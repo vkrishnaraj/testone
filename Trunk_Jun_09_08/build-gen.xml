@@ -430,13 +430,6 @@
 			<param name="destinationResource" value="${build.dir}/${ant_project_name}/classes/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</antcall>
 
-		<ant target="combineResourceFiles" antfile="build-gen.xml">
-					<property name="defaultResource" value="${basedir}/companies/tracer/tracer.properties" />
-					<property name="overrideResource" value="${basedir}/companies/${ant_project_name}/tracer.properties" />
-					<property name="tertiaryResource" value="${basedir}/companies/${ant_project_name}/${sub_path}tracer.properties"/>
-					<property name="destinationResource" value="${build.dir}/${ant_project_name}/classes/tracer.properties" />
-		</ant>
-		
 		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/${sub_path}hibernate_main.cfg.xml" overwrite="true"/>
 		<copy todir="${build.dir}/${ant_project_name}/classes" file="companies/${ant_project_name}/${sub_path}hibernate_dirty.cfg.xml" overwrite="true"/>
 		<copy todir="${build.dir}/${ant_project_name}/classes" file="${basedir}/src/dozerBeanMapping.xml" />

@@ -2312,6 +2312,7 @@
 		<property name="staging.env" value="local" />
 		<property name="ant_project_name" value="ab" />
 		<property name="sub_path" value="local/" />
+		<property name="environment.name" value="local"/>
 		<property name="cron.job.config.file" value="companies/ab/environment/local/jobs/cronJobs.xml" />
 		<property name="jarprefix" value="ablocal-" />
 		<antcall target="cron-service" />
@@ -2322,6 +2323,7 @@
 		<property name="staging.env" value="testing" />
 		<property name="ant_project_name" value="ab" />
 		<property name="sub_path" value="test/" />
+		<property name="environment.name" value="test"/>
 		<property name="cron.job.config.file" value="companies/ab/environment/test/jobs/cronJobs.xml" />
 		<property name="jarprefix" value="abtest-" />
 		<antcall target="cron-service" />
@@ -2332,6 +2334,7 @@
 		<property name="staging.env" value="training" />
 		<property name="ant_project_name" value="ab" />
 		<property name="sub_path" value="train/" />
+		<property name="environment.name" value="train"/>
 		<property name="cron.job.config.file" value="companies/ab/environment/train/jobs/cronJobs.xml" />
 		<property name="jarprefix" value="abtrain-" />
 		<antcall target="cron-service" />
@@ -2342,6 +2345,7 @@
 		<property name="staging.env" value="production" />
 		<property name="ant_project_name" value="ab" />
 		<property name="sub_path" value="prod/" />
+		<property name="environment.name" value="prod"/>
 		<property name="cron.job.config.file" value="companies/ab/environment/prod/jobs/cronJobs.xml" />
 		<property name="jarprefix" value="abprod-" />
 		<antcall target="cron-service" />
@@ -2352,6 +2356,7 @@
 		<property name="staging.env" value="hudson" />
 		<property name="ant_project_name" value="ab" />
 		<property name="sub_path" value="hudson/" />
+		<property name="environment.name" value="hudson"/>
 		<property name="cron.job.config.file" value="companies/ab/environment/hudson/jobs/cronJobs.xml" />
 		<property name="jarprefix" value="abhudson-" />
 		<antcall target="cron-service" />
@@ -2366,6 +2371,7 @@
 		<property name="staging.env" value="local" />
 		<property name="ant_project_name" value="lfc" />
 		<property name="sub_path" value="local/" />
+		<property name="environment.name" value="local"/>
 		<property name="cron.job.config.file" value="companies/lfc/environment/local/jobs/cronJobs.xml" />
 		<property name="jarprefix" value="lfclocal-" />
 		<antcall target="cron-service" />
@@ -2376,6 +2382,7 @@
 		<property name="staging.env" value="testing" />
 		<property name="ant_project_name" value="lfc" />
 		<property name="sub_path" value="test/" />
+		<property name="environment.name" value="test"/>
 		<property name="cron.job.config.file" value="companies/lfc/environment/test/jobs/cronJobs.xml" />
 		<property name="jarprefix" value="lfctest-" />
 		<antcall target="cron-service" />
@@ -2386,6 +2393,7 @@
 		<property name="staging.env" value="training" />
 		<property name="ant_project_name" value="lfc" />
 		<property name="sub_path" value="train/" />
+		<property name="environment.name" value="train"/>
 		<property name="cron.job.config.file" value="companies/lfc/environment/train/jobs/cronJobs.xml" />
 		<property name="jarprefix" value="lfctrain-" />
 		<antcall target="cron-service" />
@@ -2396,6 +2404,7 @@
 		<property name="staging.env" value="production" />
 		<property name="ant_project_name" value="lfc" />
 		<property name="sub_path" value="prod/" />
+		<property name="environment.name" value="prod"/>
 		<property name="cron.job.config.file" value="companies/lfc/environment/prod/jobs/cronJobs.xml" />
 		<property name="jarprefix" value="lfcprod-" />
 		<antcall target="cron-service" />
@@ -2406,6 +2415,7 @@
 		<property name="staging.env" value="hudson" />
 		<property name="ant_project_name" value="lfc" />
 		<property name="sub_path" value="hudson/" />
+		<property name="environment.name" value="hudson"/>
 		<property name="cron.job.config.file" value="companies/lfc/environment/hudson/jobs/cronJobs.xml" />
 		<property name="jarprefix" value="lfchudson-" />
 		<antcall target="cron-service" />
@@ -2416,6 +2426,7 @@
 		<property name="staging.env" value="demo" />
 		<property name="ant_project_name" value="lfc" />
 		<property name="sub_path" value="demo/" />
+		<property name="environment.name" value="demo"/>
 		<property name="cron.job.config.file" value="companies/lfc/environment/demo/jobs/cronJobs.xml" />
 		<property name="jarprefix" value="lfcdemo-" />
 		<antcall target="cron-service" />
@@ -2426,6 +2437,7 @@
 		<property name="staging.env" value="demo" />
 		<property name="ant_project_name" value="alaska" />
 		<property name="sub_path" value="demo/" />
+		<property name="environment.name" value="demo"/>
 		<property name="cron.job.config.file" value="companies/alaska/environment/demo/jobs/cronJobs.xml" />
 		<property name="jarprefix" value="dademo-" />
 		<antcall target="cron-service" />
@@ -2440,6 +2452,7 @@
 		<property name="staging.env" value="local" />
 		<property name="ant_project_name" value="westjet" />
 		<property name="sub_path" value="local/" />
+		<property name="environment.name" value="local"/>
 		<property name="cron.job.config.file" value="companies/westjet/environment/local/jobs/cronJobs.xml" />
 		<property name="jarprefix" value="wslocal-" />
 		<antcall target="cron-service" />
@@ -2450,6 +2463,7 @@
 		<property name="staging.env" value="testing" />
 		<property name="ant_project_name" value="westjet" />
 		<property name="sub_path" value="test/" />
+		<property name="environment.name" value="test"/>
 		<property name="cron.job.config.file" value="companies/westjet/environment/test/jobs/cronJobs.xml" />
 		<property name="jarprefix" value="wstest-" />
 		<antcall target="cron-service" />
@@ -2460,6 +2474,7 @@
 		<property name="staging.env" value="training" />
 		<property name="ant_project_name" value="westjet" />
 		<property name="sub_path" value="train/" />
+		<property name="environment.name" value="train"/>
 		<property name="cron.job.config.file" value="companies/westjet/environment/train/jobs/cronJobs.xml" />
 		<property name="jarprefix" value="wstrain-" />
 		<antcall target="cron-service" />
@@ -2470,6 +2485,7 @@
 		<property name="staging.env" value="production" />
 		<property name="ant_project_name" value="westjet" />
 		<property name="sub_path" value="prod/" />
+		<property name="environment.name" value="prod"/>
 		<property name="jarprefix" value="wsprod-" />
 		<property name="cron.job.config.file" value="companies/westjet/environment/prod/jobs/cronJobs.xml" />
 		<antcall target="cron-service" />
@@ -2480,6 +2496,7 @@
 		<property name="staging.env" value="hudson" />
 		<property name="ant_project_name" value="westjet" />
 		<property name="sub_path" value="hudson/" />
+		<property name="environment.name" value="hudson"/>
 		<property name="jarprefix" value="wshudson-" />
 		<property name="cron.job.config.file" value="companies/westjet/environment/hudson/jobs/cronJobs.xml" />
 		<antcall target="cron-service" />
@@ -2494,6 +2511,7 @@
 		<property name="staging.env" value="testing" />
 		<property name="ant_project_name" value="webjet" />
 		<property name="sub_path" value="test/" />
+		<property name="environment.name" value="test"/>
 		<property name="cron.job.config.file" value="companies/webjet/environment/test/jobs/cronJobs.xml" />
 		<property name="jarprefix" value="whtest-" />
 		<antcall target="cron-service" />
@@ -2504,6 +2522,7 @@
 		<property name="staging.env" value="training" />
 		<property name="ant_project_name" value="webjet" />
 		<property name="sub_path" value="train/" />
+		<property name="environment.name" value="train"/>
 		<property name="cron.job.config.file" value="companies/webjet/environment/train/jobs/cronJobs.xml" />
 		<property name="jarprefix" value="whtrain-" />
 		<antcall target="cron-service" />
@@ -2514,6 +2533,7 @@
 		<property name="staging.env" value="production" />
 		<property name="ant_project_name" value="webjet" />
 		<property name="sub_path" value="prod/" />
+		<property name="environment.name" value="prod"/>
 		<property name="jarprefix" value="whprod-" />
 		<property name="cron.job.config.file" value="companies/webjet/environment/prod/jobs/cronJobs.xml" />
 		<antcall target="cron-service" />
@@ -2524,6 +2544,7 @@
 		<property name="staging.env" value="hudson" />
 		<property name="ant_project_name" value="webjet" />
 		<property name="sub_path" value="hudson/" />
+		<property name="environment.name" value="hudson"/>
 		<property name="jarprefix" value="whhudson-" />
 		<property name="cron.job.config.file" value="companies/webjet/environment/hudson/jobs/cronJobs.xml" />
 		<antcall target="cron-service" />
@@ -2538,6 +2559,7 @@
 		<property name="staging.env" value="testing" />
 		<property name="ant_project_name" value="canadiannorth" />
 		<property name="sub_path" value="test/" />
+		<property name="environment.name" value="test"/>
 		<property name="cron.job.config.file" value="companies/canadiannorth/environment/test/jobs/cronJobs.xml" />
 		<property name="jarprefix" value="5ttest-" />
 		<antcall target="cron-service" />
@@ -2548,6 +2570,7 @@
 		<property name="staging.env" value="training" />
 		<property name="ant_project_name" value="canadiannorth" />
 		<property name="sub_path" value="train/" />
+		<property name="environment.name" value="train"/>
 		<property name="cron.job.config.file" value="companies/canadiannorth/environment/train/jobs/cronJobs.xml" />
 		<property name="jarprefix" value="5ttrain-" />
 		<antcall target="cron-service" />
@@ -2558,6 +2581,7 @@
 		<property name="staging.env" value="production" />
 		<property name="ant_project_name" value="canadiannorth" />
 		<property name="sub_path" value="prod/" />
+		<property name="environment.name" value="prod"/>
 		<property name="jarprefix" value="5tprod-" />
 		<property name="cron.job.config.file" value="companies/canadiannorth/environment/prod/jobs/cronJobs.xml" />
 		<antcall target="cron-service" />
@@ -2568,6 +2592,7 @@
 		<property name="staging.env" value="hudson" />
 		<property name="ant_project_name" value="canadiannorth" />
 		<property name="sub_path" value="hudson/" />
+		<property name="environment.name" value="hudson"/>
 		<property name="jarprefix" value="5thudson-" />
 		<property name="cron.job.config.file" value="companies/canadiannorth/environment/hudson/jobs/cronJobs.xml" />
 		<antcall target="cron-service" />
@@ -2582,6 +2607,7 @@
 		<property name="staging.env" value="testing" />
 		<property name="ant_project_name" value="flyafrica" />
 		<property name="sub_path" value="test/" />
+		<property name="environment.name" value="test"/>
 		<property name="cron.job.config.file" value="companies/flyafrica/environment/test/jobs/cronJobs.xml" />
 		<property name="jarprefix" value="z7test-" />
 		<antcall target="cron-service" />
@@ -2592,6 +2618,7 @@
 		<property name="staging.env" value="training" />
 		<property name="ant_project_name" value="flyafrica" />
 		<property name="sub_path" value="train/" />
+		<property name="environment.name" value="train"/>
 		<property name="cron.job.config.file" value="companies/flyafrica/environment/train/jobs/cronJobs.xml" />
 		<property name="jarprefix" value="z7train-" />
 		<antcall target="cron-service" />
@@ -2602,6 +2629,7 @@
 		<property name="staging.env" value="production" />
 		<property name="ant_project_name" value="flyafrica" />
 		<property name="sub_path" value="prod/" />
+		<property name="environment.name" value="prod"/>
 		<property name="jarprefix" value="z7prod-" />
 		<property name="cron.job.config.file" value="companies/flyafrica/environment/prod/jobs/cronJobs.xml" />
 		<antcall target="cron-service" />
@@ -2612,6 +2640,7 @@
 		<property name="staging.env" value="hudson" />
 		<property name="ant_project_name" value="flyafrica" />
 		<property name="sub_path" value="hudson/" />
+		<property name="environment.name" value="hudson"/>
 		<property name="jarprefix" value="z7hudson-" />
 		<property name="cron.job.config.file" value="companies/flyafrica/environment/hudson/jobs/cronJobs.xml" />
 		<antcall target="cron-service" />
@@ -2626,6 +2655,7 @@
 		<property name="staging.env" value="testing" />
 		<property name="ant_project_name" value="jetblue" />
 		<property name="sub_path" value="test/" />
+		<property name="environment.name" value="test"/>
 		<property name="jarprefix" value="b6test-" />
 		<property name="cron.job.config.file" value="companies/jetblue/environment/${sub_path}jobs/cronJobs.xml" />
 		<antcall target="cron-service" />
@@ -2636,6 +2666,7 @@
 		<property name="staging.env" value="training" />
 		<property name="ant_project_name" value="jetblue" />
 		<property name="sub_path" value="train/" />
+		<property name="environment.name" value="train"/>
 		<property name="jarprefix" value="b6train-" />
 		<property name="cron.job.config.file" value="companies/jetblue/environment/${sub_path}jobs/cronJobs.xml" />
 		<antcall target="cron-service" />
@@ -2646,6 +2677,7 @@
 		<property name="staging.env" value="production" />
 		<property name="ant_project_name" value="jetblue" />
 		<property name="sub_path" value="prod/" />
+		<property name="environment.name" value="prod"/>
 		<property name="jarprefix" value="b6prod-" />
 		<property name="cron.job.config.file" value="companies/jetblue/environment/${sub_path}jobs/cronJobs.xml" />
 		<antcall target="cron-service" />
@@ -2656,6 +2688,7 @@
 		<property name="staging.env" value="hudson" />
 		<property name="ant_project_name" value="jetblue" />
 		<property name="sub_path" value="hudson/" />
+		<property name="environment.name" value="hudson"/>
 		<property name="jarprefix" value="b6hudson-" />
 		<property name="cron.job.config.file" value="companies/jetblue/environment/${sub_path}jobs/cronJobs.xml" />
 		<antcall target="cron-service" />
@@ -2670,6 +2703,7 @@
 		<property name="staging.env" value="production" />
 		<property name="ant_project_name" value="azul" />
 		<property name="sub_path" value="prod/" />
+		<property name="environment.name" value="prod"/>
 		<property name="jarprefix" value="adprod-" />
 		<property name="cron.job.config.file" value="companies/azul/environment/${sub_path}jobs/cronJobs.xml" />
 		<antcall target="cron-service" />
@@ -2680,6 +2714,7 @@
 		<property name="staging.env" value="training" />
 		<property name="ant_project_name" value="azul" />
 		<property name="sub_path" value="train/" />
+		<property name="environment.name" value="train"/>
 		<property name="jarprefix" value="adtrain-" />
 		<property name="cron.job.config.file" value="companies/azul/environment/${sub_path}jobs/cronJobs.xml" />
 		<antcall target="cron-service" />
@@ -2690,6 +2725,7 @@
 		<property name="staging.env" value="testing" />
 		<property name="ant_project_name" value="azul" />
 		<property name="sub_path" value="test/" />
+		<property name="environment.name" value="test"/>
 		<property name="jarprefix" value="adtest-" />
 		<property name="cron.job.config.file" value="companies/azul/environment/${sub_path}jobs/cronJobs.xml" />
 		<antcall target="cron-service" />
@@ -2700,6 +2736,7 @@
 		<property name="staging.env" value="hudson" />
 		<property name="ant_project_name" value="azul" />
 		<property name="sub_path" value="hudson/" />
+		<property name="environment.name" value="hudson"/>
 		<property name="jarprefix" value="adhudson-" />
 		<property name="cron.job.config.file" value="companies/azul/environment/${sub_path}jobs/cronJobs.xml" />
 		<antcall target="cron-service" />
@@ -2714,6 +2751,7 @@
 		<property name="staging.env" value="testing" />
 		<property name="ant_project_name" value="spirit" />
 		<property name="sub_path" value="test/" />
+		<property name="environment.name" value="test"/>
 		<property name="jarprefix" value="nktest-" />
 		<property name="cron.job.config.file" value="companies/spirit/environment/${sub_path}jobs/cronJobs.xml" />
 		<antcall target="cron-service" />
@@ -2724,6 +2762,7 @@
 		<property name="staging.env" value="training" />
 		<property name="ant_project_name" value="spirit" />
 		<property name="sub_path" value="train/" />
+		<property name="environment.name" value="train"/>
 		<property name="jarprefix" value="nktrain-" />
 		<property name="cron.job.config.file" value="companies/spirit/environment/${sub_path}jobs/cronJobs.xml" />
 		<antcall target="cron-service" />
@@ -2734,6 +2773,7 @@
 		<property name="staging.env" value="production" />
 		<property name="ant_project_name" value="spirit" />
 		<property name="sub_path" value="prod/" />
+		<property name="environment.name" value="prod"/>
 		<property name="jarprefix" value="nkprod-" />
 		<property name="cron.job.config.file" value="companies/spirit/environment/${sub_path}jobs/cronJobs.xml" />
 		<antcall target="cron-service" />
@@ -2744,6 +2784,7 @@
 		<property name="staging.env" value="hudson" />
 		<property name="ant_project_name" value="spirit" />
 		<property name="sub_path" value="hudson/" />
+		<property name="environment.name" value="hudson"/>
 		<property name="jarprefix" value="nkhudson-" />
 		<property name="cron.job.config.file" value="companies/spirit/environment/${sub_path}jobs/cronJobs.xml" />
 		<antcall target="cron-service" />
@@ -2759,6 +2800,7 @@
 		<property name="ant_project_name" value="airtran"/>
 		<property name="jarprefix" value="airtran-test-"/>
 		<property name="sub_path" value="test/"/>
+		<property name="environment.name" value="test"/>
 		<property name="hibernate_dialect" value="sqlserver" />
 		<property name="cron.job.config.file" value="companies/airtran/environment/${sub_path}jobs/cronJobs.xml" />
 		<antcall target="cron-service" />
@@ -2770,6 +2812,7 @@
 		<property name="ant_project_name" value="airtran"/>
 		<property name="jarprefix" value="airtran-prod-"/>
 		<property name="sub_path" value="prod/"/>
+		<property name="environment.name" value="prod"/>
 		<property name="hibernate_dialect" value="sqlserver" />
 		<property name="cron.job.config.file" value="companies/airtran/environment/${sub_path}jobs/cronJobs.xml" />
 		<antcall target="cron-service" />
@@ -2781,6 +2824,7 @@
 		<property name="ant_project_name" value="american-fs"/>
 		<property name="jarprefix" value="american-prod-"/>
 		<property name="sub_path" value="prod/"/>
+		<property name="environment.name" value="prod"/>
 		<property name="cron.job.config.file" value="companies/american-fs/environment/${sub_path}jobs/cronJobs.xml" />
 		<antcall target="cron-service" />
 	</target>
@@ -2883,12 +2927,11 @@
 		</ant>
 
 		<ant target="combineResourceFiles" antfile="build-gen.xml">
-			<property name="defaultResource" value="${basedir}/companies/tracer/tracer.properties" />
-			<property name="overrideResource" value="${basedir}/companies/${ant_project_name}/tracer.properties" />
-			<property name="tertiaryResource" value="${basedir}/companies/${ant_project_name}/environment/${sub_path}tracer.properties"/>
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/${ant_project_name}/environment/${sub_path}/tracer.properties" />
 			<property name="destinationResource" value="${build.dir}/${ant_project_name}/classes/tracer.properties" />
 		</ant>
-
+		
 		<property name="hibernate_props_loc" value="${basedir}/companies/${ant_project_name}/environment/${sub_path}" />
 		<!-- Dialect will only be set if not already set by sqlserver client -->
 		<property name="hibernate_dialect" value="mysql" />
