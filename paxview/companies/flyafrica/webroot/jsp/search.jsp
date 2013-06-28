@@ -19,7 +19,8 @@
 			<table cellspacing="0" width="600" border="0">
 				<tr>
 					<td>
-						<img src="images/header_bg.gif" />
+  						<a href="www.nettracer.com" >
+  						<img src="images/NT_logo_blu.jpg"/></a>
 					</td>
 					<!-- <td valign="top" align="right">
 					<c:choose>
