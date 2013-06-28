@@ -4,7 +4,7 @@ import com.bagnet.nettracer.tracing.utils.TEA;
 
 public class TestPasswordEncrypt {
 
-	private String newPass = "SoftSprint1011";
+	private String newPass = "/LucasArts43!";
 	
     @org.junit.Test
 	public void testReportClaimDate() {
