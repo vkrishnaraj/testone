@@ -53,7 +53,7 @@ public class PassengerBean {
 	private Boolean declarePayExcessValue;
 	private Double declaredValue;
 	private String placeBagChecked;
-	private Boolean clearCustomBag;
+	private int clearCustomBag;
 	private String bagWeight;
 	private Boolean rerouteBag;
 	private Boolean differentClaimCheck;
@@ -302,10 +302,10 @@ public class PassengerBean {
 	public void setPlaceBagChecked(String placeBagChecked) {
 		this.placeBagChecked = placeBagChecked;
 	}
-	public Boolean getClearCustomBag() {
+	public int getClearCustomBag() {
 		return clearCustomBag;
 	}
-	public void setClearCustomBag(Boolean clearCustomBag) {
+	public void setClearCustomBag(int clearCustomBag) {
 		this.clearCustomBag = clearCustomBag;
 	}
 	public String getBagWeight() {
@@ -737,8 +737,11 @@ public class PassengerBean {
 		return "No";
 	}
 	public String getClearCustomBagDisp() {
-		if (clearCustomBag != null) {
-			return (clearCustomBag ? "Yes" : "No");
+		if (clearCustomBag != 0) {
+			if (clearCustomBag == 3) {
+				return "N/A";
+			}
+			return (clearCustomBag == 1 ? "Yes" : "No");
 		}
 		return "No";
 	}

@@ -1,7 +1,7 @@
-<?xml version="1.0"?>
-<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/j2ee"
+ 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+ 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 
 	<!-- JBoss Params -->
 	<!-- Disables JBoss's JSF implementation -->
@@ -38,6 +38,10 @@
 	<context-param>
 		<param-name>com.sun.faces.validateXml</param-name>
 		<param-value>true</param-value>
+	</context-param>
+	<context-param>
+  		<param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
+  		<param-value>true</param-value>
 	</context-param>
 	<!-- End JSF Params -->
 	
@@ -139,5 +143,12 @@
     	<error-code>500</error-code>
     	<location>/error.xhtml</location>
 	</error-page>
+ 	<session-config>
+ 		<cookie-config>
+ 			<http-only>true</http-only>
+ 		</cookie-config>
+ 		<tracking-mode>COOKIE</tracking-mode>
+ 	
+ 	</session-config>
 	
 </web-app>

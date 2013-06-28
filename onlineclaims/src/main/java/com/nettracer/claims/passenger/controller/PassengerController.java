@@ -670,8 +670,7 @@ public class PassengerController {
 								LabelText.STATUS_NORMAL);
 					}
 	
-					if (null != passengerBean.getClearCustomBag()
-							&& passengerBean.getClearCustomBag()) {
+					if (1 == passengerBean.getClearCustomBag()) {
 						flightLabel.getBagWeight().setState(
 								LabelText.STATUS_REQUIRED);
 					} else {
@@ -815,8 +814,8 @@ public class PassengerController {
 	 */
 	public void clearCustomListener(ValueChangeEvent valueChangeEvent) {
 		logger.info("ValueChangeListener called: clearCustomListener");
-		Boolean clearCustom = (Boolean) valueChangeEvent.getNewValue();
-		if (null != clearCustom && clearCustom) {
+		Integer clearCustom = (Integer) valueChangeEvent.getNewValue();
+		if (null != clearCustom && clearCustom == 1) {
 			flightLabel.getBagWeight().setState(LabelText.STATUS_REQUIRED);
 		} else {
 			flightLabel.getBagWeight().setState(LabelText.STATUS_NORMAL);

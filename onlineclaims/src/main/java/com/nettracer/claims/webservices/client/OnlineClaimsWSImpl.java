@@ -256,7 +256,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
         passengerBean.setDeclaredValue(null != claim.getDeclaredValue() 
         		&& ! claim.getDeclaredValue().equals("?")
         		? Double.parseDouble(claim.getDeclaredValue()) : 0D);
-        passengerBean.setClearCustomBag(intToBool(claim.getBagClearCustoms()));
+        passengerBean.setClearCustomBag(claim.getBagClearCustoms());
         passengerBean.setBagWeight(claim.getBagWeight());
         passengerBean.setRerouteBag(intToBool(claim.getBaggageReroutedEnRoute()));
         passengerBean.setDifferentClaimCheck(intToBool(claim.getDifferentClaimCheck()));
@@ -492,7 +492,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
          claim.setDeclaredExcessValue(boolToInt(passengerBean.getDeclarePayExcessValue()));
          claim.setDeclaredValue(passengerBean.getDeclaredValue()+"");
          claim.setDeclaredCurrency(passengerBean.getDeclaredValueCurrency()); 
-         claim.setBagClearCustoms(boolToInt(passengerBean.getClearCustomBag()));
+         claim.setBagClearCustoms(passengerBean.getClearCustomBag());
          claim.setBagWeight(passengerBean.getBagWeight());              
          claim.setBaggageReroutedEnRoute(boolToInt(passengerBean.getRerouteBag()));
          claim.setDifferentClaimCheck(boolToInt(passengerBean.getDifferentClaimCheck()));
