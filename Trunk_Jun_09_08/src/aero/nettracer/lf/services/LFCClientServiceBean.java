@@ -1026,7 +1026,7 @@ public class LFCClientServiceBean implements LFCClientServiceRemote {
 			weight = lost.getItem().getFound().getItem().getWeight();
 		}
 		return FedexUtils.getRates(bean.getContact().getPrefshipaddress(),
-				bean.getDeclaredValue(), weight);
+				bean.getDeclaredValue(), weight, bean.getSubCompany());
 
 	}
 

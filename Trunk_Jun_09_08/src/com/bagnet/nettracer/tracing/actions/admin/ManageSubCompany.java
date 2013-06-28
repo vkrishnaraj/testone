@@ -83,6 +83,7 @@ public final class ManageSubCompany extends Action {
 			SCForm.setEmail_Notice_3(subcomp.getEmail_Notice_3());
 			SCForm.setEmail_Notice_4(subcomp.getEmail_Notice_4());
 			SCForm.setEmail_Notice_5(subcomp.getEmail_Notice_5());
+			SCForm.setShippingSurcharge(subcomp.getShippingSurcharge());
 			SCForm.setName(subcomp.getName());
 			SCForm.setSubcompanyCode(subcomp.getSubcompanyCode());
 			SCForm.setId(subcomp.getId());
@@ -410,6 +411,7 @@ public final class ManageSubCompany extends Action {
 			sc.setEmail_Notice_4(SCForm.getEmail_Notice_4());
 			sc.setEmail_Notice_5(SCForm.getEmail_Notice_5());
 			sc.setEmail_Subject(SCForm.getEmail_Subject());
+			sc.setShippingSurcharge(SCForm.getShippingSurcharge());
 			sc.setAuto_Close_High(SCForm.getAuto_Close_High());
 			sc.setAuto_Close_Low(SCForm.getAuto_Close_Low());
 			

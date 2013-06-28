@@ -30,6 +30,7 @@ public class SubCompanyForm extends ValidatorForm {
 	private int email_Notice_5;
 	private int auto_Close_Low;
 	private int auto_Close_High;
+	private int shippingSurcharge;
 	private String delete1;
 	
 	public long getId() {
@@ -182,6 +183,14 @@ public class SubCompanyForm extends ValidatorForm {
 
 	public String getDelete1() {
 		return delete1;
+	}
+
+	public int getShippingSurcharge() {
+		return shippingSurcharge;
+	}
+
+	public void setShippingSurcharge(int shippingSurcharge) {
+		this.shippingSurcharge = shippingSurcharge;
 	}
 }
 

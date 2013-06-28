@@ -20,6 +20,7 @@ import aero.nettracer.lfc.model.RateBean;
 
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.dao.lf.SubCompanyDAO;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.fedex.ws.addressvalidation.v2.Address;
 import com.fedex.ws.addressvalidation.v2.AddressToValidate;
@@ -305,7 +306,7 @@ public class FedexUtils {
 		}
 	}
 	
-	static ArrayList<RateBean> getRates(AddressBean ship, double declaredValue, float weight){
+	static ArrayList<RateBean> getRates(AddressBean ship, double declaredValue, float weight, String subcompany){ 
 		boolean getAllRatesFlag = true; 
 		RateServiceStub stub=null;
 		try {
@@ -427,7 +428,10 @@ public class FedexUtils {
 			ArrayList<RateBean> ratesList=new ArrayList<RateBean>();
 			BigDecimal shippingCost;
 			//Logic for if SWA, add 1. If AA, add 5
-			shippingCost=new BigDecimal(1);
+			if(subcompany!=null && subcompany.length()>0)
+				shippingCost=new BigDecimal(SubCompanyDAO.loadSubcompany(subcompany).getShippingSurcharge());
+			else
+				shippingCost=new BigDecimal(5);
 			if(replyDoc.getRateReply().getRateReplyDetailsArray().length==0){
 				return null;
 			}

@@ -185,6 +185,15 @@
                 </td>
               </tr>
               <tr>
+                <td>
+                  <bean:message key="colname.shippingsurcharge" />
+                  :
+                </td>
+                <td>
+                  <html:text styleClass="textfield" property="shippingSurcharge" size="20" maxlength="3" />
+                </td>
+              </tr>
+              <tr>
                 <td colspan="2" align="center">
                   &nbsp;
                 </td>

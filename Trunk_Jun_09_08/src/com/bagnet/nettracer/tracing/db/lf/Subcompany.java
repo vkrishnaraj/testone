@@ -47,6 +47,7 @@ public class Subcompany implements Serializable{
 	private int email_Notice_5;
 	private int auto_Close_Low;
 	private int auto_Close_High;
+	private int shippingSurcharge;
 	
 
 	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="subcompany")
@@ -154,6 +155,14 @@ public class Subcompany implements Serializable{
 
 	public void setAuto_Close_High(int auto_Close_High) {
 		this.auto_Close_High = auto_Close_High;
+	}
+
+	public int getShippingSurcharge() {
+		return shippingSurcharge;
+	}
+
+	public void setShippingSurcharge(int shippingSurcharge) {
+		this.shippingSurcharge = shippingSurcharge;
 	}
 }
 
