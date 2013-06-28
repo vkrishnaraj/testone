@@ -1,0 +1,1820 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is JAX-WS RI 2.1.5-hudson-$BUILD_NUMBER-. --><schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xsdns="http://postilion/realtime/merchantframework/xsd/v1/" targetNamespace="http://postilion/realtime/merchantframework/xsd/v1/" elementFormDefault="qualified" attributeFormDefault="qualified">
+
+	<include schemaLocation="Merchant-1.xsd" />
+
+	<element name="SendTranRequest">
+		<complexType>
+			<sequence>
+				<element name="merc" type="xsdns:Merc" minOccurs="1" maxOccurs="1">
+				</element>
+				<element name="tranCode" minOccurs="1" maxOccurs="1">
+					<simpleType>
+						<restriction base="int">
+							<enumeration value="0" />
+							<enumeration value="1" />
+							<enumeration value="2" />
+							<enumeration value="3" />
+							<enumeration value="4" />
+							<enumeration value="5" />
+							<enumeration value="6" />
+							<enumeration value="7" />
+							<enumeration value="9" />
+							<enumeration value="10" />
+							<enumeration value="11" />
+							<enumeration value="12" />
+							<enumeration value="13" />
+							<enumeration value="14" />
+							<enumeration value="15" />
+							<enumeration value="16" />
+							<enumeration value="17" />
+						</restriction>
+					</simpleType>
+				</element>
+				<element name="card" type="xsdns:Card" minOccurs="0" maxOccurs="1">
+				</element>
+				<element name="contact" type="xsdns:Contact" minOccurs="0" maxOccurs="1">
+				</element>
+				<element name="reqAmt" minOccurs="0" maxOccurs="1">
+					<simpleType>
+						<restriction base="string">
+							<pattern value="\d{1,12}" />
+						</restriction>
+					</simpleType>
+				</element>
+				<element name="prevSettleAmt" minOccurs="0" maxOccurs="1">
+					<simpleType>
+						<restriction base="string">
+							<pattern value="\d{1,12}" />
+						</restriction>
+					</simpleType>
+				</element>
+				<element name="lclDtTm" type="dateTime" minOccurs="0" maxOccurs="1">
+				</element>
+				<element name="usrDef" type="xsdns:NameVal" minOccurs="0" maxOccurs="10">
+				</element>
+				<element name="pos" type="xsdns:Pos" minOccurs="0" maxOccurs="1">
+				</element>
+				<element name="indCode" minOccurs="0" maxOccurs="1">
+					<simpleType>
+						<restriction base="int">
+							<pattern value="[0-4]" />
+						</restriction>
+					</simpleType>
+				</element>
+				<element name="tranFlags" type="xsdns:TranFlags" minOccurs="0" maxOccurs="1">
+				</element>
+				<element name="authReq" type="xsdns:AuthReq" minOccurs="0" maxOccurs="1">
+				</element>
+				<element name="origTranData" type="xsdns:TranData" minOccurs="0" maxOccurs="1">
+				</element>
+				<element name="achEcheck" type="xsdns:AchEcheck" minOccurs="0" maxOccurs="1">
+				</element>
+				<element name="recurPmt" type="xsdns:RecurPmt" minOccurs="0" maxOccurs="1">
+				</element>
+				<element name="recurMan" type="xsdns:RecurMan" maxOccurs="1" minOccurs="0">
+				</element>
+				<element name="tax" type="xsdns:Tax" minOccurs="0" maxOccurs="1">
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+
+	<element name="SendTranResponse">
+		<complexType>
+			<sequence>
+				<element name="rspCode" minOccurs="1" maxOccurs="1">
+					<simpleType>
+						<restriction base="string">
+							<pattern value="\w{2}" />
+						</restriction>
+					</simpleType>
+				</element>
+				<element name="extRspCode" minOccurs="0" maxOccurs="1">
+					<simpleType>
+						<restriction base="string">
+							<pattern value="\w{2}" />
+						</restriction>
+					</simpleType>
+				</element>
+				<element name="authRsp" type="xsdns:AuthRsp" minOccurs="0" maxOccurs="1">
+				</element>
+
+				<element name="tranData" type="xsdns:TranData" minOccurs="0" maxOccurs="1">
+				</element>
+				<element name="invId" maxOccurs="1" minOccurs="0">
+					<simpleType>
+						<restriction base="long">
+							<pattern value="\d+" />
+							<maxInclusive value="9223372036854775807" />
+							<minInclusive value="0" />
+						</restriction>
+					</simpleType>
+				</element>
+				<element name="cardType" minOccurs="0" maxOccurs="1">
+					<simpleType>
+						<restriction base="string">
+							<pattern value="[0-5]" />
+						</restriction>
+					</simpleType>
+				</element>
+				<element name="mapCaid" minOccurs="0" maxOccurs="1">
+					<simpleType>
+						<restriction base="string">
+							<pattern value=".{1,15}" />
+						</restriction>
+					</simpleType>
+				</element>
+				<element name="additionalAmount" type="xsdns:AdditionalAmount" minOccurs="0" maxOccurs="unbounded" />
+				<element name="achResponse" type="xsdns:AchResponse" minOccurs="0" maxOccurs="1" />
+			</sequence>
+		</complexType>
+	</element>
+
+	<complexType name="Card">
+		<sequence>
+			<element name="type" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="int">
+						<pattern value="[0-5]" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="pan" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">			 
+                  <maxLength value="19" />
+						<minLength value="12" />
+						<pattern value="[0-9]{6}[0-9\*]+[0-9]{4}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="sec" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="\d{3,4}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="xprDt" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="\d\d(1[0-2]|0\d)" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="sqncNr" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="\d{3}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="trk1" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value=".{1,76}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="trk2" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="37" />
+						<minLength value="1" />
+						<pattern value="[A-Za-z0-9]+[A-Za-z0-9=]*">
+						</pattern>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="dbtOrCdt" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="int">
+						<pattern value="[01]" />
+					</restriction>
+				</simpleType>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="TranFlags">
+		<sequence>
+			<element name="dupChkTmPrd" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="int">
+
+						<minInclusive value="1" />
+
+						<maxInclusive value="86400" />
+						<pattern value="\d{1,5}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="rsbmt" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="[YN]" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="mgdSettle" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="[YN]" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="convFeeAcptd" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="[YN]" />
+					</restriction>
+				</simpleType>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="AuthReq">
+		<sequence>
+			<element name="xid" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="[0-9A-Fa-f]{40}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="cavv" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="[0-9A-Fa-f]{40}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="ucafIdcr" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="int">
+						<pattern value="[0-2]" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="ucaf" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="[0-9A-Fa-f]{64}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="purcCard" type="xsdns:PurcCard" minOccurs="0" maxOccurs="1">
+			</element>
+			<element name="eSign" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="[0-9A-Fa-f]{2,1000}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="voiceAuthCode" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="[A-Za-z0-9 ]{6}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="ordNr" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value=".{1,50}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="vchrNr" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="\d{1,32}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="pin" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="[0-9A-Fa-f]{16}" />
+					</restriction>
+				</simpleType>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="PurcCard">
+		<sequence>
+			<element name="custId" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="25" />
+						<minLength value="1" />
+						<pattern value="[A-Za-z0-9]+[A-Za-z0-9_]*">
+						</pattern>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="cardAcptrTaxId" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="20" />
+						<minLength value="1" />
+						<pattern value="[A-Za-z0-9]+[A-Za-z0-9_]*">
+						</pattern>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="cardAcptrVatNr" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="20" />
+						<minLength value="1" />
+						<pattern value="\w{1,20}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="cardAcptrRefNr" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="20" />
+						<minLength value="1" />
+						<pattern value="\w{1,20}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="corpVatNr" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="20" />
+						<minLength value="1" />
+						<pattern value="\w{1,20}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="custVatNr" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="20" />
+						<minLength value="1" />
+						<pattern value="\w{1,20}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="mercOrdNr" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="17" />
+						<minLength value="1" />
+						<pattern value="[A-Za-z0-9 ]{1,17}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="invcNr" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="20" />
+						<minLength value="1" />
+						<pattern value="\w{1,20}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="ordDt" type="dateTime" minOccurs="0" maxOccurs="1">
+			</element>
+			<element name="purcDt" type="dateTime" minOccurs="0" maxOccurs="1">
+			</element>
+			<element name="custBlngCode" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="20" />
+						<minLength value="1" />
+						<pattern value="\w{1,20}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="custOrdNr" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="22" />
+						<minLength value="1" />
+						<pattern value="\w{1,20}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="taxExmp" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="[YN]" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="cmdyCode" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="20" />
+						<minLength value="1" />
+						<pattern value="\w{1,20}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="desc" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="40" />
+						<minLength value="1" />
+						<pattern value="[A-Za-z0-9]+[A-Za-z0-9\s]*">
+						</pattern>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="dcntAmt" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="\d{1,12}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="shpAmt" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="\d{1,12}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="dutyAmt" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="\d{1,12}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="taxColld" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="[YN]" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="totAmt" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="\d{1,12}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="cmnt" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="40" />
+						<minLength value="1" />
+						<pattern value="\w{1,40}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="privData" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="999" />
+						<minLength value="1" />
+						<pattern value=".+" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="lineItem" type="xsdns:LineItem" minOccurs="0" maxOccurs="unbounded">
+			</element>
+			<element name="tax" type="xsdns:PurcCardTax" minOccurs="0" maxOccurs="unbounded">
+			</element>
+			<element name="billShip" type="xsdns:BillShip" minOccurs="0" maxOccurs="1">
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="LineItem">
+		<sequence>
+			<element name="itemNr" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="[0-9]{3}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="prodCode" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="20" />
+						<minLength value="1" />
+						<pattern value="\w+" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="custCode" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="20" />
+						<minLength value="1" />
+						<pattern value="\w+" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="cmdyCode" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="20" />
+						<minLength value="1" />
+						<pattern value="\w+" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="vatRefNr" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="20" />
+						<minLength value="1" />
+						<pattern value="\w+" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="desc" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="40" />
+						<minLength value="1" />
+						<pattern value="[A-Za-z0-9]+[A-Za-z0-9_]*">
+						</pattern>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="qty" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="\d{1,12}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="qtyExp" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="int">
+
+						<maxInclusive value="9" />
+						<minInclusive value="0" />
+						<pattern value="\d{1}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="unitOfMsr" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="12" />
+						<minLength value="1" />
+						<pattern value="\w+" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="unitPrc" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="\d{1,12}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="dcnt" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<enumeration value="Y" />
+						<enumeration value="N" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="dcntRt" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+
+						<length value="5" />
+						<pattern value="\w+" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="dcntAmt" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="\d{1,12}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="totAmt" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="\d{1,12}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="totAmtType" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="int">
+
+
+						<maxInclusive value="1" />
+						<minInclusive value="0" />
+						<pattern value="\d{1}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="supType" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="int">
+
+						<minInclusive value="0" />
+
+						<maxInclusive value="1" />
+						<pattern value="\d{1}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="sign" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<enumeration value="C" />
+						<enumeration value="D" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="privData" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="999" />
+						<minLength value="1" />
+						<pattern value=".{1,999}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="tax" type="xsdns:PurcCardTax" minOccurs="0" maxOccurs="unbounded">
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="PurcCardTax">
+		<sequence>
+			<element name="type" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<minLength value="2" />
+						<maxLength value="6" />
+						<pattern value="\w+" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="desc" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="20" />
+						<minLength value="1" />
+						<pattern value=".{1,20}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="incld" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="[YN]" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="amt" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="\d{1,12}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="rate" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="int">
+
+
+						<minInclusive value="0" />
+						<maxInclusive value="99999" />
+						<pattern value="\d{1,5}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="rateExp" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="int">
+
+						<minInclusive value="0" />
+						<maxInclusive value="9" />
+						<pattern value="\d{1}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="cardAcptrId" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="20" />
+						<minLength value="1" />
+						<pattern value="\w+" />
+					</restriction>
+				</simpleType>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="BillShip">
+		<sequence>
+			<element name="type" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="int">
+
+						<minInclusive value="0" />
+						<maxInclusive value="3" />
+						<pattern value="\d{1}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="contact" type="xsdns:Contact" minOccurs="0" maxOccurs="1">
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="TranData">
+		<sequence>
+			<element name="swchKey" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="32" />
+						<minLength value="1" />
+						<pattern value="\w+" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="tranNr" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="\d{2,12}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="dtTm" type="dateTime" minOccurs="0" maxOccurs="1">
+			</element>
+			<element name="amt" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="\d{1,12}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="stan" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="\d{6}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="auth" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value=".{1,6}" />
+					</restriction>
+				</simpleType>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="RecurPmt">
+		<sequence>
+			<element name="pmtFreq" minOccurs="1" maxOccurs="1">
+				<simpleType>
+					<restriction base="int">
+
+
+						<maxInclusive value="2" />
+						<minInclusive value="0" />
+						<pattern value="\d{1}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="initRecurPmtIdcr" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="int">
+
+
+						<maxInclusive value="1" />
+						<minInclusive value="0" />
+						<pattern value="\d{1}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="pmtNr" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="int">
+
+
+						<maxInclusive value="999" />
+						<minInclusive value="1" />
+						<pattern value="\d{1,3}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="nrOfPmt" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="int">
+						<pattern value="(0|[1-9]{1}[0-9]{0,8}|[1]{1}[0-9]{1,9}|[2]{1}([0]{1}[0-9]{8}|[1]{1}([0-3]{1}[0-9]{7}|[4]{1}([0-6]{1}[0-9]{6}|[7]{1}([0-3]{1}[0-9]{5}|[4]{1}([0-7]{1}[0-9]{4}|[8]{1}([0-2]{1}[0-9]{3}|[3]{1}([0-5]{1}[0-9]{2}|[6]{1}([0-3]{1}[0-9]{1}|[4]{1}[0-7]{1})))))))))" />
+						<minInclusive value="1" />
+					</restriction>
+				</simpleType>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="AuthRsp">
+		<sequence>
+			<element name="secRslt" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="." />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="avsRslt" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="." />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="aci" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="\w" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="cavvRslt" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<enumeration value="0" />
+						<enumeration value="1" />
+						<enumeration value="2" />
+						<enumeration value="3" />
+						<enumeration value="4" />
+						<enumeration value="6" />
+						<enumeration value="7" />
+						<enumeration value="8" />
+						<enumeration value="9" />
+						<enumeration value="A" />
+						<enumeration value="B" />
+						<enumeration value="C" />
+						<enumeration value="D" />
+						<pattern value="\w" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="tranId" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="[A-Za-z0-9]{1,15}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="gwyTranId" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="[A-Za-z0-9]{1,20}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="issrNtwkId" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="11" />
+						<minLength value="1" />
+						<pattern value=".+" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="valCode" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="\w{4}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="comCardType" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="[A-Z]{1,10}" />
+					</restriction>
+				</simpleType>
+			</element>
+		</sequence>
+	</complexType>
+
+	<element name="SettleTranRequest">
+		<complexType>
+			<sequence>
+				<element name="merc" type="xsdns:Merc" minOccurs="1" maxOccurs="1">
+				</element>
+
+				<element name="settleData" type="xsdns:SettleData" minOccurs="1" maxOccurs="1000" />
+			</sequence>
+		</complexType>
+	</element>
+
+	<element name="SettleTranResponse">
+		<complexType>
+			<sequence>
+				<element name="rspCode" minOccurs="1" maxOccurs="1">
+					<simpleType>
+						<restriction base="string">
+							<pattern value="\w{2}" />
+						</restriction>
+					</simpleType>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+
+	<complexType name="SettleData">
+		<sequence>
+			<element name="tranNr" maxOccurs="1" minOccurs="1">
+
+				<simpleType>
+					<restriction base="string">
+						<pattern value="\d{2,12}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="amt" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="\d{1,12}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="mgdSettle" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="[YN]" />
+					</restriction>
+				</simpleType>
+			</element>			
+		</sequence>
+	</complexType>
+
+	<complexType name="Pmt">
+		<sequence>
+			<element name="id" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="long">
+						<pattern value="\d+">
+						</pattern>
+						<maxInclusive value="9223372036854775807" />
+						<minInclusive value="0" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="type" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="int">
+						<minInclusive value="0" />
+						<maxInclusive value="2" />
+						<pattern value="\d{1}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="card" type="xsdns:Card" minOccurs="0" maxOccurs="1">
+			</element>
+			<element name="ordNr" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value=".{1,50}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="amt" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="[0-9]{1,12}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="tax" type="xsdns:Tax" minOccurs="0" maxOccurs="1">
+			</element>
+			<element name="ach" type="xsdns:AchEcheck" minOccurs="0" maxOccurs="1">
+			</element>
+			<element name="desc" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<minLength value="1" />
+						<pattern value=".+" />
+						<maxLength value="500" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="indCode" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="int">
+						<pattern value="[0-4]" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="status" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="int">
+						<pattern value="[01]" />
+					</restriction>
+				</simpleType>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="Recur">
+		<sequence>
+			<element name="recurProfStat" minOccurs="1" maxOccurs="1">
+				<simpleType>
+					<restriction base="int">
+
+						<minInclusive value="0" />
+						<maxInclusive value="2" />
+						<pattern value="\d{1}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="dbtOrCdt" minOccurs="1" maxOccurs="1">
+
+				<simpleType>
+					<restriction base="int">
+
+						<minInclusive value="0" />
+						<maxInclusive value="1" />
+						<pattern value="\d{1}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="amt" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<minLength value="1" />
+						<maxLength value="12" />
+						<pattern value="\d{1,12}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="nrOfPmt" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="int">
+						<pattern value="(0|[1-9]{1}[0-9]{0,8}|[1]{1}[0-9]{1,9}|[2]{1}([0]{1}[0-9]{8}|[1]{1}([0-3]{1}[0-9]{7}|[4]{1}([0-6]{1}[0-9]{6}|[7]{1}([0-3]{1}[0-9]{5}|[4]{1}([0-7]{1}[0-9]{4}|[8]{1}([0-2]{1}[0-9]{3}|[3]{1}([0-5]{1}[0-9]{2}|[6]{1}([0-3]{1}[0-9]{1}|[4]{1}[0-7]{1})))))))))">
+						</pattern>
+
+						<minInclusive value="1" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="startDt" type="dateTime" minOccurs="1" maxOccurs="1">
+			</element>
+
+			<element name="blngCyc" minOccurs="1" maxOccurs="1">
+				<simpleType>
+					<restriction base="int">
+						<pattern value="\d{1,2}" />
+						<enumeration value="0" />
+						<enumeration value="10" />
+						<enumeration value="20" />
+						<enumeration value="30" />
+						<enumeration value="40" />
+						<enumeration value="50" />
+						<enumeration value="51" />
+						<enumeration value="52" />
+						<enumeration value="60" />
+						<enumeration value="70" />
+						<enumeration value="80" />
+						<enumeration value="90" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="desc" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<minLength value="1" />
+						<maxLength value="25" />
+						<pattern value=".+" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="custId" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="long">
+						<pattern value="\d+" />
+						<maxInclusive value="9223372036854775807" />
+						<minInclusive value="0" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="pmtId" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="long">
+						<pattern value="\d+">
+						</pattern>
+						<maxInclusive value="9223372036854775807" />
+						<minInclusive value="0" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="prodInfo" type="xsdns:ProdInfo" maxOccurs="unbounded" minOccurs="0">
+			</element>
+			<element name="nextProcDt" type="dateTime" minOccurs="0" maxOccurs="1">
+			</element>
+			<element name="nrOfPmtRem" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="int">
+						<pattern value="(0|[1-9]{1}[0-9]{0,8}|[1]{1}[0-9]{1,9}|[2]{1}([0]{1}[0-9]{8}|[1]{1}([0-3]{1}[0-9]{7}|[4]{1}([0-6]{1}[0-9]{6}|[7]{1}([0-3]{1}[0-9]{5}|[4]{1}([0-7]{1}[0-9]{4}|[8]{1}([0-2]{1}[0-9]{3}|[3]{1}([0-5]{1}[0-9]{2}|[6]{1}([0-3]{1}[0-9]{1}|[4]{1}[0-7]{1})))))))))">
+						</pattern>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="nrOfPmtProc" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="int">
+						<pattern value="(0|[1-9]{1}[0-9]{0,8}|[1]{1}[0-9]{1,9}|[2]{1}([0]{1}[0-9]{8}|[1]{1}([0-3]{1}[0-9]{7}|[4]{1}([0-6]{1}[0-9]{6}|[7]{1}([0-3]{1}[0-9]{5}|[4]{1}([0-7]{1}[0-9]{4}|[8]{1}([0-2]{1}[0-9]{3}|[3]{1}([0-5]{1}[0-9]{2}|[6]{1}([0-3]{1}[0-9]{1}|[4]{1}[0-7]{1})))))))))">
+						</pattern>
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="indCode" minOccurs="0" maxOccurs="1">
+
+				<simpleType>
+					<restriction base="int">
+						<pattern value="[0-4]" />
+					</restriction>
+				</simpleType>
+			</element>
+			
+			<element name="ordNr" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value=".{1,50}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="purcOrdNr" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="17" />
+						<minLength value="1" />
+						<pattern value="[A-Za-z0-9 ]{1,17}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="shipToZipCode" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value=".{1,9}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="usrDef" type="xsdns:NameVal" minOccurs="0" maxOccurs="unbounded">
+			</element>
+			<element name="tax" type="xsdns:Tax" minOccurs="0" maxOccurs="1">
+			</element>
+			
+			<element name="seccCode" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="int">
+
+						<minInclusive value="0" />
+						<maxInclusive value="7" />
+						<pattern value="\d{1}" />
+					</restriction>
+				</simpleType>
+			</element>
+			
+			<element name="achAcctInfo" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="10" />
+						<pattern value=".+" />
+						<minLength value="1" />
+					</restriction>
+				</simpleType>
+			</element>
+			
+		</sequence>
+	</complexType>
+
+	<complexType name="ProdInfo">
+		<sequence>
+			<element name="prodId" minOccurs="1" maxOccurs="1">
+				<simpleType>
+					<restriction base="long">
+						<pattern value="\d+" />
+						<maxInclusive value="9223372036854775807" />
+						<minInclusive value="0" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="quantity" minOccurs="1" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<minLength value="1" />
+						<maxLength value="12" />
+						<pattern value="\d{1,12}" />
+					</restriction>
+				</simpleType>
+			</element>
+		</sequence>
+	</complexType>
+
+	<element name="UpdtRecurrProfRequest">
+		<complexType>
+			<sequence>
+				<element name="merc" type="xsdns:Merc" minOccurs="1" maxOccurs="1">
+				</element>
+				<element name="cust" minOccurs="0" maxOccurs="1" type="xsdns:Cust">
+				</element>
+				<element name="recurProf" type="xsdns:RecurProf" minOccurs="0" maxOccurs="1">
+				</element>
+				<element name="prodData" type="xsdns:ProdData" maxOccurs="unbounded" minOccurs="0" />
+			</sequence>
+		</complexType>
+	</element>
+	<element name="UpdtRecurrProfResponse">
+		<complexType>
+			<sequence>
+				<element name="id" minOccurs="0" maxOccurs="1">
+					<simpleType>
+						<restriction base="long">
+							<pattern value="\d+" />
+							<maxInclusive value="9223372036854775807" />
+							<minInclusive value="0" />
+						</restriction>
+					</simpleType>
+				</element>
+				<element name="custId" minOccurs="0" maxOccurs="1">
+					<simpleType>
+						<restriction base="long">
+							<pattern value="\d+" />
+							<maxInclusive value="9223372036854775807" />
+							<minInclusive value="0" />
+						</restriction>
+					</simpleType>
+				</element>
+				<element name="pmtId" minOccurs="0" maxOccurs="10">
+					<simpleType>
+						<restriction base="long">
+							<pattern value="\d+" />
+							<maxInclusive value="9223372036854775807" />
+							<minInclusive value="0" />
+						</restriction>
+					</simpleType>
+				</element>
+				<element name="prodId" maxOccurs="unbounded" minOccurs="0">
+					<simpleType>
+						<restriction base="long">
+							<pattern value="\d+" />
+							<maxInclusive value="9223372036854775807" />
+							<minInclusive value="0" />
+						</restriction>
+					</simpleType>
+				</element>
+				<element name="rspCode" minOccurs="0" maxOccurs="1">
+					<simpleType>
+						<restriction base="string">
+
+							<length value="2" />
+						</restriction>
+					</simpleType>
+				</element>
+			</sequence>
+		</complexType>
+	</element>
+
+	<complexType name="Tax">
+		<sequence>
+			<element name="idcr" minOccurs="1" maxOccurs="1">
+				<simpleType>
+					<restriction base="int">
+						<pattern value="[0-2]" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="amt" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="[0-9]{1,12}" />
+					</restriction>
+				</simpleType>
+			</element>
+		</sequence>
+	</complexType>
+
+	<element name="FndRecurrProfRequest">
+		<complexType>
+			<sequence>
+				<element name="merc" type="xsdns:Merc" maxOccurs="1" minOccurs="1">
+				</element>
+
+
+				<element name="type" maxOccurs="1" minOccurs="0">
+					<simpleType>
+						<restriction base="int">
+
+							<minInclusive value="0" />
+							<maxInclusive value="1" />
+							<pattern value="\d{1}" />
+						</restriction>
+					</simpleType>
+				</element>
+				<element name="recurProfCrta" type="xsdns:RecurProfCrta" maxOccurs="1" minOccurs="0">
+				</element>
+
+
+				<element name="custCrta" maxOccurs="1" minOccurs="0" type="xsdns:CustCrta">
+
+				</element>
+				<element name="prodCrta" type="xsdns:ProdCrta" maxOccurs="1" minOccurs="0">
+				</element>
+				<element name="pmtCrta" type="xsdns:PmtCrta" minOccurs="0" maxOccurs="1" />
+			</sequence>
+		</complexType>
+	</element>
+
+	<element name="FndRecurrProfResponse">
+		<complexType>
+			<sequence>
+				<element name="id" type="int" maxOccurs="1" minOccurs="0">
+				</element>
+				<element name="mercId" maxOccurs="1" minOccurs="1">
+					<simpleType>
+						<restriction base="string">
+							<pattern value=".+" />
+							<minLength value="1" />
+							<maxLength value="15" />
+						</restriction>
+					</simpleType>
+				</element>
+				<element name="cust" type="xsdns:Cust" maxOccurs="unbounded" minOccurs="0">
+				</element>
+				<element name="recurProf" type="xsdns:RecurProf" maxOccurs="unbounded" minOccurs="0">
+				</element>
+				<element name="prodData" type="xsdns:ProdData" maxOccurs="unbounded" minOccurs="0" />
+			</sequence>
+		</complexType>
+	</element>
+
+	<complexType name="Cust">
+		<sequence>
+			<element name="type" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="int">
+
+						<minInclusive value="0" />
+						<maxInclusive value="2" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="contact" type="xsdns:Contact" minOccurs="1" maxOccurs="1">
+			</element>
+			<element name="pmt" type="xsdns:Pmt" minOccurs="0" maxOccurs="10" />
+		</sequence>
+	</complexType>
+	<complexType name="CustCrta">
+		<sequence>
+			<element name="id" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="long">
+						<pattern value="\d+" />
+						<maxInclusive value="9223372036854775807" />
+						<minInclusive value="0" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="coName" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<maxLength value="30" />
+						<minLength value="1" />
+						<pattern value=".+" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="firstName" maxOccurs="1" minOccurs="0">
+				<simpleType>
+					<restriction base="string">
+						<pattern value=".{1,30}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="lastName" maxOccurs="1" minOccurs="0">
+				<simpleType>
+					<restriction base="string">
+						<pattern value=".{1,30}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="fullName" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value=".{1,61}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="stat" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="int">
+						<pattern value="[0-1]" />
+					</restriction>
+				</simpleType>
+			</element>
+
+		</sequence>
+	</complexType>
+
+	<complexType name="RecurProfCrta">
+		<sequence>
+			<element name="id" maxOccurs="1" minOccurs="0">
+				<simpleType>
+					<restriction base="long">
+						<pattern value="\d+" />
+						<maxInclusive value="9223372036854775807" />
+						<minInclusive value="0" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="ordNr" maxOccurs="1" minOccurs="0">
+				<simpleType>
+					<restriction base="string">
+						<minLength value="1" />
+						<maxLength value="50" />
+						<pattern value=".+" />
+					</restriction>
+				</simpleType>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="ProdCrta">
+		<sequence>
+			<element name="id" maxOccurs="1" minOccurs="0">
+				<simpleType>
+					<restriction base="long">
+						<pattern value="\d+" />
+						<maxInclusive value="9223372036854775807" />
+						<minInclusive value="0" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="stat" maxOccurs="1" minOccurs="0">
+				<simpleType>
+					<restriction base="int">
+
+						<minInclusive value="0" />
+						<maxInclusive value="1" />
+						<pattern value="\d{1}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="prodName" maxOccurs="1" minOccurs="0">
+				<simpleType>
+					<restriction base="string">
+						<pattern value=".+" />
+						<minLength value="1" />
+						<maxLength value="25" />
+					</restriction>
+				</simpleType>
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="Prod">
+		<sequence>
+
+			<element name="prodName" maxOccurs="1" minOccurs="0">
+				<simpleType>
+					<restriction base="string">
+						<pattern value=".+" />
+						<minLength value="1" />
+						<maxLength value="25" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="stat" maxOccurs="1" minOccurs="1">
+				<simpleType>
+					<restriction base="int">
+
+						<minInclusive value="0" />
+						<maxInclusive value="1" />
+						<pattern value="\d{1}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="itemNr" maxOccurs="1" minOccurs="1">
+				<simpleType>
+					<restriction base="int">
+						<pattern value="\d{3}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="desc" maxOccurs="1" minOccurs="0">
+				<simpleType>
+					<restriction base="string">
+						<minLength value="1" />
+						<maxLength value="100" />
+						<pattern value=".+" />
+					</restriction>
+				</simpleType>
+			</element>
+
+			<element name="price" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<minLength value="1" />
+						<maxLength value="12" />
+						<pattern value="\d{1,12}" />
+					</restriction>
+				</simpleType>
+			</element>
+
+			<element name="taxPctg" maxOccurs="1" minOccurs="0">
+				<simpleType>
+					<restriction base="string">
+						<minLength value="1" />
+						<maxLength value="8" />
+						<pattern value="([0-9]{1,3}|[0-9]{0,3}[.][0-9]{1,6})" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="unitOfMsr" maxOccurs="1" minOccurs="0">
+				<simpleType>
+					<restriction base="string">
+						<pattern value=".+" />
+						<minLength value="1" />
+						<maxLength value="20" />
+					</restriction>
+				</simpleType>
+			</element>
+
+			<element name="setupFee" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<minLength value="1" />
+						<maxLength value="12" />
+						<pattern value="\d{1,12}" />
+					</restriction>
+				</simpleType>
+			</element>
+
+		</sequence>
+	</complexType>
+
+	<complexType name="RecurProf">
+		<sequence>
+			<element name="recurProfId" maxOccurs="1" minOccurs="0">
+				<simpleType>
+					<restriction base="long">
+						<pattern value="\d+" />
+						<maxInclusive value="9223372036854775807" />
+						<minInclusive value="0" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="type" maxOccurs="1" minOccurs="0">
+				<simpleType>
+					<restriction base="int">
+						<minInclusive value="0" />
+						<maxInclusive value="2" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="recur" type="xsdns:Recur" maxOccurs="1" minOccurs="0">
+			</element>
+			<element name="prodData" type="xsdns:ProdData" maxOccurs="unbounded" minOccurs="0">
+			</element>
+		</sequence>
+	</complexType>
+
+	<complexType name="ProdData">
+		<sequence>
+			<element name="id" maxOccurs="1" minOccurs="0">
+				<simpleType>
+					<restriction base="long">
+						<pattern value="\d+" />
+						<maxInclusive value="9223372036854775807" />
+						<minInclusive value="0" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="type" maxOccurs="1" minOccurs="0">
+				<simpleType>
+					<restriction base="int">
+
+						<minInclusive value="0" />
+						<maxInclusive value="2" />
+						<pattern value="\d{1}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="prod" type="xsdns:Prod" maxOccurs="1" minOccurs="0">
+			</element>
+			<element name="quantity" maxOccurs="1" minOccurs="0">
+				<simpleType>
+					<restriction base="string">
+						<minLength value="1" />
+						<maxLength value="12" />
+						<pattern value="\d{1,12}" />
+					</restriction>
+				</simpleType>
+			</element>
+		</sequence>
+	</complexType>
+
+
+	<complexType name="RecurMan">
+		<sequence>
+			<element name="id" maxOccurs="1" minOccurs="1">
+				<simpleType>
+					<restriction base="long">
+						<pattern value="\d+" />
+						<maxInclusive value="9223372036854775807" />
+						<minInclusive value="0" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="sec" maxOccurs="1" minOccurs="0">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="\d{3,4}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="seccCode" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="int">
+						<minInclusive value="0" />
+						<maxInclusive value="7" />
+						<pattern value="\d{1}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="prodInfo" type="xsdns:ProdInfo" maxOccurs="unbounded" minOccurs="0" />
+		</sequence>
+	</complexType>
+
+	<complexType name="PmtCrta">
+		<sequence>
+			<element name="pan" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="\d{1,19}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="acctNr" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value=".{1,28}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="pmtId" minOccurs="0" maxOccurs="1">
+
+				<simpleType>
+					<restriction base="long">
+						<maxInclusive value="9223372036854775807" />
+						<minInclusive value="0" />
+						<pattern value="\d+" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="pmtDesc" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value=".{1,50}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="ordNr" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value=".{1,50}" />
+					</restriction>
+				</simpleType>
+			</element>
+		</sequence>
+	</complexType>
+	
+	<complexType name="AchResponse">
+		<sequence>
+			<element name="Message" minOccurs="0" maxOccurs="1">
+				<simpleType>
+					<restriction base="string">
+						<pattern value=".{1,2084}" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="Note" minOccurs="0" maxOccurs="unbounded">
+				<simpleType>
+					<restriction base="string">
+						<pattern value=".{1,2084}" />
+					</restriction>
+				</simpleType>
+			</element>
+		</sequence>
+	</complexType>
+	
+	<complexType name="AdditionalAmount">
+		<sequence>
+			<element name="accountType">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="\d{2}" />
+						<enumeration value="00" />
+						<enumeration value="08" />
+						<enumeration value="09" />
+						<enumeration value="10" />
+						<enumeration value="11" />
+						<enumeration value="12" />
+						<enumeration value="18" />
+						<enumeration value="19" />
+						<enumeration value="20" />
+						<enumeration value="21" />
+						<enumeration value="28" />
+						<enumeration value="29" />
+						<enumeration value="30" />
+						<enumeration value="31" />
+						<enumeration value="32" />
+						<enumeration value="33" />
+						<enumeration value="34" />
+						<enumeration value="35" />
+						<enumeration value="39" />
+						<enumeration value="40" />
+						<enumeration value="48" />
+						<enumeration value="49" />
+						<enumeration value="50" />
+						<enumeration value="51" />
+						<enumeration value="52" />
+						<enumeration value="53" />
+						<enumeration value="58" />
+						<enumeration value="59" />
+						<enumeration value="60" />
+						<enumeration value="67" />
+						<enumeration value="68" />
+						<enumeration value="69" />
+						<enumeration value="70" />
+						<enumeration value="71" />
+						<enumeration value="72" />
+						<enumeration value="73" />
+						<enumeration value="91" />
+						<enumeration value="92" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="amountType">
+				<simpleType>
+					<restriction base="string">
+						<pattern value=".{2}" />
+						<enumeration value="00" />
+						<enumeration value="01" />
+						<enumeration value="02" />
+						<enumeration value="05" />
+						<enumeration value="20" />
+						<enumeration value="40" />
+						<enumeration value="53" />
+						<enumeration value="57" />
+						<enumeration value="80" />
+						<enumeration value="81" />
+						<enumeration value="90" />
+						<enumeration value="91" />
+						<enumeration value="3S" />
+						<enumeration value="4S" />
+						<enumeration value="4T" />
+						<enumeration value="4U" />
+						<enumeration value="4V" />
+						<enumeration value="4W" />
+						<enumeration value="4X" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="currencyCode">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="(\d{3}|[A-Z]{3})" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="amountSign">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="[CD]" />
+					</restriction>
+				</simpleType>
+			</element>
+			<element name="amount">
+				<simpleType>
+					<restriction base="string">
+						<pattern value="\d{12}" />
+					</restriction>
+				</simpleType>
+			</element>
+		</sequence>
+	</complexType>
+</schema>

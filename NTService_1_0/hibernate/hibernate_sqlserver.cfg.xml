@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+<session-factory>
+
+	<property name="connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
+	<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+	<property name="hibernate.connection.url">jdbc:sqlserver://${main.db.url}</property>
+	<property name="hibernate.connection.username">${main.db.user}</property>
+	<property name="hibernate.connection.password">${main.db.pass}</property>
+	<property name="jdbc.fetch_size">50</property> 
+	<property name="jdbc.batch_size">25</property> 
+	<property name="jdbc.use_scrollable_resultset">false</property> 
+	<property name="dialect">org.hibernate.dialect.SQLServerDialect</property>
+   <property name="hibernate.listeners.envers.autoRegister">false</property>	
+
+	<!-- c3p0 -->
+	<property name="hibernate.c3p0.acquire_increment">1</property>
+	<property name="hibernate.c3p0.idle_test_period">100</property>
+	<!-- seconds -->
+	<property name="hibernate.c3p0.max_size">${main.c3p0.max}</property> 
+	<property name="hibernate.c3p0.max_statements">0</property> 
+	<property name="hibernate.c3p0.min_size">${main.c3p0.min}</property> 
+	<property name="hibernate.c3p0.timeout">5000</property>
+
+	<!-- Java5 Annotated Classes -->
+	<mapping class="aero.nettracer.serviceprovider.common.db.User" />
+	<mapping class="aero.nettracer.serviceprovider.common.db.Profile" />
+	<mapping class="aero.nettracer.serviceprovider.common.db.SabreConnection" />
+	<mapping class="aero.nettracer.serviceprovider.common.db.WorldTracerWebAccount" />
+	<mapping class="aero.nettracer.serviceprovider.common.db.WorldTracerISharesAccount" />
+
+		<mapping class="aero.nettracer.serviceprovider.common.db.PrivacyPermissions"/>
+</session-factory>
+
+</hibernate-configuration>

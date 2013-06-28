@@ -63,6 +63,53 @@
 		<ant target="WT_services_wsdl2java" />
 	</target>
 
+	<!--<target name="cron-generate-hibernate-xmls" >
+		<copy toFile="${build.dir}/${ant_project_name}/classes/hibernate_main.cfg.xml" file="hibernate/hibernate_${hibernate_dialect}.cfg.xml" overwrite="true" >
+			<filterset begintoken="${" endtoken="}" >
+				<filter token="main.c3p0.max" value="40" />
+			</filterset>
+			<filterset begintoken="${" endtoken="}" >
+				<filtersfile file="${hibernate_props_loc}hibernate.properties" />
+				<filtersfile file="${basedir}/environments/cron/hibernate.properties" />
+			</filterset>
+		</copy>
+		<copy toFile="${build.dir}/${ant_project_name}/classes/hibernate_dirty.cfg.xml" file="companies/tracer/hibernate/hibernate_${hibernate_dialect}_dirty.cfg.xml" overwrite="true" >
+			<filterset begintoken="${" endtoken="}" >
+				<filter token="dirty.c3p0.max" value="40" />
+			</filterset>
+			<filterset begintoken="${" endtoken="}" >
+				<filtersfile file="${hibernate_props_loc}hibernate.properties" />
+				<filtersfile file="${basedir}/companies/tracer/environment/cron/hibernate.properties" />
+			</filterset>
+		</copy>
+		<copy toFile="${build.dir}/${ant_project_name}/classes/hibernate_geo.cfg.xml" file="hibernate/hibernate_${hibernate_dialect}_reporting.cfg.xml" overwrite="true" >
+			<filterset begintoken="${" endtoken="}" >
+				<filtersfile file="${hibernate_props_loc}hibernate.properties" />
+				<filtersfile file="${basedir}/companies/tracer/environment/cron/hibernate.properties" />
+			</filterset>
+		</copy>	
+	</target>-->
+
+	<target name="generate-hibernate-xmls" >
+		<copy toFile="${basedir}/src/hibernate_main.cfg.xml" file="hibernate/hibernate_${hibernate_dialect}.cfg.xml" overwrite="true" >
+			<filterset begintoken="${" endtoken="}" >
+				<filtersfile file="${hibernate_props_loc}/hibernate.properties" />
+				<filtersfile file="${basedir}/environments/${client.name}/${environment.name}/hibernate.properties" />
+			</filterset>
+		</copy>
+		<!-- <copy toFile="${basedir}/src/hibernate_dirty.cfg.xml" file="companies/tracer/hibernate/hibernate_${hibernate_dialect}_dirty.cfg.xml" overwrite="true" >
+			<filterset begintoken="${" endtoken="}" >
+				<filtersfile file="${hibernate_props_loc}/hibernate.properties" />
+				<filtersfile file="${basedir}/companies/tracer/environment/${environment.name}/hibernate.properties" />
+			</filterset>
+		</copy>
+		<copy toFile="${basedir}/src/hibernate_reporting.cfg.xml" file="companies/tracer/hibernate/hibernate_${hibernate_dialect}_reporting.cfg.xml" overwrite="true" >
+			<filterset begintoken="${" endtoken="}" >
+				<filtersfile file="${hibernate_props_loc}/hibernate.properties" />
+				<filtersfile file="${basedir}/companies/tracer/environment/${environment.name}/hibernate.properties" />
+			</filterset>
+		</copy>	-->
+	</target>
 
 	<target name="services_java2wsdl">
 		<taskdef name="Java2WSDLTask" classname="org.apache.ws.java2wsdl.Java2WSDLTask" classpathref="${axis2.classpath}" />
@@ -284,6 +331,10 @@
 				<include name="META-INF/**/*"/>
 			</fileset>
 		</copy>
+
+		<property name="hibernate_dialect" value="mysql" />
+		<property name="hibernate_props_loc" value="environments/${client.name}/${environment.name}" />
+				
 		<!--ant target="build-war">
 		</ant-->
 		
@@ -291,7 +342,9 @@
 		<copy todir="${build.dir}/services-war/WEB-INF/classes/" file="${root.dir}/environments/${client.name}/${environment.name}/hibernate_geo.cfg.xml" overwrite="true" />
 		<copy todir="${build.dir}/services-war/WEB-INF/classes/" file="${root.dir}/dozer/fs/dozerBeanMapping.xml" overwrite="true" />
 		
-		<javac srcdir="./src" fork="true" destdir="${build.dir}/services-war/WEB-INF/classes" debug="on" memoryinitialsize="256m" memorymaximumsize="256m" >
+		<antcall target="generate-hibernate-xmls" />
+		
+		<javac srcdir="./src" fork="no" destdir="${build.dir}/services-war/WEB-INF/classes" debug="on" memoryinitialsize="256m" memorymaximumsize="512m" >
 			<classpath refid="project.classpath" />
 		</javac>
 		
