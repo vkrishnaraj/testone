@@ -116,8 +116,8 @@ public class PaxViewDao extends HibernateDaoSupport {
 						.equalsIgnoreCase("Please Select a Language")) {
 			return null;
 		}
-		return ((Languages) getHibernateTemplate().find(
-				"from Languages where description= ?", languageDescription)
+		return ((Languages) getHibernateTemplate().findByNamedParam(
+				"from Languages where description= :lang", "lang", languageDescription)
 				.get(0)).getId();
 	}
 
