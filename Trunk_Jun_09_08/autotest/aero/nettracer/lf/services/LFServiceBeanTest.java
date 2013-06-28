@@ -1033,6 +1033,7 @@ public class LFServiceBeanTest {
 		for(LFMatchHistory match:results){
 			if(match.getFound().getId() == foundId && match.getLost().getId() == lostId){
 				hasMatch = match;
+				bean.sendFoundEmail(match.getLost().getId());
 			}
 		}
 		assertTrue(hasMatch != null);
@@ -1686,8 +1687,8 @@ public class LFServiceBeanTest {
 		
 		LFPerson client = new LFPerson();
 		client.setFirstName("Bob");
-		client.setLastName("wehadababyitsaboy");
-		client.setDecryptedEmail("mloupas@nettracer.aero");
+		client.setLastName("NetTracer");
+		client.setDecryptedEmail("sfine@nettracer.aero");
 		LFAddress address = new LFAddress();
 		address.setDecryptedAddress1("123 Test Street");
 		address.setDecryptedCity("Atlanta");
@@ -1774,8 +1775,8 @@ public class LFServiceBeanTest {
 		/* temp */
 		LFPerson client = new LFPerson();
 		client.setFirstName("Bob");
-		client.setLastName("wehadababyitsaboy");
-		client.setDecryptedEmail("mloupas@nettracer.aero");
+		client.setLastName("NetTracer");
+		client.setDecryptedEmail("sfine@nettracer.aero");
 		LFAddress address = new LFAddress();
 		address.setDecryptedAddress1("123 Test Street");
 		address.setDecryptedCity("Atlanta");
@@ -1802,6 +1803,7 @@ public class LFServiceBeanTest {
 		
 		LFItem item = getItem();
 		item.setType(TracingConstants.LF_TYPE_FOUND);
+		item.setWeight(15);
 		found.setItem(item);
 		item.setFound(found);
 		
