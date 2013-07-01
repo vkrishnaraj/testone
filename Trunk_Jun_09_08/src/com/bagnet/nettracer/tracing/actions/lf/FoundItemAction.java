@@ -343,7 +343,7 @@ public class FoundItemAction extends CheckedAction {
 					}
 				} else if (request.getParameter("email") != null) {
 					String validWeight=request.getParameter("validWeight");
-					if(!validWeight.matches("-?\\d+(\\.\\d+)?"))
+					if(!validWeight.matches("^-?\\d+(\\.\\d+)?"))
 						validWeight="1.0";
 					if(Float.valueOf(validWeight)<=0f)
 						validWeight="1.0";
