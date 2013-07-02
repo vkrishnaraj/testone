@@ -47,13 +47,13 @@ public class ConsumerQueueManager {
 //		Date start = new Date();
 		ConsumerQueueElement element = null;
 		synchronized(consumerQueue){
-			int index = getNextIndex();
-			if(index == -1){
+			currentIndex = getNextIndex(consumerQueue.size(),currentIndex);
+			if(currentIndex == -1){
 //				Date end = new Date();
 //				System.out.println("Consumer TAKE: " + (end.getTime() - start.getTime()));
 				return null;
 			}
-			element = consumerQueue.get(index);
+			element = consumerQueue.get(currentIndex);
 			if(element.getQueue().peek() != null){
 //				Date end = new Date();
 //				System.out.println("Consumer TAKE: " + (end.getTime() - start.getTime()));
@@ -95,10 +95,21 @@ public class ConsumerQueueManager {
 		return this.take();
 	}
 	
-	private static int getNextIndex(){
-		if(consumerQueue.size() == 0){
+	/**
+	 * Round robin implementation.  If queue size is zero, return -1 to indicate to queue manager that queue is empty.
+	 * Otherwise, increment index by one until end of queue then restart.
+	 * 
+	 * @param size
+	 * @param currentIndex
+	 * @return
+	 */
+	protected static int getNextIndex(int size, int currentIndex){
+		if(size == 0){
 			return -1;
-		} 
-		return currentIndex;
+		} else if (currentIndex + 1 >= size){
+			return 0;
+		} else {
+			return currentIndex + 1;
+		}
 	}
 }
