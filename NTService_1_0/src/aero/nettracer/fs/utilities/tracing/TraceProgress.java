@@ -10,6 +10,7 @@ public class TraceProgress {
 	private ConsumerQueueElement element;
 	
 	private static final int MAX_SECONDS = 9999;
+	private static final int DEFAULT_WAIT_TIME = 30;
 	
 	public TraceProgress(long startTime, ConsumerQueueElement element){
 		this.fileId = element.getFile().getId();
@@ -61,6 +62,10 @@ public class TraceProgress {
 			return MAX_SECONDS;
 		}
 		if(percentRemaining == 0){
+			if(element.isAllProducersFinished() == false){
+				//not all producers are finished, thus cannot "accurately" estimate remaining time.  Use default wait time.
+				return DEFAULT_WAIT_TIME;
+			}
 			return 0;
 		}
 		long timeElapsed = (now - startTime) / 1000;
