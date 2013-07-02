@@ -145,7 +145,7 @@ public class Consumer implements Runnable{
 			//process match
 			if(match.getFile2() != null){
 				logger.debug("consumer claim: " + match.getFile2().getId());
-				match.setFile2(TraceWrapper.loadFileFromCache(match.getFile2().getId()));
+				match.setFile2(TraceWrapper.getCacheManager().loadFile(match.getFile2().getId()));
 				edate = new Date();
 				if(edate.getTime() - sdate.getTime()>timeout){
 					System.out.println("load file " + match.getFile2().getId() + ": " + (edate.getTime() - sdate.getTime()));

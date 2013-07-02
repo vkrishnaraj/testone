@@ -1,0 +1,6 @@
+<infinispan>
+	<namedCache name="FsFileCache">
+		<eviction  maxEntries="70000" strategy="LIRS" />
+		<expiration wakeUpInterval="500" maxIdle="172800000"/>
+	</namedCache>
+</infinispan>

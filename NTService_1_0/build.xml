@@ -341,6 +341,7 @@
 		<copy todir="${build.dir}/services-war/WEB-INF/classes/" file="${root.dir}/environments/${client.name}/${environment.name}/hibernate_main.cfg.xml" overwrite="true" />
 		<copy todir="${build.dir}/services-war/WEB-INF/classes/" file="${root.dir}/environments/${client.name}/${environment.name}/hibernate_geo.cfg.xml" overwrite="true" />
 		<copy todir="${build.dir}/services-war/WEB-INF/classes/" file="${root.dir}/dozer/fs/dozerBeanMapping.xml" overwrite="true" />
+		<copy todir="${build.dir}/services-war/WEB-INF/classes/" file="${root.dir}/src/infinispan_config.xml" overwrite="true" />
 		
 		<antcall target="generate-hibernate-xmls" />
 		
@@ -359,6 +360,7 @@
 			<include name="**/**/fraud/**/*.class" />
 			<include name="**/**/fraud/client/*.class" />
 			<include name="**/**/nettracer/fs/utilities/tracing/*.class" />
+			<include name="**/**/nettracer/fs/utilities/tracing/cache/*.class" />
 			<include name="**/**/nettracer/fs/utilities/*.class" />
 			<include name="**/**/nettracer/fs/model/**/*.class" />
 			<include name="**/**/nettracer/fs/bmo/*.class" />
@@ -381,7 +383,8 @@
 	    	org.jboss.remote-naming,
 	    	org.javassist,
 	    	org.dozer,
-	    	org.apache.commons.codec"/>
+	    	org.apache.commons.codec,
+	    	org.infinispan"/>
 	    </manifest>
 		
 		<jar destfile="${dist.dir}/nt_fs_client.jar" basedir="${build.dir}/services-war/WEB-INF/classes/">

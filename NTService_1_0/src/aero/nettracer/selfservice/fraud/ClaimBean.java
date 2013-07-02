@@ -184,6 +184,13 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 						AuditUtil.createAuditAction(AuditUtil.ACTION_CREATE_FILE, file.getId(), file.getValidatingCompanycode(),null)
 						.addMetric(AuditUtil.ACTION_CREATE_FILE, (new Date()).getTime() - starttime.getTime(), 0, null));
 			}
+			
+			/**
+			 * loupas - Since there is quite a bit of ID manipulation in the save method, it is probably best to delete the entry from the cache and let the tracing
+			 * process load a fresh copy from the database with all the IDs as opposed to updating this copy
+			 */
+			TraceWrapper.getCacheManager().removeFromCache(toSubmit.getId());
+			
 			return toSubmit.getId();
 		} catch (Exception e) {
 			// logger.error("Error Saving: ", e);
@@ -491,7 +498,7 @@ public class ClaimBean implements ClaimRemote, ClaimHome {
 	public TraceResponse getFileMatches(long fileId) {
 		Date starttime = new Date();
 		TraceResponse tr = new TraceResponse();
-		File file = TraceWrapper.loadFileFromCache(fileId);
+		File file = TraceWrapper.getCacheManager().loadFile(fileId);
 		Set<FsMatchHistoryAudit> matchAuditSet = new HashSet<FsMatchHistoryAudit>();
 		Set<MatchHistory> mh = Producer.getCensoredFileMatches(fileId, matchAuditSet);
 		tr.setMatchHistory(mh);

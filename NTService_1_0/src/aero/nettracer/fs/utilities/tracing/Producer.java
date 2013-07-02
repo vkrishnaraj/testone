@@ -62,7 +62,7 @@ public class Producer {
 	}
 	
 	public static TraceResponse matchFile(long fileId, int maxDelay, boolean persistData, boolean isPrimary, boolean returnResults){
-		File file = TraceWrapper.loadFileFromCache(fileId);
+		File file = TraceWrapper.getCacheManager().loadFile(fileId);
 		if(file != null){
 			return matchFile(file, maxDelay, persistData, isPrimary, returnResults);
 		} else {
@@ -355,7 +355,7 @@ public class Producer {
 		element.setProducerCount(count);
 		element.setProducerFinished(true);
 		//System.out.println("Consumer BEGIN: " + (new Date()));
-
+		
 		traceProgress.put(file.getId(), new TraceProgress((new Date()).getTime(),element));
 		
 		if(returnResults){
@@ -606,7 +606,7 @@ public class Producer {
 	}
 	
 	public static Set<MatchHistory> getCensoredFileMatches(long fileId, Set<FsMatchHistoryAudit> matchAuditSet) {
-		File f = TraceWrapper.loadFileFromCache(fileId);
+		File f = TraceWrapper.getCacheManager().loadFile(fileId);
 		String company = f.getValidatingCompanycode();
 		Set<MatchHistory> histories = Producer.getMatchHistoryResult(fileId);
 		List<PrivacyPermissions> p = PrivacyPermissionsBean.getPrivacyPermissions();

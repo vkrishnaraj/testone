@@ -14,6 +14,9 @@ import aero.nettracer.fs.model.File;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.FsIncident;
 import aero.nettracer.fs.model.detection.MatchHistory;
+import aero.nettracer.fs.utilities.tracing.cache.CacheManager;
+import aero.nettracer.fs.utilities.tracing.cache.CacheManagerDefaultImpl;
+import aero.nettracer.fs.utilities.tracing.cache.CacheManagerInfinispanImpl;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
 
@@ -27,6 +30,8 @@ public class TraceWrapper {
 	
 	private static boolean LOAD_FROM_CACHE = false;
 	private static int MAX_CACHE_SIZE = 5000;
+	
+	private static String FS_CACHE_MANAGER_IMPL = System.getProperty("fs.cachemanager.impl");
 	
 	public static File loadFile(long fileId){
 		Session sess = HibernateWrapper.getSession().openSession();
@@ -193,6 +198,26 @@ public class TraceWrapper {
 		t.setPriority(Thread.MIN_PRIORITY);
 		t.start();
 		return t;
+	}
+	
+	
+	
+	/**
+	 * Using the Wrapper property to set the cache implementation.  This also provides a kill switch, if we ever need to disable the cache,
+	 * update the wrapper conf to use the DefaultImpl and bounce.
+	 * 
+	 * If we ever updatet this project with Spring, consider refactoring to use Spring injection instead
+	 * 
+	 * @return
+	 */
+	public static CacheManager getCacheManager(){
+		if("CacheManagerInfinispanImpl".equals(FS_CACHE_MANAGER_IMPL)){
+			return CacheManagerInfinispanImpl.getInstance();
+		} else if ("CacheManagerDefaultImpl".equals(FS_CACHE_MANAGER_IMPL)){
+			return CacheManagerDefaultImpl.getInstance();
+		} else {
+			return CacheManagerDefaultImpl.getInstance();
+		}
 	}
 	
 }
