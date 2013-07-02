@@ -1122,7 +1122,10 @@ public class PassengerController {
 					if (bagTagList != null && bagTagList.size() > 0) {
 						for (Bag lostBag : bagTagList) {
 							if (passengerBean.isPilferage() || passengerBean.isDamaged() || !(Boolean.parseBoolean(lostBag.getBagArrivalStatus()))) {
-								lostBagList.add(lostBag);
+								Bag tempBag = new Bag();
+								tempBag.setBagArrivalStatus(lostBag.getBagArrivalStatus());
+								tempBag.setBagTagNumber(lostBag.getBagTagNumber());
+								lostBagList.add(tempBag);
 							}
 						}
 						if (!(passengerBean.isPilferage() || passengerBean.isDamaged()) && passengerBean.isDelayed() && passengerBean.getLostBag() != lostBagList.size()) {

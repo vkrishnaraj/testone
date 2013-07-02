@@ -869,7 +869,10 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 					bagList.add(bag);
 				}
 				if (!"INTERIM".equals(bag.getBagTagNumber())) {
-					bagTagList.add(bag);
+					Bag tempBag = new Bag();
+					tempBag.setBagArrivalStatus(wsBag[i].getBagArrive()+"");
+					tempBag.setBagTagNumber(wsBag[i].getTag());
+					bagTagList.add(tempBag);
 				}
 				bag=null; //GC
 			}
