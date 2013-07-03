@@ -403,6 +403,8 @@ public class Reservation implements ReservationInterface {
 							for (Segment seg : journey.getSegments().getSegmentArray()) {
 								Itinerary itin = res.addNewPassengerItinerary();
 								mapSegmentsToItinerary(seg, itin);
+								Itinerary bagItin = res.addNewBagItinerary();
+								mapSegmentsToItinerary(seg, bagItin);
 								// CG: MAY NEED TO REPLACE ABOVE TWO LINES WITH THE COMMENTED CODE BELOW AND ADJUST MAP METHOD.
 //								if (seg.getLegs() != null && seg.getLegs().getLegArray() != null) {
 //									for (Leg leg : seg.getLegs().getLegArray()) {
