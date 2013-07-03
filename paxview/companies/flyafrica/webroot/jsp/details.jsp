@@ -34,8 +34,8 @@
 <table cellspacing="0" width="600" border="0"> 
   <tr>
   	<td>
-  	<a href="www.nettracer.com" >
-  	<img src="images/NT_logo_blu.jpg"/></a>
+  	<a href="http://www.nettracer.com" >
+  	<img src="images/NT_logo_blu.jpg" style="border: none;"/></a>
   	</td>
   </tr>
   <tr> 
