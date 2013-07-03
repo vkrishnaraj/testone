@@ -105,9 +105,10 @@
             	<%if(request.getParameter("incident")!=null){ %>
             	<input type="hidden" id="incident" name="incident" value="<%=request.getParameter("incident") %>" />
             	<%} %>
-					<html:submit property="send" styleId="button" onclick="this.disabled = true;">
+					<html:hidden property="send" value="" disabled="true" />
+					<html:button property="sendButton" styleId="button" onclick="this.disabled = true; this.form.send.disabled = false; this.form.submit();">
                       <bean:message key="send_message" />
-                    </html:submit>
+                    </html:button>
                     &nbsp;&nbsp;
                     <input id="button" type="button" value='<bean:message key="claim.button.back" />' onClick="history.back()">
                 </center>        	
