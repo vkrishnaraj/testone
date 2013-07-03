@@ -1094,6 +1094,8 @@ public class BagService {
 			IncidentBMO iBMO = new IncidentBMO(); // init lostdelay pojo or ejb
 			// copy into incident bean
 			BeanUtils.copyProperties(iDTO, theform);
+			Incident oInc=iBMO.getIncidentByID(iDTO.getIncident_ID(), null);
+			
 			
 			if(iDTO.getAgentassigned() == null || iDTO.getAgentassigned().getAgent_ID() == 0)
 				iDTO.setAgentassigned(null);
@@ -1165,6 +1167,129 @@ public class BagService {
 						}
 					}
 				}
+				
+				//Passenger, Itinerary, and Baginformation set for Audit purposes
+				if(oInc!=null){
+				// fault station
+				if(oInc.getFaultstation()!=null && oInc.getFaultstation().getStation_ID()== 0) {
+					// default to assigned station
+					iDTO.setFaultstation(new Station());
+					
+					if(iDTO.getAgent().getStation().getCompany().getVariable().getDefault_station_code() > 0) {
+						iDTO.getFaultstation().setStation_ID(iDTO.getAgent().getStation().getCompany().getVariable().getDefault_station_code());
+					}	else {
+						iDTO.getFaultstation().setStation_ID(iDTO.getStationassigned().getStation_ID());
+					}
+					
+					// set losscode
+					if(iDTO.getAgent().getStation().getCompany().getVariable().getDefault_loss_code() > 0)
+						iDTO.setLoss_code(iDTO.getAgent().getStation().getCompany().getVariable().getDefault_loss_code());
+				}
+				else {
+					iDTO.setFaultstation(new Station());
+					iDTO.getFaultstation().setStation_ID(oInc.getFaultstation().getStation_ID());
+				}
+				
+				if (oInc.getWtFile() != null) {
+					iDTO.setWtFile(oInc.getWtFile());
+				}
+
+				// set claimchecks to incident
+				// remove all spaces within claimcheck for incident
+				// if (itemtype == TracingConstants.LOST_DELAY) {
+				Incident_Claimcheck ic = null;
+
+				if(oInc.getClaimcheck_list() != null) {
+					for(int i = oInc.getClaimcheck_list().size() - 1; i >= 0; i--) {
+						ic = (Incident_Claimcheck) oInc.getClaimcheck_list().get(i);
+						if(ic.getClaimchecknum() != null) {
+							ic.setClaimchecknum(TracerUtils.removeSpaces(ic.getClaimchecknum().toUpperCase()));
+							ic.setIncident(iDTO);
+							if(ic.getClaimchecknum().length() == 0) {
+								// nothing entered, remove it from claimcheck list
+								oInc.getClaimcheck_list().remove(i);
+							}
+						}
+						else {
+							// claim checknum is null, remove it from the list
+							oInc.getClaimcheck_list().remove(i);
+						}
+
+					}
+				}
+				
+				//For Existing Incidents
+				//If Property (and Lost delay){
+				if(PropertyBMO.isTrue(PropertyBMO.PROPERTY_DELIVERY_INSTRUCTIONS) && iDTO.getItemtype().getItemType_ID()==TracingConstants.LOST_DELAY ) {
+					if(oInc.getDeliveryInstructions()!=null){
+						DeliveryInstructions DI=oInc.getDeliveryInstructions();
+						DI.setInstructions(oInc.getDeliveryInstructions().getInstructions());
+						HibernateUtils.save(DI);
+					}
+				}
+
+				if(oInc.getRemarks() != null) {
+					for(Remark re:oInc.getRemarks()) {
+						//re = (Remark) oInc.getRemarks().get(i);
+
+						// If agent_ID = 0, agent is transient. To prevent exception
+						// from being thrown, we get the non-transient version.
+						// Was unable to determine what causes object to become
+						// transient.
+						if(re.getAgent() != null && re.getAgent().getAgent_ID() == 0) {
+							try {
+								Agent tmpAgent = TracerUtils.getAgent(re.getAgent().getUsername(), re.getAgent()
+										.getCompanycode_ID());
+								re.setAgent(tmpAgent);
+							}
+							catch (Exception e) {
+								logger.error("Could not correct transient agent: " + e.getMessage());
+								e.printStackTrace();
+							}
+						}
+
+						re.setIncident(iDTO);
+					}
+				}
+				Itinerary iti = null;
+				if(oInc.getItinerary_list() != null) {
+					for(int i = 0; i < oInc.getItinerary_list().size(); i++) {
+						iti = (Itinerary) oInc.getItinerary_list().get(i);
+						iti.setIncident(iDTO);
+					}
+				}
+
+				iDTO.setClaimchecks(new LinkedHashSet(oInc.getClaimcheck_list()));
+				iDTO.setRemarks(oInc.getRemarks());
+				iDTO.setItinerary(new LinkedHashSet(oInc.getItinerary_list()));
+
+				iDTO.setPassengers(new LinkedHashSet(oInc.getPassenger_list()));
+				Passenger pa = null;
+				if(iDTO.getPassengers() != null) {
+					for(Iterator i = iDTO.getPassengers().iterator(); i.hasNext();) {
+						pa = (Passenger) i.next();
+						pa.setIncident(iDTO);
+						if(pa.getMembership() != null) {
+							if(pa.getMembership().getCompanycode_ID() == null
+									|| pa.getMembership().getCompanycode_ID().length() <= 0) {
+								pa.setMembership(null);
+							}
+						}
+					}
+				}
+				
+				for(ExpensePayout ep : iDTO.getExpenses()) {
+					ep.setIncident(iDTO);
+					ep.setExpensepayout_ID(0);
+				}
+
+				// everytime when user update mbr, reset the ohd lasttraced date so
+				// tracer
+				// will pick it up.
+				iDTO.setOhd_lasttraced(null);
+				}
+				//End Audit code
+				
 				int result = -1;
 				try{
 					result=iBMO.insertItemContents(true, ilist,mod_agent, iDTO);
