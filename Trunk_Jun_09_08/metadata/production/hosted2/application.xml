@@ -15,12 +15,6 @@
   </module>
  <module>
      <web>
-         <web-uri>canadiannorth_production.war</web-uri>
-         <context-root>canadiannorth</context-root>
-     </web>
-  </module>
- <module>
-     <web>
          <web-uri>frontier_production.war</web-uri>
          <context-root>frontier</context-root>
      </web>

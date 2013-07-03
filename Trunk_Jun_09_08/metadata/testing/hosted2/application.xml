@@ -6,13 +6,6 @@
 	      version="5">
 
  <display-name>TracerEAR</display-name>
- <module>
-     <web>
-         <web-uri>canadiannorth_testing.war</web-uri>
-         <context-root>canadiannorth</context-root>
-     </web>
-  </module>
-  
    <module>
      <web>
          <web-uri>frontier_testing.war</web-uri>
