@@ -365,15 +365,15 @@ public class Reservation implements ReservationInterface {
 			if (passMap.containsKey(info.getPersonOrgID())) {
 				Passenger p = passMap.get(info.getPersonOrgID());
 				Address add = p.getAddresses();
-				if (info.getPhoneNumber() != null) {
+				if (info.getPhoneNumber() != null && info.getPhoneNumber().length() > 0) {
 					String phone = info.getPhoneNumber();
-					if (info.getAreaCode() != null) {
+					if (info.getAreaCode() != null && info.getAreaCode().length() > 0) {
 						phone = "(" + info.getAreaCode() + ") " + phone;
 					}
-					if (info.getCountryCode() != null) {
+					if (info.getCountryCode() != null && info.getCountryCode().length() > 0) {
 						phone = info.getCountryCode() + " " + phone; 
 					}
-					if (info.getExtension() != null) {
+					if (info.getExtension() != null && info.getExtension().length() > 0) {
 						phone = phone + " ext:" + info.getExtension();
 					}
 					add.setAltPhone(phone);
