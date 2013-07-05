@@ -41,17 +41,17 @@ public class Settings {
 	//////////////////////////////////////////////////////////GENERIC TEST SETTINGS////////////////////////////////////////////////////////
 	
 	//URL ROOT FOR WEB APP BEING TESTED
-	//public static final String APP_URL_LOCAL = "http://10.41.103.66:8180/";
-	public static final String APP_URL_LOCAL = "http://10.52.113.20/";
+	public static final String APP_URL_LOCAL = "http://172.30.68.3:8180/";
+	//public static final String APP_URL_LOCAL = "http://10.52.113.20/";
 //	public static final String APP_URL_LOCAL = "http://192.168.2.106:8080/";
 	
 	//LOGIN CREDENTIALS
-	//public static final String USERNAME_ADMIN = "ntauto";
-	public static final String USERNAME_ADMIN = "ntadmin";
+	public static final String USERNAME_ADMIN = "ntauto";
+//	public static final String USERNAME_ADMIN = "ntadmin";
 	public static final String USERNAME_OGADMIN = "ogadmin";
 	public static final String USERNAME_TEST = "nttestauto";
-	//public static final String PASSWORD_ADMIN = "IpoL!Jan7";
-	public static final String PASSWORD_ADMIN = "/LucasArts44!";
+	public static final String PASSWORD_ADMIN = "IpoL!Jan7";
+//	public static final String PASSWORD_ADMIN = "/LucasArts44!";
 	public static final String PASSWORD_OGADMIN = "Ladendead51!";
 //	public static final String PASSWORD_OGADMIN = "InstaNokia41!";
 	public static final String PASSWORD_TEST = "nttest@Hud1";
