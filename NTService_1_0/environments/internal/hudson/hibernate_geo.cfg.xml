@@ -9,7 +9,7 @@
 
 	<property name="connection.driver_class">org.gjt.mm.mysql.Driver</property>
 	<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
-	<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/geodb_testing</property>
+	<property name="hibernate.connection.url">jdbc:mysql://hudsondb.nettracer.aero:3306/geodb_testing</property>
 	<property name="hibernate.connection.username">hudson</property>
 	<property name="hibernate.connection.password">nettracer</property>
 	<property name="show_sql">false</property>

@@ -13,7 +13,7 @@
 	<property name="hibernate.cache.use_second_level_cache">false</property>
 		
 	
-	<property name="hibernate.connection.url">jdbc:mysql://testingdbhost:3306/central_training</property>
+	<property name="hibernate.connection.url">jdbc:mysql://trainingdb.nettracer.aero:3306/central_training</property>
 	<property name="hibernate.connection.username">central_user</property>
 	<property name="hibernate.connection.password">WhG26274</property>
 	<property name="show_sql">false</property>
