@@ -2474,7 +2474,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			h.put("SUBJECTLINE", resources.getString("dm.email.subject"));
 		}
 		
-		h.put("HASH", ""+lost.getClient().getDecryptedEmail().hashCode());
+		//h.put("HASH", ""+lost.getClient().getDecryptedEmail().hashCode());
 		
 		return h;
 	}
