@@ -168,6 +168,10 @@
 		<mkdir dir="${build.dir}/webservices/passengerview" />
 		
 	</target>
+	
+	<target name="generate-build-number" >
+		<buildnumber/>
+	</target>
 
 	<target name="delete">
 		<delete file="${basedir}/src/custom_ui.properties" />
@@ -357,6 +361,11 @@
 				</patternset>
 			</fileset>
 		</copy>
+		<copy toFile="${build.dir}/${ant_project_name}_web/classes/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" file="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" overwrite="true" >
+			<filterset begintoken="${" endtoken="}" >
+				<filtersfile file="${basedir}/build.number" />
+			</filterset>
+		</copy>		
 	</target>
 	
 	<target name="delete-wars">

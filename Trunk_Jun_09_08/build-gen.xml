@@ -392,6 +392,11 @@
 				</patternset>
 			</fileset>
 		</copy>
+		<copy toFile="${build.dir}/${ant_project_name}_web/classes/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" file="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" overwrite="true" >
+			<filterset begintoken="${" endtoken="}" >
+				<filtersfile file="${basedir}/build.number" />
+			</filterset>
+		</copy>		
 	</target>
 
 	<target name="build-cron-service" depends="build-cron-jar">
