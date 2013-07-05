@@ -422,10 +422,10 @@ public final class ManageGroups extends Action {
 			String groupDesc = (String) dForm.get("groupDesc");
 			
 			if(groupName != null){
-				groupName = groupName.replaceAll("['\\<\\>%()]", "");
+				groupName = groupName.replaceAll(TracingConstants.FILTER_CHARACTERS, "");
 			}
 			if(groupDesc != null){
-				groupDesc = groupDesc.replaceAll("['\\<\\>%()]", "");
+				groupDesc = groupDesc.replaceAll(TracingConstants.FILTER_CHARACTERS, "");
 			}
 			
 			g.setDescription(groupName);

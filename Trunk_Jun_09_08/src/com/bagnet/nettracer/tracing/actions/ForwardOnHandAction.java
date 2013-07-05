@@ -67,7 +67,7 @@ public class ForwardOnHandAction extends Action {
 		if(theform.getOhdList() != null){
 			for(LabelValueBean ohdBean: theform.getOhdList()){
 				if(ohdBean != null && ohdBean.getValue() != null){
-					ohdBean.setValue(ohdBean.getValue().replaceAll("['\"/<>%()]",""));
+					ohdBean.setValue(ohdBean.getValue().replaceAll(TracingConstants.FILTER_CHARACTERS,""));
 				}
 			}
 		}

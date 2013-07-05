@@ -244,7 +244,7 @@ public class TaskUtils {
 				sql.append(" order by ");
 	
 				if (sort != null && sort.length() > 0) {
-					if (sort.equalsIgnoreCase("")) {
+					if (sort.equalsIgnoreCase(SortParam.DUE_DATE.getParamString())) {
 						sql.append("task.due_date_time asc");
 					} else {
 						if (sort.equalsIgnoreCase(SortParam.REMINDER_DATE.getParamString())) {

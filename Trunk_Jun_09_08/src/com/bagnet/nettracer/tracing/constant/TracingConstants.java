@@ -50,6 +50,8 @@ public class TracingConstants {
 		}
 	}
 	
+	public final static String FILTER_CHARACTERS = "['\"/<>%()]";
+	
 	public enum AgentActiveStatus { ALL, ACTIVE, INACTIVE }
 	public final static int TRACING_ELEMENT_X = 7;
 	public final static String MAINTAIN_AGENTS_TYPE_AGENTS = "0";
