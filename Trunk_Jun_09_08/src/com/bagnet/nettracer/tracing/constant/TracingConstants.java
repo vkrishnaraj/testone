@@ -14,6 +14,42 @@ import java.util.Properties;
  */
 public class TracingConstants {
 
+	public static enum SortParam {
+		LASTNAME ("lastname"),
+		ACTIVE ("active"),
+		USERNAME ("username"),
+		GROUP ("group"),
+		STATION ("station"),
+		INCIDENT ("incident"),
+		CREATEDATE ("createdate"),
+		DUE_DATE ("due_date"),
+		REMINDER_DATE ("reminder_date"),
+		FILE_REF_NUMBER ("file_ref_number"),
+		STATUS ("status"),
+		PRIORITY ("priority"),
+		ASSIGNED_TO ("assigned_to");
+		
+		private final String param;
+		SortParam(String param){
+			this.param = param;
+		}
+		
+		public String getParamString(){
+			return param;
+		}
+		
+		public static boolean isValid(String param){
+			if(param != null){
+				for(SortParam p: SortParam.values()){
+					if(p.getParamString().equals(param)){
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+	}
+	
 	public enum AgentActiveStatus { ALL, ACTIVE, INACTIVE }
 	public final static int TRACING_ELEMENT_X = 7;
 	public final static String MAINTAIN_AGENTS_TYPE_AGENTS = "0";

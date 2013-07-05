@@ -73,7 +73,7 @@ public final class ManageAgents extends Action {
 
 		String sort = request.getParameter("sort");
 
-		if (sort != null && sort.length() > 0) request.setAttribute("sort", sort);
+		if (sort != null && sort.length() > 0 && com.bagnet.nettracer.tracing.constant.TracingConstants.SortParam.isValid(sort)) request.setAttribute("sort", sort);
 
 		//retrieve all timezones and populate the list.
 		request.setAttribute("timezones", AdminUtils.getTimeZones());

@@ -25,6 +25,7 @@ import org.hibernate.criterion.Projections;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.UsergroupBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.constant.TracingConstants.SortParam;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Airport;
 import com.bagnet.nettracer.tracing.db.Company;
@@ -1535,20 +1536,21 @@ public class AdminUtils {
 
 			}
 			
+			
 			if (sort != null && sort.length() > 0) {
-				if (sort.equalsIgnoreCase("lastname")) {
+				if (sort.equalsIgnoreCase(SortParam.LASTNAME.getParamString())) {
 					sql.append(" order by agent.lastname asc ");
 				} else {
-					if (sort.equalsIgnoreCase("active")) {
+					if (sort.equalsIgnoreCase(SortParam.ACTIVE.getParamString())) {
 						sql.append(" order by agent.active desc ");
 					} else {
-						if (sort.equalsIgnoreCase("username")) {
+						if (sort.equalsIgnoreCase(SortParam.USERNAME.getParamString())) {
 							sql.append(" order by agent.username asc ");
 						} else {
-							if (sort.equalsIgnoreCase("group")) {
+							if (sort.equalsIgnoreCase(SortParam.GROUP.getParamString())) {
 								sql.append(" order by ug.description asc ");
 							} else {
-								if (sort.equalsIgnoreCase("station")) {
+								if (sort.equalsIgnoreCase(SortParam.STATION.getParamString())) {
 									sql.append(" order by agent.station.stationcode asc ");
 								}
 							}
@@ -1616,16 +1618,16 @@ public class AdminUtils {
 			sql.append(" and agent.usergroup_id = :userGroup_ID ");
 
 			if (sort != null && sort.length() > 0) {
-				if (sort.equalsIgnoreCase("lastname")) {
+				if (sort.equalsIgnoreCase(SortParam.LASTNAME.getParamString())) {
 					sql.append(" order by agent.lastname asc ");
 				} else {
-					if (sort.equalsIgnoreCase("active")) {
+					if (sort.equalsIgnoreCase(SortParam.ACTIVE.getParamString())) {
 						sql.append(" order by agent.active desc ");
 					} else {
-						if (sort.equalsIgnoreCase("username")) {
+						if (sort.equalsIgnoreCase(SortParam.USERNAME.getParamString())) {
 							sql.append(" order by agent.username asc ");
 						} else {
-							if (sort.equalsIgnoreCase("station")) {
+							if (sort.equalsIgnoreCase(SortParam.STATION.getParamString())) {
 								sql.append(" order by agent.station.stationcode asc ");
 							}
 						}

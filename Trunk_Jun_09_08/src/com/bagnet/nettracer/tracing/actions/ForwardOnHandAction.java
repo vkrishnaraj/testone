@@ -62,6 +62,16 @@ public class ForwardOnHandAction extends Action {
 		BagService bs = new BagService();
 		ForwardOnHandForm theform = (ForwardOnHandForm) form;
 		
+		//this field is what contains the expedite bagtag which is a freeflow. 
+		//must strip invalid characters to prevent reflective xss attacks
+		if(theform.getOhdList() != null){
+			for(LabelValueBean ohdBean: theform.getOhdList()){
+				if(ohdBean != null && ohdBean.getValue() != null){
+					ohdBean.setValue(ohdBean.getValue().replaceAll("['\"/<>%()]",""));
+				}
+			}
+		}
+		
 		String companyCode = null;
 		if (theform.getCompanyCode() != null && !theform.getCompanyCode().equals("") && CompanyBMO.getCompany(theform.getCompanyCode())!=null) companyCode = theform
 				.getCompanyCode();

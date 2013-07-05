@@ -66,8 +66,6 @@ public final class ManageDeliveryCompanies extends Action {
 		String companyCode = user.getStation().getCompany().getCompanyCode_ID();
 		request.setAttribute("integrationTypeList", DeliveryIntegrationTypeUtils.getIntegrationTypeList());
 
-		String sort = request.getParameter("sort");
-		if (sort != null && sort.length() > 0) request.setAttribute("sort", sort);
 		
 		if (request.getParameter("addNewServiceLevel") != null) {
 			String companyId = request.getParameter("delivercompany_ID");

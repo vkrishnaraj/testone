@@ -26,6 +26,7 @@ import org.apache.struts.validator.DynaValidatorForm;
 
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.constant.TracingConstants.SortParam;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.Station;
@@ -72,7 +73,7 @@ public final class ManageStation extends Action {
 
 		String sort = request.getParameter("sort");
 
-		if (sort != null && sort.length() > 0) request.setAttribute("sort", sort);
+		if (sort != null && sort.length() > 0 && SortParam.isValid(sort)) request.setAttribute("sort", sort);
 
 		if ((request.getParameter("edit") != null &&  !request.getParameter("edit").equals(""))|| request.getParameter("addAgents") != null) {
 			String stationId = request.getParameter("stationId");

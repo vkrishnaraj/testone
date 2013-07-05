@@ -142,8 +142,13 @@ public class OHD_Log_Itinerary implements Serializable {
 	 */
 	public void setLegfrom(String legfrom) {
 		this.legfrom = legfrom;
-		if (this.legfrom != null) this.legfrom = (this.legfrom).toUpperCase();
-
+		if (this.legfrom != null){
+			this.legfrom = (this.legfrom).toUpperCase();
+			if(!this.legfrom.matches("[A-Z]{3}")){
+				this.legfrom = null;
+			}
+		}
+		
 	}
 
 	/**
@@ -161,7 +166,12 @@ public class OHD_Log_Itinerary implements Serializable {
 	 */
 	public void setLegto(String legto) {
 		this.legto = legto;
-		if (this.legto != null) this.legto = (this.legto).toUpperCase();
+		if (this.legto != null){
+			this.legto = (this.legto).toUpperCase();
+			if(!this.legto.matches("[A-Z]{3}")){
+				this.legto = null;
+			}
+		}
 
 	}
 

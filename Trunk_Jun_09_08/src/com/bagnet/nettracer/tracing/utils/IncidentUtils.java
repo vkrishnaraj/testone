@@ -25,6 +25,7 @@ import org.hibernate.criterion.Order;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.constant.TracingConstants.SortParam;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.IATA_irregularity_code;
@@ -91,10 +92,10 @@ public class IncidentUtils {
 			}
 
 			if (sort != null && sort.length() > 0) {
-				if (sort.equalsIgnoreCase("incident")) {
+				if (sort.equalsIgnoreCase(SortParam.INCIDENT.getParamString())) {
 					sql.append(" order by incident.incident_ID  asc ");
 				} else {
-					if (sort.equalsIgnoreCase("createdate")) {
+					if (sort.equalsIgnoreCase(SortParam.CREATEDATE.getParamString())) {
 						sql.append("  order by incident.createdate desc ");
 					}
 				}

@@ -21,6 +21,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.constant.TracingConstants.SortParam;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.forms.ClaimsToBeProcessedForm;
@@ -53,7 +54,7 @@ public class ClaimsTask extends Action {
 
 		String sort = request.getParameter("sort");
 
-		if (sort != null && sort.length() > 0) request.setAttribute("sort", sort);
+		if (sort != null && sort.length() > 0 && SortParam.isValid(sort)) request.setAttribute("sort", sort);
 
 		//menu highlite
 		request.setAttribute("highlite", TracingConstants.SYSTEM_COMPONENT_NAME_CLAIMS_TO_BE_PROCESSED);

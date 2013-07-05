@@ -17,6 +17,7 @@ import org.hibernate.criterion.Order;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.constant.TracingConstants.SortParam;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Priority;
 import com.bagnet.nettracer.tracing.db.Status;
@@ -243,22 +244,22 @@ public class TaskUtils {
 				sql.append(" order by ");
 	
 				if (sort != null && sort.length() > 0) {
-					if (sort.equalsIgnoreCase("due_date")) {
+					if (sort.equalsIgnoreCase("")) {
 						sql.append("task.due_date_time asc");
 					} else {
-						if (sort.equalsIgnoreCase("reminder_date")) {
+						if (sort.equalsIgnoreCase(SortParam.REMINDER_DATE.getParamString())) {
 							sql.append("reminder_date_time asc ");
 						} else {
-							if (sort.equalsIgnoreCase("file_ref_number")) {
+							if (sort.equalsIgnoreCase(SortParam.FILE_REF_NUMBER.getParamString())) {
 								sql.append("file_ref_number");
 							} else {
-								if (sort.equalsIgnoreCase("status")) {
+								if (sort.equalsIgnoreCase(SortParam.STATUS.getParamString())) {
 									sql.append("task.status.description");
 								} else {
-									if (sort.equalsIgnoreCase("priority")) {
+									if (sort.equalsIgnoreCase(SortParam.PRIORITY.getParamString())) {
 										sql.append("task.priority.priority_ID desc");
 									} else {
-										if (sort.equalsIgnoreCase("assigned_to")) {
+										if (sort.equalsIgnoreCase(SortParam.ASSIGNED_TO.getParamString())) {
 											sql.append("task.assignedTo.username");
 										}
 									}

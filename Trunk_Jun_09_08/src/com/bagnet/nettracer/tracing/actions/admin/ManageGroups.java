@@ -26,6 +26,7 @@ import org.apache.struts.util.LabelValueBean;
 import org.apache.struts.validator.DynaValidatorForm;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.constant.TracingConstants.SortParam;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.GroupComponentPolicy;
 import com.bagnet.nettracer.tracing.db.Station;
@@ -57,7 +58,7 @@ public final class ManageGroups extends Action {
 
 		String sort = request.getParameter("sort");
 
-		if (sort != null && sort.length() > 0)
+		if (sort != null && sort.length() > 0 && SortParam.isValid(sort))
 			request.setAttribute("sort", sort);
 
 		Agent user = (Agent) session.getAttribute("user");
@@ -417,8 +418,18 @@ public final class ManageGroups extends Action {
 			String groupId = (String) request.getParameter("groupID");
 
 			UserGroup g = new UserGroup();
-			g.setDescription((String) dForm.get("groupName"));
-			g.setDescription2((String) dForm.get("groupDesc"));
+			String groupName = (String) dForm.get("groupName");
+			String groupDesc = (String) dForm.get("groupDesc");
+			
+			if(groupName != null){
+				groupName = groupName.replaceAll("['\\<\\>%()]", "");
+			}
+			if(groupDesc != null){
+				groupDesc = groupDesc.replaceAll("['\\<\\>%()]", "");
+			}
+			
+			g.setDescription(groupName);
+			g.setDescription2(groupDesc);
 			g.setCompanycode_ID(companyCode);
 			try {
 				HibernateUtils.saveGroup(g, groupId, user);
