@@ -47,3 +47,7 @@ background-color: #BED6F8;
 	z-index: 1;
 }
 
+.button:active {
+     padding-top: 7px;
+     padding-bottom: 8px;
+}
