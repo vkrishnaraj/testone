@@ -9,6 +9,7 @@
                  com.bagnet.nettracer.tracing.db.Company" %>
 <%@ page import="java.util.List,
                  java.util.Iterator" %>
+
 <script>
 	window.onload = function()
 	{
@@ -40,7 +41,14 @@
           
           <tr>
             <td align=right width=50% valign=middle>
-              <html:hidden property="companyCode" value="WN" />
+              <bean:message key="prompt.company" />
+              :
+            </td>
+            <td>
+              <SELECT NAME="companyCode" class="dropdown">
+              	<option value="Z7" selected="selected">FlyAfrica</option>
+              	<option value="OW">Owens Group</option>
+              </SELECT>
             </td>
           </tr>
           <tr>
@@ -49,7 +57,7 @@
               :
             </td>
             <td>
-              <html:text property="username" size="16" maxlength="18" styleClass="textfield" />
+              <html:text property="username" size="16" maxlength="25" styleClass="textfield" />
             </td>
           </tr>
           <tr>
