@@ -870,7 +870,6 @@
 		<antcall target="build-war-testing-avis"/>
 		<antcall target="build-war-testing-frontier"/>
 		<antcall target="build-war-testing-southwest"/>
-		<antcall target="build-war-testing-ntsouthwest"/>
 		<!--antcall target="build-war-testing-canadiannorth"/-->
 		<antcall target="build-war-testing-flyafrica"/>
 		<property name="app.xml.location" value="metadata/testing/hosted2" />
@@ -905,8 +904,6 @@
 		<antcall target="hibernate_generate" />		
 		<antcall target="build-war-hudson-frontier"/>
 		<antcall target="build-war-hudson-southwest"/>
-		<antcall target="build-war-hudson-ntsouthwest"/>
-		<!--antcall target="build-war-hudson-canadiannorth"/-->
 		<antcall target="build-war-hudson-flyafrica"/>
 		<property name="app.xml.location" value="metadata/hudson/hosted2" />
 		<antcall target="donotrun-build-ear" />
@@ -1187,8 +1184,6 @@
 		<antcall target="build-war-training-avis"/>
 		<antcall target="build-war-training-frontier"/>
 		<antcall target="build-war-training-southwest"/>
-		<antcall target="build-war-training-ntsouthwest"/>
-		<!--antcall target="build-war-training-canadiannorth"/-->
 		<antcall target="build-war-training-flyafrica"/>
 		<property name="app.xml.location" value="metadata/training/hosted2" />
 		<antcall target="donotrun-build-ear" />
@@ -1355,8 +1350,6 @@
 		<antcall target="build-war-production-avis"/>
 		<antcall target="build-war-production-frontier"/>		
 		<antcall target="build-war-production-southwest"/>
-		<antcall target="build-war-production-ntsouthwest"/>
-		<!--antcall target="build-war-production-canadiannorth"/-->
 		<antcall target="build-war-production-flyafrica"/>
 		<property name="app.xml.location" value="metadata/production/hosted2" />
 		<antcall target="donotrun-build-ear" />
@@ -2350,9 +2343,7 @@
 		<antcall target="build-cron-testing-spirit"/>
 		<antcall target="build-cron-testing-lfc"/>
 		<antcall target="build-cron-testing-webjet"/>
-		<!--antcall target="build-cron-testing-canadiannorth"/-->
 		<antcall target="build-cron-testing-flyafrica"/>
-		<antcall target="build-cron-testing-ntsouthwest"/>
 		<antcall target="build-cron-testing-airtran"/>
 				
 	</target>
@@ -2364,9 +2355,7 @@
 		<antcall target="build-cron-training-spirit"/>
 		<antcall target="build-cron-training-lfc"/>
 		<antcall target="build-cron-training-webjet"/>
-		<!--antcall target="build-cron-training-canadiannorth"/-->
 		<antcall target="build-cron-training-flyafrica"/>
-		<antcall target="build-cron-training-ntsouthwest"/>
 	</target>
 	<target name="build-cron-production-all">
 		<antcall target="build-cron-production-avis"/>
@@ -2376,9 +2365,7 @@
 		<antcall target="build-cron-production-spirit"/>
 		<antcall target="build-cron-production-lfc"/>
 		<antcall target="build-cron-production-webjet"/>
-		<!--antcall target="build-cron-production-canadiannorth"/-->
 		<antcall target="build-cron-production-flyafrica"/>
-		<antcall target="build-cron-production-ntsouthwest"/>
 		<antcall target="build-cron-production-airtran"/>
 	</target>
 	<target name="build-cron-hudson-all">
@@ -2389,9 +2376,7 @@
 		<antcall target="build-cron-hudson-westjet"/>
 		<antcall target="build-cron-hudson-lfc"/>
 		<antcall target="build-cron-hudson-webjet"/>
-		<!--antcall target="build-cron-hudson-canadiannorth"/-->
 		<antcall target="build-cron-hudson-flyafrica"/>
-		<antcall target="build-cron-hudson-ntsouthwest"/>
 	</target>
 	<target name="build-cron-demo-all">
 		<antcall target="build-cron-demo-lfc"/>
