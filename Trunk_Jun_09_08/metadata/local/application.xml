@@ -27,6 +27,13 @@
      </web>
   </module>
   
+  <module>
+     <web>
+         <web-uri>ntwn.war</web-uri>
+         <context-root>ntsouthwest</context-root>
+     </web>
+  </module>
+  
   
   <!-- <library-directory>APP-INF/lib</library-directory> -->
   <!-- 
