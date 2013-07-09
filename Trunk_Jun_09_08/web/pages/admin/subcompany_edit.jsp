@@ -87,9 +87,17 @@
                 <font color=red>
                   *:
                 </td>
+                <logic:empty name="subCompanyForm" property="subcompanyCode">
                 <td>
                   <html:text styleClass="textfield" property="subcompanyCode" size="12" maxlength="3" />
                 </td>
+                </logic:empty >
+                
+                <logic:notEmpty name="subCompanyForm" property="subcompanyCode">
+                <td>
+                  <html:text styleClass="textfield" property="subcompanyCode" disabled="true" size="12" maxlength="3" />
+                </td>
+                </logic:notEmpty>
               </tr>
               <tr>
                 <td>
@@ -99,18 +107,16 @@
                   </font>
                   :
                 </td>
+                <logic:empty name="subCompanyForm" property="subcompanyCode">
                 <td>
                   <html:text styleClass="textfield" property="name" size="20" maxlength="50" />
                 </td>
-              </tr>
-              <tr>
+                </logic:empty>
+                <logic:notEmpty name="subCompanyForm" property="subcompanyCode" >
                 <td>
-                  <bean:message key="header.companyCode" />
-                  :
+                  <html:text styleClass="textfield" property="name" disabled="true" size="20" maxlength="50" />
                 </td>
-                <td>
-                  <html:text styleClass="textfield" property="companyCode" size="12" maxlength="2" readonly="true" />
-                </td>
+                </logic:notEmpty>
               </tr>
               <tr>
                 <td>
