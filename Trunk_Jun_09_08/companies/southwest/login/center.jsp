@@ -45,7 +45,7 @@
             </td>
             <td>
               <SELECT NAME="companyCode" class="dropdown">
-              	<option value="Z7" selected="selected">FlyAfrica</option>
+              	<option value="WN" selected="selected">Southwest</option>
               	<option value="OW">Owens Group</option>
               </SELECT>
             </td>
