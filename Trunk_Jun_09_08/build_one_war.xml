@@ -1,4 +1,4 @@
-<project name="3.0" default="build-ear-testing" basedir=".">
+<project name="3.0" default="build-ear-local-westjet" basedir=".">
 
 	<!-- GLOBAL PROPERTIES -->
 	
@@ -767,6 +767,15 @@
 		<antcall target="donotrun-build-ear" />
 	</target>
 	
+	<target name="build-ear-local-ntsouthwest" depends="delete-wars">
+			<property name="staging.project" value="ntsouthwest" />
+			<property name="staging.env" value="local" />
+			<property name="avis.service.includes" value="*.war" />
+			<antcall target="build-war-local-ntsouthwest"/>
+			<property name="app.xml.location" value="metadata/southwest/local" />		
+			<antcall target="donotrun-build-ear" />
+		</target>
+	
 	<target name="build-ear-local-virginamerica" depends="delete-wars">
 		<property name="staging.project" value="virginamerica-fs" />
 		<property name="staging.env" value="local" />
@@ -861,6 +870,7 @@
 		<antcall target="build-war-testing-avis"/>
 		<antcall target="build-war-testing-frontier"/>
 		<antcall target="build-war-testing-southwest"/>
+		<antcall target="build-war-testing-ntsouthwest"/>
 		<!--antcall target="build-war-testing-canadiannorth"/-->
 		<antcall target="build-war-testing-flyafrica"/>
 		<property name="app.xml.location" value="metadata/testing/hosted2" />
@@ -895,6 +905,7 @@
 		<antcall target="hibernate_generate" />		
 		<antcall target="build-war-hudson-frontier"/>
 		<antcall target="build-war-hudson-southwest"/>
+		<antcall target="build-war-hudson-ntsouthwest"/>
 		<!--antcall target="build-war-hudson-canadiannorth"/-->
 		<antcall target="build-war-hudson-flyafrica"/>
 		<property name="app.xml.location" value="metadata/hudson/hosted2" />
@@ -1083,6 +1094,15 @@
 		<property name="app.xml.location" value="metadata/southwest-fs/test" />
 		<antcall target="donotrun-build-ear" />
 	</target>
+	
+	<target name="build-ear-testing-ntsouthwest" depends="delete-wars">
+			<property name="staging.project" value="ntsouthwest" />
+			<property name="staging.env" value="testing" />
+			<property name="avis.service.includes" value="*.war" />
+			<antcall target="build-war-testing-ntsouthwest"/>
+			<property name="app.xml.location" value="metadata/southwest/test" />
+			<antcall target="donotrun-build-ear" />
+		</target>
 
 	<target name="build-ear-testing-webjet" depends="delete-wars">
 		<property name="staging.project" value="webjet" />
@@ -1167,6 +1187,7 @@
 		<antcall target="build-war-training-avis"/>
 		<antcall target="build-war-training-frontier"/>
 		<antcall target="build-war-training-southwest"/>
+		<antcall target="build-war-training-ntsouthwest"/>
 		<!--antcall target="build-war-training-canadiannorth"/-->
 		<antcall target="build-war-training-flyafrica"/>
 		<property name="app.xml.location" value="metadata/training/hosted2" />
@@ -1236,6 +1257,15 @@
 		<property name="app.xml.location" value="metadata/southwest-fs/train" />
 		<antcall target="donotrun-build-ear" />
 	</target>
+	
+	<target name="build-ear-training-ntsouthwest" depends="delete-wars">
+			<property name="staging.project" value="ntsouthwest" />
+			<property name="staging.env" value="training" />
+			<property name="avis.service.includes" value="*.war" />
+			<antcall target="build-war-training-ntsouthwest"/>
+			<property name="app.xml.location" value="metadata/southwest/train" />
+			<antcall target="donotrun-build-ear" />
+		</target>
 
 	<!--target name="build-ear-training-canadiannorth" depends="delete-wars">
 		<property name="staging.project" value="canadiannorth" />
@@ -1325,6 +1355,7 @@
 		<antcall target="build-war-production-avis"/>
 		<antcall target="build-war-production-frontier"/>		
 		<antcall target="build-war-production-southwest"/>
+		<antcall target="build-war-production-ntsouthwest"/>
 		<!--antcall target="build-war-production-canadiannorth"/-->
 		<antcall target="build-war-production-flyafrica"/>
 		<property name="app.xml.location" value="metadata/production/hosted2" />
@@ -1404,7 +1435,16 @@
 		<property name="app.xml.location" value="metadata/southwest-fs/prod" />
 		<antcall target="donotrun-build-ear" />
 	</target>
-
+	
+	<target name="build-ear-production-ntsouthwest" depends="delete-wars">
+		<property name="staging.project" value="ntsouthwest" />
+		<property name="staging.env" value="production" />
+		<property name="avis.service.includes" value="*.war"/>
+		<antcall target="build-war-production-ntsouthwest"/>
+		<property name="app.xml.location" value="metadata/southwest/prod" />
+		<antcall target="donotrun-build-ear" />
+	</target>
+	
 	<target name="build-ear-production-webjet" depends="delete-wars">
 		<property name="staging.project" value="webjet" />
 		<property name="staging.env" value="production" />
@@ -1600,6 +1640,14 @@
 		<property name="southwest.init.complete" value="true" />
 		<antcall target="donotrun-build-southwest" />
 	</target>
+	
+	<target name="build-war-testing-ntsouthwest" depends="delete">
+		<property name="ant_project_name" value="ntsouthwest" />
+		<property name="ant_war_name" value="ntsouthwest_testing" />
+		<property name="environment.name" value="test"/>
+		<property name="ntsouthwest.init.complete" value="true" />
+		<antcall target="donotrun-build-ntsouthwest" />
+	</target>
 
 	<target name="build-war-testing-webjet" depends="delete">
 		<property name="ant_project_name" value="webjet" />
@@ -1755,6 +1803,14 @@
 		<property name="southwest.init.complete" value="true" />
 		<antcall target="donotrun-build-southwest" />
 	</target>
+	
+	<target name="build-war-hudson-ntsouthwest" depends="delete">
+		<property name="ant_project_name" value="ntsouthwest" />
+		<property name="ant_war_name" value="ntsouthwest_hudson" />
+		<property name="environment.name" value="hudson"/>
+		<property name="ntsouthwest.init.complete" value="true" />
+		<antcall target="donotrun-build-ntsouthwest" />
+	</target>
 
 	<!--target name="build-war-hudson-canadiannorth" depends="delete">
 		<property name="ant_project_name" value="canadiannorth" />
@@ -1901,6 +1957,14 @@
 		<property name="southwest.init.complete" value="true" />
 		<antcall target="donotrun-build-southwest" />
 	</target>
+	
+	<target name="build-war-production-ntsouthwest" depends="delete">
+		<property name="ant_project_name" value="ntsouthwest" />
+		<property name="ant_war_name" value="ntsouthwest_production" />
+		<property name="environment.name" value="prod"/>
+		<property name="ntsouthwest.init.complete" value="true" />
+		<antcall target="donotrun-build-ntsouthwest" />
+	</target>
 
 	<!--target name="build-war-production-canadiannorth" depends="delete">
 		<property name="ant_project_name" value="canadiannorth" />
@@ -2000,6 +2064,14 @@
 		<property name="environment.name" value="train"/>
 		<property name="southwest.init.complete" value="true" />
 		<antcall target="donotrun-build-southwest" />
+	</target>
+	
+	<target name="build-war-training-ntsouthwest" depends="delete">
+		<property name="ant_project_name" value="ntsouthwest" />
+		<property name="ant_war_name" value="ntsouthwest_training" />
+		<property name="environment.name" value="train"/>
+		<property name="ntsouthwest.init.complete" value="true" />
+		<antcall target="donotrun-build-ntsouthwest" />
 	</target>
 
 	<!--target name="build-war-training-canadiannorth" depends="delete">
@@ -2133,6 +2205,14 @@
 		<property name="southwest.init.complete" value="true" />
 		<property name="environment.name" value="local" />
 		<antcall target="donotrun-build-southwest" />
+	</target>
+	
+	<target name="build-war-local-ntsouthwest" depends="delete">
+		<property name="ant_project_name" value="ntsouthwest" />
+		<property name="ant_war_name" value="ntwn" />
+		<property name="ntsouthwest.init.complete" value="true" />
+		<property name="environment.name" value="local" />
+		<antcall target="donotrun-build-ntsouthwest" />
 	</target>
 
 	<!--target name="build-war-local-canadiannorth" depends="delete">
@@ -2272,6 +2352,7 @@
 		<antcall target="build-cron-testing-webjet"/>
 		<!--antcall target="build-cron-testing-canadiannorth"/-->
 		<antcall target="build-cron-testing-flyafrica"/>
+		<antcall target="build-cron-testing-ntsouthwest"/>
 		<antcall target="build-cron-testing-airtran"/>
 				
 	</target>
@@ -2285,6 +2366,7 @@
 		<antcall target="build-cron-training-webjet"/>
 		<!--antcall target="build-cron-training-canadiannorth"/-->
 		<antcall target="build-cron-training-flyafrica"/>
+		<antcall target="build-cron-training-ntsouthwest"/>
 	</target>
 	<target name="build-cron-production-all">
 		<antcall target="build-cron-production-avis"/>
@@ -2296,6 +2378,7 @@
 		<antcall target="build-cron-production-webjet"/>
 		<!--antcall target="build-cron-production-canadiannorth"/-->
 		<antcall target="build-cron-production-flyafrica"/>
+		<antcall target="build-cron-production-ntsouthwest"/>
 		<antcall target="build-cron-production-airtran"/>
 	</target>
 	<target name="build-cron-hudson-all">
@@ -2308,6 +2391,7 @@
 		<antcall target="build-cron-hudson-webjet"/>
 		<!--antcall target="build-cron-hudson-canadiannorth"/-->
 		<antcall target="build-cron-hudson-flyafrica"/>
+		<antcall target="build-cron-hudson-ntsouthwest"/>
 	</target>
 	<target name="build-cron-demo-all">
 		<antcall target="build-cron-demo-lfc"/>
@@ -2656,6 +2740,54 @@
 	</target>
 		
 	<!-- END FLY AFRICA CRON TARGETS -->
+	
+	<!-- NTSOUTHWEST CRON TARGETS -->
+		
+	<target name="build-cron-testing-ntsouthwest">
+		<property name="staging.project" value="cron" />
+		<property name="staging.env" value="ntsouthwest" />
+		<property name="ant_project_name" value="ntsouthwest" />
+		<property name="sub_path" value="test/" />
+		<property name="environment.name" value="test"/>
+		<property name="cron.job.config.file" value="companies/southwest/environment/test/jobs/cronJobs.xml" />
+		<property name="jarprefix" value="ntwntest-" />
+		<antcall target="cron-service" />
+	</target>
+		
+	<target name="build-cron-training-ntsouthwest">
+		<property name="staging.project" value="cron" />
+		<property name="staging.env" value="training" />
+		<property name="ant_project_name" value="ntsouthwest" />
+		<property name="sub_path" value="train/" />
+		<property name="environment.name" value="train"/>
+		<property name="cron.job.config.file" value="companies/southwest/environment/train/jobs/cronJobs.xml" />
+		<property name="jarprefix" value="ntwntrain-" />
+		<antcall target="cron-service" />
+	</target>
+
+	<target name="build-cron-production-ntsouthwest">
+		<property name="staging.project" value="cron" />
+		<property name="staging.env" value="production" />
+		<property name="ant_project_name" value="ntsouthwest" />
+		<property name="sub_path" value="prod/" />
+		<property name="environment.name" value="prod"/>
+		<property name="jarprefix" value="ntwnprod-" />
+		<property name="cron.job.config.file" value="companies/southwest/environment/prod/jobs/cronJobs.xml" />
+		<antcall target="cron-service" />
+	</target>
+
+	<target name="build-cron-hudson-ntsouthwest">
+		<property name="staging.project" value="cron" />
+		<property name="staging.env" value="hudson" />
+		<property name="ant_project_name" value="ntsouthwest" />
+		<property name="sub_path" value="hudson/" />
+		<property name="environment.name" value="hudson"/>
+		<property name="jarprefix" value="ntwnhudson-" />
+		<property name="cron.job.config.file" value="companies/southwest/environment/hudson/jobs/cronJobs.xml" />
+		<antcall target="cron-service" />
+	</target>
+		
+	<!-- END NTSOUTHWEST CRON TARGETS -->
 	
 	<!-- JETBLUE CRON TARGETS -->
 	
@@ -3176,6 +3308,40 @@
 			<property name="overrideResource" value="${basedir}/companies/southwest-fs/environment/${environment.name}/tracer.properties" />
 			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
 		</ant>
+		<antcall target="fast_all" />
+		<antcall target="delete" />
+	</target>
+	
+	<target name="donotrun-build-ntsouthwest">		
+
+		<property name="hibernate_props_loc" value="companies/southwest/environment/${environment.name}" />
+		<property name="hibernate_dialect" value="mysql" />
+		<antcall target="generate-hibernate-xmls" />
+		
+		<copy todir="${basedir}/web/pages/login" file="companies/southwest/environment/${environment.name}/login/center.jsp" />
+		
+		<ant antfile="build-gen.xml" target="combineResourceFiles">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/southwest/environment/${environment.name}/tracer.properties" />
+			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
+		</ant>
+
+		<copy todir="${basedir}/web/reports" file="companies/tracer/LostDelayReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/tracer/DamageReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/tracer/MissingReceipt.jrxml" />
+			
+		<antcall target="jasper_compile" />
+
+		<copy todir="${basedir}/src" file="companies/southwest/custom_ui.properties" />
+
+		<!-- Hibernate main dependent on environment -->
+
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
+			<property name="overrideResource" value="${basedir}/companies/southwest/ApplicationResources.properties" />
+			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		</ant>
+
 		<antcall target="fast_all" />
 		<antcall target="delete" />
 	</target>
