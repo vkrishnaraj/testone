@@ -114,7 +114,7 @@
               					<% } %>
               				</td>
               				<td>
-              					<bean:write name="result" property="lost.location.stationcode" />&nbsp;
+              					<bean:write name="result" property="found.location.stationcode" />&nbsp;
               				</td>
               				<td>
               					<%=catMap.get(String.valueOf(result.getFound().getItem().getCategory()))!=null?catMap.get(String.valueOf(result.getFound().getItem().getCategory())):"" %>&nbsp;
