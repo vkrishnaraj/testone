@@ -159,6 +159,8 @@ public final class ManageCompany extends Action {
 					dForm.setAuto_close_dam_station(cmpny.getVariable().getAuto_close_dam_station());
 					dForm.setAuto_close_pil_station(cmpny.getVariable().getAuto_close_pil_station());
 					
+					dForm.setPnrlastxdays(cmpny.getVariable().getPnr_last_x_days());
+					
 					dForm.setIncident_lock_mins(cmpny.getVariable().getIncident_lock_mins());
 				}
 				
@@ -382,6 +384,10 @@ public final class ManageCompany extends Action {
 					
 					if (dForm.getIncident_lock_mins() != null) {
 					var.setIncident_lock_mins(dForm.getIncident_lock_mins().intValue());	
+					}
+					
+					if(dForm.getPnrlastxdays()!=null){
+						var.setPnr_last_x_days(dForm.getPnrlastxdays());
 					}
 				}
 				
