@@ -357,6 +357,15 @@
 	              <html:text styleClass="textfield" name="companyForm" property="incident_lock_mins" size="4" maxlength="4" />
 	            </td>
 	        </tr>
+            <tr>
+	            <td>
+	              <bean:message key="colname.pnrlastxdays" />
+	              :
+	            </td>
+	            <td>
+	              <html:text styleClass="textfield" name="companyForm" property="pnrlastxdays" size="4" maxlength="4" />
+	            </td>
+            </tr>
 	          
 		    <tr>
             <td colspan="2">
