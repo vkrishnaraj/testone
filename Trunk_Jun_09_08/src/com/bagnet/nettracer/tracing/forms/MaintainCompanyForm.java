@@ -89,6 +89,7 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	private boolean auto_wt_amend;
 	private Integer min_pass_size;
 	private Integer pass_x_history;
+	private Integer pnrlastxdays;
 	
 	//AUTO CLOSE
 	private Integer auto_close_days_back;
@@ -468,6 +469,14 @@ public final class MaintainCompanyForm extends ValidatorForm {
 
 	public Integer getIncident_lock_mins() {
 		return incident_lock_mins;
+	}
+
+	public Integer getPnrlastxdays() {
+		return pnrlastxdays;
+	}
+
+	public void setPnrlastxdays(Integer pnrlastxdays) {
+		this.pnrlastxdays = pnrlastxdays;
 	}
 
 

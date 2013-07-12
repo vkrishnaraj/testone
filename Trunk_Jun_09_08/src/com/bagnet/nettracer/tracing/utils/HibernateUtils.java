@@ -330,6 +330,7 @@ public class HibernateUtils {
 						c.getVariable().setAuto_close_dam_station(obj.getVariable().getAuto_close_dam_station());
 						c.getVariable().setAuto_close_pil_station(obj.getVariable().getAuto_close_pil_station());
 						
+						c.getVariable().setPnr_last_x_days(obj.getVariable().getPnr_last_x_days());
 						c.getVariable().setIncident_lock_mins(obj.getVariable().getIncident_lock_mins());
 					}
 					

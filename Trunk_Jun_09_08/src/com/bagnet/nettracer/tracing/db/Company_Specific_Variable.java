@@ -79,6 +79,7 @@ public class Company_Specific_Variable implements Serializable {
 	private String blindEmail;
 	private int min_pass_size;
 	private int pass_x_history;
+	private int pnr_last_x_days;
 	
 	//AUTO CLOSE
 	private int auto_close_days_back;
@@ -1133,6 +1134,18 @@ public class Company_Specific_Variable implements Serializable {
 	 */
 	public int getIncident_lock_mins() {
 		return incident_lock_mins;
+	}
+
+	/**
+	 * @return the pnr_last_x_days
+	 * @hibernate.property type="integer"
+	 */
+	public int getPnr_last_x_days() {
+		return pnr_last_x_days;
+	}
+	
+	public void setPnr_last_x_days(int pnr_last_x_days) {
+		this.pnr_last_x_days = pnr_last_x_days;
 	}
 	
 }
