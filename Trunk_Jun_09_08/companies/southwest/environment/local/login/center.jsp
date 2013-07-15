@@ -40,7 +40,10 @@
           
           <tr>
             <td align=right width=50% valign=middle>
-              <html:hidden property="companyCode" value="WN" />
+               <SELECT NAME="companyCode" class="dropdown">
+              	<option value="WN" selected="selected">Southwest</option>
+              	<option value="OW">Owens Group</option>
+              </SELECT>
             </td>
           </tr>
           <tr>
