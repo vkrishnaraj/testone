@@ -589,8 +589,10 @@ function gotoHistoricalReport() {
         <html:text property="pnr" size="10" maxlength="6"
           styleClass="textfield" /></td>
         <td><bean:message key="colname.storage_location" /> <br>
-        <html:text property="storage_location" size="22" maxlength="25"
-          styleClass="textfield" /></td>
+        <html:textarea name="OnHandForm" styleId="commentBox" property="storage_location" rows="3" cols="40" 
+          onkeydown="textCounter2(commentBox, commentCount, 100);" 
+          onkeyup="textCounter2(commentBox, commentCount, 100);" styleClass="textfield" />  
+          <input name="comment2" id="commentCount" type="text" value="100" size="4" maxlength="4" disabled="true" />  </td>
       </tr>
       <tr>
         <td><bean:message key="colname.airline_membership" /> <br>
