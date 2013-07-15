@@ -127,6 +127,75 @@ function disableButton(aButton) {
         </html:messages>
       </logic:messagesPresent> </font> <br>
       <jsp:include page="/pages/includes/incident_population.jsp" />
+      
+      <logic:present name="pnrlist" scope="request">
+      	
+      	<h1 class="green">
+          <bean:message key="pnr.prepop.matched.incresults" />
+        </h1>
+        <bean:message key="pnr.prepop.matched.message" />
+        <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
+          <tr>
+            <td><strong><bean:message key="prepop.search.inc" /></strong></td>
+            <td><strong><bean:message key="prepop.search.inc_create_date" /></strong></td>
+            <td><strong><bean:message key="prepop.search.inc_status" /></strong></td>
+            <td><strong><bean:message key="prepop.search.inc_pax" /></strong></td>
+            <td><strong><bean:message key="prepop.search.inc.create_station" /></strong></td>
+            <td><strong><bean:message key="prepop.search.inc.assigned_station" /></strong></td>
+          </tr>
+          <logic:iterate id="pnrInc" name="pnrlist" type="com.bagnet.nettracer.tracing.db.Incident">
+            <tr>
+              <td><a href='searchIncident.do?incident=<bean:write name="pnrInc" property="incident_ID"/>'>
+              <bean:write name="pnrInc" property="incident_ID" />
+              </a></td>
+              <td><bean:write name="pnrInc" property="displaydate" /></td>
+              <td><bean:message name="pnrInc" property="status.key" /></td>
+              <td>
+<%
+                boolean hasp = false;
+%>              <bean:define id="passengers" name="pnrInc" property="passenger_list" />
+                <logic:iterate id="passenger" name="passengers" type="com.bagnet.nettracer.tracing.db.Passenger">
+<%
+                  hasp = false;
+%>
+                  <logic:notEqual name="passenger" property="lastname" value="">
+                    <bean:write name="passenger" property="lastname" />
+                    ,
+<%
+                    hasp = true;
+%>
+                  </logic:notEqual>
+                  <logic:notEqual name="passenger" property="firstname" value="">
+<%
+                    hasp = true;
+%>
+                  </logic:notEqual>
+                  <bean:write name="passenger" property="firstname" />
+                  <bean:write name="passenger" property="middlename" />
+<%
+                  if (hasp) {
+%>
+                    <br>
+<%
+                  }
+%>
+                </logic:iterate>
+                &nbsp;
+              </td>
+              <td><bean:write name="pnrInc" property="stationcreated.stationcode" /></td>
+              <td><bean:write name="pnrInc" property="stationassigned.stationcode" /></td>
+            </tr>
+          </logic:iterate>
+         <tr>
+			<td align="center" valign="top" colspan="12"><html:submit
+					property="pnrpopulate" styleId="button"
+					onclick="buttonSelected = 'pnrpopulate'">
+					<bean:message key="button.populate.continue" />
+				</html:submit> 
+			</td>
+		</tr>
+        </table>
+      </logic:present>
   </html:form>
 </logic:present>
 

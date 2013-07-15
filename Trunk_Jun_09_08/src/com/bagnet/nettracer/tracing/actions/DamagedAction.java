@@ -540,7 +540,26 @@ public class DamagedAction extends CheckedAction {
 			
 			ActionMessage error = null;
 			ArrayList alerrors = new ArrayList();
-			if (MBRActionUtils.prePopulate(request,theform,alerrors,TracingConstants.DAMAGED_BAG)) {
+
+			if(request.getParameter("pnrpopulate") == null && user.getStation().getCompany().getVariable().getPnr_last_x_days()!=0){
+				List<Incident> pnrList = MBRActionUtils.prePopulateCheck(request,theform,user.getStation().getCompany().getVariable().getPnr_last_x_days(),TracingConstants.DAMAGED_BAG);
+				if(pnrList!=null && pnrList.size()>0){
+					List<Incident> ilist=new ArrayList();
+					for(Object o:pnrList){
+						Incident i=(Incident)o;
+						ilist.add(i);
+					}
+					request.setAttribute("pnrlist", ilist);
+					session.setAttribute("pnrtrue",  theform.getRecordlocator());
+					theform.setRecordlocator(theform.getRecordlocator());
+				}
+			}
+			boolean pnrcheck=(user.getStation().getCompany().getVariable().getPnr_last_x_days()!=0 && (request.getParameter("pnrpopulate") != null || request.getAttribute("pnrlist")==null)) || (user.getStation().getCompany().getVariable().getPnr_last_x_days()==0 && request.getParameter("doprepopulate1") != null);
+			// Attempt to prepopulate the fields from the reservation integration.
+			if(!(theform.getRecordlocator()!=null  && theform.getRecordlocator().length()>0) && session.getAttribute("pnrtrue")!=null && session.getAttribute("pnrtrue").toString().length()>0){
+				theform.setRecordlocator(session.getAttribute("pnrtrue").toString());
+			}
+			if (pnrcheck && MBRActionUtils.prePopulate(request,theform,alerrors,TracingConstants.DAMAGED_BAG)) {
 				if (alerrors.size() > 0) {
 					for (int i=0;i<alerrors.size();i++) {
 						error = new ActionMessage((String)alerrors.get(i));

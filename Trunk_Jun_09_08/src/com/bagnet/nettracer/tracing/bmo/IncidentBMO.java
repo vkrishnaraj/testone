@@ -2483,5 +2483,31 @@ public class IncidentBMO {
 		}
 		return false;
 	}
-	
+
+	public static List<Incident> getIncidentsByPNR(String pnr, int lastXDays){
+		String sql = "from com.bagnet.nettracer.tracing.db.Incident where createdate > :lastXDate and recordlocator = :pnr";
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			Date lastXDate=new Date();
+			lastXDate=DateUtils.addDays(lastXDate, -lastXDays);
+			q.setParameter("lastXDate", lastXDate);
+			q.setParameter("pnr", pnr);
+			
+			List<Incident> ilist= (List<Incident>) q.list();
+			return ilist;
+		} catch (Exception e) {
+			logger.error("Error in checking existing PNRs for Incidents: " + e);
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.error("unable to close hibernate session: " + e);
+				}
+			}
+		}
+	}
 }
