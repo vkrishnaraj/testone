@@ -2484,6 +2484,17 @@ public class IncidentBMO {
 		return false;
 	}
 
+	/**
+	 * Get Incidents by PNR
+	 *
+	 * Method uses to get and return a list of incidents that match pnr 
+	 * and were made within the last X amount of days (determined by Company_Specific_Variable pnrLastXDays)
+	 *
+	 * @param  pnr 	String of pnr to compare against Incidents
+	 * @param  lastXDays	Integer of day count that the incident has to be made within the last days of to be included.
+	 * @return List of incidents with similar pnr and made in the last X Days.
+	 * -Sean Fine
+	 */
 	public static List<Incident> getIncidentsByPNR(String pnr, int lastXDays){
 		String sql = "from com.bagnet.nettracer.tracing.db.Incident where createdate > :lastXDate and recordlocator = :pnr";
 		Session sess = null;

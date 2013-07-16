@@ -1054,6 +1054,18 @@ public class MBRActionUtils {
 		return false;
 	}
 
+	/**
+	 * PNR Prepopulation Check Tool
+	 *
+	 * Method uses to get and return a list of incidents that match pnr 
+	 * and were made within the last X amount of days (determined by Company_Specific_Variable pnrLastXDays)
+	 *
+	 * @param  pnr 	String of pnr to compare against Incidents
+	 * @param  lastXDays	Integer of day count that the incident has to be made within the last days of to be included.
+	 * @return List of incidents with similar pnr and made in the last X Days.
+	 * -Sean Fine
+	 */
+
 	public static List<Incident> prePopulateCheck(String pnr, int lastXDays) {
 		
 		return IncidentBMO.getIncidentsByPNR(pnr, lastXDays);

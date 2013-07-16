@@ -79,6 +79,9 @@ public class Company_Specific_Variable implements Serializable {
 	private String blindEmail;
 	private int min_pass_size;
 	private int pass_x_history;
+	/**
+	 * Variable to determine the last amount of days to include incidents for a PNR Prepopulation Check. -Sean Fine
+	 */
 	private int pnr_last_x_days;
 	
 	//AUTO CLOSE
