@@ -7,8 +7,6 @@
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="org.apache.struts.action.DynaActionForm" %>
 <html:form action="codeAdmin.do" method="post" onsubmit="return validateCodeForm(this);">
-  <html:hidden property="active"/>
-  <html:hidden property="controllable"/>
   <html:javascript formName="codeForm" />
   <tr>
     <td colspan="3" id="pageheadercell">
@@ -130,6 +128,24 @@
           </td>
           <td>
             <html:text styleClass="textfield" name="codeForm" property="companycode_ID" size="4" maxlength="4" disabled="true" />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <bean:message key="header.active" />
+            :
+          </td>
+          <td>
+            <html:checkbox property="active" value="1"></html:checkbox>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <bean:message key="header.controllable" />
+            :
+          </td>
+          <td>
+            <html:checkbox property="controllable" value="1"></html:checkbox>
           </td>
         </tr>
         <tr>

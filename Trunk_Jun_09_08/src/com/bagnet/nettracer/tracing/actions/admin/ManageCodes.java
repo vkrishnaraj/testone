@@ -84,6 +84,8 @@ public final class ManageCodes extends Action {
 			if (code.isShow_to_limited_users() == true)
 				visible = "1";
 			dForm.set("visibleToLimited", visible);
+			dForm.set("active", code.isActive() ? "1" : "");
+			dForm.set("controllable", code.isControllable() ? "1" : "");
 			return mapping.findForward(TracingConstants.EDIT_CODE);
 		}
 
@@ -183,7 +185,19 @@ public final class ManageCodes extends Action {
 				show = true;
 			}
 			s.setShow_to_limited_users(show);
-
+			
+			boolean active = false;
+			if (((String)dForm.get("active")).equals("1")) {
+				active = true;
+			}
+			s.setActive(active);
+			
+			boolean controllable = false;
+			if (((String)dForm.get("controllable")).equals("1")) {
+				controllable = true;
+			}
+			s.setControllable(controllable);
+			
 			try {
 				HibernateUtils.saveCode(s, isNew);
 

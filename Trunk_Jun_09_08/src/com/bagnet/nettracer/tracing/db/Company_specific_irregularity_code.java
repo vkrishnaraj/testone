@@ -21,6 +21,8 @@ public class Company_specific_irregularity_code implements Serializable {
 	private String description;
 	private int report_type;
 	private boolean show_to_limited_users;
+	private boolean active;
+	private boolean controllable;
 
 	private Company company;
 
@@ -130,5 +132,43 @@ public class Company_specific_irregularity_code implements Serializable {
 	 */
 	public void setShow_to_limited_users(boolean show_to_limited_users) {
 		this.show_to_limited_users = show_to_limited_users;
+	}
+
+	/**
+	 * @return whether the loss code is active or not
+	 * @hibernate.property type="boolean"
+	 */
+	public boolean isActive() {
+		return active;
+	}
+	
+	/**
+	 * @param active : the active to set
+	 */
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	
+	/**
+	 * @return whether the loss code is controllable or not
+	 * @hibernate.property type="boolean"
+	 */
+	public boolean isControllable() {
+		return controllable;
+	}
+	
+	/**
+	 * @param controllable : the controllable to set
+	 */
+	public void  setControllable(boolean controllable) {
+		this.controllable = controllable;
+	}
+	
+	public String getActiveDisp() {
+		return active ? "Yes" : "No";
+	}
+	
+	public String getControllableDisp() {
+		return controllable ? "Yes" : "No";
 	}
 }

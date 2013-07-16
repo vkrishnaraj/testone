@@ -197,6 +197,8 @@
 			<form-property name="companycode_ID" type="java.lang.String" />
 			<form-property name="locale" type="java.lang.String" />
 			<form-property name="visibleToLimited" type="java.lang.String" />
+			<form-property name="active" type="java.lang.String" />
+			<form-property name="controllable" type="java.lang.String" />
 		</form-bean>
 		<form-bean name="searchBDOForm" type="com.bagnet.nettracer.tracing.forms.SearchBDOForm" />
 		<form-bean name="auditOHDForm" type="com.bagnet.nettracer.tracing.forms.audit.AuditOnHandForm" />
