@@ -766,7 +766,7 @@ public class LostDelayAction extends CheckedAction {
 
 			
 			if(request.getParameter("pnrpopulate") == null && user.getStation().getCompany().getVariable().getPnr_last_x_days()!=0){
-				List<Incident> pnrList = MBRActionUtils.prePopulateCheck(request,theform,user.getStation().getCompany().getVariable().getPnr_last_x_days(),TracingConstants.LOST_DELAY);
+				List<Incident> pnrList = MBRActionUtils.prePopulateCheck(theform.getRecordlocator(),user.getStation().getCompany().getVariable().getPnr_last_x_days());
 				if(pnrList!=null && pnrList.size()>0){
 					List<Incident> ilist=new ArrayList();
 					for(Object o:pnrList){
@@ -778,7 +778,9 @@ public class LostDelayAction extends CheckedAction {
 					theform.setRecordlocator(theform.getRecordlocator());
 				}
 			}
-			boolean pnrcheck=(user.getStation().getCompany().getVariable().getPnr_last_x_days()!=0 && (request.getParameter("pnrpopulate") != null || (request.getParameter("pnrpopulate") != null && request.getAttribute("pnrlist")==null))) || (user.getStation().getCompany().getVariable().getPnr_last_x_days()==0 && request.getParameter("doprepopulate1") != null);
+			boolean pnrcheck=(user.getStation().getCompany().getVariable().getPnr_last_x_days()!=0 && (request.getParameter("pnrpopulate") != null && request.getAttribute("pnrlist")==null)) ||
+						((user.getStation().getCompany().getVariable().getPnr_last_x_days()==0 || request.getAttribute("pnrlist")==null) && request.getParameter("doprepopulate") != null) ||
+						request.getParameter("qPrepopulate") != null;
 			// Attempt to prepopulate the fields from the reservation integration.
 			if(!(theform.getRecordlocator()!=null  && theform.getRecordlocator().length()>0) && session.getAttribute("pnrtrue")!=null && session.getAttribute("pnrtrue").toString().length()>0){
 				theform.setRecordlocator(session.getAttribute("pnrtrue").toString());

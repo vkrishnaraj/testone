@@ -335,3 +335,16 @@ function qPrepopulateIncident(type, content, pnrOrTag) {
   
 }
 
+function qPrepopulateIncident2(type, content, pnrOrTag,inLastXDays) {
+	if(parseInt(inLastXDays)>0){
+		if(window.confirm("One or more incidents already exist for this PNR. Are you sure you wish to continue with pre-population?")){
+			return qPrepopulateIncident(type, content, pnrOrTag)
+		} else {
+			return false;
+		}
+	} else {
+		return qPrepopulateIncident(type, content, pnrOrTag)
+	}
+	
+}
+

@@ -1054,10 +1054,9 @@ public class MBRActionUtils {
 		return false;
 	}
 
-	public static List<Incident> prePopulateCheck(HttpServletRequest request,
-			IncidentForm theform, int lastXDays, int incidentType) {
+	public static List<Incident> prePopulateCheck(String pnr, int lastXDays) {
 		
-		return IncidentBMO.getIncidentsByPNR(theform.getRecordlocator(), lastXDays);
+		return IncidentBMO.getIncidentsByPNR(pnr, lastXDays);
 		// TODO Auto-generated method stub
 		
 	}

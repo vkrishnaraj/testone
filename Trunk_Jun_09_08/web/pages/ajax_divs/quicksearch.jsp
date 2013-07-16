@@ -6,6 +6,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent"%>
 <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
 <%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
+<%@page import="com.bagnet.nettracer.tracing.utils.MBRActionUtils"%>
 <%
 	Agent a = (Agent) session.getAttribute("user");
     boolean createDelayed = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_MISHANDLED_BAG, a);
@@ -16,6 +17,7 @@
 
 
 <%@ page import="java.util.ArrayList"%>
+<%@ page import="java.util.List"%>
 
 <%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
 <%@page import="com.bagnet.nettracer.tracing.db.OHD"%>
@@ -118,8 +120,17 @@ jQuery(document).ready(function() {
 		<option value="2">Pilfered</option>
 	<%   } %>
 	</select>
+	<% List pnrlist=new ArrayList();
+		int lastX=0;
+	if(a.getStation().getCompany().getVariable().getPnr_last_x_days()!=0)
+		lastX=a.getStation().getCompany().getVariable().getPnr_last_x_days();
+		pnrlist=MBRActionUtils.prePopulateCheck(request.getParameter("search"),lastX); 
+	%>
 	<button type="button" id="button"
-		onclick="this.disabled = true; this.value='<bean:message key="ajax.please_wait" />';  qPrepopulateIncident(document.getElementById('qPrepopulateType').value, '<%=request.getParameter("search")%>', <c:out  value="${quickSearchForm.dto.prepopType}"/>);">Create
+		onclick="this.disabled = true; this.value='<bean:message key="ajax.please_wait" />';
+		if(!qPrepopulateIncident2(document.getElementById('qPrepopulateType').value, '<%=request.getParameter("search")%>', 
+			<c:out  value="${quickSearchForm.dto.prepopType}"/>, <%=(lastX>0 && pnrlist!=null && pnrlist.size()>0)?String.valueOf(lastX):"0"%>))
+			{this.disabled = false; this.value='Create Incident';}">Create
 	Incident</button>
 	&nbsp; &nbsp; 
 	<%   if (TracerProperties.isTrue(a.getCompanycode_ID(),TracerProperties.RESERVATION_POPULATE_OHD_ON)) { %>

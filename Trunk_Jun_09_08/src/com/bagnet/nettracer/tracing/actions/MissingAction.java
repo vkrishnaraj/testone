@@ -534,7 +534,7 @@ public class MissingAction extends CheckedAction {
 			ArrayList alerrors = new ArrayList();
 
 			if(request.getParameter("pnrpopulate") == null && user.getStation().getCompany().getVariable().getPnr_last_x_days()!=0){
-				List<Incident> pnrList = MBRActionUtils.prePopulateCheck(request,theform,user.getStation().getCompany().getVariable().getPnr_last_x_days(),TracingConstants.MISSING_ARTICLES);
+				List<Incident> pnrList = MBRActionUtils.prePopulateCheck(theform.getRecordlocator(),user.getStation().getCompany().getVariable().getPnr_last_x_days());
 				if(pnrList!=null && pnrList.size()>0){
 					List<Incident> ilist=new ArrayList();
 					for(Object o:pnrList){
