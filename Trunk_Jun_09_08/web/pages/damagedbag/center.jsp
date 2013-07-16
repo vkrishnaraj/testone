@@ -136,55 +136,134 @@ function disableButton(aButton) {
         <bean:message key="pnr.prepop.matched.message" />
         <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
           <tr>
-            <td><strong><bean:message key="prepop.search.inc" /></strong></td>
-            <td><strong><bean:message key="prepop.search.inc_create_date" /></strong></td>
-            <td><strong><bean:message key="prepop.search.inc_status" /></strong></td>
-            <td><strong><bean:message key="prepop.search.inc_pax" /></strong></td>
-            <td><strong><bean:message key="prepop.search.inc.create_station" /></strong></td>
-            <td><strong><bean:message key="prepop.search.inc.assigned_station" /></strong></td>
+          		  <td><b><bean:message key="colname.incident_num" /></b></td>
+                  <td><b><bean:message key="colname.report_type" /></b></td>
+                  <td><b><bean:message key="colname.incident_create_date" /></b></td>
+                  <td><b><bean:message key="colname.companycreated" /></b></td>
+                  <td><b><bean:message key="colname.stationcreated" /></b></td>
+                  <td><b><bean:message key="colname.stationassigned" /></b></td>
+                  <td><b><bean:message key="header.status" /></b></td>
+			      <td><b><bean:message key="colname.color" /></b></td>
+			      <td><b><bean:message key="colname.bagtype" /></b></td>
+                  <td><b><bean:message key="colname.claimnum" /></b></td>
+                  <td><b><bean:message key="colname.pass_name" /></b></td>
+                  <%if(a.getStation().getCompany().getVariable().getWt_enabled()==1){%>
+                  <td><b><bean:message key="colname.worldtracer_id"/></b></td>
+                  <%}%>
           </tr>
           <logic:iterate id="pnrInc" name="pnrlist" type="com.bagnet.nettracer.tracing.db.Incident">
-            <tr>
-              <td><a href='searchIncident.do?incident=<bean:write name="pnrInc" property="incident_ID"/>'>
-              <bean:write name="pnrInc" property="incident_ID" />
-              </a></td>
-              <td><bean:write name="pnrInc" property="displaydate" /></td>
-              <td><bean:message name="pnrInc" property="status.key" /></td>
-              <td>
+            <bean:define id="items" name="pnrInc" property="itemlist" />
+                  <bean:define id="claimchecks" name="pnrInc" property="claimcheck_list" />
+                  <bean:define id="itinerary" name="pnrInc" property="itinerary_list" />
+                  <bean:define id="passengers" name="pnrInc" property="passenger_list" />
+                  <tr>
+                    <td>
+                      <a href='searchIncident.do?incident=<bean:write name="pnrInc" property="incident_ID"/>'><bean:write name="pnrInc" property="incident_ID" /></a>
+                    </td>
+                    <td>
+                      <bean:message name="pnrInc" property="itemtype.key" />
+                    </td>
+                    <td>
+                      <bean:write name="pnrInc" property="displaydate" />
+                    </td>
+                    <td>
+                      <bean:write name="pnrInc" property="stationcreated.company.companyCode_ID" />
+                    </td>
+                    <td>
+                      <bean:write name="pnrInc" property="stationcreated.stationcode" />
+                    </td>
+                    <td>
+                      <bean:write name="pnrInc" property="stationassigned.stationcode" />
+                    </td>
+                    <td>
+                      <bean:message name="pnrInc" property="status.key" />
+                    </td>
+				      <td>
+				        <logic:iterate id="item_list" name="items" type="com.bagnet.nettracer.tracing.db.Item">
+				          <logic:present name="item_list" property="color">
+				            <logic:notEqual name="item_list" property="color" value="">
+				              <bean:write name="item_list" property="color" />
+				              <br>
+				            </logic:notEqual>
+				          </logic:present>
+				        </logic:iterate>
+				        &nbsp;
+				      </td>
+				      <td>
+				        <logic:iterate id="item_list" name="items" type="com.bagnet.nettracer.tracing.db.Item">
+				          <logic:present name="item_list" property="bagtype">
+				            <logic:notEqual name="item_list" property="bagtype" value="">
+				              <bean:write name="item_list" property="bagtype" />
+				              <br>
+				            </logic:notEqual>
+				          </logic:present>
+				        </logic:iterate>
+				        &nbsp;
+				      </td>
+                    <td>
+                      <logic:iterate id="item_list" name="items" type="com.bagnet.nettracer.tracing.db.Item">
+                        <logic:present name="item_list" property="claimchecknum">
+                        <logic:notEqual name="item_list" property="claimchecknum" value="">
+                          <bean:write name="item_list" property="claimchecknum" />
+                          <br>
+                        </logic:notEqual>
+                        </logic:present>
+                      </logic:iterate>
+                      <logic:iterate id="claimcheck_list" name="claimchecks" type="com.bagnet.nettracer.tracing.db.Incident_Claimcheck">
+                        <logic:notEqual name="claimcheck_list" property="claimchecknum" value="">
+                          <bean:write name="claimcheck_list" property="claimchecknum" />
+                          <br>
+                        </logic:notEqual>
+                      </logic:iterate>
+                      &nbsp;
+                    </td>
+                    <td>
 <%
-                boolean hasp = false;
-%>              <bean:define id="passengers" name="pnrInc" property="passenger_list" />
-                <logic:iterate id="passenger" name="passengers" type="com.bagnet.nettracer.tracing.db.Passenger">
-<%
-                  hasp = false;
+                      boolean hasp = false;
 %>
-                  <logic:notEqual name="passenger" property="lastname" value="">
-                    <bean:write name="passenger" property="lastname" />
-                    ,
+                      <logic:iterate id="passenger_list" name="passengers" type="com.bagnet.nettracer.tracing.db.Passenger">
 <%
-                    hasp = true;
+                        hasp = false;
 %>
-                  </logic:notEqual>
-                  <logic:notEqual name="passenger" property="firstname" value="">
+                        <logic:notEqual name="passenger_list" property="lastname" value="">
+                          <bean:write name="passenger_list" property="lastname" />
+                          ,
 <%
-                    hasp = true;
+                          hasp = true;
 %>
-                  </logic:notEqual>
-                  <bean:write name="passenger" property="firstname" />
-                  <bean:write name="passenger" property="middlename" />
+                        </logic:notEqual>
+                        <logic:notEqual name="passenger_list" property="firstname" value="">
 <%
-                  if (hasp) {
+                          hasp = true;
 %>
-                    <br>
+                        </logic:notEqual>
+                        <bean:write name="passenger_list" property="firstname" />
+                        <bean:write name="passenger_list" property="middlename" />
 <%
-                  }
+                        if (hasp) {
 %>
-                </logic:iterate>
-                &nbsp;
-              </td>
-              <td><bean:write name="pnrInc" property="stationcreated.stationcode" /></td>
-              <td><bean:write name="pnrInc" property="stationassigned.stationcode" /></td>
-            </tr>
+                          <br>
+<%
+                        }
+%>
+                      </logic:iterate>
+                      &nbsp;
+                    </td>
+                    <%
+                	if(a.getStation().getCompany().getVariable().getWt_enabled()==1){
+                    %>
+                    <td>
+                     	<logic:empty name="pnrInc" property="wt_id">
+                            &nbsp;
+                        </logic:empty>
+                        <logic:notEmpty name="pnrInc" property="wt_id">
+                        	 <bean:write name="pnrInc" property="wt_id" />
+                        </logic:notEmpty>
+                    </td>
+                    <%
+                	}
+                    %>
+                  </tr>
           </logic:iterate>
          <tr>
 			<td align="center" valign="top" colspan="12"><html:submit
