@@ -524,6 +524,9 @@ public class MissingAction extends CheckedAction {
 			}
 
 		} else {
+			if(request.getParameter("doprepopulate")==null){
+				theform.setRecordlocator("");
+			}
 			// prepopulate
 			TracerUtils.populateIncident(theform, request, TracingConstants.MISSING_ARTICLES);
 			IncidentForm thenewform = (IncidentForm)session.getAttribute("incidentForm");
@@ -533,7 +536,7 @@ public class MissingAction extends CheckedAction {
 			ActionMessage error = null;
 			ArrayList alerrors = new ArrayList();
 
-			if(request.getParameter("pnrpopulate") == null && user.getStation().getCompany().getVariable().getPnr_last_x_days()!=0){
+			if(request.getParameter("pnrpopulate") == null && user.getStation().getCompany().getVariable().getPnr_last_x_days()!=0 && theform.getRecordlocator()!=null && theform.getRecordlocator().length()>0){
 				List<Incident> pnrList = MBRActionUtils.prePopulateCheck(theform.getRecordlocator(),user.getStation().getCompany().getVariable().getPnr_last_x_days());
 				if(pnrList!=null && pnrList.size()>0){
 					List<Incident> ilist=new ArrayList();

@@ -553,6 +553,7 @@ public class LostDelayAction extends CheckedAction {
 				if(error == null || (request.getParameter("doclosewt") != null && error.getKey().equals("error.unable_to_close_incident"))) {
 					theform.setRemarkEnteredWhenNotifiedOfRequirements(false);
 					theform.setNotifiedOfRequirements(false);
+					theform.setRecordlocator("");
 					if (theform.getOtherSystemInformation() != null && theform.getOtherSystemInformation().trim().length() >0) {
 						// Assumes this is new and that we are saving OSI for first time.
 						OtherSystemInformation osi = new OtherSystemInformation();
@@ -756,6 +757,9 @@ public class LostDelayAction extends CheckedAction {
 		} else {
 			error = null;
 			ArrayList alerrors = new ArrayList();
+			if(request.getParameter("doprepopulate")==null){
+				theform.setRecordlocator("");
+			}
 			// prepopulate new incident fields
 			TracerUtils.populateIncident(theform, request, TracingConstants.LOST_DELAY);
 			//next two lines solve the problem with Occurred BSO Airline dropdown not default to right value
@@ -765,7 +769,7 @@ public class LostDelayAction extends CheckedAction {
 			request.setAttribute("newform", "1");
 
 			
-			if(request.getParameter("pnrpopulate") == null && user.getStation().getCompany().getVariable().getPnr_last_x_days()!=0){
+			if(request.getParameter("pnrpopulate") == null && user.getStation().getCompany().getVariable().getPnr_last_x_days()!=0 && theform.getRecordlocator()!=null && theform.getRecordlocator().length()>0){
 				List<Incident> pnrList = MBRActionUtils.prePopulateCheck(theform.getRecordlocator(),user.getStation().getCompany().getVariable().getPnr_last_x_days());
 				if(pnrList!=null && pnrList.size()>0){
 					List<Incident> ilist=new ArrayList();
