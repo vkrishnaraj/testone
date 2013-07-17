@@ -1071,7 +1071,8 @@ public class OhdBMO {
 			intelligentSearchProcessing(siDTO, s, eightDig, nineDig, tenDig);
 			
 
-			if (!iscount) s.append(" order by ohd.OHD_ID");
+			if (!iscount && siDTO.getRecordlocator().length() > 0) s.append(" order by ohd.founddate desc, ohd.foundtime desc");
+			else if(!iscount ) s.append(" order by ohd.OHD_ID");
 			
 			q = sess.createQuery(s.toString());
 			

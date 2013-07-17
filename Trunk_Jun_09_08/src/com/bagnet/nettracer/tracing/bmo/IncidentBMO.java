@@ -1334,7 +1334,9 @@ public class IncidentBMO {
 				s.append(" and incident.agentassigned is null");
 			}
 
-			if (!iscount)
+			if (!iscount && siDTO.getRecordlocator() != null && siDTO.getRecordlocator().trim().length() > 0)
+				s.append(" order by incident.createdate desc, incident.createtime desc");
+			else if (!iscount)
 				s.append(" order by incident.incident_ID");
 
 			q = sess.createQuery(s.toString());
@@ -1961,7 +1963,7 @@ public class IncidentBMO {
 			}
 
 			if (!iscount)
-				s.append(" order by incident.incident_ID");
+				s.append(" order by incident.incident_ID, incident.createdate, incident.createtime");
 
 			q = sess.createQuery(s.toString());
 
