@@ -51,7 +51,7 @@ public class Settings {
 	public static final String USERNAME_OGADMIN = "ogadmin";
 	public static final String USERNAME_TEST = "nttestauto";
 	public static final String PASSWORD_ADMIN = "IpoL!Jan7";
-//	public static final String PASSWORD_ADMIN = "/LucasArts44!";
+//	public static final String PASSWORD_ADMIN = "SoftSprint1011";
 	public static final String PASSWORD_OGADMIN = "Ladendead51!";
 //	public static final String PASSWORD_OGADMIN = "InstaNokia41!";
 	public static final String PASSWORD_TEST = "nttest@Hud1";
@@ -187,10 +187,19 @@ public class Settings {
 	
 
 	
-	/////////////////////////////////////////////////////////// WESTJET ///////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////// USAIR ///////////////////////////////////////////////////////
 	
 	public static final String START_URL_US = "tracer";
 
-	
+	/////////////////////////////////////////////////////////// SOUTHWEST ///////////////////////////////////////////////////////
+		
+	public static final String START_URL_WN = "ntsouthwest";
+	//public static final String START_URL_WS = "wjtracer/";
+	public static String INCIDENT_ID_WN = "";
+	public static String DAMAGE_ID_WN = "";
+	public static String PILFERAGE_ID_WN = "";
+	public static String ONHAND_ID_WN = "";
+	public static String FOUND_ID_WN = "";
+
 	
 }
