@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file was auto-generated from WSDL -->
+<!-- by the Apache Axis2 version: 1.5  Built on : Apr 30, 2009 (06:07:24 EDT) -->
+<serviceGroup>
+    <service name="CS2Service">
+        <messageReceivers>
+            <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="com.bagnet.nettracer.ws.wn.cs2.CS2ServiceMessageReceiverInOut"/>
+        </messageReceivers>
+        <parameter name="ServiceClass">com.bagnet.nettracer.ws.wn.cs2.CS2ServiceImpl</parameter>
+        <parameter name="useOriginalwsdl">true</parameter>
+        <parameter name="modifyUserWSDLPortAddress">true</parameter>
+        <operation name="issueLuvVoucher" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://cs2.wn.ws.nettracer.bagnet.com">
+            <actionMapping>urn:issueLuvVoucher</actionMapping>
+            <outputActionMapping>urn:issueLuvVoucherResponse</outputActionMapping>
+        </operation>
+        <operation name="retrieveIncident" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://cs2.wn.ws.nettracer.bagnet.com">
+            <actionMapping>urn:retrieveIncident</actionMapping>
+            <outputActionMapping>urn:retrieveIncidentResponse</outputActionMapping>
+        </operation>
+    </service>
+</serviceGroup>

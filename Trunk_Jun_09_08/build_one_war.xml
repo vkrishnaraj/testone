@@ -4961,6 +4961,42 @@
 
 
 	</target>
+
+
+	<target name="WN_CS2Service_java2wsdl" depends="wsdl-build-dev">
+		<taskdef name="Java2WSDLTask" classname="org.apache.ws.java2wsdl.Java2WSDLTask" classpathref="${axis2.classpath}" />
+
+		<Java2WSDLTask classPath="${build.dir}/${ant_project_name}_web/classes" className="com.bagnet.nettracer.ws.wn.cs2.CS2Service" outputLocation="src/com/bagnet/nettracer/ws/wn/cs2" outputFileName="CS2Service.wsdl">
+		</Java2WSDLTask>
+
+	</target>
+
+	<target name="WN_CS2Service_wsdl2java">
+		<java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true" classpathref="${axis2.classpath}">
+			<arg value="-uri" />
+			<arg file="src/com/bagnet/nettracer/ws/wn/cs2/CS2Service.wsdl" />
+
+			<arg value="-o" />
+			<arg file="${build.dir}/webservices/wn/cs2" />
+
+			<arg value="-ss" />
+			<arg value="-sd" />
+			<arg value="-g" />
+
+			<arg value="-d" />
+			<arg value="xmlbeans" />
+
+		</java>
+
+		<!-- copy services.xml to web-inf -->
+		<copy todir="${basedir}/web/WEB-INF/services/wn/CS2Service/META-INF" file="${build.dir}/webservices/wn/cs2/resources/services.xml" />
+
+		<replace file="${basedir}/web/WEB-INF/services/wn/CS2Service/META-INF/services.xml">
+			<replacetoken><![CDATA[com.bagnet.nettracer.ws.wn.cs2.CS2ServiceSkeleton]]></replacetoken>
+			<replacevalue><![CDATA[com.bagnet.nettracer.ws.wn.cs2.CS2ServiceImpl]]></replacevalue>
+		</replace>
+		
+	</target>
 	
 </project>
 
