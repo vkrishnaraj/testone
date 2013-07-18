@@ -53,5 +53,50 @@ public class B6_CloseLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 			verifyTrue(false);
 		}
 	}
+	
+	@Test
+	public void testPopulateQSCheck() {
+		if (checkNoErrorPage()) {
+			selenium.click("id=menucol_1.1");
+			waitForPageToLoadImproved();
+			selenium.type("name=recordlocator", "TESTER");
+			selenium.click("id=button");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("CLDVRF: Failed to load page.");
+			return;
+		}
+		if (checkNoErrorPage()) {
+			verifyTrue(selenium.isTextPresent(Settings.INCIDENT_ID_WN));
+			selenium.click("menucol_0.0");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("CLDVRF: Failed to load Quick Search and search on PNR.");
+			return;
+		}
 
+		if (checkNoErrorPage()) {
+			selenium.controlKeyDown();
+			selenium.keyDown("id=header", "\\83");
+			selenium.keyUp("id=header", "\\83");
+			selenium.controlKeyUp();
+			selenium.type("id=quickSearchQuery3", "TESTER");
+			selenium.click("id=button");
+			waitForPageToLoadImproved(1000,false);
+		} else {
+			System.out.println("CLDVRF: Failed to load prepopulate page.");
+			return;			
+		}
+		
+		if (checkNoErrorPage()) {
+			verifyTrue(selenium.isTextPresent(Settings.INCIDENT_ID_WN));
+			selenium.keyDown("id=header", "\\27");
+			selenium.keyUp("id=header", "\\27");
+		} else {
+			System.out.println("CLDVRF: Failed to check for existing PNR Incidents.");
+			return;			
+		}
+		
+	}
+	
 }
