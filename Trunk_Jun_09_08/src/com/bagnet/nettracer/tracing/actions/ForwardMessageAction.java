@@ -81,7 +81,7 @@ public class ForwardMessageAction extends Action {
 		}
 		request.setAttribute("stationList", stationList);
 		
-		List codes = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.LOST_DELAY, false, user);
+		List codes = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.LOST_DELAY, false, user, false, true);
 		//add to the loss codes
 		request.setAttribute("losscodes", codes);
 		

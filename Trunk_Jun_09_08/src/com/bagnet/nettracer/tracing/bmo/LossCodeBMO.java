@@ -174,16 +174,19 @@ public class LossCodeBMO {
 	}
 	
 	public static List<Company_specific_irregularity_code> getCompanyCodes(String companyCode, int report_type, boolean limit, Agent user) {
-		return getCompanyCodes(companyCode, report_type, limit, user, false);
+		return getCompanyCodes(companyCode, report_type, limit, user, false, false);
 	}
-
-	/**
-	 * Get the company specific irregularity codes
-	 * 
-	 * @param companyCode
-	 * @return list of codes null in case of exception
-	 */
+	
 	public static List<Company_specific_irregularity_code> getCompanyCodes(String companyCode, int report_type, boolean limit, Agent user, boolean checkLLC) {
+		return getCompanyCodes(companyCode, report_type, limit, user, checkLLC, false);
+	}
+	
+	/**
+	 * Get only the active list of loss codes.
+	 * @return the list of active company codes
+	 */
+	
+	public static List<Company_specific_irregularity_code> getCompanyCodes(String companyCode, int report_type, boolean limit, Agent user, boolean checkLLC, boolean active) {
 		Session sess = null;
 		boolean limitQuery = false;
 		
@@ -207,6 +210,10 @@ public class LossCodeBMO {
 			
 			if (limitQuery) {
 				cri.add(Expression.eq("show_to_limited_users", true));
+			}
+			
+			if (active) {
+				cri.add(Expression.eq("active", true));
 			}
 			
 			cri.addOrder(Order.asc("loss_code"));

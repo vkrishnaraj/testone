@@ -749,7 +749,7 @@ public class OnHandAction extends CheckedAction {
 	}
 
 	private List<Company_specific_irregularity_code> createLossCodeList(OnHandForm theform, Agent user) {
-		List<Company_specific_irregularity_code> result = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.OHD,  true, user);
+		List<Company_specific_irregularity_code> result = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.OHD,  true, user, false, true);
 		
 		boolean addFormCode = false;
 		if (theform.getLoss_code() > 0) {
