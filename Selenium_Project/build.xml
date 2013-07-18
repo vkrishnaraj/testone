@@ -107,7 +107,7 @@
         <java jar="lib/selenium-server.jar" fork="true" spawn="true">
              <arg line="-port 4444"/>
          </java>
-      <!--  <java jar="lib/selenium-server.jar" fork="true" spawn="true">
+        <java jar="lib/selenium-server.jar" fork="true" spawn="true">
              <arg line="-port 4445"/>
          </java>
         <java jar="lib/selenium-server.jar" fork="true" spawn="true">
@@ -121,17 +121,11 @@
          </java>
         <java jar="lib/selenium-server.jar" fork="true" spawn="true">
              <arg line="-port 4449"/>
-         </java> -->
+         </java>
   		
 
   		<parallel>
   			<junit printsummary="yes"  showoutput="true" fork="true">
-	      		<classpath refid="junitpath.test" />
-	      		<formatter type="xml" usefile="true" />
-	      		<test name="aero.nettracer.web.defaul.testing.TestUSAir" />
-	    		<jvmarg value="-Dselenium.port=4444"/>
-	    	</junit>
-  		<!--	<junit printsummary="yes"  showoutput="true" fork="true">
 	      		<classpath refid="junitpath.test" />
 	      		<formatter type="xml" usefile="true" />
 	      		<test name="aero.nettracer.web.defaul.testing.TestWestJet" />
@@ -166,14 +160,14 @@
 	      		<formatter type="xml" usefile="true" />
 	      		<test name="aero.nettracer.web.defaul.testing.TestLfc" />
 	    		<jvmarg value="-Dselenium.port=4449"/>
-	    	</junit>  	-->
+	    	</junit>  	
   		</parallel>
   		
   		
         <waitfor maxwait="2" maxwaitunit="minute" checkevery="100">
             <http url="http://localhost:4444/selenium-server/driver/?cmd=shutDownSeleniumServer"/>
         </waitfor>
-    <!--    <waitfor maxwait="2" maxwaitunit="minute" checkevery="100">
+        <waitfor maxwait="2" maxwaitunit="minute" checkevery="100">
             <http url="http://localhost:4445/selenium-server/driver/?cmd=shutDownSeleniumServer"/>
         </waitfor>
         <waitfor maxwait="2" maxwaitunit="minute" checkevery="100">
@@ -187,7 +181,7 @@
         </waitfor>
         <waitfor maxwait="2" maxwaitunit="minute" checkevery="100">
             <http url="http://localhost:4449/selenium-server/driver/?cmd=shutDownSeleniumServer"/>
-        </waitfor> -->
+        </waitfor> 
   </target>
 	
 </project>
