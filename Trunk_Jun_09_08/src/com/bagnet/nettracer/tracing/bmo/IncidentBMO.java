@@ -1963,7 +1963,7 @@ public class IncidentBMO {
 			}
 
 			if (!iscount)
-				s.append(" order by incident.incident_ID, incident.createdate, incident.createtime");
+				s.append(" order by incident.incident_ID");
 
 			q = sess.createQuery(s.toString());
 

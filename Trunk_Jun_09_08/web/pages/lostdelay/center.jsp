@@ -15,7 +15,6 @@
 <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
 <%@page import="com.bagnet.nettracer.tracing.forms.IncidentForm"%>
 <%@page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
-<%@page import="com.bagnet.nettracer.tracing.db.Incident" %>
 <%@page import="java.util.ResourceBundle" %>
 <%@page import="java.util.Locale" %>
 <%

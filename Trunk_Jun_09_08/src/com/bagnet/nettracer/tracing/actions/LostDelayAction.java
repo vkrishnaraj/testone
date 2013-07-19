@@ -553,7 +553,6 @@ public class LostDelayAction extends CheckedAction {
 				if(error == null || (request.getParameter("doclosewt") != null && error.getKey().equals("error.unable_to_close_incident"))) {
 					theform.setRemarkEnteredWhenNotifiedOfRequirements(false);
 					theform.setNotifiedOfRequirements(false);
-					theform.setRecordlocator("");
 					if (theform.getOtherSystemInformation() != null && theform.getOtherSystemInformation().trim().length() >0) {
 						// Assumes this is new and that we are saving OSI for first time.
 						OtherSystemInformation osi = new OtherSystemInformation();
@@ -773,8 +772,8 @@ public class LostDelayAction extends CheckedAction {
 				List<Incident> pnrList = MBRActionUtils.prePopulateCheck(theform.getRecordlocator(),user.getStation().getCompany().getVariable().getPnr_last_x_days());
 				if(pnrList!=null && pnrList.size()>0){
 					List<Incident> ilist=new ArrayList();
-					for(Object o:pnrList){
-						Incident i=(Incident)o;
+					for(Incident o:pnrList){
+						Incident i=o;
 						ilist.add(i);
 					}
 					request.setAttribute("pnrlist", ilist);

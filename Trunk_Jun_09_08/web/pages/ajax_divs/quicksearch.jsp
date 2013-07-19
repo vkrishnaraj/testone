@@ -96,7 +96,7 @@ jQuery(document).ready(function() {
 	<br/>
 	<p/>
 	<input type="text" id="quickSearchQuery3" name="search" onkeydown="quickSearchKey3()" class="textfield" value="<bean:write name="quickSearchForm" property="search" />"/>&nbsp; 
-	<button type="button" id="button" onclick="quickSearchKey4();">Search</button><br /><br /></div>
+	<button type="button" id="button" name="searchButton" onclick="quickSearchKey4();">Search</button><br /><br /></div>
 
 <c:if test="${quickSearchForm.dto.prepop == true}">
 <% if (createOnHand || createMissing || createDelayed || createDamaged) { %>
@@ -122,11 +122,13 @@ jQuery(document).ready(function() {
 	</select>
 	<% List pnrlist=new ArrayList();
 		int lastX=0;
-	if(a.getStation().getCompany().getVariable().getPnr_last_x_days()!=0)
+	if(a.getStation().getCompany().getVariable().getPnr_last_x_days()!=0){
 		lastX=a.getStation().getCompany().getVariable().getPnr_last_x_days();
-		pnrlist=MBRActionUtils.prePopulateCheck(request.getParameter("search"),lastX); 
+		pnrlist=MBRActionUtils.prePopulateCheck(request.getParameter("search"),lastX);
+	}
 	%>
-	<button type="button" id="button"
+	<!-- Checking for if the window confirmation appears and if it does, it the user declines it. The button verbiage and enabled status will be restored -->
+	<button type="button" id="button" name="createIncidentButton"
 		onclick="this.disabled = true; this.value='<bean:message key="ajax.please_wait" />';
 		if(!qPrepopulateIncident2(document.getElementById('qPrepopulateType').value, '<%=request.getParameter("search")%>', 
 			<c:out  value="${quickSearchForm.dto.prepopType}"/>, <%=(lastX>0 && pnrlist!=null && pnrlist.size()>0)?String.valueOf(lastX):"0"%>))

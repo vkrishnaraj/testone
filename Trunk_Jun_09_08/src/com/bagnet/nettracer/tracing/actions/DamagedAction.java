@@ -548,8 +548,8 @@ public class DamagedAction extends CheckedAction {
 				List<Incident> pnrList = MBRActionUtils.prePopulateCheck(theform.getRecordlocator(),user.getStation().getCompany().getVariable().getPnr_last_x_days());
 				if(pnrList!=null && pnrList.size()>0){
 					List<Incident> ilist=new ArrayList();
-					for(Object o:pnrList){
-						Incident i=(Incident)o;
+					for(Incident o:pnrList){
+						Incident i=o;
 						ilist.add(i);
 					}
 					request.setAttribute("pnrlist", ilist);
