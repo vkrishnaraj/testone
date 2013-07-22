@@ -7,6 +7,13 @@
 
  <display-name>TracerEAR</display-name>
   
+ <module>
+     <web>
+         <web-uri>avis_hudson.war</web-uri>
+         <context-root>avis</context-root>
+     </web>
+  </module>
+  
    <module>
      <web>
          <web-uri>frontier_hudson.war</web-uri>
@@ -15,6 +22,12 @@
   </module>
   
   
+   <module>
+     <web>
+         <web-uri>jetblue_hudson.war</web-uri>
+         <context-root>jetblue</context-root>
+     </web>
+  </module>
    <module>
      <web>
          <web-uri>southwest_hudson.war</web-uri>
@@ -28,5 +41,11 @@
      </web>
   </module>
  
+   <module>
+     <web>
+         <web-uri>lfc_hudson.war</web-uri>
+         <context-root>lostandfound</context-root>
+     </web>
+  </module>
   
 </application> 
