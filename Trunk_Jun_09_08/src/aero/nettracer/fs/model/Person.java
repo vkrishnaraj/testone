@@ -279,12 +279,14 @@ public class Person implements Serializable {
 	public void setRedactedDriversLicenseNumber(String driversLicenseNumber) {
 		setDriversLicenseNumber(driversLicenseNumber);
 	}
+	
+	public void setTransferDriversLicenseNumber(String driversLicenseNumber) {
+		this.driversLicenseNumber = driversLicenseNumber;
+	}
 
 	public void setDriversLicenseNumber(String driversLicenseNumber) {
-		if (driversLicenseNumber != null
-				&& driversLicenseNumber.matches("[A-Za-z0-9]{5,15}")) {
-			this.driversLicenseNumber = StringUtils.sha1_256(driversLicenseNumber,
-					true);
+		if (driversLicenseNumber != null && driversLicenseNumber.matches("[A-Za-z0-9]{5,15}")) {
+			this.driversLicenseNumber = StringUtils.sha1_256(driversLicenseNumber, true);
 		}
 	}
 

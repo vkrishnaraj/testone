@@ -380,6 +380,7 @@ public final class IncidentForm extends ValidatorForm {
 		if (index < 0) index = 0;
 		if (this.passengerlist.size() <= index) {
 			Passenger a = new Passenger();
+			a.setDriversLicenseCountry(PropertyBMO.getValue(PropertyBMO.PROPERTY_DEFAULT_COUNTRY));
 			if (index == 0) a.setIsprimary(1);
 			AirlineMembership am = new AirlineMembership();
 			String setDefault = PropertyBMO.getValue(PropertyBMO.PROPERTY_SET_DEFAULT_MEMBERSHIP);

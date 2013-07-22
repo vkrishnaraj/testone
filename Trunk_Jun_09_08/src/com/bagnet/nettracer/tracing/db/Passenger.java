@@ -7,6 +7,11 @@
 package com.bagnet.nettracer.tracing.db;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -14,9 +19,16 @@ import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Set;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.ShortBufferException;
+
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.struts.util.MessageResources;
+
+import aero.nettracer.security.AES;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.utils.NumberUtils;
@@ -29,6 +41,7 @@ import com.cci.utils.parser.ElementNode;
  * @hibernate.class table="Passenger"
  */
 public class Passenger implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private int Passenger_ID;
 	private String jobtitle;
 	private int salutation;
@@ -46,6 +59,9 @@ public class Passenger implements Serializable {
 	private int numRonKitsIssued;
 	private String languageKey;
 	private String languageFreeFlow;
+	
+	private String driversLicenseProvince;
+	private String driversLicenseCountry;
 
 	public JRBeanCollectionDataSource getAddressesForReport() {
 		if (addresses == null || addresses.size() < 1) return null;
@@ -66,6 +82,8 @@ public class Passenger implements Serializable {
 		sb.append("<salutation>" + salutation + "</salutation>");
 		sb.append("<driverslicense>" + driverslicense + "</driverslicense>");
 		sb.append("<dlstate>" + dlstate + "</dlstate>");
+		sb.append("<dlProvince>" + driversLicenseProvince + "</dlstate>");
+		sb.append("<dlCountry>" + driversLicenseCountry + "</dlstate>");
 		sb.append("<commonnumber>" + commonnum + "</commonnumber>");
 		sb.append("<countryofissue>" + countryofissue + "</countryofissue>");
 		if (membership == null) {
@@ -115,6 +133,10 @@ public class Passenger implements Serializable {
 				obj.setDriverslicense(child.getTextContents());
 			} else if (child.getType().equals("dlstate")) {
 				obj.setDlstate(child.getTextContents());
+			} else if (child.getType().equals("driversLicenseProvince")) {
+				obj.setDriversLicenseProvince(child.getTextContents());
+			} else if (child.getType().equals("driversLicenseCountry")) {
+				obj.setDriversLicenseCountry(child.getTextContents());
 			} else if (child.getType().equals("commonnumber")) {
 				obj.setCommonnum(child.getTextContents());
 			} else if (child.getType().equals("countryofissue")) {
@@ -357,7 +379,7 @@ public class Passenger implements Serializable {
 	/**
 	 * @return Returns the driverslicense.
 	 * 
-	 * @hibernate.property type="string" length="10"
+	 * @hibernate.property type="string"
 	 */
 	public String getDriverslicense() {
 		return driverslicense;
@@ -369,6 +391,24 @@ public class Passenger implements Serializable {
 	 */
 	public void setDriverslicense(String driverslicense) {
 		this.driverslicense = driverslicense;
+	}
+	
+	public String getDecriptedDriversLicense() {
+		try {
+			return AES.decrypt(driverslicense);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "";
+		}
+	}
+	
+	public void setDecriptedDriversLicense(String decriptedDriversLicense) {
+		try {
+			this.driverslicense = AES.encrypt(decriptedDriversLicense);
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.driverslicense = null;
+		}
 	}
 	
 	/**
@@ -498,5 +538,35 @@ public class Passenger implements Serializable {
 	public void setLanguageFreeFlow(String languageFreeFlow) {
 		this.languageFreeFlow = languageFreeFlow;
 	}
+	
+	public String getRedactedDriversLicense() {
+		return driverslicense != null && !driverslicense.isEmpty() ? "*********" : "";
+	}
+	
+	public void setRedactedDriversLicense(String redactedDriversLicense) {
+		// NOOP for struts
+	}
+	
+	/**
+	 * @hibernate.property type="string" column="dlprovince"
+	 */
+	public String getDriversLicenseProvince() {
+		return driversLicenseProvince;
+	}
+
+	public void setDriversLicenseProvince(String driversLicenseProvince) {
+		this.driversLicenseProvince = driversLicenseProvince;
+	}
+
+	/**
+	 * @hibernate.property type="string" length="2" column="dlcountry"
+	 */
+	public String getDriversLicenseCountry() {
+		return driversLicenseCountry;	
+	}
+
+	public void setDriversLicenseCountry(String driversLicenseCountry) {
+		this.driversLicenseCountry = driversLicenseCountry;
+	}	
 
 }

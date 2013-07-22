@@ -47,6 +47,14 @@
 
 <%
   Agent a = (Agent)session.getAttribute("user");
+  boolean hasCollectDlPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_COLLECT_DRIVERS_LICENSE, a);
+  boolean hasViewEditDlPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_EDIT_DRIVERS_LICENSE, a);
+
+  IncidentForm myform = (IncidentForm) session.getAttribute("incidentForm");
+  boolean isNew = myform.getIncident_ID() == null || myform.getIncident_ID().isEmpty();
+	
+  boolean dlFieldsEnabled = hasViewEditDlPermission || isNew;
+
   String cssFormClass;
  
   int report_type = 0;
@@ -168,6 +176,74 @@
             </td>
 
           </tr>
+          <% if (hasCollectDlPermission) { %>
+          <tr>
+               <td>
+	            	<bean:message key="colname.drivers" />
+	            	<br />
+	            	<% if (dlFieldsEnabled) { %>
+	            		<html:text name="passenger" property="decriptedDriversLicense" indexed="true" size="20" maxlength="20" styleClass="textfield" />
+	            	<% } else { %>
+	            		<html:text name="passenger" property="redactedDriversLicense" indexed="true" size="20" disabled="<%=!dlFieldsEnabled %>" maxlength="20" styleClass="textfield" />
+            		<% } %>
+	            </td>
+                <td>
+                  <bean:message key="colname.state.req" />
+                  <br />
+                  <logic:equal name="passenger" property="driversLicenseCountry" value="US">
+                    <html:select property='<%= "passenger[" + i + "].dlstate" %>' styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'driversLicenseCountry', 'driversLicenseProvince');" >
+                      <html:option value="">
+                        <bean:message key="select.none" />
+                      </html:option>
+                      <html:options collection="statelist" property="value" labelProperty="label" />
+                    </html:select>
+                  </logic:equal>
+                  <logic:equal name="passenger" property="driversLicenseCountry" value="">
+                    <html:select property='<%= "passenger[" + i + "].dlstate" %>' styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'driversLicenseCountry', 'driversLicenseProvince');" >
+                      <html:option value="">
+                        <bean:message key="select.none" />
+                      </html:option>
+                      <html:options collection="statelist" property="value" labelProperty="label" />
+                    </html:select>
+                  </logic:equal>
+                  <logic:notEqual name="passenger" property="driversLicenseCountry" value="">
+                    <logic:notEqual name="passenger" property="driversLicenseCountry" value="US">
+                      <html:select property='<%= "passenger[" + i + "].dlstate" %>' styleClass="dropdown" disabled="true" onchange="updateCountryUS(this, this.form, 'driversLicenseCountry', 'driversLicenseProvince');" >
+                        <html:option value="">
+                          <bean:message key="select.none" />
+                        </html:option>
+                        <html:options collection="statelist" property="value" labelProperty="label" />
+                      </html:select>
+                    </logic:notEqual>
+                  </logic:notEqual>
+                </td>
+                <td>
+                  <bean:message key="colname.province" />
+                  <br />
+                      <logic:equal name="passenger" property="driversLicenseCountry" value="US">
+                  <html:text property='<%= "passenger[" + i + "].driversLicenseProvince" %>' size="15" maxlength="100" styleClass="disabledtextfield" disabled="true" />
+                      </logic:equal>
+                      <logic:equal name="passenger" property="driversLicenseCountry" value="">
+                  <html:text property='<%= "passenger[" + i + "].driversLicenseProvince" %>' size="15" maxlength="100" styleClass="textfield" />
+                      </logic:equal>
+                      <logic:notEqual name="passenger" property="driversLicenseCountry" value="">
+                        <logic:notEqual name="passenger" property="driversLicenseCountry" value="US">
+                  <html:text property='<%= "passenger[" + i + "].driversLicenseProvince" %>' size="15" maxlength="100" styleClass="textfield" />
+                         </logic:notEqual>
+                      </logic:notEqual>
+                </td>
+                <td colspan=2>
+                  <bean:message key="colname.country" />
+                  <br>
+                  <html:select property='<%= "passenger[" + i + "].driversLicenseCountry" %>' styleClass="dropdown" onchange="checkstate(this,this.form,'dlstate', 'driversLicenseProvince');">
+                    <html:option value="">
+                      <bean:message key="select.none" />
+                    </html:option>
+                    <html:options name="OnHandForm" collection="countrylist" property="value" labelProperty="label" />
+                  </html:select>
+                </td>
+              </tr>
+          <% } %>
           <tr>
             <td nowrap>
               <bean:message key="colname.airline_membership" />

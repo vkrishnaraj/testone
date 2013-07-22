@@ -380,6 +380,20 @@ function loadBeforeUnload(data) {
 	}
 }
 
+function enableStateProvince() {
+	var form = document.forms["incidentForm"];
+	enableElements(form.getElementsByTagName("select"), 'state');
+	enableElements(form.getElementsByTagName("input"), 'province');
+}
+
+function enableElements(els, key) {
+	for (var i = 0; i < els.length; ++i) {
+		if (els[i].name.toLowerCase().indexOf(key) != -1) {
+			els[i].disabled = false;
+		}
+	}
+}
+
 </script>
 <!--[if lt IE 9]>
 <script language="javascript" >

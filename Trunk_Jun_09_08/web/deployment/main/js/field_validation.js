@@ -168,11 +168,13 @@ function isWhitespace (s)
 		} else if (var1.value == 'US') {
 			//US - enable state, disable province
 			o.elements[state].disabled = false;
+			o.elements[province].value = '';
 			o.elements[province].disabled = true;
 			o.elements[province].className = 'disabledtextfield';
 		} else {
 			//International - disable state, enable province
-			o.elements[state].disabled = true;
+			o.elements[state].selectedIndex = 0;
+			o.elements[state].disabled = true;			
 			o.elements[province].className = 'textfield';
 			o.elements[province].disabled = false;
 		}

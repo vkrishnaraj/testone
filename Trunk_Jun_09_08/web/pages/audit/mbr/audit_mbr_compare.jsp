@@ -54,6 +54,11 @@ function updatePagination() {
 }
 
 </script>
+<%
+	Agent a = (Agent)session.getAttribute("user");
+	boolean hasCollectDlPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_COLLECT_DRIVERS_LICENSE, a);
+ 	boolean hasViewEditDlPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_EDIT_DRIVERS_LICENSE, a);
+%>
 <html:form action="audit_mbr.do" method="post">
   <tr>
     <td colspan="3" id="pageheadercell">
@@ -409,6 +414,28 @@ function updatePagination() {
                       <bean:message key="colname.email" />
                       :
                       <bean:write name="address" property="email" />
+                      <% if (hasCollectDlPermission) { %>
+	                      <br>
+	                      <bean:message key="colname.drivers" />
+	                      :
+	                      <% if (hasViewEditDlPermission) { %>
+	                      	<bean:write name="passenger" property="decriptedDriversLicense" />
+	                      <% } else { %>
+	                      	<bean:write name="passenger" property="redactedDriversLicense" />
+	                      <% } %>
+	                      <br>
+	                      <bean:message key="colname.state" />
+	                      :
+	                      <bean:write name="passenger" property="dlstate" />
+	                      <br>
+	                      <bean:message key="colname.province" />
+	                      :
+	                      <bean:write name="passenger" property="driversLicenseProvince" />
+	                      <br>
+	                      <bean:message key="colname.country_of_issue" />
+	                      :
+	                      <bean:write name="passenger" property="driversLicenseCountry" />
+                      <% } %>
                     </logic:iterate>
                   </logic:present>
                   <br>

@@ -1,6 +1,5 @@
 package com.bagnet.nettracer.tracing.utils;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,14 +13,12 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.codec.language.DoubleMetaphone;
 import org.apache.commons.codec.language.Soundex;
 import org.apache.log4j.Logger;
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.dozer.Mapper;
 import org.hibernate.Criteria;
-//import org.hibernate.classic.Session;
 import org.hibernate.Session;
 import org.hibernate.criterion.Expression;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,6 +55,7 @@ import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.forms.ClaimForm;
 import com.bagnet.nettracer.tracing.utils.ntfs.Name;
 import com.bagnet.nettracer.tracing.utils.ntfs.ParsedData;
+//import org.hibernate.classic.Session;
 
 
 
@@ -482,6 +480,11 @@ public class ClaimUtils {
 
 		p.setPhones(paxPhones);
 		p.setAddresses(paxAddresses);
+		p.setDriversLicenseNumber(pax.getDecriptedDriversLicense());
+		
+		p.setDriversLicenseState(pax.getDlstate());
+		p.setDriversLicenseProvince(pax.getDriversLicenseProvince());
+		p.setDriversLicenseCountry(pax.getDriversLicenseCountry());
 
 		p.setDescription(null);
 		String fn = pax.getFirstname();

@@ -250,6 +250,8 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_GET_NEXT = "Get Next Dispute";
 	
 	public static final String SYSTEM_COMPONENT_NAME_EDIT_TRACING_STATUS = "Edit Tracing Status";
+	public static final String SYSTEM_COMPONENT_NAME_COLLECT_DRIVERS_LICENSE = "Collect_Drivers_License";
+	public static final String SYSTEM_COMPONENT_NAME_VIEW_EDIT_DRIVERS_LICENSE = "View_Edit_Drivers_License";
 	
 	//Table numbers for status
 	public final static int AJAX_STATUS_INC = 1;

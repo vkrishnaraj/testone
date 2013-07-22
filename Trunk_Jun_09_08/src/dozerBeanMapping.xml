@@ -21,7 +21,11 @@
 		<field-exclude> 
   			<a>reservation</a> 
   			<b>reservattion</b> 
-		</field-exclude>     
+		</field-exclude>
+		<field>
+			<a>driversLicenseNumber</a>
+			<b>transferDriversLicenseNumber</b>
+		</field>     
 	</mapping>	
 
 	<mapping map-null="false">

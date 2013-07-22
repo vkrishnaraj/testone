@@ -424,12 +424,18 @@
 
 
         var pos = currentElementName.indexOf(".");
-        var str = currentElementName.substring(0,pos+1) + "driverslicense";
-
+        var str = currentElementName.substring(0,pos+1) + "decriptedDriversLicense";
+        if (!form.elements[str] || form.elements[str] == null) {
+        	str = currentElementName.substring(0,pos+1) + "redactedDriversLicense";
+        }
+		
         if (form.elements[str].value.length > 0 && currentElement.value.length ==0) {
-            alert("<%= (String)bundle.getString("error.validation.dlicense") %>");
-            currentElement.focus();
-            return false;
+        	var dlProvince = document.getElementById(currentElementName.substring(0,pos+1) + 'driversLicenseProvince');
+        	if (!dlProvince || dlProvince.value == null || dlProvince.value.length == 0) {
+	            alert("<%= (String)bundle.getString("error.validation.dlicense") %>");
+	            currentElement.focus();
+	            return false;
+            }
         }
     } 
       

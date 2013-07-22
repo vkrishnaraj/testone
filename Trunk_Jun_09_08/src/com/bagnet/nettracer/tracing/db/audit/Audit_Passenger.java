@@ -12,6 +12,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import aero.nettracer.security.AES;
+
 /**
  * @author Administrator
  * 
@@ -32,6 +34,9 @@ public class Audit_Passenger implements Serializable {
 	private int isprimary;
 	private Audit_AirlineMembership audit_membership;
 	private Set addresses;
+	
+	private String driversLicenseProvince;
+	private String driversLicenseCountry;
 	
 	private Audit_Incident audit_incident;
 	
@@ -177,6 +182,19 @@ public class Audit_Passenger implements Serializable {
 	public void setDriverslicense(String driverslicense) {
 		this.driverslicense = driverslicense;
 	}
+	
+	public String getRedactedDriversLicense() {
+		return driverslicense != null && !driverslicense.isEmpty() ? "*********" : "";
+	}	
+	
+	public String getDecriptedDriversLicense() {
+		try {
+			return AES.decrypt(driverslicense);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "";
+		}
+	}
 
 	/**
 	 * @return Returns the firstname.
@@ -307,6 +325,28 @@ public class Audit_Passenger implements Serializable {
 	public void addAddress(Audit_Address address) {
 		if (this.getAddresses() == null) this.setAddresses(new HashSet());
 		this.getAddresses().add(address);
+	}
+
+	/**
+	 * @hibernate.property type="string" column="dlprovince"
+	 */
+	public String getDriversLicenseProvince() {
+		return driversLicenseProvince;
+	}
+
+	public void setDriversLicenseProvince(String driversLicenseProvince) {
+		this.driversLicenseProvince = driversLicenseProvince;
+	}
+
+	/**
+	 * @hibernate.property type="string" length="2" column="dlcountry"
+	 */
+	public String getDriversLicenseCountry() {
+		return driversLicenseCountry;
+	}
+
+	public void setDriversLicenseCountry(String driversLicenseCountry) {
+		this.driversLicenseCountry = driversLicenseCountry;
 	}
 
 }
