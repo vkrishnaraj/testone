@@ -4922,6 +4922,9 @@
 		<fileset dir="${app.home.jb7}\modules\org\hibernate\main">
 			<patternset refid="jar.files" />
 		</fileset>
+		<fileset dir="${app.home.jb7}\modules\org\jboss\as\jpa\hibernate\4">
+			<patternset refid="jar.files" />
+		</fileset>
 		<fileset dir="lib/jars">
 			<patternset refid="jar.files" />
 		</fileset>
@@ -4998,6 +5001,9 @@
 			<patternset refid="jar.files" />
 		</fileset>
 		<fileset dir="${app.home.jb7}\modules\org\hibernate\main">
+			<patternset refid="jar.files" />
+		</fileset>
+		<fileset dir="${app.home.jb7}\modules\org\jboss\as\jpa\hibernate\4">
 			<patternset refid="jar.files" />
 		</fileset>
 		<fileset dir="lib/jars">
