@@ -41,7 +41,7 @@ public class Settings {
 	//////////////////////////////////////////////////////////GENERIC TEST SETTINGS////////////////////////////////////////////////////////
 	
 	//URL ROOT FOR WEB APP BEING TESTED
-	public static final String APP_URL_LOCAL = "https://hudson.nettracer.aero/";
+	public static final String APP_URL_LOCAL = "http://hudson.nettracer.aero/";
 	//public static final String APP_URL_LOCAL = "http://10.52.113.20/";
 //	public static final String APP_URL_LOCAL = "http://192.168.2.106:8080/";
 	
