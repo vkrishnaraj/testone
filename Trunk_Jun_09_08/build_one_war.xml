@@ -803,6 +803,16 @@
 		<antcall target="donotrun-build-ear" />
 	</target-->
 
+	<target name="build-ear-local-demonstration" depends="delete-wars">
+		<property name="staging.project" value="demonstration" />
+		<property name="staging.env" value="local" />
+		<property name="avis.service.includes" value="*.war" />
+		<antcall target="build-war-local-demonstration"/>
+		<property name="app.xml.location" value="metadata/demonstration/local" />		
+		<antcall target="donotrun-build-ear" />
+	</target>
+
+
 	<target name="build-ear-local-flyafrica" depends="delete-wars">
 		<property name="staging.project" value="flyafrica" />
 		<property name="staging.env" value="local" />
@@ -891,9 +901,7 @@
 		<property name="staging.env" value="hudson" />
 		<property name="avis.service.includes" value="*.war" />
 		<antcall target="hibernate_generate" />		
-		<antcall target="build-war-hudson-avis"/>
 		<antcall target="build-war-hudson-westjet"/>
-		<antcall target="build-war-hudson-jetblue"/>
 		<antcall target="build-war-hudson-spirit"/>
 		<antcall target="build-war-hudson-azul"/>
 		<antcall target="build-war-hudson-delta"/>
@@ -901,7 +909,6 @@
 		<antcall target="build-war-hudson-american"/>
 		<antcall target="build-war-hudson-virginamerica"/>
 		<antcall target="build-war-hudson-webjet"/>
-		<antcall target="build-war-hudson-lfc"/>
 		<antcall target="build-war-hudson-alaska"/>
 		<property name="app.xml.location" value="metadata/hudson/hosted" />
 		<antcall target="donotrun-build-ear" />
@@ -913,7 +920,10 @@
 		<property name="avis.service.includes" value="*.war" />
 		<antcall target="hibernate_generate" />		
 		<antcall target="build-war-hudson-frontier"/>
+		<antcall target="build-war-hudson-avis"/>
 		<antcall target="build-war-hudson-southwest"/>
+		<antcall target="build-war-hudson-lfc"/>
+		<antcall target="build-war-hudson-jetblue"/>
 		<antcall target="build-war-hudson-flyafrica"/>
 		<property name="app.xml.location" value="metadata/hudson/hosted2" />
 		<antcall target="donotrun-build-ear" />
@@ -1300,6 +1310,15 @@
 		<property name="app.xml.location" value="metadata/canadiannorth/train" />
 		<antcall target="donotrun-build-ear" />
 	</target-->
+
+	<target name="build-ear-training-demonstration" depends="delete-wars">
+		<property name="staging.project" value="demonstration" />
+		<property name="staging.env" value="training" />
+		<property name="avis.service.includes" value="*.war" />
+		<antcall target="build-war-training-demonstration"/>
+		<property name="app.xml.location" value="metadata/demonstration/train" />
+		<antcall target="donotrun-build-ear" />
+	</target>
 
 	<target name="build-ear-training-flyafrica" depends="delete-wars">
 		<property name="staging.project" value="flyafrica" />
@@ -2115,6 +2134,15 @@
 		<antcall target="donotrun-build-canadiannorth" />
 	</target-->
 
+	<target name="build-war-training-demonstration" depends="delete">
+		<property name="ant_project_name" value="demonstration" />
+		<property name="ant_war_name" value="demonstration_training" />
+		<property name="environment.name" value="train"/>
+		<property name="demonstration.init.complete" value="true" />
+		<antcall target="donotrun-build-demonstration" />
+	</target>
+
+
 	<target name="build-war-training-flyafrica" depends="delete">
 		<property name="ant_project_name" value="flyafrica" />
 		<property name="ant_war_name" value="flyafrica_training" />
@@ -2255,6 +2283,13 @@
 		<property name="environment.name" value="local" />
 		<antcall target="donotrun-build-canadiannorth" />
 	</target-->
+	<target name="build-war-local-demonstration" depends="delete">
+		<property name="ant_project_name" value="demonstration" />
+		<property name="ant_war_name" value="da" />
+		<property name="demonstration.init.complete" value="true" />
+		<property name="environment.name" value="local" />
+		<antcall target="donotrun-build-demonstration" />
+	</target>
 
 	<target name="build-war-local-flyafrica" depends="delete">
 		<property name="ant_project_name" value="flyafrica" />
@@ -2395,6 +2430,7 @@
 		<antcall target="build-cron-training-spirit"/>
 		<antcall target="build-cron-training-lfc"/>
 		<antcall target="build-cron-training-webjet"/>
+		<antcall target="build-cron-training-demonstration"/>
 		<antcall target="build-cron-training-flyafrica"/>
 	</target>
 	<target name="build-cron-production-all">
@@ -2765,6 +2801,21 @@
 	</target>
 		
 	<!-- END FLY AFRICA CRON TARGETS -->
+	
+	<!-- DEMONSTRATION CRON TARGETS -->
+			
+		<target name="build-cron-training-demonstration">
+			<property name="staging.project" value="cron" />
+			<property name="staging.env" value="training" />
+			<property name="ant_project_name" value="demonstration" />
+			<property name="sub_path" value="train/" />
+			<property name="environment.name" value="train"/>
+			<property name="cron.job.config.file" value="companies/demonstration/environment/train/jobs/cronJobs.xml" />
+			<property name="jarprefix" value="z7train-" />
+			<antcall target="cron-service" />
+		</target>
+			
+		<!-- END FLY AFRICA CRON TARGETS -->
 	
 	<!-- NTSOUTHWEST CRON TARGETS -->
 		
@@ -3698,6 +3749,40 @@
 		<antcall target="fast_all" />
 		<antcall target="delete" />
 	</target-->
+	
+	<target name="donotrun-build-demonstration">		
+
+		<property name="hibernate_props_loc" value="companies/demonstration/environment/${environment.name}" />
+		<property name="hibernate_dialect" value="mysql" />
+		<antcall target="generate-hibernate-xmls" />
+		
+		<copy todir="${basedir}/web/pages/login" file="companies/demonstration/environment/${environment.name}/login/center.jsp" />
+		
+		<ant antfile="build-gen.xml" target="combineResourceFiles">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/demonstration/environment/${environment.name}/tracer.properties" />
+			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
+		</ant>
+
+		<copy todir="${basedir}/web/reports" file="companies/tracer/LostDelayReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/tracer/DamageReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/tracer/MissingReceipt.jrxml" />
+			
+		<antcall target="jasper_compile" />
+
+		<copy todir="${basedir}/src" file="companies/demonstration/custom_ui.properties" />
+
+		<!-- Hibernate main dependent on environment -->
+
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
+			<property name="overrideResource" value="${basedir}/companies/demonstration/ApplicationResources.properties" />
+			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		</ant>
+
+		<antcall target="fast_all" />
+		<antcall target="delete" />
+	</target>
 	
 	<target name="donotrun-build-flyafrica">		
 
