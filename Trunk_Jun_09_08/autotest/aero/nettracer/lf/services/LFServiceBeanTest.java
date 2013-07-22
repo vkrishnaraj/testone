@@ -781,7 +781,7 @@ public class LFServiceBeanTest {
 		
 		//test email
 		try {
-			List<Long> ids = bean.getXDayList(match1.getLost().getCompanyId(), 1);
+			List<Long> ids = bean.getXDayList(1);
 			boolean hasId = false;
 			for(long id:ids){
 				if(id == match1.getLost().getId())hasId=true;
@@ -793,7 +793,7 @@ public class LFServiceBeanTest {
 			match1.setStatus(status);
 			bean.saveOrUpdateTraceResult(match1);
 			
-			ids = bean.getXDayList(match1.getLost().getCompanyId(), 1);
+			ids = bean.getXDayList(1);
 			hasId = false;
 			for(long id:ids){
 				if(id == match1.getLost().getId())hasId=true;

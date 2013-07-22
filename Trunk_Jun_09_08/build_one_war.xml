@@ -4831,8 +4831,18 @@
 	
 	<path id="classpath.test">
 		<pathelement location="${build.dir}/lfc_web/classes" />
-		<fileset dir="lib">
+		<fileset dir="${app.home.jb7}\bin\client">
 			<patternset refid="jar.files" />
+		</fileset>
+		<fileset dir="${app.home.jb7}\modules\org\hibernate\main">
+			<patternset refid="jar.files" />
+		</fileset>
+		<fileset dir="lib/jars">
+			<patternset refid="jar.files" />
+		</fileset>
+		<fileset dir="lib/build-client">
+			<patternset refid="jar.files" />
+			<include name="dom4j-1.6.jar" />
 		</fileset>
 	</path>	
 	
@@ -4894,6 +4904,61 @@
   	      		<formatter type="xml" usefile="true" />
   	      		<test name="com.bagnet.nettracer.tracing.utils.SecurityUtilsTest" />
   	    	</junit>
+  		
+  </target>
+	
+	<path id="classpath.wn.test">
+		<pathelement location="${build.dir}/southwest_web/classes" />
+		<fileset dir="${app.home.jb7}\bin\client">
+			<patternset refid="jar.files" />
+		</fileset>
+		<fileset dir="${app.home.jb7}\modules\org\hibernate\main">
+			<patternset refid="jar.files" />
+		</fileset>
+		<fileset dir="lib/jars">
+			<patternset refid="jar.files" />
+		</fileset>
+		<fileset dir="lib/build-client">
+			<patternset refid="jar.files" />
+			<include name="dom4j-1.6.jar" />
+		</fileset>
+	</path>	
+	
+  	<target name="test-local-wn-CS2Service" depends="build-war-local-ntsouthwest">
+		<javac srcdir="./autotest" fork="false" destdir="${build.dir}/southwest_web/classes" debug="on" verbose="true" memoryinitialsize="256m" >
+			<classpath refid="project.classpath" />
+			<exclude name="com/bagnet/nettracer/cronjob/**" />
+			<exclude name="com/bagnet/clients/airtran/**" unless="include.fl" />
+			<exclude name="com/bagnet/clients/us/**" unless="include.us" />
+			<exclude name="com/bagnet/clients/demo/**" unless="include.demo" />
+			<exclude name="com/bagnet/clients/ws/**" unless="include.ws" />
+			<exclude name="com/bagnet/clients/b6/**" unless="include.b6" />
+		</javac>
+  		
+ 	   	<junit printsummary="yes" showoutput="true" >
+  	      		<classpath refid="classpath.wn.test" />
+  	      		<formatter type="xml" usefile="true" />
+  	      		<test name="com.bagnet.nettracer.ws.wn.cs2.CS2ServiceImplTest" />
+  	    </junit>
+  		
+  </target>
+	
+  	<target name="test-hudson-wn-CS2Service" depends="build-war-hudson-ntsouthwest">
+		<javac srcdir="./autotest" fork="false" destdir="${build.dir}/southwest_web/classes" debug="on" verbose="true" memoryinitialsize="256m" >
+			<classpath refid="project.classpath" />
+			<exclude name="com/bagnet/nettracer/cronjob/**" />
+			<exclude name="com/bagnet/clients/airtran/**" unless="include.fl" />
+			<exclude name="com/bagnet/clients/us/**" unless="include.us" />
+			<exclude name="com/bagnet/clients/demo/**" unless="include.demo" />
+			<exclude name="com/bagnet/clients/ws/**" unless="include.ws" />
+			<exclude name="com/bagnet/clients/b6/**" unless="include.b6" />
+		</javac>
+  		
+ 	   	<junit printsummary="yes" showoutput="true" >
+  	      		<classpath refid="classpath.wn.test" />
+  	      		<formatter type="xml" usefile="true" />
+  	      		<test name="com.bagnet.nettracer.ws.wn.cs2.CS2ServiceImplTest" />
+  	    </junit>
   		
   </target>
 
