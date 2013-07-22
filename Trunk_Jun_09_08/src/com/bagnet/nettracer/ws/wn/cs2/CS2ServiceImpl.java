@@ -39,7 +39,7 @@ import com.bagnet.nettracer.ws.wn.pojo.xsd.Authentication;
 /**
  * CS2ServiceImpl java implementation for the axisService
  */
-public class CS2ServiceImpl {
+public class CS2ServiceImpl extends CS2ServiceSkeleton {
 
 	private static final String FAILED = "Failed";
 	private static final String SUCCESS = "Success";
