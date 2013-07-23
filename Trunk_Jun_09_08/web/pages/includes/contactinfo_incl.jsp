@@ -185,14 +185,11 @@
           </tr>
           <% if (hasCollectDlPermission) { %>
           <tr>
+          	<% if (dlFieldsEnabled) { %>
                <td>
 	            	<bean:message key="colname.drivers" />
 	            	<br />
-	            	<% if (dlFieldsEnabled) { %>
-	            		<html:text name="passenger" property="decriptedDriversLicense" indexed="true" size="20" maxlength="20" styleClass="textfield" />
-	            	<% } else { %>
-	            		<html:text name="passenger" property="redactedDriversLicense" indexed="true" size="20" disabled="<%=!dlFieldsEnabled %>" maxlength="20" styleClass="textfield" />
-            		<% } %>
+            		<html:text name="passenger" property="decriptedDriversLicense" indexed="true" size="20" maxlength="20" styleClass="textfield" />
 	            </td>
                 <td>
                   <bean:message key="colname.state.req" />
@@ -249,6 +246,38 @@
                     <html:options name="OnHandForm" collection="countrylist" property="value" labelProperty="label" />
                   </html:select>
                 </td>
+                <% } else { %>
+                <td>
+                	<bean:message key="colname.drivers" />
+	            	<br />
+                	<html:text name="passenger" property="redactedDriversLicense" indexed="true" size="20" disabled="true" maxlength="20" styleClass="textfield" />
+                </td>
+                <td>
+                	<bean:message key="colname.state.req" />
+                  	<br />
+                    <html:select property='<%= "passenger[" + i + "].dlstate" %>' styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'driversLicenseCountry', 'driversLicenseProvince');" disabled="true" >
+                      <html:option value="">
+                        <bean:message key="select.none" />
+                      </html:option>
+                      <html:options collection="statelist" property="value" labelProperty="label" />
+                    </html:select>
+                </td>
+                <td>
+                	<bean:message key="colname.province" />
+                  	<br />
+                  	<html:text property='<%= "passenger[" + i + "].driversLicenseProvince" %>' size="15" maxlength="100" styleClass="disabledtextfield" disabled="true" />
+                </td>                          
+                <td colspan=2>
+                	<bean:message key="colname.country" />
+	                <br>
+	                <html:select property='<%= "passenger[" + i + "].driversLicenseCountry" %>' styleClass="dropdown" onchange="checkstate(this,this.form,'dlstate', 'driversLicenseProvince');" disabled="true">
+	                  <html:option value="">
+	                    <bean:message key="select.none" />
+	                  </html:option>
+	                  <html:options name="OnHandForm" collection="countrylist" property="value" labelProperty="label" />
+	                </html:select>
+                </td>
+                <% } %>
               </tr>
           <% } %>
           <tr>
