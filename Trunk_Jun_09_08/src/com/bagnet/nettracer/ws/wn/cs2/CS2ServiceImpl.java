@@ -7,6 +7,7 @@
 package com.bagnet.nettracer.ws.wn.cs2;
 
 import java.text.SimpleDateFormat;
+import java.util.Currency;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -46,6 +47,7 @@ public class CS2ServiceImpl extends CS2ServiceSkeleton {
 	private static final String AUTH_FAILED = "Authentication Failed";
 	private static final String NOT_FOUND = "Incident Number not found";
 	private static final String DEFAULT_CODE = "OTH";
+	private static final String DEFAULT_CURR = "USD";
 	private static final int DEFAULT_STATUS = TracingConstants.EXPENSEPAYOUT_STATUS_PENDING;
 	private static final int DEFAULT_TYPE = 8;
 
@@ -148,6 +150,9 @@ public class CS2ServiceImpl extends CS2ServiceSkeleton {
 		payout.setStation(station);
 		payout.setExpenselocation(station);
 		payout.setVoucheramt(doc.getAmount());
+		String curr = PropertyBMO.getValue(PropertyBMO.CS2_EXPENSE_CURRENCY);
+		curr = (curr == null ? DEFAULT_CURR : curr);
+		payout.setCurrency(Currency.getInstance(curr));
 		Comment comment = new Comment();
 		comment.setAgent(agent);
 		comment.setCreateDate(new Date());

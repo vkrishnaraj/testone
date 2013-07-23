@@ -221,6 +221,7 @@ public class PropertyBMO {
 	public static final String CS2_EXPENSE_PAYCODE = "cs2.expense.paycode";
 	public static final String CS2_EXPENSE_STATUS = "cs2.expense.status";
 	public static final String CS2_EXPENSE_PAYTYPE = "cs2.expense.paytype";
+	public static final String CS2_EXPENSE_CURRENCY = "cs2.expense.currency";
 	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;
