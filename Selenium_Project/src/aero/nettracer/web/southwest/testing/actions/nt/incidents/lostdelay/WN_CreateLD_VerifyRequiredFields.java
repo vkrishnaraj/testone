@@ -8,9 +8,84 @@ import aero.nettracer.web.utility.Settings;
 public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 
 	@Test
+	public void testEnableDriversLicenseCollection() {
+		verifyTrue(navigateToPermissionsPage());
+		verifyTrue(selenium.isTextPresent("Collect Driver's License"));
+		verifyTrue(selenium.isTextPresent("View/Edit Driver's License"));
+		selenium.check("name=632");
+		selenium.uncheck("name=633");
+		selenium.click("xpath=(//input[@id='button'])[2]");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			selenium.click("//a[contains(text(),'[ Logout ]')]");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Save Permissions. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+			verifyTrue(false);
+		}
+
+		selenium.type("//input[@name='username']", Settings.USERNAME_ADMIN);
+		selenium.type("//input[@name='password']", Settings.PASSWORD_ADMIN);
+		selenium.click("//input[@id='button']");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			verifyTrue(selenium.isTextPresent("Task Manager Home"));
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Log In. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+			verifyTrue(false);
+		}
+		
+//		selenium.click("//a[contains(text(),'[ Logout ]')]");
+//		waitForPageToLoadImproved();
+//		
+//		selenium.select("//select[@name='companyCode']", "label=Owens Group");
+//		selenium.type("//input[@name='username']", Settings.USERNAME_OGADMIN);
+//		selenium.type("//input[@name='password']", Settings.PASSWORD_OGADMIN);
+//		selenium.click("//input[@id='button']");
+//		waitForPageToLoadImproved();		
+//		if (checkNoErrorPage()) {
+//			checkCopyrightAndQuestionMarks();
+//			selenium.click("//a[contains(text(),'Maintain Companies')]");
+//			waitForPageToLoadImproved();
+//			if (checkNoErrorPage()) {
+//				selenium.type("//input[@name='companySearchName']", "wn");
+//				selenium.click("//input[@id='button']");
+//				waitForPageToLoadImproved();
+//				if (checkNoErrorPage()) {
+//					selenium.click("xpath=(//a[contains(text(),'Maintain')])[14]");
+//					waitForPageToLoadImproved();
+//					if (checkNoErrorPage()) {
+//						selenium.click("xpath=(//a[contains(text(),'Maintain')])[12]");
+//						waitForPageToLoadImproved();
+//						if (checkNoErrorPage()) {
+//						} else {
+//							System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Maintain Permissions. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+//							verifyTrue(false);
+//						}
+//					} else {
+//						System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Maintain Groups. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+//						verifyTrue(false);
+//					}
+//				} else {
+//					System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Searching For SouthWest. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+//					verifyTrue(false);
+//				}
+//			} else {
+//				System.out.println("!!!!!!!!!!!!!!! - Maintain Companies Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+//				verifyTrue(false);
+//			}			
+//		} else {
+//			System.out.println("!!!!!!!!!!!!!!! - Failed to Log In. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+//			verifyTrue(false);
+//		}
+		
+		
+	}
+	
+	@Test
 	public void testVerifyText() throws Exception {
 		goToTaskManager();
-		selenium.click("menucol_1.1");
+		selenium.click("//a[@id='menucol_1.1']");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
@@ -20,6 +95,14 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 				checkCopyrightAndQuestionMarks();
 				selenium.type("name=passenger[0].lastname", "Test");
 				selenium.type("name=passenger[0].firstname", "Test");
+				verifyTrue(selenium.isElementPresent("name=passenger[0].decriptedDriversLicense"));
+				verifyTrue(selenium.isElementPresent("name=passenger[0].dlstate"));
+				verifyTrue(selenium.isElementPresent("name=passenger[0].driversLicenseProvince"));
+				verifyTrue(selenium.isElementPresent("name=passenger[0].driversLicenseCountry"));
+				selenium.type("name=passenger[0].decriptedDriversLicense", "12345");
+				selenium.select("name=passenger[0].dlstate", "label=Georgia");
+				verifyFalse(selenium.isEditable("name=passenger[0].driversLicenseProvince"));
+				verifyEquals("US", selenium.getValue("name=passenger[0].driversLicenseCountry"));
 				selenium.type("name=addresses[0].address1", "123 Test");
 				selenium.type("name=addresses[0].city", "Test");
 				selenium.type("name=theitinerary[0].legfrom", "ATL");
@@ -65,37 +148,146 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	}
 	
 	@Test
-	public void testPressEnterInRemarksField() {
-		String locator = "//textarea[@id='remark[0]']";
-		verifyEquals("1500", selenium.getValue("//input[@id='remark[0].counter']"));
-		typeString(locator, "Test line");
-		selenium.focus(locator);
-		selenium.setCursorPosition(locator, String.valueOf(selenium.getValue(locator).length()));
-		selenium.keyDown(locator, "\\13");
-		selenium.keyDown(locator, "\\13");
-		selenium.keyDown(locator, "\\13");
-		verifyEquals("1487", selenium.getValue("//input[@id='remark[0].counter']"));
-
+	public void testVerifyDriversLicenseRedacted() {
+		selenium.click("id=menucol_1.4");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			checkCopyrightAndQuestionMarks();
+			selenium.type("name=incident_ID", Settings.INCIDENT_ID_WN);
+			selenium.click("id=button");
+			waitForPageToLoadImproved();
+			if (checkNoErrorPage()) {
+				checkCopyrightAndQuestionMarks();
+				verifyFalse(selenium.isEditable("name=passenger[0].redactedDriversLicense"));
+				verifyEquals("*********", selenium.getValue("name=passenger[0].redactedDriversLicense"));
+				verifyFalse(selenium.isEditable("name=passenger[0].dlstate"));
+				verifyEquals("GA", selenium.getValue("name=passenger[0].dlstate"));
+				verifyFalse(selenium.isEditable("name=passenger[0].driversLicenseProvince"));
+				verifyEquals("", selenium.getValue("name=passenger[0].driversLicenseProvince"));
+				verifyFalse(selenium.isEditable("name=passenger[0].driversLicenseCountry"));
+				verifyEquals("US", selenium.getValue("name=passenger[0].driversLicenseCountry"));
+				goToTaskManager();
+			} else {
+				System.out.println("!!!!!!!!!!!!!!! - Failed to Load Incident: " + Settings.INCIDENT_ID_WN + ". Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+				verifyTrue(false);
+			}
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Load Incident Search Page. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+			verifyTrue(false);
+		}
 	}
 	
 	@Test
-	public void testTopSaveButton() {
+	public void testVerifyDriversLicensePrepopulateClaim() {
+		selenium.click("id=menucol_1.4");
+		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
-			selenium.click("//input[@id='topSave']");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("CLDVRF: Failed to save the incident.");
-			return;
-		}
-		
-		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Lost/Delayed Bag Incident has been modified."));
 			checkCopyrightAndQuestionMarks();
-			selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
+			selenium.type("name=incident_ID", Settings.INCIDENT_ID_WN);
+			selenium.click("id=button");
 			waitForPageToLoadImproved();
+			if (checkNoErrorPage()) {
+				checkCopyrightAndQuestionMarks();
+				selenium.click("//td[@id='navmenucell']/div/dl/dd[11]/a/span[2]");
+				waitForPageToLoadImproved();
+				if (checkNoErrorPage()) {
+					checkCopyrightAndQuestionMarks();
+					verifyEquals("*********", selenium.getValue("name=claimant.redactedDriversLicenseNumber"));
+					verifyEquals("GA", selenium.getValue("name=claimant.driversLicenseState"));
+					verifyEquals("US", selenium.getValue("name=claimant.driversLicenseCountry"));
+					goToTaskManager();
+				} else {
+					System.out.println("!!!!!!!!!!!!!!! - Failed to Pre-populate Claim. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+					verifyTrue(false);
+				}
+			} else {
+				System.out.println("!!!!!!!!!!!!!!! - Failed to Load Incident: " + Settings.INCIDENT_ID_WN + ". Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+				verifyTrue(false);
+			}
 		} else {
-			System.out.println("CLDVRF: Failed to save the incident using the top save button.");
-			return;
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Load Incident Search Page. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+			verifyTrue(false);
+		}
+	}
+	
+	@Test
+	public void testDriversLicenseRedactedAuditTrail() {
+		selenium.click("id=menucol_9.12");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			checkCopyrightAndQuestionMarks();
+			selenium.click("//td[@id='navmenucell']/div/dl/dd[3]/a/span[2]");
+			waitForPageToLoadImproved();
+			if (checkNoErrorPage()) {
+				checkCopyrightAndQuestionMarks();
+				selenium.type("//input[@name='incident_ID']", Settings.INCIDENT_ID_WN);
+				selenium.click("//input[@id='button']");
+				waitForPageToLoadImproved();
+				if (checkNoErrorPage()) {
+					checkCopyrightAndQuestionMarks();
+					selenium.click("//a[contains(@href, 'audit_mbr.do?detail=1&incident_ID=" + Settings.INCIDENT_ID_WN + "')]");
+					waitForPageToLoadImproved();
+					if (checkNoErrorPage()) {
+						checkCopyrightAndQuestionMarks();
+						selenium.check("//input[@name='audit_id']");
+						selenium.click("xpath=(//input[@id='button'])[3]");
+						waitForPageToLoadImproved();
+						if (checkNoErrorPage()) {
+							checkCopyrightAndQuestionMarks();
+							verifyTrue(selenium.isTextPresent("Driver's License Number : *********"));
+							verifyTrue(selenium.isTextPresent("State : GA"));
+							verifyTrue(selenium.isTextPresent("Province :"));
+							verifyTrue(selenium.isTextPresent("Country Of Issue : US"));
+						} else {
+							System.out.println("!!!!!!!!!!!!!!! - Failed to Load Audit Trail for Incident: " + Settings.INCIDENT_ID_WN + ". Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+							verifyTrue(false);
+						}
+					} else {
+						System.out.println("!!!!!!!!!!!!!!! - Failed to Load Audit Trail for Incident: " + Settings.INCIDENT_ID_WN + ". Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+						verifyTrue(false);
+					}
+				} else {
+					System.out.println("!!!!!!!!!!!!!!! - Failed to Load Incident: " + Settings.INCIDENT_ID_WN + ". Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+					verifyTrue(false);
+				}
+			} else {
+				System.out.println("!!!!!!!!!!!!!!! - Failed to Load Incident Tab. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+				verifyTrue(false);
+			}
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Load Audit Trail. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+			verifyTrue(false);
+		}
+	}
+	
+	@Test
+	public void testPressEnterInRemarksField() {
+		selenium.click("id=menucol_1.4");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			checkCopyrightAndQuestionMarks();
+			selenium.type("name=incident_ID", Settings.INCIDENT_ID_WN);
+			selenium.click("id=button");
+			waitForPageToLoadImproved();
+			if (checkNoErrorPage()) {
+				checkCopyrightAndQuestionMarks();
+				String locator = "//textarea[@id='remark[0]']";
+				verifyEquals("1500", selenium.getValue("//input[@id='remark[0].counter']"));
+				typeString(locator, "Test line");
+				selenium.focus(locator);
+				selenium.setCursorPosition(locator, String.valueOf(selenium.getValue(locator).length()));
+				selenium.keyDown(locator, "\\13");
+				selenium.keyDown(locator, "\\13");
+				selenium.keyDown(locator, "\\13");
+				verifyEquals("1487", selenium.getValue("//input[@id='remark[0].counter']"));
+				goToTaskManager();
+			} else {
+				System.out.println("!!!!!!!!!!!!!!! - Failed to Load Incident: " + Settings.INCIDENT_ID_WN + ". Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+				verifyTrue(false);
+			}
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Load Incident Search Page. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+			verifyTrue(false);
 		}
 	}
 	
@@ -159,6 +351,50 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 			selenium.keyPress(locator, key);
 			selenium.keyUp(locator, key);
 		}
+	}
+	
+	private boolean navigateToPermissionsPage() {
+		boolean success = false;
+		selenium.click("//a[contains(text(),'[ Logout ]')]");
+		waitForPageToLoadImproved();
+		
+		selenium.select("//select[@name='companyCode']", "label=Owens Group");
+		selenium.type("//input[@name='username']", Settings.USERNAME_OGADMIN);
+		selenium.type("//input[@name='password']", Settings.PASSWORD_OGADMIN);
+		selenium.click("//input[@id='button']");
+		waitForPageToLoadImproved();		
+		if (checkNoErrorPage()) {
+			checkCopyrightAndQuestionMarks();
+			selenium.click("//a[contains(text(),'Maintain Companies')]");
+			waitForPageToLoadImproved();
+			if (checkNoErrorPage()) {
+				selenium.type("//input[@name='companySearchName']", "wn");
+				selenium.click("//input[@id='button']");
+				waitForPageToLoadImproved();
+				if (checkNoErrorPage()) {
+					selenium.click("xpath=(//a[contains(text(),'Maintain')])[14]");
+					waitForPageToLoadImproved();
+					if (checkNoErrorPage()) {
+						selenium.click("xpath=(//a[contains(text(),'Maintain')])[12]");
+						waitForPageToLoadImproved();
+						if (checkNoErrorPage()) {
+							success = true;
+						} else {
+							System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Maintain Permissions. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+						}
+					} else {
+						System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Maintain Groups. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+					}
+				} else {
+					System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Searching For SouthWest. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+				}
+			} else {
+				System.out.println("!!!!!!!!!!!!!!! - Maintain Companies Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+			}			
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Log In. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+		}
+		return success;
 	}
 
 }
