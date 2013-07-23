@@ -155,7 +155,7 @@ public class DisputeResolutionAction extends CheckedAction {
 		
 		//the company specific codes..
 		//List<Company_specific_irregularity_code> codes = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.LOST_DELAY, true, user);
-		List<Company_specific_irregularity_code> codes = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), incidentType, false, user, false, true);
+		List<Company_specific_irregularity_code> codes = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), incidentType, false, user);
 		//add to the loss codes
 		request.setAttribute("losscodes", codes);
 		
