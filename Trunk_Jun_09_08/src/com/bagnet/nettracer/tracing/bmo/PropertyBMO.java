@@ -211,6 +211,8 @@ public class PropertyBMO {
 	public static final String FEDEX_METER_NUMBER = "fedex.meter.number";
 	public static final String FEDEX_KEY = "fedex.key";
 	public static final String FEDEX_PASSWORD = "fedex.password";
+
+	public static final String BDSI_ADDRESS_ENDPOINT = "bsdi.address.endpoint";
 	
 	public static final String TRANSFIRST_USER_ID="transfirst.user.id";
 	public static final String TRANSFIRST_REG_KEY="transfirst.reg.key";

@@ -6,6 +6,7 @@
  */
 package com.bagnet.nettracer.tracing.actions;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Currency;
@@ -25,6 +26,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.integrations.delivery.DeliveryIntegrationResponse;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
@@ -40,6 +42,7 @@ import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.forms.BDOForm;
 import com.bagnet.nettracer.tracing.history.BDOHistoryObject;
 import com.bagnet.nettracer.tracing.history.HistoryContainer;
+import com.bagnet.nettracer.tracing.utils.BagDelStatusInfoUtils;
 import com.bagnet.nettracer.tracing.utils.BDOUtils;
 import com.bagnet.nettracer.tracing.utils.DeliveryIntegrationTypeUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
@@ -47,6 +50,7 @@ import com.bagnet.nettracer.tracing.utils.HistoryUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
+import com.bagnet.nettracer.tracing.web.StatusListDisp;
 
 /**
  * @author Matt
@@ -307,6 +311,16 @@ public class BDOAction extends Action {
 				HistoryUtils.AddToHistoryContainer(session, BHO,  String.valueOf(bdo.getBDO_ID()));
 				request.setAttribute("showbdo", "1");
 				request.setAttribute("showprint", "1");
+				if(bdo.getDelivery_integration_type()==bdo.getDelivery_integration_type().SERV && bdo.getDelivery_integration_id()!=null && !bdo.getDelivery_integration_id().isEmpty() && PropertyBMO.getValue(PropertyBMO.BDSI_ADDRESS_ENDPOINT)!=null){
+					DecimalFormat myFormatter=new DecimalFormat("0000000000");
+					String bdoNum=myFormatter.format(bdo.getBDO_ID());
+					List<StatusListDisp> statuslist=BagDelStatusInfoUtils.getStatusList(bdo.getIncident().getStationcode()+bdo.getCompanycode_ID()+bdoNum,user);
+					if(statuslist!=null) {
+						request.setAttribute("statusList", statuslist);
+					}	else { 
+						request.setAttribute("webserviceError", new Integer("1"));
+					}
+				}
 				return (mapping.findForward(TracingConstants.BDO_MAIN));
 			}
 

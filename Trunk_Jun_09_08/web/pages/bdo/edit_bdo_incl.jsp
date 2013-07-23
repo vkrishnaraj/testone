@@ -10,6 +10,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%@page import="com.bagnet.nettracer.reporting.ReportingConstants"%>
 <%@page import="com.bagnet.nettracer.tracing.forms.BDOForm"%>
+<%@page import="com.bagnet.nettracer.tracing.web.StatusListDisp" %>
 
 
 
@@ -117,6 +118,48 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
       
 	    <div id="maincontent">
 		    <span style="float: left">
+		    <% if(PropertyBMO.getValue(PropertyBMO.BDSI_ADDRESS_ENDPOINT)!=null) {%>
+		    
+        
+        	<logic:present name="webserviceError" scope="request">
+			  	<h1 class="green">
+		          <bean:message key="header.bdo_tracking" />
+		 		</h1>
+	 			<table>
+			   		<tr>
+			   			<td><bean:message key="no.status.list.webservice.error"/></td>
+			   		</tr>
+		    	</table>  
+        	</logic:present>
+		  	<logic:present name="statusList" scope="request">
+		  	<h1 class="green">
+	          <bean:message key="header.bdo_tracking" />
+	 		</h1>
+		  		<logic:notEmpty name="statusList" scope="request">
+				  	<table class="form2" cellspacing="0" cellpadding="0">
+				  		<tr>
+				    			<td class="header"><bean:message key="status.bag.list.date"/></td>
+				    			<td class="header"><bean:message key="status.bag.list.description"/></td>
+				    		</tr>
+				    	<logic:iterate id="status" indexId="i" name="statusList" scope="request" type="com.bagnet.nettracer.tracing.web.StatusListDisp">
+				    		<tr>
+				    			<td><bean:write property="createDateDisp" name="status"/></td>
+				    			<td><bean:write property="delStatusDesc2" name="status"/></td>
+				    		</tr>
+				    	</logic:iterate>
+			    	</table>
+		    	</logic:notEmpty>
+		    	
+		  		<logic:empty name="statusList" scope="request">
+				  	<table>
+				   		<tr>
+				   			<td><bean:message key="no.status.list.error"/></td>
+				   		</tr>
+			    	</table>  
+		    	</logic:empty>
+		    </logic:present>
+		    <span style="float: left">
+	    <% } %>
         <h1 class="green">
           <bean:message key="header.bdo_general" />
           <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#bdo/bdo.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
@@ -127,6 +170,7 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
   </span>
         
         <span style="align:right; float:right;">
+       
         <logic:present name="wt_id" scope="request">
          
         <% if(request.getAttribute("wt_id")!= null && !request.getAttribute("wt_id").equals("") && !request.getAttribute("wt_id").equals("null"))
@@ -154,7 +198,7 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
             </tr>
           </table>
         </logic:present>
-        
+         
         
         <logic:present name="inserted" scope="request">
           <br>
