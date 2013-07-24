@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.ws.wn.onhandscanning;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -17,16 +18,20 @@ import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.OHD;
+import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
+import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.OHDUtils;
 import com.bagnet.nettracer.tracing.utils.SecurityUtils;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 import com.bagnet.nettracer.ws.core.WSCoreOHDUtil;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD;
 import com.bagnet.nettracer.ws.wn.onhandscanning.CreateUpdateOnhandResponseDocument.CreateUpdateOnhandResponse;
 import com.bagnet.nettracer.ws.wn.onhandscanning.EchoResponseDocument.EchoResponse;
 import com.bagnet.nettracer.ws.wn.onhandscanning.IsValidUserResponseDocument.IsValidUserResponse;
+import com.bagnet.nettracer.ws.wn.onhandscanning.ReturnOnhandResponseDocument.ReturnOnhandResponse;
 import com.bagnet.nettracer.ws.wn.onhandscanning.SaveBagDropTimeResponseDocument.SaveBagDropTimeResponse;
 
 public class OnhandScanningServiceImplementation extends OnhandScanningServiceSkeleton{
@@ -139,15 +144,98 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 
 
 	/**
-	 * Auto generated method signature
+	 * Searches for an OHD with the given tag number for the given station.
+	 * If found, closes the OHD with disposition of "Owner Picked Up"
 	 * 
 	 * @param returnOnhand
 	 */
 
 	public ReturnOnhandResponseDocument returnOnhand(ReturnOnhandDocument returnOnhand)
 	{
-		//TODO : fill this with the necessary business logic
-		throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#returnOnhand");
+		logger.info(returnOnhand);
+		ReturnOnhandResponseDocument resDoc = ReturnOnhandResponseDocument.Factory.newInstance();
+		ReturnOnhandResponse res = resDoc.addNewReturnOnhandResponse();
+		com.bagnet.nettracer.ws.wn.onhandscanning.pojo.xsd.ServiceResponse serviceResponse = res.addNewReturn();
+
+		if(returnOnhand == null || returnOnhand.getReturnOnhand() == null){
+			serviceResponse.setSuccess(false);
+			serviceResponse.setValidUser(false);
+			serviceResponse.addError("returnOnhand request empty");
+			logger.info(resDoc);
+			return resDoc;
+		}
+		
+		Agent agent = null;
+		com.bagnet.nettracer.ws.wn.pojo.xsd.Authentication auth = returnOnhand.getReturnOnhand().getAuthentication();
+		try {
+			agent = getAgent(auth);
+		} catch (Exception e) {
+			serviceResponse.setSuccess(false);
+			serviceResponse.setValidUser(false);
+			serviceResponse.addError(e.getMessage());
+			logger.info(resDoc);
+			return resDoc;
+		}
+		serviceResponse.setValidUser(true);
+		
+		Station foundstation = StationBMO.getStationByCode(returnOnhand.getReturnOnhand().getFoundStation(), agent.getCompanycode_ID());
+		if(foundstation == null){
+			serviceResponse.setSuccess(false);
+			serviceResponse.addError("Please provide a valid foundStation code");
+			logger.info(resDoc);
+			return resDoc;
+		}
+		String ohdId = lookupBagtag(returnOnhand.getReturnOnhand().getTagNumber(), foundstation.getStation_ID());
+		if(ohdId == null){
+			serviceResponse.setSuccess(false);
+			serviceResponse.addError("No OHD exists with this baggage tag number at this station");
+			logger.info(resDoc);
+			return resDoc;
+		}
+		
+		OhdBMO obmo = new OhdBMO();
+		OHD ohd = obmo.findOHDByID(ohdId);
+		if(ohd == null){
+			serviceResponse.setSuccess(false);
+			serviceResponse.addError("Error load OHD, please contact NetTracer");
+			logger.info(resDoc);
+			return resDoc;
+		}
+		
+		Status status = new Status();
+		status.setStatus_ID(TracingConstants.OHD_STATUS_CLOSED);
+		ohd.setStatus(status);
+		
+		Status disposalStatus = new Status();
+		disposalStatus.setStatus_ID(TracingConstants.OHD_STATUS_OWNER_PICKED_UP);
+		ohd.setDisposal_status(disposalStatus);
+		
+		Remark r = new Remark();
+		r.setAgent(agent);
+		r.setOhd(ohd);
+		r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
+		r.setRemarktype(TracingConstants.REMARK_CLOSING);
+		r.setRemarktext("Onhand has been returned");
+		ohd.getRemarks().add(r);
+		
+		if(obmo.insertOHD(ohd, ohd.getAgent())){
+			WSCoreOHDUtil util = new WSCoreOHDUtil();
+			try {
+				serviceResponse.setOnhand(util.OHDtoWS_Mapping(OhdBMO.getOHDByID(ohd.getOHD_ID(),null)));
+				serviceResponse.setSuccess(true);
+				serviceResponse.setCreateUpdateIndicator(STATUS_UPDATE);
+				logger.info(resDoc);
+				return resDoc;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		} 
+
+		serviceResponse.setSuccess(false);
+		serviceResponse.addError("Error updating OHD, please contact NetTracer");
+		logger.info(resDoc);
+		return resDoc;
 	}
 
 
@@ -236,7 +324,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		wsohd.setCompanycodeId(agent.getCompanycode_ID());
 		
 		Station foundstation = StationBMO.getStationByCode(wsohd.getFoundAtStation(), agent.getCompanycode_ID());
-		String ohdId = lookupBagtag(wsohd.getBagtagnum());
+		String ohdId = lookupBagtag(wsohd.getBagtagnum(), foundstation.getStation_ID());
 		OHD incomingOHD = OHDUtils.getBagTagNumberIncomingToStation(wsohd.getBagtagnum(),foundstation);
 		if(ohdId != null){
 			//update OHD
@@ -362,13 +450,18 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 	 * @param bagtag
 	 * @return
 	 */
-	protected String lookupBagtag(String bagtag){
+	protected String lookupBagtag(String bagtag, int foundStationID){
 		//TODO identify additional critiera
+		if(bagtag == null || bagtag.isEmpty() || foundStationID == 0){
+			return null;
+		}
+		
 		Session sess = null;
 		try {
 			String query = "select ohd_id from ohd "
-					+ "where (claimnum=:claimnum1 or claimnum=:claimnum2)" +
+					+ "where (claimnum=:claimnum1 or claimnum=:claimnum2) " +
 					"and status_id =:status " +
+					"and found_station_ID =:found_station_ID " +
 					"order by founddate desc";
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createSQLQuery(query);
@@ -381,6 +474,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 			}
 			q.setString("claimnum2", twoCharBagTag);
 			q.setParameter("status", TracingConstants.OHD_STATUS_OPEN);
+			q.setParameter("found_station_ID", foundStationID);
 			List list = q.list();
 			if (list.size() == 0) {
 				logger.debug("unable to find ohd with bagtag: " + bagtag);

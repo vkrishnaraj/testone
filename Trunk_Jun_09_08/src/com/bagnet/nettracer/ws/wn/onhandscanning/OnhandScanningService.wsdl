@@ -130,7 +130,7 @@
                         <xs:element minOccurs="0" name="tagNumber" nillable="true" type="xs:string"/>
                         <xs:element minOccurs="0" name="claimCheckInd" nillable="true" type="xs:string"/>
                         <xs:element minOccurs="0" name="customerSignature" nillable="true" type="xs:string"/>
-                        <xs:element minOccurs="0" name="deviceUser" nillable="true" type="ax24:DeviceUser"/>
+                        <xs:element minOccurs="0" name="foundStation" nillable="true" type="xs:string"/>
                         <xs:element minOccurs="0" name="positiveIdInd" nillable="true" type="xs:string"/>
                     </xs:sequence>
                 </xs:complexType>
@@ -238,13 +238,6 @@
                     <xs:element minOccurs="0" name="positiveIdInd" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="success" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="validUser" type="xs:boolean"/>
-                </xs:sequence>
-            </xs:complexType>
-            <xs:complexType name="DeviceUser">
-                <xs:sequence>
-                    <xs:element minOccurs="0" name="deviceId" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="stationCode" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="userId" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
         </xs:schema>

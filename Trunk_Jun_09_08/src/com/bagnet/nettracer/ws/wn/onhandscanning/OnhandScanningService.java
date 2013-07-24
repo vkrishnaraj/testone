@@ -27,7 +27,7 @@ public class OnhandScanningService {
 		return null;
 	}
 	
-	public ServiceResponse returnOnhand(Authentication authentication,  String tagNumber, String claimCheckInd, String customerSignature, DeviceUser deviceUser, String positiveIdInd){
+	public ServiceResponse returnOnhand(Authentication authentication,  String tagNumber, String claimCheckInd, String customerSignature, String foundStation, String positiveIdInd){
 		return null;
 	}
 	
