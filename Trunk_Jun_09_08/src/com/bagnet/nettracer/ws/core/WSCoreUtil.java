@@ -10,8 +10,8 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.MessageResources;
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
-import org.hibernate.criterion.Expression;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -361,15 +361,20 @@ public class WSCoreUtil {
 	 * @return
 	 */
 	public static Status getStatus(String desc, int table_id) {
+		
 		Session sess = null;
 		try {
 			if (desc == null || desc.length() == 0) return null;
-
+			
 			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(Status.class);
-			cri.add(Expression.eq("description", desc));
-			cri.add(Expression.eq("table_ID", new Integer(table_id)));
-			Status status = (Status) cri.list().get(0);
+			String sql = "select status_id from status where description =:description and table_ID =:table_ID";
+			
+			SQLQuery query = sess.createSQLQuery(sql);
+			query.setParameter("description", desc);
+			query.setParameter("table_ID", table_id);
+			Integer status_id = (Integer)query.list().get(0);
+			Status status = new Status();
+			status.setStatus_ID(status_id);
 			return status;
 		} catch (Exception e) {
 			e.printStackTrace();

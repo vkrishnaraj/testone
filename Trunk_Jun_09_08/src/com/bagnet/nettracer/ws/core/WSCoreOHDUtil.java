@@ -160,8 +160,15 @@ public class WSCoreOHDUtil {
  		try {
 			if (ws == null)
 				return null;
-
-			return WStoOHD_Mapping(ws);
+			// insert into our db
+			OHD ohd = WStoOHD_Mapping(ws);
+			OhdBMO obmo = new OhdBMO();
+			boolean result = obmo.insertOHD(ohd, ohd.getAgent());
+			if (!result) {
+				ws.setErrorcode("unable to insert ohd into NT, please contact NT support");
+				return null;
+			}
+	 		return ohd.getOHD_ID();
 		} catch (Exception e) {
 			ws.setErrorcode("error inserting ohd into nt, error: " + e.toString());
 			return null;
@@ -296,6 +303,34 @@ public class WSCoreOHDUtil {
 			}
 
 		}
+		
+		OHD_Passenger paxs = null;
+		if(oDTO.getPassengers() != null){
+			for(OHD_Passenger pax:(Set<OHD_Passenger>)oDTO.getPassengers()){
+				com.bagnet.nettracer.ws.core.pojo.xsd.WSPassenger wspax = so.addNewPassengers();
+				wspax.setFirstname(pax.getFirstname());
+				wspax.setMiddlename(pax.getMiddlename());
+				wspax.setLastname(pax.getLastname());
+				wspax.setIsprimary(pax.getIsprimary());
+				
+				if(pax.getAddresses() != null){
+					OHD_Address addr = pax.getAddress(0);
+					wspax.setAddress1(addr.getAddress1());
+					wspax.setAddress2(addr.getAddress2());
+					wspax.setCity(addr.getCity());
+					wspax.setStateID(addr.getState_ID());
+					wspax.setProvince(addr.getProvince());
+					wspax.setZip(addr.getZip());
+					wspax.setCountrycodeID(addr.getCountrycode_ID());
+					wspax.setEmail(addr.getEmail());
+					wspax.setHomephone(addr.getHomephone());
+					wspax.setAltphone(addr.getAltphone());
+					wspax.setMobile(addr.getMobile());
+					wspax.setPager(addr.getPager());
+					wspax.setWorkphone(addr.getWorkphone());
+				}
+			}
+		}
 
 		return so;
  	}
@@ -307,11 +342,14 @@ public class WSCoreOHDUtil {
  	 * @return
  	 * @throws Exception
  	 */
- 	public String WStoOHD_Mapping(WSOHD ws) throws Exception {
+ 	public OHD WStoOHD_Mapping(WSOHD ws) throws Exception {
  		OhdBMO obmo = new OhdBMO();
  		OHD ohd = null;
  		
- 		if (ws.getOHDID() == null || ws.getOHDID().length() == 0) ohd = new OHD();
+ 		if (ws.getOHDID() == null || ws.getOHDID().length() == 0){
+ 			ohd = new OHD();
+ 			ohd.setCreationMethod(TracingConstants.FILE_CREATION_METHOD_WEBSERVICE);
+ 		}
  		else {
  			ohd = obmo.findOHDByID(ws.getOHDID());
  			if (ohd == null) {
@@ -360,11 +398,13 @@ public class WSCoreOHDUtil {
  		// found date time
  		Date thedate = null;
  		
+ 		if(ws.getFounddatetime() != null){
  		Calendar tmpCal = ws.getFounddatetime();
  		Date tmpDate = tmpCal.getTime();
 		
 		ohd.setFounddate(tmpDate);
 		ohd.setFoundtime(tmpDate);
+ 		}
 		
 		String datetimestr = null;
 		// bag arrive date
@@ -490,77 +530,80 @@ public class WSCoreOHDUtil {
 					
 					// actual arrive time
 					datetimestr = wit.getActarrivetime();
-					thedate = DateUtils.convertToDate(datetimestr, WSCoreUtil.WS_TIMEFORMAT, null);
-					if (thedate == null) {
-						ws.setErrorcode("invalid time format for actual arrive time, please use NT standard: " + WSCoreUtil.WS_TIMEFORMAT);
-			 			return null;
+					if(datetimestr != null){
+						thedate = DateUtils.convertToDate(datetimestr, WSCoreUtil.WS_TIMEFORMAT, null);
+						if (thedate == null) {
+							ws.setErrorcode("invalid time format for actual arrive time, please use NT standard: " + WSCoreUtil.WS_TIMEFORMAT);
+							return null;
+						}
+						oi.setActarrivetime(thedate);
 					}
-					oi.setActarrivetime(thedate);
-					
 					// actual depart time
 					datetimestr = wit.getActdeparttime();
-					thedate = DateUtils.convertToDate(datetimestr, WSCoreUtil.WS_TIMEFORMAT, null);
-					if (thedate == null) {
-						ws.setErrorcode("invalid time format for actual depart time, please use NT standard: " + WSCoreUtil.WS_TIMEFORMAT);
-			 			return null;
+					if(datetimestr != null){
+						thedate = DateUtils.convertToDate(datetimestr, WSCoreUtil.WS_TIMEFORMAT, null);
+						if (thedate == null) {
+							ws.setErrorcode("invalid time format for actual depart time, please use NT standard: " + WSCoreUtil.WS_TIMEFORMAT);
+							return null;
+						}
+						oi.setActdeparttime(thedate);
 					}
-					oi.setActdeparttime(thedate);
-					
 					oi.setAirline(wit.getAirline());
 					
 					// arrive date
 					datetimestr = wit.getArrivedate();
-					thedate = DateUtils.convertToDate(datetimestr, WSCoreUtil.WS_DATEFORMAT, null);
-					if (thedate == null) {
-						ws.setErrorcode("invalid time format for arrive date, please use NT standard: " + WSCoreUtil.WS_DATEFORMAT);
-			 			return null;
+					if(datetimestr != null){
+						thedate = DateUtils.convertToDate(datetimestr, WSCoreUtil.WS_DATEFORMAT, null);
+						if (thedate == null) {
+							ws.setErrorcode("invalid time format for arrive date, please use NT standard: " + WSCoreUtil.WS_DATEFORMAT);
+							return null;
+						}
+						oi.setArrivedate(thedate);
 					}
-					oi.setArrivedate(thedate);
 					
 					// depart date
 					datetimestr = wit.getDepartdate();
-					thedate = DateUtils.convertToDate(datetimestr, WSCoreUtil.WS_DATEFORMAT, null);
-					if (thedate == null) {
-						ws.setErrorcode("invalid time format for depart date, please use NT standard: " + WSCoreUtil.WS_DATEFORMAT);
-			 			return null;
+					if(datetimestr != null){
+						thedate = DateUtils.convertToDate(datetimestr, WSCoreUtil.WS_DATEFORMAT, null);
+						if (thedate == null) {
+							ws.setErrorcode("invalid time format for depart date, please use NT standard: " + WSCoreUtil.WS_DATEFORMAT);
+							return null;
+						}
+						oi.setDepartdate(thedate);
 					}
-					oi.setDepartdate(thedate);
-					
+
 					oi.setFlightnum(wit.getFlightnum());
 					oi.setLegfrom(wit.getLegfrom());
 					oi.setLegto(wit.getLegto());
 
 					// scheduled arrive time
 					datetimestr = wit.getScharrivetime();
-					thedate = DateUtils.convertToDate(datetimestr, WSCoreUtil.WS_TIMEFORMAT, null);
-					if (thedate == null) {
-						ws.setErrorcode("invalid time format for scheduled arrive time, please use NT standard: " + WSCoreUtil.WS_TIMEFORMAT);
-			 			return null;
+					if(datetimestr != null){
+						thedate = DateUtils.convertToDate(datetimestr, WSCoreUtil.WS_TIMEFORMAT, null);
+						if (thedate == null) {
+							ws.setErrorcode("invalid time format for scheduled arrive time, please use NT standard: " + WSCoreUtil.WS_TIMEFORMAT);
+							return null;
+						}
+						oi.setScharrivetime(thedate);
 					}
-					oi.setScharrivetime(thedate);
 					
 					// scheduled depart time
 					datetimestr = wit.getSchdeparttime();
-					thedate = DateUtils.convertToDate(datetimestr, WSCoreUtil.WS_TIMEFORMAT, null);
-					if (thedate == null) {
-						ws.setErrorcode("invalid time format for scheduled depart time, please use NT standard: " + WSCoreUtil.WS_TIMEFORMAT);
-			 			return null;
+					if(datetimestr != null){
+						thedate = DateUtils.convertToDate(datetimestr, WSCoreUtil.WS_TIMEFORMAT, null);
+						if (thedate == null) {
+							ws.setErrorcode("invalid time format for scheduled depart time, please use NT standard: " + WSCoreUtil.WS_TIMEFORMAT);
+							return null;
+						}
+						oi.setSchdeparttime(thedate);
 					}
-					oi.setSchdeparttime(thedate);
 					oi_set.add(oi);
 				}
 			}
 			ohd.setItinerary(oi_set);
 		}
 		
-		// insert into our db
-		boolean result = obmo.insertOHD(ohd, ohd.getAgent());
-		if (!result) {
-			ws.setErrorcode("unable to insert ohd into NT, please contact NT support");
-			return null;
-		}
- 		return ohd.getOHD_ID();
- 
+		return ohd;
  	}
 
   /**
@@ -667,7 +710,7 @@ public class WSCoreOHDUtil {
    * a series of steps take place
    * to handle it correctly
    */
-  private void properlyHandleForwardedOnHand(OHD ohd, Agent user, Station foundAtStation) {
+  public void properlyHandleForwardedOnHand(OHD ohd, Agent user, Station foundAtStation) {
 	Date gmtDate = TracerDateTime.getGMTDate();
 	String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(gmtDate);
 	MessageResources messages = MessageResources
