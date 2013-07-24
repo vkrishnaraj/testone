@@ -31,6 +31,7 @@ import aero.nettracer.web.lfc.testing.actions.lfc.salvage.LF_Salvage;
 import aero.nettracer.web.lfc.testing.actions.lfc.salvage.LF_SalvageSearch;
 import aero.nettracer.web.lfc.testing.actions.lfc.taskman.LF_VerifyText_TaskManager;
 import aero.nettracer.web.utility.SeleniumTestBrowserDefault;
+import aero.nettracer.web.utility.Settings;
 
 @RunWith(Suite.class)
 @SuiteClasses({
@@ -47,7 +48,7 @@ public class TestLfc {
 	
 	@BeforeClass
 	public static void oneTimeSetUp() {
-		SeleniumTestBrowserDefault.initBrowser();
+		SeleniumTestBrowserDefault.initBrowser(Settings.PORT2);
 	}
 	
 	@AfterClass

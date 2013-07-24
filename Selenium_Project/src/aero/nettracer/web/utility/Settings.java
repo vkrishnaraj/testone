@@ -29,7 +29,7 @@ public class Settings {
 	public static final String BROWSER_CUSTOM = "*custom";
 	public static final String BROWSER_FIREFOXCUSTOM = "*firefox C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe";
 	
-	public static final boolean ECLIPSE_RUNS_SERVER = false;
+	public static final boolean ECLIPSE_RUNS_SERVER = true;
 	
 	//DELAY IN MS BETWEEN ACTIONS
 	public static final String EXECUTION_SPEED_FAST = "2";
@@ -41,9 +41,16 @@ public class Settings {
 	//////////////////////////////////////////////////////////GENERIC TEST SETTINGS////////////////////////////////////////////////////////
 	
 	//URL ROOT FOR WEB APP BEING TESTED
-	public static final String APP_URL_LOCAL = "http://hudson.nettracer.aero/";
-	//public static final String APP_URL_LOCAL = "http://10.52.113.20/";
+//	public static final String APP_URL_LOCAL = "https://hudson.nettracer.aero/";
+//	public static final String APP_URL_LOCAL = "http://172.30.68.3:8180/";
+	public static final String APP_URL_LOCAL = "http://172.30.68.3";
+//	public static final String APP_URL_LOCAL = "http://172.30.68.3:8380/";
 //	public static final String APP_URL_LOCAL = "http://192.168.2.106:8080/";
+	
+
+	public static String PORT1=":8180/";
+	public static String PORT2=":8280/";
+	public static String PORT3=":8380/";
 	
 	//LOGIN CREDENTIALS
 	public static final String USERNAME_ADMIN = "ntauto";
@@ -84,6 +91,7 @@ public class Settings {
 	public static String DAMAGE_ID = "";
 	public static String PILFERAGE_ID = "";
 	public static String ONHAND_ID = "";
+	public static String PORT=":8180/";
 	
 
 	

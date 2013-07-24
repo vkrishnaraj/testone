@@ -54,6 +54,9 @@ public class SeleniumTestBrowserDefault extends Settings {
 	}
 
 	public synchronized static void initBrowser() {
+		initBrowser(PORT);
+	}
+	public synchronized static void initBrowser(String portnum) {
 		int port = 6789;
 		
 		if (System.getProperty("selenium.port") != null) {
@@ -76,7 +79,7 @@ public class SeleniumTestBrowserDefault extends Settings {
 				}
 			}
 			browser = new DefaultSelenium("localhost", port, BROWSER_IEXPLORE,
-					APP_URL_LOCAL);
+					APP_URL_LOCAL+portnum);
 			 
 
 			

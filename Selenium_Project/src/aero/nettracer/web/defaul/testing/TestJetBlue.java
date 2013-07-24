@@ -25,6 +25,7 @@ import aero.nettracer.web.jetblue.testing.actions.nt.onhands.B6_ReceiveOHD;
 import aero.nettracer.web.jetblue.testing.actions.nt.taskman.B6_InboxMessage;
 import aero.nettracer.web.jetblue.testing.actions.nt.taskman.B6_VerifyText_TaskManager;
 import aero.nettracer.web.utility.SeleniumTestBrowserDefault;
+import aero.nettracer.web.utility.Settings;
 
 @RunWith(Suite.class)
 @SuiteClasses({
@@ -41,7 +42,7 @@ public class TestJetBlue {
 	
 	@BeforeClass
 	public static void oneTimeSetUp() {
-		SeleniumTestBrowserDefault.initBrowser();
+		SeleniumTestBrowserDefault.initBrowser(Settings.PORT2);
 	}
 	
 	@AfterClass

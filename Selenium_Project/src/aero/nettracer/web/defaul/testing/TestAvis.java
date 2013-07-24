@@ -21,6 +21,7 @@ import aero.nettracer.web.avis.testing.actions.lf.match.AB_ConfirmMatch;
 import aero.nettracer.web.avis.testing.actions.lf.match.AB_CreateDelivery;
 import aero.nettracer.web.avis.testing.actions.lf.match.AB_ManualMatch_FoundToLost;
 import aero.nettracer.web.utility.SeleniumTestBrowserDefault;
+import aero.nettracer.web.utility.Settings;
 
 @RunWith(Suite.class)
 @SuiteClasses({
@@ -36,7 +37,7 @@ public class TestAvis {
 	
 	@BeforeClass
 	public static void oneTimeSetUp() {
-		SeleniumTestBrowserDefault.initBrowser();
+		SeleniumTestBrowserDefault.initBrowser(Settings.PORT2);
 	}
 	
 	@AfterClass
