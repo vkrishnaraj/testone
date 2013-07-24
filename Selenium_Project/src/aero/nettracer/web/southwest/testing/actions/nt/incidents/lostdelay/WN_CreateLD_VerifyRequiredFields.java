@@ -293,7 +293,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	
 	private boolean navigateToPermissionsPage() {
 		boolean success = false;
-		selenium.click("//a[contains(text(),'[ Logout ]')]");
+		selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
 		waitForPageToLoadImproved();
 		
 		selenium.select("//select[@name='companyCode']", "label=Owens Group");
@@ -356,7 +356,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		selenium.click("xpath=(//input[@id='button'])[2]");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
-			selenium.click("//a[contains(text(),'[ Logout ]')]");
+			selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
 			waitForPageToLoadImproved();
 			success = loginToNt();
 		} else {
@@ -383,7 +383,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	
 	private boolean navigateToIncident() {
 		boolean success = false;
-		selenium.click("id=menucol_1.4");
+		selenium.click("//a[contains(@href, 'searchIncident.do?ld=1')]");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
@@ -404,7 +404,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	
 	private boolean navigateToAuditTrail() {
 		boolean success = false;
-		selenium.click("id=menucol_9.12");
+		selenium.click("//a[@id='menucol_9.12']");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
