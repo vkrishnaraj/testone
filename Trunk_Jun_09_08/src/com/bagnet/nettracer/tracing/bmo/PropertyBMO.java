@@ -224,6 +224,9 @@ public class PropertyBMO {
 	public static final String CS2_EXPENSE_STATUS = "cs2.expense.status";
 	public static final String CS2_EXPENSE_PAYTYPE = "cs2.expense.paytype";
 	public static final String CS2_EXPENSE_CURRENCY = "cs2.expense.currency";
+
+	public static final String SWA_SERVICE_ADDRESS_ENDPOINT = "swa.service.address.endpoint";
+	public static final String BDO_WS_TIMEOUT = "bso.ws.timeout";
 	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;

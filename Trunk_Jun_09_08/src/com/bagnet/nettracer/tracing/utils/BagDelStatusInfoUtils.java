@@ -35,14 +35,14 @@ import com.bagnet.nettracer.tracing.web.StatusListDisp;
 @Stateless
 public class BagDelStatusInfoUtils {
 
-	static private int DEFAULT_RES_WS_TIMEOUT = 5000;
+	static private int DEFAULT_RES_WS_TIMEOUT = 30000;
 //Begin Logic
 	public static List<StatusListDisp> getStatusList(String bdoid, Agent user){
 		BaggageDeliveryStatusInfoServiceStub stub=null;
 		try {
 			stub = new BaggageDeliveryStatusInfoServiceStub(PropertyBMO.getValue(PropertyBMO.BDSI_ADDRESS_ENDPOINT));
 
-			int timeout = PropertyBMO.getValueAsInt(PropertyBMO.RES_WS_TIMEOUT);
+			int timeout = PropertyBMO.getValueAsInt(PropertyBMO.BDO_WS_TIMEOUT);
 			stub._getServiceClient().getOptions().setProperty(HTTPConstants.SO_TIMEOUT, timeout==0?DEFAULT_RES_WS_TIMEOUT:timeout);
 			stub._getServiceClient().getOptions().setProperty(HTTPConstants.CONNECTION_TIMEOUT, timeout==0?DEFAULT_RES_WS_TIMEOUT:timeout);
 		} catch (AxisFault e2) {
