@@ -17,6 +17,7 @@ import org.tempuri.CalculateDeliveryCostDocument.CalculateDeliveryCost;
 import org.tempuri.CalculateDeliveryCostResponseDocument;
 import org.tempuri.CalculateDeliveryCostResponseDocument.CalculateDeliveryCostResponse;
 import org.tempuri.RetVal;
+import org.tempuri.SouthwestAirlinesBDOAddResponse;
 import org.tempuri.SouthwestAirlinesCalculateDeliveryCostResponse;
 import org.tempuri.SouthwestAirlinesStub;
 
@@ -52,7 +53,7 @@ public class CostServiceUtils {
 			// This is the call to the web service
 	    	BDOAddResponse reply = replyDoc.getBDOAddResponse();
 			
-			RetVal a= reply.getBDOAddResult();
+	    	SouthwestAirlinesBDOAddResponse a= (SouthwestAirlinesBDOAddResponse) reply.getBDOAddResult();
 			
 			return ;
 		} catch (Exception e) {
