@@ -968,6 +968,18 @@ function updatePagination() {
                 </td>
               </logic:iterate>
             </tr>
+            
+            <tr>
+              <td>
+                <bean:message key="colname.pnrlastxdays" />
+              </td>
+              <logic:iterate id="audit_lfi" name="compareList" scope="request">
+                <td>
+                  <bean:write name="audit_lfi" property="variable.pnr_last_x_days" />
+                  &nbsp;
+                </td>
+              </logic:iterate>
+            </tr>
 
 
           </table>

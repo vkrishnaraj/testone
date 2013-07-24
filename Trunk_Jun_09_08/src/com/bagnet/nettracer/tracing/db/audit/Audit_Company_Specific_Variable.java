@@ -87,6 +87,12 @@ public class Audit_Company_Specific_Variable implements Serializable {
 	//incident locking
 	private int incident_lock_mins;
 	
+
+	/**
+	 * Variable to determine the last amount of days to include incidents for a PNR Prepopulation Check. -Sean Fine
+	 */
+	private int pnr_last_x_days;
+	
 	/**
 	 * @return Returns the default_loss_code.
 	 * 
@@ -994,6 +1000,18 @@ public class Audit_Company_Specific_Variable implements Serializable {
 	 */
 	public int getIncident_lock_mins() {
 		return incident_lock_mins;
+	}
+	
+	/**
+	 * @return the pnr_last_x_days
+	 * @hibernate.property type="integer"
+	 */
+	public int getPnr_last_x_days() {
+		return pnr_last_x_days;
+	}
+	
+	public void setPnr_last_x_days(int pnr_last_x_days) {
+		this.pnr_last_x_days = pnr_last_x_days;
 	}
 	
 	

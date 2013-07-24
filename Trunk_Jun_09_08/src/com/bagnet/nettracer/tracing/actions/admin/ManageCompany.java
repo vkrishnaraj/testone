@@ -24,6 +24,7 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company;
@@ -387,7 +388,17 @@ public final class ManageCompany extends Action {
 					}
 					
 					if(dForm.getPnrlastxdays()!=null){
-						var.setPnr_last_x_days(dForm.getPnrlastxdays());
+						if(PropertyBMO.getValueAsInt(PropertyBMO.MAX_PNR_LAST_DAYS)!=0 && dForm.getPnrlastxdays()>PropertyBMO.getValueAsInt(PropertyBMO.MAX_PNR_LAST_DAYS)){
+							String[] vars={PropertyBMO.getValue(PropertyBMO.MAX_PNR_LAST_DAYS)};
+							ActionMessage error = new ActionMessage("error.max.pnr",vars);
+							errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+							saveMessages(request, errors);
+							
+							dForm.setPnrlastxdays(PropertyBMO.getValueAsInt(PropertyBMO.MAX_PNR_LAST_DAYS));
+							var.setPnr_last_x_days(PropertyBMO.getValueAsInt(PropertyBMO.MAX_PNR_LAST_DAYS));
+						} else{
+							var.setPnr_last_x_days(dForm.getPnrlastxdays());
+						}
 					}
 				}
 				
