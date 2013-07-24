@@ -167,6 +167,8 @@
 	<classpathentry kind="lib" path="C:/jboss-as-7.1.1.Final/modules/org/hibernate/main/hibernate-c3p0-4.1.1.Final.jar"/>
 	<classpathentry kind="lib" path="C:/jboss-as-7.1.1.Final/modules/org/hibernate/main/hibernate-commons-annotations-4.0.1.Final.jar"/>
 	<classpathentry kind="lib" path="C:/jboss-as-7.1.1.Final/modules/org/hibernate/main/hibernate-entitymanager-4.0.1.Final.jar"/>
+	<classpathentry kind="lib" path="lib/jars/OnhandScanningService.jar"/>
+	<classpathentry kind="lib" path="lib/jars/ntwscore_schemas.jar"/>
 	<classpathentry kind="lib" path="lib/jars/WN_CS2Service.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

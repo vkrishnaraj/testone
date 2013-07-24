@@ -85,6 +85,7 @@ public class OHD implements Serializable {
 	private boolean tagSentToWt;
 	private int tagSentToWtStationId;
 	
+	private int creationMethod;
 
 	public String getDisplaydate() {
 		Date completedate = DateUtils.convertToDate(this.getFounddate().toString() + " "
@@ -1051,5 +1052,19 @@ public class OHD implements Serializable {
 	public void setTagSentToWtStationId(int tagSentToWtStationId) {
   	this.tagSentToWtStationId = tagSentToWtStationId;
   }
+
+	
+	/**
+	 * @hibernate.property type="integer"
+	 * 
+	 * @return
+	 */
+	public int getCreationMethod() {
+		return creationMethod;
+	}
+
+	public void setCreationMethod(int creationMethod) {
+		this.creationMethod = creationMethod;
+	}
 	
 }

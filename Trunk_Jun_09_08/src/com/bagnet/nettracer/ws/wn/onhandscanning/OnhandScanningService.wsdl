@@ -1,0 +1,533 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ns="http://onhandscanning.wn.ws.nettracer.bagnet.com" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:ax25="http://pojo.core.ws.nettracer.bagnet.com/xsd" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ax23="http://pojo.onhandscanning.wn.ws.nettracer.bagnet.com/xsd" xmlns:ax21="http://pojo.wn.ws.nettracer.bagnet.com/xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://onhandscanning.wn.ws.nettracer.bagnet.com">
+    <wsdl:types>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://pojo.core.ws.nettracer.bagnet.com/xsd">
+            <xs:complexType name="WS_OHD">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="OHD_ID" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="agent" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="bagarrivedate" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="bagtagnum" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="close_date" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="color" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="companycode_id" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="disposal_status" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="errorcode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="faultStation" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="firstname" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="foundAtStation" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="founddatetime" nillable="true" type="xs:date"/>
+                    <xs:element minOccurs="0" name="holdingStation" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="inventories" nillable="true" type="ax25:WS_Inventory"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="itineraries" nillable="true" type="ax25:WS_Itinerary"/>
+                    <xs:element minOccurs="0" name="lastname" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="lossCode" type="xs:int"/>
+                    <xs:element minOccurs="0" name="manufacturer" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="membership" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="middlename" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="passengers" nillable="true" type="ax25:WS_Passenger"/>
+                    <xs:element minOccurs="0" name="record_locator" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="status" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="storage_location" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="type" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="xdescelement1" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="xdescelement2" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="xdescelement3" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="WS_Inventory">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="category" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="description" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="WS_Itinerary">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="actarrivetime" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="actdeparttime" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="airline" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="arrivedate" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="departdate" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="flightnum" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="itinerary_ID" type="xs:int"/>
+                    <xs:element minOccurs="0" name="itinerarytype" type="xs:int"/>
+                    <xs:element minOccurs="0" name="legfrom" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="legfrom_type" type="xs:int"/>
+                    <xs:element minOccurs="0" name="legto" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="legto_type" type="xs:int"/>
+                    <xs:element minOccurs="0" name="scharrivetime" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="schdeparttime" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="WS_Passenger">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="address1" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="address2" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="altphone" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="city" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="commonnum" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="countrycode_ID" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="countryofissue" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="dlstate" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="driverslicense" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="email" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="firstname" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="homephone" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="hotel" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="is_permanent" type="xs:int"/>
+                    <xs:element minOccurs="0" name="isprimary" type="xs:int"/>
+                    <xs:element minOccurs="0" name="jobtitle" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="lastname" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="membershipairline" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="membershipnum" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="membershipstatus" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="middlename" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="mobile" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="pager" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="passenger_ID" type="xs:int"/>
+                    <xs:element minOccurs="0" name="province" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="salutation" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="state_ID" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="valid_bdate" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="valid_edate" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="workphone" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="zip" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://pojo.wn.ws.nettracer.bagnet.com/xsd">
+            <xs:complexType name="Authentication">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="airlineCode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="systemName" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="systemPassword" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ax27="http://pojo.core.ws.nettracer.bagnet.com/xsd" xmlns:ax24="http://pojo.onhandscanning.wn.ws.nettracer.bagnet.com/xsd" xmlns:ax22="http://pojo.wn.ws.nettracer.bagnet.com/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://onhandscanning.wn.ws.nettracer.bagnet.com">
+            <xs:import namespace="http://pojo.wn.ws.nettracer.bagnet.com/xsd"/>
+            <xs:import namespace="http://pojo.onhandscanning.wn.ws.nettracer.bagnet.com/xsd"/>
+            <xs:import namespace="http://pojo.core.ws.nettracer.bagnet.com/xsd"/>
+            <xs:element name="saveBagDropTime">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="authentication" nillable="true" type="ax22:Authentication"/>
+                        <xs:element minOccurs="0" name="bagDrop" nillable="true" type="ax24:BagDrop"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="saveBagDropTimeResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax24:ServiceResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="returnOnhand">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="authentication" nillable="true" type="ax22:Authentication"/>
+                        <xs:element minOccurs="0" name="tagNumber" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="claimCheckInd" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="customerSignature" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="deviceUser" nillable="true" type="ax24:DeviceUser"/>
+                        <xs:element minOccurs="0" name="positiveIdInd" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="returnOnhandResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax24:ServiceResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="lookupOnhandReturn">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="authentication" nillable="true" type="ax22:Authentication"/>
+                        <xs:element minOccurs="0" name="tagNumber" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="lookupOnhandReturnResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax24:ServiceResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="lookupOnhandLZ">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="authentication" nillable="true" type="ax22:Authentication"/>
+                        <xs:element minOccurs="0" name="onhand" nillable="true" type="ax25:WS_OHD"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="lookupOnhandLZResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax24:ServiceResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="isValidUser">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="authentication" nillable="true" type="ax22:Authentication"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="isValidUserResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax24:ServiceResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="echo">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="s" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="echoResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="createUpdateOnhand">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="authentication" nillable="true" type="ax22:Authentication"/>
+                        <xs:element minOccurs="0" name="onhand" nillable="true" type="ax25:WS_OHD"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="createUpdateOnhandResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax24:ServiceResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema xmlns:ax26="http://pojo.core.ws.nettracer.bagnet.com/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://pojo.onhandscanning.wn.ws.nettracer.bagnet.com/xsd">
+            <xs:import namespace="http://pojo.core.ws.nettracer.bagnet.com/xsd"/>
+            <xs:complexType name="BagDrop">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="airlineCode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="arrivalStationCode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="bagDropDatetime" nillable="true" type="xs:date"/>
+                    <xs:element minOccurs="0" name="flightNumber" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="previouslyEnteredFlag" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="scheduleArrivalDatetime" nillable="true" type="xs:date"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ServiceResponse">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="bagDrop" nillable="true" type="ax23:BagDrop"/>
+                    <xs:element minOccurs="0" name="claimCheckInd" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="createUpdateIndicator" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="error" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="onhand" nillable="true" type="ax26:WS_OHD"/>
+                    <xs:element minOccurs="0" name="positiveIdInd" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="success" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="validUser" type="xs:boolean"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="DeviceUser">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="deviceId" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="stationCode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="userId" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="lookupOnhandReturnRequest">
+        <wsdl:part name="parameters" element="ns:lookupOnhandReturn"/>
+    </wsdl:message>
+    <wsdl:message name="lookupOnhandReturnResponse">
+        <wsdl:part name="parameters" element="ns:lookupOnhandReturnResponse"/>
+    </wsdl:message>
+    <wsdl:message name="isValidUserRequest">
+        <wsdl:part name="parameters" element="ns:isValidUser"/>
+    </wsdl:message>
+    <wsdl:message name="isValidUserResponse">
+        <wsdl:part name="parameters" element="ns:isValidUserResponse"/>
+    </wsdl:message>
+    <wsdl:message name="createUpdateOnhandRequest">
+        <wsdl:part name="parameters" element="ns:createUpdateOnhand"/>
+    </wsdl:message>
+    <wsdl:message name="createUpdateOnhandResponse">
+        <wsdl:part name="parameters" element="ns:createUpdateOnhandResponse"/>
+    </wsdl:message>
+    <wsdl:message name="returnOnhandRequest">
+        <wsdl:part name="parameters" element="ns:returnOnhand"/>
+    </wsdl:message>
+    <wsdl:message name="returnOnhandResponse">
+        <wsdl:part name="parameters" element="ns:returnOnhandResponse"/>
+    </wsdl:message>
+    <wsdl:message name="echoRequest">
+        <wsdl:part name="parameters" element="ns:echo"/>
+    </wsdl:message>
+    <wsdl:message name="echoResponse">
+        <wsdl:part name="parameters" element="ns:echoResponse"/>
+    </wsdl:message>
+    <wsdl:message name="saveBagDropTimeRequest">
+        <wsdl:part name="parameters" element="ns:saveBagDropTime"/>
+    </wsdl:message>
+    <wsdl:message name="saveBagDropTimeResponse">
+        <wsdl:part name="parameters" element="ns:saveBagDropTimeResponse"/>
+    </wsdl:message>
+    <wsdl:message name="lookupOnhandLZRequest">
+        <wsdl:part name="parameters" element="ns:lookupOnhandLZ"/>
+    </wsdl:message>
+    <wsdl:message name="lookupOnhandLZResponse">
+        <wsdl:part name="parameters" element="ns:lookupOnhandLZResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="OnhandScanningServicePortType">
+        <wsdl:operation name="lookupOnhandReturn">
+            <wsdl:input message="ns:lookupOnhandReturnRequest" wsaw:Action="urn:lookupOnhandReturn"/>
+            <wsdl:output message="ns:lookupOnhandReturnResponse" wsaw:Action="urn:lookupOnhandReturnResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="isValidUser">
+            <wsdl:input message="ns:isValidUserRequest" wsaw:Action="urn:isValidUser"/>
+            <wsdl:output message="ns:isValidUserResponse" wsaw:Action="urn:isValidUserResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="createUpdateOnhand">
+            <wsdl:input message="ns:createUpdateOnhandRequest" wsaw:Action="urn:createUpdateOnhand"/>
+            <wsdl:output message="ns:createUpdateOnhandResponse" wsaw:Action="urn:createUpdateOnhandResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="returnOnhand">
+            <wsdl:input message="ns:returnOnhandRequest" wsaw:Action="urn:returnOnhand"/>
+            <wsdl:output message="ns:returnOnhandResponse" wsaw:Action="urn:returnOnhandResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="echo">
+            <wsdl:input message="ns:echoRequest" wsaw:Action="urn:echo"/>
+            <wsdl:output message="ns:echoResponse" wsaw:Action="urn:echoResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="saveBagDropTime">
+            <wsdl:input message="ns:saveBagDropTimeRequest" wsaw:Action="urn:saveBagDropTime"/>
+            <wsdl:output message="ns:saveBagDropTimeResponse" wsaw:Action="urn:saveBagDropTimeResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="lookupOnhandLZ">
+            <wsdl:input message="ns:lookupOnhandLZRequest" wsaw:Action="urn:lookupOnhandLZ"/>
+            <wsdl:output message="ns:lookupOnhandLZResponse" wsaw:Action="urn:lookupOnhandLZResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="OnhandScanningServiceSoap11Binding" type="ns:OnhandScanningServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="lookupOnhandReturn">
+            <soap:operation soapAction="urn:lookupOnhandReturn" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="isValidUser">
+            <soap:operation soapAction="urn:isValidUser" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="createUpdateOnhand">
+            <soap:operation soapAction="urn:createUpdateOnhand" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="returnOnhand">
+            <soap:operation soapAction="urn:returnOnhand" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="echo">
+            <soap:operation soapAction="urn:echo" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="lookupOnhandLZ">
+            <soap:operation soapAction="urn:lookupOnhandLZ" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="saveBagDropTime">
+            <soap:operation soapAction="urn:saveBagDropTime" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="OnhandScanningServiceSoap12Binding" type="ns:OnhandScanningServicePortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="lookupOnhandReturn">
+            <soap12:operation soapAction="urn:lookupOnhandReturn" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="isValidUser">
+            <soap12:operation soapAction="urn:isValidUser" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="createUpdateOnhand">
+            <soap12:operation soapAction="urn:createUpdateOnhand" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="returnOnhand">
+            <soap12:operation soapAction="urn:returnOnhand" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="echo">
+            <soap12:operation soapAction="urn:echo" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="lookupOnhandLZ">
+            <soap12:operation soapAction="urn:lookupOnhandLZ" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="saveBagDropTime">
+            <soap12:operation soapAction="urn:saveBagDropTime" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="OnhandScanningServiceHttpBinding" type="ns:OnhandScanningServicePortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="lookupOnhandReturn">
+            <http:operation location="OnhandScanningService/lookupOnhandReturn"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="lookupOnhandReturn"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="lookupOnhandReturn"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="isValidUser">
+            <http:operation location="OnhandScanningService/isValidUser"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="isValidUser"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="isValidUser"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="createUpdateOnhand">
+            <http:operation location="OnhandScanningService/createUpdateOnhand"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="createUpdateOnhand"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="createUpdateOnhand"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="returnOnhand">
+            <http:operation location="OnhandScanningService/returnOnhand"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="returnOnhand"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="returnOnhand"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="echo">
+            <http:operation location="OnhandScanningService/echo"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="echo"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="echo"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="lookupOnhandLZ">
+            <http:operation location="OnhandScanningService/lookupOnhandLZ"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="lookupOnhandLZ"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="lookupOnhandLZ"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="saveBagDropTime">
+            <http:operation location="OnhandScanningService/saveBagDropTime"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="saveBagDropTime"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="saveBagDropTime"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="OnhandScanningService">
+        <wsdl:port name="OnhandScanningServiceHttpSoap11Endpoint" binding="ns:OnhandScanningServiceSoap11Binding">
+            <soap:address location="http://localhost:8080/axis2/services/OnhandScanningService"/>
+        </wsdl:port>
+        <wsdl:port name="OnhandScanningServiceHttpSoap12Endpoint" binding="ns:OnhandScanningServiceSoap12Binding">
+            <soap12:address location="http://localhost:8080/axis2/services/OnhandScanningService"/>
+        </wsdl:port>
+        <wsdl:port name="OnhandScanningServiceHttpEndpoint" binding="ns:OnhandScanningServiceHttpBinding">
+            <http:address location="http://localhost:8080/axis2/services/OnhandScanningService"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

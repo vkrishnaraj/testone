@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file was auto-generated from WSDL -->
+<!-- by the Apache Axis2 version: 1.5  Built on : Apr 30, 2009 (06:07:24 EDT) -->
+<serviceGroup>
+    <service name="OnhandScanningService">
+        <messageReceivers>
+            <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="com.bagnet.nettracer.ws.wn.onhandscanning.OnhandScanningServiceMessageReceiverInOut"/>
+        </messageReceivers>
+        <parameter name="ServiceClass">com.bagnet.nettracer.ws.wn.onhandscanning.OnhandScanningServiceImplementation</parameter>
+        <parameter name="useOriginalwsdl">true</parameter>
+        <parameter name="modifyUserWSDLPortAddress">true</parameter>
+        <operation name="lookupOnhandLZ" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://onhandscanning.wn.ws.nettracer.bagnet.com">
+            <actionMapping>urn:lookupOnhandLZ</actionMapping>
+            <outputActionMapping>urn:lookupOnhandLZResponse</outputActionMapping>
+        </operation>
+        <operation name="echo" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://onhandscanning.wn.ws.nettracer.bagnet.com">
+            <actionMapping>urn:echo</actionMapping>
+            <outputActionMapping>urn:echoResponse</outputActionMapping>
+        </operation>
+        <operation name="isValidUser" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://onhandscanning.wn.ws.nettracer.bagnet.com">
+            <actionMapping>urn:isValidUser</actionMapping>
+            <outputActionMapping>urn:isValidUserResponse</outputActionMapping>
+        </operation>
+        <operation name="saveBagDropTime" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://onhandscanning.wn.ws.nettracer.bagnet.com">
+            <actionMapping>urn:saveBagDropTime</actionMapping>
+            <outputActionMapping>urn:saveBagDropTimeResponse</outputActionMapping>
+        </operation>
+        <operation name="createUpdateOnhand" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://onhandscanning.wn.ws.nettracer.bagnet.com">
+            <actionMapping>urn:createUpdateOnhand</actionMapping>
+            <outputActionMapping>urn:createUpdateOnhandResponse</outputActionMapping>
+        </operation>
+        <operation name="returnOnhand" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://onhandscanning.wn.ws.nettracer.bagnet.com">
+            <actionMapping>urn:returnOnhand</actionMapping>
+            <outputActionMapping>urn:returnOnhandResponse</outputActionMapping>
+        </operation>
+        <operation name="lookupOnhandReturn" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://onhandscanning.wn.ws.nettracer.bagnet.com">
+            <actionMapping>urn:lookupOnhandReturn</actionMapping>
+            <outputActionMapping>urn:lookupOnhandReturnResponse</outputActionMapping>
+        </operation>
+    </service>
+</serviceGroup>

@@ -1,0 +1,404 @@
+package com.bagnet.nettracer.ws.wn.onhandscanning;
+
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
+import org.hibernate.Query;
+import org.hibernate.Session;
+
+import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.OHD;
+import com.bagnet.nettracer.tracing.db.Station;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
+import com.bagnet.nettracer.tracing.utils.OHDUtils;
+import com.bagnet.nettracer.tracing.utils.SecurityUtils;
+import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
+import com.bagnet.nettracer.ws.core.WSCoreOHDUtil;
+import com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD;
+import com.bagnet.nettracer.ws.wn.onhandscanning.CreateUpdateOnhandResponseDocument.CreateUpdateOnhandResponse;
+import com.bagnet.nettracer.ws.wn.onhandscanning.EchoResponseDocument.EchoResponse;
+import com.bagnet.nettracer.ws.wn.onhandscanning.IsValidUserResponseDocument.IsValidUserResponse;
+import com.bagnet.nettracer.ws.wn.onhandscanning.SaveBagDropTimeResponseDocument.SaveBagDropTimeResponse;
+
+public class OnhandScanningServiceImplementation extends OnhandScanningServiceSkeleton{
+	
+	private static Logger logger = Logger.getLogger(OnhandScanningServiceImplementation.class);
+	
+	public static String STATUS_CREATE = "CREATE";
+	public static String STATUS_UPDATE = "UPDATE";
+	
+	
+	/**
+	 * returns agent if properly authorized as by the following criteria:
+	 *   Has valid username, password and companycode
+	 *   Is a webservice user
+	 *   Ignores account locks
+	 * 
+	 * @param auth
+	 * @return
+	 * @throws Exception
+	 */
+	protected Agent getAgent(com.bagnet.nettracer.ws.wn.pojo.xsd.Authentication auth) throws Exception{
+		if(auth == null || auth.getSystemName() == null || auth.getSystemName().length() == 0 ||
+				auth.getSystemPassword() == null || auth.getSystemPassword().length() == 0 ||
+				auth.getAirlineCode() == null ||  auth.getAirlineCode().length() == 0){
+			throw new Exception("Must provide username, password and airline code");
+		} else {
+			Agent agent = null;
+			ActionMessages errors = new ActionMessages();
+			agent = SecurityUtils.authUser(auth.getSystemName(), auth.getSystemPassword(), auth.getAirlineCode(), 0, errors);
+			if(!errors.isEmpty()){
+				Iterator i = errors.get();
+				while(i.hasNext()){
+					ActionMessage message = (ActionMessage)i.next();
+					if("error.user.lockedout".equals(message.getKey())){
+						//As per Southwest requirements, account locks are not to be considered, skip and continue
+						continue;
+					} else {
+						throw new Exception("Invalid username/password");
+					}
+				}
+			}
+			
+			if(agent == null){
+				throw new Exception("unable to authenticate user, please contact NetTracer");
+			} else {
+				if(agent.isWs_enabled()){
+					return agent;
+				} else {
+					throw new Exception("user is not authorized for web services");
+				}
+			}
+		}
+	}
+	
+	
+	/**
+	 * returns agent if properly authorized as by the following criteria:
+	 *   Has valid username, password and companycode
+	 *   Is a webservice user
+	 *   Ignores account locks
+	 * 
+	 * @param isValidUser
+	 */
+
+	public IsValidUserResponseDocument isValidUser(IsValidUserDocument isValidUser){
+		logger.info(isValidUser);
+		IsValidUserResponseDocument resDoc = IsValidUserResponseDocument.Factory.newInstance();
+		IsValidUserResponse res = resDoc.addNewIsValidUserResponse();
+		com.bagnet.nettracer.ws.wn.onhandscanning.pojo.xsd.ServiceResponse serviceResponse = res.addNewReturn();
+		
+		if(isValidUser == null || isValidUser.getIsValidUser() == null){
+			serviceResponse.setSuccess(false);
+			serviceResponse.setValidUser(false);
+			serviceResponse.addError("isValidUser request empty");
+			logger.info(resDoc);
+			return resDoc;
+		}
+
+		Agent agent = null;
+		com.bagnet.nettracer.ws.wn.pojo.xsd.Authentication auth = isValidUser.getIsValidUser().getAuthentication();
+		try {
+			agent = getAgent(auth);
+		} catch (Exception e) {
+			serviceResponse.setSuccess(false);
+			serviceResponse.setValidUser(false);
+			serviceResponse.addError(e.getMessage());
+			logger.info(resDoc);
+			return resDoc;
+		}
+		serviceResponse.setSuccess(true);
+		serviceResponse.setValidUser(true);
+		logger.info(resDoc);
+		return resDoc;
+	}
+
+
+	/**
+	 * Test echo service
+	 * 
+	 * @param echo
+	 */
+
+	public EchoResponseDocument echo(EchoDocument echo)
+	{
+		EchoResponseDocument resDoc = EchoResponseDocument.Factory.newInstance();
+		EchoResponse res = resDoc.addNewEchoResponse();
+		res.setReturn("Echo service: " + echo.getEcho().getS());
+		return resDoc;
+	}
+
+
+	/**
+	 * Auto generated method signature
+	 * 
+	 * @param returnOnhand
+	 */
+
+	public ReturnOnhandResponseDocument returnOnhand(ReturnOnhandDocument returnOnhand)
+	{
+		//TODO : fill this with the necessary business logic
+		throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#returnOnhand");
+	}
+
+
+	/**
+	 * Auto generated method signature
+	 * 
+	 * @param saveBagDropTime
+	 */
+
+	public com.bagnet.nettracer.ws.wn.onhandscanning.SaveBagDropTimeResponseDocument saveBagDropTime(com.bagnet.nettracer.ws.wn.onhandscanning.SaveBagDropTimeDocument saveBagDropTime)
+	{
+		logger.info(saveBagDropTime);
+		SaveBagDropTimeResponseDocument resDoc = SaveBagDropTimeResponseDocument.Factory.newInstance();
+		SaveBagDropTimeResponse res = resDoc.addNewSaveBagDropTimeResponse();
+		com.bagnet.nettracer.ws.wn.onhandscanning.pojo.xsd.ServiceResponse serviceResponse = res.addNewReturn();
+		
+		if(saveBagDropTime == null || saveBagDropTime.getSaveBagDropTime() == null || saveBagDropTime.getSaveBagDropTime().getBagDrop() == null){
+			serviceResponse.setSuccess(false);
+			serviceResponse.setValidUser(false);
+			serviceResponse.addError("bagdrop request empty");
+			logger.info(resDoc);
+			return resDoc;
+		}
+
+		Agent agent = null;
+		com.bagnet.nettracer.ws.wn.pojo.xsd.Authentication auth = saveBagDropTime.getSaveBagDropTime().getAuthentication();
+		try {
+			agent = getAgent(auth);
+		} catch (Exception e) {
+			serviceResponse.setSuccess(false);
+			serviceResponse.setValidUser(false);
+			serviceResponse.addError(e.getMessage());
+			logger.info(resDoc);
+			return resDoc;
+		}
+		serviceResponse.setValidUser(true);
+		
+		//TODO BagDrop is to be implemented in a later iteration.  In meantime, echo back request
+		serviceResponse.setBagDrop(saveBagDropTime.getSaveBagDropTime().getBagDrop());
+		serviceResponse.setSuccess(true);
+		
+		logger.info(resDoc);
+		return resDoc;
+	}
+
+
+	/**
+	 * Auto generated method signature
+	 * 
+	 * @param createUpdateOnhand
+	 */
+
+	public CreateUpdateOnhandResponseDocument createUpdateOnhand(CreateUpdateOnhandDocument createUpdateOnhand)
+	{
+		logger.info(createUpdateOnhand);
+		CreateUpdateOnhandResponseDocument resDoc = CreateUpdateOnhandResponseDocument.Factory.newInstance();
+		CreateUpdateOnhandResponse res = resDoc.addNewCreateUpdateOnhandResponse();
+		com.bagnet.nettracer.ws.wn.onhandscanning.pojo.xsd.ServiceResponse serviceResponse = res.addNewReturn();
+
+		if(createUpdateOnhand == null || createUpdateOnhand.getCreateUpdateOnhand() == null || createUpdateOnhand.getCreateUpdateOnhand().getOnhand() == null){
+			serviceResponse.setSuccess(false);
+			serviceResponse.setValidUser(false);
+			serviceResponse.addError("ohd request empty");
+			logger.info(resDoc);
+			return resDoc;
+		}
+
+		Agent agent = null;
+		com.bagnet.nettracer.ws.wn.pojo.xsd.Authentication auth = createUpdateOnhand.getCreateUpdateOnhand().getAuthentication();
+		try {
+			agent = getAgent(auth);
+			serviceResponse.setValidUser(true);
+		} catch (Exception e) {
+			serviceResponse.setSuccess(false);
+			serviceResponse.setValidUser(false);
+			serviceResponse.addError(e.getMessage());
+			logger.info(resDoc);
+			return resDoc;
+		}
+		
+		WSOHD wsohd = createUpdateOnhand.getCreateUpdateOnhand().getOnhand();
+		if(wsohd.getStatus() == null){
+			wsohd.setStatus("Open");
+		}
+		wsohd.setAgent(agent.getUsername());
+		wsohd.setCompanycodeId(agent.getCompanycode_ID());
+		
+		Station foundstation = StationBMO.getStationByCode(wsohd.getFoundAtStation(), agent.getCompanycode_ID());
+		String ohdId = lookupBagtag(wsohd.getBagtagnum());
+		OHD incomingOHD = OHDUtils.getBagTagNumberIncomingToStation(wsohd.getBagtagnum(),foundstation);
+		if(ohdId != null){
+			//update OHD
+			wsohd.setOHDID(ohdId);
+			WSCoreOHDUtil util = new WSCoreOHDUtil();
+			try {
+				
+				OHD ntohd = util.WStoOHD_Mapping(wsohd);
+				if(updateExistingOhd(ntohd)){
+					serviceResponse.setOnhand(util.OHDtoWS_Mapping(OhdBMO.getOHDByID(ntohd.getOHD_ID(),null)));
+					serviceResponse.setSuccess(true);
+					serviceResponse.setCreateUpdateIndicator(STATUS_UPDATE);
+					logger.info(resDoc);
+					return resDoc;
+				} else {
+					serviceResponse.addError("unable to insert ohd into NT, please contact NT support");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else if(incomingOHD != null){
+			//receive bag
+			wsohd.setOHDID(incomingOHD.getOHD_ID());
+			WSCoreOHDUtil util = new WSCoreOHDUtil();
+			try {
+				OHD ntohd = util.WStoOHD_Mapping(wsohd);
+				if(updateExistingOhd(ntohd)){
+					util.properlyHandleForwardedOnHand(incomingOHD, agent, foundstation);
+					serviceResponse.setOnhand(util.OHDtoWS_Mapping(OhdBMO.getOHDByID(ntohd.getOHD_ID(),null)));
+					serviceResponse.setSuccess(true);
+					serviceResponse.setCreateUpdateIndicator(STATUS_UPDATE);
+					logger.info(resDoc);
+					return resDoc;
+				} else {
+					serviceResponse.addError("unable to insert ohd into NT, please contact NT support");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		} else {
+			//create new OHD
+			if(wsohd.getFounddatetime() == null){
+				GregorianCalendar c = new GregorianCalendar();
+				c.setTime(DateUtils.convertToGMTDate(new Date()));
+				wsohd.setFounddatetime(c);
+			}
+			
+			WSCoreOHDUtil util = new WSCoreOHDUtil();
+			try {
+				OHD ntohd = util.WStoOHD_Mapping(wsohd);
+			
+				ntohd.setXdescelement_ID_1(TracingConstants.TRACING_ELEMENT_X);
+				ntohd.setXdescelement_ID_2(TracingConstants.TRACING_ELEMENT_X);
+				ntohd.setXdescelement_ID_3(TracingConstants.TRACING_ELEMENT_X);
+				
+				OhdBMO obmo = new OhdBMO();
+				if(obmo.insertOHD(ntohd, ntohd.getAgent())){
+					serviceResponse.setOnhand(util.OHDtoWS_Mapping(OhdBMO.getOHDByID(ntohd.getOHD_ID(),null)));
+					serviceResponse.setSuccess(true);
+					serviceResponse.setCreateUpdateIndicator(STATUS_CREATE);
+					logger.info(resDoc);
+					return resDoc;
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		serviceResponse.setSuccess(false);
+		serviceResponse.addError(wsohd.getErrorcode());
+		logger.info(resDoc);
+		return resDoc;
+	}
+
+	private boolean updateExistingOhd(OHD ohd){
+		OhdBMO obmo = new OhdBMO();
+		OHD oldohd = obmo.findOHDByID(ohd.getOHD_ID());
+		if(oldohd != null){
+			//These fields are not to be altered during an update
+			ohd.setStatus(oldohd.getStatus());
+			ohd.setXdescelement_ID_1(oldohd.getXdescelement_ID_1());
+			ohd.setXdescelement_ID_2(oldohd.getXdescelement_ID_2());
+			ohd.setXdescelement_ID_3(oldohd.getXdescelement_ID_3());
+			ohd.setCreationMethod(oldohd.getCreationMethod());
+			ohd.setFounddate(oldohd.getFounddate());
+			ohd.setFoundtime(oldohd.getFoundtime());
+		}
+		
+		return obmo.insertOHD(ohd, ohd.getAgent());
+	}
+
+
+	/**
+	 * Auto generated method signature
+	 * 
+	 * @param lookupOnhandLZ
+	 */
+
+	public com.bagnet.nettracer.ws.wn.onhandscanning.LookupOnhandLZResponseDocument lookupOnhandLZ(com.bagnet.nettracer.ws.wn.onhandscanning.LookupOnhandLZDocument lookupOnhandLZ)
+	{
+		//TODO : fill this with the necessary business logic
+		throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#lookupOnhandLZ");
+	}
+
+	/**
+	 * Auto generated method signature
+	 * 
+	 * @param lookupOnhandReturn
+	 */
+
+	public com.bagnet.nettracer.ws.wn.onhandscanning.LookupOnhandReturnResponseDocument lookupOnhandReturn(com.bagnet.nettracer.ws.wn.onhandscanning.LookupOnhandReturnDocument lookupOnhandReturn)
+	{
+		//TODO : fill this with the necessary business logic
+		throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#lookupOnhandReturn");
+	}
+
+
+	/**
+	 * Search for existing bagtag
+	 * 
+	 * @param bagtag
+	 * @return
+	 */
+	protected String lookupBagtag(String bagtag){
+		//TODO identify additional critiera
+		Session sess = null;
+		try {
+			String query = "select ohd_id from ohd "
+					+ "where (claimnum=:claimnum1 or claimnum=:claimnum2)" +
+					"and status_id =:status " +
+					"order by founddate desc";
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createSQLQuery(query);
+			q.setParameter("claimnum1", bagtag);
+			String twoCharBagTag = null;
+			try{
+				twoCharBagTag = LookupAirlineCodes.getTwoCharacterBagTag(bagtag);
+			} catch (Exception e){
+				twoCharBagTag = bagtag;
+			}
+			q.setString("claimnum2", twoCharBagTag);
+			q.setParameter("status", TracingConstants.OHD_STATUS_OPEN);
+			List list = q.list();
+			if (list.size() == 0) {
+				logger.debug("unable to find ohd with bagtag: " + bagtag);
+				return null;
+			}
+			return (String) list.get(0);
+		} catch (Exception e) {
+			logger.error("unable to retrieve ohd: " + e);
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.error("unable to close connection: " + e);
+				}
+			}
+		}
+	}
+	
+}
