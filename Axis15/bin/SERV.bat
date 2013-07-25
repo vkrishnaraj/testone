@@ -1,0 +1,1 @@
+wsdl2java -uri SERV.wsdl -ss -sd -g -d xmlbeans -o service
