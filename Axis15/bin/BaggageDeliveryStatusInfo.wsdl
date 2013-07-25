@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="GetLastStatus">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="bdoNumber" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLastStatusResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetLastStatusResult" type="tns:BaggageDeliveryStatusInfoResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="BaggageDeliveryStatusInfoResponse">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="bdoNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="unbounded" form="unqualified" name="info" type="tns:StatusInfo" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="bdoExists" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="statusExists" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="systemError" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="errorMessage" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="StatusInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="deliveryStatus" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="deliveryStatusDescription" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="deliveryStatusDescription2" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="statusDateTime" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="standardMinTime" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="standardMaxTime" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="specialMaxTime" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="driver" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="signedBy" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="notes" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="createdDateTime" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="lastModifiedDateTime" type="s:dateTime" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetLastStatuses">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="unbounded" name="bdoNumbers" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetLastStatusesResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetLastStatusesResult" type="tns:ArrayOfBaggageDeliveryStatusInfoResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfBaggageDeliveryStatusInfoResponse">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="BaggageDeliveryStatusInfoResponse" nillable="true" type="tns:BaggageDeliveryStatusInfoResponse" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetStatusList">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="bdoNumber" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetStatusListResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetStatusListResult" type="tns:BaggageDeliveryStatusInfoResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetStatusLists">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="unbounded" name="bdoNumbers" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetStatusListsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetStatusListsResult" type="tns:ArrayOfBaggageDeliveryStatusInfoResponse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetLastStatusSoapIn">
+    <wsdl:part name="parameters" element="tns:GetLastStatus" />
+  </wsdl:message>
+  <wsdl:message name="GetLastStatusSoapOut">
+    <wsdl:part name="parameters" element="tns:GetLastStatusResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetLastStatusesSoapIn">
+    <wsdl:part name="parameters" element="tns:GetLastStatuses" />
+  </wsdl:message>
+  <wsdl:message name="GetLastStatusesSoapOut">
+    <wsdl:part name="parameters" element="tns:GetLastStatusesResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetStatusListSoapIn">
+    <wsdl:part name="parameters" element="tns:GetStatusList" />
+  </wsdl:message>
+  <wsdl:message name="GetStatusListSoapOut">
+    <wsdl:part name="parameters" element="tns:GetStatusListResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetStatusListsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetStatusLists" />
+  </wsdl:message>
+  <wsdl:message name="GetStatusListsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetStatusListsResponse" />
+  </wsdl:message>
+  <wsdl:portType name="BaggageDeliveryStatusInfoServiceSoap">
+    <wsdl:operation name="GetLastStatus">
+      <wsdl:input message="tns:GetLastStatusSoapIn" />
+      <wsdl:output message="tns:GetLastStatusSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLastStatuses">
+      <wsdl:input message="tns:GetLastStatusesSoapIn" />
+      <wsdl:output message="tns:GetLastStatusesSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetStatusList">
+      <wsdl:input message="tns:GetStatusListSoapIn" />
+      <wsdl:output message="tns:GetStatusListSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetStatusLists">
+      <wsdl:input message="tns:GetStatusListsSoapIn" />
+      <wsdl:output message="tns:GetStatusListsSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BaggageDeliveryStatusInfoServiceSoap" type="tns:BaggageDeliveryStatusInfoServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetLastStatus">
+      <soap:operation soapAction="http://tempuri.org/GetLastStatus" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLastStatuses">
+      <soap:operation soapAction="http://tempuri.org/GetLastStatuses" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStatusList">
+      <soap:operation soapAction="http://tempuri.org/GetStatusList" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStatusLists">
+      <soap:operation soapAction="http://tempuri.org/GetStatusLists" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="BaggageDeliveryStatusInfoServiceSoap12" type="tns:BaggageDeliveryStatusInfoServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetLastStatus">
+      <soap12:operation soapAction="http://tempuri.org/GetLastStatus" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLastStatuses">
+      <soap12:operation soapAction="http://tempuri.org/GetLastStatuses" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStatusList">
+      <soap12:operation soapAction="http://tempuri.org/GetStatusList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetStatusLists">
+      <soap12:operation soapAction="http://tempuri.org/GetStatusLists" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="BaggageDeliveryStatusInfoService">
+    <wsdl:port name="BaggageDeliveryStatusInfoServiceSoap" binding="tns:BaggageDeliveryStatusInfoServiceSoap">
+      <soap:address location="https://test.rbags.com/BDO.WebService/BaggageDeliveryStatusInfoService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="BaggageDeliveryStatusInfoServiceSoap12" binding="tns:BaggageDeliveryStatusInfoServiceSoap12">
+      <soap12:address location="https://test.rbags.com/BDO.WebService/BaggageDeliveryStatusInfoService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
