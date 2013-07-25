@@ -103,7 +103,15 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		} else {
 			System.out.println("!!!!!!!!!!!!!!! - Failed to Pre-populate Claim. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 		}
+		selenium.select("name=state", "value=GA");
+		selenium.type("name=zip", "30339");
+		selenium.click("name=save");
+		waitForPageToLoadImproved();
+		
 		goToTaskManager();
+
+		waitForPageToLoadImproved();
+		
 	}
 	
 	@Test
@@ -114,6 +122,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("Province :"));
 		verifyTrue(selenium.isTextPresent("Country Of Issue : US"));
 		goToTaskManager();
+		waitForPageToLoadImproved();
 	}
 	
 	@Test
@@ -130,6 +139,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isEditable("name=passenger[0].driversLicenseCountry"));
 		verifyEquals("US", selenium.getValue("name=passenger[0].driversLicenseCountry"));		
 		goToTaskManager();
+		waitForPageToLoadImproved();
 	}
 	
 	@Test
@@ -140,6 +150,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("Province :"));
 		verifyTrue(selenium.isTextPresent("Country Of Issue : US"));
 		goToTaskManager();
+		waitForPageToLoadImproved();
 	}
 	
 	@Test
@@ -200,6 +211,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 			verifyTrue(false);
 		}
 		goToTaskManager();
+		waitForPageToLoadImproved();
 	}
 	
 	@Test
@@ -214,7 +226,10 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		selenium.keyDown(locator, "\\13");
 		selenium.keyDown(locator, "\\13");
 		verifyEquals("1487", selenium.getValue("//input[@id='remark[0].counter']"));
+		selenium.click("name=saveButton");
+		waitForPageToLoadImproved();
 		goToTaskManager();
+		waitForPageToLoadImproved();
 	}
 	
 	@Test
