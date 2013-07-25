@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.db.issuance;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -21,7 +22,10 @@ public class IssuanceItemQuantity {
 	private long id;
 	
 	private int quantity;
-
+	
+	@Column(name="minimum_active_quantity")
+	private int minimuActiveQuantity;
+	
 	@ManyToOne
 	@JoinColumn(name = "station_id")
 	private Station station;
@@ -61,4 +65,13 @@ public class IssuanceItemQuantity {
 	public void setIssuanceItem(IssuanceItem issuanceItem) {
 		this.issuanceItem = issuanceItem;
 	}
+
+	public int getMinimuActiveQuantity() {
+		return minimuActiveQuantity;
+	}
+
+	public void setMinimuActiveQuantity(int minimuActiveQuantity) {
+		this.minimuActiveQuantity = minimuActiveQuantity;
+	}
+	
 }
