@@ -1,6 +1,5 @@
 package aero.nettracer.web.southwest.testing.actions.nt.incidents.lostdelay;
 
-import org.apache.bcel.generic.GOTO;
 import org.junit.Test;
 
 import aero.nettracer.web.utility.DefaultSeleneseTestCase;
@@ -94,11 +93,11 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	@Test
 	public void testVerifyDriversLicensePrepopulateClaim() {
 		navigateToIncident();
-		selenium.click("//td[@id='navmenucell']/div/dl/dd[11]/a/span[2]");
+		selenium.click("//td[@id='navmenucell']/div/dl/dd[10]/a/span[2]");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
-			verifyEquals("*********", selenium.getValue("name=claimant.redactedDriversLicenseNumber"));
+			verifyEquals("*********", selenium.getValue("//input[@name='claimant.redactedDriversLicenseNumber']"));
 			verifyEquals("GA", selenium.getValue("name=claimant.driversLicenseState"));
 			verifyEquals("US", selenium.getValue("name=claimant.driversLicenseCountry"));
 		} else {
@@ -204,19 +203,6 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	}
 	
 	@Test
-	public void testDisableDriversLicensePermissions() {
-		verifyTrue(setDriversLicensePermission(false, false));
-		verifyTrue(loginToNt());
-		verifyTrue(navigateToIncident());
-		verifyFalse(selenium.isElementPresent("name=passenger[0].redactedDriversLicense"));
-		verifyFalse(selenium.isElementPresent("name=passenger[0].decriptedDriversLicense"));
-		verifyFalse(selenium.isElementPresent("name=passenger[0].dlstate"));
-		verifyFalse(selenium.isElementPresent("name=passenger[0].driversLicenseProvince"));
-		verifyFalse(selenium.isElementPresent("name=passenger[0].driversLicenseCountry"));
-		goToTaskManager();
-	}
-	
-	@Test
 	public void testPressEnterInRemarksField() {
 		verifyTrue(navigateToIncident());
 		String locator = "//textarea[@id='remark[0]']";
@@ -297,8 +283,8 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		waitForPageToLoadImproved();
 		
 		selenium.select("//select[@name='companyCode']", "label=Owens Group");
-		selenium.type("//input[@name='username']", Settings.USERNAME_OGADMIN);
-		selenium.type("//input[@name='password']", Settings.PASSWORD_OGADMIN);
+		selenium.type("//div[@id='mainlogin']/form/table/tbody/tr[4]/td[2]/input", Settings.USERNAME_OGADMIN);
+		selenium.type("//div[@id='mainlogin']/form/table/tbody/tr[5]/td[2]/input", Settings.PASSWORD_OGADMIN);
 		selenium.click("//input[@id='button']");
 		waitForPageToLoadImproved();		
 		if (checkNoErrorPage()) {
@@ -368,9 +354,9 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	
 	private boolean loginToNt() {
 		boolean success = false;
-		selenium.type("//input[@name='username']", Settings.USERNAME_ADMIN);
-		selenium.type("//input[@name='password']", Settings.PASSWORD_ADMIN);
-		selenium.click("//input[@id='button']");
+		selenium.type("document.logonForm.elements[1]", Settings.USERNAME_ADMIN);
+		selenium.type("document.logonForm.elements[2]", Settings.PASSWORD_ADMIN);
+		selenium.click("document.logonForm.elements[3]");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Task Manager Home"));
