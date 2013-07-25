@@ -1,4 +1,4 @@
-package com.bagnet.nettracer.tracing.utils;
+package com.bagnet.nettracer.tracing.actions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +30,7 @@ import org.tempuri.StatusInfo;
 
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.web.StatusListDisp;
 
 @Stateless

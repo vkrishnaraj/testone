@@ -42,7 +42,7 @@ import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.forms.BDOForm;
 import com.bagnet.nettracer.tracing.history.BDOHistoryObject;
 import com.bagnet.nettracer.tracing.history.HistoryContainer;
-import com.bagnet.nettracer.tracing.utils.BagDelStatusInfoUtils;
+import com.bagnet.nettracer.tracing.actions.BagDelStatusInfoUtils;
 import com.bagnet.nettracer.tracing.utils.BDOUtils;
 import com.bagnet.nettracer.tracing.utils.DeliveryIntegrationTypeUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
