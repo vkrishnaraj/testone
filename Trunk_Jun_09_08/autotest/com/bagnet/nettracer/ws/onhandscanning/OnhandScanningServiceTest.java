@@ -28,6 +28,9 @@ import com.bagnet.nettracer.ws.core.pojo.xsd.WSItinerary;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSPassenger;
 import com.bagnet.nettracer.ws.wn.onhandscanning.CreateUpdateOnhandDocument.CreateUpdateOnhand;
+import com.bagnet.nettracer.ws.wn.onhandscanning.LookupOnhandLZDocument.LookupOnhandLZ;
+import com.bagnet.nettracer.ws.wn.onhandscanning.LookupOnhandLZResponseDocument.LookupOnhandLZResponse;
+import com.bagnet.nettracer.ws.wn.onhandscanning.LookupOnhandReturnDocument.LookupOnhandReturn;
 import com.bagnet.nettracer.ws.wn.onhandscanning.ReturnOnhandDocument.ReturnOnhand;
 import com.bagnet.nettracer.ws.wn.onhandscanning.SaveBagDropTimeDocument.SaveBagDropTime;
 import com.bagnet.nettracer.ws.wn.onhandscanning.pojo.xsd.BagDrop;
@@ -327,7 +330,7 @@ public class OnhandScanningServiceTest {
 	}
 	
 	@Test
-	public void returnOhd(){
+	public void returnOhdTest(){
 		CreateUpdateOnhandDocument doc = getBlankOhdDocuement();
 		
 		String bagtag = "WN000010";
@@ -430,6 +433,379 @@ public class OnhandScanningServiceTest {
 		assertTrue(res.getSuccess());
 		assertTrue("Closed".equals(res.getOnhand().getStatus()));
 		assertTrue("Owner Picked Up".equals(res.getOnhand().getDisposalStatus()));
+		
+	}
+	@Test
+	public void lookupOhdReturnCurrentStationNoAssociateIncidentTest(){
+		CreateUpdateOnhandDocument doc = getBlankOhdDocuement();
+		
+		String bagtag = "WN000011";
+		Station foundstation = StationBMO.getStationByCode("ACY", companycode);
+		String lookupOHD = service.lookupBagtag(bagtag, foundstation.getStation_ID());
+		if(lookupOHD != null){
+			OHD toClose = OhdBMO.getOHDByID(lookupOHD, null);
+			toClose.getStatus().setStatus_ID(4);
+			HibernateUtils.save(toClose);
+		}
+		
+		WSOHD ohd = doc.getCreateUpdateOnhand().addNewOnhand();
+		ohd.setBagtagnum(bagtag);
+		ohd.setColor("BK");
+		ohd.setType("21");
+		ohd.setFirstname("Bill");
+		ohd.setMiddlename("Billy");
+		ohd.setLastname("Nettracer");
+		ohd.setRecordLocator("nttest");
+		ohd.setFoundAtStation("ACY");
+		ohd.setHoldingStation("ACY");
+		
+		
+		WSItinerary itin = ohd.addNewItineraries();
+		itin.setLegfrom("ATL");
+		itin.setLegto("LAX");
+		itin.setAirline("WN");
+		itin.setFlightnum("123");
+		itin.setDepartdate("2013-07-16T08:47:35.000-05:00");
+		itin.setArrivedate("2013-07-16T08:47:35.000-05:00");
+//		itin.setSchdeparttime("2013-07-16T08:47:35.000-05:00");
+//		itin.setScharrivetime("2013-07-16T08:47:35.000-05:00");
+		
+		WSPassenger pax = ohd.addNewPassengers();
+		pax.setAddress1("2675 Paces Ferry Rd");
+		pax.setAddress2("Suite 240");
+		pax.setCity("Atlanta");
+		pax.setStateID("GA");//TODO state validation
+		pax.setZip("30339");
+		pax.setFirstname("John");
+		pax.setLastname("Doe");
+		pax.setHomephone("555-555-5555");
+		
+		CreateUpdateOnhandResponseDocument response = service.createUpdateOnhand(doc);
+		
+		ServiceResponse ret = response.getCreateUpdateOnhandResponse().getReturn();
+		if(ret.getErrorArray() != null){
+			for(String error:ret.getErrorArray()){
+				System.out.println(error);
+			}
+		}
+		assertTrue(ret.getSuccess());
+		assertTrue(OnhandScanningServiceImplementation.STATUS_CREATE.equals(ret.getCreateUpdateIndicator()));
+		WSOHD retohd = ret.getOnhand();
+		assertTrue(bagtag.equals(retohd.getBagtagnum()));
+		assertTrue("BK".equals(retohd.getColor()));
+		assertTrue("21".equals(retohd.getType()));
+		assertTrue("Bill".equals(retohd.getFirstname()));
+		assertTrue("Billy".equals(retohd.getMiddlename()));
+		assertTrue("Nettracer".equals(retohd.getLastname()));
+		assertTrue("nttest".equals(retohd.getRecordLocator()));
+		assertTrue("X".equals(retohd.getXdescelement1()));
+		assertTrue("X".equals(retohd.getXdescelement2()));
+		assertTrue("X".equals(retohd.getXdescelement3()));
+		
+		WSItinerary retitin = retohd.getItinerariesArray(0);
+		assertTrue("ATL".equals(retitin.getLegfrom()));
+		assertTrue("LAX".equals(retitin.getLegto()));
+		assertTrue("WN".equals(retitin.getAirline()));
+		assertTrue("123".equals(retitin.getFlightnum()));
+//		System.out.println(retitin.getSchdeparttime());
+//		System.out.println(retitin.getScharrivetime());
+		assertTrue("2013-07-16".equals(retitin.getDepartdate()));
+		assertTrue("2013-07-16".equals(retitin.getArrivedate()));
+		
+		WSPassenger retpax = retohd.getPassengersArray(0);
+		assertTrue("2675 Paces Ferry Rd".equals(retpax.getAddress1()));
+		assertTrue("Suite 240".equals(retpax.getAddress2()));
+		assertTrue("Atlanta".equals(retpax.getCity()));
+		assertTrue("GA".equals(retpax.getStateID()));
+		assertTrue("30339".equals(retpax.getZip()));
+		assertTrue("John".equals(retpax.getFirstname()));
+		assertTrue("Doe".equals(retpax.getLastname()));
+		assertTrue("555-555-5555".equals(retpax.getHomephone()));
+		
+		OHD updateOhd = OhdBMO.getOHDByID(retohd.getOHDID(), null);
+		assertTrue(updateOhd.getCreationMethod() == TracingConstants.FILE_CREATION_METHOD_WEBSERVICE);
+		
+		LookupOnhandReturnDocument requestdoc = LookupOnhandReturnDocument.Factory.newInstance();
+		LookupOnhandReturn retohddoc = requestdoc.addNewLookupOnhandReturn();
+		Authentication ohdauth = retohddoc.addNewAuthentication();
+		ohdauth.setSystemName(username);
+		ohdauth.setSystemPassword(password);
+		ohdauth.setAirlineCode(companycode);
+		retohddoc.setFoundStation("ACY");
+		retohddoc.setTagNumber(bagtag);
+		
+		LookupOnhandReturnResponseDocument responsedoc = service.lookupOnhandReturn(requestdoc);
+		ServiceResponse res = responsedoc.getLookupOnhandReturnResponse().getReturn();
+		assertTrue(res.getSuccess());
+		assertTrue(OnhandScanningServiceImplementation.STATUS_RETURN_ALLOWED.equals(res.getReturnStatus()));	
+		
+		//close ohd
+		OHD toClose = OhdBMO.getOHDByID(retohd.getOHDID(), null);
+		toClose.getStatus().setStatus_ID(4);
+		HibernateUtils.save(toClose);
+	}
+	
+	@Test
+	public void lookupOhdReturnCurrentStationAssociateIncidentTest(){
+		CreateUpdateOnhandDocument doc = getBlankOhdDocuement();
+		
+		String bagtag = "WN000012";
+		Station foundstation = StationBMO.getStationByCode("ACY", companycode);
+		String lookupOHD = service.lookupBagtag(bagtag, foundstation.getStation_ID());
+		if(lookupOHD != null){
+			OHD toClose = OhdBMO.getOHDByID(lookupOHD, null);
+			toClose.getStatus().setStatus_ID(4);
+			HibernateUtils.save(toClose);
+		}
+		
+		WSOHD ohd = doc.getCreateUpdateOnhand().addNewOnhand();
+		ohd.setBagtagnum(bagtag);
+		ohd.setColor("BK");
+		ohd.setType("21");
+		ohd.setFirstname("Bill");
+		ohd.setMiddlename("Billy");
+		ohd.setLastname("Nettracer");
+		ohd.setRecordLocator("nttest");
+		ohd.setFoundAtStation("ACY");
+		ohd.setHoldingStation("ACY");
+		
+		
+		WSItinerary itin = ohd.addNewItineraries();
+		itin.setLegfrom("ATL");
+		itin.setLegto("LAX");
+		itin.setAirline("WN");
+		itin.setFlightnum("123");
+		itin.setDepartdate("2013-07-16T08:47:35.000-05:00");
+		itin.setArrivedate("2013-07-16T08:47:35.000-05:00");
+//		itin.setSchdeparttime("2013-07-16T08:47:35.000-05:00");
+//		itin.setScharrivetime("2013-07-16T08:47:35.000-05:00");
+		
+		WSPassenger pax = ohd.addNewPassengers();
+		pax.setAddress1("2675 Paces Ferry Rd");
+		pax.setAddress2("Suite 240");
+		pax.setCity("Atlanta");
+		pax.setStateID("GA");//TODO state validation
+		pax.setZip("30339");
+		pax.setFirstname("John");
+		pax.setLastname("Doe");
+		pax.setHomephone("555-555-5555");
+		
+		CreateUpdateOnhandResponseDocument response = service.createUpdateOnhand(doc);
+		
+		ServiceResponse ret = response.getCreateUpdateOnhandResponse().getReturn();
+		if(ret.getErrorArray() != null){
+			for(String error:ret.getErrorArray()){
+				System.out.println(error);
+			}
+		}
+		assertTrue(ret.getSuccess());
+		assertTrue(OnhandScanningServiceImplementation.STATUS_CREATE.equals(ret.getCreateUpdateIndicator()));
+		WSOHD retohd = ret.getOnhand();
+		assertTrue(bagtag.equals(retohd.getBagtagnum()));
+		assertTrue("BK".equals(retohd.getColor()));
+		assertTrue("21".equals(retohd.getType()));
+		assertTrue("Bill".equals(retohd.getFirstname()));
+		assertTrue("Billy".equals(retohd.getMiddlename()));
+		assertTrue("Nettracer".equals(retohd.getLastname()));
+		assertTrue("nttest".equals(retohd.getRecordLocator()));
+		assertTrue("X".equals(retohd.getXdescelement1()));
+		assertTrue("X".equals(retohd.getXdescelement2()));
+		assertTrue("X".equals(retohd.getXdescelement3()));
+		
+		WSItinerary retitin = retohd.getItinerariesArray(0);
+		assertTrue("ATL".equals(retitin.getLegfrom()));
+		assertTrue("LAX".equals(retitin.getLegto()));
+		assertTrue("WN".equals(retitin.getAirline()));
+		assertTrue("123".equals(retitin.getFlightnum()));
+//		System.out.println(retitin.getSchdeparttime());
+//		System.out.println(retitin.getScharrivetime());
+		assertTrue("2013-07-16".equals(retitin.getDepartdate()));
+		assertTrue("2013-07-16".equals(retitin.getArrivedate()));
+		
+		WSPassenger retpax = retohd.getPassengersArray(0);
+		assertTrue("2675 Paces Ferry Rd".equals(retpax.getAddress1()));
+		assertTrue("Suite 240".equals(retpax.getAddress2()));
+		assertTrue("Atlanta".equals(retpax.getCity()));
+		assertTrue("GA".equals(retpax.getStateID()));
+		assertTrue("30339".equals(retpax.getZip()));
+		assertTrue("John".equals(retpax.getFirstname()));
+		assertTrue("Doe".equals(retpax.getLastname()));
+		assertTrue("555-555-5555".equals(retpax.getHomephone()));
+		
+		OHD updateOhd = OhdBMO.getOHDByID(retohd.getOHDID(), null);
+		assertTrue(updateOhd.getCreationMethod() == TracingConstants.FILE_CREATION_METHOD_WEBSERVICE);
+		updateOhd.setMatched_incident("ACYWN00000001");
+		HibernateUtils.save(updateOhd);
+		
+		LookupOnhandReturnDocument requestdoc = LookupOnhandReturnDocument.Factory.newInstance();
+		LookupOnhandReturn retohddoc = requestdoc.addNewLookupOnhandReturn();
+		Authentication ohdauth = retohddoc.addNewAuthentication();
+		ohdauth.setSystemName(username);
+		ohdauth.setSystemPassword(password);
+		ohdauth.setAirlineCode(companycode);
+		retohddoc.setFoundStation("ACY");
+		retohddoc.setTagNumber(bagtag);
+		
+		LookupOnhandReturnResponseDocument responsedoc = service.lookupOnhandReturn(requestdoc);
+		ServiceResponse res = responsedoc.getLookupOnhandReturnResponse().getReturn();
+		assertTrue(res.getSuccess());	
+		assertTrue(OnhandScanningServiceImplementation.STATUS_RETURN_ASSOCIATED_REPORT.equals(res.getReturnStatus()));
+		assertTrue("ACYWN00000001".equals(res.getAssoicatedIncidentId()));
+		
+		//close ohd
+		OHD toClose = OhdBMO.getOHDByID(retohd.getOHDID(), null);
+		toClose.getStatus().setStatus_ID(4);
+		HibernateUtils.save(toClose);
+	}
+	
+	@Test
+	public void lookupOhdReturnNoOhdTest(){
+		
+		String bagtag = "WN000013";
+		Station foundstation = StationBMO.getStationByCode("ACY", companycode);
+		String lookupOHD = service.lookupBagtag(bagtag, foundstation.getStation_ID());
+		if(lookupOHD != null){
+			OHD toClose = OhdBMO.getOHDByID(lookupOHD, null);
+			toClose.getStatus().setStatus_ID(4);
+			HibernateUtils.save(toClose);
+		}
+		
+		LookupOnhandReturnDocument requestdoc = LookupOnhandReturnDocument.Factory.newInstance();
+		LookupOnhandReturn retohddoc = requestdoc.addNewLookupOnhandReturn();
+		Authentication ohdauth = retohddoc.addNewAuthentication();
+		ohdauth.setSystemName(username);
+		ohdauth.setSystemPassword(password);
+		ohdauth.setAirlineCode(companycode);
+		retohddoc.setFoundStation("ACY");
+		retohddoc.setTagNumber(bagtag);
+		
+		LookupOnhandReturnResponseDocument responsedoc = service.lookupOnhandReturn(requestdoc);
+		ServiceResponse res = responsedoc.getLookupOnhandReturnResponse().getReturn();
+		assertTrue(res.getSuccess());
+		assertTrue(OnhandScanningServiceImplementation.STATUS_RETURN_NO_OHD.equals(res.getReturnStatus()));	
+	}
+	
+	@Test
+	public void lookupOhdLZTest(){
+		CreateUpdateOnhandDocument doc = getBlankOhdDocuement();
+		
+		String bagtag = "WN000009";
+		Station foundstation = StationBMO.getStationByCode("ACY", companycode);
+		String lookupOHD = service.lookupBagtag(bagtag, foundstation.getStation_ID());
+		if(lookupOHD != null){
+			OHD toClose = OhdBMO.getOHDByID(lookupOHD, null);
+			toClose.getStatus().setStatus_ID(4);
+			HibernateUtils.save(toClose);
+		}
+		
+		WSOHD ohd = doc.getCreateUpdateOnhand().addNewOnhand();
+		ohd.setBagtagnum(bagtag);
+		ohd.setColor("BK");
+		ohd.setType("21");
+		ohd.setFirstname("Bill");
+		ohd.setMiddlename("Billy");
+		ohd.setLastname("Nettracer");
+		ohd.setRecordLocator("nttest");
+		ohd.setFoundAtStation("ACY");
+		ohd.setHoldingStation("ACY");
+		
+		
+		WSItinerary itin = ohd.addNewItineraries();
+		itin.setLegfrom("ATL");
+		itin.setLegto("LAX");
+		itin.setAirline("WN");
+		itin.setFlightnum("123");
+		itin.setDepartdate("2013-07-16T08:47:35.000-05:00");
+		itin.setArrivedate("2013-07-16T08:47:35.000-05:00");
+//		itin.setSchdeparttime("2013-07-16T08:47:35.000-05:00");
+//		itin.setScharrivetime("2013-07-16T08:47:35.000-05:00");
+		
+		WSPassenger pax = ohd.addNewPassengers();
+		pax.setAddress1("2675 Paces Ferry Rd");
+		pax.setAddress2("Suite 240");
+		pax.setCity("Atlanta");
+		pax.setStateID("GA");//TODO state validation
+		pax.setZip("30339");
+		pax.setFirstname("John");
+		pax.setLastname("Doe");
+		pax.setHomephone("555-555-5555");
+		
+		CreateUpdateOnhandResponseDocument response = service.createUpdateOnhand(doc);
+		
+		ServiceResponse ret = response.getCreateUpdateOnhandResponse().getReturn();
+		if(ret.getErrorArray() != null){
+			for(String error:ret.getErrorArray()){
+				System.out.println(error);
+			}
+		}
+		assertTrue(ret.getSuccess());
+		assertTrue(OnhandScanningServiceImplementation.STATUS_CREATE.equals(ret.getCreateUpdateIndicator()));
+		WSOHD retohd = ret.getOnhand();
+		assertTrue(bagtag.equals(retohd.getBagtagnum()));
+		assertTrue("BK".equals(retohd.getColor()));
+		assertTrue("21".equals(retohd.getType()));
+		assertTrue("Bill".equals(retohd.getFirstname()));
+		assertTrue("Billy".equals(retohd.getMiddlename()));
+		assertTrue("Nettracer".equals(retohd.getLastname()));
+		assertTrue("nttest".equals(retohd.getRecordLocator()));
+		assertTrue("X".equals(retohd.getXdescelement1()));
+		assertTrue("X".equals(retohd.getXdescelement2()));
+		assertTrue("X".equals(retohd.getXdescelement3()));
+		
+		WSItinerary retitin = retohd.getItinerariesArray(0);
+		assertTrue("ATL".equals(retitin.getLegfrom()));
+		assertTrue("LAX".equals(retitin.getLegto()));
+		assertTrue("WN".equals(retitin.getAirline()));
+		assertTrue("123".equals(retitin.getFlightnum()));
+//		System.out.println(retitin.getSchdeparttime());
+//		System.out.println(retitin.getScharrivetime());
+		assertTrue("2013-07-16".equals(retitin.getDepartdate()));
+		assertTrue("2013-07-16".equals(retitin.getArrivedate()));
+		
+		WSPassenger retpax = retohd.getPassengersArray(0);
+		assertTrue("2675 Paces Ferry Rd".equals(retpax.getAddress1()));
+		assertTrue("Suite 240".equals(retpax.getAddress2()));
+		assertTrue("Atlanta".equals(retpax.getCity()));
+		assertTrue("GA".equals(retpax.getStateID()));
+		assertTrue("30339".equals(retpax.getZip()));
+		assertTrue("John".equals(retpax.getFirstname()));
+		assertTrue("Doe".equals(retpax.getLastname()));
+		assertTrue("555-555-5555".equals(retpax.getHomephone()));
+		
+		OHD updateOhd = OhdBMO.getOHDByID(retohd.getOHDID(), null);
+		assertTrue(updateOhd.getCreationMethod() == TracingConstants.FILE_CREATION_METHOD_WEBSERVICE);
+		
+		OHD toRecieve = OhdBMO.getOHDByID(retohd.getOHDID(), null);
+		Agent agent = AdminUtils.getAgentBasedOnUsername(username, companycode);
+		assertTrue(forwardOHD(agent,toRecieve));
+		
+		toRecieve = OhdBMO.getOHDByID(retohd.getOHDID(), null);
+		
+		LookupOnhandLZDocument lzdoc = LookupOnhandLZDocument.Factory.newInstance();
+		LookupOnhandLZ lzreq = lzdoc.addNewLookupOnhandLZ();
+		lzreq.setTagNumber(bagtag);
+		lzreq.setFoundStation("FLL");
+		Authentication lzauth = lzreq.addNewAuthentication();
+		lzauth.setSystemName(username);
+		lzauth.setSystemPassword(password);
+		lzauth.setAirlineCode(companycode);
+
+		
+		LookupOnhandLZResponseDocument lzresponse = service.lookupOnhandLZ(lzdoc);
+		LookupOnhandLZResponse lzret = lzresponse.getLookupOnhandLZResponse();
+		if(lzret.getReturn().getErrorArray() != null){
+			for(String error:lzret.getReturn().getErrorArray()){
+				System.out.println(error);
+			}
+		}
+		assertTrue(lzret.getReturn().getSuccess());
+		assertTrue(OnhandScanningServiceImplementation.STATUS_RETURN_LZ_UPDATE_REQUIRED.equals(lzret.getReturn().getReturnStatus()));
+
+
+		//closing ohd
+		OHD toClose = OhdBMO.getOHDByID(retohd.getOHDID(), null);
+		toClose.getStatus().setStatus_ID(4);
+		HibernateUtils.save(toClose);
 		
 	}
 }

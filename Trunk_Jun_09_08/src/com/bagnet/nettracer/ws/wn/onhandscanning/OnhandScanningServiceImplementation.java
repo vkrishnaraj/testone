@@ -31,6 +31,8 @@ import com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD;
 import com.bagnet.nettracer.ws.wn.onhandscanning.CreateUpdateOnhandResponseDocument.CreateUpdateOnhandResponse;
 import com.bagnet.nettracer.ws.wn.onhandscanning.EchoResponseDocument.EchoResponse;
 import com.bagnet.nettracer.ws.wn.onhandscanning.IsValidUserResponseDocument.IsValidUserResponse;
+import com.bagnet.nettracer.ws.wn.onhandscanning.LookupOnhandLZResponseDocument.LookupOnhandLZResponse;
+import com.bagnet.nettracer.ws.wn.onhandscanning.LookupOnhandReturnResponseDocument.LookupOnhandReturnResponse;
 import com.bagnet.nettracer.ws.wn.onhandscanning.ReturnOnhandResponseDocument.ReturnOnhandResponse;
 import com.bagnet.nettracer.ws.wn.onhandscanning.SaveBagDropTimeResponseDocument.SaveBagDropTimeResponse;
 
@@ -40,6 +42,12 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 	
 	public static String STATUS_CREATE = "CREATE";
 	public static String STATUS_UPDATE = "UPDATE";
+	public static String STATUS_RETURN_ALLOWED = "Return allowed";
+	public static String STATUS_RETURN_ASSOCIATED_REPORT = "Cannot return, associated report";
+	public static String STATUS_RETURN_NO_OHD = "Cannot return, does not exist";
+	public static String STATUS_RETURN_LZ_UPDATE_REQUIRED = "LZ Update Required";
+	public static String STATUS_RETURN_UPDATE_SUCCESS = "Successful Update";
+	public static String STATUS_RETURN_CREATE_OHD = "Create OHD";
 	
 	
 	/**
@@ -427,10 +435,146 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 
 	public com.bagnet.nettracer.ws.wn.onhandscanning.LookupOnhandLZResponseDocument lookupOnhandLZ(com.bagnet.nettracer.ws.wn.onhandscanning.LookupOnhandLZDocument lookupOnhandLZ)
 	{
-		//TODO : fill this with the necessary business logic
-		throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#lookupOnhandLZ");
+		logger.info(lookupOnhandLZ);
+		LookupOnhandLZResponseDocument resDoc = LookupOnhandLZResponseDocument.Factory.newInstance();
+		LookupOnhandLZResponse res = resDoc.addNewLookupOnhandLZResponse();
+		com.bagnet.nettracer.ws.wn.onhandscanning.pojo.xsd.ServiceResponse serviceResponse = res.addNewReturn();
+
+		if(lookupOnhandLZ == null || lookupOnhandLZ.getLookupOnhandLZ() == null){
+			serviceResponse.setSuccess(false);
+			serviceResponse.setValidUser(false);
+			serviceResponse.addError("lookupOnhandReturn request empty");
+			logger.info(resDoc);
+			return resDoc;
+		}
+
+		Agent agent = null;
+		com.bagnet.nettracer.ws.wn.pojo.xsd.Authentication auth = lookupOnhandLZ.getLookupOnhandLZ().getAuthentication();
+		try {
+			agent = getAgent(auth);
+			serviceResponse.setValidUser(true);
+		} catch (Exception e) {
+			serviceResponse.setSuccess(false);
+			serviceResponse.setValidUser(false);
+			serviceResponse.addError(e.getMessage());
+			logger.info(resDoc);
+			return resDoc;
+		}
+		serviceResponse.setValidUser(true);
+		
+		Station foundstation = StationBMO.getStationByCode(lookupOnhandLZ.getLookupOnhandLZ().getFoundStation(), agent.getCompanycode_ID());
+		if(foundstation == null){
+			serviceResponse.setSuccess(false);
+			serviceResponse.addError("Please provide a valid foundStation code");
+			logger.info(resDoc);
+			return resDoc;
+		}
+		
+		
+		WSCoreOHDUtil util = new WSCoreOHDUtil();
+		OHD incomingOHD = OHDUtils.getBagTagNumberIncomingToStation(lookupOnhandLZ.getLookupOnhandLZ().getTagNumber(),foundstation);
+		
+		if(incomingOHD != null){
+			//receive OHD
+			util.properlyHandleForwardedOnHand(incomingOHD, agent, foundstation);
+			try{
+				OhdBMO obmo = new OhdBMO();
+				serviceResponse.setOnhand(util.OHDtoWS_Mapping(obmo.findOHDByID(incomingOHD.getOHD_ID())));
+			} catch (Exception e) {
+				e.printStackTrace();
+				serviceResponse.setSuccess(false);
+				serviceResponse.addError("Failed to load OHD, please contact NetTracer");
+				logger.info(resDoc);
+				return resDoc;
+			}
+			serviceResponse.setSuccess(true);
+			serviceResponse.setCreateUpdateIndicator(STATUS_UPDATE);
+			serviceResponse.setReturnStatus(STATUS_RETURN_LZ_UPDATE_REQUIRED);
+			logger.info(resDoc);
+			return resDoc;
+		}
+
+		OHD ohd = null;
+		OhdBMO obmo = new OhdBMO();
+		String ohdId = lzDeleteLast5Days(lookupOnhandLZ.getLookupOnhandLZ().getTagNumber());
+		if(ohdId != null){
+			ohd = obmo.findOHDByID(ohdId);
+			//TODO loupas - to be built in a later iteration
+		} else {
+			ohdId = lzDamagedList(lookupOnhandLZ.getLookupOnhandLZ().getTagNumber());
+			if(ohdId != null){
+				ohd = obmo.findOHDByID(ohdId);
+				//TODO loupas - to be built in a later iteration
+			} else {
+				ohdId = lzDamagedBagBSO(lookupOnhandLZ.getLookupOnhandLZ().getTagNumber());
+				if(ohdId != null){
+					ohd = obmo.findOHDByID(ohdId);
+					//TODO loupas - to be built in a later iteration
+				} else {
+					ohdId = lzTBI(lookupOnhandLZ.getLookupOnhandLZ().getTagNumber());
+					if(ohdId != null){
+						ohd = obmo.findOHDByID(ohdId);
+						//TODO loupas - to be built in a later iteration
+					} else {
+						ohdId = lz45Days(lookupOnhandLZ.getLookupOnhandLZ().getTagNumber());
+						if(ohdId != null){
+							ohd = obmo.findOHDByID(ohdId);
+							//TODO loupas - to be built in a later iteration
+						}
+					}
+				}
+			}
+		}
+		
+		if(ohd != null){
+			obmo.insertOHD(ohd, ohd.getAgent());
+			try{
+				serviceResponse.setOnhand(util.OHDtoWS_Mapping(incomingOHD));
+			} catch (Exception e) {
+				e.printStackTrace();
+				serviceResponse.setSuccess(false);
+				serviceResponse.addError("Failed to load OHD, please contact NetTracer");
+				logger.info(resDoc);
+				return resDoc;
+			}
+			serviceResponse.setSuccess(true);
+			serviceResponse.setCreateUpdateIndicator(STATUS_UPDATE);
+			serviceResponse.setReturnStatus(STATUS_RETURN_UPDATE_SUCCESS);
+			logger.info(resDoc);
+			return resDoc;
+		} else {
+			serviceResponse.setSuccess(true);
+			serviceResponse.setReturnStatus(STATUS_RETURN_CREATE_OHD);
+			logger.info(resDoc);
+			return resDoc;
+		}
 	}
 
+	private String lzDeleteLast5Days(String bagtag){
+		//TODO loupas - to be built in a later iteration
+		return null;
+	}
+	
+	private String lzDamagedList(String bagtag){
+		//TODO loupas - to be built in a later iteration
+		return null;
+	}
+	
+	private String lzDamagedBagBSO(String bagtag){
+		//TODO loupas - to be built in a later iteration
+		return null;
+	}
+	
+	private String lzTBI(String bagtag){
+		//TODO loupas - to be built in a later iteration
+		return null;
+	}
+	
+	private String lz45Days(String bagtag){
+		//TODO loupas - to be built in a later iteration
+		return null;
+	}
+	
 	/**
 	 * Auto generated method signature
 	 * 
@@ -439,8 +583,85 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 
 	public com.bagnet.nettracer.ws.wn.onhandscanning.LookupOnhandReturnResponseDocument lookupOnhandReturn(com.bagnet.nettracer.ws.wn.onhandscanning.LookupOnhandReturnDocument lookupOnhandReturn)
 	{
-		//TODO : fill this with the necessary business logic
-		throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#lookupOnhandReturn");
+		
+		logger.info(lookupOnhandReturn);
+		LookupOnhandReturnResponseDocument resDoc = LookupOnhandReturnResponseDocument.Factory.newInstance();
+		LookupOnhandReturnResponse res = resDoc.addNewLookupOnhandReturnResponse();
+		com.bagnet.nettracer.ws.wn.onhandscanning.pojo.xsd.ServiceResponse serviceResponse = res.addNewReturn();
+
+		if(lookupOnhandReturn == null || lookupOnhandReturn.getLookupOnhandReturn() == null){
+			serviceResponse.setSuccess(false);
+			serviceResponse.setValidUser(false);
+			serviceResponse.addError("lookupOnhandReturn request empty");
+			logger.info(resDoc);
+			return resDoc;
+		}
+
+		Agent agent = null;
+		com.bagnet.nettracer.ws.wn.pojo.xsd.Authentication auth = lookupOnhandReturn.getLookupOnhandReturn().getAuthentication();
+		try {
+			agent = getAgent(auth);
+			serviceResponse.setValidUser(true);
+		} catch (Exception e) {
+			serviceResponse.setSuccess(false);
+			serviceResponse.setValidUser(false);
+			serviceResponse.addError(e.getMessage());
+			logger.info(resDoc);
+			return resDoc;
+		}
+		serviceResponse.setValidUser(true);
+		
+		Station foundstation = StationBMO.getStationByCode(lookupOnhandReturn.getLookupOnhandReturn().getFoundStation(), agent.getCompanycode_ID());
+		if(foundstation == null){
+			serviceResponse.setSuccess(false);
+			serviceResponse.addError("Please provide a valid foundStation code");
+			logger.info(resDoc);
+			return resDoc;
+		}
+		
+		String ohdId = lookupBagtag(lookupOnhandReturn.getLookupOnhandReturn().getTagNumber(), foundstation.getStation_ID());
+		OHD incomingOHD = OHDUtils.getBagTagNumberIncomingToStation(lookupOnhandReturn.getLookupOnhandReturn().getTagNumber(),foundstation);
+		WSCoreOHDUtil util = new WSCoreOHDUtil();
+		OHD ohd = null;
+		if(ohdId != null){
+			//OHD in current station
+			OhdBMO obmo = new OhdBMO();
+			ohd = obmo.findOHDByID(ohdId);
+		} else if (incomingOHD != null){
+			//Incoming OHD, receive
+			util.properlyHandleForwardedOnHand(incomingOHD, agent, foundstation);
+			OhdBMO obmo = new OhdBMO();
+			ohd = obmo.findOHDByID(incomingOHD.getOHD_ID());
+		}
+		
+		if(ohd != null){
+			try{
+				serviceResponse.setOnhand(util.OHDtoWS_Mapping(ohd));
+			} catch (Exception e) {
+				e.printStackTrace();
+				serviceResponse.setSuccess(false);
+				serviceResponse.addError("Failed to load OHD, please contact NetTracer");
+				logger.info(resDoc);
+				return resDoc;
+			}
+			if(ohd.getMatched_incident() != null && !ohd.getMatched_incident().isEmpty()){
+				serviceResponse.setAssoicatedIncidentId(ohd.getMatched_incident());
+				serviceResponse.setSuccess(true);
+				serviceResponse.setReturnStatus(STATUS_RETURN_ASSOCIATED_REPORT);
+				logger.info(resDoc);
+				return resDoc;
+			} else {
+				serviceResponse.setSuccess(true);
+				serviceResponse.setReturnStatus(STATUS_RETURN_ALLOWED);
+				logger.info(resDoc);
+				return resDoc;
+			}
+		} else {
+			serviceResponse.setSuccess(true);
+			serviceResponse.setReturnStatus(STATUS_RETURN_NO_OHD);
+			logger.info(resDoc);
+			return resDoc;
+		}
 	}
 
 

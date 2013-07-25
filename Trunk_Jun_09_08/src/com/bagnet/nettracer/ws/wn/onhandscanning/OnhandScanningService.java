@@ -19,11 +19,11 @@ public class OnhandScanningService {
 		return null;
 	}
 	
-	public ServiceResponse lookupOnhandLZ(Authentication authentication, WS_OHD onhand){
+	public ServiceResponse lookupOnhandLZ(Authentication authentication, String tagNumber, String foundStation){
 		return null;
 	}
 	
-	public ServiceResponse lookupOnhandReturn(Authentication authentication, String tagNumber){
+	public ServiceResponse lookupOnhandReturn(Authentication authentication, String tagNumber, String foundStation){
 		return null;
 	}
 	
