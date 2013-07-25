@@ -159,7 +159,7 @@ public class SERV implements BDOIntegration {
 			
 			/********* HANDLING THE RESPONSE ************/
 			logger.info(doc);
-			BDOAddResponseDocument resDoc = stub.BDO_Add(doc);
+			BDOAddResponseDocument resDoc = stub.bDO_Add(doc);
 			logger.info(resDoc);
 			int orderId = resDoc.getBDOAddResponse().getBDOAddResult().getOrderID();
 			

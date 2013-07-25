@@ -137,7 +137,7 @@ public class Rynns implements BDOIntegration {
 			
 			
 			/********* HANDLING THE RESPONSE ************/
-			BDOAddResponseDocument resDoc = stub.BDO_Add(doc);
+			BDOAddResponseDocument resDoc = stub.bDO_Add(doc);
 			
 			int orderId = resDoc.getBDOAddResponse().getBDOAddResult().getOrderID();
 			
