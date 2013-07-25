@@ -9,6 +9,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 import aero.nettracer.web.defaul.testing.actions.nt.core.Def_Logout;
 import aero.nettracer.web.utility.SeleniumTestBrowserDefault;
+import aero.nettracer.web.utility.Settings;
 import aero.nettracer.web.southwest.testing.actions.nt.core.WN_Login;
 import aero.nettracer.web.southwest.testing.actions.nt.incidents.lostdelay.WN_CreateLD_VerifyRequiredFields;
 
@@ -21,7 +22,7 @@ public class TestSouthwest {
 	
 	@BeforeClass
 	public static void oneTimeSetUp() {
-		SeleniumTestBrowserDefault.initBrowser();
+		SeleniumTestBrowserDefault.initBrowser(Settings.PORT3);
 	}
 	
 	@AfterClass
