@@ -372,7 +372,7 @@
 	              :
 	            </td>
 	            <td>
-	              <html:text styleClass="textfield" name="companyForm" property="issuance_edit_last_x_days" size="4" maxlength="4" />
+	              <html:text styleClass="textfield" name="companyForm" property="issuanceitemxdaysback" size="4" maxlength="4" />
 	            </td>
             </tr>
 	          
