@@ -2413,13 +2413,13 @@
 
 	<!-- CRON TARGETS -->
 	<target name="build-cron-testing-all">
-		<!--<antcall target="build-cron-testing-alaska"/>
+		<antcall target="build-cron-testing-alaska"/>
 		<antcall target="build-cron-testing-delta"/>
 		<antcall target="build-cron-testing-american"/>
 		<antcall target="build-cron-testing-frontier"/>
 		<antcall target="build-cron-testing-southwest"/>
 		<antcall target="build-cron-testing-united"/>
-		<antcall target="build-cron-testing-virgin"/>-->
+		<antcall target="build-cron-testing-virgin"/>
 		<antcall target="build-cron-testing-avis"/>
 		<antcall target="build-cron-testing-westjet"/>
 		<antcall target="build-cron-testing-jetblue"/>
@@ -2432,13 +2432,13 @@
 				
 	</target>
 	<target name="build-cron-training-all">
-		<!--<antcall target="build-cron-training-alaska"/>
+		<antcall target="build-cron-training-alaska"/>
 		<antcall target="build-cron-training-delta"/>
 		<antcall target="build-cron-training-american"/>
 		<antcall target="build-cron-training-frontier"/>
 		<antcall target="build-cron-training-southwest"/>
 		<antcall target="build-cron-training-united"/>
-		<antcall target="build-cron-training-virgin"/>-->
+		<antcall target="build-cron-training-virgin"/>
 		<antcall target="build-cron-training-avis"/>
 		<antcall target="build-cron-training-westjet"/>
 		<antcall target="build-cron-training-jetblue"/>
@@ -2450,13 +2450,13 @@
 		<antcall target="build-cron-training-flyafrica"/>
 	</target>
 	<target name="build-cron-production-all">
-		<!--<antcall target="build-cron-production-alaska"/>
+		<antcall target="build-cron-production-alaska"/>
 		<antcall target="build-cron-production-delta"/>
 		<antcall target="build-cron-production-american"/>
 		<antcall target="build-cron-production-frontier"/>
 		<antcall target="build-cron-production-southwest"/>
 		<antcall target="build-cron-production-united"/>
-		<antcall target="build-cron-production-virgin"/>-->
+		<antcall target="build-cron-production-virgin"/>
 		<antcall target="build-cron-production-avis"/>
 		<antcall target="build-cron-production-westjet"/>
 		<antcall target="build-cron-production-jetblue"/>
@@ -2468,13 +2468,13 @@
 		<antcall target="build-cron-production-airtran"/>
 	</target>
 	<target name="build-cron-hudson-all">
-		<!--<antcall target="build-cron-hudson-alaska"/>
+		<antcall target="build-cron-hudson-alaska"/>
 		<antcall target="build-cron-hudson-delta"/>
 		<antcall target="build-cron-hudson-american"/>
 		<antcall target="build-cron-hudson-frontier"/>
 		<antcall target="build-cron-hudson-southwest"/>
 		<antcall target="build-cron-hudson-united"/>
-		<antcall target="build-cron-hudson-virgin"/>-->
+		<antcall target="build-cron-hudson-virgin"/>
 		<antcall target="build-cron-hudson-avis"/>
 		<antcall target="build-cron-hudson-azul"/>
 		<antcall target="build-cron-hudson-jetblue"/>
@@ -2548,7 +2548,7 @@
 	
 	<!-- END AVIS CRON TARGETS -->
 	
-	<!-- ALASKA CRON TARGETS 
+	<!-- ALASKA CRON TARGETS -->
 
 		<target name="build-cron-local-alaska">
 			<property name="staging.project" value="cron" />
@@ -2605,9 +2605,9 @@
 			<antcall target="cron-service" />
 		</target>
 		
-		 END ALASKA CRON TARGETS -->
+	<!--  END ALASKA CRON TARGETS -->
 	
-	<!-- DELTA CRON TARGETS 
+	<!-- DELTA CRON TARGETS -->
 
 			<target name="build-cron-local-delta">
 				<property name="staging.project" value="cron" />
@@ -2664,9 +2664,9 @@
 				<antcall target="cron-service" />
 			</target>
 			
-		 END DELTA CRON TARGETS -->
+	<!--  END DELTA CRON TARGETS -->
 
-	<!-- AMERICAN CRON TARGETS 
+	<!-- AMERICAN CRON TARGETS -->
 
 			<target name="build-cron-local-american">
 				<property name="staging.project" value="cron" />
@@ -2713,9 +2713,9 @@
 				<antcall target="cron-service" />
 			</target>
 			
-		 END AMERICAN CRON TARGETS -->
+	<!-- END AMERICAN CRON TARGETS -->
 
-	<!-- FRONTIER CRON TARGETS 
+	<!-- FRONTIER CRON TARGETS -->
 
 			<target name="build-cron-local-frontier">
 				<property name="staging.project" value="cron" />
@@ -2772,9 +2772,9 @@
 				<antcall target="cron-service" />
 			</target>
 			
-		 END FRONTIER CRON TARGETS -->
+	<!--  END FRONTIER CRON TARGETS -->
 
-	<!-- UNITED CRON TARGETS 
+	<!-- UNITED CRON TARGETS -->
 
 			<target name="build-cron-local-united">
 				<property name="staging.project" value="cron" />
@@ -2831,9 +2831,9 @@
 				<antcall target="cron-service" />
 			</target>
 			
-		 END UNITED CRON TARGETS -->
+	<!--  END UNITED CRON TARGETS -->
 
-	<!-- SOUTHWEST CRON TARGETS 
+	<!-- SOUTHWEST CRON TARGETS -->
 
 			<target name="build-cron-local-southwest">
 				<property name="staging.project" value="cron" />
@@ -2890,9 +2890,9 @@
 				<antcall target="cron-service" />
 			</target>
 			
-		 END SOUTHWEST CRON TARGETS -->
+	<!--  END SOUTHWEST CRON TARGETS -->
 
-	<!-- VIRGIN CRON TARGETS 
+	<!-- VIRGIN CRON TARGETS -->
 
 			<target name="build-cron-local-virgin">
 				<property name="staging.project" value="cron" />
@@ -2949,7 +2949,7 @@
 				<antcall target="cron-service" />
 			</target>
 			
-		 END VIRGIN CRON TARGETS -->
+	<!--  END VIRGIN CRON TARGETS -->
 	
 	<!-- LFC CRON TARGETS -->
 
