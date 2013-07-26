@@ -90,6 +90,7 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	private Integer min_pass_size;
 	private Integer pass_x_history;
 	private Integer pnrlastxdays;
+	private Integer issuanceitemxdaysback;
 	
 	//AUTO CLOSE
 	private Integer auto_close_days_back;
@@ -477,6 +478,14 @@ public final class MaintainCompanyForm extends ValidatorForm {
 
 	public void setPnrlastxdays(Integer pnrlastxdays) {
 		this.pnrlastxdays = pnrlastxdays;
+	}
+
+	public Integer getIssuanceitemxdaysback() {
+		return issuanceitemxdaysback;
+	}
+
+	public void setIssuanceitemxdaysback(Integer issuanceitemxdaysback) {
+		this.issuanceitemxdaysback = issuanceitemxdaysback;
 	}
 
 

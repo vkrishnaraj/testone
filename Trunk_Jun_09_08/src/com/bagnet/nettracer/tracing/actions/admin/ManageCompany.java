@@ -162,6 +162,8 @@ public final class ManageCompany extends Action {
 					
 					dForm.setPnrlastxdays(cmpny.getVariable().getPnr_last_x_days());
 					
+					dForm.setIssuanceitemxdaysback(cmpny.getVariable().getIssuance_edit_last_x_days());
+					
 					dForm.setIncident_lock_mins(cmpny.getVariable().getIncident_lock_mins());
 				}
 				
@@ -399,6 +401,10 @@ public final class ManageCompany extends Action {
 						} else{
 							var.setPnr_last_x_days(dForm.getPnrlastxdays());
 						}
+					}
+					
+					if (dForm.getIssuanceitemxdaysback()!=null) {
+						var.setIssuance_edit_last_x_days(dForm.getIssuanceitemxdaysback().intValue());
 					}
 				}
 				
