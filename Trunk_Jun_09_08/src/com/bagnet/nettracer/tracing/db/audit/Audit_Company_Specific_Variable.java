@@ -92,6 +92,8 @@ public class Audit_Company_Specific_Variable implements Serializable {
 	 * Variable to determine the last amount of days to include incidents for a PNR Prepopulation Check. -Sean Fine
 	 */
 	private int pnr_last_x_days;
+
+	private int issuance_edit_last_x_days;
 	
 	/**
 	 * @return Returns the default_loss_code.
@@ -1012,6 +1014,18 @@ public class Audit_Company_Specific_Variable implements Serializable {
 	
 	public void setPnr_last_x_days(int pnr_last_x_days) {
 		this.pnr_last_x_days = pnr_last_x_days;
+	}
+
+	/**
+	 * @return the issuance_edit_last_x_days
+	 * @hibernate.property type="integer"
+	 */
+	public int getIssuance_edit_last_x_days() {
+		return issuance_edit_last_x_days;
+	}
+	
+	public void setIssuance_edit_last_x_days(int issuance_edit_last_x_days) {
+		this.issuance_edit_last_x_days = issuance_edit_last_x_days;
 	}
 	
 	

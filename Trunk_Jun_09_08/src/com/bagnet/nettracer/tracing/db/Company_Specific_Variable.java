@@ -84,6 +84,8 @@ public class Company_Specific_Variable implements Serializable {
 	 */
 	private int pnr_last_x_days;
 	
+	private int issuance_edit_last_x_days;
+	
 	//AUTO CLOSE
 	private int auto_close_days_back;
 	private int auto_close_ld_code;
@@ -1149,6 +1151,18 @@ public class Company_Specific_Variable implements Serializable {
 	
 	public void setPnr_last_x_days(int pnr_last_x_days) {
 		this.pnr_last_x_days = pnr_last_x_days;
+	}
+
+	/**
+	 * @return the issuance_edit_last_x_days
+	 * @hibernate.property type="integer"
+	 */
+	public int getIssuance_edit_last_x_days() {
+		return issuance_edit_last_x_days;
+	}
+	
+	public void setIssuance_edit_last_x_days(int issuance_edit_last_x_days) {
+		this.issuance_edit_last_x_days = issuance_edit_last_x_days;
 	}
 	
 }

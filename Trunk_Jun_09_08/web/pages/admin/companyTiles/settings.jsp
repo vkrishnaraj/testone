@@ -366,6 +366,15 @@
 	              <html:text styleClass="textfield" name="companyForm" property="pnrlastxdays" size="4" maxlength="4" />
 	            </td>
             </tr>
+            <tr>
+	            <td>
+	              <bean:message key="colname.issuance.item.last.x.days" />
+	              :
+	            </td>
+	            <td>
+	              <html:text styleClass="textfield" name="companyForm" property="issuance_edit_last_x_days" size="4" maxlength="4" />
+	            </td>
+            </tr>
 	          
 		    <tr>
             <td colspan="2">

@@ -987,5 +987,13 @@
     <definition name="fraud_forum_claim" extends="user_menu">
         <put name="center"   value="/pages/fraud_forum/forum_claim.jsp"/>
     </definition>
+    
+    <definition name="issuanceItemAdmin" extends="user_menu">
+        <put name="center"   value="/pages/issuance/issuance_admin.jsp"/>
+    </definition>
+    
+    <definition name="auditIssuanceItemAdmin" extends="user_menu">
+        <put name="center"   value="/pages/issuance/audit_issuance_admin.jsp"/>
+    </definition>
 
  </tiles-definitions>

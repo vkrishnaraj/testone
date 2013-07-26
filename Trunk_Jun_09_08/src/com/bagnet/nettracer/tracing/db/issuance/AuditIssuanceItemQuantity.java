@@ -24,11 +24,15 @@ public class AuditIssuanceItemQuantity {
 
 	@Id
 	@GeneratedValue
+	@Column(name="audit_id")
 	private long auditID;
 	
 	private long id;
 	
 	private int quantity;
+	
+	@Column(name="minimum_active_quantity")
+	private int minimuActiveQuantity;
 	
 	@Column(name="quantity_change")
 	private int quantityChange;
@@ -83,4 +87,53 @@ public class AuditIssuanceItemQuantity {
 	public void setIssuanceItem(IssuanceItem issuanceItem) {
 		this.issuanceItem = issuanceItem;
 	}
+
+	public long getAuditID() {
+		return auditID;
+	}
+
+	public void setAuditID(long auditID) {
+		this.auditID = auditID;
+	}
+
+	public int getQuantityChange() {
+		return quantityChange;
+	}
+
+	public void setQuantityChange(int quantityChange) {
+		this.quantityChange = quantityChange;
+	}
+
+	public String getIncidentID() {
+		return incidentID;
+	}
+
+	public void setIncidentID(String incidentID) {
+		this.incidentID = incidentID;
+	}
+
+	public Agent getEditAgent() {
+		return editAgent;
+	}
+
+	public void setEditAgent(Agent editAgent) {
+		this.editAgent = editAgent;
+	}
+
+	public Date getEditDate() {
+		return editDate;
+	}
+
+	public void setEditDate(Date editDate) {
+		this.editDate = editDate;
+	}
+
+	public int getMinimuActiveQuantity() {
+		return minimuActiveQuantity;
+	}
+
+	public void setMinimuActiveQuantity(int minimuActiveQuantity) {
+		this.minimuActiveQuantity = minimuActiveQuantity;
+	}
+	
 }

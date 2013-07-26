@@ -286,6 +286,9 @@
 		<form-bean name="forumSearchForm" type="com.bagnet.nettracer.tracing.forms.forum.ForumSearchForm" />
 		<form-bean name="forumViewForm" type="com.bagnet.nettracer.tracing.forms.forum.ForumViewForm" />	
 		<form-bean name="forumClaimForm" type="com.bagnet.nettracer.tracing.forms.forum.ForumClaimForm" />	
+		
+		<form-bean name="issuanceItemAdminForm" type="com.bagnet.nettracer.tracing.forms.issuance.IssuanceItemAdminForm" />	
+		<form-bean name="auditIssuanceItemAdminForm" type="com.bagnet.nettracer.tracing.forms.issuance.AuditIssuanceItemAdminForm" />	
 
 	</form-beans>
 	<!-- global exception -->
@@ -578,6 +581,9 @@
 		<forward name="fraud_forum_create" path="fraud_forum_create" />
 		<forward name="fraud_forum_view" path="fraud_forum_view" />
 		<forward name="fraud_forum_claim" path="fraud_forum_claim" />
+		
+		<forward name="issuanceItemAdmin" path="issuanceItemAdmin" />
+		<forward name="auditIssuanceItemAdmin" path="auditIssuanceItemAdmin" />
 		
 	</global-forwards>
 
@@ -935,6 +941,9 @@
 		<action path="/fraud_forum_create" type="com.bagnet.nettracer.tracing.actions.forum.ForumCreateAction" name="forumViewForm" scope="session" validate="false"></action>
 		<action path="/fraud_forum_view" type="com.bagnet.nettracer.tracing.actions.forum.ForumViewAction" name="forumViewForm" scope="session" validate="false"></action>
 		<action path="/fraud_forum_claim" type="com.bagnet.nettracer.tracing.actions.forum.ForumClaimAction" name="forumClaimForm" scope="session" validate="false"></action>
+		
+		<action path="/issuanceItemAdmin" type="com.bagnet.nettracer.tracing.actions.issuance.IssuanceItemAdminAction" name="issuanceItemAdminForm" scope="session" validate="false"></action>
+		<action path="/auditIssuanceItemAdmin" type="com.bagnet.nettracer.tracing.actions.issuance.AuditIssuanceItemAdminAction" name="auditIssuanceItemAdminForm" scope="session" validate="false"></action>
 		
 	</action-mappings>
 

@@ -252,6 +252,8 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_EDIT_TRACING_STATUS = "Edit Tracing Status";
 	public static final String SYSTEM_COMPONENT_NAME_COLLECT_DRIVERS_LICENSE = "Collect_Drivers_License";
 	public static final String SYSTEM_COMPONENT_NAME_VIEW_EDIT_DRIVERS_LICENSE = "View_Edit_Drivers_License";
+
+	public static final String SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_STATION_ADMIN = "Issuance_Item_Station_Admin";
 	
 	//Table numbers for status
 	public final static int AJAX_STATUS_INC = 1;
@@ -973,6 +975,10 @@ public class TracingConstants {
 	public final static String FRAUD_FORUM_CREATE = "fraud_forum_create";
 	public final static String FRAUD_FORUM_VIEW = "fraud_forum_view";
 	public final static String FRAUD_FORUM_CLAIM = "fraud_forum_claim";
+	
+	//Issuance Item pages
+	public final static String ISSUANCE_ITEM_ADMIN = "issuanceItemAdmin";
+	public final static String AUDIT_ISSUANCE_ITEM_ADMIN = "auditIssuanceItemAdmin";
 	
 	// defaults
 	public final static String US_COUNTRY_CODE = "US";
