@@ -2362,6 +2362,7 @@
 			<include name="**/**/*.properties" />
 			<exclude name="**/**/jndi.properties"/>
 			<exclude name="aero/nettracer/lf/services/Fedex*.class" />
+			<exclude name="com/bagnet/nettracer/tracing/actions/BagDelStatusInfoUtils*.class"/>
 			<exclude name="aero/nettracer/lf/services/LFCClientService*.class" />
 		</jar>
 	</target>
@@ -2381,6 +2382,7 @@
 			<include name="**/**/*.properties" />
 			<exclude name="**/**/jndi.properties"/>
 			<exclude name="aero/nettracer/lf/services/Fedex*.class" />
+			<exclude name="com/bagnet/nettracer/tracing/actions/BagDelStatusInfoUtils*.class"/>
 			<exclude name="aero/nettracer/lf/services/LFCClientService*.class" />
 		</jar>
 	</target>
@@ -2411,6 +2413,13 @@
 
 	<!-- CRON TARGETS -->
 	<target name="build-cron-testing-all">
+		<!--<antcall target="build-cron-testing-alaska"/>
+		<antcall target="build-cron-testing-delta"/>
+		<antcall target="build-cron-testing-american"/>
+		<antcall target="build-cron-testing-frontier"/>
+		<antcall target="build-cron-testing-southwest"/>
+		<antcall target="build-cron-testing-united"/>
+		<antcall target="build-cron-testing-virgin"/>-->
 		<antcall target="build-cron-testing-avis"/>
 		<antcall target="build-cron-testing-westjet"/>
 		<antcall target="build-cron-testing-jetblue"/>
@@ -2423,6 +2432,13 @@
 				
 	</target>
 	<target name="build-cron-training-all">
+		<!--<antcall target="build-cron-training-alaska"/>
+		<antcall target="build-cron-training-delta"/>
+		<antcall target="build-cron-training-american"/>
+		<antcall target="build-cron-training-frontier"/>
+		<antcall target="build-cron-training-southwest"/>
+		<antcall target="build-cron-training-united"/>
+		<antcall target="build-cron-training-virgin"/>-->
 		<antcall target="build-cron-training-avis"/>
 		<antcall target="build-cron-training-westjet"/>
 		<antcall target="build-cron-training-jetblue"/>
@@ -2434,6 +2450,13 @@
 		<antcall target="build-cron-training-flyafrica"/>
 	</target>
 	<target name="build-cron-production-all">
+		<!--<antcall target="build-cron-production-alaska"/>
+		<antcall target="build-cron-production-delta"/>
+		<antcall target="build-cron-production-american"/>
+		<antcall target="build-cron-production-frontier"/>
+		<antcall target="build-cron-production-southwest"/>
+		<antcall target="build-cron-production-united"/>
+		<antcall target="build-cron-production-virgin"/>-->
 		<antcall target="build-cron-production-avis"/>
 		<antcall target="build-cron-production-westjet"/>
 		<antcall target="build-cron-production-jetblue"/>
@@ -2445,6 +2468,13 @@
 		<antcall target="build-cron-production-airtran"/>
 	</target>
 	<target name="build-cron-hudson-all">
+		<!--<antcall target="build-cron-hudson-alaska"/>
+		<antcall target="build-cron-hudson-delta"/>
+		<antcall target="build-cron-hudson-american"/>
+		<antcall target="build-cron-hudson-frontier"/>
+		<antcall target="build-cron-hudson-southwest"/>
+		<antcall target="build-cron-hudson-united"/>
+		<antcall target="build-cron-hudson-virgin"/>-->
 		<antcall target="build-cron-hudson-avis"/>
 		<antcall target="build-cron-hudson-azul"/>
 		<antcall target="build-cron-hudson-jetblue"/>
@@ -2517,6 +2547,409 @@
 	</target>
 	
 	<!-- END AVIS CRON TARGETS -->
+	
+	<!-- ALASKA CRON TARGETS 
+
+		<target name="build-cron-local-alaska">
+			<property name="staging.project" value="cron" />
+			<property name="staging.env" value="local" />
+			<property name="ant_project_name" value="alaska-fs" />
+			<property name="sub_path" value="local/" />
+			<property name="environment.name" value="local"/>
+			<property name="cron.job.config.file" value="companies/alaska-fs/environment/local/jobs/cronJobs.xml" />
+			<property name="jarprefix" value="aslocal-" />
+			<antcall target="cron-service" />
+		</target>
+		
+		<target name="build-cron-testing-alaska">
+			<property name="staging.project" value="cron" />
+			<property name="staging.env" value="testing" />
+			<property name="ant_project_name" value="alaska-fs" />
+			<property name="sub_path" value="test/" />
+			<property name="environment.name" value="test"/>
+			<property name="cron.job.config.file" value="companies/alaska-fs/environment/test/jobs/cronJobs.xml" />
+			<property name="jarprefix" value="astest-" />
+			<antcall target="cron-service" />
+		</target>
+		
+		<target name="build-cron-training-alaska">
+			<property name="staging.project" value="cron" />
+			<property name="staging.env" value="training" />
+			<property name="ant_project_name" value="alaska-fs" />
+			<property name="sub_path" value="train/" />
+			<property name="environment.name" value="train"/>
+			<property name="cron.job.config.file" value="companies/alaska-fs/environment/train/jobs/cronJobs.xml" />
+			<property name="jarprefix" value="astrain-" />
+			<antcall target="cron-service" />
+		</target>
+
+		<target name="build-cron-production-alaska">
+			<property name="staging.project" value="cron" />
+			<property name="staging.env" value="production" />
+			<property name="ant_project_name" value="alaska-fs" />
+			<property name="sub_path" value="prod/" />
+			<property name="environment.name" value="prod"/>
+			<property name="cron.job.config.file" value="companies/alaska-fs/environment/prod/jobs/cronJobs.xml" />
+			<property name="jarprefix" value="asprod-" />
+			<antcall target="cron-service" />
+		</target>		
+
+		<target name="build-cron-hudson-alaska">
+			<property name="staging.project" value="cron" />
+			<property name="staging.env" value="hudson" />
+			<property name="ant_project_name" value="alaska-fs" />
+			<property name="sub_path" value="hudson/" />
+			<property name="environment.name" value="hudson"/>
+			<property name="cron.job.config.file" value="companies/alaska-fs/environment/hudson/jobs/cronJobs.xml" />
+			<property name="jarprefix" value="ashudson-" />
+			<antcall target="cron-service" />
+		</target>
+		
+		 END ALASKA CRON TARGETS -->
+	
+	<!-- DELTA CRON TARGETS 
+
+			<target name="build-cron-local-delta">
+				<property name="staging.project" value="cron" />
+				<property name="staging.env" value="local" />
+				<property name="ant_project_name" value="delta-fs" />
+				<property name="sub_path" value="local/" />
+				<property name="environment.name" value="local"/>
+				<property name="cron.job.config.file" value="companies/delta-fs/environment/local/jobs/cronJobs.xml" />
+				<property name="jarprefix" value="dllocal-" />
+				<antcall target="cron-service" />
+			</target>
+			
+			<target name="build-cron-testing-delta">
+				<property name="staging.project" value="cron" />
+				<property name="staging.env" value="testing" />
+				<property name="ant_project_name" value="delta-fs" />
+				<property name="sub_path" value="test/" />
+				<property name="environment.name" value="test"/>
+				<property name="cron.job.config.file" value="companies/delta-fs/environment/test/jobs/cronJobs.xml" />
+				<property name="jarprefix" value="dltest-" />
+				<antcall target="cron-service" />
+			</target>
+			
+			<target name="build-cron-training-delta">
+				<property name="staging.project" value="cron" />
+				<property name="staging.env" value="training" />
+				<property name="ant_project_name" value="delta-fs" />
+				<property name="sub_path" value="train/" />
+				<property name="environment.name" value="train"/>
+				<property name="cron.job.config.file" value="companies/delta-fs/environment/train/jobs/cronJobs.xml" />
+				<property name="jarprefix" value="dltrain-" />
+				<antcall target="cron-service" />
+			</target>
+
+			<target name="build-cron-production-delta">
+				<property name="staging.project" value="cron" />
+				<property name="staging.env" value="production" />
+				<property name="ant_project_name" value="delta-fs" />
+				<property name="sub_path" value="prod/" />
+				<property name="environment.name" value="prod"/>
+				<property name="cron.job.config.file" value="companies/delta-fs/environment/prod/jobs/cronJobs.xml" />
+				<property name="jarprefix" value="dlprod-" />
+				<antcall target="cron-service" />
+			</target>		
+
+			<target name="build-cron-hudson-delta">
+				<property name="staging.project" value="cron" />
+				<property name="staging.env" value="hudson" />
+				<property name="ant_project_name" value="delta-fs" />
+				<property name="sub_path" value="hudson/" />
+				<property name="environment.name" value="hudson"/>
+				<property name="cron.job.config.file" value="companies/delta-fs/environment/hudson/jobs/cronJobs.xml" />
+				<property name="jarprefix" value="dlhudson-" />
+				<antcall target="cron-service" />
+			</target>
+			
+		 END DELTA CRON TARGETS -->
+
+	<!-- AMERICAN CRON TARGETS 
+
+			<target name="build-cron-local-american">
+				<property name="staging.project" value="cron" />
+				<property name="staging.env" value="local" />
+				<property name="ant_project_name" value="american-fs" />
+				<property name="sub_path" value="local/" />
+				<property name="environment.name" value="local"/>
+				<property name="cron.job.config.file" value="companies/american-fs/environment/local/jobs/cronJobs.xml" />
+				<property name="jarprefix" value="aalocal-" />
+				<antcall target="cron-service" />
+			</target>
+			
+			<target name="build-cron-testing-american">
+				<property name="staging.project" value="cron" />
+				<property name="staging.env" value="testing" />
+				<property name="ant_project_name" value="american-fs" />
+				<property name="sub_path" value="test/" />
+				<property name="environment.name" value="test"/>
+				<property name="cron.job.config.file" value="companies/american-fs/environment/test/jobs/cronJobs.xml" />
+				<property name="jarprefix" value="aatest-" />
+				<antcall target="cron-service" />
+			</target>
+			
+			<target name="build-cron-training-american">
+				<property name="staging.project" value="cron" />
+				<property name="staging.env" value="training" />
+				<property name="ant_project_name" value="american-fs" />
+				<property name="sub_path" value="train/" />
+				<property name="environment.name" value="train"/>
+				<property name="cron.job.config.file" value="companies/american-fs/environment/train/jobs/cronJobs.xml" />
+				<property name="jarprefix" value="aatrain-" />
+				<antcall target="cron-service" />
+			</target>
+
+
+			<target name="build-cron-hudson-american">
+				<property name="staging.project" value="cron" />
+				<property name="staging.env" value="hudson" />
+				<property name="ant_project_name" value="american-fs" />
+				<property name="sub_path" value="hudson/" />
+				<property name="environment.name" value="hudson"/>
+				<property name="cron.job.config.file" value="companies/american-fs/environment/hudson/jobs/cronJobs.xml" />
+				<property name="jarprefix" value="aahudson-" />
+				<antcall target="cron-service" />
+			</target>
+			
+		 END AMERICAN CRON TARGETS -->
+
+	<!-- FRONTIER CRON TARGETS 
+
+			<target name="build-cron-local-frontier">
+				<property name="staging.project" value="cron" />
+				<property name="staging.env" value="local" />
+				<property name="ant_project_name" value="frontier-fs" />
+				<property name="sub_path" value="local/" />
+				<property name="environment.name" value="local"/>
+				<property name="cron.job.config.file" value="companies/frontier-fs/environment/local/jobs/cronJobs.xml" />
+				<property name="jarprefix" value="f9local-" />
+				<antcall target="cron-service" />
+			</target>
+			
+			<target name="build-cron-testing-frontier">
+				<property name="staging.project" value="cron" />
+				<property name="staging.env" value="testing" />
+				<property name="ant_project_name" value="frontier-fs" />
+				<property name="sub_path" value="test/" />
+				<property name="environment.name" value="test"/>
+				<property name="cron.job.config.file" value="companies/frontier-fs/environment/test/jobs/cronJobs.xml" />
+				<property name="jarprefix" value="f9test-" />
+				<antcall target="cron-service" />
+			</target>
+			
+			<target name="build-cron-training-frontier">
+				<property name="staging.project" value="cron" />
+				<property name="staging.env" value="training" />
+				<property name="ant_project_name" value="frontier-fs" />
+				<property name="sub_path" value="train/" />
+				<property name="environment.name" value="train"/>
+				<property name="cron.job.config.file" value="companies/frontier-fs/environment/train/jobs/cronJobs.xml" />
+				<property name="jarprefix" value="f9train-" />
+				<antcall target="cron-service" />
+			</target>
+
+			<target name="build-cron-production-frontier">
+				<property name="staging.project" value="cron" />
+				<property name="staging.env" value="production" />
+				<property name="ant_project_name" value="frontier-fs" />
+				<property name="sub_path" value="prod/" />
+				<property name="environment.name" value="prod"/>
+				<property name="cron.job.config.file" value="companies/frontier-fs/environment/prod/jobs/cronJobs.xml" />
+				<property name="jarprefix" value="f9prod-" />
+				<antcall target="cron-service" />
+			</target>		
+
+			<target name="build-cron-hudson-frontier">
+				<property name="staging.project" value="cron" />
+				<property name="staging.env" value="hudson" />
+				<property name="ant_project_name" value="frontier-fs" />
+				<property name="sub_path" value="hudson/" />
+				<property name="environment.name" value="hudson"/>
+				<property name="cron.job.config.file" value="companies/frontier-fs/environment/hudson/jobs/cronJobs.xml" />
+				<property name="jarprefix" value="f9hudson-" />
+				<antcall target="cron-service" />
+			</target>
+			
+		 END FRONTIER CRON TARGETS -->
+
+	<!-- UNITED CRON TARGETS 
+
+			<target name="build-cron-local-united">
+				<property name="staging.project" value="cron" />
+				<property name="staging.env" value="local" />
+				<property name="ant_project_name" value="united-fs" />
+				<property name="sub_path" value="local/" />
+				<property name="environment.name" value="local"/>
+				<property name="cron.job.config.file" value="companies/united-fs/environment/local/jobs/cronJobs.xml" />
+				<property name="jarprefix" value="ualocal-" />
+				<antcall target="cron-service" />
+			</target>
+			
+			<target name="build-cron-testing-united">
+				<property name="staging.project" value="cron" />
+				<property name="staging.env" value="testing" />
+				<property name="ant_project_name" value="united-fs" />
+				<property name="sub_path" value="test/" />
+				<property name="environment.name" value="test"/>
+				<property name="cron.job.config.file" value="companies/united-fs/environment/test/jobs/cronJobs.xml" />
+				<property name="jarprefix" value="uatest-" />
+				<antcall target="cron-service" />
+			</target>
+			
+			<target name="build-cron-training-united">
+				<property name="staging.project" value="cron" />
+				<property name="staging.env" value="training" />
+				<property name="ant_project_name" value="united-fs" />
+				<property name="sub_path" value="train/" />
+				<property name="environment.name" value="train"/>
+				<property name="cron.job.config.file" value="companies/united-fs/environment/train/jobs/cronJobs.xml" />
+				<property name="jarprefix" value="uatrain-" />
+				<antcall target="cron-service" />
+			</target>
+
+			<target name="build-cron-production-united">
+				<property name="staging.project" value="cron" />
+				<property name="staging.env" value="production" />
+				<property name="ant_project_name" value="united-fs" />
+				<property name="sub_path" value="prod/" />
+				<property name="environment.name" value="prod"/>
+				<property name="cron.job.config.file" value="companies/united-fs/environment/prod/jobs/cronJobs.xml" />
+				<property name="jarprefix" value="uaprod-" />
+				<antcall target="cron-service" />
+			</target>		
+
+			<target name="build-cron-hudson-united">
+				<property name="staging.project" value="cron" />
+				<property name="staging.env" value="hudson" />
+				<property name="ant_project_name" value="united-fs" />
+				<property name="sub_path" value="hudson/" />
+				<property name="environment.name" value="hudson"/>
+				<property name="cron.job.config.file" value="companies/united-fs/environment/hudson/jobs/cronJobs.xml" />
+				<property name="jarprefix" value="uahudson-" />
+				<antcall target="cron-service" />
+			</target>
+			
+		 END UNITED CRON TARGETS -->
+
+	<!-- SOUTHWEST CRON TARGETS 
+
+			<target name="build-cron-local-southwest">
+				<property name="staging.project" value="cron" />
+				<property name="staging.env" value="local" />
+				<property name="ant_project_name" value="southwest-fs" />
+				<property name="sub_path" value="local/" />
+				<property name="environment.name" value="local"/>
+				<property name="cron.job.config.file" value="companies/southwest-fs/environment/local/jobs/cronJobs.xml" />
+				<property name="jarprefix" value="wnlocal-" />
+				<antcall target="cron-service" />
+			</target>
+			
+			<target name="build-cron-testing-southwest">
+				<property name="staging.project" value="cron" />
+				<property name="staging.env" value="testing" />
+				<property name="ant_project_name" value="southwest-fs" />
+				<property name="sub_path" value="test/" />
+				<property name="environment.name" value="test"/>
+				<property name="cron.job.config.file" value="companies/southwest-fs/environment/test/jobs/cronJobs.xml" />
+				<property name="jarprefix" value="wntest-" />
+				<antcall target="cron-service" />
+			</target>
+			
+			<target name="build-cron-training-southwest">
+				<property name="staging.project" value="cron" />
+				<property name="staging.env" value="training" />
+				<property name="ant_project_name" value="southwest-fs" />
+				<property name="sub_path" value="train/" />
+				<property name="environment.name" value="train"/>
+				<property name="cron.job.config.file" value="companies/southwest-fs/environment/train/jobs/cronJobs.xml" />
+				<property name="jarprefix" value="wntrain-" />
+				<antcall target="cron-service" />
+			</target>
+
+			<target name="build-cron-production-southwest">
+				<property name="staging.project" value="cron" />
+				<property name="staging.env" value="production" />
+				<property name="ant_project_name" value="southwest-fs" />
+				<property name="sub_path" value="prod/" />
+				<property name="environment.name" value="prod"/>
+				<property name="cron.job.config.file" value="companies/southwest-fs/environment/prod/jobs/cronJobs.xml" />
+				<property name="jarprefix" value="wnprod-" />
+				<antcall target="cron-service" />
+			</target>		
+
+			<target name="build-cron-hudson-southwest">
+				<property name="staging.project" value="cron" />
+				<property name="staging.env" value="hudson" />
+				<property name="ant_project_name" value="southwest-fs" />
+				<property name="sub_path" value="hudson/" />
+				<property name="environment.name" value="hudson"/>
+				<property name="cron.job.config.file" value="companies/southwest-fs/environment/hudson/jobs/cronJobs.xml" />
+				<property name="jarprefix" value="wnhudson-" />
+				<antcall target="cron-service" />
+			</target>
+			
+		 END SOUTHWEST CRON TARGETS -->
+
+	<!-- VIRGIN CRON TARGETS 
+
+			<target name="build-cron-local-virgin">
+				<property name="staging.project" value="cron" />
+				<property name="staging.env" value="local" />
+				<property name="ant_project_name" value="virginamerica-fs" />
+				<property name="sub_path" value="local/" />
+				<property name="environment.name" value="local"/>
+				<property name="cron.job.config.file" value="companies/virginamerica-fs/environment/local/jobs/cronJobs.xml" />
+				<property name="jarprefix" value="vxlocal-" />
+				<antcall target="cron-service" />
+			</target>
+			
+			<target name="build-cron-testing-virgin">
+				<property name="staging.project" value="cron" />
+				<property name="staging.env" value="testing" />
+				<property name="ant_project_name" value="virginamerica-fs" />
+				<property name="sub_path" value="test/" />
+				<property name="environment.name" value="test"/>
+				<property name="cron.job.config.file" value="companies/virginamerica-fs/environment/test/jobs/cronJobs.xml" />
+				<property name="jarprefix" value="vxtest-" />
+				<antcall target="cron-service" />
+			</target>
+			
+			<target name="build-cron-training-virgin">
+				<property name="staging.project" value="cron" />
+				<property name="staging.env" value="training" />
+				<property name="ant_project_name" value="virginamerica-fs" />
+				<property name="sub_path" value="train/" />
+				<property name="environment.name" value="train"/>
+				<property name="cron.job.config.file" value="companies/virginamerica-fs/environment/train/jobs/cronJobs.xml" />
+				<property name="jarprefix" value="vxtrain-" />
+				<antcall target="cron-service" />
+			</target>
+
+			<target name="build-cron-production-virgin">
+				<property name="staging.project" value="cron" />
+				<property name="staging.env" value="production" />
+				<property name="ant_project_name" value="virginamerica-fs" />
+				<property name="sub_path" value="prod/" />
+				<property name="environment.name" value="prod"/>
+				<property name="cron.job.config.file" value="companies/virginamerica-fs/environment/prod/jobs/cronJobs.xml" />
+				<property name="jarprefix" value="vxprod-" />
+				<antcall target="cron-service" />
+			</target>		
+
+			<target name="build-cron-hudson-virgin">
+				<property name="staging.project" value="cron" />
+				<property name="staging.env" value="hudson" />
+				<property name="ant_project_name" value="virginamerica-fs" />
+				<property name="sub_path" value="hudson/" />
+				<property name="environment.name" value="hudson"/>
+				<property name="cron.job.config.file" value="companies/virginamerica-fs/environment/hudson/jobs/cronJobs.xml" />
+				<property name="jarprefix" value="vxhudson-" />
+				<antcall target="cron-service" />
+			</target>
+			
+		 END VIRGIN CRON TARGETS -->
 	
 	<!-- LFC CRON TARGETS -->
 
