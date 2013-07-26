@@ -34,6 +34,8 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 				verifyEquals("US", selenium.getValue("name=passenger[0].driversLicenseCountry"));
 				selenium.type("name=addresses[0].address1", "123 Test");
 				selenium.type("name=addresses[0].city", "Test");
+				selenium.select("name=addresses[0].state_ID", "label=Georgia");
+				selenium.type("name=addresses[0].zip", "12345");
 				selenium.type("name=theitinerary[0].legfrom", "ATL");
 				selenium.type("name=theitinerary[0].legto", "LAX");
 				selenium.type("name=theitinerary[0].flightnum", "123");
@@ -103,11 +105,9 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		} else {
 			System.out.println("!!!!!!!!!!!!!!! - Failed to Pre-populate Claim. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 		}
-		selenium.select("name=state", "value=GA");
-		selenium.type("name=zip", "30339");
+		
 		selenium.click("name=save");
 		waitForPageToLoadImproved();
-		
 		goToTaskManager();
 
 		waitForPageToLoadImproved();
@@ -232,51 +232,50 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		waitForPageToLoadImproved();
 	}
 	
-	@Test
-	public void testPopulateQSCheck() {
-		if (checkNoErrorPage()) {
-			selenium.click("id=menucol_1.1");
-			waitForPageToLoadImproved();
-			selenium.type("name=recordlocator", "TESTER");
-			selenium.click("id=button");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("CLDVRF: Failed to load page.");
-			return;
-		}
-		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent(Settings.INCIDENT_ID_WN));
-			selenium.click("menucol_0.0");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("CLDVRF: Failed to load Quick Search and search on PNR.");
-			return;
-		}
-
-		if (checkNoErrorPage()) {
-			selenium.controlKeyDown();
-			selenium.keyDown("id=header", "\\83");
-			selenium.keyUp("id=header", "\\83");
-			selenium.controlKeyUp();
-			waitForPageToLoadImproved(3000,false);
-			selenium.type("id=quickSearchQuery3", "TESTER");
-			selenium.click("id=button");
-			waitForPageToLoadImproved(10000,false);
-		} else {
-			System.out.println("CLDVRF: Failed to load prepopulate page.");
-			return;			
-		}
-		
-		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent(Settings.INCIDENT_ID_WN));
-		} else {
-			System.out.println("CLDVRF: Failed to check for existing PNR Incidents.");
-			return;			
-		}
-		
-		
-		
-	}
+//	@Test
+//	public void testPopulateQSCheck() {
+//		if (checkNoErrorPage()) {
+//			selenium.click("id=menucol_1.1");
+//			waitForPageToLoadImproved();
+//			selenium.type("name=recordlocator", "TESTER");
+//			selenium.click("id=button");
+//			waitForPageToLoadImproved();
+//		} else {
+//			System.out.println("CLDVRF: Failed to load page.");
+//			return;
+//		}
+//		if (checkNoErrorPage()) {
+//			verifyTrue(selenium.isTextPresent(Settings.INCIDENT_ID_WN));
+//			selenium.click("menucol_0.0");
+//			waitForPageToLoadImproved();
+//		} else {
+//			System.out.println("CLDVRF: Failed to load Quick Search and search on PNR.");
+//			return;
+//		}
+//
+//		if (checkNoErrorPage()) {
+//			selenium.controlKeyDown();
+//			selenium.keyDown("id=header", "\\83");
+//			selenium.keyUp("id=header", "\\83");
+//			selenium.controlKeyUp();
+//			selenium.type("id=quickSearchQuery3", "TESTER");
+//			selenium.click("id=button");
+//			waitForPageToLoadImproved();
+//		} else {
+//			System.out.println("CLDVRF: Failed to load prepopulate page.");
+//			return;			
+//		}
+//		
+//		if (checkNoErrorPage()) {
+//			verifyTrue(selenium.isTextPresent(Settings.INCIDENT_ID_WN));
+//		} else {
+//			System.out.println("CLDVRF: Failed to check for existing PNR Incidents.");
+//			return;			
+//		}
+//		
+//		
+//		
+//	}
 	
 	private void typeString(String locator, String string) {
 		char[] chars = string.toCharArray();
