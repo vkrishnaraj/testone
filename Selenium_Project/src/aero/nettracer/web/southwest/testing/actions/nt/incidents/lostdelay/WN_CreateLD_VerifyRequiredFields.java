@@ -258,9 +258,10 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 			selenium.keyDown("id=header", "\\83");
 			selenium.keyUp("id=header", "\\83");
 			selenium.controlKeyUp();
+			waitForPageToLoadImproved(3000,false);
 			selenium.type("id=quickSearchQuery3", "TESTER");
 			selenium.click("id=button");
-			waitForPageToLoadImproved(1000,false);
+			waitForPageToLoadImproved(10000,false);
 		} else {
 			System.out.println("CLDVRF: Failed to load prepopulate page.");
 			return;			
