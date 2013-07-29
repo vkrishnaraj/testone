@@ -11,7 +11,7 @@ import java.util.GregorianCalendar;
  *
  */
 public class FileHelper {
-	private static final String BASE_PATH = "c:/nettracer_claims_files/";
+	private static final String BASE_PATH = "//172.30.6.104/online_claims_files/";
 	private static String path;
 	
 	private static String getFilePath(String incidentId) {

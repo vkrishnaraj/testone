@@ -52,9 +52,9 @@
 
 <!-- Create the c3p0 unpooled ds --> <!-- PRODUCTION DB = 10.60.98.66 :: DEV DB = localhost -->
 <bean id="unpooledDataSource" class="com.mchange.v2.c3p0.DataSources" factory-method="unpooledDataSource" depends-on="driverInstance" >
-<constructor-arg index="0"><value>jdbc:mysql://10.60.98.66:3306/onlineclaims</value></constructor-arg>
-<constructor-arg index="1"><value>emergency</value></constructor-arg>
-<constructor-arg index="2"><value>Em3r6eNcy</value></constructor-arg>
+<constructor-arg index="0"><value>jdbc:mysql://drapp1.nettracer.aero:3306/onlineclaims</value></constructor-arg>
+<constructor-arg index="1"><value>oc_user</value></constructor-arg>
+<constructor-arg index="2"><value>1V82M24m</value></constructor-arg>
 </bean>
 
 <!-- Create the pooled data source to actually use -->
