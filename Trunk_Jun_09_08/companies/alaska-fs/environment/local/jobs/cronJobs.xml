@@ -30,6 +30,13 @@
 			<list>
 				<!-- ref bean="cronAvisStillSearching" />
 				<ref bean="cronAvisAutoClose" /-->
+				<ref bean="cronDataFeedTrigger" />
+				<ref bean="cronMoveToLzTrigger" />
+				<ref bean="cronNewPassiveTracerTrigger" />
+				<ref bean="cronWtQueueTrigger" />
+				<ref bean="cronOldPassiveTracerTrigger" />
+				<ref bean="cronMoveToWtTrigger" /> 
+				<ref bean="cronFsDataRetention"/>
 			</list>
 		</property>
 	</bean>

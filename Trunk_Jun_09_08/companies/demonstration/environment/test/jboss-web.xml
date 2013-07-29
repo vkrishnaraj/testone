@@ -1,0 +1,3 @@
+<jboss-web>
+	<context-root>/demonstation</context-root>
+</jboss-web>
