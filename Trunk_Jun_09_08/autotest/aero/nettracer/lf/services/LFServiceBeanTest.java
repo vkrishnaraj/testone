@@ -19,6 +19,7 @@ import org.junit.Test;
 import aero.nettracer.general.services.GeneralServiceBean;
 import aero.nettracer.lf.services.LFCClientServiceBean;
 import aero.nettracer.lf.services.LFServiceBean;
+import aero.nettracer.lf.services.LFTracingUtil;
 import aero.nettracer.lf.services.exception.NonUniqueBarcodeException;
 import aero.nettracer.lf.services.exception.UpdateException;
 import aero.nettracer.security.AES;
@@ -676,6 +677,61 @@ public class LFServiceBeanTest {
 		}
 		assertTrue(threwException);
 		assertTrue(LFTracingUtil.hasMatch(newMatch));
+	}
+	
+	@Test
+	public void saveNewMatchAfterConfirmedTest(){
+		LFServiceBean bean = new LFServiceBean();
+		
+		Agent agent = bean.getAutoAgent();
+		
+		LFServiceBean bean = new LFServiceBean();
+		
+		
+		LFLost clost = createLostTestCase();
+		long lostId = bean.saveOrUpdateLostReport(lost, bean.getAutoAgent());
+		assertTrue(lostId != -1);
+		
+		LFFound cfound = createFoundTestCase();
+		long foundId = 0;
+		try {
+			foundId = bean.saveOrUpdateFoundItem(found, null);
+		} catch (NonUniqueBarcodeException e) {
+			foundId = -1;
+			e.printStackTrace();
+		} catch (UpdateException ue){
+			fail();
+		}
+		assertTrue(foundId > 0);
+		
+		LFLost lost = bean.getLostReport(lostId);
+		LFFound found = bean.getFoundItem(foundId);
+		
+		LFMatchHistory mh = new LFMatchHistory();
+		mh.setFound(found);
+		mh.setLost(lost);
+		mh.setMatchTimeStamp(new Date());
+		mh.setScore(12);
+		Status s = new Status();
+		s.setStatus_ID(607);
+		mh.setStatus(s);
+		long mid = LFTracingUtil.saveLFMatchHistory(mh);
+		assertTrue(mid > 0);
+		assertTrue(bean.confirmMatch(mid, agent));
+		
+		LFLost lost3 = bean.getLostReport(lostId);
+		LFFound found3 = bean.getFoundItem(foundId);
+		
+		LFMatchHistory mh2 = new LFMatchHistory();
+		mh2.setFound(found);
+		mh2.setLost(lost);
+		mh2.setMatchTimeStamp(new Date());
+		mh2.setScore(13);
+		s = new Status();
+		s.setStatus_ID(607);
+		mh2.setStatus(s);
+		long mid2 = LFTracingUtil.saveLFMatchHistory(mh2);
+		assertTrue(mid2 == -1);
 	}
 	
 	@Test

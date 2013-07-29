@@ -11,6 +11,7 @@
 				<ref bean="cronMoveToLzTrigger" />
 				<ref bean="cronNewPassiveTracerTrigger" />
 				<ref bean="RemoveMassOhdTrigger" />
+				<ref bean="TwentyForHourEmailTrigger" />
 			</list>
 		</property>
 	</bean>
@@ -24,6 +25,17 @@
 	<bean id="RemoveMassOhdTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="RemoveMassOhdJob" />
 		<property name="cronExpression" value="${removemassohd.cron}" />
+	</bean>
+	
+	<bean id="TwentyForHourEmailJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetBeanName" value="CronUtils" />
+		<property name="targetMethod" value="process24HoursEmails" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="TwentyForHourEmailTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="TwentyForHourEmailJob" />
+		<property name="cronExpression" value="${twentyFourHourEmail.cron}" />
 	</bean>
 
 </beans>

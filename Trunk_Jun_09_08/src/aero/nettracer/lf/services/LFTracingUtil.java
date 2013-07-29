@@ -964,7 +964,8 @@ public class LFTracingUtil {
 					if(matchid > -1){
 						matchList.add(match);
 					} else {
-						throw new Exception("failed to add trace result");
+						//we shouldn't prevent the tracing of the remaining items because this one match failed to save
+						//especially since it can now legitimately fail
 					}
 				} catch (org.hibernate.exception.ConstraintViolationException e){
 					//already traced this result, ignore
@@ -1013,10 +1014,43 @@ public class LFTracingUtil {
 		}
 	}
 	
+	public static boolean itemOpenDisposition(long itemId){
+		String sql = "select i.disposition_status_id did from lfitem i where i.id = :id";
+		Session sess = null;
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			SQLQuery q = sess.createSQLQuery(sql);
+			q.setParameter("id", itemId);
+			q.addScalar("did", StandardBasicTypes.INTEGER);
+			List list = q.list();
+			if(list.size() > 0){
+				if(TracingConstants.LF_DISPOSITION_OTHER == (Integer)list.get(0)){
+					return true;
+				}
+			}
+			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	public static long saveLFMatchHistory(LFMatchHistory match) throws org.hibernate.exception.ConstraintViolationException{
 		//loupas - encryption is cpu intensive, first check to see if we need to save then encrypt
 		if(match.getId() == 0){//only need this check first time saving
 			if(!hasMatch(match)){
+				if(!itemOpenDisposition(match.getLost().getItem().getId()) || !itemOpenDisposition(match.getFound().getItem().getId())){
+					//The lost item or found item has already been confirmed match, do not create new match.  Only check this when saving match for the first time
+					return -1;
+				}
 				if(match.getDetails() != null){
 					for(LFMatchDetail detail:match.getDetails()){
 						detail.encrypt();
@@ -1093,7 +1127,8 @@ public class LFTracingUtil {
 					if(bean.saveOrUpdateTraceResult(match) > -1){
 						matchList.add(match);
 					} else {
-						throw new Exception("failed to add trace result");
+						//we shouldn't prevent the tracing of the remaining items because this one match failed to save
+						//especially since it can now legitimately fail
 					}
 				} catch (org.hibernate.exception.ConstraintViolationException e){
 					//already traced this result, ignore

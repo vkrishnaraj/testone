@@ -13,7 +13,7 @@
 				<ref bean="LockCleanupTrigger" />
 				<ref bean="wtStatusTrigger" />
 				<ref bean="wtAlertTrigger" />
-				<ref bean="TwentyForHourEmailTrigger" />
+
 				<!--<ref bean="CrmTrigger" />-->
 				<ref bean="BillingTrigger" />
 				<ref bean="AutoCloseTrigger" />
@@ -32,20 +32,7 @@
 		<property name="jobDetail" ref="CrmJob" />
 		<property name="cronExpression" value="${crmjob.cron}" />
 	</bean>
-	
-	<bean id="TwentyForHourEmailJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetBeanName" value="CronUtils" />
-		<property name="targetMethod" value="process24HoursEmails" />
-		<property name="concurrent" value="false" />
-	</bean>
-	
-	<bean id="TwentyForHourEmailTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
-		<property name="jobDetail" ref="TwentyForHourEmailJob" />
-		<property name="cronExpression" value="${twentyFourHourEmail.cron}" />
-	</bean>
 
-	
-	
 	<bean id="WtAlertJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetBeanName" value="CronUtils" />
 		<property name="targetMethod" value="hourlySqlServerStatusCheck" />

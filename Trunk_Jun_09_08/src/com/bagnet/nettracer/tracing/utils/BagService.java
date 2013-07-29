@@ -1964,6 +1964,10 @@ public class BagService {
 						oo.setOhd(oDTO);
 					}
 
+				} else {
+					oDTO.setXdescelement_ID_1(theform.getXDesc1());
+					oDTO.setXdescelement_ID_2(theform.getXDesc2());
+					oDTO.setXdescelement_ID_3(theform.getXDesc3());
 				}
 
 				OhdBMO oBMO = new OhdBMO();
