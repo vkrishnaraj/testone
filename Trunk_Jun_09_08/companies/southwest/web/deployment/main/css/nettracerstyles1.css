@@ -69,7 +69,7 @@ form {
 	background-color:#FFFFFF;
 	border-left:1px solid #000000;
 	border-right:1px solid #000000;
-	
+
 	height: 100%;
 	text-align:left;
 	margin-right: auto;
@@ -110,22 +110,22 @@ td#header {
 td#header.cssstandardthreecolumn { 
 	background-image:url(../images/nettracer/header_bg_noconf.gif);
 	background-repeat:no-repeat;
-	background-color: #001934;
+	background-color: #FFFFFF;
 }
 div#headercontent {
 	float:right;
 	margin:3px;
 }
 table#headercontent td{
-	color:#FFFFFF;
+	color:#184173;
 	text-align:right;
 }
 table#headercontent a{
-	color:#FFFFFF;
+	color:#184173;
 	text-decoration:none;
 }
 table#headercontent a:hover{
-	color:#FFFFFF;
+	color:#184173;
 	text-decoration:underline;
 }
 
