@@ -587,7 +587,7 @@
               <td width="30%" nowrap="nowrap"><bean:message
                 key="colname.claimnum.req" /> :</td>
               <td><html:text name="claimcheck"
-                property="claimchecknum" size="13" maxlength="10"
+                property="claimchecknum" size="13" maxlength="11"
                 styleClass="textfield" indexed="true" /> <%
                   if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SCANNER_DATA, a)) {
                 %> <logic:notEmpty name="claimcheck"

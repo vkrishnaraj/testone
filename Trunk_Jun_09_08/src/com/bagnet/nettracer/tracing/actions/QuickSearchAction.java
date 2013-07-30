@@ -110,7 +110,7 @@ public class QuickSearchAction extends Action {
 		}
 
 		logger.info(s);
-
+		boolean utb=s.length()>3 && s.substring(0, 3).equals("UTB");
 		if (tenDigitPattern.matcher(s).find()) {
 			logger.info("Tag Number... 1");
 			if (TracerProperties.isTrue(user.getCompanycode_ID(),TracerProperties.RESERVATION_BY_BAGTAG) && !s.contains("%")) {
@@ -127,7 +127,7 @@ public class QuickSearchAction extends Action {
 			}
 			netTracerTagSearch(user, s, dto, 9, scanResults);
 			dto.setRedirect(REDIRECT_TAG_NUMBER_SEARCH);
-		} else if (twoCharPattern.matcher(s).find()) {
+		} else if (twoCharPattern.matcher(s).find() || utb) {
 			logger.info("Tag Number... 3");
 			if (TracerProperties.isTrue(user.getCompanycode_ID(),TracerProperties.RESERVATION_BY_BAGTAG) && !s.contains("%")) {
 				dto.setPrepopType(1);

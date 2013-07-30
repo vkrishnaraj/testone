@@ -3248,7 +3248,7 @@
 			<antcall target="cron-service" />
 		</target>
 			
-		<!-- END FLY AFRICA CRON TARGETS -->
+		<!-- END DEMONSTRATION CRON TARGETS -->
 	
 	<!-- NTSOUTHWEST CRON TARGETS -->
 		

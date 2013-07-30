@@ -1605,9 +1605,11 @@ public class WorldTracerWebService implements WorldTracerConnector {
 		
 		ArrayList<ClaimCheck> claimChecks = new ArrayList<ClaimCheck>();
 		for (Incident_Claimcheck cc: i.getClaimcheck_list()) {
-			ClaimCheck cl = new ClaimCheck();
-			cl.setTagNumber(cc.getClaimchecknum());
-			claimChecks.add(cl);
+			if(cc.getClaimchecknum()!=null && cc.getClaimchecknum().length()>0 && !cc.getClaimchecknum().substring(0, 3).equals("UTB")){
+				ClaimCheck cl = new ClaimCheck();
+				cl.setTagNumber(cc.getClaimchecknum());
+				claimChecks.add(cl);
+			}
 		}
 		a.setClaimCheck(claimChecks.toArray(new ClaimCheck[claimChecks.size()]));
 		if (i.getTracingComplete() != null) {

@@ -622,7 +622,7 @@ public class DefaultWorldTracerService implements WorldTracerService {
 
 		if (ntIncident.getClaimcheck_list() != null) {
 			for (Incident_Claimcheck ic : ntIncident.getClaimcheck_list()) {
-				if (ic.getClaimchecknum() != null && ic.getClaimchecknum().trim().length() > 0) {
+				if (ic.getClaimchecknum() != null && ic.getClaimchecknum().trim().length() > 0 && !ic.getClaimchecknum().substring(0,3).equals("UTB")) {
 					addClaimCheckNum(ic.getClaimchecknum(), result, ntIncident.getStationassigned().getCompany()
 							.getCompanyCode_ID());
 				}

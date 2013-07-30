@@ -1153,7 +1153,10 @@ public class OhdBMO {
 			if (siDTO.getClaimchecknum()!=null && siDTO.getClaimchecknum().length()>0) {
 				String tag=siDTO.getClaimchecknum();
 		    		
-    			if (tag != null && tag.length() == 8) {
+				if(tag!=null && tag.length()>3 &&tag.substring(0, 3).equals("UTB")){
+	    			q.setString("keyUTB", tag);
+		    	}
+				if (tag != null && tag.length() == 8) {
     				String key = tag.substring(0, 2);
 	    			q.setString("key8" + key, key);
 	    			q.setString("key8" + key + "List", tag.substring(2));
@@ -1222,7 +1225,9 @@ public class OhdBMO {
     	if (tag != null && tag.length() > 0) {
     		String itemSelect = "";
     		
-    			if (tag != null && tag.length() == 8) {
+	    		if(tag!=null && tag.length()>3 && tag.substring(0, 3).equals("UTB")){
+					itemSelect = " and (claimcheck.claimchecknum = :keyUTB)";
+				} else if (tag != null && tag.length() == 8) {
     				String key = tag.substring(0, 2);
     				itemSelect = " and (ohd.claimchecknum_carriercode = :key8" + key + " and ohd.claimchecknum_bagnumber = :key8" + key + "List)";
     			} else if (tag != null && tag.length() == 9) {

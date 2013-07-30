@@ -512,8 +512,8 @@ public enum MatchElement {
 	private static ArrayList<MatchResult> matchClaimCheck(MatchElement e,
 			TraceIncident incident, TraceOHD ohd) {
 		ArrayList<MatchResult> results = new ArrayList<MatchResult>();
-
-		if (ohd.getClaimnum() == null || ohd.getClaimnum().trim().length() < 1) {
+		
+		if (ohd.getClaimnum() == null || ohd.getClaimnum().trim().length() < 1 || ohd.getClaimnum().substring(0, 3).equals("UTB")) {
 			return results;
 		}
 
@@ -534,7 +534,7 @@ public enum MatchElement {
 				.getClaimchecks()) {
 			String originalIncString = null;
 			String originalOhdString = ohd.getClaimnum();
-			if (iClaim.getClaimchecknum().trim().length() > 0) {
+			if (iClaim.getClaimchecknum().trim().length() > 0 && !iClaim.getClaimchecknum().substring(0, 3).equals("UTB")) {
 				String incTenDigitTag = null;
 				try {
 					originalIncString = iClaim.getClaimchecknum();
