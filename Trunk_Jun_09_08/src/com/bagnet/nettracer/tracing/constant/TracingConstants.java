@@ -112,6 +112,7 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_SHARED_ATTACHMENTS = "Shared Attachments";
 	public final static String SYSTEM_COMPONENT_NAME_DELETE_BAGTAG_BAGS = "Delete Bagtags to Bags";
 	public final static String SYSTEM_COMPONENT_NAME_CLONE_OHD="Clone OHDs";
+	public final static String SYSTEM_COMPONENT_NAME_EXTERNAL_LINKS="External Links";
 	
 	//TODO: adding three sub items under last one to get the itemized view for WS
 	public final static String SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS_TYPE_DELAYED = "Incoming Incidents Type Delayed";
@@ -744,6 +745,8 @@ public class TracingConstants {
 	public final static String VIEW_BAGBUZZ_VIEW = "viewbagbuzzview";
 
     public final static String VIEW_PRIVACY_PERMISSIONS = "viewprivacypermissions";
+    
+    public final static String VIEW_LINKS = "view_links";
 	
 	//success on inserting on hand
 	public final static String INSERT_ON_HAND_SUCCESS = "insertonhandsuccess";
