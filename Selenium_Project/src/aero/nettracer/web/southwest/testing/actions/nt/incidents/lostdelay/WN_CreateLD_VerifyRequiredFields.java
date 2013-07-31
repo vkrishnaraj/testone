@@ -231,51 +231,116 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		goToTaskManager();
 		waitForPageToLoadImproved();
 	}
+
+	@Test
+	public void testUTBBagTag(){
+		verifyTrue(navigateToIncident());
+		selenium.type("name=claimcheck[0].claimchecknum", "UTB");
+		selenium.click("name=saveButton");
+		assertEquals("Claim Check Number is not a valid claim check number.[10 digits or 8 character AN]", selenium.getAlert());
+		selenium.type("name=claimcheck[0].claimchecknum", "UTB12345678");
+		selenium.click("name=saveButton");
+		waitForPageToLoadImproved();
+
+		if (checkNoErrorPage()) {
+			verifyTrue(navigateToIncident());
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("CLDVRF: ERROR SAVING INCIDENT.");
+			return;
+		}
+
+		if (checkNoErrorPage()) {
+			verifyEquals(selenium.getValue("name=claimcheck[0].claimchecknum"),"UTB12345678");
+			selenium.click("id=menucol_1.4");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("CLDVRF: ERROR NAVIGATING TO INCIDENT.");
+			return;
+		}
+		
+
+		if (checkNoErrorPage()) {
+			selenium.type("name=claimchecknum", "UTB12345678");
+			selenium.click("id=button");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("CLDVRF: ERROR NAVIGATING TO THE LOST DELAY SEARCH PAGE.");
+			return;
+		}
+		
+
+		if (checkNoErrorPage()) {
+			verifyTrue(selenium.isTextPresent(Settings.INCIDENT_ID_WN));
+			goToTaskManager();
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("CLDVRF: ERROR SEARCHING FOR THE INCIDENT BY CLAIMCHECK NUMBER.");
+			return;
+		}
+
+		if (checkNoErrorPage()) {
+			selenium.controlKeyDown();
+			selenium.keyDown("id=header", "\\83");
+			selenium.keyUp("id=header", "\\83");
+			selenium.controlKeyUp();
+			waitForPageToLoadImproved(3000,false);
+			selenium.type("id=quickSearchQuery3", "UTB12345678");
+			selenium.click("id=button");
+			waitForPageToLoadImproved(10000,false);
+			verifyTrue(selenium.isTextPresent(Settings.INCIDENT_ID_WN));
+			selenium.keyDown("id=header", "\\27");
+			selenium.keyUp("id=header", "\\27");
+		} else {
+			System.out.println("CLDVRF: ERROR NAVIGATING TO TASKMANAGER.");
+			return;
+		}
+	}
 	
-//	@Test
-//	public void testPopulateQSCheck() {
-//		if (checkNoErrorPage()) {
-//			selenium.click("id=menucol_1.1");
-//			waitForPageToLoadImproved();
-//			selenium.type("name=recordlocator", "TESTER");
-//			selenium.click("id=button");
-//			waitForPageToLoadImproved();
-//		} else {
-//			System.out.println("CLDVRF: Failed to load page.");
-//			return;
-//		}
-//		if (checkNoErrorPage()) {
-//			verifyTrue(selenium.isTextPresent(Settings.INCIDENT_ID_WN));
-//			selenium.click("menucol_0.0");
-//			waitForPageToLoadImproved();
-//		} else {
-//			System.out.println("CLDVRF: Failed to load Quick Search and search on PNR.");
-//			return;
-//		}
-//
-//		if (checkNoErrorPage()) {
-//			selenium.controlKeyDown();
-//			selenium.keyDown("id=header", "\\83");
-//			selenium.keyUp("id=header", "\\83");
-//			selenium.controlKeyUp();
-//			selenium.type("id=quickSearchQuery3", "TESTER");
-//			selenium.click("id=button");
-//			waitForPageToLoadImproved();
-//		} else {
-//			System.out.println("CLDVRF: Failed to load prepopulate page.");
-//			return;			
-//		}
-//		
-//		if (checkNoErrorPage()) {
-//			verifyTrue(selenium.isTextPresent(Settings.INCIDENT_ID_WN));
-//		} else {
-//			System.out.println("CLDVRF: Failed to check for existing PNR Incidents.");
-//			return;			
-//		}
-//		
-//		
-//		
-//	}
+	@Test
+	public void testPopulateQSCheck() {
+		if (checkNoErrorPage()) {
+			selenium.click("id=menucol_1.1");
+			waitForPageToLoadImproved();
+			selenium.type("name=recordlocator", "TESTER");
+			selenium.click("id=button");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("CLDVRF: Failed to load page.");
+			return;
+		}
+		if (checkNoErrorPage()) {
+			verifyTrue(selenium.isTextPresent(Settings.INCIDENT_ID_WN));
+			selenium.click("menucol_0.0");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("CLDVRF: Failed to load Quick Search and search on PNR.");
+			return;
+		}
+
+		if (checkNoErrorPage()) {
+			selenium.controlKeyDown();
+			selenium.keyDown("id=header", "\\83");
+			selenium.keyUp("id=header", "\\83");
+			selenium.controlKeyUp();
+			waitForPageToLoadImproved(3000,false);
+			selenium.type("id=quickSearchQuery3", "TESTER");
+			selenium.click("id=button");
+			waitForPageToLoadImproved(10000,false);
+		} else {
+			System.out.println("CLDVRF: Failed to load prepopulate page.");
+			return;			
+		}
+		
+		if (checkNoErrorPage()) {
+			verifyTrue(selenium.isTextPresent(Settings.INCIDENT_ID_WN));
+			selenium.keyDown("id=header", "\\27");
+			selenium.keyUp("id=header", "\\27");
+		} else {
+			System.out.println("CLDVRF: Failed to check for existing PNR Incidents.");
+			return;			
+		}
+	}
 	
 	private void typeString(String locator, String string) {
 		char[] chars = string.toCharArray();
