@@ -68,7 +68,10 @@ public class SearchOnHandAction extends Action {
 		
 		SearchIncidentForm daform = (SearchIncidentForm) form;
 		
-		
+		String sort = request.getParameter("sort");
+
+		if (sort != null && sort.length() > 0) request.setAttribute("sort", sort);
+
 		if (request.getParameter("search") == null && request.getParameter("generateReport") == null) {
 			
 			//daform.setAirline(user.getStation().getCompany().getCompanyCode_ID());
@@ -98,12 +101,12 @@ public class SearchOnHandAction extends Action {
 					notClosed = true;
 				}
 				
-				List countArray =  bs.findOnHandBagsBySearchCriteria(daform, user, 0, 0, true, notClosed, true);
+				List countArray =  bs.findOnHandBagsBySearchCriteria(daform, user, 0, 0, true, notClosed, true, sort);
 				int rc = ((Long) countArray.get(0)).intValue();
 				int maxRc = TracerProperties.getMaxReportRows(user.getStation().getCompany().getCompanyCode_ID()); 
 									
 				if (rc < maxRc) {
-					List resultArray =  bs.findOnHandBagsBySearchCriteria(daform, user, 0, 0, false, notClosed, true);
+					List resultArray =  bs.findOnHandBagsBySearchCriteria(daform, user, 0, 0, false, notClosed, true, sort);
 					ReportBMO rbmo = new ReportBMO(request);
 
 					reportFile = ReportBMO.createSearchOnhandReport(resultArray, request, outputType, user.getCurrentlocale(), reportPath, rbmo);
@@ -138,7 +141,7 @@ public class SearchOnHandAction extends Action {
 			notClosed = true;
 		}
 		// get number of records found
-		if ((resultlist = bs.findOnHandBagsBySearchCriteria(daform, user, 0, 0, true, notClosed, true)) == null
+		if ((resultlist = bs.findOnHandBagsBySearchCriteria(daform, user, 0, 0, true, notClosed, true, sort)) == null
 				|| resultlist.size() <= 0) {
 			int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_SEARCH_PAGES, session);
 			request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
@@ -174,7 +177,7 @@ public class SearchOnHandAction extends Action {
 
 			//find the paginated on hand bags
 			List searchList = bs.findOnHandBagsBySearchCriteria(daform, user, rowsperpage, currpage,
-					false, notClosed, true);
+					false, notClosed, true, sort);
 
 			if (currpage + 1 == totalpages) request.setAttribute("end", "1");
 			if (totalpages > 1) {

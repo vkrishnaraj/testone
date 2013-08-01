@@ -2010,11 +2010,16 @@ public class BagService {
 
 	public List findOnHandBagsBySearchCriteria(SearchIncidentForm daform, Agent user, int rowsperpage, int currpage,
 			boolean isCount, boolean notClosed) {
-		return findOnHandBagsBySearchCriteria(daform, user, rowsperpage, currpage, isCount, notClosed, false);
+		return findOnHandBagsBySearchCriteria(daform, user, rowsperpage, currpage, isCount, notClosed, false, null);
 		
 	}
 	public List findOnHandBagsBySearchCriteria(SearchIncidentForm daform, Agent user, int rowsperpage, int currpage,
 			boolean isCount, boolean notClosed, boolean dirtyRead) {
+		return findOnHandBagsBySearchCriteria(daform, user, rowsperpage, currpage, isCount, notClosed, dirtyRead, null);
+		
+	}
+	public List findOnHandBagsBySearchCriteria(SearchIncidentForm daform, Agent user, int rowsperpage, int currpage,
+			boolean isCount, boolean notClosed, boolean dirtyRead, String sort) {
 		try {
 			OhdBMO oBMO = new OhdBMO();
 			Ohd_DTO oDTO = new Ohd_DTO();
@@ -2032,7 +2037,7 @@ public class BagService {
 				oDTO.setHeldStation(StationBMO.getStation(daform.getStationassigned_ID()).getStationcode());
 			}
 
-			return oBMO.findOnHandBagsBySearchCriteria(oDTO, user, rowsperpage, currpage, isCount, notClosed, dirtyRead);
+			return oBMO.findOnHandBagsBySearchCriteria(oDTO, user, rowsperpage, currpage, isCount, notClosed, dirtyRead, sort);
 
 		}
 		catch (Exception e) {

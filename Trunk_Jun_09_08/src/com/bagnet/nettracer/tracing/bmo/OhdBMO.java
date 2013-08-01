@@ -593,7 +593,7 @@ public class OhdBMO {
 	
 	public List findOnHandBagsBySearchCriteria(Ohd_DTO oDTO, Agent user, int rowsperpage,
 			int currpage, boolean iscount, boolean notClosed) {
-		return findOnHandBagsBySearchCriteria(oDTO, user, rowsperpage, currpage, iscount, notClosed, false);
+		return findOnHandBagsBySearchCriteria(oDTO, user, rowsperpage, currpage, iscount, notClosed, false, null);
 	}
 	/**
 	 * Find on hands based on the search criteria
@@ -609,7 +609,7 @@ public class OhdBMO {
 	 * @return list of on hands, null if none found.
 	 */
 	public List findOnHandBagsBySearchCriteria(Ohd_DTO oDTO, Agent user, int rowsperpage,
-			int currpage, boolean iscount, boolean notClosed, boolean dirtyRead) {
+			int currpage, boolean iscount, boolean notClosed, boolean dirtyRead, String sort) {
 
 		Session sess = null;
 
@@ -764,8 +764,37 @@ public class OhdBMO {
 			}
 
 			
-			if (!iscount) sql.append(" order by ohd.OHD_ID");
-
+			if (!iscount && (sort==null|| sort.equals(""))) {
+				sql.append(" order by ohd.OHD_ID");
+			} else if (!iscount) {			
+				String sortq = "";
+				if (sort != null) {
+					if (sort.equals("ohdnum")) sortq = " order by ohd.OHD_ID asc";
+					if (sort.equals("ohdnumRev")) sortq = " order by ohd.OHD_ID desc";
+					if (sort.equals("ohdCreateDate")) sortq = " order by ohd.founddate asc";
+					if (sort.equals("ohdCreateDateRev")) sortq = " order by ohd.founddate desc";
+					if (sort.equals("bagtagnum")) sortq = " order by ohd.claimnum asc";
+					if (sort.equals("bagtagnumRev")) sortq = " order by ohd.claimnum desc";
+					if (sort.equals("status")) sortq = " order by ohd.status.status_ID asc";
+					if (sort.equals("statusRev")) sortq = " order by ohd.status.status_ID desc";
+					if (sort.equals("color")) sortq = " order by ohd.color asc";
+					if (sort.equals("colorRev")) sortq = " order by ohd.color desc";
+					if (sort.equals("bagtype")) sortq = " order by ohd.type asc";
+					if (sort.equals("bagtypeRev")) sortq = " order by ohd.type desc";
+					if (sort.equals("foundComp")) sortq = " order by ohd.foundAtStation.company.companyCode_ID asc";
+					if (sort.equals("foundCompRev")) sortq = " order by ohd.foundAtStation.company.companyCode_ID desc";
+					if (sort.equals("foundStation")) sortq = " order by ohd.foundAtStation.stationcode asc";
+					if (sort.equals("foundStationRev")) sortq = " order by ohd.foundAtStation.stationcode desc";
+					if (sort.equals("holdStation")) sortq = " order by ohd.holdingStation.stationcode asc";
+					if (sort.equals("holdStationRev")) sortq = " order by ohd.holdingStation.stationcode desc";
+					if (sort.equals("name")) sortq = " order by ohd.lastname asc";
+					if (sort.equals("nameRev")) sortq = " order by ohd.lastname desc";
+					if (sort.equals("wtid")) sortq = " order by ohd.wtFile.wt_id asc";
+					if (sort.equals("wtidRev")) sortq = " order by ohd.wtFile.wt_id desc";
+				}
+				sql.append(sortq);
+			}
+			
 			Query q = sess.createQuery(sql.toString());
 
 			if (rowsperpage > 0) {

@@ -51,8 +51,26 @@ function updatePagination() {
     return true;
 }
 
+function sortSearchOhd(sortOrder) {
+	o = document.searchIncidentForm;
+	o.sort.value = sortOrder;
+	o.submit();
+}
   </script>
   <html:form action="searchOnHand.do" method="post" onsubmit="fillzero(this.incident_ID, 13); return true;">
+  <%
+    String sort = (String)request.getAttribute("sort");
+
+    if (sort != null && sort.length() > 0) {
+%>
+      <input type=hidden name=sort value='<%= sort %>'>
+<%
+    } else {
+%>
+      <input type=hidden name=sort value="ohdnum">
+<%
+    }
+%>
     <tr>
       <td colspan="3" id="pageheadercell">
         <div id="pageheaderleft">
@@ -245,64 +263,164 @@ function updatePagination() {
             %>
             <table class="form2" cellspacing="0" cellpadding="0">
               <tr>
+              	<logic:notEqual name="sort" value="ohdnum" scope="request">
                 <td>
                   <strong>
-                    <bean:message key="colname.on_hand_report_number" />
+                     <a href="#" onclick="sortSearchOhd('ohdnum');"><bean:message key="colname.on_hand_report_number" /></a>
                   </strong>
                 </td>
+                </logic:notEqual>
+                <logic:equal name="sort" value="ohdnum" scope="request">
                 <td>
                   <strong>
-                    <bean:message key="colname.ohd_create_date" />
+                     <a href="#" onclick="sortSearchOhd('ohdnumRev');"><bean:message key="colname.on_hand_report_number" /></a>
                   </strong>
                 </td>
+                </logic:equal>
+              	<logic:notEqual name="sort" value="ohdCreateDate" scope="request">
                 <td>
                   <strong>
-                    <bean:message key="colname.bag_tag_number" />
+                    <a href="#" onclick="sortSearchOhd('ohdCreateDate');"><bean:message key="colname.ohd_create_date" /></a>
                   </strong>
                 </td>
+                </logic:notEqual>
+                <logic:equal name="sort" value="ohdCreateDate" scope="request">
                 <td>
                   <strong>
-                    <bean:message key="header.status" />
+                    <a href="#" onclick="sortSearchOhd('ohdCreateDateRev');"><bean:message key="colname.ohd_create_date" /></a>
                   </strong>
                 </td>
+                </logic:equal>
+                <logic:notEqual name="sort" value="bagtagnum" scope="request">
                 <td>
                   <strong>
-                    <bean:message key="colname.color" />
+                    <a href="#" onclick="sortSearchOhd('bagtagnum');"><bean:message key="colname.bag_tag_number" /></a>
                   </strong>
                 </td>
+                </logic:notEqual>
+                <logic:equal name="sort" value="bagtagnum" scope="request">
                 <td>
                   <strong>
-                    <bean:message key="colname.bagtype" />
+                    <a href="#" onclick="sortSearchOhd('bagtagnumRev');"><bean:message key="colname.bag_tag_number" /></a>
                   </strong>
                 </td>
+                </logic:equal>
+              	<logic:notEqual name="sort" value="status" scope="request">
                 <td>
                   <strong>
-                    <bean:message key="colname.found_company" />
+                    <a href="#" onclick="sortSearchOhd('status');"><bean:message key="header.status" /></a>
                   </strong>
                 </td>
+                </logic:notEqual>
+              	<logic:equal name="sort" value="status" scope="request">
                 <td>
                   <strong>
-                    <bean:message key="colname.found_station" />
+                    <a href="#" onclick="sortSearchOhd('statusRev');"><bean:message key="header.status" /></a>
                   </strong>
                 </td>
+                </logic:equal>
+                <logic:notEqual name="sort" value="color" scope="request">
                 <td>
                   <strong>
-                    <bean:message key="colname.holding_station" />
+                    <a href="#" onclick="sortSearchOhd('color');"><bean:message key="colname.color" /></a>
                   </strong>
                 </td>
+                </logic:notEqual>
+                <logic:equal name="sort" value="color" scope="request">
                 <td>
                   <strong>
-                    <bean:message key="colname.name" />
+                    <a href="#" onclick="sortSearchOhd('colorRev');"><bean:message key="colname.color" /></a>
                   </strong>
                 </td>
+                </logic:equal>
+              	<logic:notEqual name="sort" value="bagtype" scope="request">
+                <td>
+                  <strong>
+                    <a href="#" onclick="sortSearchOhd('bagtype');"><bean:message key="colname.bagtype" /></a>
+                  </strong>
+                </td>
+                </logic:notEqual>
+              	<logic:equal name="sort" value="bagtype" scope="request">
+                <td>
+                  <strong>
+                    <a href="#" onclick="sortSearchOhd('bagtypeRev');"><bean:message key="colname.bagtype" /></a>
+                  </strong>
+                </td>
+                </logic:equal>
+                <logic:notEqual name="sort" value="foundComp" scope="request">
+                <td>
+                  <strong>
+                    <a href="#" onclick="sortSearchOhd('foundComp');"><bean:message key="colname.found_company" /></a>
+                  </strong>
+                </td>
+                </logic:notEqual>
+                <logic:equal name="sort" value="foundComp" scope="request">
+                <td>
+                  <strong>
+                    <a href="#" onclick="sortSearchOhd('foundCompRev');"><bean:message key="colname.found_company" /></a>
+                  </strong>
+                </td>
+                </logic:equal>
+              	<logic:notEqual name="sort" value="foundStation" scope="request">
+                <td>
+                  <strong>
+                    <a href="#" onclick="sortSearchOhd('foundStation');"><bean:message key="colname.found_station" /></a>
+                  </strong>
+                </td>
+                </logic:notEqual>
+                <logic:equal name="sort" value="foundStation" scope="request">
+                <td>
+                  <strong>
+                    <a href="#" onclick="sortSearchOhd('foundStationRev');"><bean:message key="colname.found_station" /></a>
+                  </strong>
+                </td>
+                </logic:equal>
+              	<logic:notEqual name="sort" value="holdStation" scope="request">
+	                <td>
+	                  <strong>
+	                    <a href="#" onclick="sortSearchOhd('holdStation');"><bean:message key="colname.holding_station" /></a>
+	                  </strong>
+	                </td>
+                </logic:notEqual>
+                <logic:equal name="sort" value="holdStation" scope="request">
+	                <td>
+	                  <strong>
+	                    <a href="#" onclick="sortSearchOhd('holdStationRev');"><bean:message key="colname.holding_station" /></a>
+	                  </strong>
+	                </td>
+                </logic:equal>
+              	<logic:notEqual name="sort" value="name" scope="request">
+	                <td>
+	                  <strong>
+	                    <a href="#" onclick="sortSearchOhd('name');"><bean:message key="colname.name" /></a>
+	                  </strong>
+	                </td>
+                </logic:notEqual>
+                <logic:equal name="sort" value="name" scope="request">
+	                <td>
+	                  <strong>
+	                    <a href="#" onclick="sortSearchOhd('nameRev');"><bean:message key="colname.name" /></a>
+	                  </strong>
+	                </td>
+                </logic:equal>
                 <%
                 	if(a.getStation().getCompany().getVariable().getWt_enabled()==1){
                 %>
-                <td>
-                	<strong>
-                		<bean:message key="colname.worldtracer_id"/>
-                	</strong>
-                </td>
+                
+              	<logic:notEqual name="sort" value="wtid" scope="request">
+	                <td>
+	                	<strong>
+	                		<a href="#" onclick="sortSearchOhd('wtid');"><bean:message key="colname.worldtracer_id"/></a>
+	                	</strong>
+	                </td>
+                </logic:notEqual>
+                <logic:equal name="sort" value="wtid" scope="request">
+	                <td>
+	                	<strong>
+	                		<a href="#" onclick="sortSearchOhd('wtidRev');"><bean:message key="colname.worldtracer_id"/></a>
+	                	</strong>
+	                </td>
+                </logic:equal>
                 <%
                 	}
                 %>
