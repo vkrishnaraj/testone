@@ -746,7 +746,7 @@ public class TracingConstants {
 
     public final static String VIEW_PRIVACY_PERMISSIONS = "viewprivacypermissions";
     
-    public final static String VIEW_LINKS = "view_links";
+    public final static String VIEW_LINKS = "viewlinks";
 	
 	//success on inserting on hand
 	public final static String INSERT_ON_HAND_SUCCESS = "insertonhandsuccess";

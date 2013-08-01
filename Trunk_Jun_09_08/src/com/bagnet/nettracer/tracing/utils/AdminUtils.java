@@ -42,6 +42,7 @@ import com.bagnet.nettracer.tracing.db.SystemComponent;
 import com.bagnet.nettracer.tracing.db.TimeZone;
 import com.bagnet.nettracer.tracing.db.UserGroup;
 import com.bagnet.nettracer.tracing.db.Work_Shift;
+import com.bagnet.nettracer.tracing.db.Link;
 import com.bagnet.nettracer.tracing.db.audit.Audit_GroupComponentPolicy;
 import com.bagnet.nettracer.tracing.db.audit.Audit_UserGroup;
 import com.bagnet.nettracer.tracing.db.lf.Subcompany;
@@ -818,6 +819,33 @@ public class AdminUtils {
 				cri.setFirstResult(startnum);
 				cri.setMaxResults(rowsperpage);
 			}
+			return cri.list();
+		} catch (Exception e) {
+			logger.fatal(e.getMessage());
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.fatal(e.getMessage());
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Get all the links associated with a given company
+	 * 
+	 * @param companyCode
+	 * @return number of links in the system
+	 */
+	public static List getLinks(String companyCode) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Link.class);
+			cri.createCriteria("company").add(Expression.eq("companyCode_ID", companyCode));
 			return cri.list();
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());

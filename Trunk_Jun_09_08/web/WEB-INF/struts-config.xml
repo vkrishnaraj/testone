@@ -393,7 +393,7 @@
 		
 		<forward name="viewprivacypermissions" path="view_privacypermissions"/>
 		
-		<forward name="view_links" path="view_links"/>
+		<forward name="viewlinks" path="view_links"/>
 
 		<forward name="viewregion" path="view_region"/>
 		

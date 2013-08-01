@@ -194,6 +194,7 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.SpecialFlag" />
 		<mapping class="com.bagnet.nettracer.tracing.db.CrmFile" />
 		<mapping class="com.bagnet.nettracer.tracing.db.Item_BDO" />
+		<mapping class="com.bagnet.nettracer.tracing.db.Link" />
 		
 		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim" />
 		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.OCAddress" />

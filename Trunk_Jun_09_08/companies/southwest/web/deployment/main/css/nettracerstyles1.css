@@ -336,6 +336,25 @@ div#maincontent table.form2{
 	background-color:#D1E4F1;
 }
 
+div#maincontent table.links{
+	background-color:#D1E4F1;
+	padding:5px;
+	font-size:16px;
+}
+
+div#maincontent table.links td.link_image{
+	text-align:center;
+	vertical-align:middle;
+	width:100px;
+	background-color:#fff;
+}
+
+div#maincontent table.links td.link_description{
+	text-align:left;
+	vertical-align:middle;
+	padding-left:5px;
+	background-color:#fff;
+}
 
 td.white{
 	background-color:#fff;

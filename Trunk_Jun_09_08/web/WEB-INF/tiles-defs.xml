@@ -389,7 +389,7 @@
     </definition>
     
     <definition name="view_links" extends="user_menu">
-    	<put name="center" value="pages/admin/links.jsp"/>
+    	<put name="center" value="/pages/admin/links.jsp"/>
     </definition>
     
     <definition name="view_worldtracerafviewraw" path="/pages/worldtracer/worldtracer_viewaf_rawinc.jsp">

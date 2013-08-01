@@ -3,6 +3,9 @@ package com.bagnet.nettracer.tracing.actions.admin;
 
 import java.util.TreeMap;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -24,6 +27,9 @@ import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.audit.AuditGroupUtils;
 
+import com.bagnet.nettracer.tracing.db.Company;
+import com.bagnet.nettracer.tracing.db.Link;
+
 public final class ViewLinksAction extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -33,12 +39,15 @@ public final class ViewLinksAction extends Action {
 		TracerUtils.checkSession(session);
 
 		Agent user = (Agent) session.getAttribute("user");
-		if (user == null || form == null) {
+		if (user == null) {
 			response.sendRedirect("logoff.do");
 			return null;
 		}
 
 		//Get inner content from database
+		String companyCode = user.getStation().getCompany().getCompanyCode_ID();
+		List linkList = AdminUtils.getLinks(companyCode);
+		request.setAttribute("linkList", linkList);
 		
 		return mapping.findForward(TracingConstants.VIEW_LINKS);
 	}
