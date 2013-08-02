@@ -1854,6 +1854,11 @@ public class BagService {
 					oDTO.setOhd_type(TracingConstants.NOT_MASS_OHD_TYPE);
 
 				oDTO.setClaimnum(TracerUtils.removeSpaces(bagtag).toUpperCase());
+				
+				oDTO.setModifiedBy(mod_agent.getUsername());
+				oDTO.setModifiedDate(DateUtils.convertToGMTDate(new Date()));
+				oDTO.setPosId(theform.getPosId());
+				oDTO.setLateCheckInd(theform.getLateCheck());
 
 				// oDTO.setOHD_ID(theform.getOhd_id());
 				oDTO.setFoundtime(theform.getFoundTime());
@@ -2149,6 +2154,11 @@ public class BagService {
 				iDTO.getAgent().getCurrentlocale(), null ));
 		theform.setDispWarehouseSentDate(DateUtils.formatDate(iDTO.getWarehouseSentDate(), iDTO.getAgent().getDateformat().getFormat(), 
 				iDTO.getAgent().getCurrentlocale(), null ));
+		
+		theform.setModifiedAgent(iDTO.getModifiedBy());
+		theform.setModifiedDate(iDTO.getModifiedDate());
+		theform.setPosId(iDTO.getPosId());
+		theform.setLateCheck(iDTO.getLateCheckInd());
 
 		BeanUtils.copyProperties(theform, iDTO);
 		if(iDTO.getMembership() == null) {

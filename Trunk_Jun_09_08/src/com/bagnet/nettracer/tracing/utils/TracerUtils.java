@@ -356,6 +356,9 @@ public class TracerUtils {
 		theform.setFoundDate(x);
 		theform.getItinerary(theform.getItinerarylist().size());
 		theform.getItem(theform.getItemlist().size());
+
+		theform.setModifiedAgent(user.getUsername());
+		theform.setModifiedDate(x);
 		
 		if (request.getParameter("cloneOnHand") != null
 				&& UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLONE_OHD, user)) {

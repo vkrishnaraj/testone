@@ -76,6 +76,9 @@ public class Audit_OHD implements Serializable {
 	
 	private int faultStation;
 	private int loss_code;
+	
+	private String posId;
+	private boolean lateCheckInd;
 
 	/**
 	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.Agent"
@@ -890,5 +893,33 @@ public class Audit_OHD implements Serializable {
 		this.matched_incident = matched_incident;
 	}
 
+	/**
+	 * @hibernate.property type="string" length="6"
+	 */
+	public String getPosId() {
+		return posId;
+	}
 
+	public void setPosId(String posId) {
+		this.posId = posId;
+	}
+
+	/**
+	 * @hibernate.property type="boolean"
+	 */
+	public boolean getLateCheckInd() {
+		return lateCheckInd;
+	}
+
+	public void setLateCheckInd(boolean lateCheckInd) {
+		this.lateCheckInd = lateCheckInd;
+	}
+
+	public String getDispPosId() {
+		return posId == null ? "" : posId;
+	}
+	
+	public String getDispLateCheckInd() {
+		return lateCheckInd ? "Yes" : "No";
+	}
 }

@@ -93,7 +93,11 @@ public final class OnHandForm extends ValidatorForm {
 	private boolean notifiedOfRequirements;
 	
 	private String teletypeAddress; //for the big Teletype String for historical reporting
-
+	
+	private Date modifiedDate;
+	private String modifiedAgent;
+	private String posId;
+	private boolean lateCheck;
 	
 	public String getTeletypeAddress() {
 		return teletypeAddress;
@@ -774,8 +778,7 @@ public final class OnHandForm extends ValidatorForm {
 	 * @return
 	 */
 	public String getDispFoundTime() {
-		return DateUtils.formatDate(this.getFoundDate(), _DATEFORMAT + " " + _TIMEFORMAT, null,
-				_TIMEZONE);
+		return DateUtils.formatDate(this.getFoundDate(), _DATEFORMAT + " " + _TIMEFORMAT, null,	_TIMEZONE);
 	}
 
 	/**
@@ -783,8 +786,7 @@ public final class OnHandForm extends ValidatorForm {
 	 * @return
 	 */
 	public String getDispCloseDate() {
-		return DateUtils.formatDate(this.getClose_date(), _DATEFORMAT + " " + _TIMEFORMAT, null,
-				_TIMEZONE);
+		return DateUtils.formatDate(this.getClose_date(), _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
 	}
 
 	/**
@@ -1062,6 +1064,33 @@ public final class OnHandForm extends ValidatorForm {
 	public void setLoss_code(int lossCode) {
 		this.lossCode = lossCode;
 	}
+	public Date getModifiedDate() {
+		return modifiedDate;
+	}
+	public void setModifiedDate(Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
+	public String getModifiedAgent() {
+		return modifiedAgent;
+	}
+	public void setModifiedAgent(String modifiedAgent) {
+		this.modifiedAgent = modifiedAgent;
+	}
 	
+	public String getDispModifiedDate() {
+		return DateUtils.formatDate(this.getModifiedDate(), _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
+	}
+	public String getPosId() {
+		return posId;
+	}
+	public void setPosId(String posId) {
+		this.posId = posId;
+	}
+	public boolean getLateCheck() {
+		return lateCheck;
+	}
+	public void setLateCheck(boolean lateCheck) {
+		this.lateCheck = lateCheck;
+	}
 	
 }

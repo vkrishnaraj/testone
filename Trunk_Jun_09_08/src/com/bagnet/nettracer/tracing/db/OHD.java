@@ -86,6 +86,11 @@ public class OHD implements Serializable {
 	private int tagSentToWtStationId;
 	
 	private int creationMethod;
+	
+	private String modifiedBy;
+	private Date modifiedDate;
+	private String posId;
+	private boolean lateCheckInd;
 
 	public String getDisplaydate() {
 		Date completedate = DateUtils.convertToDate(this.getFounddate().toString() + " "
@@ -1065,6 +1070,50 @@ public class OHD implements Serializable {
 
 	public void setCreationMethod(int creationMethod) {
 		this.creationMethod = creationMethod;
+	}
+
+	/**
+	 * @hibernate.property type="string"
+	 */
+	public String getModifiedBy() {
+		return modifiedBy;
+	}
+
+	public void setModifiedBy(String modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
+
+	/**
+	 * @hibernate.property type="timestamp"
+	 */
+	public Date getModifiedDate() {
+		return modifiedDate;
+	}
+
+	public void setModifiedDate(Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
+
+	/**
+	 * @hibernate.property type="string" length="6"
+	 */
+	public String getPosId() {
+		return posId;
+	}
+
+	public void setPosId(String posId) {
+		this.posId = posId;
+	}
+
+	/**
+	 * @hibernate.property type="boolean"
+	 */
+	public boolean getLateCheckInd() {
+		return lateCheckInd;
+	}
+
+	public void setLateCheckInd(boolean lateCheckInd) {
+		this.lateCheckInd = lateCheckInd;
 	}
 	
 }

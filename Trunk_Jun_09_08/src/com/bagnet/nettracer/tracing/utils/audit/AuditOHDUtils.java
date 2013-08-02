@@ -252,6 +252,8 @@ public class AuditOHDUtils {
 		audit_ohd.setFaultstation_ID(ohd.getFaultstation_ID());
 		audit_ohd.setLoss_code(ohd.getLoss_code());
 		audit_ohd.setMatched_incident(ohd.getMatched_incident());
+		audit_ohd.setPosId(ohd.getPosId());
+		audit_ohd.setLateCheckInd(ohd.getLateCheckInd());
 
 		if (ohd.getControlLog() != null) {
 			Set aControlLog = new HashSet();

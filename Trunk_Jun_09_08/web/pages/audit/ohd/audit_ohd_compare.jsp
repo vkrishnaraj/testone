@@ -56,6 +56,7 @@ function updatePagination() {
 </script>
 <%
   List compareList = (List)request.getAttribute("compareList");
+  Agent a = (Agent) session.getAttribute("user");
 %>
   <html:form action="audit_ohd.do" method="post">
     <tr>
@@ -264,6 +265,28 @@ function updatePagination() {
                 </td>
               </logic:iterate>
             </tr>
+            <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_COLLECT_POS_ID, a)) { %>
+            <tr>
+              <td>
+                <bean:message key="colname.posId" />
+              </td>
+              <logic:iterate id="audit_ohd" name="compareList" scope="request">
+                <td>
+                  <bean:write name="audit_ohd" property="dispPosId" />
+                </td>
+              </logic:iterate>
+            </tr>
+            <tr>
+              <td>
+                <bean:message key="colname.latecheck" />
+              </td>
+              <logic:iterate id="audit_ohd" name="compareList" scope="request">
+                <td>
+                  <bean:write name="audit_ohd" property="dispLateCheckInd" />
+                </td>
+              </logic:iterate>
+            </tr>
+            <% } %>
             <tr>
               <td>
                 <bean:message key="colname.matchedincident" />
