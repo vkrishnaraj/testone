@@ -9,7 +9,7 @@
  <module>
      <web>
          <web-uri>demonstration_training.war</web-uri>
-         <context-root>demonstration</context-root>
+         <context-root>nettracer</context-root>
      </web>
   </module>
 </application> 
