@@ -630,7 +630,7 @@ public class OhdBMO {
 			else sql.append("select distinct ohd from com.bagnet.nettracer.tracing.db.OHD ohd ");
 
 			if (oDTO.getFirstname().trim().length() > 0 || oDTO.getLastname().trim().length() > 0
-					|| oDTO.getMiddlename().trim().length() > 0) {
+					|| oDTO.getMiddlename().trim().length() > 0 || (sort != null && (sort.equals("name") || !sort.equals("name")))) {
 				sql.append(" left outer join ohd.passengers passengers ");
 			}
 
@@ -787,8 +787,8 @@ public class OhdBMO {
 					if (sort.equals("foundStationRev")) sortq = " order by ohd.foundAtStation.stationcode desc";
 					if (sort.equals("holdStation")) sortq = " order by ohd.holdingStation.stationcode asc";
 					if (sort.equals("holdStationRev")) sortq = " order by ohd.holdingStation.stationcode desc";
-					if (sort.equals("name")) sortq = " order by ohd.lastname asc";
-					if (sort.equals("nameRev")) sortq = " order by ohd.lastname desc";
+					if (sort.equals("name")) sortq = " order by passengers.lastname asc";
+					if (sort.equals("nameRev")) sortq = " order by passengers.lastname desc";
 					if (sort.equals("wtid")) sortq = " order by ohd.wtFile.wt_id asc";
 					if (sort.equals("wtidRev")) sortq = " order by ohd.wtFile.wt_id desc";
 				}
