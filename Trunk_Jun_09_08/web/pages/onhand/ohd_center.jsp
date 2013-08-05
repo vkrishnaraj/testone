@@ -528,13 +528,11 @@ function gotoHistoricalReport() {
         <html:text property="dispFoundTime" size="14"
           styleClass="textfield" /></td>
         <td><bean:message key="colname.ohd_create_agent" /> <br>
-        <html:text property="agent_initials" size="10" readonly="true"
-          styleClass="textfield" disabled="true" /></td>
-          <td><bean:message key="colname.ohd_modified_date" /> <br>
-          <html:text property="dispModifiedDate" size="14" readonly="true"
-          styleClass="textfield" /></td>
-          <td><bean:message key="colname.ohd_modified_agent"/> <br>
-          <html:text property="modifiedAgent" size="10"
+         <html:text property="agent_initials" size="10" readonly="true"           styleClass="textfield" disabled="true" /></td>
+        <td><bean:message key="colname.ohd_modified_date" /> <br> 
+        	<html:text property="dispModifiedDate" size="14" readonly="true" styleClass="textfield" /></td>
+        <td><bean:message key="colname.ohd_modified_agent"/> <br>
+          	<html:text property="modifiedAgent" size="10"
           styleClass="textfield" disabled="true" /></td>
         <td><bean:message key="colname.found_station_nobr" /> <br>
         <input type="text" size="10" class="textfield"
@@ -601,7 +599,7 @@ function gotoHistoricalReport() {
       </tr>
       <tr>
         <td><bean:message key="colname.bag_tag_number.req" /> <br>
-        <html:text property="bagTagNumber" size="18" maxlength="10"
+        <html:text property="bagTagNumber" size="18" maxlength="11"
           styleClass="textfield" /></td>
         <td><bean:message key="colname.pnr" /> <br>
         <html:text property="pnr" size="10" maxlength="6"
