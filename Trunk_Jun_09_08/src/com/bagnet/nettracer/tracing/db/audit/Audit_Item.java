@@ -69,6 +69,8 @@ public class Audit_Item implements Serializable {
 
 	private Audit_Incident audit_incident;
 	
+	private String posId;
+	
 	/**
 	 * @return Returns the bag_weight.
 	 * 
@@ -780,4 +782,16 @@ public class Audit_Item implements Serializable {
 		XDescElement xd = TracerUtils.getXdescelement(xdescelement_ID_3);
 		return xd.getKey();
 	}
+
+	/**
+	 * @hibernate.property type="string" length="6"
+	 */
+	public String getPosId() {
+		return posId;
+	}
+
+	public void setPosId(String posId) {
+		this.posId = posId;
+	}
+	
 }

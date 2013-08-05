@@ -73,119 +73,119 @@ public class MBRActionUtils {
 		
 		
 		
-		if (request.getParameter("email_customer") == null)
-			theform.setEmail_customer(0);
-			
-		int numberToAdd = 1;
-		int fileindex = -1;
-		StringTokenizer stt = null;
-		Enumeration e = request.getParameterNames();
-		while (e.hasMoreElements()) {
-			String parameter = (String) e.nextElement();
-			if (parameter.indexOf("addinventory") > -1) {
-				String index = parameter.substring(parameter.indexOf("[")+1, java.lang.Math.min(parameter.indexOf("]"), parameter.length()));				
-				numberToAdd = TracerUtils.getNumberToAdd(request, "addNumInventory[" + index + "]" );
-				fileindex = Integer.parseInt(parameter.substring(parameter.indexOf("[") + 1, parameter.indexOf("]")));
+			if (request.getParameter("email_customer") == null)
+				theform.setEmail_customer(0);
 				
-				for (int i=0; i<numberToAdd; ++i) {
-					Item_Inventory ii = new Item_Inventory();
-					ii.setItem(theform.getItem(fileindex, -1));
-					theform.getItem(fileindex, -1).getInventorylist().add(ii);
-
+			int numberToAdd = 1;
+			int fileindex = -1;
+			StringTokenizer stt = null;
+			Enumeration e = request.getParameterNames();
+			while (e.hasMoreElements()) {
+				String parameter = (String) e.nextElement();
+				if (parameter.indexOf("addinventory") > -1) {
+					String index = parameter.substring(parameter.indexOf("[")+1, java.lang.Math.min(parameter.indexOf("]"), parameter.length()));				
+					numberToAdd = TracerUtils.getNumberToAdd(request, "addNumInventory[" + index + "]" );
+					fileindex = Integer.parseInt(parameter.substring(parameter.indexOf("[") + 1, parameter.indexOf("]")));
+					
+					for (int i=0; i<numberToAdd; ++i) {
+						Item_Inventory ii = new Item_Inventory();
+						ii.setItem(theform.getItem(fileindex, -1));
+						theform.getItem(fileindex, -1).getInventorylist().add(ii);
+	
+					}
+					request.setAttribute("inventory", Integer.toString(fileindex));
+					request.setAttribute("markDirty", 1);
+					return true;
 				}
-				request.setAttribute("inventory", Integer.toString(fileindex));
+			}
+	
+	
+	
+			// add new remark box
+			if (request.getParameter("addremark") != null) {
+				//set new remark with current time
+				Remark r = theform.getRemark(theform.getRemarklist().size());
+				r.setCreatetime(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(TracerDateTime.getGMTDate()));
+				r.setAgent(user);
+				r.set_DATEFORMAT(user.getDateformat().getFormat());
+				r.set_TIMEFORMAT(user.getTimeformat().getFormat());
+				r.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+				request.setAttribute("remark", Integer.toString(theform.getRemarklist().size() - 1));
 				request.setAttribute("markDirty", 1);
 				return true;
 			}
-		}
-
-
-
-		// add new remark box
-		if (request.getParameter("addremark") != null) {
-			//set new remark with current time
-			Remark r = theform.getRemark(theform.getRemarklist().size());
-			r.setCreatetime(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(TracerDateTime.getGMTDate()));
-			r.setAgent(user);
-			r.set_DATEFORMAT(user.getDateformat().getFormat());
-			r.set_TIMEFORMAT(user.getTimeformat().getFormat());
-			r.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
-			request.setAttribute("remark", Integer.toString(theform.getRemarklist().size() - 1));
-			request.setAttribute("markDirty", 1);
-			return true;
-		}
-		// add passenger
-		if (request.getParameter("addPassenger") != null) {
-			numberToAdd = TracerUtils.getNumberToAdd(request, "addPassengerNum");
-			for (int i=0; i<numberToAdd; ++i) {
-				theform.getPassenger(theform.getPassengerlist().size());
+			// add passenger
+			if (request.getParameter("addPassenger") != null) {
+				numberToAdd = TracerUtils.getNumberToAdd(request, "addPassengerNum");
+				for (int i=0; i<numberToAdd; ++i) {
+					theform.getPassenger(theform.getPassengerlist().size());
+				}
+				request.setAttribute("passenger", Integer.toString(theform.getPassengerlist().size() - 1));
+				request.setAttribute("markDirty", 1);
+				return true;
 			}
-			request.setAttribute("passenger", Integer.toString(theform.getPassengerlist().size() - 1));
-			request.setAttribute("markDirty", 1);
-			return true;
-		}
-
-		// add claimcheck
-		if (request.getParameter("addclaimcheck") != null) {
-			numberToAdd = TracerUtils.getNumberToAdd(request, "addclaimcheckNum");
-			for (int i=0; i<numberToAdd; ++i) {
-				theform.getClaimcheck(theform.getClaimchecklist().size());
-			}
-			request.setAttribute("claimcheck", "1");
-			request.setAttribute("markDirty", 1);
-			return true;
-		}
-		// add new item box
-		if (request.getParameter("additem") != null) {
-			numberToAdd = TracerUtils.getNumberToAdd(request, "additemNum");
-			for (int i=0; i<numberToAdd; ++i) {
 	
-				Item item = theform.getItem(theform.getItemlist().size(), TracingConstants.LOST_DELAY);
-				item.setXdescelement_ID_1(TracingConstants.XDESC_TYPE_X);
-				item.setXdescelement_ID_2(TracingConstants.XDESC_TYPE_X);
-				item.setXdescelement_ID_3(TracingConstants.XDESC_TYPE_X);
-				item.set_DATEFORMAT(user.getDateformat().getFormat());
-				item.setCurrency_ID(user.getDefaultcurrency());
-				// set item status if it is not being set to open
-				item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN));
-				//set default weight unit
-				String myDefaultWeightUnit = PropertyBMO.getValue(PropertyBMO.PROPERTY_NT_COMPANY_WEIGHT_UNIT_DEFAULT);
-				item.setBag_weight_unit(myDefaultWeightUnit);
+			// add claimcheck
+			if (request.getParameter("addclaimcheck") != null) {
+				numberToAdd = TracerUtils.getNumberToAdd(request, "addclaimcheckNum");
+				for (int i=0; i<numberToAdd; ++i) {
+					theform.getClaimcheck(theform.getClaimchecklist().size());
+				}
+				request.setAttribute("claimcheck", "1");
+				request.setAttribute("markDirty", 1);
+				return true;
 			}
-			request.setAttribute("item", Integer.toString(theform.getItemlist().size() - 1));
-			request.setAttribute("markDirty", 1);
-			return true;
-		}
-
-		if (request.getParameter("addarticles") != null) {
-			numberToAdd = TracerUtils.getNumberToAdd(request, "addarticlesNum");
-			for (int i=0; i<numberToAdd; ++i) {	
-				Articles a = theform.getArticle(theform.getArticlelist().size());
-				a.setCurrency_ID(user.getDefaultcurrency());
+			// add new item box
+			if (request.getParameter("additem") != null) {
+				numberToAdd = TracerUtils.getNumberToAdd(request, "additemNum");
+				for (int i=0; i<numberToAdd; ++i) {
+		
+					Item item = theform.getItem(theform.getItemlist().size(), TracingConstants.LOST_DELAY);
+					item.setXdescelement_ID_1(TracingConstants.XDESC_TYPE_X);
+					item.setXdescelement_ID_2(TracingConstants.XDESC_TYPE_X);
+					item.setXdescelement_ID_3(TracingConstants.XDESC_TYPE_X);
+					item.set_DATEFORMAT(user.getDateformat().getFormat());
+					item.setCurrency_ID(user.getDefaultcurrency());
+					// set item status if it is not being set to open
+					item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN));
+					//set default weight unit
+					String myDefaultWeightUnit = PropertyBMO.getValue(PropertyBMO.PROPERTY_NT_COMPANY_WEIGHT_UNIT_DEFAULT);
+					item.setBag_weight_unit(myDefaultWeightUnit);
+				}
+				request.setAttribute("item", Integer.toString(theform.getItemlist().size() - 1));
+				request.setAttribute("markDirty", 1);
+				return true;
 			}
-			request.setAttribute("articles", Integer.toString(theform.getArticlelist().size() - 1));
-			request.setAttribute("markDirty", 1);
-			return true;
-		}
-		// add new itinerary box
-		if (request.getParameter("addpassit") != null) {		
-			numberToAdd = TracerUtils.getNumberToAdd(request, "addpassitNum");
-			for (int i=0; i<numberToAdd; ++i) {
-				theform.getItinerary(theform.getItinerarylist().size(), TracingConstants.PASSENGER_ROUTING);
+	
+			if (request.getParameter("addarticles") != null) {
+				numberToAdd = TracerUtils.getNumberToAdd(request, "addarticlesNum");
+				for (int i=0; i<numberToAdd; ++i) {	
+					Articles a = theform.getArticle(theform.getArticlelist().size());
+					a.setCurrency_ID(user.getDefaultcurrency());
+				}
+				request.setAttribute("articles", Integer.toString(theform.getArticlelist().size() - 1));
+				request.setAttribute("markDirty", 1);
+				return true;
 			}
-			request.setAttribute("passit", "1");
-			request.setAttribute("markDirty", 1);
-			return true;
-		}
-		if (request.getParameter("addbagit") != null) {
-			numberToAdd = TracerUtils.getNumberToAdd(request, "addbagitNum");
-			for (int i=0; i<numberToAdd; ++i) {
-				theform.getItinerary(theform.getItinerarylist().size(), TracingConstants.BAGGAGE_ROUTING);
+			// add new itinerary box
+			if (request.getParameter("addpassit") != null) {		
+				numberToAdd = TracerUtils.getNumberToAdd(request, "addpassitNum");
+				for (int i=0; i<numberToAdd; ++i) {
+					theform.getItinerary(theform.getItinerarylist().size(), TracingConstants.PASSENGER_ROUTING);
+				}
+				request.setAttribute("passit", "1");
+				request.setAttribute("markDirty", 1);
+				return true;
 			}
-			request.setAttribute("bagit", "1");
-			request.setAttribute("markDirty", 1);
-			return true;
-		}
+			if (request.getParameter("addbagit") != null) {
+				numberToAdd = TracerUtils.getNumberToAdd(request, "addbagitNum");
+				for (int i=0; i<numberToAdd; ++i) {
+					theform.getItinerary(theform.getItinerarylist().size(), TracingConstants.BAGGAGE_ROUTING);
+				}
+				request.setAttribute("bagit", "1");
+				request.setAttribute("markDirty", 1);
+				return true;
+			}
 		}
 		return false;
 		

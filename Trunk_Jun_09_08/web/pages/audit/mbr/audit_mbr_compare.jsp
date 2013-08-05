@@ -674,6 +674,12 @@ function updatePagination() {
                       <bean:write name="theitem" property="OHD_ID" />
                       <br>
                     </logic:present>
+                    <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_COLLECT_POS_ID, a)) { %>
+	                    <bean:message key="colname.posId" />
+	                    :
+	                    <bean:write name="theitem" property="posId" />
+	                    <br>
+                    <% } %>
                     <bean:message key="colname.name_on_bag" />
                     :
                     <bean:write name="theitem" property="lnameonbag" />
