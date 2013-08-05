@@ -14,6 +14,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		// MJS: initial state is drivers license collection enabled
 		// 		and view/edit drivers license disabled.
 		setDriversLicensePermission(true, false);
+		verifyTrue(setCollectPosIdPermission(true));
 		selenium.click("//a[@id='menucol_1.1']");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
@@ -41,6 +42,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 				selenium.type("name=theitinerary[0].flightnum", "123");
 				selenium.click("id=itcalendar0");
 				selenium.click("link=Today");
+				selenium.type("name=theitem[0].posId", "123456");
 				selenium.select("name=theitem[0].color", "label=BK - Black");
 				selenium.select("name=theitem[0].bagtype", "label=22");
 				selenium.select("name=inventorylist[0].categorytype_ID", "label=Alcohol");
@@ -212,6 +214,38 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		}
 		goToTaskManager();
 		waitForPageToLoadImproved();
+	}
+	
+	@Test
+	public void testCollectPosIdFields() {
+		verifyTrue(navigateToIncident());
+		verifyTrue(selenium.isTextPresent("Position ID"));
+		verifyTrue(selenium.isElementPresent("name=theitem[0].posId"));
+		goToTaskManager();
+	}
+	
+	@Test
+	public void testPosIdAuditTrail() {
+		verifyTrue(navigateToAuditTrail());
+		verifyTrue(selenium.isTextPresent("Position ID : 123456"));
+		goToTaskManager();
+	}
+	
+	@Test
+	public void testPosIdFieldsNotPresent() {
+		verifyTrue(navigateToPermissionsPage());
+		verifyTrue(setCollectPosIdPermission(false));
+		verifyTrue(navigateToIncident());
+		verifyFalse(selenium.isTextPresent("Position ID"));
+		verifyFalse(selenium.isElementPresent("name=theitem[0].posId"));
+		goToTaskManager();
+	}
+	
+	@Test
+	public void testPosIdNotPresentAuditTrail() {
+		verifyTrue(navigateToAuditTrail());
+		verifyFalse(selenium.isTextPresent("Position ID : 123456"));
+		goToTaskManager();
 	}
 	
 	@Test
@@ -429,6 +463,30 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 			System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Save Permissions. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 		}
 		
+		return success;
+	}
+	
+	private boolean setCollectPosIdPermission(boolean check) {
+		boolean success = false;
+		if (!navigateToPermissionsPage()) {
+			return success;
+		}
+		
+		if (check) {
+			selenium.check("name=635");
+		} else {
+			selenium.uncheck("name=635");
+		}
+		
+		selenium.click("xpath=(//input[@id='button'])[2]");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
+			waitForPageToLoadImproved();
+			success = loginToNt();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Save Permissions. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+		}
 		return success;
 	}
 	
