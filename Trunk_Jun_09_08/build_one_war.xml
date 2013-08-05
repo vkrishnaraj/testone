@@ -1,4 +1,4 @@
-<project name="3.0" default="build-ear-local-westjet" basedir=".">
+<project name="3.0" default="build-ear-local-ntsouthwest" basedir=".">
 
 	<!-- GLOBAL PROPERTIES -->
 	
@@ -318,13 +318,24 @@
 	<target name="schemaexport" depends="compile-core,hibernate_generate_core" description="Exports a generated schema to DB and file">
 		<hibernatetool destdir="${build.dir}/${ant_project_name}/ddl">
 			<classpath>
-				<path refid="project.classpath" />
-				<path location="${build.dir}/${ant_project_name}/classes" />
-				<fileset dir="${app.home.jb5}\lib">
-					<patternset refid="jar.files" />
-				</fileset>
+				<fileset dir="${app.home.jb7}\bin\client">
+							<patternset refid="jar.files" />
+						</fileset>
+						<fileset dir="${app.home.jb7}\modules\org\hibernate\main">
+							<patternset refid="jar.files" />
+						</fileset>
+						<fileset dir="${app.home.jb7}\modules\org\jboss\as\jpa\hibernate\4">
+							<patternset refid="jar.files" />
+						</fileset>
+						<fileset dir="lib/jars">
+							<patternset refid="jar.files" />
+						</fileset>
+						<fileset dir="lib/build-client">
+							<patternset refid="jar.files" />
+							<include name="dom4j-1.6.jar" />
+						</fileset>
 			</classpath>
-			<annotationconfiguration configurationfile="companies/american-fs/environment/local/hibernate_main.cfg.xml" />
+			<annotationconfiguration configurationfile="hibernate_main.cfg.xml" />
 			<hbm2ddl drop="true" create="true" export="false" outputfilename="nettracer-ddl.sql" delimiter=";" format="true" />
 		</hibernatetool>
 	</target>
@@ -605,6 +616,8 @@
 	<target name="build-testing">
 		<antcall target="build-ear-testing"/>
 		<antcall target="build-ear-testing2"/>
+		<antcall target="build-ear-testing3"/>
+		<antcall target="build-ear-testing4"/>
 		<antcall target="build-ear-testing-avis"/>
 		<antcall target="build-ear-testing-avis-lfc-service"/>
 		<antcall target="build-ear-testing-airtran"/>
@@ -625,6 +638,7 @@
 	<target name="build-training">
 		<antcall target="build-ear-training"/>
 		<antcall target="build-ear-training2"/>
+		<antcall target="build-ear-training3"/>
 		<antcall target="build-ear-training-avis"/>
 		<antcall target="build-ear-training-avis-lfc-service"/>
 		<antcall target="build-ear-training-united"/>
@@ -636,6 +650,7 @@
 	<target name="build-production">
 		<antcall target="build-ear-production"/>
 		<antcall target="build-ear-production2"/>
+		<antcall target="build-ear-production3"/>
 		<antcall target="build-ear-production-avis"/>
 		<antcall target="build-ear-production-avis-lfc-service"/>
 		<antcall target="build-ear-production-airtran"/>
@@ -893,6 +908,16 @@
 		<antcall target="hibernate_generate" />		
 		<antcall target="build-war-testing-ntsouthwest"/>
 		<property name="app.xml.location" value="metadata/testing/hosted3" />
+		<antcall target="donotrun-build-ear" />
+	</target>
+
+	<target name="build-ear-testing4" depends="delete-wars">
+		<property name="staging.project" value="hosted4" />
+		<property name="staging.env" value="testing" />
+		<property name="avis.service.includes" value="*.war" />
+		<antcall target="hibernate_generate" />		
+		<antcall target="build-war-testing2-ntsouthwest"/>
+		<property name="app.xml.location" value="metadata/testing/hosted4" />
 		<antcall target="donotrun-build-ear" />
 	</target>
 
@@ -1701,6 +1726,14 @@
 		<antcall target="donotrun-build-ntsouthwest" />
 	</target>
 
+	<target name="build-war-testing2-ntsouthwest" depends="delete">
+		<property name="ant_project_name" value="southwest" />
+		<property name="ant_war_name" value="ntsouthwest_testing" />
+		<property name="environment.name" value="test2"/>
+		<property name="ntsouthwest.init.complete" value="true" />
+		<antcall target="donotrun-build-ntsouthwest" />
+	</target>
+
 	<target name="build-war-testing-webjet" depends="delete">
 		<property name="ant_project_name" value="webjet" />
 		<property name="ant_war_name" value="webjet_testing" />
@@ -2418,6 +2451,8 @@
 		<antcall target="build-cron-testing-american"/>
 		<antcall target="build-cron-testing-frontier"/>
 		<antcall target="build-cron-testing-southwest"/>
+		<antcall target="build-cron-testing-ntsouthwest"/>
+		<antcall target="build-cron-testing2-ntsouthwest"/>
 		<antcall target="build-cron-testing-united"/>
 		<antcall target="build-cron-testing-virgin"/>
 		<antcall target="build-cron-testing-avis"/>
@@ -2437,6 +2472,7 @@
 		<antcall target="build-cron-training-american"/>
 		<antcall target="build-cron-training-frontier"/>
 		<antcall target="build-cron-training-southwest"/>
+		<antcall target="build-cron-training-ntsouthwest"/>
 		<antcall target="build-cron-training-united"/>
 		<antcall target="build-cron-training-virgin"/>
 		<antcall target="build-cron-training-avis"/>
@@ -2455,6 +2491,7 @@
 		<antcall target="build-cron-production-american"/>
 		<antcall target="build-cron-production-frontier"/>
 		<antcall target="build-cron-production-southwest"/>
+		<antcall target="build-cron-production-ntsouthwest"/>
 		<antcall target="build-cron-production-united"/>
 		<antcall target="build-cron-production-virgin"/>
 		<antcall target="build-cron-production-avis"/>
@@ -2473,6 +2510,7 @@
 		<antcall target="build-cron-hudson-american"/>
 		<antcall target="build-cron-hudson-frontier"/>
 		<antcall target="build-cron-hudson-southwest"/>
+		<antcall target="build-cron-hudson-ntsouthwest"/>
 		<antcall target="build-cron-hudson-united"/>
 		<antcall target="build-cron-hudson-virgin"/>
 		<antcall target="build-cron-hudson-avis"/>
@@ -3254,12 +3292,23 @@
 		
 	<target name="build-cron-testing-ntsouthwest">
 		<property name="staging.project" value="cron" />
-		<property name="staging.env" value="ntsouthwest" />
+		<property name="staging.env" value="testing" />
 		<property name="ant_project_name" value="southwest" />
 		<property name="sub_path" value="test/" />
 		<property name="environment.name" value="test"/>
 		<property name="cron.job.config.file" value="companies/southwest/environment/test/jobs/cronJobs.xml" />
 		<property name="jarprefix" value="ntwntest-" />
+		<antcall target="cron-service" />
+	</target>
+
+	<target name="build-cron-testing2-ntsouthwest">
+		<property name="staging.project" value="cron" />
+		<property name="staging.env" value="testing" />
+		<property name="ant_project_name" value="southwest" />
+		<property name="sub_path" value="test2/" />
+		<property name="environment.name" value="test"/>
+		<property name="cron.job.config.file" value="companies/southwest/environment/test2/jobs/cronJobs.xml" />
+		<property name="jarprefix" value="ntwntest2-" />
 		<antcall target="cron-service" />
 	</target>
 		
