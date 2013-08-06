@@ -13,7 +13,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	public void testVerifyText() throws Exception {
 		// MJS: initial state is drivers license collection enabled
 		// 		and view/edit drivers license disabled.
-		setDriversLicensePermission(true, false);
+		verifyTrue(setDriversLicensePermission(true, false));
 		verifyTrue(setCollectPosIdPermission(true));
 		selenium.click("//a[@id='menucol_1.1']");
 		waitForPageToLoadImproved();
@@ -96,7 +96,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testVerifyDriversLicensePrepopulateClaim() {
-		navigateToIncident();
+		verifyTrue(navigateToIncident());
 		selenium.click("//td[@id='navmenucell']/div/dl/dd[10]/a/span[2]");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
@@ -124,7 +124,6 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("Province :"));
 		verifyTrue(selenium.isTextPresent("Country Of Issue : US"));
 		goToTaskManager();
-		waitForPageToLoadImproved();
 	}
 	
 	@Test
@@ -374,6 +373,93 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 			System.out.println("CLDVRF: Failed to check for existing PNR Incidents.");
 			return;			
 		}
+	}
+	
+	@Test
+	public void testCreateIncidentWithEmptyDriversLicense() throws Exception {
+		verifyTrue(setDriversLicensePermission(true, false));
+		selenium.click("//a[@id='menucol_1.1']");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			checkCopyrightAndQuestionMarks();
+			selenium.click("name=skip_prepopulate");
+			waitForPageToLoadImproved();
+			if (checkNoErrorPage()) {
+				checkCopyrightAndQuestionMarks();
+				selenium.type("name=passenger[0].lastname", "Test");
+				selenium.type("name=passenger[0].firstname", "Test");
+				selenium.type("name=addresses[0].address1", "123 Test");
+				selenium.type("name=addresses[0].city", "Test");
+				selenium.select("name=addresses[0].state_ID", "label=Georgia");
+				selenium.type("name=addresses[0].zip", "12345");
+				selenium.type("name=theitinerary[0].legfrom", "ATL");
+				selenium.type("name=theitinerary[0].legto", "LAX");
+				selenium.type("name=theitinerary[0].flightnum", "123");
+				selenium.click("id=itcalendar0");
+				selenium.click("link=Today");
+				selenium.select("name=theitem[0].color", "label=BK - Black");
+				selenium.select("name=theitem[0].bagtype", "label=22");
+				selenium.select("name=inventorylist[0].categorytype_ID", "label=Alcohol");
+				selenium.type("name=inventorylist[0].description", "TEST");
+				selenium.select("name=inventorylist[1].categorytype_ID", "label=Alcohol");
+				selenium.select("name=inventorylist[2].categorytype_ID", "label=Alcohol");
+				selenium.type("name=inventorylist[1].description", "TEST");
+				selenium.type("name=inventorylist[2].description", "TEST");
+				selenium.type("name=recordlocator", "TESTER");
+				selenium.type("name=addresses[0].email", "email@email.com");
+				selenium.type("name=claimcheck[0].claimchecknum", "WN123456");
+				selenium.type("name=addresses[0].mobile", "(555) 555-4444");
+				selenium.click("savetracingButton");
+				waitForPageToLoadImproved();
+				if (checkNoErrorPage()) {
+					verifyTrue(selenium.isTextPresent("Lost/Delayed Bag Incident has been submitted."));
+					checkCopyrightAndQuestionMarks();
+					String incident_id = selenium.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
+					Settings.INCIDENT_ID_WN = incident_id;
+					System.out.println("WN: Lost/Delay Incident Created: " + Settings.INCIDENT_ID_WN);
+					selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
+					waitForPageToLoadImproved();
+				} else {
+					System.out.println("!!!!!!!!!!!!!!! - Create Lost/Delay Success Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+					verifyTrue(false);
+				}
+			} else {
+				System.out.println("!!!!!!!!!!!!!!! - Edit Lost/Delay Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+				verifyTrue(false);
+			}
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Prepopulate Lost/Delay Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+			verifyTrue(false);
+		}
+		
+	}
+	
+	@Test
+	public void testEmptyDriversLicenseDisabled() {
+		verifyTrue(navigateToIncident());
+		verifyFalse(selenium.isEditable("name=passenger[0].redactedDriversLicense"));
+		verifyEquals("", selenium.getValue("name=passenger[0].redactedDriversLicense"));
+		verifyFalse(selenium.isEditable("name=passenger[0].dlstate"));
+		verifyEquals("", selenium.getValue("name=passenger[0].dlstate"));
+		verifyFalse(selenium.isEditable("name=passenger[0].driversLicenseProvince"));
+		verifyEquals("", selenium.getValue("name=passenger[0].driversLicenseProvince"));
+		verifyFalse(selenium.isEditable("name=passenger[0].driversLicenseCountry"));
+		verifyEquals("US", selenium.getValue("name=passenger[0].driversLicenseCountry"));
+		goToTaskManager();
+	}
+	
+	@Test
+	public void testEmptyDriversLicenseEnabled() {
+		verifyTrue(setDriversLicensePermission(true, true));
+		verifyTrue(navigateToIncident());
+		verifyTrue(selenium.isEditable("name=passenger[0].decriptedDriversLicense"));
+		verifyEquals("", selenium.getValue("name=passenger[0].decriptedDriversLicense"));
+		verifyTrue(selenium.isEditable("name=passenger[0].dlstate"));
+		verifyEquals("", selenium.getValue("name=passenger[0].dlstate"));
+		verifyEquals("", selenium.getValue("name=passenger[0].driversLicenseProvince"));
+		verifyTrue(selenium.isEditable("name=passenger[0].driversLicenseCountry"));
+		verifyEquals("US", selenium.getValue("name=passenger[0].driversLicenseCountry"));
+		goToTaskManager();
 	}
 	
 	private void typeString(String locator, String string) {
