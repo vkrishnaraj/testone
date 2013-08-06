@@ -520,7 +520,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 
 	@Test
 	public void testEmptyPassportEnabled() {
-		verifyTrue(setDriversLicensePermission(true, true));
+		verifyTrue(setPassportPermission(true, true));
 		verifyTrue(navigateToIncident());
 		verifyTrue(selenium.isEditable("name=passenger[0].decryptedPassportNumber"));
 		verifyEquals("", selenium.getValue("name=passenger[0].decryptedPassportNumber"));
