@@ -1187,6 +1187,8 @@ public class TracingConstants {
 	
 	public static final int FILE_CREATION_METHOD_APPLICATION = 0;
 	public static final int FILE_CREATION_METHOD_WEBSERVICE = 1;
+
+	public final static String UTB_CHECK = "UTB";
 	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {

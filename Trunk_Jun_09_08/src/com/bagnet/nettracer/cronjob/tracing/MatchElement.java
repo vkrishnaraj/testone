@@ -513,7 +513,7 @@ public enum MatchElement {
 			TraceIncident incident, TraceOHD ohd) {
 		ArrayList<MatchResult> results = new ArrayList<MatchResult>();
 		
-		if (ohd.getClaimnum() == null || ohd.getClaimnum().trim().length() < 1 || ohd.getClaimnum().substring(0, 3).equals("UTB")) {
+		if (ohd.getClaimnum() == null || ohd.getClaimnum().trim().length() < 1 || (ohd.getClaimnum().trim().length() > 3 && ohd.getClaimnum().substring(0, 3).toUpperCase().equals(TracingConstants.UTB_CHECK))) {
 			return results;
 		}
 
@@ -534,7 +534,11 @@ public enum MatchElement {
 				.getClaimchecks()) {
 			String originalIncString = null;
 			String originalOhdString = ohd.getClaimnum();
-			if (iClaim.getClaimchecknum().trim().length() > 0 && !iClaim.getClaimchecknum().substring(0, 3).equals("UTB")) {
+			/*
+	    	 * Checking if the bagtag is a Untagged Bagtag (ie. UTB1234) and if not, then proceed to include it in tracing.
+	    	 * We don't trace against Untagged Bagtags	
+	    	 */
+			if (iClaim.getClaimchecknum().trim().length() > 0 && !iClaim.getClaimchecknum().substring(0, 3).toUpperCase().equals(TracingConstants.UTB_CHECK)) {
 				String incTenDigitTag = null;
 				try {
 					originalIncString = iClaim.getClaimchecknum();

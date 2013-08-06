@@ -4284,9 +4284,10 @@
 			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
 		</ant>
 
-		<copy todir="${basedir}/web/reports" file="companies/tracer/LostDelayReceipt.jrxml" />
-		<copy todir="${basedir}/web/reports" file="companies/tracer/DamageReceipt.jrxml" />
-		<copy todir="${basedir}/web/reports" file="companies/tracer/MissingReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/flyafrica/DamageReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/flyafrica/LostDelayReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/flyafrica/MissingReceipt.jrxml" />
+		
 			
 		<antcall target="jasper_compile" />
 

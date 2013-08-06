@@ -19,7 +19,7 @@ function checkExpedite(strng)
 function checkClaimCheck(strng)
 { 
     var objRegExp  = /(^UTB\d{1,8}$|^\d{10}$|^[a-zA-Z0-9]{2}\d{6}$)/;
-    return objRegExp.test(strng);
+    return objRegExp.test(strng.toUpperCase());
 }
 
 function checkPnr(strng)

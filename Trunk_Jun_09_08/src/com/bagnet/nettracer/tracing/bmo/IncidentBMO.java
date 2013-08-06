@@ -1386,21 +1386,27 @@ public class IncidentBMO {
 			
 			if (siDTO.getClaimchecknum()!=null && siDTO.getClaimchecknum().length()>0) {
 				String tag=siDTO.getClaimchecknum();
-		    	if(tag!=null && tag.length()>3 &&tag.substring(0, 3).equals("UTB")){
-	    			q.setString("keyUTB", tag);
+				/*
+		    	 * Checking for UTB tag - When saving UTB as a Incident_Claimcheck, it only needs to check against the claimCheckNum field	
+		    	 */
+				boolean utb=false;
+		    	if(tag!=null && tag.length()>3 &&tag.substring(0, 3).toUpperCase().equals(TracingConstants.UTB_CHECK)){
+	    			q.setString("keyUTB", tag.substring(0, 3));
+	    			q.setString("keyUTBList", tag.substring(3));
+	    			utb=true;
 		    	}
-    			if (tag != null && tag.length() == 8) {
+    			if (tag != null && tag.length() == 8 && !utb) {
     				String key = tag.substring(0, 2);
 	    			q.setString("key8" + key, key);
 	    			q.setString("key8" + key + "List", tag.substring(2));
 	    		}
-    			if (tag != null && tag.length() == 9) {
+    			if (tag != null && tag.length() == 9 && !utb) {
 
     				String key = tag.substring(0, 3);
 	    			q.setString("key9" + key, key);
 	    			q.setString("key9" + key + "List", tag.substring(3));
 	    		}
-    			if (tag != null && tag.length() == 10) {
+    			if (tag != null && tag.length() == 10 && !utb) {
     				String key = tag.substring(0, 4);
 	    			q.setString("key10" + key + "One", key.substring(0, 1));
 	    			q.setString("key10" + key + "Two", key.substring(1,4));
@@ -1498,9 +1504,11 @@ public class IncidentBMO {
 		String tag=siDTO.getClaimchecknum();
     	if (tag != null && tag.length() > 0) {
     		String itemSelect = "";
-    		
-    			if(tag!=null && tag.length()>3 && tag.substring(0, 3).equals("UTB")){
-    				itemSelect = " and (claimcheck.claimchecknum = :keyUTB)";
+	    		/*
+		    	 * Checking for UTB tag - When saving UTB as a Incident_Claimcheck, it only needs to check against the claimCheckNum field	
+		    	 */
+    			if(tag!=null && tag.length()>3 && tag.substring(0, 3).toUpperCase().equals(TracingConstants.UTB_CHECK)){
+    				itemSelect = " and ((item.claimchecknum_ticketingcode = :keyUTB and item.claimchecknum_bagnumber = :keyUTBList) or (claimcheck.claimchecknum_ticketingcode = :keyUTB and claimcheck.claimchecknum_bagnumber = :keyUTBList))";
     			}else if (tag != null && tag.length() == 8) {
     				String key = tag.substring(0, 2);
     				itemSelect = " and ((item.claimchecknum_carriercode = :key8" + key + " and item.claimchecknum_bagnumber = :key8" + key + "List) or (claimcheck.claimchecknum_carriercode = :key8" + key + " and claimcheck.claimchecknum_bagnumber = :key8" + key + "List))";

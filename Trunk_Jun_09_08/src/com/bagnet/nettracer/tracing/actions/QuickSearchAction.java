@@ -110,7 +110,10 @@ public class QuickSearchAction extends Action {
 		}
 
 		logger.info(s);
-		boolean utb=s.length()>3 && s.substring(0, 3).equals("UTB");
+		/*
+    	 * utb - Boolean to check that the claimchecknum is at least 3 characters in length and if it is, to check if the first 3 characters are UTB to check if it's a Untagged Bagtag	
+    	 */
+		boolean utb=s.length()>3 && s.substring(0, 3).toUpperCase().equals(TracingConstants.UTB_CHECK);
 		if (tenDigitPattern.matcher(s).find()) {
 			logger.info("Tag Number... 1");
 			if (TracerProperties.isTrue(user.getCompanycode_ID(),TracerProperties.RESERVATION_BY_BAGTAG) && !s.contains("%")) {

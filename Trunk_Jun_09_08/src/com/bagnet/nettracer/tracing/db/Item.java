@@ -755,13 +755,19 @@ public class Item implements Serializable {
 	}
 	
 	private void setClaimSearchParams(String claimchecknum) {
-		if (claimchecknum != null && claimchecknum.length() > 7 && claimchecknum.length() < 11) {
+		if (claimchecknum != null && claimchecknum.length() > 3 && claimchecknum.length() < 11) {
 			String leading = null;
 			String ticketing = null;
 			String carrier = null;
 			String bagnum = null;
 			
-			if (claimchecknum.length() == 8) {
+			/*
+	    	 * Check if claimchecknum is Untagged Bagtag and mark carrier and bagnum if so	
+	    	 */
+			if(claimchecknum.substring(0, 3).toUpperCase().equals(TracingConstants.UTB_CHECK)){
+				ticketing = claimchecknum.substring(0, 3);
+				bagnum = claimchecknum.substring(3);
+			} else if (claimchecknum.length() == 8) {
 				carrier = claimchecknum.substring(0, 2);
 				ticketing = LookupAirlineCodes.getThreeDigitTicketingCode(carrier);
 				bagnum = claimchecknum.substring(2);

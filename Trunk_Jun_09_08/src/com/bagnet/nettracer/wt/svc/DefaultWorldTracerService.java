@@ -622,7 +622,10 @@ public class DefaultWorldTracerService implements WorldTracerService {
 
 		if (ntIncident.getClaimcheck_list() != null) {
 			for (Incident_Claimcheck ic : ntIncident.getClaimcheck_list()) {
-				if (ic.getClaimchecknum() != null && ic.getClaimchecknum().trim().length() > 0 && !ic.getClaimchecknum().substring(0,3).equals("UTB")) {
+				/*
+		    	 * Checking for UTB tag - We don't submit Untagged Bagtags to World Tracer
+		    	 */
+				if (ic.getClaimchecknum() != null && ic.getClaimchecknum().trim().length() > 0 && !ic.getClaimchecknum().substring(0,3).toUpperCase().equals(TracingConstants.UTB_CHECK)) {
 					addClaimCheckNum(ic.getClaimchecknum(), result, ntIncident.getStationassigned().getCompany()
 							.getCompanyCode_ID());
 				}
