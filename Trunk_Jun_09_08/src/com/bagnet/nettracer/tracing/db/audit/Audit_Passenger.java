@@ -38,6 +38,9 @@ public class Audit_Passenger implements Serializable {
 	private String driversLicenseProvince;
 	private String driversLicenseCountry;
 	
+	private String passportNumber;
+	private String passportIssuer;
+	
 	private Audit_Incident audit_incident;
 	
 	public List getAddress_list() {
@@ -347,6 +350,55 @@ public class Audit_Passenger implements Serializable {
 
 	public void setDriversLicenseCountry(String driversLicenseCountry) {
 		this.driversLicenseCountry = driversLicenseCountry;
+	}
+
+	/**
+	 * @hibernate.property type="string"
+	 */
+	public String getPassportNumber() {
+		return passportNumber;
+	}
+
+	public void setPassportNumber(String passportNumber) {
+		this.passportNumber = passportNumber;
+	}
+
+	/**
+	 * @hibernate.property type="string"
+	 */
+	public String getPassportIssuer() {
+		return passportIssuer;
+	}
+
+	public void setPassportIssuer(String passportIssuer) {
+		this.passportIssuer = passportIssuer;
+	}
+	
+	public String getRedactedPassportNumber() {
+		return passportNumber != null && !passportNumber.isEmpty() ? "***************" : "";
+	}
+	
+	public void setRedactedPassportNumber(String redactedPassportNumber) {
+		// NOOP for struts
+	}
+	
+	public void setDecryptedPassportNumber(String decryptedPassportNumber) {
+		if (decryptedPassportNumber == null || decryptedPassportNumber.isEmpty()) return;
+		try {
+			this.passportNumber = AES.encrypt(decryptedPassportNumber);
+		} catch (Exception e) {
+			e.printStackTrace();
+			this.passportNumber = null;
+		}
+	}
+	
+	public String getDecryptedPassportNumber() {
+		try {
+			return AES.decrypt(passportNumber);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

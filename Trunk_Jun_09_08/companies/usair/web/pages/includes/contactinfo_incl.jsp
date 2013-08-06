@@ -47,13 +47,17 @@
 
 <%
   Agent a = (Agent)session.getAttribute("user");
-  boolean hasCollectDlPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_COLLECT_DRIVERS_LICENSE, a);
-  boolean hasViewEditDlPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_EDIT_DRIVERS_LICENSE, a);
+  boolean hasCollectDlPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DRIVERS_LICENSE_COLLECT, a);
+  boolean hasViewEditDlPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DRIVERS_LICENSE_VIEW_EDIT, a);
+  
+  boolean hasCollectPassportPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSPORT_COLLECT, a);
+  boolean hasViewEditPassportPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSPORT_VIEW_EDIT, a);
 
   IncidentForm myform = (IncidentForm) session.getAttribute("incidentForm");
   boolean isNew = myform.getIncident_ID() == null || myform.getIncident_ID().isEmpty();
 	
   boolean dlFieldsEnabled = hasViewEditDlPermission || isNew;
+  boolean passportFieldsEnabled = hasViewEditPassportPermission || isNew;
 
   String cssFormClass;
  
@@ -272,6 +276,43 @@
                 </td>
                 <% } %>
               </tr>
+          <% } %>
+          <% if (hasCollectPassportPermission) { %>
+          <tr>
+          	<% if (passportFieldsEnabled) { %>
+          	<td>
+            	<bean:message key="colname.common_num" />
+            	<br />
+           		<html:text name="passenger" property="decryptedPassportNumber" indexed="true" size="20" maxlength="20" styleClass="textfield" />
+            </td>
+            <td colspan=4>
+              <bean:message key="colname.country" />
+              <br>
+              <html:select property='<%= "passenger[" + i + "].passportIssuer" %>' styleClass="dropdown" >
+                <html:option value="">
+                  <bean:message key="select.none" />
+                </html:option>
+                <html:options name="OnHandForm" collection="countrylist" property="value" labelProperty="label" />
+              </html:select>
+            </td>
+            <% } else { %>
+	          	<td>
+	            	<bean:message key="colname.common_num" />
+	            	<br />
+	           		<html:text name="passenger" property="redactedPassportNumber" disabled="true" indexed="true" size="20" maxlength="20" styleClass="textfield" />
+	            </td>
+	            <td colspan=4>
+	              <bean:message key="colname.country" />
+	              <br>
+	              <html:select property='<%= "passenger[" + i + "].passportIssuer" %>' disabled="true" styleClass="dropdown" >
+	                <html:option value="">
+	                  <bean:message key="select.none" />
+	                </html:option>
+	                <html:options name="OnHandForm" collection="countrylist" property="value" labelProperty="label" />
+	              </html:select>
+	            </td>
+            <% } %>
+          </tr>
           <% } %>
           <tr>
             <td nowrap>

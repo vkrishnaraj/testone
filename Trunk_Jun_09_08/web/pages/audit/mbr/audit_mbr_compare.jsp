@@ -56,8 +56,12 @@ function updatePagination() {
 </script>
 <%
 	Agent a = (Agent)session.getAttribute("user");
-	boolean hasCollectDlPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_COLLECT_DRIVERS_LICENSE, a);
- 	boolean hasViewEditDlPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_EDIT_DRIVERS_LICENSE, a);
+	boolean hasCollectDlPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DRIVERS_LICENSE_COLLECT, a);
+ 	boolean hasViewEditDlPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DRIVERS_LICENSE_VIEW_EDIT, a);
+ 	
+	boolean hasCollectPassportPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSPORT_COLLECT, a);
+ 	boolean hasViewEditPassportPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSPORT_VIEW_EDIT, a);
+ 	
 %>
 <html:form action="audit_mbr.do" method="post">
   <tr>
@@ -435,6 +439,20 @@ function updatePagination() {
 	                      <bean:message key="colname.country_of_issue" />
 	                      :
 	                      <bean:write name="passenger" property="driversLicenseCountry" />
+                      <% } %>
+                      <% if (hasCollectPassportPermission) { %>
+                      	<br>
+                      	<bean:message key="colname.common_num" />
+                      	:
+                      	<% if (hasViewEditPassportPermission) { %>
+                      		<bean:write name="passenger" property="decryptedPassportNumber" />
+                      	<% } else { %>
+                      		<bean:write name="passenger" property="redactedPassportNumber" />
+                      	<% } %>
+                      	<br>
+                      	<bean:message key="colname.country" />
+                      	:
+                      	<bean:write name="passenger" property="passportIssuer" />
                       <% } %>
                     </logic:iterate>
                   </logic:present>

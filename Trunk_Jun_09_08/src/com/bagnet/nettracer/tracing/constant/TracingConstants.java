@@ -251,10 +251,12 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_GET_NEXT = "Get Next Dispute";
 	
 	public static final String SYSTEM_COMPONENT_NAME_EDIT_TRACING_STATUS = "Edit Tracing Status";
-	public static final String SYSTEM_COMPONENT_NAME_COLLECT_DRIVERS_LICENSE = "Collect_Drivers_License";
-	public static final String SYSTEM_COMPONENT_NAME_VIEW_EDIT_DRIVERS_LICENSE = "View_Edit_Drivers_License";
+	public static final String SYSTEM_COMPONENT_NAME_DRIVERS_LICENSE_COLLECT = "Drivers_License_Collect";
+	public static final String SYSTEM_COMPONENT_NAME_DRIVERS_LICENSE_VIEW_EDIT = "Drivers_License_View_Edit";
 	public static final String SYSTEM_COMPONENT_NAME_COLLECT_POS_ID = "Collect_Pos_Id";
-
+	public static final String SYSTEM_COMPONENT_NAME_PASSPORT_COLLECT = "Passport_Collect";
+	public static final String SYSTEM_COMPONENT_NAME_PASSPORT_VIEW_EDIT = "Passport_View_Edit";
+	
 	public static final String SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_STATION_ADMIN = "Issuance_Item_Station_Admin";
 	
 	//Table numbers for status
