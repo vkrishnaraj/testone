@@ -403,6 +403,7 @@ public class Passenger implements Serializable {
 	}
 	
 	public void setDecriptedDriversLicense(String decriptedDriversLicense) {
+		if (decriptedDriversLicense == null || decriptedDriversLicense.isEmpty()) return;
 		try {
 			this.driverslicense = AES.encrypt(decriptedDriversLicense);
 		} catch (Exception e) {
