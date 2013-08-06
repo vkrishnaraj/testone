@@ -12,6 +12,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%
 	Agent a = (Agent) session.getAttribute("user");
+	boolean collectPosId = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_COLLECT_POS_ID, a);
 	String cssFormClass;
 
 	cssFormClass = "form2_dam";
@@ -164,6 +165,42 @@
 				<%
 					}
 				%>
+			</tr>
+			<tr>
+				<td <% if (!collectPosId) { %>colspan=3<% } %>>
+					<%
+						if (report_type == 0) {
+					%> <bean:message key="colname.damaged_bag_status" /> <%
+					 	} else {
+					 %> <bean:message key="colname.bag_status" /> <%
+					 	}
+					 %> <br> <input type="text"
+					name="theitem[<%=i%>].status.description"
+					value="<bean:message name="theitem" property="status.key" />"
+					size="25" maxlength="25" styleClass="textfield" readonly="true" />
+
+					&nbsp;&nbsp;&nbsp;&nbsp; <logic:present name="theitem"
+						property="bdo">
+
+						<bean:message key="header.bdo" />: <a
+							href="bdo.do?bdo_id=<bean:write name="theitem" property="bdo.BDO_ID" />"><bean:write
+								name="theitem" property="bdo.BDO_ID_ref" /></a>
+						<%
+							if (theitem.isBdoEntryCanceled()) {
+						%>
+              	(<bean:message key="bdo.canceled" />)
+              <%
+							}
+						%>
+					</logic:present>
+				</td>
+				<% if (collectPosId) { %>
+	            <td colspan=2>
+	            	<bean:message key="colname.posId" />
+	            	<br>
+	            	<html:text name="theitem" property="posId" size="6" maxlength="6" styleClass="textfield" indexed="true" />
+	            </td>
+            <% } %>
 			</tr>
 			<tr>
 				<td><bean:message key="colname.last_name_onbag" /> <br> <html:text
@@ -381,7 +418,7 @@
 
 
 			<tr>
-				<td colspan="3">
+				<td <% if (!collectPosId) { %>colspan=3<% } %>>
 					<%
 						if (report_type == 0) {
 					%> <bean:message key="colname.damaged_bag_status" /> <%
@@ -408,6 +445,13 @@
 						%>
 					</logic:present>
 				</td>
+				<% if (collectPosId) { %>
+	            <td colspan=2>
+	            	<bean:message key="colname.posId" />
+	            	<br>
+	            	<html:text name="theitem" property="posId" size="6" maxlength="6" styleClass="textfield" indexed="true" />
+	            </td>
+            <% } %>
 			</tr>
 			<%
 				if (report_type == 0) {
