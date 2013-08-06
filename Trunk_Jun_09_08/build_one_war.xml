@@ -172,6 +172,10 @@
 	<target name="generate-build-number" >
 		<buildnumber/>
 	</target>
+	
+	<target name="generate-hudson-build-number" >
+		<buildnumber file="hudson.number" />
+	</target>
 
 	<target name="delete">
 		<delete file="${basedir}/src/custom_ui.properties" />
