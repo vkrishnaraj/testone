@@ -1,4 +1,4 @@
-package aero.nettracer.web.southwest.testing.actions.nt.onhand;
+package aero.nettracer.web.southwest.testing.actions.nt.onhands;
 
 import org.junit.Test;
 
