@@ -8,12 +8,14 @@ import aero.nettracer.web.utility.Settings;
 public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 
 	private static final String DRIVERS_LICENSE = "12345";
+	private static final String PASSPORT_NUMBER = "1234567890";
 	
 	@Test
 	public void testVerifyText() throws Exception {
 		// MJS: initial state is drivers license collection enabled
 		// 		and view/edit drivers license disabled.
 		verifyTrue(setDriversLicensePermission(true, false));
+		verifyTrue(setPassportPermission(true, false));
 		verifyTrue(setCollectPosIdPermission(true));
 		selenium.click("//a[@id='menucol_1.1']");
 		waitForPageToLoadImproved();
@@ -29,10 +31,14 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 				verifyTrue(selenium.isElementPresent("name=passenger[0].dlstate"));
 				verifyTrue(selenium.isElementPresent("name=passenger[0].driversLicenseProvince"));
 				verifyTrue(selenium.isElementPresent("name=passenger[0].driversLicenseCountry"));
+				verifyTrue(selenium.isElementPresent("name=passenger[0].decryptedPassportNumber"));
+				verifyTrue(selenium.isElementPresent("name=passenger[0].passportIssuer"));
 				selenium.type("name=passenger[0].decriptedDriversLicense", WN_CreateLD_VerifyRequiredFields.DRIVERS_LICENSE);
 				selenium.select("name=passenger[0].dlstate", "label=Georgia");
 				verifyFalse(selenium.isEditable("name=passenger[0].driversLicenseProvince"));
 				verifyEquals("US", selenium.getValue("name=passenger[0].driversLicenseCountry"));
+				selenium.type("name=passenger[0].decryptedPassportNumber", WN_CreateLD_VerifyRequiredFields.PASSPORT_NUMBER);
+				selenium.select("name=passenger[0].passportIssuer", "label=United States");
 				selenium.type("name=addresses[0].address1", "123 Test");
 				selenium.type("name=addresses[0].city", "Test");
 				selenium.select("name=addresses[0].state_ID", "label=Georgia");
@@ -95,6 +101,16 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	}
 	
 	@Test
+	public void testVerifyPassportRedacted() {
+		verifyTrue(navigateToIncident());
+		verifyFalse(selenium.isEditable("name=passenger[0].redactedPassportNumber"));
+		verifyEquals("***************", selenium.getValue("name=passenger[0].redactedPassportNumber"));
+		verifyFalse(selenium.isEditable("name=passenger[0].passportIssuer"));
+		verifyEquals("US", selenium.getValue("name=passenger[0].passportIssuer"));
+		goToTaskManager();
+	}
+	
+	@Test
 	public void testVerifyDriversLicensePrepopulateClaim() {
 		verifyTrue(navigateToIncident());
 		selenium.click("//td[@id='navmenucell']/div/dl/dd[10]/a/span[2]");
@@ -123,6 +139,14 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		verifyTrue(selenium.isTextPresent("State : GA"));
 		verifyTrue(selenium.isTextPresent("Province :"));
 		verifyTrue(selenium.isTextPresent("Country Of Issue : US"));
+		goToTaskManager();
+	}
+
+	@Test
+	public void testPassportRedactedAuditTrail() {
+		verifyTrue(navigateToAuditTrail());
+		verifyTrue(selenium.isTextPresent("Common Number (Passport) : ***************"));
+		verifyTrue(selenium.isTextPresent("Country : US"));
 		goToTaskManager();
 	}
 	
@@ -211,6 +235,27 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 			System.out.println("!!!!!!!!!!!!!!! - Failed to save Incident: " + Settings.INCIDENT_ID_WN + ". Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 			verifyTrue(false);
 		}
+		goToTaskManager();
+		waitForPageToLoadImproved();
+	}
+	
+	@Test
+	public void testPassportViewEdit() {
+		verifyTrue(setPassportPermission(true, true));
+		verifyTrue(navigateToIncident());
+		verifyTrue(selenium.isEditable("name=passenger[0].decryptedPassportNumber"));
+		verifyEquals(WN_CreateLD_VerifyRequiredFields.PASSPORT_NUMBER, selenium.getValue("name=passenger[0].decryptedPassportNumber"));
+		verifyTrue(selenium.isEditable("name=passenger[0].passportIssuer"));
+		verifyEquals("US", selenium.getValue("name=passenger[0].passportIssuer"));		
+		goToTaskManager();
+		waitForPageToLoadImproved();
+	}
+	
+	@Test
+	public void testPassportViewEditAuditTrail() {
+		verifyTrue(navigateToAuditTrail());
+		verifyTrue(selenium.isTextPresent("Common Number (Passport) : " + WN_CreateLD_VerifyRequiredFields.PASSPORT_NUMBER));
+		verifyTrue(selenium.isTextPresent("Country : US"));
 		goToTaskManager();
 		waitForPageToLoadImproved();
 	}
@@ -378,6 +423,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	@Test
 	public void testCreateIncidentWithEmptyDriversLicense() throws Exception {
 		verifyTrue(setDriversLicensePermission(true, false));
+		verifyTrue(setPassportPermission(true, false));
 		selenium.click("//a[@id='menucol_1.1']");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
@@ -462,6 +508,27 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		goToTaskManager();
 	}
 	
+	@Test
+	public void testEmptyPassportDisabled() {
+		verifyTrue(navigateToIncident());
+		verifyFalse(selenium.isEditable("name=passenger[0].redactedPassportNumber"));
+		verifyEquals("", selenium.getValue("name=passenger[0].redactedPassportNumber"));
+		verifyFalse(selenium.isEditable("name=passenger[0].passportIssuer"));
+		verifyEquals("US", selenium.getValue("name=passenger[0].passportIssuer"));
+		goToTaskManager();
+	}
+
+	@Test
+	public void testEmptyPassportEnabled() {
+		verifyTrue(setDriversLicensePermission(true, true));
+		verifyTrue(navigateToIncident());
+		verifyTrue(selenium.isEditable("name=passenger[0].decryptedPassportNumber"));
+		verifyEquals("", selenium.getValue("name=passenger[0].decryptedPassportNumber"));
+		verifyTrue(selenium.isEditable("name=passenger[0].passportIssuer"));
+		verifyEquals("US", selenium.getValue("name=passenger[0].passportIssuer"));
+		goToTaskManager();
+	}
+	
 	private void typeString(String locator, String string) {
 		char[] chars = string.toCharArray();
 		StringBuffer sb = new StringBuffer(selenium.getText(locator));
@@ -502,7 +569,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 						selenium.click("xpath=(//a[contains(text(),'Maintain')])[12]");
 						waitForPageToLoadImproved();
 						if (checkNoErrorPage()) {
-							success = selenium.isTextPresent("Collect Driver's License") && selenium.isTextPresent("View/Edit Driver's License");
+							success = selenium.isTextPresent("Maintain Group Permissions");
 						} else {
 							System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Maintain Permissions. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 						}
@@ -537,6 +604,37 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 			selenium.check("name=633");
 		} else {
 			selenium.uncheck("name=633");
+		}
+		
+		selenium.click("xpath=(//input[@id='button'])[2]");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
+			waitForPageToLoadImproved();
+			success = loginToNt();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Save Permissions. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+		}
+		
+		return success;
+	}
+
+	private boolean setPassportPermission(boolean collectPassport, boolean viewEditPassport) {
+		boolean success = false;
+		if (!navigateToPermissionsPage()) {
+			return success;
+		}
+		
+		if (collectPassport) {
+			selenium.check("name=636");
+		} else {
+			selenium.uncheck("name=636");
+		}
+		
+		if (viewEditPassport) {
+			selenium.check("name=637");
+		} else {
+			selenium.uncheck("name=637");
 		}
 		
 		selenium.click("xpath=(//input[@id='button'])[2]");
