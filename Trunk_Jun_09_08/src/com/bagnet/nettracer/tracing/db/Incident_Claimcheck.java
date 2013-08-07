@@ -87,7 +87,7 @@ public class Incident_Claimcheck implements Serializable {
 	}
 	
 	private void setClaimSearchParams(String claimchecknum) {
-		if (claimchecknum != null && claimchecknum.length() > 3 && claimchecknum.length() < 11) {
+		if (claimchecknum != null && claimchecknum.length() > 3 && claimchecknum.length() < 12) {
 			String leading = null;
 			String ticketing = null;
 			String carrier = null;
