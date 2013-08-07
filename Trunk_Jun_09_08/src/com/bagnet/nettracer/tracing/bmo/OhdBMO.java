@@ -630,7 +630,7 @@ public class OhdBMO {
 			else sql.append("select distinct ohd from com.bagnet.nettracer.tracing.db.OHD ohd ");
 
 			if (oDTO.getFirstname().trim().length() > 0 || oDTO.getLastname().trim().length() > 0
-					|| oDTO.getMiddlename().trim().length() > 0 || (sort != null && (sort.equals("name") || !sort.equals("nameRev")))) {
+					|| oDTO.getMiddlename().trim().length() > 0 || (sort != null && (sort.equals("name") || sort.equals("nameRev")))) {
 				sql.append(" left outer join ohd.passengers passengers ");
 			}
 
@@ -768,52 +768,55 @@ public class OhdBMO {
 				if (sort == null || sort.equals("")) {
 					sql.append(" order by ohd.OHD_ID");
 				} else {
-					String sortq = "";
+					String sortq = " order by ";
 					if (sort.equals("ohdnum"))
-						sortq = " order by ohd.OHD_ID asc";
+						sortq += " ohd.OHD_ID asc, ";
 					if (sort.equals("ohdnumRev"))
-						sortq = " order by ohd.OHD_ID desc";
+						sortq += " ohd.OHD_ID desc, ";
 					if (sort.equals("ohdCreateDate"))
-						sortq = " order by ohd.founddate asc";
+						sortq += " ohd.founddate asc";
 					if (sort.equals("ohdCreateDateRev"))
-						sortq = " order by ohd.founddate desc";
+						sortq += " ohd.founddate desc";
 					if (sort.equals("bagtagnum"))
-						sortq = " order by ohd.claimnum asc";
+						sortq += " ohd.claimnum asc, ";
 					if (sort.equals("bagtagnumRev"))
-						sortq = " order by ohd.claimnum desc";
+						sortq += "ohd.claimnum desc, ";
 					if (sort.equals("status"))
-						sortq = " order by ohd.status.status_ID asc";
+						sortq += " ohd.status.status_ID asc, ";
 					if (sort.equals("statusRev"))
-						sortq = " order by ohd.status.status_ID desc";
+						sortq += " ohd.status.status_ID desc, ";
 					if (sort.equals("color"))
-						sortq = " order by ohd.color asc";
+						sortq += " ohd.color asc, ";
 					if (sort.equals("colorRev"))
-						sortq = " order by ohd.color desc";
+						sortq += " ohd.color desc, ";
 					if (sort.equals("bagtype"))
-						sortq = " order by ohd.type asc";
+						sortq += " ohd.type asc, ";
 					if (sort.equals("bagtypeRev"))
-						sortq = " order by ohd.type desc";
+						sortq += " ohd.type desc, ";
 					if (sort.equals("foundComp"))
-						sortq = " order by ohd.foundAtStation.company.companyCode_ID asc";
+						sortq += " ohd.foundAtStation.company.companyCode_ID asc, ";
 					if (sort.equals("foundCompRev"))
-						sortq = " order by ohd.foundAtStation.company.companyCode_ID desc";
+						sortq += " ohd.foundAtStation.company.companyCode_ID desc, ";
 					if (sort.equals("foundStation"))
-						sortq = " order by ohd.foundAtStation.stationcode asc";
+						sortq += " ohd.foundAtStation.stationcode asc, ";
 					if (sort.equals("foundStationRev"))
-						sortq = " order by ohd.foundAtStation.stationcode desc";
+						sortq += " ohd.foundAtStation.stationcode desc, ";
 					if (sort.equals("holdStation"))
-						sortq = " order by ohd.holdingStation.stationcode asc";
+						sortq += " ohd.holdingStation.stationcode asc, ";
 					if (sort.equals("holdStationRev"))
-						sortq = " order by ohd.holdingStation.stationcode desc";
+						sortq += " ohd.holdingStation.stationcode desc, ";
 					if (sort.equals("name"))
-						sortq = " order by passengers.lastname asc";
+						sortq += " passengers.lastname asc, ";
 					if (sort.equals("nameRev"))
-						sortq = " order by passengers.lastname desc";
+						sortq += " passengers.lastname desc, ";
 					if (sort.equals("wtid"))
-						sortq = " order by ohd.wtFile.wt_id asc";
+						sortq += " ohd.wtFile.wt_id asc, ";
 					if (sort.equals("wtidRev"))
-						sortq = " order by ohd.wtFile.wt_id desc";
-				
+						sortq += " ohd.wtFile.wt_id desc, ";
+					
+					if(!((sort.equals("ohdCreateDate")) || (sort.equals("ohdCreateDateRev"))))
+						sortq += " ohd.founddate asc";
+					
 					sql.append(sortq);
 				}
 			}
