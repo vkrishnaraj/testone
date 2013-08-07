@@ -648,11 +648,11 @@ public class LFTracingUtil {
 						fphonenumber="";
 						if(fphone.getDecryptedCountry()!=null && fphone.getDecryptedCountry().length()>0)
 							fphonenumber+=fphone.getDecryptedCountry();
-						if(fphone.getDecryptedCountry()!=null && fphone.getDecryptedCountry().length()>0)
+						if(fphone.getDecryptedArea()!=null && fphone.getDecryptedArea().length()>0)
 							fphonenumber+=fphone.getDecryptedArea();
-						if(fphone.getDecryptedCountry()!=null && fphone.getDecryptedCountry().length()>0)
+						if(fphone.getDecryptedExchange()!=null && fphone.getDecryptedExchange().length()>0)
 							fphonenumber+=fphone.getDecryptedExchange();
-						if(fphone.getDecryptedCountry()!=null && fphone.getDecryptedCountry().length()>0)
+						if(fphone.getDecryptedLine()!=null && fphone.getDecryptedLine().length()>0)
 							fphonenumber+=fphone.getDecryptedLine();
 						
 					}
