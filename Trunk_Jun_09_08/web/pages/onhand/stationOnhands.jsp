@@ -15,6 +15,10 @@
 	org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources) request
 			.getAttribute("org.apache.struts.action.MESSAGE");
 	java.util.Locale myLocale = (java.util.Locale) session.getAttribute("org.apache.struts.action.LOCALE");
+	
+	boolean showPosId = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_COLLECT_POS_ID, a);
+	
+	int colspan = showPosId ? 14 : 13;
 %>
 
 <script language="javascript">
@@ -117,12 +121,18 @@ function submitForwardForm()
                 </td>
                 <td>
                   <strong>
-                    <bean:message key="colname.ld_report_num" />
+<%--                     <bean:message key="colname.ld_report_num" /> --%>
+                    <bean:message key="colname.incident_num" />
                   </strong>
                 </td>
                 <td>
                   <strong>
                     <bean:message key="colname.ohd_create_date" />
+                  </strong>
+                </td>
+                <td>
+                  <strong>
+                    <bean:message key="colname.ohd_modified_date" />
                   </strong>
                 </td>
                 <td>
@@ -145,19 +155,26 @@ function submitForwardForm()
                     <bean:message key="colname.bagtype" />
                   </strong>
                 </td>
+				<% if (showPosId) { %>
+					<td>
+						<strong>
+							<bean:message key="colname.posId" />
+						</strong>
+					</td>
+				<% } %>
                 <td>
                   <strong>
-                    <bean:message key="header.companyCode" />
-                  </strong>
-                </td>
-                <td>
-                  <strong>
-                    <bean:message key="colname.found_station" />
+                    <bean:message key="colname.found_destination" />
                   </strong>
                 </td>
                 <td>
                   <strong>
                     <bean:message key="colname.name" />
+                  </strong>
+                </td>
+                <td>
+                  <strong>
+                    <bean:message key="colname.storage_location" />
                   </strong>
                 </td>
                 <td>
@@ -196,6 +213,11 @@ function submitForwardForm()
                     <bean:write name="ohd" property="displaydate" />
                   </td>
                   <td>
+                  	<bean:write name="ohd" property="dispModifiedDate" />
+                  	<br>
+                  	<bean:write name="ohd" property="dispModifiedTime" />
+                  </td>
+                  <td>
                     <bean:write name="ohd" property="claimnum" />
                     &nbsp;
                   </td>
@@ -214,12 +236,24 @@ function submitForwardForm()
                     </logic:empty>
                     <bean:write name="ohd" property="type" />
                   </td>
-                  <td>
-                    <bean:write name="ohd" property="foundAtStation.company.companyCode_ID" />
-                  </td>
-                  <td>
-                    <bean:write name="ohd" property="foundAtStation.stationcode" />
-                  </td>
+				  <% if (showPosId) { %>
+				  	<td>
+				  		<logic:empty name="ohd" property="posId" >
+				  			&nbsp;
+				  		</logic:empty>
+				  		<logic:notEmpty name="ohd" property="posId" >
+				  			<bean:write name="ohd" property="posId" />
+				  		</logic:notEmpty>
+				  	</td>
+				  <% } %>
+				  <td>
+				  	<logic:empty name="ohd" property="dispDestination" >
+				  		&nbsp;
+			  		</logic:empty>
+				  	<logic:notEmpty name="ohd" property="dispDestination" >
+				  		<bean:write name="ohd" property="dispDestination" />
+			  		</logic:notEmpty>
+				  </td>
                   <td>
                     <logic:notEmpty name="ohd" property="passenger">
                       <logic:notEmpty name="ohd" property="passenger.lastname">
@@ -238,6 +272,14 @@ function submitForwardForm()
                       &nbsp;
                     </logic:empty>
                   </td>
+                  <td style="width:12em;word-wrap:break-word;">
+                  	<logic:empty name="ohd" property="storage_location" >
+                  		&nbsp;
+                  	</logic:empty>
+                  	<logic:notEmpty name="ohd" property="storage_location" >
+                  		<bean:write name="ohd" property="storage_location" />
+                  	</logic:notEmpty>
+                  </td>
                   <td>
                     <%
                         
@@ -255,17 +297,17 @@ function submitForwardForm()
               </logic:iterate>
               <input type="hidden" name="search" value="1">
               <tr>
-                <td colspan="12">
+                <td colspan="<%=colspan %>">
                   <jsp:include page="/pages/includes/pagination_incl.jsp" />
                 </td>
               </tr>
                <tr>
-                        <td colspan="12">
+                        <td colspan="<%=colspan %>" >
                           &nbsp;
                         </td>
                       </tr>
                       <tr>
-                        <td colspan="12" align="center">
+                        <td colspan="<%=colspan %>" align="center">
                           <logic:present name="cbroStationID" scope="session">
           <%
                             if (session.getAttribute("cbroStationID").equals("" + a.getStation().getStation_ID())) {

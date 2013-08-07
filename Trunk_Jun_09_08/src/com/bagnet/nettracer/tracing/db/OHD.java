@@ -1122,4 +1122,21 @@ public class OHD implements Serializable {
 		this.lateCheckInd = lateCheckInd;
 	}
 	
+	public String getDispDestination() {
+		if (itinerary == null || itinerary.isEmpty()) return "";
+		Object[] items = itinerary.toArray();
+		OHD_Itinerary itinerary = (OHD_Itinerary) items[items.length - 1];
+		return itinerary.getLegto() != null ? itinerary.getLegto() : "";
+	}
+	
+	public String getDispModifiedDate() {
+		String modDate = DateUtils.formatDate(this.getModifiedDate(), _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
+		return modDate != null ? modDate.substring(0, modDate.lastIndexOf(' ')) : "";
+	}
+	
+	public String getDispModifiedTime() {
+		String modTime = DateUtils.formatDate(this.getModifiedDate(), _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
+		return modTime != null ? modTime.substring(modTime.lastIndexOf(' '), modTime.length()) : "";
+	}
+	
 }
