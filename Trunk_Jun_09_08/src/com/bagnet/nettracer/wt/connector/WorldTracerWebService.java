@@ -1608,7 +1608,7 @@ public class WorldTracerWebService implements WorldTracerConnector {
 			/*
 	    	 * Checking for UTB tag - We don't submit Untagged Bagtags to World Tracer
 	    	 */
-			if(cc.getClaimchecknum()!=null && cc.getClaimchecknum().length()>0 && !cc.getClaimchecknum().substring(0, 3).toUpperCase().equals(TracingConstants.UTB_CHECK)){
+			if(cc.getClaimchecknum()!=null && cc.getClaimchecknum().length()>0 && !(cc.getClaimchecknum().length()>3 && cc.getClaimchecknum().substring(0, 3).toUpperCase().equals(TracingConstants.UTB_CHECK))){
 				ClaimCheck cl = new ClaimCheck();
 				cl.setTagNumber(cc.getClaimchecknum());
 				claimChecks.add(cl);

@@ -538,7 +538,7 @@ public enum MatchElement {
 	    	 * Checking if the bagtag is a Untagged Bagtag (ie. UTB1234) and if not, then proceed to include it in tracing.
 	    	 * We don't trace against Untagged Bagtags	
 	    	 */
-			if (iClaim.getClaimchecknum().trim().length() > 0 && !iClaim.getClaimchecknum().substring(0, 3).toUpperCase().equals(TracingConstants.UTB_CHECK)) {
+			if (iClaim.getClaimchecknum().trim().length() > 0 && !(iClaim.getClaimchecknum().trim().length() > 3 && iClaim.getClaimchecknum().substring(0, 3).toUpperCase().equals(TracingConstants.UTB_CHECK))) {
 				String incTenDigitTag = null;
 				try {
 					originalIncString = iClaim.getClaimchecknum();
