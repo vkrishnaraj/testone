@@ -110,7 +110,7 @@ td#header {
 td#header.cssstandardthreecolumn { 
 	background-image:url(../images/nettracer/header_bg_noconf.gif);
 	background-repeat:no-repeat;
-	background-color: #FFFFFF;
+	background-color: #ffffff;
 }
 div#headercontent {
 	float:right;
