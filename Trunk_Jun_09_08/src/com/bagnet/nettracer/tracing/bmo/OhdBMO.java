@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.bmo;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -1998,5 +1999,41 @@ public class OhdBMO {
 						logger.error("unable to close hibernate session: " + e);
 					}
 				}
-			}		}
+			}		
+			}
+
+		/**
+		 * Inserts a single remark for an onhand.
+		 * 
+		 * Since the existing OHDBMO.updateRemarksOnly takes a set of remarks and overwrites the existing set,
+		 * this method will load the existing ohd remark set and append the new remark before saving.
+		 * 
+		 * @param remarkText
+		 * @param ohdId
+		 * @param agent
+		 * @param remarkType
+		 * @return boolean
+		 */
+		
+		public boolean insertRemark(String remarkText, String ohdId, Agent agent, int remarkType){
+			OHD ohd = findOHDByID(ohdId);
+			if(ohd == null){
+				return false;
+			}
+			
+			if(agent == null){
+				//TODO - we use ogadmin for remarks for other crons such as moveToLZ, maybe we should consider a configuration system or auto agent
+				agent = AdminUtils.getAgentBasedOnUsername("ogadmin", "OW");
+			}
+			
+			Remark r = new Remark();
+			r.setAgent(agent);
+			r.setOhd(ohd);
+			r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
+			r.setRemarktype(remarkType);
+			r.setRemarktext(remarkText);
+			ohd.getRemarks().add(r);
+
+			return updateRemarksOnly(ohd.getOHD_ID(), ohd.getRemarks(), agent);
+		}
 }

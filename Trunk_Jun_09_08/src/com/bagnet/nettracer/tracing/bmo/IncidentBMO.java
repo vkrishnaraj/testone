@@ -2535,4 +2535,45 @@ public class IncidentBMO {
 			}
 		}
 	}
+	
+	
+	
+	/**
+	 * Inserts a single remark for an incident.
+	 * 
+	 * Since the existing IncidentBMO.updateRemarksOnly takes a set of remarks and overwrites the exisitng set,
+	 * this method will load the existing incident remark set and append the new remark before saving.
+	 * 
+	 * @param remarkText
+	 * @param incidentId
+	 * @param agent
+	 * @param remarkType
+	 * @return boolean
+	 */
+	public boolean insertRemark(String remarkText, String incidentId, Agent agent, int remarkType){
+		Incident incident = findIncidentByID(incidentId);
+		if(incident == null){
+			return false;
+		}
+		
+		if(agent == null){
+			//TODO - we use ogadmin for remarks for other crons such as moveToLZ, maybe we should consider a configuration system or auto agent
+			agent = AdminUtils.getAgentBasedOnUsername("ogadmin", "OW");
+		}
+
+		Remark r = new Remark();
+		r.setAgent(agent);
+		r.setIncident(incident);
+		r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
+		r.setRemarktype(remarkType);
+		r.setRemarktext(remarkText);
+		incident.getRemarks().add(r);
+
+		if(updateRemarksOnly(incident.getIncident_ID(), incident.getRemarks(), agent) > 0){
+			//remarks were updated successfully
+			return true;
+		} else {
+			return true;
+		}
+	}
 }

@@ -377,10 +377,10 @@ public class WorldTracerWebService implements WorldTracerConnector {
 
 		} catch (AxisFault e) {
 			e.printStackTrace();
-			throw new WorldTracerException("Connection error... Unable to create incident: " + incident.getIncident_ID());
+			throw new WorldTracerException("World Tracer Connection error... Unable to amend AHL: " + incident.getIncident_ID());
 		} catch (RemoteException e) {
 			e.printStackTrace();
-			throw new WorldTracerException("Connection error... Unable to create incident: " + incident.getIncident_ID());
+			throw new WorldTracerException("World Tracer Connection error... Unable to amend AHL: " + incident.getIncident_ID());
 		}
 
 		return returnValue;
@@ -476,10 +476,10 @@ public class WorldTracerWebService implements WorldTracerConnector {
 
 		} catch (AxisFault e) {
 			e.printStackTrace();
-			throw new WorldTracerException("Connection error... Unable to create incident: " + incident.getIncident_ID());
+			throw new WorldTracerException("World Tracer connection error... Unable to close AHL: " + incident.getIncident_ID());
 		} catch (RemoteException e) {
 			e.printStackTrace();
-			throw new WorldTracerException("Connection error... Unable to create incident: " + incident.getIncident_ID());
+			throw new WorldTracerException("World Tracer connection error... Unable to close AHL: " + incident.getIncident_ID());
 		}
 
 		return returnValue;
@@ -973,7 +973,7 @@ public class WorldTracerWebService implements WorldTracerConnector {
 			} else {
 				
 				if (response != null && response.getError() != null && response.getError().getDescription() != null && response.getError().getDescription().length() > 0) {
-					throw new WorldTracerException("Unable create AHL: " + incident.getIncident_ID() + response.getError().getDescription());
+					throw new WorldTracerException("Unable create AHL: " + incident.getIncident_ID() + " - " + response.getError().getDescription());
 				} else {
 					throw new WorldTracerException("Unable to create incident: " + incident.getIncident_ID());
 				}
