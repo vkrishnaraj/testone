@@ -12,7 +12,7 @@ public class WN_OHD_Sort_Search extends DefaultSeleneseTestCase {
 		
 		selenium.click("id=menucol_4.4");
 		waitForPageToLoadImproved();
-		
+		String sortCheck="";
 		if(checkNoErrorPage()) {
 			selenium.click("id=button");
 			waitForPageToLoadImproved();
@@ -21,6 +21,7 @@ public class WN_OHD_Sort_Search extends DefaultSeleneseTestCase {
 		}
 
 		if(checkNoErrorPage()) {
+			sortCheck=selenium.getText("//td[@id='middlecolumn']/div/table[2]/tbody/tr[2]/td");
 			selenium.click("link=On-hand Number");
 			waitForPageToLoadImproved();
 		} else {
@@ -28,6 +29,7 @@ public class WN_OHD_Sort_Search extends DefaultSeleneseTestCase {
 		}
 
 		if(checkNoErrorPage()) {
+			verifyNotEquals("//td[@id='middlecolumn']/div/table[2]/tbody/tr[2]/td",sortCheck);
 			selenium.click("link=Color");
 			waitForPageToLoadImproved();
 		} else {
@@ -35,6 +37,7 @@ public class WN_OHD_Sort_Search extends DefaultSeleneseTestCase {
 		}
 
 		if(checkNoErrorPage()) {
+			sortCheck=selenium.getText("//td[@id='middlecolumn']/div/table[2]/tbody/tr[2]/td[5]");
 			selenium.click("link=Color");
 			waitForPageToLoadImproved();
 		} else {
@@ -42,6 +45,7 @@ public class WN_OHD_Sort_Search extends DefaultSeleneseTestCase {
 		}
 
 		if(checkNoErrorPage()) {
+			verifyNotEquals("//td[@id='middlecolumn']/div/table[2]/tbody/tr[2]/td[5]",sortCheck);
 			selenium.click("link=Bag Tag Number");
 			waitForPageToLoadImproved();
 		} else {
@@ -49,6 +53,7 @@ public class WN_OHD_Sort_Search extends DefaultSeleneseTestCase {
 		}
 
 		if(checkNoErrorPage()) {
+			sortCheck=selenium.getText("//td[@id='middlecolumn']/div/table[2]/tbody/tr[2]/td[3]");
 			selenium.click("link=Bag Tag Number");
 			waitForPageToLoadImproved();
 		} else {
@@ -56,6 +61,7 @@ public class WN_OHD_Sort_Search extends DefaultSeleneseTestCase {
 		}
 
 		if(checkNoErrorPage()) {
+			verifyNotEquals("//td[@id='middlecolumn']/div/table[2]/tbody/tr[2]/td[3]",sortCheck);
 			selenium.click("link=Name");
 			waitForPageToLoadImproved();
 		} else {
@@ -63,6 +69,7 @@ public class WN_OHD_Sort_Search extends DefaultSeleneseTestCase {
 		}
 
 		if(checkNoErrorPage()) {
+			sortCheck=selenium.getText("//td[@id='middlecolumn']/div/table[2]/tbody/tr[2]/td[10]");
 			selenium.click("link=Name");
 			waitForPageToLoadImproved();
 		} else {
@@ -70,6 +77,7 @@ public class WN_OHD_Sort_Search extends DefaultSeleneseTestCase {
 		}
 
 		if(checkNoErrorPage()) {
+			verifyNotEquals("//td[@id='middlecolumn']/div/table[2]/tbody/tr[2]/td[10]",sortCheck);
 			selenium.click("link=Type");
 			waitForPageToLoadImproved();
 		} else {
@@ -77,6 +85,7 @@ public class WN_OHD_Sort_Search extends DefaultSeleneseTestCase {
 		}
 
 		if(checkNoErrorPage()) {
+			sortCheck=selenium.getText("//td[@id='middlecolumn']/div/table[2]/tbody/tr[2]/td[6]");
 			selenium.click("link=Type");
 			waitForPageToLoadImproved();
 		} else {
@@ -84,6 +93,7 @@ public class WN_OHD_Sort_Search extends DefaultSeleneseTestCase {
 		}
 		
 		if(checkNoErrorPage()) {
+			verifyNotEquals("//td[@id='middlecolumn']/div/table[2]/tbody/tr[2]/td[6]",sortCheck);
 			selenium.click("link=Status");
 			waitForPageToLoadImproved();
 		} else {
@@ -147,6 +157,7 @@ public class WN_OHD_Sort_Search extends DefaultSeleneseTestCase {
 		}
 		
 		if(checkNoErrorPage()) {
+			sortCheck=selenium.getText("//td[@id='middlecolumn']/div/table[2]/tbody/tr[2]/td[2]");
 			selenium.click("link=OHD Date/Time");
 			waitForPageToLoadImproved();
 		} else {
@@ -154,6 +165,7 @@ public class WN_OHD_Sort_Search extends DefaultSeleneseTestCase {
 		}
 		
 		if(checkNoErrorPage()) {
+			verifyNotEquals("//td[@id='middlecolumn']/div/table[2]/tbody/tr[2]/td[2]",sortCheck);
 			goToTaskManager();
 			waitForPageToLoadImproved();
 		} else {
