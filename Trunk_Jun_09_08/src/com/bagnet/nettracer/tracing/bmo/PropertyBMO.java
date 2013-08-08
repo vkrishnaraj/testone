@@ -231,6 +231,9 @@ public class PropertyBMO {
 	public static final String SWA_SERVICE_ADDRESS_ENDPOINT = "swa.service.address.endpoint";
 	public static final String BDO_WS_TIMEOUT = "bso.ws.timeout";
 	
+	public static final String NT_USER="nt.user";
+	public static final String NTFS_USER="ntfs.user";
+	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;
 		if(key != null && value != null){

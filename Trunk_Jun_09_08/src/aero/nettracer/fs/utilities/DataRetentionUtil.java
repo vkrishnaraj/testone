@@ -20,7 +20,7 @@ public class DataRetentionUtil {
 
 	private Date getDeleteDate() throws Exception{
 		int years = PropertyBMO.getValueAsInt(PropertyBMO.FS_RETENTION_YEARS);
-		if(years > 0){
+		if(years > 0 && !PropertyBMO.isTrue(PropertyBMO.NT_USER)){
 			GregorianCalendar cal = new GregorianCalendar();
 			cal.add(Calendar.YEAR, -years);
 			System.out.println(cal.getTime());
