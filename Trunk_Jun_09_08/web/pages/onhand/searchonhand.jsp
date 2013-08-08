@@ -7,14 +7,10 @@
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
-<%@page import="java.util.ResourceBundle" %>
-<%@page import="java.util.Locale" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.OHD" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
-ResourceBundle bundle = ResourceBundle.getBundle(
-		"com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
 %>
   
   <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
@@ -264,29 +260,8 @@ function sortSearchOhd(sortOrder) {
             </div>
             <%
               }
-           
-           String ohdTitle=bundle.getString("colname.on_hand_report_number");
             %>
             
-            <!-- Experimentation with DisplayTag<display:table requestURI="/searchOnHand.do" name="requestScope.onhandlist" id="ohd" >
-             	<display:column property="OHD_ID" title="<%=ohdTitle %>" sortable="true">
-             		<A HREF="addOnHandBag.do?ohd_ID=${row.applicationNumber}">${row.applicationNumber}</A>
-             	</display:column>
-             	<display:column property="displaydate" title="TEST2" sortable="true" />
-                <display:column property="claimnum" title="TEST3" sortable="true" />
-                <display:column property="status.key" title="TEST2" sortable="true"/>
-                <display:column property="color" title="TEST2" sortable="true" />
-                <display:column property="type" title="TEST2" sortable="true" />
-                <display:column property="foundAtStation.company.companyCode_ID" title="TEST2" sortable="true" />
-                <display:column property="foundAtStation.stationcode" title="TEST2" sortable="true" />
-                <display:column property="holdingStation.stationcode" title="TEST2" sortable="true" />
-                <display:column property="passenger.lastname" title="TEST2" sortable="true" /> 
-                   <%
-                	if(a.getStation().getCompany().getVariable().getWt_enabled()==1){
-                   %>
-                   <display:column property="wt_id" title="TEST2" sortable="true"/>
-                   <% } %>
-            </display:table>-->
             <table class="form2" cellspacing="0" cellpadding="0">
               <tr>
               	<logic:notEqual name="sort" value="ohdnum" scope="request">
