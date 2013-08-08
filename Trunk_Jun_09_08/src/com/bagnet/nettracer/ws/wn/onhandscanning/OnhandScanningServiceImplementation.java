@@ -329,7 +329,9 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 			wsohd.setStatus("Open");
 		}
 		wsohd.setAgent(agent.getUsername());
-		wsohd.setCompanycodeId(agent.getCompanycode_ID());
+		if(wsohd.getCompanycodeId() == null || wsohd.getCompanycodeId().isEmpty()){
+			wsohd.setCompanycodeId(agent.getCompanycode_ID());
+		}
 		
 		Station foundstation = StationBMO.getStationByCode(wsohd.getFoundAtStation(), agent.getCompanycode_ID());
 		String ohdId = lookupBagtag(wsohd.getBagtagnum(), foundstation.getStation_ID());

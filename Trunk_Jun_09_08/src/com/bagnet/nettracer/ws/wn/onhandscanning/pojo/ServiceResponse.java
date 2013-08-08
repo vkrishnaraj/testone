@@ -34,6 +34,8 @@ public class ServiceResponse {
 	private String claimCheckInd;
 	private BagDrop bagDrop;
 	private String createUpdateIndicator;
+	private String returnStatus;
+	private String assoicatedIncidentId;
 	
 	public String getClaimCheckInd() {
 		return claimCheckInd;
@@ -58,6 +60,18 @@ public class ServiceResponse {
 	}
 	public void setCreateUpdateIndicator(String createUpdateIndicator) {
 		this.createUpdateIndicator = createUpdateIndicator;
+	}
+	public String getReturnStatus() {
+		return returnStatus;
+	}
+	public void setReturnStatus(String returnStatus) {
+		this.returnStatus = returnStatus;
+	}
+	public String getAssoicatedIncidentId() {
+		return assoicatedIncidentId;
+	}
+	public void setAssoicatedIncidentId(String assoicatedIncidentId) {
+		this.assoicatedIncidentId = assoicatedIncidentId;
 	}
 	private String positiveIdInd;
 	
