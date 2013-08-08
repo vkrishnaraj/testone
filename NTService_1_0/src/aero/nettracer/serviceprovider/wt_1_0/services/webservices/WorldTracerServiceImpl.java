@@ -481,14 +481,14 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					ErrorType[] errors = wsresponse.getWTRStatusRS()
 							.getErrors().getErrorArray();
 					for (ErrorType error : errors) {
-						errorMsg.append(error.getShortText());
+						errorMsg.append(error.getStringValue());
 						logger.error(WEB_SERVICE_ERROR_MESSAGE
 								+ error.toString());
 					}
 				}
 
 				String returnError = errorMsg.toString();
-				if (returnError.length() > 0) {
+				if (returnError.isEmpty()) {
 					returnError = UNKNOWN_FAILURE;
 				}
 
@@ -562,14 +562,14 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					ErrorType[] errors = wsresponse.getWTRStatusRS()
 							.getErrors().getErrorArray();
 					for (ErrorType error : errors) {
-						errorMsg.append(error.getShortText());
+						errorMsg.append(error.getStringValue());
 						logger.error(WEB_SERVICE_ERROR_MESSAGE
 								+ error.toString());
 					}
 				}
 
 				String returnError = errorMsg.toString();
-				if (returnError.length() > 0) {
+				if (returnError.isEmpty()) {
 					returnError = UNKNOWN_FAILURE;
 				}
 
@@ -679,14 +679,14 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					ErrorType[] errors = wsresponse.getWTRStatusRS()
 							.getErrors().getErrorArray();
 					for (ErrorType error : errors) {
-						errorMsg.append(error.getShortText());
+						errorMsg.append(error.getStringValue());
 						logger.error(WEB_SERVICE_ERROR_MESSAGE
 								+ error.toString());
 					}
 				}
 
 				String returnError = errorMsg.toString();
-				if (returnError.length() > 0) {
+				if (returnError.isEmpty()) {
 					returnError = UNKNOWN_FAILURE;
 				}
 
@@ -805,14 +805,14 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					ErrorType[] errors = wsresponse.getWTRStatusRS()
 							.getErrors().getErrorArray();
 					for (ErrorType error : errors) {
-						errorMsg.append(error.getShortText());
+						errorMsg.append(error.getStringValue());
 						logger.error(WEB_SERVICE_ERROR_MESSAGE
 								+ error.toString());
 					}
 				}
 
 				String returnError = errorMsg.toString();
-				if (returnError.length() > 0) {
+				if (returnError.isEmpty()) {
 					returnError = UNKNOWN_FAILURE;
 				}
 
@@ -906,14 +906,14 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					ErrorType[] errors = wsresponse.getWTRStatusRS()
 							.getErrors().getErrorArray();
 					for (ErrorType error : errors) {
-						errorMsg.append(error.getShortText());
+						errorMsg.append(error.getStringValue());
 						logger.error(WEB_SERVICE_ERROR_MESSAGE
 								+ error.toString());
 					}
 				}
 
 				String returnError = errorMsg.toString();
-				if (returnError.length() > 0) {
+				if (returnError.isEmpty()) {
 					returnError = UNKNOWN_FAILURE;
 				}
 
@@ -1046,7 +1046,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					ErrorType[] errors = wsresponse.getWTRInboxMessageReadRS()
 							.getErrors().getErrorArray();
 					for (ErrorType error : errors) {
-						errorMsg.append(error.getShortText());
+						errorMsg.append(error.getStringValue());
 						logger.error(WEB_SERVICE_ERROR_MESSAGE
 								+ error.toString());
 						if (error.toString().indexOf("NO MESSAGES ON FILE") > -1){
@@ -1057,7 +1057,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				}
 
 				String returnError = errorMsg.toString();
-				if (returnError.length() > 0) {
+				if (returnError.isEmpty()) {
 					returnError = UNKNOWN_FAILURE;
 				}
 
@@ -1208,14 +1208,14 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					ErrorType[] errors = wsresponse.getWTRInboxMessageCountRS()
 							.getErrors().getErrorArray();
 					for (ErrorType error : errors) {
-						errorMsg.append(error.getShortText());
+						errorMsg.append(error.getStringValue());
 						logger.error(WEB_SERVICE_ERROR_MESSAGE
 								+ error.toString());
 					}
 				}
 
 				String returnError = errorMsg.toString();
-				if (returnError.length() > 0) {
+				if (returnError.isEmpty()) {
 					returnError = UNKNOWN_FAILURE;
 				}
 
@@ -1355,13 +1355,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				if (wsresponse != null && wsresponse.getWTRStatusRS() != null && wsresponse.getWTRStatusRS().getErrors() != null) {
 					ErrorType[] errors = wsresponse.getWTRStatusRS().getErrors().getErrorArray();
 					for (ErrorType error : errors) {
-						errorMsg.append(error.getShortText());
+						errorMsg.append(error.getStringValue());
 						logger.error(WEB_SERVICE_ERROR_MESSAGE + error.toString());
 					}
 				}
 
 				String returnError = errorMsg.toString();
-				if (returnError.length() > 0) {
+				if (returnError.isEmpty()) {
 					returnError = UNKNOWN_FAILURE;
 				}
 
@@ -1675,13 +1675,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				if (wsresponse != null && wsresponse.getWTRBagsCreateRS() != null && wsresponse.getWTRBagsCreateRS().getErrors() != null) {
 					ErrorType[] errors = wsresponse.getWTRBagsCreateRS().getErrors().getErrorArray();
 					for (ErrorType error : errors) {
-						errorMsg.append(error.getShortText());
+						errorMsg.append(error.getStringValue());
 						logger.error(WEB_SERVICE_ERROR_MESSAGE + error.toString());
 					}
 				}
 
 				String returnError = errorMsg.toString();
-				if (returnError.length() > 0) {
+				if (returnError.isEmpty()) {
 					returnError = UNKNOWN_FAILURE;
 				}
 
@@ -1746,13 +1746,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				if (wsresponse != null && wsresponse.getWTRStatusRS() != null && wsresponse.getWTRStatusRS().getErrors() != null) {
 					ErrorType[] errors = wsresponse.getWTRStatusRS().getErrors().getErrorArray();
 					for (ErrorType error : errors) {
-						errorMsg.append(error.getShortText());
+						errorMsg.append(error.getStringValue());
 						logger.error(WEB_SERVICE_ERROR_MESSAGE + error.toString());
 					}
 				}
 
 				String returnError = errorMsg.toString();
-				if (returnError.length() > 0) {
+				if (returnError.isEmpty()) {
 					returnError = UNKNOWN_FAILURE;
 				}
 
@@ -1818,13 +1818,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				if (wsresponse != null && wsresponse.getWTRStatusRS() != null && wsresponse.getWTRStatusRS().getErrors() != null) {
 					ErrorType[] errors = wsresponse.getWTRStatusRS().getErrors().getErrorArray();
 					for (ErrorType error : errors) {
-						errorMsg.append(error.getShortText());
+						errorMsg.append(error.getStringValue());
 						logger.error(WEB_SERVICE_ERROR_MESSAGE + error.toString());
 					}
 				}
 
 				String returnError = errorMsg.toString();
-				if (returnError.length() > 0) {
+				if (returnError.isEmpty()) {
 					returnError = UNKNOWN_FAILURE;
 				}
 
@@ -2339,13 +2339,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				if (wsresponse != null && wsresponse.getWTRBagsCreateRS() != null && wsresponse.getWTRBagsCreateRS().getErrors() != null) {
 					ErrorType[] errors = wsresponse.getWTRBagsCreateRS().getErrors().getErrorArray();
 					for (ErrorType error : errors) {
-						errorMsg.append(error.getShortText());
+						errorMsg.append(error.getStringValue());
 						logger.error(WEB_SERVICE_ERROR_MESSAGE + error.toString());
 					}
 				}
 
 				String returnError = errorMsg.toString();
-				if (returnError.length() > 0) {
+				if (returnError.isEmpty()) {
 					returnError = UNKNOWN_FAILURE;
 				}
 
@@ -2409,13 +2409,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				if (wsresponse != null && wsresponse.getWTRStatusRS() != null && wsresponse.getWTRStatusRS().getErrors() != null) {
 					ErrorType[] errors = wsresponse.getWTRStatusRS().getErrors().getErrorArray();
 					for (ErrorType error : errors) {
-						errorMsg.append(error.getShortText());
+						errorMsg.append(error.getStringValue());
 						logger.error(WEB_SERVICE_ERROR_MESSAGE + error.toString());
 					}
 				}
 
 				String returnError = errorMsg.toString();
-				if (returnError.length() > 0) {
+				if (returnError.isEmpty()) {
 					returnError = UNKNOWN_FAILURE;
 				}
 
@@ -2478,13 +2478,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				if (wsresponse != null && wsresponse.getWTRStatusRS() != null && wsresponse.getWTRStatusRS().getErrors() != null) {
 					ErrorType[] errors = wsresponse.getWTRStatusRS().getErrors().getErrorArray();
 					for (ErrorType error : errors) {
-						errorMsg.append(error.getShortText());
+						errorMsg.append(error.getStringValue());
 						logger.error(WEB_SERVICE_ERROR_MESSAGE + error.toString());
 					}
 				}
 
 				String returnError = errorMsg.toString();
-				if (returnError.length() > 0) {
+				if (returnError.isEmpty()) {
 					returnError = UNKNOWN_FAILURE;
 				}
 
@@ -2523,6 +2523,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			}
 			response.setSuccess(true);
 		} catch (Exception e) {
+			//TODO loupas handle error message for logging
 			throw new WorldTracerConnectionException("Communication error with WorldTracer", e);
 		}
 	}
@@ -2575,7 +2576,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					if (wsresponse.getWTRStatusRS().getErrors() != null) {
 						ErrorType[] errors = wsresponse.getWTRStatusRS().getErrors().getErrorArray();
 						for (ErrorType error : errors) {
-							errorMsg.append(error.getShortText());
+							errorMsg.append(error.getStringValue());
 							logger.error(WEB_SERVICE_ERROR_MESSAGE + error.toString());
 						}
 					}
@@ -2586,7 +2587,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 							if (error.getStringValue().contains("RECORD ALREADY CLOSED")) {
 								response.setSuccess(true);
 							} else {
-								errorMsg.append(error.getShortText());
+								errorMsg.append(error.getStringValue());
 								logger.error(WEB_SERVICE_ERROR_MESSAGE + error.toString());
 							}
 						}
@@ -2594,7 +2595,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				}
 
 				String returnError = errorMsg.toString();
-				if (returnError.length() > 0) {
+				if (returnError.isEmpty()) {
 					returnError = UNKNOWN_FAILURE;
 				}
 
@@ -2730,13 +2731,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				if (wsresponse != null && wsresponse.getWTRStatusRS() != null && wsresponse.getWTRStatusRS().getErrors() != null) {
 					ErrorType[] errors = wsresponse.getWTRStatusRS().getErrors().getErrorArray();
 					for (ErrorType error : errors) {
-						errorMsg.append(error.getShortText());
+						errorMsg.append(error.getStringValue());
 						logger.error(WEB_SERVICE_ERROR_MESSAGE + error.toString());
 					}
 				}
 
 				String returnError = errorMsg.toString();
-				if (returnError.length() > 0) {
+				if (returnError.isEmpty()) {
 					returnError = UNKNOWN_FAILURE;
 				}
 
@@ -2901,13 +2902,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				if (wsresponse != null && wsresponse.getWTRBagsCreateRS() != null && wsresponse.getWTRBagsCreateRS().getErrors() != null) {
 					ErrorType[] errors = wsresponse.getWTRBagsCreateRS().getErrors().getErrorArray();
 					for (ErrorType error : errors) {
-						errorMsg.append(error.getShortText());
+						errorMsg.append(error.getStringValue());
 						logger.error(WEB_SERVICE_ERROR_MESSAGE + error.toString());
 					}
 				}
 
 				String returnError = errorMsg.toString();
-				if (returnError.length() > 0) {
+				if (returnError.isEmpty()) {
 					returnError = UNKNOWN_FAILURE;
 				}
 
@@ -2988,7 +2989,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				if (wsresponse != null && wsresponse.getWTRDelayedBagRecReadRS() != null && wsresponse.getWTRDelayedBagRecReadRS().getErrors() != null) {
 					ErrorType[] errors = wsresponse.getWTRDelayedBagRecReadRS().getErrors().getErrorArray();
 					for (ErrorType error : errors) {
-						errorMsg.append(error.getShortText());
+						errorMsg.append(error.getStringValue());
 						logger.error(WEB_SERVICE_ERROR_MESSAGE + error.toString());
 						if (error.toString().indexOf("RECORD NOT FOUND") > -1){
 							logger.error("Record not found");
@@ -2998,7 +2999,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				}
 
 				String returnError = errorMsg.toString();
-				if (returnError.length() > 0) {
+				if (returnError.isEmpty()) {
 					returnError = UNKNOWN_FAILURE;
 				}
 
@@ -3373,7 +3374,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				if (wsresponse != null && wsresponse.getWTROnhandBagRecReadRS() != null && wsresponse.getWTROnhandBagRecReadRS().getErrors() != null) {
 					ErrorType[] errors = wsresponse.getWTROnhandBagRecReadRS().getErrors().getErrorArray();
 					for (ErrorType error : errors) {
-						errorMsg.append(error.getShortText());
+						errorMsg.append(error.getStringValue());
 						logger.error(WEB_SERVICE_ERROR_MESSAGE + error.toString());
 						if (error.toString().indexOf("RECORD NOT FOUND") > -1){
 							logger.error("Record not found");
@@ -3383,7 +3384,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				}
 
 				String returnError = errorMsg.toString();
-				if (returnError.length() > 0) {
+				if (returnError.isEmpty()) {
 					returnError = UNKNOWN_FAILURE;
 				}
 
@@ -3711,13 +3712,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				if (wsresponse != null && wsresponse.getWTRStatusRS() != null && wsresponse.getWTRStatusRS().getErrors() != null) {
 					ErrorType[] errors = wsresponse.getWTRStatusRS().getErrors().getErrorArray();
 					for (ErrorType error : errors) {
-						errorMsg.append(error.getShortText());
+						errorMsg.append(error.getStringValue());
 						logger.error(WEB_SERVICE_ERROR_MESSAGE + error.toString());
 					}
 				}
 
 				String returnError = errorMsg.toString();
-				if (returnError.length() > 0) {
+				if (returnError.isEmpty()) {
 					returnError = UNKNOWN_FAILURE;
 				}
 
@@ -4248,13 +4249,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				if (wsresponse != null && wsresponse.getWTRStatusRS() != null && wsresponse.getWTRStatusRS().getErrors() != null) {
 					ErrorType[] errors = wsresponse.getWTRStatusRS().getErrors().getErrorArray();
 					for (ErrorType error : errors) {
-						errorMsg.append(error.getShortText());
+						errorMsg.append(error.getStringValue());
 						logger.error(WEB_SERVICE_ERROR_MESSAGE + error.toString());
 					}
 				}
 
 				String returnError = errorMsg.toString();
-				if (returnError.length() > 0) {
+				if (returnError.isEmpty()) {
 					returnError = UNKNOWN_FAILURE;
 				}
 
@@ -4368,13 +4369,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				if (wsresponse != null && wsresponse.getWTRStatusRS() != null && wsresponse.getWTRStatusRS().getErrors() != null) {
 					ErrorType[] errors = wsresponse.getWTRStatusRS().getErrors().getErrorArray();
 					for (ErrorType error : errors) {
-						errorMsg.append(error.getShortText());
+						errorMsg.append(error.getStringValue());
 						logger.error(WEB_SERVICE_ERROR_MESSAGE + error.toString());
 					}
 				}
 
 				String returnError = errorMsg.toString();
-				if (returnError.length() > 0) {
+				if (returnError.isEmpty()) {
 					returnError = UNKNOWN_FAILURE;
 				}
 

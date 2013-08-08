@@ -149,7 +149,7 @@ public abstract class AbstractServiceManager implements ServiceManagerInterface 
 					response.setError(new WebServiceError(ServiceConstants.RECORD_NOT_FOUND_EXCEPTION));
 				} else {
 					logger.error("AbstractServiceManager.WorldTracerException");
-					response.setError(new WebServiceError(ServiceConstants.UNEXPECTED_EXCEPTION));
+					response.setError(new WebServiceError(e.getMessage()));
 				}
 				logger.error(e, e);
 				response.setSuccess(false);
