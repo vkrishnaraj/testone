@@ -74,7 +74,7 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			selenium.type("name=posId", "123456");
-			selenium.check("name=lateCheckValue");
+			selenium.click("name=lateCheckValue");
 			selenium.select("name=bagColor", "label=BK - Black");
 			selenium.select("name=bagType", "label=22");
 			selenium.click("name=savetracing");
@@ -101,7 +101,7 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 			verifyEquals(Settings.ONHAND_ID_WN, selenium.getValue("name=ohd_id"));
 			verifyEquals("123456", selenium.getValue("name=posId"));
 			verifyEquals("on", selenium.getValue("name=lateCheckValue"));
-			selenium.uncheck("name=lateCheckValue");
+			selenium.click("name=lateCheckValue");
 			selenium.click("name=savetracing");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
@@ -131,7 +131,7 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 		verifyTrue(selenium.isTextPresent("Position ID"));
 		assertEquals("123456", selenium.getText("//div[@id='maincontent']/table/tbody/tr[5]/td[2]"));
 		verifyTrue(selenium.isTextPresent("Late Check"));
-		assertEquals("No", selenium.getText("//div[@id='maincontent']/table/tbody/tr[6]/td[2]"));
+		assertEquals("Yes", selenium.getText("//div[@id='maincontent']/table/tbody/tr[6]/td[2]"));
 		goToTaskManager();
 	}
 	
