@@ -131,7 +131,7 @@
 				%>
 				<td colspan="2"><bean:message key="colname.claimnum.req2" /> <br>
 					<html:text name="theitem" property="claimchecknum" size="10"
-						maxlength="10" styleClass="textfield" indexed="true" /></td>
+						maxlength="11" styleClass="textfield" indexed="true" /></td>
 				<%
 					} else {
 				%>
