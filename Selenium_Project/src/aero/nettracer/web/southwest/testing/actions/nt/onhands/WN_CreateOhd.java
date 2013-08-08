@@ -40,7 +40,7 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 			verifyFalse(selenium.isTextPresent("Position ID"));
 			verifyFalse(selenium.isTextPresent("Late Check"));
 			verifyFalse(selenium.isElementPresent("name=posId"));
-			verifyFalse(selenium.isElementPresent("name=lateCheck"));
+			verifyFalse(selenium.isElementPresent("name=lateCheckValue"));
 		} else {
 			System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Navigate to Add Onhand. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 			verifyTrue(false);
@@ -60,7 +60,7 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 			verifyTrue(selenium.isTextPresent("Position ID"));
 			verifyTrue(selenium.isTextPresent("Late Check"));
 			verifyTrue(selenium.isElementPresent("name=posId"));
-			verifyTrue(selenium.isElementPresent("name=lateCheck"));
+			verifyTrue(selenium.isElementPresent("name=lateCheckValue"));
 		} else {
 			System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Navigate to Add Onhand. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 			verifyTrue(false);
@@ -74,7 +74,7 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			selenium.type("name=posId", "123456");
-			selenium.click("name=lateCheck");
+			selenium.check("name=lateCheckValue");
 			selenium.select("name=bagColor", "label=BK - Black");
 			selenium.select("name=bagType", "label=22");
 			selenium.click("name=savetracing");
@@ -100,7 +100,24 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 			checkCopyrightAndQuestionMarks();
 			verifyEquals(Settings.ONHAND_ID_WN, selenium.getValue("name=ohd_id"));
 			verifyEquals("123456", selenium.getValue("name=posId"));
-			verifyEquals("on", selenium.getValue("name=lateCheck"));
+			verifyEquals("on", selenium.getValue("name=lateCheckValue"));
+			selenium.uncheck("name=lateCheckValue");
+			selenium.click("name=savetracing");
+			waitForPageToLoadImproved();
+			if (checkNoErrorPage()) {
+				checkCopyrightAndQuestionMarks();
+				selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
+				waitForPageToLoadImproved();
+				if (checkNoErrorPage()) {
+					verifyEquals("off", selenium.getValue("name=lateCheckValue"));
+				} else {
+					System.out.println("!!!!!!!!!!!!!!! - Failed to reload Onhand. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+					verifyTrue(false);
+				}
+			} else {
+				System.out.println("!!!!!!!!!!!!!!! - Failed to save Onhand. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+				verifyTrue(false);
+			}
 		} else {
 			System.out.println("!!!!!!!!!!!!!!! - Failed to load the new Onhand. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 			verifyTrue(false);
@@ -114,7 +131,7 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 		verifyTrue(selenium.isTextPresent("Position ID"));
 		assertEquals("123456", selenium.getText("//div[@id='maincontent']/table/tbody/tr[5]/td[2]"));
 		verifyTrue(selenium.isTextPresent("Late Check"));
-		assertEquals("Yes", selenium.getText("//div[@id='maincontent']/table/tbody/tr[6]/td[2]"));
+		assertEquals("No", selenium.getText("//div[@id='maincontent']/table/tbody/tr[6]/td[2]"));
 		goToTaskManager();
 	}
 	
