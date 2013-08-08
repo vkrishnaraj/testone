@@ -176,10 +176,20 @@ function gotoHistoricalReport() {
     }
   }
 
+  function updateLateCheckValue() {
+	var lateCheck = document.getElementById("lateCheck");
+	if (lateCheck.value.indexOf("true") != -1) {
+		lateCheck.value = "false";
+	} else {
+		lateCheck.value = "true";
+	}
+  }
+
   </SCRIPT>
 
 <html:form styleId="dirtyCheck-form" action="addOnHandBag.do" method="post"
   enctype="multipart/form-data" onsubmit="return validateRest(this);">
+  <html:hidden property="lateCheck" />
   <tr>
     <td colspan="3" id="pageheadercell">
     <div id="pageheaderleft">
@@ -582,7 +592,7 @@ function gotoHistoricalReport() {
       	</td>
       	<td colspan=2>
       		<bean:message key="colname.latecheck" /><br>
-      		<html:checkbox property="lateCheck"></html:checkbox>
+      		<html:checkbox property="lateCheckValue" onclick="updateLateCheckValue();" />
       	</td>
       </tr>
       <% } %>

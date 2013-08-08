@@ -1093,4 +1093,10 @@ public final class OnHandForm extends ValidatorForm {
 		this.lateCheck = lateCheck;
 	}
 	
+	public String getLateCheckValue() {
+		return lateCheck ? "on" : "off";
+	}
+
+	// NOOP to keep struts happy
+	public void setLateCheckValue(String lateCheckValue) { }
 }
