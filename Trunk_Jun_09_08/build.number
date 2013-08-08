@@ -3,3 +3,5 @@
 build.number=2
 tag.number=3_8_0
 version.number=3.8.0
+tag.name=TAG
+tag.separator=_
