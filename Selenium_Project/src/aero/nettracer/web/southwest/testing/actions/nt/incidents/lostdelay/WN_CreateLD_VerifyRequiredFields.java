@@ -322,7 +322,6 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 
 		if (checkNoErrorPage()) {
 			verifyTrue(navigateToIncident());
-			waitForPageToLoadImproved();
 		} else {
 			System.out.println("CLDVRF: ERROR SAVING INCIDENT.");
 			return;
