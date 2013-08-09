@@ -178,7 +178,7 @@
 					 %> <br> <input type="text"
 					name="theitem[<%=i%>].status.description"
 					value="<bean:message name="theitem" property="status.key" />"
-					size="25" maxlength="25" styleClass="textfield" readonly="true" />
+					size="25" maxlength="25" class="textfield" readonly="true" />
 
 					&nbsp;&nbsp;&nbsp;&nbsp; <logic:present name="theitem"
 						property="bdo">
