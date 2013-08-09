@@ -47,8 +47,8 @@ public class WS_LDVerifyApplyAllOnClose extends DefaultSeleneseTestCase {
 				return;
 			}
 			selenium.type("//tr[@id='claimcheck_1']/td[2]/input", "4444444444");
-			selenium.select("//div[@id='item_0']/table/tbody/tr[3]/td/select", "label=WT - White/clear");
-			selenium.select("//div[@id='item_0']/table/tbody/tr[3]/td/select[2]", "label=02");
+			selenium.select("//div[@id='item_0']/table/tbody/tr[4]/td/select", "label=WT - White/clear");
+			selenium.select("//div[@id='item_0']/table/tbody/tr[4]/td/select[2]", "label=02");
 			selenium.select("//tr[@id='inventory_0_0']/td/select", "label=Alcohol");
 			selenium.select("//tr[@id='inventory_0_1']/td/select", "label=Art");
 			selenium.select("//tr[@id='inventory_0_2']/td/select", "label=Audio");
@@ -57,8 +57,8 @@ public class WS_LDVerifyApplyAllOnClose extends DefaultSeleneseTestCase {
 			selenium.type("//tr[@id='inventory_0_2']/td[2]/input", "test");
 			selenium.click("//div[@id='maincontent']/center[5]/input");
 			waitForPageToLoadImproved();
-			selenium.select("//div[@id='item_1']/table/tbody/tr[3]/td/select", "label=BK - Black");
-			selenium.select("//div[@id='item_1']/table/tbody/tr[3]/td/select[2]", "label=03");
+			selenium.select("//div[@id='item_1']/table/tbody/tr[4]/td/select", "label=BK - Black");
+			selenium.select("//div[@id='item_1']/table/tbody/tr[4]/td/select[2]", "label=03");
 			selenium.select("//tr[@id='inventory_1_0']/td/select", "label=Alcohol");
 			selenium.select("//tr[@id='inventory_1_1']/td/select", "label=Art");
 			selenium.select("//tr[@id='inventory_1_2']/td/select", "label=Audio");
