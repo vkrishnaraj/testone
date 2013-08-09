@@ -130,8 +130,8 @@ public class WS_LDVerifyReplacementBags extends LoginUtil {
 			selenium.click("id=itcalendar20");
 			selenium.click("//div[@id='calstyle']/table/tbody/tr/td/center/table[2]/tbody/tr[8]/td/a");
 			selenium.type("//div[@id='item_0']/table/tbody/tr/td[2]/input", "3333333333");
-			selenium.select("//div[@id='item_0']/table/tbody/tr[3]/td/select", "label=WT - White/clear");
-			selenium.select("//div[@id='item_0']/table/tbody/tr[3]/td/select[2]", "label=50");
+			selenium.select("//div[@id='item_0']/table/tbody/tr[4]/td/select", "label=WT - White/clear");
+			selenium.select("//div[@id='item_0']/table/tbody/tr[4]/td/select[2]", "label=50");
 			selenium.select("//tr[@id='inventory_0_0']/td/select", "label=Art");
 			selenium.select("//tr[@id='inventory_0_1']/td/select", "label=Audio");
 			selenium.select("//tr[@id='inventory_0_2']/td/select", "label=Infant");
