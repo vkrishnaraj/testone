@@ -53,7 +53,7 @@ public class TestLfc {
 	
 	@AfterClass
 	public static void oneTimeTearDown() {
-		SeleniumTestBrowserDefault.stopBrowser();
+		SeleniumTestBrowserDefault.stopBrowser("LFC");
 	}
 	
 }

@@ -28,7 +28,7 @@ public class TestSouthwest {
 	
 	@AfterClass
 	public static void oneTimeTearDown() {
-		SeleniumTestBrowserDefault.stopBrowser();
+		SeleniumTestBrowserDefault.stopBrowser("NTSOUTHWEST");
 	}
 	
 }

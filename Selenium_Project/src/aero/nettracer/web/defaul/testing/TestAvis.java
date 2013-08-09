@@ -42,7 +42,7 @@ public class TestAvis {
 	
 	@AfterClass
 	public static void oneTimeTearDown() {
-		SeleniumTestBrowserDefault.stopBrowser();
+		SeleniumTestBrowserDefault.stopBrowser("AVIS");
 	}
 	
 }

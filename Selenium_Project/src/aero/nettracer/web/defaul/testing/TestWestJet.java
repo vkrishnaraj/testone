@@ -57,7 +57,7 @@ public class TestWestJet {
 	
 	@AfterClass
 	public static void oneTimeTearDown() {
-		SeleniumTestBrowserDefault.stopBrowser();
+		SeleniumTestBrowserDefault.stopBrowser("WESTJET");
 	}
 	
 }

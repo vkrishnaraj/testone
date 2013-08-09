@@ -45,7 +45,7 @@ public class TestSpirit {
 	
 	@AfterClass
 	public static void oneTimeTearDown() {
-		SeleniumTestBrowserDefault.stopBrowser();
+		SeleniumTestBrowserDefault.stopBrowser("SPIRIT");
 	}
 	
 }

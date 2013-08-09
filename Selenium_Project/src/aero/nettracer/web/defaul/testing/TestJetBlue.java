@@ -47,7 +47,7 @@ public class TestJetBlue {
 	
 	@AfterClass
 	public static void oneTimeTearDown() {
-		SeleniumTestBrowserDefault.stopBrowser();
+		SeleniumTestBrowserDefault.stopBrowser("JETBLUE");
 	}
 	
 }

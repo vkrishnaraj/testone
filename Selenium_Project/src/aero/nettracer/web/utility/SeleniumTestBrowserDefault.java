@@ -29,28 +29,12 @@ public class SeleniumTestBrowserDefault extends Settings {
 	}
 
 	public synchronized static void stopBrowser() {
-//		try {
-//			File f = new File("sessions.txt");
-//			FileWriter fstream;
-//			if (f.exists()) {
-//				fstream = new FileWriter(f, true);
-//			} else {
-//				fstream = new FileWriter(f);
-//			}
-//			BufferedWriter out = new BufferedWriter(fstream);
-//			out.write("?sessionId=" + browser.getCookieByName("JSESSIONID") + "&cmd=testComplete");
-//			out.newLine();
-//			out.close();
-//		} catch (IOException e) {
-//			System.out.println("Write Error: " + e.getMessage());
-//		}
-		
+		stopBrowser("DEFAULT");
+	}
+
+	public synchronized static void stopBrowser(String client) {
 		browser.stop();
-//		if (ECLIPSE_RUNS_SERVER) {
-//			server.stop();
-//		} else {
-//			browser.shutDownSeleniumServer();
-//		}
+		System.out.println(client + ": Selenium Tests Complete");
 	}
 
 	public synchronized static void initBrowser() {
