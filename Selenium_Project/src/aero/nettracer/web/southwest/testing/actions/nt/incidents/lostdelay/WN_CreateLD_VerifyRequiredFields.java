@@ -3,7 +3,6 @@ package aero.nettracer.web.southwest.testing.actions.nt.incidents.lostdelay;
 import org.junit.Test;
 
 import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
-import aero.nettracer.web.utility.DefaultSeleneseTestCase;
 import aero.nettracer.web.utility.Settings;
 
 public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
