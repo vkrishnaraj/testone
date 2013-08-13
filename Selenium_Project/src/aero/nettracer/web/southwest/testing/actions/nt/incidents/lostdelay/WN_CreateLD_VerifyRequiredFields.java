@@ -2,14 +2,12 @@ package aero.nettracer.web.southwest.testing.actions.nt.incidents.lostdelay;
 
 import org.junit.Test;
 
+import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
 import aero.nettracer.web.utility.DefaultSeleneseTestCase;
 import aero.nettracer.web.utility.Settings;
 
-public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
+public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 
-	private static final String DRIVERS_LICENSE = "12345";
-	private static final String PASSPORT_NUMBER = "1234567890";
-	
 	@Test
 	public void testVerifyText() throws Exception {
 		// MJS: initial state is drivers license collection enabled
@@ -33,11 +31,11 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 				verifyTrue(selenium.isElementPresent("name=passenger[0].driversLicenseCountry"));
 				verifyTrue(selenium.isElementPresent("name=passenger[0].decryptedPassportNumber"));
 				verifyTrue(selenium.isElementPresent("name=passenger[0].passportIssuer"));
-				selenium.type("name=passenger[0].decriptedDriversLicense", WN_CreateLD_VerifyRequiredFields.DRIVERS_LICENSE);
+				selenium.type("name=passenger[0].decriptedDriversLicense", WN_SeleniumTest.DRIVERS_LICENSE);
 				selenium.select("name=passenger[0].dlstate", "label=Georgia");
 				verifyFalse(selenium.isEditable("name=passenger[0].driversLicenseProvince"));
 				verifyEquals("US", selenium.getValue("name=passenger[0].driversLicenseCountry"));
-				selenium.type("name=passenger[0].decryptedPassportNumber", WN_CreateLD_VerifyRequiredFields.PASSPORT_NUMBER);
+				selenium.type("name=passenger[0].decryptedPassportNumber", WN_SeleniumTest.PASSPORT_NUMBER);
 				selenium.select("name=passenger[0].passportIssuer", "label=United States");
 				selenium.type("name=addresses[0].address1", "123 Test");
 				selenium.type("name=addresses[0].city", "Test");
@@ -88,7 +86,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testVerifyDriversLicenseRedacted() {
-		verifyTrue(navigateToIncident());
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		verifyFalse(selenium.isEditable("name=passenger[0].redactedDriversLicense"));
 		verifyEquals("*********", selenium.getValue("name=passenger[0].redactedDriversLicense"));
 		verifyFalse(selenium.isEditable("name=passenger[0].dlstate"));
@@ -102,7 +100,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testVerifyPassportRedacted() {
-		verifyTrue(navigateToIncident());
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		verifyFalse(selenium.isEditable("name=passenger[0].redactedPassportNumber"));
 		verifyEquals("***************", selenium.getValue("name=passenger[0].redactedPassportNumber"));
 		verifyFalse(selenium.isEditable("name=passenger[0].passportIssuer"));
@@ -112,7 +110,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testVerifyDriversLicensePrepopulateClaim() {
-		verifyTrue(navigateToIncident());
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		selenium.click("//td[@id='navmenucell']/div/dl/dd[10]/a/span[2]");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
@@ -134,7 +132,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testDriversLicenseRedactedAuditTrail() {
-		verifyTrue(navigateToAuditTrail());
+		verifyTrue(navigateToIncidentAuditTrail());
 		verifyTrue(selenium.isTextPresent("Driver's License Number : *********"));
 		verifyTrue(selenium.isTextPresent("State : GA"));
 		verifyTrue(selenium.isTextPresent("Province :"));
@@ -144,7 +142,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 
 	@Test
 	public void testPassportRedactedAuditTrail() {
-		verifyTrue(navigateToAuditTrail());
+		verifyTrue(navigateToIncidentAuditTrail());
 		verifyTrue(selenium.isTextPresent("Common Number (Passport) : ***************"));
 		verifyTrue(selenium.isTextPresent("Country : US"));
 		goToTaskManager();
@@ -154,7 +152,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	public void testDriversLicenseViewEdit() {
 		// MJS: enable view/edit drivers license
 		verifyTrue(setDriversLicensePermission(true, true));
-		verifyTrue(navigateToIncident());
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		verifyTrue(selenium.isEditable("name=passenger[0].decriptedDriversLicense"));
 		verifyEquals(WN_CreateLD_VerifyRequiredFields.DRIVERS_LICENSE, selenium.getValue("name=passenger[0].decriptedDriversLicense"));
 		verifyTrue(selenium.isEditable("name=passenger[0].dlstate"));
@@ -169,7 +167,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testDriversLicenseViewEditAuditTrail() {
-		verifyTrue(navigateToAuditTrail());
+		verifyTrue(navigateToIncidentAuditTrail());
 		verifyTrue(selenium.isTextPresent("Driver's License Number : " + WN_CreateLD_VerifyRequiredFields.DRIVERS_LICENSE));
 		verifyTrue(selenium.isTextPresent("State : GA"));
 		verifyTrue(selenium.isTextPresent("Province :"));
@@ -180,7 +178,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testDriversLicenseStateProvinceFields() {
-		verifyTrue(navigateToIncident());
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		selenium.select("name=passenger[0].driversLicenseCountry", "label=United Kingdom");
 		verifyEquals("", selenium.getValue("name=passenger[0].dlstate"));
 		verifyFalse(selenium.isEditable("name=passenger[0].dlstate"));
@@ -242,7 +240,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	@Test
 	public void testPassportViewEdit() {
 		verifyTrue(setPassportPermission(true, true));
-		verifyTrue(navigateToIncident());
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		verifyTrue(selenium.isEditable("name=passenger[0].decryptedPassportNumber"));
 		verifyEquals(WN_CreateLD_VerifyRequiredFields.PASSPORT_NUMBER, selenium.getValue("name=passenger[0].decryptedPassportNumber"));
 		verifyTrue(selenium.isEditable("name=passenger[0].passportIssuer"));
@@ -253,7 +251,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testPassportViewEditAuditTrail() {
-		verifyTrue(navigateToAuditTrail());
+		verifyTrue(navigateToIncidentAuditTrail());
 		verifyTrue(selenium.isTextPresent("Common Number (Passport) : " + WN_CreateLD_VerifyRequiredFields.PASSPORT_NUMBER));
 		verifyTrue(selenium.isTextPresent("Country : US"));
 		goToTaskManager();
@@ -262,7 +260,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testCollectPosIdFields() {
-		verifyTrue(navigateToIncident());
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		verifyTrue(selenium.isTextPresent("Position ID"));
 		verifyTrue(selenium.isElementPresent("name=theitem[0].posId"));
 		goToTaskManager();
@@ -270,7 +268,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testPosIdAuditTrail() {
-		verifyTrue(navigateToAuditTrail());
+		verifyTrue(navigateToIncidentAuditTrail());
 		verifyTrue(selenium.isTextPresent("Position ID : 123456"));
 		goToTaskManager();
 	}
@@ -279,7 +277,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	public void testPosIdFieldsNotPresent() {
 		verifyTrue(navigateToPermissionsPage());
 		verifyTrue(setCollectPosIdPermission(false));
-		verifyTrue(navigateToIncident());
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		verifyFalse(selenium.isTextPresent("Position ID"));
 		verifyFalse(selenium.isElementPresent("name=theitem[0].posId"));
 		goToTaskManager();
@@ -287,14 +285,14 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testPosIdNotPresentAuditTrail() {
-		verifyTrue(navigateToAuditTrail());
+		verifyTrue(navigateToIncidentAuditTrail());
 		verifyFalse(selenium.isTextPresent("Position ID : 123456"));
 		goToTaskManager();
 	}
 	
 	@Test
 	public void testPressEnterInRemarksField() {
-		verifyTrue(navigateToIncident());
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		String locator = "//textarea[@id='remark[0]']";
 		verifyEquals("1500", selenium.getValue("//input[@id='remark[0].counter']"));
 		typeString(locator, "Test line");
@@ -312,7 +310,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 
 	@Test
 	public void testUTBBagTag(){
-		verifyTrue(navigateToIncident());
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		selenium.type("name=claimcheck[0].claimchecknum", "UTB");
 		selenium.click("name=saveButton");
 		assertEquals("Claim Check Number is not a valid claim check number.[10 digits or 8 character AN]", selenium.getAlert());
@@ -321,7 +319,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		waitForPageToLoadImproved();
 
 		if (checkNoErrorPage()) {
-			verifyTrue(navigateToIncident());
+			verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		} else {
 			System.out.println("CLDVRF: ERROR SAVING INCIDENT.");
 			return;
@@ -481,7 +479,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testEmptyDriversLicenseDisabled() {
-		verifyTrue(navigateToIncident());
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		verifyFalse(selenium.isEditable("name=passenger[0].redactedDriversLicense"));
 		verifyEquals("", selenium.getValue("name=passenger[0].redactedDriversLicense"));
 		verifyFalse(selenium.isEditable("name=passenger[0].dlstate"));
@@ -496,7 +494,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	@Test
 	public void testEmptyDriversLicenseEnabled() {
 		verifyTrue(setDriversLicensePermission(true, true));
-		verifyTrue(navigateToIncident());
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		verifyTrue(selenium.isEditable("name=passenger[0].decriptedDriversLicense"));
 		verifyEquals("", selenium.getValue("name=passenger[0].decriptedDriversLicense"));
 		verifyTrue(selenium.isEditable("name=passenger[0].dlstate"));
@@ -509,7 +507,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testEmptyPassportDisabled() {
-		verifyTrue(navigateToIncident());
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		verifyFalse(selenium.isEditable("name=passenger[0].redactedPassportNumber"));
 		verifyEquals("", selenium.getValue("name=passenger[0].redactedPassportNumber"));
 		verifyFalse(selenium.isEditable("name=passenger[0].passportIssuer"));
@@ -520,7 +518,7 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	@Test
 	public void testEmptyPassportEnabled() {
 		verifyTrue(setPassportPermission(true, true));
-		verifyTrue(navigateToIncident());
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		verifyTrue(selenium.isEditable("name=passenger[0].decryptedPassportNumber"));
 		verifyEquals("", selenium.getValue("name=passenger[0].decryptedPassportNumber"));
 		verifyTrue(selenium.isEditable("name=passenger[0].passportIssuer"));
@@ -541,50 +539,6 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 			selenium.keyPress(locator, key);
 			selenium.keyUp(locator, key);
 		}
-	}
-	
-	private boolean navigateToPermissionsPage() {
-		boolean success = false;
-		selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
-		waitForPageToLoadImproved();
-		
-		selenium.select("//select[@name='companyCode']", "label=Owens Group");
-		selenium.type("//div[@id='mainlogin']/form/table/tbody/tr[4]/td[2]/input", Settings.USERNAME_OGADMIN);
-		selenium.type("//div[@id='mainlogin']/form/table/tbody/tr[5]/td[2]/input", Settings.PASSWORD_OGADMIN);
-		selenium.click("//input[@id='button']");
-		waitForPageToLoadImproved();		
-		if (checkNoErrorPage()) {
-			checkCopyrightAndQuestionMarks();
-			selenium.click("//a[contains(text(),'Maintain Companies')]");
-			waitForPageToLoadImproved();
-			if (checkNoErrorPage()) {
-				selenium.type("//input[@name='companySearchName']", "wn");
-				selenium.click("//input[@id='button']");
-				waitForPageToLoadImproved();
-				if (checkNoErrorPage()) {
-					selenium.click("xpath=(//a[contains(text(),'Maintain')])[14]");
-					waitForPageToLoadImproved();
-					if (checkNoErrorPage()) {
-						selenium.click("xpath=(//a[contains(text(),'Maintain')])[12]");
-						waitForPageToLoadImproved();
-						if (checkNoErrorPage()) {
-							success = selenium.isTextPresent("Maintain Group Permissions");
-						} else {
-							System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Maintain Permissions. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-						}
-					} else {
-						System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Maintain Groups. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-					}
-				} else {
-					System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Searching For Southwest. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-				}
-			} else {
-				System.out.println("!!!!!!!!!!!!!!! - Maintain Companies Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-			}			
-		} else {
-			System.out.println("!!!!!!!!!!!!!!! - Failed to Log In. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-		}
-		return success;
 	}
 	
 	private boolean setDriversLicensePermission(boolean collectDl, boolean viewEditDl) {
@@ -673,83 +627,4 @@ public class WN_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		return success;
 	}
 	
-	private boolean loginToNt() {
-		boolean success = false;
-		selenium.type("document.logonForm.elements[1]", Settings.USERNAME_ADMIN);
-		selenium.type("document.logonForm.elements[2]", Settings.PASSWORD_ADMIN);
-		selenium.click("document.logonForm.elements[3]");
-		waitForPageToLoadImproved();
-		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Task Manager Home"));
-			success = true;
-		} else {
-			System.out.println("!!!!!!!!!!!!!!! - Failed to Log In. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-		}
-		return success;
-	}
-	
-	private boolean navigateToIncident() {
-		boolean success = false;
-		selenium.click("//a[contains(@href, 'searchIncident.do?ld=1')]");
-		waitForPageToLoadImproved();
-		if (checkNoErrorPage()) {
-			checkCopyrightAndQuestionMarks();
-			selenium.type("name=incident_ID", Settings.INCIDENT_ID_WN);
-			selenium.click("id=button");
-			waitForPageToLoadImproved();
-			if (checkNoErrorPage()) {
-				checkCopyrightAndQuestionMarks();
-				success = true;
-			} else {
-				System.out.println("!!!!!!!!!!!!!!! - Failed to Load Incident: " + Settings.INCIDENT_ID_WN + ". Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-			}
-		} else {
-			System.out.println("!!!!!!!!!!!!!!! - Failed to Load Incident Search Page. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-		}
-		return success;
-	}
-	
-	private boolean navigateToAuditTrail() {
-		boolean success = false;
-		selenium.click("//a[@id='menucol_9.12']");
-		waitForPageToLoadImproved();
-		if (checkNoErrorPage()) {
-			checkCopyrightAndQuestionMarks();
-			selenium.click("//td[@id='navmenucell']/div/dl/dd[3]/a/span[2]");
-			waitForPageToLoadImproved();
-			if (checkNoErrorPage()) {
-				checkCopyrightAndQuestionMarks();
-				selenium.type("//input[@name='incident_ID']", Settings.INCIDENT_ID_WN);
-				selenium.click("//input[@id='button']");
-				waitForPageToLoadImproved();
-				if (checkNoErrorPage()) {
-					checkCopyrightAndQuestionMarks();
-					selenium.click("//a[contains(@href, 'audit_mbr.do?detail=1&incident_ID=" + Settings.INCIDENT_ID_WN + "')]");
-					waitForPageToLoadImproved();
-					if (checkNoErrorPage()) {
-						checkCopyrightAndQuestionMarks();
-						selenium.check("//input[@name='audit_id']");
-						selenium.click("xpath=(//input[@id='button'])[3]");
-						waitForPageToLoadImproved();
-						if (checkNoErrorPage()) {
-							checkCopyrightAndQuestionMarks();
-							success = true;
-						} else {
-							System.out.println("!!!!!!!!!!!!!!! - Failed to Load Audit Trail for Incident: " + Settings.INCIDENT_ID_WN + ". Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-						}
-					} else {
-						System.out.println("!!!!!!!!!!!!!!! - Failed to Load Audit Trail for Incident: " + Settings.INCIDENT_ID_WN + ". Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-					}
-				} else {
-					System.out.println("!!!!!!!!!!!!!!! - Failed to Load Incident: " + Settings.INCIDENT_ID_WN + ". Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-				}
-			} else {
-				System.out.println("!!!!!!!!!!!!!!! - Failed to Load Incident Tab. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-			}
-		} else {
-			System.out.println("!!!!!!!!!!!!!!! - Failed to Load Audit Trail. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-		}
-		return success;
-	}
-
 }
