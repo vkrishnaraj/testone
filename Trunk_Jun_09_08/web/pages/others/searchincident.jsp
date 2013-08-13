@@ -52,6 +52,14 @@ function updatePagination() {
     return true;
 }
 
+function updateExpediteTagField() {
+	var expTagNum = document.getElementById("expediteTagNum");
+	if (!expTagNum || expTagNum == null) return;
+
+	var itemTypeId = document.getElementById("itemType_ID");
+	expTagNum.disabled = itemTypeId.options[itemTypeId.selectedIndex].value != 3; 
+}
+
 
   </script>
   <jsp:include page="/pages/includes/validation_search.jsp" />
@@ -102,7 +110,7 @@ function updatePagination() {
                 <td width=33%>
                   <bean:message key="colname.report_type" />
                   <br>
-                  <html:select property="itemType_ID" styleClass="dropdown">
+                  <html:select property="itemType_ID" styleClass="dropdown" styleId="itemType_ID" onchange="updateExpediteTagField();">
                     <html:option value="0">
                       <bean:message key="select.all" />
                     </html:option>
@@ -241,6 +249,15 @@ function updatePagination() {
                 </td>
                 
               </tr>
+              <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EXPEDITE_TAG_NUM_COLLECT, a)) { %>
+              <tr>
+              	<td colspan="3" >
+              		<bean:message key="colname.expedite.tagnum" />
+              		<br>
+              		<html:text property="expediteTagNum" size="11" maxlength="10" styleClass="textfield" styleId="expediteTagNum" />
+              	</td>
+              </tr>
+              <% } %>
               <tr>
                 <td colspan="3" align="center" valign="top">
                   <html:submit property="search" styleId="button">

@@ -1172,10 +1172,13 @@ public class IncidentBMO {
 				s.append("select distinct incident from com.bagnet.nettracer.tracing.db.Incident incident ");
 
 			boolean tagPresent = false;
-			if (siDTO.getClaimchecknum().length() > 0) {
+			if (!siDTO.getClaimchecknum().isEmpty() || !siDTO.getExpediteTagNum().isEmpty()) {
 				s.append(" left outer join incident.itemlist item ");
-				s.append(" left outer join incident.claimchecks claimcheck ");
 				tagPresent = true;
+			}
+			
+			if (siDTO.getClaimchecknum().length() > 0) {
+				s.append(" left outer join incident.claimchecks claimcheck ");
 			}
 			if (siDTO.getAirline().length() > 0 || siDTO.getFlightnum().length() > 0)
 				s.append(" join incident.itinerary itinerary ");
@@ -1211,7 +1214,9 @@ public class IncidentBMO {
 			}
 			
 			
-
+			if (!siDTO.getExpediteTagNum().isEmpty()) {
+				s.append("and item.expediteTagNum like :expediteTagNum ");
+			}
 
 			if (siDTO.getTicketnumber().length() > 0)
 				s.append("and incident.ticketnumber like :ticketnumber ");
@@ -1382,6 +1387,10 @@ public class IncidentBMO {
 					q.setDate("startdate1", sdate1);
 					q.setTime("starttime", stime);
 				}
+			}
+			
+			if (!siDTO.getExpediteTagNum().isEmpty()) {
+				q.setString("expediteTagNum", siDTO.getExpediteTagNum());
 			}
 			
 			if (siDTO.getClaimchecknum()!=null && siDTO.getClaimchecknum().length()>0) {

@@ -45,7 +45,7 @@ public class SearchIncident_DTO {
 	private String e_station_assignment_time = "";
 	private int assigned2StationWithin24hrs;
 	
-	
+	private String expediteTagNum;
 	
 	public int getAssigned2StationWithin24hrs() {
 		return assigned2StationWithin24hrs;
@@ -445,6 +445,14 @@ public class SearchIncident_DTO {
 
 	public void setClaimchecknum2(String claimchecknum2) {
 		this.claimchecknum2 = claimchecknum2;
+	}
+
+	public String getExpediteTagNum() {
+		return expediteTagNum;
+	}
+
+	public void setExpediteTagNum(String expediteTagNum) {
+		this.expediteTagNum = expediteTagNum;
 	}	
 	
 }

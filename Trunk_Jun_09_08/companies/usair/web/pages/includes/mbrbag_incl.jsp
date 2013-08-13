@@ -13,6 +13,7 @@
 <%
 	Agent a = (Agent) session.getAttribute("user");
 	boolean collectPosId = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_COLLECT_POS_ID, a);
+	boolean collectExpTagNum = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EXPEDITE_TAG_NUM_COLLECT, a);
 	String cssFormClass;
 
 	cssFormClass = "form2_dam";
@@ -129,9 +130,19 @@
 				<%
 					if (report_type != 1) {
 				%>
-				<td colspan="2"><bean:message key="colname.claimnum.req2" /> <br>
-					<html:text name="theitem" property="claimchecknum" size="11"
-						maxlength="11" styleClass="textfield" indexed="true" /></td>
+					<td <% if (report_type == 2 || !collectExpTagNum) { %>colspan="2"<% } %>>
+		                <bean:message key="colname.claimnum.req2" />
+		                <br>
+		                <html:text name="theitem" property="claimchecknum" size="11" maxlength="11" styleClass="textfield" indexed="true" />
+	              	</td>
+              
+	              <% if (report_type == 0 && collectExpTagNum) { %>
+	              	<td>
+	              		<bean:message key="colname.expedite.tagnum" />
+	              		<br>
+	              		<html:text name="theitem" property="expediteTagNum" size="11" maxlength="10" styleClass="textfield" indexed="true" />
+	              	</td>
+	              <% } %>
 				<%
 					} else {
 				%>

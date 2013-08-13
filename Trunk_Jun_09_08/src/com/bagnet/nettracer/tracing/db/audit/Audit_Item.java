@@ -70,6 +70,7 @@ public class Audit_Item implements Serializable {
 	private Audit_Incident audit_incident;
 	
 	private String posId;
+	private String expediteTagNum;
 	
 	/**
 	 * @return Returns the bag_weight.
@@ -792,6 +793,17 @@ public class Audit_Item implements Serializable {
 
 	public void setPosId(String posId) {
 		this.posId = posId;
+	}
+
+	/**
+	 * @hibernate.property type="string" length="10"
+	 */
+	public String getExpediteTagNum() {
+		return expediteTagNum;
+	}
+
+	public void setExpediteTagNum(String expediteTagNum) {
+		this.expediteTagNum = expediteTagNum;
 	}
 	
 }

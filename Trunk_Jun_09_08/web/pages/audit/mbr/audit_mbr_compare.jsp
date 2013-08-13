@@ -692,6 +692,12 @@ function updatePagination() {
                       <bean:write name="theitem" property="OHD_ID" />
                       <br>
                     </logic:present>
+                    <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EXPEDITE_TAG_NUM_COLLECT, a)) { %>
+	                    <bean:message key="colname.expedite.tagnum" />
+	                    :
+	                    <bean:write name="theitem" property="expediteTagNum" />
+	                    <br>
+                    <% } %>
                     <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_COLLECT_POS_ID, a)) { %>
 	                    <bean:message key="colname.posId" />
 	                    :

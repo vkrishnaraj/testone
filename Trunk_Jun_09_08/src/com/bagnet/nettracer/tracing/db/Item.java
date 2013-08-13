@@ -86,6 +86,7 @@ public class Item implements Serializable {
 	private int replacementBagIssued;
 	
 	private String posId;
+	private String expediteTagNum;
 	
 	/**
 	 * @return Returns the bag_weight;
@@ -1141,6 +1142,17 @@ public class Item implements Serializable {
 
 	public void setPosId(String posId) {
 		this.posId = posId;
+	}
+
+	/**
+	 * @hibernate.property type="string" length="10"
+	 */
+	public String getExpediteTagNum() {
+		return expediteTagNum;
+	}
+
+	public void setExpediteTagNum(String expediteTagNum) {
+		this.expediteTagNum = expediteTagNum;
 	}
 	
 }
