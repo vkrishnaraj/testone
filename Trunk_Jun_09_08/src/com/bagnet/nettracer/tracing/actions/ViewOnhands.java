@@ -33,6 +33,9 @@ import com.bagnet.nettracer.tracing.utils.OHDUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
+import org.displaytag.tags.TableTagParameters;
+import org.displaytag.util.ParamEncoder;
+
 /**
  * Implementation of <strong>Action </strong> that is responsible for generating
  * a list of all the bags that needs to be delivered to the customer.
@@ -67,7 +70,7 @@ public class ViewOnhands extends Action {
 		if (request.getParameter("cancelFwd") != null && request.getParameter("ohd_ID") != null) {
 			OHDUtils.cancelForward(request.getParameter("ohd_ID"), user);
 		}
-
+		
 		//		 menu highlite
 		request.setAttribute("highlite", TracingConstants.SYSTEM_COMPONENT_NAME_BAGS_IN_STATION);
 
@@ -78,9 +81,16 @@ public class ViewOnhands extends Action {
 		daform.setStationassigned_ID(agent_station.getStation_ID());
 
 		List resultlist = null;
-
 		// get number of records found
-		if ((resultlist = bs.findOnHandBagsBySearchCriteria(daform, user, 0, 0, true, true, true)) == null
+		/* 
+		 * Getting the sort logic 
+		 */
+		String sort=request.getParameter((new ParamEncoder("ohd")).encodeParameterName(TableTagParameters.PARAMETER_SORT));
+		if(sort==null){
+			sort=request.getParameter("sortBy")!=null?request.getParameter("sortBy").toString():"ohdnum";
+		}
+		request.setAttribute("sortNum", sort);
+		if ((resultlist = bs.findOnHandBagsBySearchCriteria(daform, user, 0, 0, true, true, true,sort)) == null
 				|| resultlist.size() <= 0) {
 			int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_SEARCH_PAGES, session);
 			request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
@@ -106,6 +116,11 @@ public class ViewOnhands extends Action {
 			request.setAttribute("currpage", Integer.toString(currpage));
 			// get row count
 			rowcount = ((Long) resultlist.get(0)).intValue();
+			if(rowcount!=0){
+				request.setAttribute("rowcount", rowcount);
+			} else {
+				request.setAttribute("rowcount", 0);
+			}
 			// find out total pages
 			totalpages = (int) Math.ceil((double) rowcount / (double) rowsperpage);
 
@@ -113,10 +128,9 @@ public class ViewOnhands extends Action {
 				currpage = 0;
 				request.setAttribute("currpage", "0");
 			}
-
 			//find the paginated on hand bags
 			List searchList = bs.findOnHandBagsBySearchCriteria(daform, user, rowsperpage, currpage,
-					false, true, true);
+					false, true, true,sort);
 
 			if (currpage + 1 == totalpages) request.setAttribute("end", "1");
 			if (totalpages > 1) {

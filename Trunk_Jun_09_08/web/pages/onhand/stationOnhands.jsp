@@ -5,11 +5,17 @@
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
+<%@ taglib uri="http://displaytag.sf.net" prefix="display" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.OHD" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.OHDUtils" %>
+<%@page import="java.util.ResourceBundle" %>
+<%@page import="java.util.Locale" %>
+<%@page import="org.displaytag.tags.TableTagParameters"%>
+<%@page import="org.displaytag.util.ParamEncoder"%>
 <%
 	Agent a = (Agent) session.getAttribute("user");
 	org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources) request
@@ -19,6 +25,9 @@
 	boolean showPosId = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_COLLECT_POS_ID, a);
 	
 	int colspan = showPosId ? 14 : 13;
+	ResourceBundle bundle = ResourceBundle.getBundle(
+			"com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
+
 %>
 
 <script language="javascript">
@@ -27,6 +36,7 @@ function goprev() {
   o = document.deliverForm;
   o.prevpage.value = "1";
   o.pagination.value="1";
+  o.sortBy.value="<%=request.getAttribute("sortNum").toString()%>"
   o.submit();
 }
 
@@ -34,6 +44,7 @@ function gonext() {
   o = document.deliverForm;
   o.nextpage.value="1";
   o.pagination.value="1";
+  o.sortBy.value="<%=request.getAttribute("sortNum").toString()%>"
   o.submit();
 }
 
@@ -41,6 +52,7 @@ function gopage(i) {
   o = document.deliverForm;
   o.currpage.value = i;
   o.pagination.value="1";
+  o.sortBy.value="<%=request.getAttribute("sortNum").toString()%>"
   o.submit();
 
 }
@@ -104,225 +116,102 @@ function submitForwardForm()
     <tr>
       
       <td id="middlecolumn">
-        
+        <% 
+        	String forwardTitle=bundle.getString("colname.forwardOhd");
+           	String ohdTitle=bundle.getString("colname.on_hand_report_number");
+           	String incTitle=bundle.getString("colname.incident_num");
+           	String ohdDateTitle=bundle.getString("colname.ohd_create_date");
+           	String ohdModDateTitle=bundle.getString("colname.ohd_modified_date");
+           	String bagTagTitle=bundle.getString("colname.bag_tag_number");
+           	String statusTitle=bundle.getString("header.status");
+           	String colorTitle=bundle.getString("colname.color");
+           	String typeTitle=bundle.getString("colname.bagtype");
+           	String foundDestTitle=bundle.getString("colname.found_destination");
+           	String nameTitle=bundle.getString("colname.name");
+           	String storageTitle=bundle.getString("colname.storage_location");
+           	String actionTitle=bundle.getString("header.action");
+        	String posTitle=bundle.getString("colname.posId");
+            %>
         <div id="maincontent">
           <logic:present name="onhandlist" scope="request">
-            <table class="form2" cellspacing="0" cellpadding="0">
-              <tr>
-                <td>
-                  <strong>
-                    <bean:message key="colname.forwardOhd" />
-                  </strong>
-                </td>
-                <td>
-                  <strong>
-                    <bean:message key="colname.on_hand_report_number" />
-                  </strong>
-                </td>
-                <td>
-                  <strong>
-<%--                     <bean:message key="colname.ld_report_num" /> --%>
-                    <bean:message key="colname.incident_num" />
-                  </strong>
-                </td>
-                <td>
-                  <strong>
-                    <bean:message key="colname.ohd_create_date" />
-                  </strong>
-                </td>
-                <td>
-                  <strong>
-                    <bean:message key="colname.ohd_modified_date" />
-                  </strong>
-                </td>
-                <td>
-                  <strong>
-                    <bean:message key="colname.bag_tag_number" />
-                  </strong>
-                </td>
-                <td>
-                  <strong>
-                    <bean:message key="header.status" />
-                  </strong>
-                </td>
-                <td>
-                  <strong>
-                    <bean:message key="colname.color" />
-                  </strong>
-                </td>
-                <td>
-                  <strong>
-                    <bean:message key="colname.bagtype" />
-                  </strong>
-                </td>
-				<% if (showPosId) { %>
-					<td>
-						<strong>
-							<bean:message key="colname.posId" />
-						</strong>
-					</td>
-				<% } %>
-                <td>
-                  <strong>
-                    <bean:message key="colname.found_destination" />
-                  </strong>
-                </td>
-                <td>
-                  <strong>
-                    <bean:message key="colname.name" />
-                  </strong>
-                </td>
-                <td>
-                  <strong>
-                    <bean:message key="colname.storage_location" />
-                  </strong>
-                </td>
-                <td>
-                  <strong>
-                    <bean:message key="header.action" />
-                  </strong>
-                </td>
-              </tr>
-              <logic:iterate id="ohd" name="onhandlist" type="com.bagnet.nettracer.tracing.db.OHD">
-                <tr>
-                  <td>
-                    <%
-                        
-                    	if (ohd != null && 
-                          ohd.getStatus().getStatus_ID() != TracingConstants.OHD_STATUS_IN_TRANSIT &&
-                          ohd.getStatus().getStatus_ID() != TracingConstants.OHD_STATUS_MATCH_IN_TRANSIT
-                        ) {
-                    %>
-                      <input type="checkbox" name="ohd" value="<bean:write name="ohd" property="OHD_ID"/>">
-                    <%
-                    	} else {
-                    %>
-                      &nbsp;
-                    <%
-                    	}
-                    %>
-                  </td>
-                  <td>
-                    <A HREF="addOnHandBag.do?ohd_ID=<bean:write name="ohd" property="OHD_ID"/>"><bean:write name="ohd" property="OHD_ID" /></a>
-                  </td>
-                  <td>
-                    <a href='searchIncident.do?incident=<%= OHDUtils.getMBRReportNum((OHD)ohd, "" + a.getStation().getStation_ID()) %>'><%=OHDUtils.getMBRReportNum(((OHD) ohd), "" + a.getStation().getStation_ID())%></a>
-                    &nbsp;
-                  </td>
-                  <td>
-                    <bean:write name="ohd" property="displaydate" />
-                  </td>
-                  <td>
-                  	<bean:write name="ohd" property="dispModifiedDate" />
-                  	<br>
-                  	<bean:write name="ohd" property="dispModifiedTime" />
-                  </td>
-                  <td>
-                    <bean:write name="ohd" property="claimnum" />
-                    &nbsp;
-                  </td>
-                  <td>
-                    <bean:message name="ohd" property="status.key" />
-                  </td>
-                  <td>
-                    <logic:empty name="ohd" property="color">
-                      &nbsp;
-                    </logic:empty>
-                    <bean:write name="ohd" property="color" />
-                  </td>
-                  <td>
-                    <logic:empty name="ohd" property="type">
-                      &nbsp;
-                    </logic:empty>
-                    <bean:write name="ohd" property="type" />
-                  </td>
-				  <% if (showPosId) { %>
-				  	<td>
-				  		<logic:empty name="ohd" property="posId" >
-				  			&nbsp;
-				  		</logic:empty>
-				  		<logic:notEmpty name="ohd" property="posId" >
-				  			<bean:write name="ohd" property="posId" />
-				  		</logic:notEmpty>
-				  	</td>
-				  <% } %>
-				  <td>
-				  	<logic:empty name="ohd" property="dispDestination" >
-				  		&nbsp;
-			  		</logic:empty>
-				  	<logic:notEmpty name="ohd" property="dispDestination" >
-				  		<bean:write name="ohd" property="dispDestination" />
-			  		</logic:notEmpty>
-				  </td>
-                  <td>
-                    <logic:notEmpty name="ohd" property="passenger">
-                      <logic:notEmpty name="ohd" property="passenger.lastname">
-                        <bean:write name="ohd" property="passenger.lastname" />
-                        ,
-                        <bean:write name="ohd" property="passenger.firstname" />
-                        &nbsp;
-                        <bean:write name="ohd" property="passenger.middlename" />
-                        &nbsp;
-                      </logic:notEmpty>
-                      <logic:empty name="ohd" property="passenger.lastname">
-                        &nbsp;
-                      </logic:empty>
-                    </logic:notEmpty>
-                    <logic:empty name="ohd" property="passenger">
-                      &nbsp;
-                    </logic:empty>
-                  </td>
-                  <td style="width:12em;word-wrap:break-word;">
-                  	<logic:empty name="ohd" property="storage_location" >
-                  		&nbsp;
-                  	</logic:empty>
-                  	<logic:notEmpty name="ohd" property="storage_location" >
-                  		<bean:write name="ohd" property="storage_location" />
-                  	</logic:notEmpty>
-                  </td>
-                  <td>
-                    <%
-                        
-                      if (ohd != null && 
-                          ohd.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_IN_TRANSIT ||
-                          ohd.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_MATCH_IN_TRANSIT
-                        ) {
-                    %>
-                      <a href="onhands.do?ohd_ID=<bean:write name="ohd" property="OHD_ID"/>&cancelFwd=1" ><bean:message key="link.cancelForward" /></a>
-                    <% } else {%>
-                      &nbsp;
-                    <% } %> 
-                  </td>
-                </tr>
-              </logic:iterate>
-              <input type="hidden" name="search" value="1">
-              <tr>
-                <td colspan="<%=colspan %>">
-                  <jsp:include page="/pages/includes/pagination_incl.jsp" />
-                </td>
-              </tr>
-               <tr>
-                        <td colspan="<%=colspan %>" >
+          	<display:table requestURI="/onhands.do" name="requestScope.onhandlist" sort="external" 
+          		size="<%=Integer.valueOf(request.getAttribute("rowcount").toString())%>" pagesize="<%=Integer.valueOf(request.getAttribute("rowsperpage").toString())%>"
+          		class="form2" cellspacing="0" cellpadding="0" id="ohd" defaultsort="1" partialList="true" >
+          		<% OHD o=(OHD)ohd; %>
+          		<display:column title="<%=forwardTitle %>">
+          		    <%  if (o != null && 
+                          o.getStatus().getStatus_ID() != TracingConstants.OHD_STATUS_IN_TRANSIT &&
+                          o.getStatus().getStatus_ID() != TracingConstants.OHD_STATUS_MATCH_IN_TRANSIT
+                        ) { %>
+          			<input type="checkbox" name="ohd" value="${ohd.OHD_ID}"/>
+          			<% } %>
+          			&nbsp;
+          		</display:column>
+             	<display:column property="OHD_ID" title="<%=ohdTitle %>" href="addOnHandBag.do" paramId="ohd_ID" sortable="true" sortName="<%=request.getAttribute("sortNum").equals("ohdnum")?"ohdnumRev":"ohdnum" %>"/>
+             	<display:column title="<%=incTitle %>" sortable="true" href="searchIncident.do" paramId="incident" sortName="<%=request.getAttribute("sortNum").equals("incnum")?"incnumRev":"incnum" %>"><a href='searchIncident.do?incident=<%= OHDUtils.getMBRReportNum((OHD)ohd, "" + a.getStation().getStation_ID()) %>'><%= OHDUtils.getMBRReportNum((OHD)ohd, "" + a.getStation().getStation_ID()) %></a>&nbsp;</display:column>
+             	<display:column property="displaydate" title="<%=ohdDateTitle  %>" sortable="true" sortName="<%=request.getAttribute("sortNum").equals("ohdCreateDate")?"ohdCreateDateRev":"ohdCreateDate" %>"/>
+             	<display:column title="<%=ohdModDateTitle  %>" sortable="true" sortName="<%=request.getAttribute("sortNum").equals("ohdModDate")?"ohdModDateRev":"ohdModDate" %>"><c:out value="${ohd.dispModifiedDate} ${ohd.dispModifiedTime}"/>&nbsp;</display:column>
+                <display:column title="<%=bagTagTitle %>" sortable="true" sortName="<%=request.getAttribute("sortNum").equals("bagtagnum")?"bagtagnumRev":"bagtagnum" %>"><c:out value="${ohd.claimnum}"/>&nbsp;</display:column>
+                <display:column title="<%=statusTitle %>" sortable="true"
+             		sortName="<%=request.getAttribute("sortNum").equals("status")?"statusRev":"status" %>">
+                	<% String status=o.getStatus().getKey(); %>
+                	<c:out value="<%=bundle.getString(status)%>" />&nbsp;
+                </display:column>
+                <display:column title="<%=colorTitle %>" sortable="true" sortName="<%=request.getAttribute("sortNum").equals("color")?"colorRev":"color" %>"><c:out value="${ohd.color}"/>&nbsp;</display:column>
+                <display:column  title="<%=typeTitle %>" sortable="true" sortName="<%=request.getAttribute("sortNum").equals("type")?"typeRev":"type" %>"><c:out value="${ohd.type}"/>&nbsp;</display:column>
+                <% if (showPosId) { %>
+                	<display:column sortable="true" title="<%=posTitle %>" sortName="<%=request.getAttribute("sortNum").equals("pos")?"posRev":"pos" %>"><c:out value="${ohd.posId}"/>&nbsp;</display:column>
+                <% } %>
+                <display:column title="<%=foundDestTitle %>" sortable="true" sortName="<%=request.getAttribute("sortNum").equals("destination")?"destinationRev":"destination" %>"><c:out value="${ohd.dispDestination}"/>&nbsp;</display:column>
+				<display:column  title="<%=nameTitle %>" sortable="true" sortName="<%=request.getAttribute("sortNum").equals("name")?"nameRev":"name" %>" >
+					<% if(o.getPassenger().getFirstname()!=null && !o.getPassenger().getFirstname().isEmpty()){ %>
+						<c:out value="${ohd.passenger.lastname}, ${ohd.passenger.firstname} ${ohd.passenger.middlename}"/>&nbsp;
+					<% } else { %>
+						<c:out value="${ohd.passenger.lastname}"/>&nbsp;
+					<% } %>
+               	</display:column> 
+               	<display:column title="<%=storageTitle %>" sortable="true" sortName="<%=request.getAttribute("sortNum").equals("storage")?"storageRev":"storage" %>" style="width:12em;word-wrap:break-word;"><c:out value="${ohd.storage_location}"/>&nbsp;</display:column>
+               	<display:column title="<%=actionTitle %>">
+          		    <%
+                        if (o != null && 
+	                      o.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_IN_TRANSIT ||
+	                      o.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_MATCH_IN_TRANSIT
+	                    ) {
+	                %>
+	                  <a href="onhands.do?ohd_ID=<bean:write name="ohd" property="OHD_ID"/>&cancelFwd=1" ><bean:message key="link.cancelForward" /></a>
+	                <% } else {%>
+	                  &nbsp;
+	                <% } %> 
+          		</display:column>
+               	<display:footer>
+	               	<tr>
+		                <td colspan="<%=colspan %>">
+		                  <jsp:include page="/pages/includes/pagination_incl.jsp" />
+		                </td>
+	              	</tr>
+               		<tr>
+                        <td colspan="<%=colspan %>">
                           &nbsp;
                         </td>
                       </tr>
                       <tr>
                         <td colspan="<%=colspan %>" align="center">
                           <logic:present name="cbroStationID" scope="session">
-          <%
+          					<%
                             if (session.getAttribute("cbroStationID").equals("" + a.getStation().getStation_ID())) {
-          %>
+          					%>
                               <input type="button" name="batch" value="<bean:message key="button.batchForward" />" Id="button" onClick="submitForwardForm()">
-          <%
+          					<%
                             }
-          %>
+         					 %>
                           </logic:present>
                           <logic:notPresent name="cbroStationID" scope="session">
                             <input type="button" name="batch" value="<bean:message key="button.batchForward" />" Id="button" onClick="submitForwardForm()">
                           </logic:notPresent>
                         </td>
                       </tr>
-            </table>
+                 </display:footer>
+            </display:table>
           </logic:present>
         </html:form>
         <html:form action="forward_on_hand.do" method="post">

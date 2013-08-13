@@ -52,5 +52,6 @@ onchange="verifyPaginationLimit(this);">
 <input type="hidden" name="prevpage"/>
 <input type="hidden" name="pagination"/>
 <input type="hidden" name="update_pagination"/>
+<input type="hidden" name="sortBy"/>
 
 

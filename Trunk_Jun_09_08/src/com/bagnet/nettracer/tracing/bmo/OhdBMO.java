@@ -640,7 +640,7 @@ public class OhdBMO {
 				sql.append(" join ohd.items items ");
 			}
 
-			if (oDTO.getAirline().length() > 0 || oDTO.getFlightnum().trim().length() > 0) {
+			if (oDTO.getAirline().length() > 0 || oDTO.getFlightnum().trim().length() > 0 || (sort != null && (sort.equals("destination") || sort.equals("destinationRev")))) {
 				sql.append(" join ohd.itinerary itinerary ");
 			}
 
@@ -774,10 +774,18 @@ public class OhdBMO {
 						sortq += " ohd.OHD_ID asc, ";
 					if (sort.equals("ohdnumRev"))
 						sortq += " ohd.OHD_ID desc, ";
+					if (sort.equals("incnum"))
+						sortq += " ohd.matched_incident asc, ";
+					if (sort.equals("incnumRev"))
+						sortq += " ohd.matched_incident desc, ";
 					if (sort.equals("ohdCreateDate"))
 						sortq += " ohd.founddate asc";
 					if (sort.equals("ohdCreateDateRev"))
 						sortq += " ohd.founddate desc";
+					if (sort.equals("ohdModDate"))
+						sortq += " ohd.modifiedDate asc, ";
+					if (sort.equals("ohdModDateRev"))
+						sortq += " ohd.modifiedDate desc, ";
 					if (sort.equals("bagtagnum"))
 						sortq += " ohd.claimnum asc, ";
 					if (sort.equals("bagtagnumRev"))
@@ -794,6 +802,10 @@ public class OhdBMO {
 						sortq += " ohd.type asc, ";
 					if (sort.equals("bagtypeRev"))
 						sortq += " ohd.type desc, ";
+					if (sort.equals("pos"))
+						sortq += " ohd.posId asc, ";
+					if (sort.equals("posRev"))
+						sortq += " ohd.posId desc, ";
 					if (sort.equals("foundComp"))
 						sortq += " ohd.foundAtStation.company.companyCode_ID asc, ";
 					if (sort.equals("foundCompRev"))
@@ -810,6 +822,14 @@ public class OhdBMO {
 						sortq += " passengers.lastname asc, ";
 					if (sort.equals("nameRev"))
 						sortq += " passengers.lastname desc, ";
+					if (sort.equals("destination"))
+						sortq += " itinerary.legto asc, ";
+					if (sort.equals("destinationRev"))
+						sortq += " itinerary.legto desc, ";
+					if (sort.equals("storage"))
+						sortq += " ohd.storage_location asc, ";
+					if (sort.equals("storageRev"))
+						sortq += " ohd.storage_location desc, ";
 					if (sort.equals("wtid"))
 						sortq += " ohd.wtFile.wt_id asc, ";
 					if (sort.equals("wtidRev"))

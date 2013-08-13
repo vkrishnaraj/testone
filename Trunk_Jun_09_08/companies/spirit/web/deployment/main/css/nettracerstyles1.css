@@ -302,6 +302,14 @@ td#middlecolumn {
 	padding-right:20px;
 	background-color:#E0EDFB;
 }
+th#middlecolumn {
+	vertical-align:top;
+	text-align:center;
+	padding: 13px;
+	padding-left:20px;
+	padding-right:20px;
+	background-color:#E0EDFB;
+}
 
 /* main content  */
 div#maincontent {
@@ -322,6 +330,11 @@ div#maincontent table {
 	margin:10px 0px;
 }
 div#maincontent table td{
+	border:1px solid #fff;
+	padding:2px;
+	vertical-align:top;
+}
+div#maincontent table th{
 	border:1px solid #fff;
 	padding:2px;
 	vertical-align:top;

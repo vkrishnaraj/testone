@@ -3747,6 +3747,13 @@
 			<property name="overrideResource" value="${basedir}/companies/ab/ApplicationResources.properties" />
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</ant>
+
+		<!-- Build information to add DisplayTag.Properties so properties don't need to be set for all tables using DisplayTag -->
+		<ant antfile="build-gen.xml" target="combineResourceFiles">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/displaytag.properties" />
+			<property name="overrideResource" value="${basedir}/companies/ab/environment/${environment.name}/displaytag.properties" />
+			<property name="destinationResource" value="${basedir}/src/displaytag.properties" />
+		</ant>
 		<ant target="combineResourceFiles" antfile="build-gen.xml">
 			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
 			<property name="overrideResource" value="${basedir}/companies/ab/environment/${environment.name}/tracer.properties" />
@@ -3785,6 +3792,13 @@
 			<property name="overrideResource" value="${basedir}/companies/lfc/ApplicationResources.properties" />
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</ant>
+
+		<!-- Build information to add DisplayTag.Properties so properties don't need to be set for all tables using DisplayTag -->
+		<ant antfile="build-gen.xml" target="combineResourceFiles">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/displaytag.properties" />
+			<property name="overrideResource" value="${basedir}/companies/lfc/environment/${environment.name}/displaytag.properties" />
+			<property name="destinationResource" value="${basedir}/src/displaytag.properties" />
+		</ant>
 		<ant target="combineResourceFiles" antfile="build-gen.xml">
 			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
 			<property name="overrideResource" value="${basedir}/companies/lfc/environment/${environment.name}/tracer.properties" />
@@ -3820,6 +3834,13 @@
 			<property name="overrideResource" value="${basedir}/companies/alaska-fs/environment/${environment.name}/tracer.properties" />
 			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
 		</ant>
+
+		<!-- Build information to add DisplayTag.Properties so properties don't need to be set for all tables using DisplayTag -->
+		<ant antfile="build-gen.xml" target="combineResourceFiles">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/displaytag.properties" />
+			<property name="overrideResource" value="${basedir}/companies/alaska-fs/environment/${environment.name}/displaytag.properties" />
+			<property name="destinationResource" value="${basedir}/src/displaytag.properties" />
+		</ant>
 		<antcall target="fast_all" />
 		<antcall target="delete" />
 	</target>
@@ -3844,6 +3865,13 @@
 			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
 			<property name="overrideResource" value="${basedir}/companies/frontier-fs/environment/${environment.name}/tracer.properties" />
 			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
+		</ant>
+
+		<!-- Build information to add DisplayTag.Properties so properties don't need to be set for all tables using DisplayTag -->
+		<ant antfile="build-gen.xml" target="combineResourceFiles">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/displaytag.properties" />
+			<property name="overrideResource" value="${basedir}/companies/frontier-fs/environment/${environment.name}/displaytag.properties" />
+			<property name="destinationResource" value="${basedir}/src/displaytag.properties" />
 		</ant>
 		<antcall target="fast_all" />
 		<antcall target="delete" />
@@ -3870,6 +3898,13 @@
 			<property name="overrideResource" value="${basedir}/companies/southwest-fs/environment/${environment.name}/tracer.properties" />
 			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
 		</ant>
+		<!-- Build information to add DisplayTag.Properties so properties don't need to be set for all tables using DisplayTag -->
+		
+		<ant antfile="build-gen.xml" target="combineResourceFiles">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/displaytag.properties" />
+			<property name="overrideResource" value="${basedir}/companies/southwest-fs/environment/${environment.name}/displaytag.properties" />
+			<property name="destinationResource" value="${basedir}/src/displaytag.properties" />
+		</ant>
 		<antcall target="fast_all" />
 		<antcall target="delete" />
 	</target>
@@ -3886,6 +3921,13 @@
 			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
 			<property name="overrideResource" value="${basedir}/companies/southwest/environment/${environment.name}/tracer.properties" />
 			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
+		</ant>
+		
+		<!-- Build information to add DisplayTag.Properties so properties don't need to be set for all tables using DisplayTag -->
+		<ant antfile="build-gen.xml" target="combineResourceFiles">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/displaytag.properties" />
+			<property name="overrideResource" value="${basedir}/companies/southwest/environment/${environment.name}/displaytag.properties" />
+			<property name="destinationResource" value="${basedir}/src/displaytag.properties" />
 		</ant>
 
 		<copy todir="${basedir}/web/reports" file="companies/tracer/LostDelayReceipt.jrxml" />
@@ -3935,6 +3977,13 @@
 			<property name="overrideResource" value="${basedir}/companies/airtran/ApplicationResources.properties" />
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</ant>
+
+		<!-- Build information to add DisplayTag.Properties so properties don't need to be set for all tables using DisplayTag -->
+		<ant antfile="build-gen.xml" target="combineResourceFiles">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/displaytag.properties" />
+			<property name="overrideResource" value="${basedir}/companies/airtran/environment/${environment.name}/displaytag.properties" />
+			<property name="destinationResource" value="${basedir}/src/displaytag.properties" />
+		</ant>
 		<ant target="combineResourceFiles" antfile="build-gen.xml">
 			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
 			<property name="overrideResource" value="${basedir}/companies/airtran/environment/${environment.name}/tracer.properties" />
@@ -3980,6 +4029,13 @@
 			<property name="overrideResource" value="${basedir}/companies/fraud/environment/${environment.name}/tracer.properties" />
 			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
 		</ant>
+
+		<!-- Build information to add DisplayTag.Properties so properties don't need to be set for all tables using DisplayTag -->
+		<ant antfile="build-gen.xml" target="combineResourceFiles">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/displaytag.properties" />
+			<property name="overrideResource" value="${basedir}/companies/fraud/environment/${environment.name}/displaytag.properties" />
+			<property name="destinationResource" value="${basedir}/src/displaytag.properties" />
+		</ant>
 		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/fraud/ApplicationResources_fr.properties" />
 		<antcall target="fast_all" />
 		<antcall target="delete" />
@@ -4011,6 +4067,13 @@
 			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
 			<property name="overrideResource" value="${basedir}/companies/azul/ApplicationResources.properties" />
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		</ant>
+
+		<!-- Build information to add DisplayTag.Properties so properties don't need to be set for all tables using DisplayTag -->
+		<ant antfile="build-gen.xml" target="combineResourceFiles">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/displaytag.properties" />
+			<property name="overrideResource" value="${basedir}/companies/azul/environment/${environment.name}/displaytag.properties" />
+			<property name="destinationResource" value="${basedir}/src/displaytag.properties" />
 		</ant>
 		<ant target="combineResourceFiles" antfile="build-gen.xml">
 			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
@@ -4049,6 +4112,13 @@
 			<property name="overrideResource" value="${basedir}/companies/delta-fs/ApplicationResources.properties" />
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</ant>
+
+		<!-- Build information to add DisplayTag.Properties so properties don't need to be set for all tables using DisplayTag -->
+		<ant antfile="build-gen.xml" target="combineResourceFiles">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/displaytag.properties" />
+			<property name="overrideResource" value="${basedir}/companies/delta-fs/environment/${environment.name}/displaytag.properties" />
+			<property name="destinationResource" value="${basedir}/src/displaytag.properties" />
+		</ant>
 		<ant target="combineResourceFiles" antfile="build-gen.xml">
 			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
 			<property name="overrideResource" value="${basedir}/companies/delta-fs/environment/${environment.name}/tracer.properties" />
@@ -4084,6 +4154,13 @@
 			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
 			<property name="overrideResource" value="${basedir}/companies/united-fs/ApplicationResources.properties" />
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		</ant>
+
+		<!-- Build information to add DisplayTag.Properties so properties don't need to be set for all tables using DisplayTag -->
+		<ant antfile="build-gen.xml" target="combineResourceFiles">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/displaytag.properties" />
+			<property name="overrideResource" value="${basedir}/companies/united-fs/environment/${environment.name}/displaytag.properties" />
+			<property name="destinationResource" value="${basedir}/src/displaytag.properties" />
 		</ant>
 		<ant target="combineResourceFiles" antfile="build-gen.xml">
 			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
@@ -4127,6 +4204,12 @@
 			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
 		</ant>
 
+		<!-- Build information to add DisplayTag.Properties so properties don't need to be set for all tables using DisplayTag -->
+		<ant antfile="build-gen.xml" target="combineResourceFiles">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/displaytag.properties" />
+			<property name="overrideResource" value="${basedir}/companies/american-fs/environment/${environment.name}/displaytag.properties" />
+			<property name="destinationResource" value="${basedir}/src/displaytag.properties" />
+		</ant>
 		<antcall target="fast_all" />
 		<antcall target="delete" />
 	</target>
@@ -4157,6 +4240,13 @@
 			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
 			<property name="overrideResource" value="${basedir}/companies/virginamerica-fs/environment/${environment.name}/tracer.properties" />
 			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
+		</ant>
+
+		<!-- Build information to add DisplayTag.Properties so properties don't need to be set for all tables using DisplayTag -->
+		<ant antfile="build-gen.xml" target="combineResourceFiles">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/displaytag.properties" />
+			<property name="overrideResource" value="${basedir}/companies/virginamerica-fs/environment/${environment.name}/displaytag.properties" />
+			<property name="destinationResource" value="${basedir}/src/displaytag.properties" />
 		</ant>
 
 		<antcall target="fast_all" />
@@ -4196,6 +4286,13 @@
 			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
 			<property name="overrideResource" value="${basedir}/companies/webjet/environment/${environment.name}/tracer.properties" />
 			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
+		</ant>
+
+		<!-- Build information to add DisplayTag.Properties so properties don't need to be set for all tables using DisplayTag -->
+		<ant antfile="build-gen.xml" target="combineResourceFiles">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/displaytag.properties" />
+			<property name="overrideResource" value="${basedir}/companies/webjet/environment/${environment.name}/displaytag.properties" />
+			<property name="destinationResource" value="${basedir}/src/displaytag.properties" />
 		</ant>
 		
 
@@ -4266,6 +4363,12 @@
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</ant>
 
+		<!-- Build information to add DisplayTag.Properties so properties don't need to be set for all tables using DisplayTag -->
+		<ant antfile="build-gen.xml" target="combineResourceFiles">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/displaytag.properties" />
+			<property name="overrideResource" value="${basedir}/companies/demonstration/environment/${environment.name}/displaytag.properties" />
+			<property name="destinationResource" value="${basedir}/src/displaytag.properties" />
+		</ant>
 		<antcall target="fast_all" />
 		<antcall target="delete" />
 	</target>
@@ -4301,6 +4404,12 @@
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</ant>
 
+		<!-- Build information to add DisplayTag.Properties so properties don't need to be set for all tables using DisplayTag -->
+		<ant antfile="build-gen.xml" target="combineResourceFiles">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/displaytag.properties" />
+			<property name="overrideResource" value="${basedir}/companies/flyafrica/environment/${environment.name}/displaytag.properties" />
+			<property name="destinationResource" value="${basedir}/src/displaytag.properties" />
+		</ant>
 		<antcall target="fast_all" />
 		<antcall target="delete" />
 	</target>
@@ -4340,6 +4449,12 @@
 			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
 		</ant>
 
+		<!-- Build information to add DisplayTag.Properties so properties don't need to be set for all tables using DisplayTag -->
+		<ant antfile="build-gen.xml" target="combineResourceFiles">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/displaytag.properties" />
+			<property name="overrideResource" value="${basedir}/companies/spirit/environment/${environment.name}/displaytag.properties" />
+			<property name="destinationResource" value="${basedir}/src/displaytag.properties" />
+		</ant>
 		<antcall target="jasper_compile" />
 		<antcall target="fast_all" />
 		<antcall target="delete" />
@@ -4377,6 +4492,13 @@
 			<property name="overrideResource" value="${basedir}/companies/jetblue/tracer.properties" />
 			<property name="tertiaryResource" value="${basedir}/companies/jetblue/environment/${environment.name}/tracer.properties"/>
 			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
+		</ant>
+
+		<!-- Build information to add DisplayTag.Properties so properties don't need to be set for all tables using DisplayTag -->
+		<ant antfile="build-gen.xml" target="combineResourceFiles">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/displaytag.properties" />
+			<property name="overrideResource" value="${basedir}/companies/jetblue/environment/${environment.name}/displaytag.properties" />
+			<property name="destinationResource" value="${basedir}/src/displaytag.properties" />
 		</ant>
 
 
@@ -4423,6 +4545,13 @@
 			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
 			<property name="overrideResource" value="${basedir}/companies/westjet/environment/${environment.name}/tracer.properties" />
 			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
+		</ant>
+
+		<!-- Build information to add DisplayTag.Properties so properties don't need to be set for all tables using DisplayTag -->
+		<ant antfile="build-gen.xml" target="combineResourceFiles">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/displaytag.properties" />
+			<property name="overrideResource" value="${basedir}/companies/westjet/environment/${environment.name}/displaytag.properties" />
+			<property name="destinationResource" value="${basedir}/src/displaytag.properties" />
 		</ant>
 		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/westjet/ApplicationResources_fr.properties" />
 		
