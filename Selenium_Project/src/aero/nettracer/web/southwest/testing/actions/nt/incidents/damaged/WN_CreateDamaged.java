@@ -106,9 +106,9 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 		}
 		
 		if (check) {
-			selenium.check("name=638");
+			selenium.check("name=639");
 		} else {
-			selenium.uncheck("name=638");
+			selenium.uncheck("name=639");
 		}
 		
 		selenium.click("xpath=(//input[@id='button'])[2]");
