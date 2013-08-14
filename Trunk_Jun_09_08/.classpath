@@ -123,7 +123,7 @@
 	<classpathentry kind="lib" path="lib/jars/onlineclaims_schemas.jar"/>
 	<classpathentry kind="lib" path="lib/jars/libphonenumber-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/jars/java-core-2.6.jar"/>
-	<classpathentry kind="lib" path="lib/jars/deliverySERV.jar"/>
+	<classpathentry kind="lib" path="lib/jars/SERV.jar"/>
 	<classpathentry kind="lib" path="lib/jars/avis-client-model.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="lib" path="lib/client-us/us-scanpointsclient.jar"/>
@@ -131,7 +131,6 @@
 	<classpathentry kind="lib" path="lib/jars/opencsv-2.3.jar"/>
 	<classpathentry kind="lib" path="lib/jars/nt_fs_client.jar"/>
 	<classpathentry kind="lib" path="lib/jars/ScannerMbrQueryService.jar"/>
-	<classpathentry kind="lib" path="C:/workspace/Trunk/lib/jars/FraudService.jar"/>
 	<classpathentry kind="lib" path="lib/provided/jbosscache-core.jar"/>
 	<classpathentry kind="lib" path="lib/jars/rmiio-2.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/jars/FraudService.jar"/>
@@ -168,7 +167,11 @@
 	<classpathentry kind="lib" path="C:/jboss-as-7.1.1.Final/modules/org/hibernate/main/hibernate-commons-annotations-4.0.1.Final.jar"/>
 	<classpathentry kind="lib" path="C:/jboss-as-7.1.1.Final/modules/org/hibernate/main/hibernate-entitymanager-4.0.1.Final.jar"/>
 	<classpathentry kind="lib" path="lib/jars/OnhandScanningService.jar"/>
-	<classpathentry kind="lib" path="lib/jars/ntwscore_schemas.jar"/>
+	<classpathentry kind="lib" path="lib/jars/AddressValidationService-test-client.jar"/>
 	<classpathentry kind="lib" path="lib/jars/WN_CS2Service.jar"/>
+	<classpathentry kind="lib" path="lib/jars/MerchantWebServices-test-client.jar"/>
+	<classpathentry kind="lib" path="lib/jars/BaggageDeliveryStatusInfoService-test-client.jar"/>
+	<classpathentry kind="lib" path="lib/jars/displaytag-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/jars/ntwscore_schemas.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
