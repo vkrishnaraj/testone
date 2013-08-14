@@ -158,7 +158,7 @@ function submitForwardForm()
                 	<c:out value="<%=bundle.getString(status)%>" />&nbsp;
                 </display:column>
                 <display:column title="<%=colorTitle %>" sortable="true" sortName="<%=request.getAttribute("sortNum").equals("color")?"colorRev":"color" %>"><c:out value="${ohd.color}"/>&nbsp;</display:column>
-                <display:column  title="<%=typeTitle %>" sortable="true" sortName="<%=request.getAttribute("sortNum").equals("type")?"typeRev":"type" %>"><c:out value="${ohd.type}"/>&nbsp;</display:column>
+                <display:column  title="<%=typeTitle %>" sortable="true" sortName="<%=request.getAttribute("sortNum").equals("bagtype")?"bagtypeRev":"bagtype" %>"><c:out value="${ohd.type}"/>&nbsp;</display:column>
                 <% if (showPosId) { %>
                 	<display:column sortable="true" title="<%=posTitle %>" sortName="<%=request.getAttribute("sortNum").equals("pos")?"posRev":"pos" %>"><c:out value="${ohd.posId}"/>&nbsp;</display:column>
                 <% } %>
