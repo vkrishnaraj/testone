@@ -7,7 +7,7 @@ import aero.nettracer.web.utility.DefaultSeleneseTestCase;
 public class WN_OHD_Sort_Search extends DefaultSeleneseTestCase {
 
 	@Test
-	public void testSortText() throws Exception {
+	public void testSortSearchText() throws Exception {
 		//TODO: Create OnHand Code and Use the ID (unable to guarantee it's use on a constant basis)
 		
 		selenium.click("id=menucol_4.4");
@@ -172,5 +172,182 @@ public class WN_OHD_Sort_Search extends DefaultSeleneseTestCase {
 			System.out.println("!!!!!!!!!!!!!!! - Failed to sort on OHD Date - !!!!!!!!!!!!!!!!!!");
 		}
 		
+	}
+	
+	@Test
+	public void testStationOnHandSort() throws Exception {
+
+		selenium.click("id=menucol_0.0");
+		waitForPageToLoadImproved();
+		String sortCheck="";
+		if(checkNoErrorPage()) {
+			selenium.click("xpath=(//a[contains(text(),'On-hand Bags')])[2]");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to access Task Manager - !!!!!!!!!!!!!!!!!!");
+		}
+
+		if(checkNoErrorPage()) {
+			selenium.click("link=On-hand Number");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to access Station On Hand page - !!!!!!!!!!!!!!!!!!");
+		}
+
+		if(checkNoErrorPage()) {
+			sortCheck=selenium.getText("//td[@id='middlecolumn']/div/table/tbody/tr/td[2]");
+			selenium.click("link=On-hand Number");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Sort by OHD Number - !!!!!!!!!!!!!!!!!!");
+		}
+
+		if(checkNoErrorPage()) {
+			verifyNotEquals("//td[@id='middlecolumn']/div/table/tbody/tr/td[2]",sortCheck);
+			selenium.click("link=Incident Number");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Sort by OHD Number Reverse - !!!!!!!!!!!!!!!!!!");
+		}
+		if(checkNoErrorPage()) {
+			sortCheck=selenium.getText("//td[@id='middlecolumn']/div/table/tbody/tr/td[3]");
+			selenium.click("link=Incident Number");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Sort by Incident Number - !!!!!!!!!!!!!!!!!!");
+		}
+		if(checkNoErrorPage()) {
+			verifyNotEquals("//td[@id='middlecolumn']/div/table/tbody/tr/td[3]",sortCheck);
+			selenium.click("link=OHD Date/Time");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Sort by Incident Number Reverse- !!!!!!!!!!!!!!!!!!");
+		}
+		if(checkNoErrorPage()) {
+			sortCheck=selenium.getText("//td[@id='middlecolumn']/div/table/tbody/tr/td[4]");
+			selenium.click("link=OHD Date/Time");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Sort by OHD Create Date - !!!!!!!!!!!!!!!!!!");
+		}
+		if(checkNoErrorPage()) {
+			verifyNotEquals("//td[@id='middlecolumn']/div/table/tbody/tr/td[4]",sortCheck);
+			selenium.click("link=Date/Time Modified");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Sort by OHD Create Date Reverse- !!!!!!!!!!!!!!!!!!");
+		}
+		if(checkNoErrorPage()) {
+			sortCheck=selenium.getText("//td[@id='middlecolumn']/div/table/tbody/tr/td[5]");
+			selenium.click("link=Date/Time Modified");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Sort by OHD Modified Date - !!!!!!!!!!!!!!!!!!");
+		}
+		if(checkNoErrorPage()) {
+			verifyNotEquals("//td[@id='middlecolumn']/div/table/tbody/tr/td[5]",sortCheck);
+			selenium.click("link=Bag Tag Number");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Sort by OHD Modified Date Reverse- !!!!!!!!!!!!!!!!!!");
+		}
+		if(checkNoErrorPage()) {
+			sortCheck=selenium.getText("//td[@id='middlecolumn']/div/table/tbody/tr/td[6]");
+			selenium.click("link=Bag Tag Number");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Sort by Bag Tag- !!!!!!!!!!!!!!!!!!");
+		}
+		if(checkNoErrorPage()) {
+			verifyNotEquals("//td[@id='middlecolumn']/div/table/tbody/tr/td[6]",sortCheck);
+			selenium.click("link=Status");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Sort by Bag Tag Reverse- !!!!!!!!!!!!!!!!!!");
+		}
+		if(checkNoErrorPage()) {
+			sortCheck=selenium.getText("//td[@id='middlecolumn']/div/table/tbody/tr/td[7]");
+			selenium.click("link=Status");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Sort by Status - !!!!!!!!!!!!!!!!!!");
+		}
+		if(checkNoErrorPage()) {
+			verifyNotEquals("//td[@id='middlecolumn']/div/table/tbody/tr/td[7]",sortCheck);
+			selenium.click("link=Color");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Sort by Status Reverse - !!!!!!!!!!!!!!!!!!");
+		}
+		if(checkNoErrorPage()) {
+			sortCheck=selenium.getText("//td[@id='middlecolumn']/div/table/tbody/tr/td[8]");
+			selenium.click("link=Color");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Sort by Color - !!!!!!!!!!!!!!!!!!");
+		}
+		if(checkNoErrorPage()) {
+			verifyNotEquals("//td[@id='middlecolumn']/div/table/tbody/tr/td[8]",sortCheck);
+			selenium.click("link=Type");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Sort by Color Reverse - !!!!!!!!!!!!!!!!!!");
+		}
+		if(checkNoErrorPage()) {
+			sortCheck=selenium.getText("//td[@id='middlecolumn']/div/table/tbody/tr/td[9]");
+			selenium.click("link=Type");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Sort by Type - !!!!!!!!!!!!!!!!!!");
+		}
+		if(checkNoErrorPage()) {
+			verifyNotEquals("//td[@id='middlecolumn']/div/table/tbody/tr/td[9]",sortCheck);
+			selenium.click("link=Destination");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Sort by Type Reverse - !!!!!!!!!!!!!!!!!!");
+		}
+		if(checkNoErrorPage()) {
+			sortCheck=selenium.getText("//td[@id='middlecolumn']/div/table/tbody/tr/td[10]");
+			selenium.click("link=Destination");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Sort by Destination - !!!!!!!!!!!!!!!!!!");
+		}
+		if(checkNoErrorPage()) {
+			verifyNotEquals("//td[@id='middlecolumn']/div/table/tbody/tr/td[10]",sortCheck);
+			selenium.click("link=Name");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Sort by Destination Reverse - !!!!!!!!!!!!!!!!!!");
+		}
+		if(checkNoErrorPage()) {
+			sortCheck=selenium.getText("//td[@id='middlecolumn']/div/table/tbody/tr/td[11]");
+			selenium.click("link=Name");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Sort by Name - !!!!!!!!!!!!!!!!!!");
+		}
+		if(checkNoErrorPage()) {
+			verifyNotEquals("//td[@id='middlecolumn']/div/table/tbody/tr/td[11]",sortCheck);
+			selenium.click("link=Comments");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Sort by Name Reverse - !!!!!!!!!!!!!!!!!!");
+		}
+		if(checkNoErrorPage()) {
+			sortCheck=selenium.getText("//td[@id='middlecolumn']/div/table/tbody/tr/td[12]");
+			selenium.click("link=Comments");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Sort by Comments - !!!!!!!!!!!!!!!!!!");
+		}
+		if(checkNoErrorPage()) {
+			verifyNotEquals("//td[@id='middlecolumn']/div/table/tbody/tr/td[12]",sortCheck);
+			selenium.click("id=menucol_0.0");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Sort by Comments Reverse - !!!!!!!!!!!!!!!!!!");
+		}
 	}
 }
