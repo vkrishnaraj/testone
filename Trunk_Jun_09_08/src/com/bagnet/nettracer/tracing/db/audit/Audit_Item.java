@@ -796,7 +796,7 @@ public class Audit_Item implements Serializable {
 	}
 
 	/**
-	 * @hibernate.property type="string" length="10"
+	 * @hibernate.property type="string" length="12"
 	 */
 	public String getExpediteTagNum() {
 		return expediteTagNum;

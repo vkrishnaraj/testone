@@ -141,7 +141,7 @@
 		              	<td>
 		              		<bean:message key="colname.expedite.tagnum" />
 		              		<br>
-		              		<html:text name="theitem" property="expediteTagNum" size="11" maxlength="10" styleClass="textfield" indexed="true" />
+		              		<html:text name="theitem" property="expediteTagNum" size="13" maxlength="12" styleClass="textfield" indexed="true" />
 		              	</td>
 		              <% } %>
 				<%

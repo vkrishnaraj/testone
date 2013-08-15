@@ -1172,7 +1172,7 @@ public class IncidentBMO {
 				s.append("select distinct incident from com.bagnet.nettracer.tracing.db.Incident incident ");
 
 			boolean tagPresent = false;
-			if (!siDTO.getClaimchecknum().isEmpty() || !siDTO.getExpediteTagNum().isEmpty()) {
+			if (!siDTO.getClaimchecknum().isEmpty() || siDTO.getExpediteTagNum() != null && !siDTO.getExpediteTagNum().isEmpty()) {
 				s.append(" left outer join incident.itemlist item ");
 				tagPresent = true;
 			}
@@ -1214,7 +1214,7 @@ public class IncidentBMO {
 			}
 			
 			
-			if (!siDTO.getExpediteTagNum().isEmpty()) {
+			if (siDTO.getExpediteTagNum() != null && !siDTO.getExpediteTagNum().isEmpty()) {
 				s.append("and item.expediteTagNum like :expediteTagNum ");
 			}
 
@@ -1389,7 +1389,7 @@ public class IncidentBMO {
 				}
 			}
 			
-			if (!siDTO.getExpediteTagNum().isEmpty()) {
+			if (siDTO.getExpediteTagNum() != null && !siDTO.getExpediteTagNum().isEmpty()) {
 				q.setString("expediteTagNum", siDTO.getExpediteTagNum());
 			}
 			
@@ -1508,8 +1508,7 @@ public class IncidentBMO {
 			}
 		}
 		
-		
-			
+					
 		if (siDTO.isIntelligentTagSearch() && searchType > 0) {
 			String nineDigitWildcardTag = null;
 			String genericTag = null;
@@ -2614,6 +2613,28 @@ public class IncidentBMO {
 			return true;
 		} else {
 			return true;
+		}
+	}
+	
+	public static boolean updateReceiveTimestamp(String incidentId, Date rxTimestamp) {
+		Session sess = HibernateWrapper.getSession().openSession();
+		try {
+			String sql = "update incident set rxTimestamp = :rxTimestamp where incident_id = :incidentId";
+			SQLQuery query = sess.createSQLQuery(sql);
+			query.setTimestamp("rxTimestamp", rxTimestamp);
+			query.setString("incidentId", incidentId);
+			return query.executeUpdate() != 0;
+		} catch (Exception e) {
+			logger.error("Error updating the receive timestamp for incident: " + incidentId, e);
+			return false;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.error("An error occurred while trying to close the session.", e);
+				}
+			}
 		}
 	}
 }
