@@ -7,7 +7,7 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 	
 	protected static final String DRIVERS_LICENSE = "12345";
 	protected static final String PASSPORT_NUMBER = "1234567890";
-	protected static final String EXPEDITE_TAG_NUM = "1234567890";
+	protected static final String EXPEDITE_TAG_NUM = "012345678912";
 	
 	protected static final String INCIDENT_TYPE_LOSTDELAY = "Lost/Delayed";
 	protected static final String INCIDENT_TYPE_MISSING = "Missing Articles";

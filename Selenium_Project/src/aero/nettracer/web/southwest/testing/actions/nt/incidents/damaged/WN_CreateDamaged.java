@@ -99,6 +99,26 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 		goToTaskManager();
 	}
 	
+	@Test
+	public void testInvalidExpediteTagNum() {
+		verifyTrue(setCollectExpediteTagNumberPermission(true));
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
+		verifyTrue(selenium.isElementPresent("name=theitem[0].expediteTagNum"));
+		selenium.type("name=theitem[0].expediteTagNum", "01234567891");
+		selenium.click("name=saveButton");
+		assertEquals("Expedite Number is an invalid expedite number.[10 or 12 digits or 8 character AN]", selenium.getAlert());
+		selenium.type("name=theitem[0].expediteTagNum", "012345678912");
+		selenium.click("name=saveButton");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			checkCopyrightAndQuestionMarks();
+			goToTaskManager();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Create Damaged Success Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+			verifyTrue(false);
+		}
+	}
+	
 	private boolean setCollectExpediteTagNumberPermission(boolean check) {
 		boolean success = false;
 		if (!navigateToPermissionsPage()) {
