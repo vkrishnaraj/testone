@@ -1850,9 +1850,14 @@ public class WorldTracerWebService implements WorldTracerConnector {
 		
 		ohd.setPnrLocator(onhand.getRecord_locator());
 		ohd.setAirlineCode(onhand.getAgent().getStation().getCompany().getCompanyCode_ID());
-		ClaimCheck claimCheck = new ClaimCheck();
-		claimCheck.setTagNumber(onhand.getClaimnum());
-		ohd.setClaimCheck(claimCheck);
+		/*
+    	 * Checking for UTB tag - We don't submit Untagged Bagtags to World Tracer
+    	 */
+		if(onhand.getClaimnum()!=null && onhand.getClaimnum().length()>0 && !(onhand.getClaimnum().length()>3 && onhand.getClaimnum().substring(0, 3).toUpperCase().equals(TracingConstants.UTB_CHECK))){
+			ClaimCheck claimCheck = new ClaimCheck();
+			claimCheck.setTagNumber(onhand.getClaimnum());
+			ohd.setClaimCheck(claimCheck);
+		}
 		ohd.setStationCode(onhand.getHoldingStation().getWt_stationcode());
 		ohd.setStorageLocation(onhand.getStorage_location());
 		
@@ -2035,10 +2040,14 @@ public class WorldTracerWebService implements WorldTracerConnector {
 				}
 				
 				String claimNum = ohd.getClaimnum().trim();
-				
-				Tag tag = new Tag();
-				tag.setTagSequence(claimNum);
-				tags.add(tag);
+				/*
+		    	 * Checking for UTB tag - We don't submit Untagged Bagtags to World Tracer for Quick On Hands
+		    	 */
+				if(claimNum!=null && claimNum.length()>0 && !(claimNum.length()>3 && claimNum.substring(0, 3).toUpperCase().equals(TracingConstants.UTB_CHECK))){
+					Tag tag = new Tag();
+					tag.setTagSequence(claimNum);
+					tags.add(tag);
+				}
 			}
 			
 			
