@@ -27,6 +27,7 @@ public class Remark implements Serializable {
 	private String createtime = "";
 	private String remarktext = "";
 	private int remarktype;
+	private boolean secure;
 	
 	private Incident incident;
 	private OHD ohd;
@@ -269,5 +270,22 @@ public class Remark implements Serializable {
 	 */
 	public void set_TIMEZONE(TimeZone _timezone) {
 		_TIMEZONE = _timezone;
+	}
+
+	/**
+	 * @return Returns the secure.
+	 * 
+	 * @hibernate.property type="boolean"
+	 */
+	public boolean isSecure() {
+		return secure;
+	}
+
+	/**
+	 * @param secure
+	 *          secure to set.
+	 */
+	public void setSecure(boolean secure) {
+		this.secure = secure;
 	}
 }

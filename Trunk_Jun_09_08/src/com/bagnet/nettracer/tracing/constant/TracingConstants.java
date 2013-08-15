@@ -257,6 +257,7 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_PASSPORT_COLLECT = "Passport_Collect";
 	public static final String SYSTEM_COMPONENT_NAME_PASSPORT_VIEW_EDIT = "Passport_View_Edit";
 	public static final String SYSTEM_COMPONENT_NAME_EXPEDITE_TAG_NUM_COLLECT = "Expedite_Tag_Num_Collect";
+	public static final String SYSTEM_COMPONENT_NAME_SECURE_REMARKS = "Secure_Remarks";
 	
 	public static final String SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_STATION_ADMIN = "Issuance_Item_Station_Admin";
 	

@@ -276,6 +276,11 @@ public final class IncidentForm extends ValidatorForm {
 				}
 			}
 		}
+		if (remarklist != null) {
+			for (Remark r : remarklist) {
+				r.setSecure(false);
+			}
+		}
 		String defChecked = TracerProperties.get(agent.getCompanycode_ID(),TracerProperties.DEFAULT_CHECKED_LOCATION);
 		if(defChecked != null) {
 			checkedlocation = defChecked;

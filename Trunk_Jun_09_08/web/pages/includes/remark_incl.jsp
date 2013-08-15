@@ -74,6 +74,7 @@
       </h1>
       <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
         <logic:iterate id="remark" indexId="i" name="incidentForm" property="remarklist" type="com.bagnet.nettracer.tracing.db.Remark">
+          <% if(!remark.isSecure() ||  (remark.isSecure() && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SECURE_REMARKS, a))){ %>
           <logic:equal name="remark" property="remarktype" value="<%= "" + TracingConstants.REMARK_REGULAR %>">
             <logic:present name="remark" property="agent">
 	            <bean:define id="agent" name="remark" property="agent" type="com.bagnet.nettracer.tracing.db.Agent" />
@@ -102,6 +103,25 @@
                 <bean:write name="agent" property="username" />
                 </logic:present>
               </td>
+              <%  if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SECURE_REMARKS, a) && remark.getRemark_ID()==0) { %>
+              
+              <td>
+                <bean:message key="colname.secure" />
+                :
+                <input type="checkbox" name="remark[<%=i %>].secure" 
+                      <logic:equal name="remark" property="secure" value="true">
+                        checked="checked"
+                      </logic:equal> />
+              </td><% } else if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SECURE_REMARKS, a)) { %>
+              <td>
+              	<logic:equal name="remark" property="secure" value="true">
+              		<span style="color:red"><bean:message key="secure.remark" /></span>
+              	</logic:equal>
+              	<logic:notEqual name="remark" property="secure" value="true">
+              		<bean:message key="general.remark" />
+              	</logic:notEqual>
+              </td>
+              <% } %>
             </tr>
             <tr>
 <%
@@ -113,7 +133,7 @@
 <%  		if(remark.getRemark_ID() != 0) {
 %>
 	
-            <td valign="top" colspan=3>
+            <td valign="top" colspan=<%=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SECURE_REMARKS, a))?4:3%>>
 <%
                 if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_UPDATE_REMARKS, a)) {
 %>
@@ -139,7 +159,7 @@
 <%
 			} else  {
 %>
-				<td valign="top" colspan=3>
+				<td valign="top" colspan=<%=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SECURE_REMARKS, a))?4:3%>>
                   <textarea name="<%= remarkDescription %>" id="<%=remarkId %>" cols="80" rows="10" onkeydown="textCounter2(<%= remarkText %>, <%= remarkText2 %>,1500);insertNewLine('<%=remarkId %>');" 
                   	onkeyup="textCounter2(<%= remarkText %>, <%= remarkText2 %>,1500);"><%= remark.getRemarktext() %></textarea>
                   <input name="<%= remarkDescription + "2" %>" id="<%=remarkId + ".counter" %>" type="text" value="1500" size="4" maxlength="4" disabled="true" />
@@ -153,6 +173,10 @@
 %>
             </tr>
           </logic:equal>
+          <% } %>
+          
+		<input type="hidden" name="remark[<%=i %>].secure" value="<bean:write name="remark" property="secure"/>" />
+
         </logic:iterate>
       </table>
       <center><html:submit property="addremark" styleId="button">
