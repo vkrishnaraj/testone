@@ -1394,14 +1394,33 @@ public class IncidentBMO {
 			}
 			
 			if (siDTO.getClaimchecknum()!=null && siDTO.getClaimchecknum().length()>0) {
+				String tag=siDTO.getClaimchecknum();
+				/*
+		    	 * Checking for UTB tag - When saving UTB as a Incident_Claimcheck, it only needs to check against the claimCheckNum field	
+		    	 */
+				boolean utb=false;
+		    	if(tag!=null && tag.length()>3 &&tag.substring(0, 3).toUpperCase().equals(TracingConstants.UTB_CHECK)){
+	    			q.setString("keyUTB", tag.substring(0, 3));
+	    			q.setString("keyUTBList", tag.substring(3));
+	    			utb=true;
+		    	}
+    			if (tag != null && tag.length() == 8 && !utb) {
+    				String key = tag.substring(0, 2);
+	    			q.setString("key8" + key, key);
+	    			q.setString("key8" + key + "List", tag.substring(2));
+	    		}
+    			if (tag != null && tag.length() == 9 && !utb) {
 
-				if (siDTO.getClaimchecknum() != null && siDTO.getClaimchecknum().length() > 0) {
-					q.setString("claimchecknum", siDTO.getClaimchecknum().trim());
-				}
-				if(siDTO.getClaimchecknum2() != null && siDTO.getClaimchecknum2().length() > 0) {
-					q.setString("claimchecknum2", siDTO.getClaimchecknum2().trim());
-				}
-
+    				String key = tag.substring(0, 3);
+	    			q.setString("key9" + key, key);
+	    			q.setString("key9" + key + "List", tag.substring(3));
+	    		}
+    			if (tag != null && tag.length() == 10 && !utb) {
+    				String key = tag.substring(0, 4);
+	    			q.setString("key10" + key + "One", key.substring(0, 1));
+	    			q.setString("key10" + key + "Two", key.substring(1,4));
+	    			q.setString("key10" + key + "List", tag.substring(4));
+	    		}
     		}
 			
 			// station assignment date related
@@ -1489,79 +1508,30 @@ public class IncidentBMO {
 	}
 
 	private void intelligentSearchProcessing(SearchIncident_DTO siDTO, StringBuffer s, boolean tagPresent){ //,HashMap<String, ArrayList<String>> eightDig,HashMap<String, ArrayList<String>> nineDig, HashMap<String, ArrayList<String>> tenDig) {
-
-		int searchType = siDTO.getIntelligentTagSearchType();
-		if (siDTO.isIntelligentTagSearch() && tagPresent && searchType == 0) {
-			Pattern pattern = Pattern.compile(LookupAirlineCodes.PATTERN_10_DIGIT_BAG_TAG);
-			if (pattern.matcher(siDTO.getClaimchecknum()).find()) {
-				siDTO.setIntelligentTagSearchType(10);
-			} else {
-				pattern = Pattern.compile(LookupAirlineCodes.PATTERN_9_DIGIT_BAG_TAG);
-				if (pattern.matcher(siDTO.getClaimchecknum()).find()) {
-					siDTO.setIntelligentTagSearchType(9);
-				} else {
-					pattern = Pattern.compile(LookupAirlineCodes.PATTERN_8_CHAR_BAG_TAG);
-					if (pattern.matcher(siDTO.getClaimchecknum()).find()) {
-						siDTO.setIntelligentTagSearchType(8);
-					}
-				}
-			}
-		}
 		
-					
-		if (siDTO.isIntelligentTagSearch() && searchType > 0) {
-			String nineDigitWildcardTag = null;
-			String genericTag = null;
-			
-			String claimcheck = siDTO.getClaimchecknum().trim();
-
-			if (claimcheck.indexOf("%") == -1) {
-				if (searchType == 10) {
-					nineDigitWildcardTag = "%" + claimcheck.substring(1);
-					try {
-						genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
-					} catch (BagtagException e) {
-						// Ignore
-						logger.error("Unable to convert bag tag: " + claimcheck);
-						genericTag = claimcheck;
-					}
-				} else if (searchType == 9) {
-					nineDigitWildcardTag = "%" + claimcheck;
-					try {
-						genericTag = LookupAirlineCodes.getTwoCharacterBagTag(claimcheck);
-					} catch (BagtagException e) {
-						// Ignore
-						logger.error("Unable to convert bag tag: " + claimcheck);
-						genericTag = claimcheck;
-					}
-				} else if (searchType == 8) {
-					genericTag = claimcheck;
-					try {
-						nineDigitWildcardTag = "%" + (LookupAirlineCodes.getFullBagTag(claimcheck)).substring(1);
-					} catch (BagtagException e) {
-						// Ignore
-						logger.error("Unable to convert bag tag: " + claimcheck);
-						nineDigitWildcardTag = claimcheck;
-					}
-				}
-				siDTO.setClaimchecknum(nineDigitWildcardTag);
-				siDTO.setClaimchecknum2(genericTag);
-			}
-			s.append(" and (item.claimchecknum like :claimchecknum");
-			if(siDTO.getClaimchecknum2()!=null && siDTO.getClaimchecknum2().length()>0){
-				s.append(" or item.claimchecknum like :claimchecknum2");
-			}
-			
-			s.append(") or (claimcheck.claimchecknum like :claimchecknum");
-
-			if(siDTO.getClaimchecknum2()!=null && siDTO.getClaimchecknum2().length()>0){
-				s.append(" or claimcheck.claimchecknum like :claimchecknum2");
-			}
-			s.append(")");
-
-		} else if (siDTO.getClaimchecknum().length() > 0) {
-			s.append(" and (item.claimchecknum like :claimchecknum");
-			s.append(" or claimcheck.claimchecknum like :claimchecknum)");
+		String returnMe = null;
+		String tag=siDTO.getClaimchecknum();
+    	if (tag != null && tag.length() > 0) {
+    		String itemSelect = "";
+	    		/*
+		    	 * Checking for UTB tag - When saving UTB as a Incident_Claimcheck, it only needs to check against the claimCheckNum field	
+		    	 */
+    			if(tag!=null && tag.length()>3 && tag.substring(0, 3).toUpperCase().equals(TracingConstants.UTB_CHECK)){
+    				itemSelect = " and ((item.claimchecknum_ticketingcode = :keyUTB and item.claimchecknum_bagnumber = :keyUTBList) or (claimcheck.claimchecknum_ticketingcode = :keyUTB and claimcheck.claimchecknum_bagnumber = :keyUTBList))";
+    			}else if (tag != null && tag.length() == 8) {
+    				String key = tag.substring(0, 2);
+    				itemSelect = " and ((item.claimchecknum_carriercode = :key8" + key + " and item.claimchecknum_bagnumber = :key8" + key + "List) or (claimcheck.claimchecknum_carriercode = :key8" + key + " and claimcheck.claimchecknum_bagnumber = :key8" + key + "List))";
+    			} else if (tag != null && tag.length() == 9) {
+    				String key = tag.substring(0, 3);
+    				itemSelect = " and ((item.claimchecknum_ticketingcode = :key9" + key + " and item.claimchecknum_bagnumber = :key9" + key + "List) or (claimcheck.claimchecknum_ticketingcode = :key9" + key + " and claimcheck.claimchecknum_bagnumber = :key9" + key + "List))";
+    			} else if (tag != null && tag.length() == 10) {
+    				String key = tag.substring(0, 4);
+    				itemSelect = " and (((item.claimchecknum_leading = :key10" + key + "One or item.claimchecknum_leading is null) "
+        					+ "and (item.claimchecknum_ticketingcode = :key10" + key + "Two and item.claimchecknum_bagnumber = :key10" + key + "List)) or "
+        					+ "((claimcheck.claimchecknum_leading = :key10" + key + "One or claimcheck.claimchecknum_leading is null) "
+        					+ "and (claimcheck.claimchecknum_ticketingcode = :key10" + key + "Two and claimcheck.claimchecknum_bagnumber = :key10" + key + "List))) ";
+    			}
+    		s.append(itemSelect );
 		}
 		
 	}
@@ -2613,28 +2583,6 @@ public class IncidentBMO {
 			return true;
 		} else {
 			return true;
-		}
-	}
-	
-	public static boolean updateReceiveTimestamp(String incidentId, Date rxTimestamp) {
-		Session sess = HibernateWrapper.getSession().openSession();
-		try {
-			String sql = "update incident set rxTimestamp = :rxTimestamp where incident_id = :incidentId";
-			SQLQuery query = sess.createSQLQuery(sql);
-			query.setTimestamp("rxTimestamp", rxTimestamp);
-			query.setString("incidentId", incidentId);
-			return query.executeUpdate() != 0;
-		} catch (Exception e) {
-			logger.error("Error updating the receive timestamp for incident: " + incidentId, e);
-			return false;
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e) {
-					logger.error("An error occurred while trying to close the session.", e);
-				}
-			}
 		}
 	}
 }
