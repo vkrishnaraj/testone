@@ -72,21 +72,24 @@
 %>
           <img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
       </h1>
-      <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
+      <table  class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
         <logic:iterate id="remark" indexId="i" name="incidentForm" property="remarklist" type="com.bagnet.nettracer.tracing.db.Remark">
           <% if(!remark.isSecure() ||  (remark.isSecure() && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SECURE_REMARKS, a))){ %>
+          
           <logic:equal name="remark" property="remarktype" value="<%= "" + TracingConstants.REMARK_REGULAR %>">
             <logic:present name="remark" property="agent">
 	            <bean:define id="agent" name="remark" property="agent" type="com.bagnet.nettracer.tracing.db.Agent" />
 	          </logic:present>
-            <tr>
-              <td valign="top">
+          
+	          
+            <tr >
+              <td valign="top" style="<%=remark.isSecure()?"color:darkRed":""%>">
                 <a name='addremark<%= i %>'></a>
                 <bean:message key="colname.date" />
                 :
                 <bean:write name="remark" property="dispcreatetime" />
               </td>
-              <td>
+              <td style="<%=remark.isSecure()?"color:darkRed":""%>">
                 <bean:message key="colname.station" />
                 :
                 <logic:present name="remark" property="agent">
@@ -96,7 +99,7 @@
 	                <bean:write name="agent" property="station.stationcode" />
 	              </logic:present>
               </td>
-              <td>
+              <td style="<%=remark.isSecure()?"color:darkRed":""%>">
                 <bean:message key="colname.agent" />
                 :
                 <logic:present name="remark" property="agent">
@@ -104,8 +107,7 @@
                 </logic:present>
               </td>
               <%  if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SECURE_REMARKS, a) && remark.getRemark_ID()==0) { %>
-              
-              <td>
+              <td style="<%=remark.isSecure()?"color:darkRed":""%>">
                 <bean:message key="colname.secure" />
                 :
                 <input type="checkbox" name="remark[<%=i %>].secure" 
@@ -113,17 +115,18 @@
                         checked="checked"
                       </logic:equal> />
               </td><% } else if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SECURE_REMARKS, a)) { %>
-              <td>
+              <td style="<%=remark.isSecure()?"color:darkRed":""%>">
               	<logic:equal name="remark" property="secure" value="true">
-              		<span style="color:red"><bean:message key="secure.remark" /></span>
+              		<bean:message key="secure.remark" />
               	</logic:equal>
               	<logic:notEqual name="remark" property="secure" value="true">
               		<bean:message key="general.remark" />
               	</logic:notEqual>
               </td>
               <% } %>
+              </
             </tr>
-            <tr>
+            <tr >
 <%
 			String remarkId = "remark[" + i + "]";
             String remarkDescription = "remark[" + i + "].remarktext";
@@ -133,7 +136,7 @@
 <%  		if(remark.getRemark_ID() != 0) {
 %>
 	
-            <td valign="top" colspan=<%=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SECURE_REMARKS, a))?4:3%>>
+            <td valign="top" style="<%=remark.isSecure()?"color:darkRed":""%>" colspan=<%=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SECURE_REMARKS, a))?4:3%>>
 <%
                 if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_UPDATE_REMARKS, a)) {
 %>

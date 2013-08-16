@@ -1326,23 +1326,23 @@ function gotoHistoricalReport() {
             <bean:define id="agent" name="remark" property="agent"
               type="com.bagnet.nettracer.tracing.db.Agent" />
           </logic:present>
-          <tr>
-            <td valign="top"><a name='addremark<%=i%>'></a> <bean:message
+          <tr class="<%=remark.isSecure()?"secureRemark":""%>">
+            <td style="<%=remark.isSecure()?"color:darkRed":""%>" valign="top"><a name='addremark<%=i%>'></a> <bean:message
               key="colname.date" /> : <bean:write name="remark"
               property="dispcreatetime" /></td>
-            <td><bean:message key="colname.station" /> : <logic:present
+            <td style="<%=remark.isSecure()?"color:darkRed":""%>"><bean:message key="colname.station" /> : <logic:present
               name="remark" property="agent">
               <bean:write name="agent" property="companycode_ID" />
               &nbsp;
               <bean:write name="agent" property="station.stationcode" />
             </logic:present></td>
-            <td><bean:message key="colname.agent" /> : <logic:present
+            <td style="<%=remark.isSecure()?"color:darkRed":""%>"><bean:message key="colname.agent" /> : <logic:present
               name="remark" property="agent">
               <bean:write name="agent" property="username" />
             </logic:present></td>
              <%  if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SECURE_REMARKS, a) && remark.getRemark_ID()==0) { %>
               
-              <td>
+              <td style="<%=remark.isSecure()?"color:darkRed":""%>">
                 <bean:message key="colname.secure" />
                 :
                 <input type="checkbox" name="remark[<%=i %>].secure" 
@@ -1350,9 +1350,9 @@ function gotoHistoricalReport() {
                         checked="checked"
                       </logic:equal> />
               </td><% } else if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SECURE_REMARKS, a)) { %>
-              <td>
+              <td style="<%=remark.isSecure()?"color:darkRed":""%>">
               	<logic:equal name="remark" property="secure" value="true">
-              		<span style="color:red"><bean:message key="secure.remark" /></span>
+              		<bean:message key="secure.remark" />
               	</logic:equal>
               	<logic:notEqual name="remark" property="secure" value="true">
               		<bean:message key="general.remark" />
@@ -1360,8 +1360,8 @@ function gotoHistoricalReport() {
               </td>
               <% } %>
           </tr>
-          <tr>
-            <td valign="top" colspan="<%=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SECURE_REMARKS, a))?4:3%>">
+          <tr class="<%=remark.isSecure()?"secureRemark":""%>">
+            <td style="<%=remark.isSecure()?"color:darkRed":""%>" valign="top" colspan="<%=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SECURE_REMARKS, a))?4:3%>">
             <%
                if (a.getGroup().getDescription().equalsIgnoreCase("Admin")
                                     || remark.getRemark_ID() == 0) {
