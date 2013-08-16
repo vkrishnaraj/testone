@@ -149,6 +149,61 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 		goToTaskManager();		
 	}
 	
+
+	@Test
+	public void testSecureRemarksDisabled() {
+		verifyTrue(navigateToIncident(Settings.ONHAND_ID_WN));
+		selenium.click("name=addremark");
+		verifyFalse(selenium.isTextPresent("Secure Remark:"));
+		verifyFalse(selenium.isTextPresent("General Remark"));
+		verifyFalse(selenium.isTextPresent("Remark is Secure"));
+		goToTaskManager();
+	}
+	
+	@Test
+	public void testSecureRemarksEnabled() {
+		verifyTrue(setSecureRemarksPermission(true));
+		verifyTrue(navigateToIncident(Settings.ONHAND_ID_WN));
+		selenium.click("name=addremark");
+		verifyTrue(selenium.isTextPresent("Secure Remark:"));
+		selenium.click("name=remark[1].secure");
+		selenium.type("id=remark[1]", "Secure Test");
+		selenium.click("name=savetracing");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			verifyTrue(selenium.isTextPresent("Remark is Secure"));
+		}
+		verifyTrue(setSecureRemarksPermission(false));
+		goToTaskManager();
+	}
+
+	
+	private boolean setSecureRemarksPermission(boolean secureRemarks) {
+		boolean success = false;
+		if (!navigateToPermissionsPage()) {
+			return success;
+		}
+		
+		if (secureRemarks) {
+			selenium.check("name=335");
+		} else {
+			selenium.uncheck("name=335");
+		}
+		
+		
+		selenium.click("xpath=(//input[@id='button'])[2]");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
+			waitForPageToLoadImproved();
+			success = loginToNt();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Save Permissions. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+		}
+		
+		return success;
+	}
+	
 	private boolean navigateToAuditTrail() {
 		boolean success = false;
 		selenium.click("//a[contains(@href, 'audit.do')]");

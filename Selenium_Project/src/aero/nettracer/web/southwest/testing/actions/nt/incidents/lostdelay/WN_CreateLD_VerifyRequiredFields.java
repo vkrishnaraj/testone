@@ -524,6 +524,33 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		verifyEquals("US", selenium.getValue("name=passenger[0].passportIssuer"));
 		goToTaskManager();
 	}
+
+	@Test
+	public void testSecureRemarksDisabled() {
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
+		selenium.click("name=addremark");
+		verifyFalse(selenium.isTextPresent("Secure Remark:"));
+		verifyFalse(selenium.isTextPresent("General Remark"));
+		verifyFalse(selenium.isTextPresent("Remark is Secure"));
+		goToTaskManager();
+	}
+	
+	@Test
+	public void testSecureRemarksEnabled() {
+		verifyTrue(setSecureRemarksPermission(true));
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
+		selenium.click("name=addremark");
+		verifyTrue(selenium.isTextPresent("Secure Remark:"));
+		selenium.click("name=remark[1].secure");
+		selenium.type("id=remark[1]", "Secure Test");
+		selenium.click("name=saveButton");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			verifyTrue(selenium.isTextPresent("Remark is Secure"));
+		}
+		verifyTrue(setSecureRemarksPermission(false));
+		goToTaskManager();
+	}
 	
 	private void typeString(String locator, String string) {
 		char[] chars = string.toCharArray();
@@ -588,6 +615,32 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		} else {
 			selenium.uncheck("name=637");
 		}
+		
+		selenium.click("xpath=(//input[@id='button'])[2]");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
+			waitForPageToLoadImproved();
+			success = loginToNt();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Save Permissions. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+		}
+		
+		return success;
+	}
+	
+	private boolean setSecureRemarksPermission(boolean secureRemarks) {
+		boolean success = false;
+		if (!navigateToPermissionsPage()) {
+			return success;
+		}
+		
+		if (secureRemarks) {
+			selenium.check("name=335");
+		} else {
+			selenium.uncheck("name=335");
+		}
+		
 		
 		selenium.click("xpath=(//input[@id='button'])[2]");
 		waitForPageToLoadImproved();
