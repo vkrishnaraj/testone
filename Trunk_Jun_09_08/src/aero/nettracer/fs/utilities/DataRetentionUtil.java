@@ -15,9 +15,20 @@ import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.utils.ClaimUtils;
-
+/**
+ * 
+ * @author SeanFine
+ * 
+ * Class used for Data Retention for FS Files, used to delete old data and gets deleted Dates
+ *
+ */
 public class DataRetentionUtil {
 
+	/**
+	 * 
+	 * @return Date for deleted for FS Files
+	 * @throws Exception
+	 */
 	private Date getDeleteDate() throws Exception{
 		int years = PropertyBMO.getValueAsInt(PropertyBMO.FS_RETENTION_YEARS);
 		if(years > 0 && !PropertyBMO.isTrue(PropertyBMO.NT_USER)){
@@ -30,6 +41,10 @@ public class DataRetentionUtil {
 		}
 	}
 	
+	/**
+	 * Method to delete old FS files that exist beyond the years of the company's Airline Data retention years.
+	 * ie. FSFiles created older than 5 Retention Years, will be deleted.
+	 */
 	public void deleteOldFiles(){
 		String sql = "select f.id from aero.nettracer.fs.model.File f left outer join f.incident i left outer join f.claims c" +
 				" where (i.timestampOpen < :date or c.claimDate < :date) ";
@@ -45,7 +60,8 @@ public class DataRetentionUtil {
 			for(Long id:list){
 				System.out.println("deleting: " + id);
 				if(!deleteFile(id)){
-					throw new Exception("failed to delete file:" + id);
+//					throw new Exception("failed to delete file:" + id);
+					System.out.println("Failed to delete file:"+id);
 				}
 			}
 			
@@ -61,7 +77,11 @@ public class DataRetentionUtil {
 		
 	}
 	
-	
+	/**
+	 * 
+	 * @param id - Identifier for the file to be deleted
+	 * @return Whether or not the file was successfully deleted
+	 */
 	public boolean deleteFile(long id){
 		Session sess = HibernateWrapper.getSession().openSession();
 		try{
@@ -88,7 +108,7 @@ public class DataRetentionUtil {
 			e.printStackTrace();
 			return false;
 		} finally {
-			if (sess != null) {
+			if (sess != null && sess.isOpen()) {
 				sess.close();
 			}
 		}
