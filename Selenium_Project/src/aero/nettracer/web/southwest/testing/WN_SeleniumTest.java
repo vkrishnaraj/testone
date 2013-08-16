@@ -135,6 +135,36 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 		return success;
 	}
 	
+	protected boolean navigateToOnhand() {
+		boolean success = false;
+		selenium.click("//a[contains(@href, 'searchOnHand.do')]");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			checkCopyrightAndQuestionMarks();
+			selenium.type("name=incident_ID", Settings.ONHAND_ID_WN);
+			selenium.click("id=button");
+			waitForPageToLoadImproved();
+			if (checkNoErrorPage()) {
+
+				selenium.click("link="+Settings.ONHAND_ID_WN);
+				waitForPageToLoadImproved();
+
+				if (checkNoErrorPage()) {
+					checkCopyrightAndQuestionMarks();
+					success = true;
+					
+				} else {
+					System.out.println("!!!!!!!!!!!!!!! - Failed to Load OHD" + Settings.INCIDENT_ID_WN + ". Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+				}
+			} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Load OHD Results. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+			}
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Load Incident Search Page. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+		}
+		return success;
+	}
+	
 	protected boolean logoutOfNt() {
 		boolean success = true;
 		selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");

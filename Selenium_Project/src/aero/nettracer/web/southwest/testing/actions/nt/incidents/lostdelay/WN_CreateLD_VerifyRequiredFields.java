@@ -529,9 +529,11 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	public void testSecureRemarksDisabled() {
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		selenium.click("name=addremark");
-		verifyFalse(selenium.isTextPresent("Secure Remark:"));
+		verifyFalse(selenium.isTextPresent("Secure Remark"));
 		verifyFalse(selenium.isTextPresent("General Remark"));
 		verifyFalse(selenium.isTextPresent("Remark is Secure"));
+		selenium.type("id=remark[1]", "General Test");
+		selenium.click("name=saveButton");
 		goToTaskManager();
 	}
 	
@@ -540,13 +542,24 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		verifyTrue(setSecureRemarksPermission(true));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		selenium.click("name=addremark");
-		verifyTrue(selenium.isTextPresent("Secure Remark:"));
-		selenium.click("name=remark[1].secure");
-		selenium.type("id=remark[1]", "Secure Test");
+
+		waitForPageToLoadImproved();
+
+		if (checkNoErrorPage()) {
+		verifyTrue(selenium.isTextPresent("Secure Remark"));
+		selenium.click("name=remark[2].secure");
+		selenium.type("id=remark[2]", "Secure Test");
 		selenium.click("name=saveButton");
 		waitForPageToLoadImproved();
+		} else {
+			System.out.println("Failed to Added Incident Remark");
+		}
 		if (checkNoErrorPage()) {
+
+			verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 			verifyTrue(selenium.isTextPresent("Remark is Secure"));
+		} else {
+			System.out.println("Failed to Save Remark");
 		}
 		verifyTrue(setSecureRemarksPermission(false));
 		goToTaskManager();

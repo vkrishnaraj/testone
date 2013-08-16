@@ -152,29 +152,54 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 
 	@Test
 	public void testSecureRemarksDisabled() {
-		verifyTrue(navigateToIncident(Settings.ONHAND_ID_WN));
+		verifyTrue(navigateToOnhand());
 		selenium.click("name=addremark");
-		verifyFalse(selenium.isTextPresent("Secure Remark:"));
-		verifyFalse(selenium.isTextPresent("General Remark"));
-		verifyFalse(selenium.isTextPresent("Remark is Secure"));
-		goToTaskManager();
+		waitForPageToLoadImproved();
+		
+		if (checkNoErrorPage()) {
+			verifyFalse(selenium.isTextPresent("Secure Remark"));
+			verifyFalse(selenium.isTextPresent("General Remark"));
+			verifyFalse(selenium.isTextPresent("Remark is Secure"));
+			selenium.type("name=remark[1].remarktext", "General Test");
+			selenium.click("name=savetracing");
+			waitForPageToLoadImproved();
+
+		} else {
+			System.out.println("Failed to add Remark");
+		}
+		if (checkNoErrorPage()) {
+			goToTaskManager();
+		} else {
+			System.out.println("Failed to save Remark");
+		}
+		
 	}
 	
 	@Test
 	public void testSecureRemarksEnabled() {
 		verifyTrue(setSecureRemarksPermission(true));
-		verifyTrue(navigateToIncident(Settings.ONHAND_ID_WN));
+		verifyTrue(navigateToOnhand());
 		selenium.click("name=addremark");
-		verifyTrue(selenium.isTextPresent("Secure Remark:"));
-		selenium.click("name=remark[1].secure");
-		selenium.type("id=remark[1]", "Secure Test");
-		selenium.click("name=savetracing");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Remark is Secure"));
+			verifyTrue(selenium.isTextPresent("Secure Remark"));
+			selenium.click("name=remark[2].secure");
+			selenium.type("name=remark[2].remarktext", "Secure Test");
+			selenium.click("name=savetracing");
+			waitForPageToLoadImproved();
+
+		} else {
+			System.out.println("Failed to add Remark");
 		}
-		verifyTrue(setSecureRemarksPermission(false));
-		goToTaskManager();
+		if (checkNoErrorPage()) {
+
+			verifyTrue(navigateToOnhand());
+			verifyTrue(selenium.isTextPresent("Remark is Secure"));
+			verifyTrue(setSecureRemarksPermission(false));
+			goToTaskManager();
+		} else {
+			System.out.println("Failed to save OHD");
+		}
 	}
 
 	
