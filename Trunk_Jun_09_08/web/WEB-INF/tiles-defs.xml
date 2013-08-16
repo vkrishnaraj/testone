@@ -999,5 +999,9 @@
     <definition name="auditIssuanceItemAdmin" extends="user_menu">
         <put name="center"   value="/pages/issuance/audit_issuance_admin.jsp"/>
     </definition>
+    
+    <definition name="editIssuanceCategory" extends="user_menu">
+        <put name="center"   value="/pages/issuance/edit_issuance_category.jsp"/>
+    </definition>
 
  </tiles-definitions>

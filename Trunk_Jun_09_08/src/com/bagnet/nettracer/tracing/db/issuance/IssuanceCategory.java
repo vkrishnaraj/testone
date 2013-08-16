@@ -31,6 +31,17 @@ public class IssuanceCategory {
 	@Column(nullable=false, length=255)
 	private String description;
 	
+	private boolean lostdelay;
+	private boolean missing;
+	private boolean damage;
+	
+	@Column(name = "document_id")
+	private long documentId;
+	
+	private boolean inventory;
+	
+	private boolean active;
+	
 	@ManyToOne
 	@JoinColumn(name="company_code_id", nullable=false)
 	private Company company;
@@ -70,6 +81,54 @@ public class IssuanceCategory {
 
 	public void setItems(Set<IssuanceItem> items) {
 		this.items = items;
+	}
+
+	public boolean isLostdelay() {
+		return lostdelay;
+	}
+
+	public void setLostdelay(boolean lostdelay) {
+		this.lostdelay = lostdelay;
+	}
+
+	public boolean isMissing() {
+		return missing;
+	}
+
+	public void setMissing(boolean missing) {
+		this.missing = missing;
+	}
+
+	public boolean isDamage() {
+		return damage;
+	}
+
+	public void setDamage(boolean damage) {
+		this.damage = damage;
+	}
+
+	public long getDocumentId() {
+		return documentId;
+	}
+
+	public void setDocumentId(long documentId) {
+		this.documentId = documentId;
+	}
+
+	public boolean isInventory() {
+		return inventory;
+	}
+
+	public void setInventory(boolean inventory) {
+		this.inventory = inventory;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 }

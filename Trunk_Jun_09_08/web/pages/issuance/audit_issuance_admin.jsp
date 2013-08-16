@@ -1,3 +1,4 @@
+<%@page import="com.bagnet.nettracer.tracing.forms.issuance.AuditIssuanceItemAdminForm"%>
 <%@page import="com.bagnet.nettracer.tracing.forms.ClaimForm"%>
 <%@ page language="java" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.ExpensePayout" %>
@@ -14,8 +15,14 @@
 <%
 	Agent a = (Agent) session.getAttribute("user");
 
+	AuditIssuanceItemAdminForm form = (AuditIssuanceItemAdminForm) request.getAttribute("auditIssuanceItemAdminForm");
 	boolean ntUser = PropertyBMO.isTrue("nt.user");
 	boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
+	boolean globalAdmin = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_GLOBAL_ADMIN, a);
+    long currentID = -1;
+ 	if (request.getAttribute("id") != null) {
+ 		currentID = (Long) request.getAttribute("id");
+ 	}
 %>
   
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
@@ -47,6 +54,7 @@
               <td id="middlecolumn">
                 
                 <div id="maincontent">
+                <% if (request.getAttribute("audit_item_quantity_resultList") != null) { %>
                     <h1 class="green">
                       <bean:message key="audit.issuance.item.quantity.header" />
                     </h1>
@@ -55,29 +63,60 @@
                     </font>
                     <br />
                     <table class="form2" cellspacing="0" cellpadding="0" width="100%">
+                      <tr>
+                        <td>
+	                     <bean:message key="issuance.item.type" /><br/>
+	                     <select name="quantity_id" class="dropdown" >
+	                     	<option value="-1" <% if (-1 == currentID) { %>selected<% } %>>
+	                     		<bean:message key="issuance.item.allitems" />
+	                     	</option>
+                <logic:iterate indexId="i" id="q_item" name="item_quantity_resultList" type="com.bagnet.nettracer.tracing.db.issuance.IssuanceItemQuantity" >
+	                     	<option value="<%=q_item.getId() %>" <% if (q_item.getId() == currentID) { %>selected<% } %>>
+	                     		<%=q_item.getIssuanceItem().getDescription() %>
+	                     	</option>
+				</logic:iterate>
+	                     </select>
+                        </td>
+                        <% if (globalAdmin) { %>
+                        <td>
+	                     <bean:message key="issuance.item.station" /><br/>
+                        	<html:select property="stationsearch_ID" styleClass="dropdown" >
+								<html:options collection="stationlist" property="station_ID" labelProperty="stationcode" />
+							</html:select>
+                        </td>
+                        <% } %>
+                      </tr>
+                    </table>
+              <div align="center">
+	                     <input type="submit" name="view_quantity" id="button"  
+							value="<bean:message key="issuance.item.button.view" />" >
+						 </input>
+                    </div>
+                    <br/>
+                    <table class="form2" cellspacing="0" cellpadding="0" width="100%">
               <tr>
-                      <td>
+                      <td class="header">
 	                     <bean:message key="issuance.item.category" />
                       </td>
-	                  <td>
-	                     <bean:message key="issuance.item.description" />
+	                  <td class="header">
+	                     <bean:message key="issuance.item.type" />
 	                  </td>
-	                  <td>
+	                  <td class="header">
 	                     <bean:message key="issuance.item.quantity" />
 	                  </td>
-	                  <td>
+	                  <td class="header">
 	                     <bean:message key="issuance.item.quantity.change" />
 	                  </td>
-	                  <td>
+	                  <td class="header">
 	                     <bean:message key="issuance.item.minimum.quantity" />
 	                  </td>
-	                  <td>
+	                  <td class="header">
 	                     <bean:message key="issuance.item.incident" />
 	                  </td>
-	                  <td>
+	                  <td class="header">
 	                     <bean:message key="issuance.item.edit.agent" />
 	                  </td>
-	                  <td>
+	                  <td class="header">
 	                     <bean:message key="issuance.item.edit.date" />
 	                  </td>
                   </tr>
@@ -100,25 +139,126 @@
 	                  </td>
 	                  <td>
 	                  	 <% String incID = (q_item.getIncidentID() != null ? q_item.getIncidentID() : ""); %>
-	                     <%=incID %>
+	                     <%=incID %>&nbsp;
 	                  </td>
 	                  <td>
 	                     <%=q_item.getEditAgent().getUsername() %>
 	                  </td>
 	                  <td>
-	                     <%=q_item.getEditDate() %>
+	                     <%=form.getDisplayDate(q_item.getEditDate()) %>
 	                  </td>
                   </tr>
                 </logic:iterate> 
-					  <tr>
-		                <td colspan="6" align="center" valign="top">
-			                  <html:submit property="back" styleId="button">
-			                    <bean:message key="Back" />
-			                  </html:submit>
-		                </td>
-		              </tr>
               </table>
-                    
+              <% } %>
+                <% if (request.getAttribute("audit_item_inventory_resultList") != null) { %>
+                    <h1 class="green">
+                      <bean:message key="audit.issuance.item.inventory.header" />
+                    </h1>
+                    <font color=red>
+                      <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
+                    </font>
+                    <br />
+                    <table class="form2" cellspacing="0" cellpadding="0" width="100%">
+                      <tr>
+                        <td>
+	                     <bean:message key="issuance.item.type" /><br/>
+	                     <select name="inventory_id" class="dropdown" >
+	                     	<option value="-1" <% if (-1 == currentID) { %>selected<% } %>>
+	                     		<bean:message key="issuance.item.allitems" />
+	                     	</option>
+                <logic:iterate indexId="i" id="i_item" name="item_inventory_resultList" type="com.bagnet.nettracer.tracing.db.issuance.IssuanceItemInventory" >
+	                     	<option value="<%=i_item.getId() %>" <% if (i_item.getId() == currentID) { %>selected<% } %>>
+	                     		<%=i_item.getIssuanceItem().getDescription() + " : " + i_item.getDescription() %>
+	                     	</option>
+				</logic:iterate>
+	                     </select>
+                        </td>
+                        <% if (globalAdmin) { %>
+                        <td>
+	                     <bean:message key="issuance.item.station" /><br/>
+                        	<html:select property="stationsearch_ID" styleClass="dropdown" >
+								<html:options collection="stationlist" property="station_ID" labelProperty="stationcode" />
+							</html:select>
+                        </td>
+                        <% } %>
+                      </tr>
+                    </table>
+              <div align="center">
+	                     <input type="submit" name="view_inventory" id="button"  
+							value="<bean:message key="issuance.item.button.view" />" >
+						 </input>
+                    </div>
+                    <br />
+                    <table class="form2" cellspacing="0" cellpadding="0" width="100%">
+              <tr>
+                      <td class="header">
+	                     <bean:message key="issuance.item.category" />
+                      </td>
+	                  <td class="header">
+	                     <bean:message key="issuance.item.type" />
+	                  </td>
+	                  <td class="header">
+	                     <bean:message key="issuance.item.description" />
+	                  </td>
+	                  <td class="header">
+	                     <bean:message key="issuance.item.barcode" />
+	                  </td>
+	                  <td class="header">
+	                     <bean:message key="issuance.item.tradetype" />
+	                  </td>
+	                  <td class="header">
+	                     <bean:message key="issuance.item.status" />
+	                  </td>
+	                  <td class="header">
+	                     <bean:message key="issuance.item.incident" />
+	                  </td>
+	                  <td class="header">
+	                     <bean:message key="issuance.item.edit.agent" />
+	                  </td>
+	                  <td class="header">
+	                     <bean:message key="issuance.item.edit.date" />
+	                  </td>
+                  </tr>
+                <logic:iterate indexId="i" id="i_item" name="audit_item_inventory_resultList" type="com.bagnet.nettracer.tracing.db.issuance.AuditIssuanceItemInventory" >
+                  <tr>
+                      <td>
+              			 <%=i_item.getIssuanceItem().getCategory().getDescription()%>
+                      </td>
+	                  <td>
+	                     <%=i_item.getIssuanceItem().getDescription()%>
+	                  </td>
+	                  <td>
+	                     <%=i_item.getDescription()%>
+	                  </td>
+	                  <td>
+	                     <%=i_item.getBarcode()%>
+	                  </td>
+	                  <td>
+	                     <bean:message key="<%="issuance.item.tradetype." + i_item.getTradeType()%>" />
+	                  </td>
+	                  <td>
+	                     <bean:message key="<%=i_item.getInventoryStatus().getKey()%>" />
+	                  </td>
+	                  <td>
+	                  	 <% String incID = (i_item.getIncidentID() != null ? i_item.getIncidentID() : ""); %>
+	                     <%=incID %>&nbsp;
+	                  </td>
+	                  <td>
+	                     <%=i_item.getEditAgent().getUsername() %>
+	                  </td>
+	                  <td>
+	                     <%=form.getDisplayDate(i_item.getEditDate()) %>
+	                  </td>
+                  </tr>
+                </logic:iterate> 
+              </table>
+              <% } %>
+              <div align="center">
+			                  <html:button property="back" styleId="button" onclick="history.back();">
+			                    <bean:message key="Back" />
+			                  </html:button>
+                    </div>
 					
                   </html:form>
 					

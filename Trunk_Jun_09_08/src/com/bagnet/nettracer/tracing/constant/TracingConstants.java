@@ -260,6 +260,7 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_SECURE_REMARKS = "Secure_Remarks";
 	
 	public static final String SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_STATION_ADMIN = "Issuance_Item_Station_Admin";
+	public static final String SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_GLOBAL_ADMIN = "Issuance_Item_Global_Admin";
 	
 	//Table numbers for status
 	public final static int AJAX_STATUS_INC = 1;
@@ -279,6 +280,7 @@ public class TracingConstants {
 	public final static int TABLE_LF_STATUS = 16;
 	public final static int TABLE_LF_DISPOSITION = 17;
 	public final static int TABLE_LF_TRACE_STATUS = 18;
+	public final static int TABLE_ISSUANCE_ITEM_INVENTORY_STATUS = 19;
 	
 	public final static int PRIORITY_LOW = 1;
 	public final static int PRIORITY_MEDIUM = 2;
@@ -987,6 +989,7 @@ public class TracingConstants {
 	//Issuance Item pages
 	public final static String ISSUANCE_ITEM_ADMIN = "issuanceItemAdmin";
 	public final static String AUDIT_ISSUANCE_ITEM_ADMIN = "auditIssuanceItemAdmin";
+	public final static String EDIT_ISSUANCE_CATEGORY = "editIssuanceCategory";
 	
 	// defaults
 	public final static String US_COUNTRY_CODE = "US";
@@ -1191,6 +1194,15 @@ public class TracingConstants {
 	public static final int FILE_CREATION_METHOD_WEBSERVICE = 1;
 
 	public final static String UTB_CHECK = "UTB";
+	
+	public static final int ISSUANCE_ITEM_INVENTORY_TYPE_BOTH = 0;
+	public static final int ISSUANCE_ITEM_INVENTORY_TYPE_TRADEOUT_ONLY = 1;
+	public static final int ISSUANCE_ITEM_INVENTORY_TYPE_LOAN_ONLY = 2;
+	
+	public static final int ISSUANCE_ITEM_INVENTORY_STATUS_AVAILABLE = 700;
+	public static final int ISSUANCE_ITEM_INVENTORY_STATUS_ONLOAN = 701;
+	public static final int ISSUANCE_ITEM_INVENTORY_STATUS_ISSUED = 702;
+	public static final int ISSUANCE_ITEM_INVENTORY_STATUS_DISCARDED = 703;
 	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {

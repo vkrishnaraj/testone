@@ -29,6 +29,8 @@ public class IssuanceItem {
 	@Column(length=50)
 	private String description;
 	
+	boolean active;
+	
 	@ManyToOne
 	@JoinColumn(name="issuance_category_id")
 	private IssuanceCategory category;
@@ -36,7 +38,12 @@ public class IssuanceItem {
 	@Fetch(FetchMode.SELECT)
 	@org.hibernate.annotations.OrderBy(clause="station_id")
 	@OneToMany(mappedBy="issuanceItem", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	private Set<IssuanceItemQuantity> quantity;
+	private Set<IssuanceItemQuantity> quantityItems;
+	
+	@Fetch(FetchMode.SELECT)
+	@org.hibernate.annotations.OrderBy(clause="station_id")
+	@OneToMany(mappedBy="issuanceItem", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	private Set<IssuanceItemInventory> inventoryItems;
 
 	public long getId() {
 		return id;
@@ -62,12 +69,28 @@ public class IssuanceItem {
 		this.category = category;
 	}
 
-	public Set<IssuanceItemQuantity> getQuantity() {
-		return quantity;
+	public boolean isActive() {
+		return active;
 	}
 
-	public void setQuantity(Set<IssuanceItemQuantity> quantity) {
-		this.quantity = quantity;
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public Set<IssuanceItemQuantity> getQuantityItems() {
+		return quantityItems;
+	}
+
+	public void setQuantityItems(Set<IssuanceItemQuantity> quantityItems) {
+		this.quantityItems = quantityItems;
+	}
+
+	public Set<IssuanceItemInventory> getInventoryItems() {
+		return inventoryItems;
+	}
+
+	public void setInventoryItems(Set<IssuanceItemInventory> inventoryItems) {
+		this.inventoryItems = inventoryItems;
 	}
 	
 }
