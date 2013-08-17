@@ -188,4 +188,34 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 		return success;
 	}
 	
+	protected boolean setPermissions(String[] permissions, boolean[] values) {
+		if (permissions == null || values == null || permissions.length != values.length) {
+			throw new IllegalArgumentException("Please provide the permissions and a value to which each one should be set.");
+		}
+		
+		boolean success = false;
+		if (!navigateToPermissionsPage()) {
+			return success;
+		}
+		
+		for (int i = 0; i < permissions.length; ++i) {
+			if (values[i]) {
+				selenium.check("name=" + permissions[i]);
+			} else {
+				selenium.uncheck("name=" + permissions[i]);
+			}
+		}
+				
+		selenium.click("xpath=(//input[@id='button'])[2]");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
+			waitForPageToLoadImproved();
+			success = loginToNt();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Save Permissions. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+		}
+		return success;
+	}
+	
 }

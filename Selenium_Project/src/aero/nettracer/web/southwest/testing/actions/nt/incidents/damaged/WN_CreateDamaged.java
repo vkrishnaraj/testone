@@ -7,9 +7,16 @@ import aero.nettracer.web.utility.Settings;
 
 public class WN_CreateDamaged extends WN_SeleniumTest {
 	
+	private static String RX_TIMESTAMP = "";
+
+	private String EXPEDITE_TAG_NUM_COLLECT = "639";
+	private String RX_TIMESTAMP_COLLECT = "640";
+	private String RX_TIMESTAMP_DELETE = "641";
+	
+	
 	@Test
 	public void testCreateDamagedIncident() {
-		verifyTrue(setCollectExpediteTagNumberPermission(true));
+		verifyTrue(setPermissions(new String[] { EXPEDITE_TAG_NUM_COLLECT, RX_TIMESTAMP_COLLECT, RX_TIMESTAMP_DELETE }, new boolean[] { true, true, true }));
 		selenium.click("//a[@id='menucol_2.1']");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
@@ -18,6 +25,9 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
+				
+				verifyFalse(selenium.isElementPresent("id=rxButton"));
+				
 				selenium.type("name=passenger[0].lastname", "Test1");
 				selenium.type("name=passenger[0].firstname", "Test1");
 				selenium.select("name=passenger[0].dlstate", "label=Georgia");
@@ -68,7 +78,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	
 	@Test
 	public void testExpediteTagNumEnabled() {
-		verifyTrue(setCollectExpediteTagNumberPermission(true));
+		verifyTrue(setPermissions(new String[] { EXPEDITE_TAG_NUM_COLLECT }, new boolean[] { true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
 		verifyTrue(selenium.isTextPresent("Expedite Tag Number"));
 		verifyTrue(selenium.isElementPresent("name=theitem[0].expediteTagNum"));				
@@ -85,7 +95,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	
 	@Test
 	public void testExpediteTagNumDisabled() {
-		verifyTrue(setCollectExpediteTagNumberPermission(false));
+		verifyTrue(setPermissions(new String[] { EXPEDITE_TAG_NUM_COLLECT }, new boolean[] { false }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
 		verifyFalse(selenium.isTextPresent("Expedite Tag Number"));
 		verifyFalse(selenium.isElementPresent("name=theitem[0].expediteTagNum"));				
@@ -101,7 +111,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	
 	@Test
 	public void testInvalidExpediteTagNum() {
-		verifyTrue(setCollectExpediteTagNumberPermission(true));
+		verifyTrue(setPermissions(new String[] { EXPEDITE_TAG_NUM_COLLECT }, new boolean[] { true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
 		verifyTrue(selenium.isElementPresent("name=theitem[0].expediteTagNum"));
 		selenium.type("name=theitem[0].expediteTagNum", "01234567891");
@@ -119,28 +129,86 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 		}
 	}
 	
-	private boolean setCollectExpediteTagNumberPermission(boolean check) {
-		boolean success = false;
-		if (!navigateToPermissionsPage()) {
-			return success;
+	@Test
+	public void testRxTimestampSet() {
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
+		verifyEquals("Additional Functions", selenium.getText("//div[@id='maincontent']/h1"));
+		verifyTrue(selenium.isElementPresent("id=rxButton"));
+		selenium.click("id=rxButton");
+		for (int second = 0;; second++) {
+			if (second >= 60) fail("timeout");
+			try { 
+				if (selenium.isElementPresent("name=dispRxTimestamp")) break; 
+			} catch (Exception e) { }
+			
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) { }
 		}
-		
-		if (check) {
-			selenium.check("name=639");
-		} else {
-			selenium.uncheck("name=639");
-		}
-		
-		selenium.click("xpath=(//input[@id='button'])[2]");
-		waitForPageToLoadImproved();
-		if (checkNoErrorPage()) {
-			selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
-			waitForPageToLoadImproved();
-			success = loginToNt();
-		} else {
-			System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Save Permissions. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-		}
-		return success;
-	}
 
+		verifyEquals("Date/Time Received at LZ:", selenium.getText("xpath=(//div[@id='rxTimestampDiv'])[2]"));
+		verifyTrue(selenium.isElementPresent("name=dispRxTimestamp"));
+		verifyTrue(selenium.isElementPresent("id=undoRxButton"));
+		
+		WN_CreateDamaged.RX_TIMESTAMP = selenium.getValue("name=dispRxTimestamp");
+		goToTaskManager();
+	}
+	
+	@Test
+	public void testRxTimestampPresent() {
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
+		verifyTrue(selenium.isElementPresent("name=dispRxTimestamp"));
+		verifyEquals(WN_CreateDamaged.RX_TIMESTAMP, selenium.getValue("name=dispRxTimestamp"));
+		verifyTrue(selenium.isElementPresent("id=undoRxButton"));
+		goToTaskManager();
+	}
+	
+	@Test
+	public void testRxTimestampAuditTrailEnabled() {
+		verifyTrue(navigateToIncidentAuditTrail());
+		verifyTrue(selenium.isTextPresent("Date/Time Received at LZ"));
+		verifyTrue(selenium.isTextPresent(WN_CreateDamaged.RX_TIMESTAMP));
+		goToTaskManager();
+	}
+	
+	@Test
+	public void testRxTimestampUndoDisabled() {
+		verifyTrue(setPermissions(new String[] { RX_TIMESTAMP_DELETE }, new boolean[] { false }));
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
+		verifyTrue(selenium.isElementPresent("name=dispRxTimestamp"));
+		verifyFalse(selenium.isElementPresent("id=undoRxButton"));
+		goToTaskManager();
+	}
+	
+	@Test
+	public void testRxTimestampUndo() {
+		verifyTrue(setPermissions(new String[] { RX_TIMESTAMP_DELETE }, new boolean[] { true }));
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
+		verifyTrue(selenium.isElementPresent("id=undoRxButton"));
+		selenium.click("id=undoRxButton");
+		for (int second = 0;; second++) {
+			if (second >= 60) fail("timeout");
+			try { 
+				if (selenium.isElementPresent("id=rxButton")) break; 
+			} catch (Exception e) { }
+			
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) { }
+		}
+		
+		verifyFalse(selenium.isElementPresent("name=dispRxTimestamp"));
+		verifyFalse(selenium.isElementPresent("id=undoRxButton"));
+		verifyTrue(selenium.isElementPresent("id=rxButton"));
+		goToTaskManager();
+	}
+	
+	@Test
+	public void testRxTimestampAuditTrailDisabled() {
+		verifyTrue(setPermissions(new String[] { RX_TIMESTAMP_COLLECT }, new boolean[] { false }));
+		verifyTrue(navigateToIncidentAuditTrail());
+		verifyFalse(selenium.isTextPresent("Date/Time Received at LZ"));
+		goToTaskManager();
+	}
+	
 }

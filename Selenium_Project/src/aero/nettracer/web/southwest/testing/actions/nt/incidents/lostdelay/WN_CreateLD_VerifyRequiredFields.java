@@ -11,9 +11,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	public void testVerifyText() throws Exception {
 		// MJS: initial state is drivers license collection enabled
 		// 		and view/edit drivers license disabled.
-		verifyTrue(setDriversLicensePermission(true, false));
-		verifyTrue(setPassportPermission(true, false));
-		verifyTrue(setCollectPosIdPermission(true));
+		verifyTrue(setPermissions(new String[] { "632", "633", "636", "637", "635" }, new boolean[] { true, false, true, false, true }));
 		selenium.click("//a[@id='menucol_1.1']");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
@@ -150,7 +148,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	@Test
 	public void testDriversLicenseViewEdit() {
 		// MJS: enable view/edit drivers license
-		verifyTrue(setDriversLicensePermission(true, true));
+		verifyTrue(setPermissions(new String[] { "632", "633" }, new boolean[] { true, true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		verifyTrue(selenium.isEditable("name=passenger[0].decriptedDriversLicense"));
 		verifyEquals(WN_CreateLD_VerifyRequiredFields.DRIVERS_LICENSE, selenium.getValue("name=passenger[0].decriptedDriversLicense"));
@@ -238,7 +236,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	
 	@Test
 	public void testPassportViewEdit() {
-		verifyTrue(setPassportPermission(true, true));
+		verifyTrue(setPermissions(new String[] { "636", "637" }, new boolean[] { true, true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		verifyTrue(selenium.isEditable("name=passenger[0].decryptedPassportNumber"));
 		verifyEquals(WN_CreateLD_VerifyRequiredFields.PASSPORT_NUMBER, selenium.getValue("name=passenger[0].decryptedPassportNumber"));
@@ -274,8 +272,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	
 	@Test
 	public void testPosIdFieldsNotPresent() {
-		verifyTrue(navigateToPermissionsPage());
-		verifyTrue(setCollectPosIdPermission(false));
+		verifyTrue(setPermissions(new String[] { "635" }, new boolean[] { false }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		verifyFalse(selenium.isTextPresent("Position ID"));
 		verifyFalse(selenium.isElementPresent("name=theitem[0].posId"));
@@ -418,8 +415,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	
 	@Test
 	public void testCreateIncidentWithEmptyDriversLicense() throws Exception {
-		verifyTrue(setDriversLicensePermission(true, false));
-		verifyTrue(setPassportPermission(true, false));
+		verifyTrue(setPermissions(new String[] { "632", "633", "636", "637" }, new boolean[] { true, false, true, false }));
 		selenium.click("//a[@id='menucol_1.1']");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
@@ -492,7 +488,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	
 	@Test
 	public void testEmptyDriversLicenseEnabled() {
-		verifyTrue(setDriversLicensePermission(true, true));
+		verifyTrue(setPermissions(new String[] { "632", "633" } , new boolean[] { true, true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		verifyTrue(selenium.isEditable("name=passenger[0].decriptedDriversLicense"));
 		verifyEquals("", selenium.getValue("name=passenger[0].decriptedDriversLicense"));
@@ -516,7 +512,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 
 	@Test
 	public void testEmptyPassportEnabled() {
-		verifyTrue(setPassportPermission(true, true));
+		verifyTrue(setPermissions(new String[] { "636", "637" }, new boolean[] { true, true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		verifyTrue(selenium.isEditable("name=passenger[0].decryptedPassportNumber"));
 		verifyEquals("", selenium.getValue("name=passenger[0].decryptedPassportNumber"));
@@ -539,7 +535,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	
 	@Test
 	public void testSecureRemarksEnabled() {
-		verifyTrue(setSecureRemarksPermission(true));
+		verifyTrue(setPermissions(new String[] { "335" }, new boolean[] { true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		selenium.click("name=addremark");
 
@@ -561,7 +557,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		} else {
 			System.out.println("Failed to Save Remark");
 		}
-		verifyTrue(setSecureRemarksPermission(false));
+		verifyTrue(setPermissions(new String[] { "335" }, new boolean[] { false }));
 		goToTaskManager();
 	}
 	
@@ -580,116 +576,116 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		}
 	}
 	
-	private boolean setDriversLicensePermission(boolean collectDl, boolean viewEditDl) {
-		boolean success = false;
-		if (!navigateToPermissionsPage()) {
-			return success;
-		}
-				
-		if (collectDl) {
-			selenium.check("name=632");
-		} else {
-			selenium.uncheck("name=632");
-		}
-		
-		if (viewEditDl) {
-			selenium.check("name=633");
-		} else {
-			selenium.uncheck("name=633");
-		}
-		
-		selenium.click("xpath=(//input[@id='button'])[2]");
-		waitForPageToLoadImproved();
-		if (checkNoErrorPage()) {
-			selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
-			waitForPageToLoadImproved();
-			success = loginToNt();
-		} else {
-			System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Save Permissions. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-		}
-		
-		return success;
-	}
-
-	private boolean setPassportPermission(boolean collectPassport, boolean viewEditPassport) {
-		boolean success = false;
-		if (!navigateToPermissionsPage()) {
-			return success;
-		}
-		
-		if (collectPassport) {
-			selenium.check("name=636");
-		} else {
-			selenium.uncheck("name=636");
-		}
-		
-		if (viewEditPassport) {
-			selenium.check("name=637");
-		} else {
-			selenium.uncheck("name=637");
-		}
-		
-		selenium.click("xpath=(//input[@id='button'])[2]");
-		waitForPageToLoadImproved();
-		if (checkNoErrorPage()) {
-			selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
-			waitForPageToLoadImproved();
-			success = loginToNt();
-		} else {
-			System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Save Permissions. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-		}
-		
-		return success;
-	}
-	
-	private boolean setSecureRemarksPermission(boolean secureRemarks) {
-		boolean success = false;
-		if (!navigateToPermissionsPage()) {
-			return success;
-		}
-		
-		if (secureRemarks) {
-			selenium.check("name=335");
-		} else {
-			selenium.uncheck("name=335");
-		}
-		
-		
-		selenium.click("xpath=(//input[@id='button'])[2]");
-		waitForPageToLoadImproved();
-		if (checkNoErrorPage()) {
-			selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
-			waitForPageToLoadImproved();
-			success = loginToNt();
-		} else {
-			System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Save Permissions. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-		}
-		
-		return success;
-	}
-	
-	private boolean setCollectPosIdPermission(boolean check) {
-		boolean success = false;
-		if (!navigateToPermissionsPage()) {
-			return success;
-		}
-		
-		if (check) {
-			selenium.check("name=635");
-		} else {
-			selenium.uncheck("name=635");
-		}
-		
-		selenium.click("xpath=(//input[@id='button'])[2]");
-		waitForPageToLoadImproved();
-		if (checkNoErrorPage()) {
-			selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
-			waitForPageToLoadImproved();
-			success = loginToNt();
-		} else {
-			System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Save Permissions. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-		}
-		return success;
-	}
+//	private boolean setDriversLicensePermission(boolean collectDl, boolean viewEditDl) {
+//		boolean success = false;
+//		if (!navigateToPermissionsPage()) {
+//			return success;
+//		}
+//				
+//		if (collectDl) {
+//			selenium.check("name=632");
+//		} else {
+//			selenium.uncheck("name=632");
+//		}
+//		
+//		if (viewEditDl) {
+//			selenium.check("name=633");
+//		} else {
+//			selenium.uncheck("name=633");
+//		}
+//		
+//		selenium.click("xpath=(//input[@id='button'])[2]");
+//		waitForPageToLoadImproved();
+//		if (checkNoErrorPage()) {
+//			selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
+//			waitForPageToLoadImproved();
+//			success = loginToNt();
+//		} else {
+//			System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Save Permissions. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+//		}
+//		
+//		return success;
+//	}
+//
+//	private boolean setPassportPermission(boolean collectPassport, boolean viewEditPassport) {
+//		boolean success = false;
+//		if (!navigateToPermissionsPage()) {
+//			return success;
+//		}
+//		
+//		if (collectPassport) {
+//			selenium.check("name=636");
+//		} else {
+//			selenium.uncheck("name=636");
+//		}
+//		
+//		if (viewEditPassport) {
+//			selenium.check("name=637");
+//		} else {
+//			selenium.uncheck("name=637");
+//		}
+//		
+//		selenium.click("xpath=(//input[@id='button'])[2]");
+//		waitForPageToLoadImproved();
+//		if (checkNoErrorPage()) {
+//			selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
+//			waitForPageToLoadImproved();
+//			success = loginToNt();
+//		} else {
+//			System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Save Permissions. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+//		}
+//		
+//		return success;
+//	}
+//	
+//	private boolean setSecureRemarksPermission(boolean secureRemarks) {
+//		boolean success = false;
+//		if (!navigateToPermissionsPage()) {
+//			return success;
+//		}
+//		
+//		if (secureRemarks) {
+//			selenium.check("name=335");
+//		} else {
+//			selenium.uncheck("name=335");
+//		}
+//		
+//		
+//		selenium.click("xpath=(//input[@id='button'])[2]");
+//		waitForPageToLoadImproved();
+//		if (checkNoErrorPage()) {
+//			selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
+//			waitForPageToLoadImproved();
+//			success = loginToNt();
+//		} else {
+//			System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Save Permissions. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+//		}
+//		
+//		return success;
+//	}
+//	
+//	private boolean setCollectPosIdPermission(boolean check) {
+//		boolean success = false;
+//		if (!navigateToPermissionsPage()) {
+//			return success;
+//		}
+//		
+//		if (check) {
+//			selenium.check("name=635");
+//		} else {
+//			selenium.uncheck("name=635");
+//		}
+//		
+//		selenium.click("xpath=(//input[@id='button'])[2]");
+//		waitForPageToLoadImproved();
+//		if (checkNoErrorPage()) {
+//			selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
+//			waitForPageToLoadImproved();
+//			success = loginToNt();
+//		} else {
+//			System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Save Permissions. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+//		}
+//		return success;
+//	}
 	
 }
