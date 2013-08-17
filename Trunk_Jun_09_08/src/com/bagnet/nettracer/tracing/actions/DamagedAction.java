@@ -63,6 +63,7 @@ import com.bagnet.nettracer.tracing.history.IncidentHistoryObject;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.ClientUtils;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.DisputeResolutionUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.HistoryUtils;
@@ -89,6 +90,7 @@ public class DamagedAction extends CheckedAction {
 
 		// check session
 		TracerUtils.checkSession(session);
+		BagService bs = new BagService();
 
 		if (session.getAttribute("user") == null || form == null) {
 			response.sendRedirect("logoff.do");
@@ -99,6 +101,24 @@ public class DamagedAction extends CheckedAction {
 		ActionMessages errors = new ActionMessages();
 		IncidentForm theform = (IncidentForm) form;
 
+		if (request.getParameter("ajax") != null) {
+			String incidentId = request.getParameter("incident_id");
+			IncidentBMO iBmo = new IncidentBMO();
+			Incident incident = iBmo.findIncidentByID(incidentId);
+			if (incident != null) {
+				boolean set = TracingConstants.TRUE.equalsIgnoreCase(request.getParameter("set"));
+				Date rxTimestamp = set ? DateUtils.convertToGMTDate(new Date()) : null;
+				incident.setRxTimestamp(rxTimestamp);
+				if (iBmo.insertIncident(false, incident, null, user) == 1) {
+					theform.setRxTimestamp(rxTimestamp);
+				} else {
+					request.setAttribute("error", "error.message.set.rx.timestamp.failed");
+					logger.error("An error occurred while trying to set the receive Date/Time for incident: " + incidentId);
+				}
+			}
+			return mapping.findForward(TracingConstants.SET_RECEIVE_DATE);
+		}
+		
 		boolean checkLLC = false;
 		if(request.getAttribute("currentstatus") != null) {
 			checkLLC = Integer.parseInt((String)request.getAttribute("currentstatus")) == TracingConstants.MBR_STATUS_CLOSED;
@@ -109,7 +129,6 @@ public class DamagedAction extends CheckedAction {
 		//add to the loss codes
 		request.setAttribute("losscodes", codes);
 
-		BagService bs = new BagService();
 		
 		request.setAttribute("damaged", "1");
 

@@ -130,6 +130,8 @@ public class Incident implements Serializable {
 	private Date tracingStarted;
 	private Date tracingComplete;
 	private Agent tracingAgent;
+	
+	private Date rxTimestamp;
 
 	@Column(name="tracing_status_id")
 	public int getTracingStatus() {
@@ -1272,4 +1274,15 @@ public class Incident implements Serializable {
 	public void setOc_claim_id(long oc_claim_id) {
   	this.oc_claim_id = oc_claim_id;
   }
+
+	@Temporal(value = TemporalType.TIMESTAMP)
+	public Date getRxTimestamp() {
+		return rxTimestamp;
+	}
+
+	public void setRxTimestamp(Date rxTimestamp) {
+		this.rxTimestamp = rxTimestamp;
+	}
+	
+	
 }

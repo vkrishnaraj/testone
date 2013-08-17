@@ -7,12 +7,29 @@
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.Company" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.forms.IncidentForm" %>
 <%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
+<%@page import="com.bagnet.nettracer.tracing.bmo.CompanyBMO"%>
 
 <c:if test="${!empty incidentForm.incident_ID and !empty incidentObj and incidentForm.incident_ID == incidentObj.incident_ID}">
 <%
+	  String cssFormClass;
+	 
+	  int report_type = 0;
+	  cssFormClass = "form2_dam";
+	
+	  if (request.getAttribute("lostdelay") != null) {
+	    report_type = 1;
+	    cssFormClass = "form2_ld";
+	  } else {
+	    if (request.getAttribute("missing") != null) {
+	      report_type = 2;
+	      cssFormClass = "form2_pil";
+	    }
+	  }
+	  
 	  Agent a = (Agent)session.getAttribute("user");
       boolean bIncidentChecklist = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_INCIDENT_CHECKLIST, a);
       boolean bIncidentChecklistReadOnly = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_INCIDENT_CHECKLIST_READ_ONLY, a);
@@ -21,23 +38,23 @@
       boolean pilCrmIntegration = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PUSH_PIL, a);
       boolean ocIntegration = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CENTRAL_BAGGAGE_CLAIMS_FEATURES, a);
       
-      if (bIncidentChecklist || bIncidentChecklistReadOnly || ldCrmIntegration || damCrmIntegration || pilCrmIntegration) {
-
+      // MJS: the collect receive timestamp functionality should be available iff: the current report is a damaged incident, 
+      //	  the user's current station is LZ, and the user has the permission to set the received in LZ timestamp.
+      boolean collectRxTimestamp = false;
+      int ohdLzId = -1;
+      if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_RECEIVE_TIMESTAMP_COLLECT, a)) {
+	      Company company = CompanyBMO.getCompany(a.getCompanycode_ID());
+		  if (company != null) {
+			  ohdLzId = company.getVariable().getOhd_lz();
+		  }
+		  
+	   	  if (report_type == 0 && ohdLzId == a.getStation().getStation_ID()) {
+	   		  collectRxTimestamp = true;
+	   	  }
+      }
+      
+      if (bIncidentChecklist || bIncidentChecklistReadOnly || ldCrmIntegration || damCrmIntegration || pilCrmIntegration || collectRxTimestamp) {
   
-  String cssFormClass;
- 
-  int report_type = 0;
-  cssFormClass = "form2_dam";
-
-  if (request.getAttribute("lostdelay") != null) {
-    report_type = 1;
-    cssFormClass = "form2_ld";
-  } else {
-    if (request.getAttribute("missing") != null) {
-      report_type = 2;
-      cssFormClass = "form2_pil";
-    }
-  }
 %>
   <h1 class="green">
     <bean:message key="header.additional.functions" />
@@ -111,11 +128,13 @@
 		  <% 
 		  } 
 		  %>
+         	<% if (collectRxTimestamp) { %>
+          	  	<jsp:include page="/pages/includes/set_rx_date.jsp" />
+          	<% } %>
 		  </td>
           </tr>
         </table>
         </div>
-
       <br>
       <br>
       &nbsp;&nbsp;&uarr;
@@ -123,7 +142,7 @@
       <br>
       <br>
 
-<% 
-      }
-%>
+	<% 
+		}
+	%>
 </c:if>

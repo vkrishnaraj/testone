@@ -50,6 +50,8 @@ public class TracingConstants {
 		}
 	}
 	
+	public final static String TRUE = "true";
+	
 	public final static String FILTER_CHARACTERS = "['\"/<>%()]";
 	
 	public enum AgentActiveStatus { ALL, ACTIVE, INACTIVE }
@@ -257,6 +259,8 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_PASSPORT_COLLECT = "Passport_Collect";
 	public static final String SYSTEM_COMPONENT_NAME_PASSPORT_VIEW_EDIT = "Passport_View_Edit";
 	public static final String SYSTEM_COMPONENT_NAME_EXPEDITE_TAG_NUM_COLLECT = "Expedite_Tag_Num_Collect";
+	public static final String SYSTEM_COMPONENT_NAME_RECEIVE_TIMESTAMP_COLLECT = "Receive_Timestamp_Collect";
+	public static final String SYSTEM_COMPONENT_NAME_RECEIVE_TIMESTAMP_DELETE = "Receive_Timestamp_Delete";
 	public static final String SYSTEM_COMPONENT_NAME_SECURE_REMARKS = "Secure_Remarks";
 	
 	public static final String SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_STATION_ADMIN = "Issuance_Item_Station_Admin";
@@ -1194,7 +1198,7 @@ public class TracingConstants {
 	public static final int FILE_CREATION_METHOD_WEBSERVICE = 1;
 
 	public final static String UTB_CHECK = "UTB";
-	
+
 	public static final int ISSUANCE_ITEM_INVENTORY_TYPE_BOTH = 0;
 	public static final int ISSUANCE_ITEM_INVENTORY_TYPE_TRADEOUT_ONLY = 1;
 	public static final int ISSUANCE_ITEM_INVENTORY_TYPE_LOAN_ONLY = 2;

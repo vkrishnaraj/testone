@@ -287,6 +287,18 @@ function updatePagination() {
               </td>
             </logic:iterate>
           </tr>
+          <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_RECEIVE_TIMESTAMP_COLLECT, a)) { %>
+          	<tr>
+          		<td>
+          			<bean:message key="received.lz.timestamp" />
+          		</td>
+          		<logic:iterate id="audit_incident" name="compareList" scope="request">
+          			<td>
+          				<bean:write name="audit_incident" property="dispRxTimestamp" />
+          			</td>
+          		</logic:iterate>
+          	</tr>
+          <% } %>
           <tr>
             <td>
               <bean:message key="colname.non_revenue" />

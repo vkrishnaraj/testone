@@ -103,6 +103,8 @@ public class Audit_Incident implements Serializable {
 	private Date tracingStarted;
 	private Date tracingComplete;
 	private Agent tracingAgent;
+	
+	private Date rxTimestamp;
 
 	/**
 	 * @return Returns the tracingStatus.
@@ -1003,5 +1005,20 @@ public class Audit_Incident implements Serializable {
 	public void setOc_claim_id(long oc_claim_id) {
   	this.oc_claim_id = oc_claim_id;
   }
+	
+	/**
+	 * @hibernate.property type="timestamp"
+	 */
+	public Date getRxTimestamp() {
+		return rxTimestamp;
+	}
+
+	public void setRxTimestamp(Date rxTimestamp) {
+		this.rxTimestamp = rxTimestamp;
+	}
+	
+	public String getDispRxTimestamp() {
+		return getRxTimestamp() != null ? DateUtils.formatDate(getRxTimestamp(), get_DATEFORMAT() + " " + get_TIMEFORMAT(), null, get_TIMEZONE()) : " ";
+	}
 
 }

@@ -104,6 +104,8 @@ public final class IncidentForm extends ValidatorForm {
 	private String revenueCode;
 	
 	private int tracingStatus;
+	
+	private Date rxTimestamp;
 
 	public int getTracingStatus() {
 		return tracingStatus;
@@ -1368,5 +1370,17 @@ public final class IncidentForm extends ValidatorForm {
 	}
 	public Date getLastupdated() {
 		return lastupdated;
+	}
+
+	public Date getRxTimestamp() {
+		return rxTimestamp;
+	}
+
+	public void setRxTimestamp(Date rxTimestamp) {
+		this.rxTimestamp = rxTimestamp;
+	}
+	
+	public String getDispRxTimestamp() {
+		return DateUtils.formatDate(getRxTimestamp(), get_DATEFORMAT() + " " + get_TIMEFORMAT(), null, get_TIMEZONE());
 	}
 }
