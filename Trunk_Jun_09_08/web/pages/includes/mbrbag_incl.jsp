@@ -313,29 +313,44 @@
 			%>
 			<tr id="bag_weight">
 			<% if (val){ %>
-				<td><bean:message key="colname.bag.weight.and.units" /><br>
+				<td <% if (theitem.getItemtype_ID() != 1 && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SPECIAL_CONDITIONS, a)) { %>colspan="3"<% } %>>
+					<bean:message key="colname.bag.weight.and.units" /><br>
 					<html:text name="theitem" property="bag_weight" size="8"
 						maxlength="10" styleClass="textfield" indexed="true" /> <html:select
 						name="theitem" property="bag_weight_unit" styleClass="dropdown"
 						indexed="true">
 						<html:option value="lbs">lbs</html:option>
 						<html:option value="kg">kg</html:option>
-					</html:select></td>
-				<%
-					}
-					if (theitem.getItemtype_ID() == 1) {
-				%>
-				<td colspan="2"><bean:message key="colname.bag.external.desc" /><br>
+					</html:select>
+				</td>					
+			<% }
+			
+			   if (report_type == 0 && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SPECIAL_CONDITIONS, a)) { %>
+				<td <% if (theitem.getItemtype_ID() != 1) { %>colspan="2"<% } %>>
+					<bean:message key="colname.special.conditions" />
+					<br>
+					<html:select name="theitem" property="specialCondition" styleClass="dropdown" indexed="true" >
+						<html:option value="0"><bean:message key="select.please_select" /></html:option> 
+						<html:option value="<%=String.valueOf(TracingConstants.SPECIAL_CONDITION_OVERWEIGHT) %>"><bean:message key="option.overweight" /></html:option> 
+						<html:option value="<%=String.valueOf(TracingConstants.SPECIAL_CONDITION_OVERSIZED) %>"><bean:message key="option.oversized" /></html:option> 
+						<html:option value="<%=String.valueOf(TracingConstants.SPECIAL_CONDITION_BOTH) %>"><bean:message key="option.both" /></html:option> 
+					</html:select>
+				</td>	   
+			<% } 
+			
+			   if (theitem.getItemtype_ID() == 1) {
+			%>
+				<td <% if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SPECIAL_CONDITIONS, a)) { %>colspan="2"<% } %>><bean:message key="colname.bag.external.desc" /><br>
 					<html:text name="theitem" property="externaldesc" maxlength="50"
-						size="75" styleClass="textfield" indexed="true" /></td>
-				<%
-					} else {
-				%>
-
+						size="75" styleClass="textfield" indexed="true" />
+				</td>
+			<%
+				} else {
+			%>
 				<td colspan="2"></td>
-				<%
-					}
-				%>
+			<%
+				}
+			%>
 			</tr>
 			<%
 				}

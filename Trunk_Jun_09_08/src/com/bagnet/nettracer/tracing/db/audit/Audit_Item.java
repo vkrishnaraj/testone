@@ -72,6 +72,8 @@ public class Audit_Item implements Serializable {
 	private String posId;
 	private String expediteTagNum;
 	
+	private int specialCondition;
+	
 	/**
 	 * @return Returns the bag_weight.
 	 * 
@@ -804,6 +806,30 @@ public class Audit_Item implements Serializable {
 
 	public void setExpediteTagNum(String expediteTagNum) {
 		this.expediteTagNum = expediteTagNum;
+	}
+
+	/**
+	 * @hibernate.property type="int"
+	 */
+	public int getSpecialCondition() {
+		return specialCondition;
+	}
+
+	public void setSpecialCondition(int specialCondition) {
+		this.specialCondition = specialCondition;
+	}
+	
+	public String getDispSpecialCondition() {
+		switch (getSpecialCondition()) {
+			case TracingConstants.SPECIAL_CONDITION_OVERWEIGHT:
+				return TracingConstants.SPECIAL_CONDITION_NAME_OVERWEIGHT;
+			case TracingConstants.SPECIAL_CONDITION_OVERSIZED:
+				return TracingConstants.SPECIAL_CONDITION_NAME_OVERSIZED;
+			case TracingConstants.SPECIAL_CONDITION_BOTH:
+				return TracingConstants.SPECIAL_CONDITION_NAME_BOTH;
+			default:
+				return "";
+		}
 	}
 	
 }

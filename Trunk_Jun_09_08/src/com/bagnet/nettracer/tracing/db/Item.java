@@ -88,6 +88,8 @@ public class Item implements Serializable {
 	private String posId;
 	private String expediteTagNum;
 	
+	private int specialCondition;
+	
 	/**
 	 * @return Returns the bag_weight;
 	 * 
@@ -1153,6 +1155,17 @@ public class Item implements Serializable {
 
 	public void setExpediteTagNum(String expediteTagNum) {
 		this.expediteTagNum = expediteTagNum;
+	}
+
+	/**
+	 * @hibernate.property type="int"
+	 */
+	public int getSpecialCondition() {
+		return specialCondition;
+	}
+
+	public void setSpecialCondition(int specialCondition) {
+		this.specialCondition = specialCondition;
 	}
 	
 }

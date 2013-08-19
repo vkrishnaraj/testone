@@ -747,6 +747,12 @@ function updatePagination() {
                     :
                     <bean:write name="theitem" property="manufacturer" />
                     <br>
+                    <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SPECIAL_CONDITIONS, a)) { %>
+                    	<bean:message key="colname.special.conditions" />
+                    	:
+                   		<bean:write name="theitem" property="dispSpecialCondition" />
+                    	<br>
+                    <% } %>
                     <bean:message key="colname.key_contents" />:
                     <br>
                     <logic:iterate id="inventories" name="theitem" property="inventorylist" type="com.bagnet.nettracer.tracing.db.audit.Audit_Item_Inventory">

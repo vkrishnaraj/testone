@@ -262,6 +262,7 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_RECEIVE_TIMESTAMP_COLLECT = "Receive_Timestamp_Collect";
 	public static final String SYSTEM_COMPONENT_NAME_RECEIVE_TIMESTAMP_DELETE = "Receive_Timestamp_Delete";
 	public static final String SYSTEM_COMPONENT_NAME_SECURE_REMARKS = "Secure_Remarks";
+	public static final String SYSTEM_COMPONENT_NAME_SPECIAL_CONDITIONS = "Special_Conditions";
 	
 	public static final String SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_STATION_ADMIN = "Issuance_Item_Station_Admin";
 	public static final String SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_GLOBAL_ADMIN = "Issuance_Item_Global_Admin";
@@ -1209,6 +1210,14 @@ public class TracingConstants {
 	public static final int ISSUANCE_ITEM_INVENTORY_STATUS_DISCARDED = 703;
 	
 	public static final String SET_RECEIVE_DATE = "setRxDate";
+	
+	public static final int SPECIAL_CONDITION_OVERWEIGHT = 1;
+	public static final int SPECIAL_CONDITION_OVERSIZED = 2;
+	public static final int SPECIAL_CONDITION_BOTH = 3;
+	
+	public static final String SPECIAL_CONDITION_NAME_OVERWEIGHT = "Overweight";
+	public static final String SPECIAL_CONDITION_NAME_OVERSIZED = "Oversized";
+	public static final String SPECIAL_CONDITION_NAME_BOTH = "Both";
 	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {
