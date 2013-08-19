@@ -588,6 +588,8 @@
 		<forward name="issuanceItemAdmin" path="issuanceItemAdmin" />
 		<forward name="auditIssuanceItemAdmin" path="auditIssuanceItemAdmin" />
 		<forward name="editIssuanceCategory" path="editIssuanceCategory" />
+
+		<forward name="setRxDate" path="setRxDate" />
 		
 	</global-forwards>
 

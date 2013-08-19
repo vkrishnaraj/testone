@@ -978,6 +978,8 @@
     </definition>
     <definition name="ajax_blank" path="/pages/ajax_divs/lf_blank.jsp">
     </definition>
+    <definition name="setRxDate" path="/pages/includes/set_rx_date.jsp">
+    </definition>
     
     <definition name="fraud_forum_search" extends="user_menu">
         <put name="center"   value="/pages/fraud_forum/forum_search.jsp"/>

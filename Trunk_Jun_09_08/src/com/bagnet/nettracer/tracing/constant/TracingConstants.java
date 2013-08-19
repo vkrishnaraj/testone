@@ -1208,6 +1208,8 @@ public class TracingConstants {
 	public static final int ISSUANCE_ITEM_INVENTORY_STATUS_ISSUED = 702;
 	public static final int ISSUANCE_ITEM_INVENTORY_STATUS_DISCARDED = 703;
 	
+	public static final String SET_RECEIVE_DATE = "setRxDate";
+	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {
 			return DB_DATEFORMAT_MSSQL;
