@@ -32,6 +32,7 @@ public class Audit_Remark implements Serializable {
 	private String _DATEFORMAT;
 	private String _TIMEFORMAT;
 	private TimeZone _TIMEZONE;
+	private boolean secure; 
 	
 	private Audit_Incident audit_incident;
 	
@@ -246,5 +247,22 @@ public class Audit_Remark implements Serializable {
 			ret = false;
 		}
 		return ret;
+	}
+	
+	/**
+	 * @return Returns the secure.
+	 * 
+	 * @hibernate.property type="boolean"
+	 */
+	public boolean isSecure() {
+		return secure;
+	}
+
+	/**
+	 * @param secure
+	 *          secure to set.
+	 */
+	public void setSecure(boolean secure) {
+		this.secure = secure;
 	}
 }

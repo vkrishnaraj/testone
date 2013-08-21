@@ -28,6 +28,7 @@ public class Audit_OHD_Remark implements Serializable {
 	private String createtime;
 	private String remarktext = "";
 	private int remarktype;
+	private boolean secure; 
 
 	private String _DATEFORMAT;
 	private String _TIMEFORMAT;
@@ -245,5 +246,21 @@ public class Audit_OHD_Remark implements Serializable {
 			ret = false;
 		}
 		return ret;
+	}
+	/**
+	 * @return Returns the secure.
+	 * 
+	 * @hibernate.property type="boolean"
+	 */
+	public boolean isSecure() {
+		return secure;
+	}
+
+	/**
+	 * @param secure
+	 *          secure to set.
+	 */
+	public void setSecure(boolean secure) {
+		this.secure = secure;
 	}
 }

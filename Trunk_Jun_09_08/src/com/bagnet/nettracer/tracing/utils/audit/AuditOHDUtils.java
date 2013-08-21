@@ -334,6 +334,7 @@ public class AuditOHDUtils {
 				aud_remark.setRemarktext(remark.getRemarktext());
 				aud_remark.setRemarktype(remark.getRemarktype());
 				aud_remark.setAudit_ohd(audit_ohd);
+				aud_remark.setSecure(remark.isSecure());
 				audit_remarks.add(aud_remark);
 			}
 			audit_ohd.setRemarks(audit_remarks);

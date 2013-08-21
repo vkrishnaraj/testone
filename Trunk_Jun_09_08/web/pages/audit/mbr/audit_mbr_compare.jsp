@@ -835,6 +835,7 @@ function updatePagination() {
                 <logic:iterate indexId="i" id="remark" name="audit_incident" property="remark_list" type="com.bagnet.nettracer.tracing.db.audit.Audit_Remark">
                   <logic:equal name="remark" property="remarktype" value="<%= "" + TracingConstants.REMARK_REGULAR %>">
                     <logic:notEqual name="remark" property="remarktext" value="">
+                  	<% if(!remark.isSecure() ||  (remark.isSecure() && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SECURE_REMARKS, a))){ %>
                       <bean:message key="colname.agent" />
                       :
                       <bean:write name="remark" property="agentUsername" />
@@ -842,6 +843,7 @@ function updatePagination() {
                       <bean:write name="remark" property="readonlyremarktext" filter="false"/>
                       <br>
                       <br>
+                  	<% } %>
                     </logic:notEqual>
                   </logic:equal>
                 </logic:iterate>
