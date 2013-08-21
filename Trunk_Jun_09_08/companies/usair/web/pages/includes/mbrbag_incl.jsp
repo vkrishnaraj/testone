@@ -14,6 +14,7 @@
 	Agent a = (Agent) session.getAttribute("user");
 	boolean collectPosId = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_COLLECT_POS_ID, a);
 	boolean collectExpTagNum = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EXPEDITE_TAG_NUM_COLLECT, a);
+	boolean collectAddItemInfo = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADDITIONAL_ITEM_INFORMATION_COLLECT, a);
 	String cssFormClass;
 
 	cssFormClass = "form2_dam";
@@ -363,62 +364,111 @@
 			%>
 			<!-- provide space for bag weight feature - end -->
 			<tr>
-				<td colspan="3"><bean:message key="colname.key_contents" /> <a
-					name='<%="inventory" + i%>'></a> <bean:define id="inventories"
-						name="theitem" property="inventorylist" /> <logic:iterate
-						id="inventorylist" indexId="j" name="inventories"
-						type="com.bagnet.nettracer.tracing.db.Item_Inventory">
-						<table class="<%=cssFormClass%>" cellspacing="0" cellpadding="0"
-							width="100%">
-							<tr
-								id="<%=TracingConstants.JSP_DELETE_INVENTORY%>_<%=i%>_<%=j%>">
-								<td><bean:message key="colname.category.req" /><br> 
-								<%if (UserPermissions.hasIncidentSavePermission(a, theitem.getIncident())	|| (val2 && inventorylist.getInventory_ID() == 0)) { %>
-									<html:select property='<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].categorytype_ID"%>'	styleClass="dropdown">
-										<html:option value="">
-											<bean:message key="select.please_select" />
-										</html:option>
-										<html:options collection="categorylist"
-											property="OHD_CategoryType_ID" labelProperty="description" />
-									</html:select> 
-								<% 	} else { %> <html:select disabled="true" 
-										property='<%="inventorylist["
-								+ (i.intValue() * 20 + j.intValue())
-								+ "].categorytype_ID"%>'
-										styleClass="dropdown">
-										<html:option value="">
-											<bean:message key="select.please_select" />
-										</html:option>
-										<html:options collection="categorylist"
-											property="OHD_CategoryType_ID" labelProperty="description" />
-									</html:select>  <%} %> </td>
-								<td>
-									<% if (report_type == 1) {%>
-									<bean:message key="colname.ld.description" /> 
-									<%} else if (report_type == 2) {%>
-									<bean:message key="colname.pil.description" /> 
-									<%	} else { %> 
-									<bean:message key="colname.dam.description" /> 
-									<%	} %> 
-									<br/> 
-									<% if (UserPermissions.hasIncidentSavePermission(a,theitem.getIncident()) || (val2 && inventorylist.getInventory_ID() == 0)) { %>
-									<html:text property="<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].description"%>" size="80" maxlength="255" styleClass="textfield" />
-									<%	} else { %>
-									<html:text disabled="true" property="<%="inventorylist[" + (i.intValue() * 20 + j.intValue()) + "].description"%>" size="80" maxlength="255" styleClass="textfield" /> 
-									<% } %>
-								</td>
-								<td align="center">&nbsp;<br> <%
-									 	String check = "true";
-									 			if (report_type != 2) {
-									 				check = "checkDeleteCount(" + i + ", " + report_type
-									 						+ ")";
-									 			}
-									 if (UserPermissions.hasIncidentSavePermission(a, theitem.getIncident())) { %>
-										<input type="button" name="deleteinventory_<%=i%>" value="<bean:message key="button.delete_content"/>" onclick="if (<%=check%>) {hideThisElement('<%=TracingConstants.JSP_DELETE_INVENTORY%>_<%=i%>_<%=j%>', '<bean:message key="colname.lc.content" />', 0);}" id="button"> 
-									<%	} %>
-								</td>
-							</tr>
-						</table>
+				<td colspan="3"><bean:message key="colname.key_contents" /> 
+					<a name='<%="inventory" + i%>'></a> 
+					<bean:define id="inventories" name="theitem" property="inventorylist" /> 
+					<logic:iterate id="inventorylist" indexId="j" name="inventories" type="com.bagnet.nettracer.tracing.db.Item_Inventory"> 
+							            <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" width="100%" id="<%=TracingConstants.JSP_DELETE_INVENTORY %>_<%= i %>_<%= j %>">
+	            <% if (report_type == 0 && collectAddItemInfo) { %>
+	            	<tr>
+	            		<td>
+		            		<bean:message key="colname.entered.date" />
+		            		<br>
+		            		<html:text property='<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].dispEnteredDate"%>' disabled="true" styleClass="textfield" />
+	            		</td> 
+	            		<td>
+		            		<bean:message key="colname.purchase.date" />
+		            		<br>
+		            		<html:text property='<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].dispPurchaseDate"%>' styleClass="textfield" />&nbsp;
+		            		<img
+								src="deployment/main/images/calendar/calendar_icon.gif"
+								id="itcalendar<%='_'+i+'_'+j %>" name="itcalendar<%='_'+i+'_'+j %>" height="15"
+								width="20" border="0" onmouseover="this.style.cursor='hand'"
+								onClick="cal1xx.select2(document.incidentForm, '<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].dispPurchaseDate"%>','itcalendar<%='_'+i+'_'+j %>','<%= a.getDateformat().getFormat() %>'); return false;">
+	            		</td>
+	            		<td>
+			                <bean:message key="colname.cost" />
+			                <br>
+			                <html:text property='<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].dispInvItemCost"%>' size="13" maxlength="12" styleClass="textfield" />
+		                </td>
+		                <td>
+			                <bean:message key="colname.currency" />
+			                <br>
+			                <html:select property='<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].invItemCurrency"%>' styleClass="dropdown" >
+			                  <html:options collection="currencylist" property="currency_ID" labelProperty="id_desc" />
+			                </html:select>
+		                </td>
+		                <td>
+			              	<bean:message key="colname.item.status" />
+			              	<br>
+			              	<html:select name="theitem" property='<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].itemStatusId"%>' styleClass="dropdown" >
+			              		<html:option value="0">
+									<bean:message key="select.please_select" />
+								</html:option>
+			              		<html:options collection="damagedItemStatusList" property="status_ID" labelProperty="description" />
+			              	</html:select>
+			            </td> 
+			            <td align="center" rowspan="2" style="vertical-align:middle;">&nbsp;<br>
+	                      <% 
+	                      String check = "true";
+	                      if (report_type !=2) {
+	                        check = "checkDeleteCount(" + i + ", " + report_type + ")";
+	                      }
+	                      if (UserPermissions.hasIncidentSavePermission(a, theitem.getIncident())) { %>
+							<input type="button" name="deleteinventory_<%=i%>" value="<bean:message key="button.delete_content"/>" onclick="if (<%=check%>) {hideThisElement('<%=TracingConstants.JSP_DELETE_INVENTORY%>_<%=i%>_<%=j%>', '<bean:message key="colname.lc.content" />', 0);}" id="button"> 
+						  <%	} %>
+		                </td>
+	            	</tr>
+            	<% } %>
+	              <tr>
+	                <td>
+	                  <bean:message key="colname.category" /><br>
+	                  <%	if (UserPermissions.hasIncidentSavePermission(a, theitem.getIncident())	|| (canAddContents && inventorylist.getInventory_ID() == 0)) { %>
+							<html:select property='<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].categorytype_ID"%>'	styleClass="dropdown">
+								<html:option value="">
+									<bean:message key="select.please_select" />
+								</html:option>
+								<html:options collection="categorylist"
+									property="OHD_CategoryType_ID" labelProperty="description" />
+							</html:select> 
+						<% 	} else { %> 
+							<html:select property='<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].categorytype_ID"%>'	disabled="true" styleClass="dropdown">
+								<html:option value="">
+									<bean:message key="select.please_select" />
+								</html:option>
+								<html:options collection="categorylist"
+									property="OHD_CategoryType_ID" labelProperty="description" />
+							</html:select> <%} %>
+	                </td>
+	                <td colspan="4">
+	                  <% if (report_type == 1) { %>
+	                  <bean:message key="colname.ld.description" />
+	                  <% } else if (report_type == 2) { %>
+	                  <bean:message key="colname.pil.description" />
+	                  <% } else {%>
+	                  <bean:message key="colname.dam.description" />
+	                  <% }%>
+	                  <br> 
+						<% if (UserPermissions.hasIncidentSavePermission(a,theitem.getIncident()) || (canAddContents && inventorylist.getInventory_ID() == 0)) { %>
+							<html:text property="<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].description"%>" size="80" maxlength="255" styleClass="textfield" /> 
+						<%	} else { %>
+							<html:text disabled="true" property="<%="inventorylist[" + (i.intValue() * 20 + j.intValue()) + "].description"%>" size="80" maxlength="255" styleClass="textfield" /> 
+						<% } %>
+	                </td>
+	                <% if (!collectAddItemInfo) { %>
+		            <td align="center">&nbsp;<br>
+	                    <% 
+	                    String check = "true";
+	                    if (report_type !=2) {
+	                      check = "checkDeleteCount(" + i + ", " + report_type + ")";
+	                    }
+	                    if (UserPermissions.hasIncidentSavePermission(a, theitem.getIncident())) { %>
+						  <input type="button" name="deleteinventory_<%=i%>" value="<bean:message key="button.delete_content"/>" onclick="if (<%=check%>) {hideThisElement('<%=TracingConstants.JSP_DELETE_INVENTORY%>_<%=i%>_<%=j%>', '<bean:message key="colname.lc.content" />', 0);}" id="button"> 
+						<%	} %>
+	                </td>
+	                <% } %>
+	              </tr>
+	            </table>
 
 					</logic:iterate>
 					<center>

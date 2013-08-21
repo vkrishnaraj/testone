@@ -8,6 +8,7 @@ package com.bagnet.nettracer.tracing.utils;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -90,6 +91,10 @@ public class MBRActionUtils {
 					for (int i=0; i<numberToAdd; ++i) {
 						Item_Inventory ii = new Item_Inventory();
 						ii.setItem(theform.getItem(fileindex, -1));
+						ii.set_DATEFORMAT(user.getDateformat().getFormat());
+						ii.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+						ii.setEnteredDate(DateUtils.convertToGMTDate(new Date()));
+						ii.setInvItemCurrency(user.getDefaultcurrency());
 						theform.getItem(fileindex, -1).getInventorylist().add(ii);
 	
 					}

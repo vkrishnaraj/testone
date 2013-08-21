@@ -62,6 +62,8 @@ function updatePagination() {
 	boolean hasCollectPassportPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSPORT_COLLECT, a);
  	boolean hasViewEditPassportPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSPORT_VIEW_EDIT, a);
  	
+ 	boolean collectAddItemInfo = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADDITIONAL_ITEM_INFORMATION_COLLECT, a);
+ 	
 %>
 <html:form action="audit_mbr.do" method="post">
   <tr>
@@ -756,7 +758,15 @@ function updatePagination() {
                     <bean:message key="colname.key_contents" />:
                     <br>
                     <logic:iterate id="inventories" name="theitem" property="inventorylist" type="com.bagnet.nettracer.tracing.db.audit.Audit_Item_Inventory">
-                    &nbsp;&nbsp;<bean:write name="inventories"  property="description" /><br>
+                    		&nbsp;&nbsp;&nbsp;&nbsp;<bean:message key="colname.item.description" />:&nbsp;<bean:write name="inventories"  property="description" /><br>
+                    	<% if (collectAddItemInfo) { %>
+		                   	&nbsp;&nbsp;&nbsp;&nbsp;<bean:message key="colname.entered.date" />:&nbsp;<bean:write name="inventories"  property="dispEnteredDate" /><br>
+		                   	&nbsp;&nbsp;&nbsp;&nbsp;<bean:message key="colname.purchase.date" />:&nbsp;<bean:write name="inventories"  property="dispPurchaseDate" /><br>
+		                   	&nbsp;&nbsp;&nbsp;&nbsp;<bean:message key="colname.cost" />:&nbsp;<bean:write name="inventories"  property="dispInvItemCost" /><br>
+		                   	&nbsp;&nbsp;&nbsp;&nbsp;<bean:message key="colname.currency" />:&nbsp;<bean:write name="inventories"  property="dispInvItemCurrency" /><br>
+	                   		&nbsp;&nbsp;&nbsp;&nbsp;<bean:message key="colname.item.status" />:&nbsp;<bean:write name="inventories"  property="dispItemStatus" /><br>
+	                   		<br>
+                    	<% } %>
                     </logic:iterate>
                     <br>
                     <bean:message key="colname.bag_status" />

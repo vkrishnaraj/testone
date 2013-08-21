@@ -345,7 +345,7 @@
     }
     else if (currentElementName.indexOf("expedite") != -1)
     {
-      if (currentElement.value.length < 1)
+      if (currentElement.value.length < 1 && currentElementName.indexOf("expediteTagNum") == -1)
       {
          alert("<%= (String)bundle.getString("colname.expedite_number") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
          currentElement.focus();

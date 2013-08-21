@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
@@ -713,8 +714,12 @@ public class WSCoreIncidentUtil {
 							wii = wi.getInventoriesArray(j);
 							iinv = new Item_Inventory();
 							iinv.setItem(item);
+							iinv.set_DATEFORMAT(agent.getDateformat().getFormat());
+							iinv.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(agent.getDefaulttimezone()).getTimezone()));
+							iinv.setEnteredDate(DateUtils.convertToGMTDate(new Date()));
 							iinv.setCategorytype_ID(WSCoreUtil.getContentCategory(wii.getCategory()));
 							iinv.setDescription(wii.getDescription());
+							iinv.setInvItemCurrency(agent.getDefaultcurrency());
 							ii_set.add(iinv);
 						}
 						item.setInventory(ii_set);

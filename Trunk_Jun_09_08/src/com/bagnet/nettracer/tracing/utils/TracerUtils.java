@@ -542,6 +542,11 @@ public class TracerUtils {
 				session.getAttribute("spokenLanguageList") != null ?
 				session.getAttribute("spokenLanguageList") :
 					getSpokenLanguageList(locale));
+		
+		session.setAttribute("damagedItemStatusList", 
+				session.getAttribute("damagedItemStatusList") != null ?
+				session.getAttribute("damagedItemStatusList") :
+					getStatusList(TracingConstants.TABLE_DAMAGED_ITEM_STATUS, user.getCurrentlocale()));
 
 	}
 
@@ -562,7 +567,7 @@ public class TracerUtils {
 		}
 		return result;
 	}
-	
+
 	private static List<LabelValueBean> getPaymentList(String locale) {
 		ArrayList<LabelValueBean> result = new ArrayList<LabelValueBean>();
 		result.add(new LabelValueBean(messages.getMessage(new Locale(locale), "payment.draft"), "DRAFT"));

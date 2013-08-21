@@ -32,6 +32,7 @@ import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim;
+import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 
@@ -505,6 +506,10 @@ public final class IncidentForm extends ValidatorForm {
 			for(int i = 0; i < inventoryCount; i++) {
 				Item_Inventory ii = new Item_Inventory();
 				ii.setItem(item);
+				ii.set_DATEFORMAT(_DATEFORMAT);
+				ii.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(agent.getDefaulttimezone()).getTimezone()));
+				ii.setEnteredDate(DateUtils.convertToGMTDate(new Date()));
+				ii.setInvItemCurrency(agent.getDefaultcurrency());
 				item.getInventorylist().add(ii);
 			}
 			item.setReplacementBagIssued(-1);

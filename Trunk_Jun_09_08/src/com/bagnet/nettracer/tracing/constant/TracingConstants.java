@@ -263,6 +263,7 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_RECEIVE_TIMESTAMP_DELETE = "Receive_Timestamp_Delete";
 	public static final String SYSTEM_COMPONENT_NAME_SECURE_REMARKS = "Secure_Remarks";
 	public static final String SYSTEM_COMPONENT_NAME_SPECIAL_CONDITIONS = "Special_Conditions";
+	public static final String SYSTEM_COMPONENT_NAME_ADDITIONAL_ITEM_INFORMATION_COLLECT = "Additional_Item_Information_Collect";
 	
 	public static final String SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_STATION_ADMIN = "Issuance_Item_Station_Admin";
 	public static final String SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_GLOBAL_ADMIN = "Issuance_Item_Global_Admin";
@@ -286,6 +287,7 @@ public class TracingConstants {
 	public final static int TABLE_LF_DISPOSITION = 17;
 	public final static int TABLE_LF_TRACE_STATUS = 18;
 	public final static int TABLE_ISSUANCE_ITEM_INVENTORY_STATUS = 19;
+	public final static int TABLE_DAMAGED_ITEM_STATUS = 20;
 	
 	public final static int PRIORITY_LOW = 1;
 	public final static int PRIORITY_MEDIUM = 2;
@@ -1218,6 +1220,10 @@ public class TracingConstants {
 	public static final String SPECIAL_CONDITION_NAME_OVERWEIGHT = "Overweight";
 	public static final String SPECIAL_CONDITION_NAME_OVERSIZED = "Oversized";
 	public static final String SPECIAL_CONDITION_NAME_BOTH = "Both";
+	
+	public static final int DAMAGED_ITEM_STATUS_RETURNED = 800;
+	public static final int DAMAGED_ITEM_STATUS_DAMAGED = 801;
+	public static final int DAMAGED_ITEM_STATUS_MISSING = 802;
 	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {

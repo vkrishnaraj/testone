@@ -7,8 +7,15 @@
 package com.bagnet.nettracer.tracing.db.audit;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.TimeZone;
 
 import com.bagnet.nettracer.tracing.bmo.CategoryBMO;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.utils.CurrencyUtils;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
+import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.audit.AuditOHDUtils;
 
 /**
@@ -24,6 +31,15 @@ public class Audit_Item_Inventory implements Serializable {
 	private String description = "";
 	
 	private Audit_Item audit_item;
+	
+	private String _DATEFORMAT; // current login agent's date format
+	private TimeZone _TIMEZONE;
+	
+	private Date enteredDate;
+	private Date purchaseDate;
+	private double invItemCost;
+	private String invItemCurrency;
+	private int itemStatusId;
 
 	public String getCategory() {
 		String category = null;
@@ -34,6 +50,22 @@ public class Audit_Item_Inventory implements Serializable {
 		if (category == null) category = "";
 		return category;
 
+	}
+
+	public String get_DATEFORMAT() {
+		return _DATEFORMAT;
+	}
+
+	public void set_DATEFORMAT(String _DATEFORMAT) {
+		this._DATEFORMAT = _DATEFORMAT;
+	}
+
+	public TimeZone get_TIMEZONE() {
+		return _TIMEZONE;
+	}
+
+	public void set_TIMEZONE(TimeZone _TIMEZONE) {
+		this._TIMEZONE = _TIMEZONE;
 	}
 
 	/**
@@ -121,6 +153,84 @@ public class Audit_Item_Inventory implements Serializable {
 	 */
 	public void setInventory_ID(long inventory_ID) {
 		this.inventory_ID = inventory_ID;
+	}
+
+	/**
+	 * @hibernate.property type="date"
+	 */
+	public Date getEnteredDate() {
+		return enteredDate;
+	}
+
+	public void setEnteredDate(Date enteredDate) {
+		this.enteredDate = enteredDate;
+	}
+	
+	public String getDispEnteredDate() {
+		return DateUtils.formatDate(getEnteredDate(), _DATEFORMAT, null, _TIMEZONE);
+	}
+
+	/**
+	 * @hibernate.property type="date"
+	 */
+	public Date getPurchaseDate() {
+		return purchaseDate;
+	}
+
+	public void setPurchaseDate(Date purchaseDate) {
+		this.purchaseDate = purchaseDate;
+	}
+	
+	public String getDispPurchaseDate() {
+		return DateUtils.formatDate(getPurchaseDate(), _DATEFORMAT, null, _TIMEZONE);
+	}
+	
+	/**
+	 * @hibernate.property type="double"
+	 */
+	public double getInvItemCost() {
+		return invItemCost;
+	}
+
+	public void setInvItemCost(double invItemCost) {
+		this.invItemCost = invItemCost;
+	}
+	
+	public String getDispInvItemCost() {
+		if (getInvItemCost() != 0)
+			return TracingConstants.DECIMALFORMAT.format(getInvItemCost());
+		else
+			return "";
+	}
+	
+	/**
+	 * @hibernate.property type="string" length="3"
+	 */
+	public String getInvItemCurrency() {
+		return invItemCurrency;
+	}
+
+	public void setInvItemCurrency(String invItemCurrency) {
+		this.invItemCurrency = invItemCurrency;
+	}
+	
+	public String getDispInvItemCurrency() {
+		return CurrencyUtils.getCurrency(getInvItemCurrency()).getDescription();
+	}
+	
+	/**
+	 * @hibernate.property
+	 */
+	public int getItemStatusId() {
+		return itemStatusId;
+	}
+
+	public void setItemStatusId(int itemStatusId) {
+		this.itemStatusId = itemStatusId;
+	}
+	
+	public String getDispItemStatus() {
+		return TracerUtils.getText(Status.getKey(getItemStatusId()), (String) null);
 	}
 
 	public String toString() {

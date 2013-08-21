@@ -10,13 +10,13 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
 import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
-import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -32,14 +32,13 @@ import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile;
-import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
+import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
-import com.bagnet.nettracer.ws.core.WSCoreUtil;
 
 public class WTIncident {
 	private static final Logger logger = Logger.getLogger(WTIncident.class);
@@ -396,6 +395,10 @@ public class WTIncident {
 					for(int j = 0; j < cstrs.length; j++){
 						// new content, content 1
 						ii = new Item_Inventory();
+						ii.set_DATEFORMAT(agent.getDateformat().getFormat());
+						ii.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(agent.getDefaulttimezone()).getTimezone()));
+						ii.setEnteredDate(DateUtils.convertToGMTDate(new Date()));
+						ii.setInvItemCurrency(agent.getDefaultcurrency());
 						cstr = cstrs[j];
 						// first get category
 						if (cstr != null) {

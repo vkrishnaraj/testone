@@ -1379,6 +1379,10 @@ public class BagService {
 			item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN));
 			Item_Inventory ii = new Item_Inventory();
 			ii.setItem(item);
+			ii.set_DATEFORMAT(user.getDateformat().getFormat());
+			ii.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+			ii.setEnteredDate(DateUtils.convertToGMTDate(new Date()));
+			ii.setInvItemCurrency(user.getDefaultcurrency());
 			item.getInventorylist().add(ii);
 		}
 		else {
@@ -1400,7 +1404,16 @@ public class BagService {
 					if(item.getInventorylist().size() == 0) {
 						Item_Inventory ii = new Item_Inventory();
 						ii.setItem(item);
+						ii.set_DATEFORMAT(user.getDateformat().getFormat());
+						ii.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
 						item.getInventorylist().add(ii);
+					} else {
+						Iterator<?> itemIterator = item.getInventorylist().iterator();
+						while(itemIterator.hasNext()) {
+							Item_Inventory theItem = (Item_Inventory) itemIterator.next();
+							theItem.set_DATEFORMAT(user.getDateformat().getFormat());
+							theItem.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+						}
 					}
 				}
 			}
@@ -1582,6 +1595,10 @@ public class BagService {
 				item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN));
 				Item_Inventory ii = new Item_Inventory();
 				ii.setItem(item);
+				ii.set_DATEFORMAT(user.getDateformat().getFormat());
+				ii.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+				ii.setEnteredDate(DateUtils.convertToGMTDate(new Date()));
+				ii.setInvItemCurrency(user.getDefaultcurrency());
 				item.getInventorylist().add(ii);
 			}
 			else {
