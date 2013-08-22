@@ -12,8 +12,6 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	private String EXPEDITE_TAG_NUM_COLLECT = "639";
 	private String RX_TIMESTAMP_COLLECT = "640";
 	private String RX_TIMESTAMP_DELETE = "641";
-	private String COURTESY_REASON_COLLECT = "648";
-	
 	
 	@Test
 	public void testCreateDamagedIncident() {
@@ -226,7 +224,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	
 	@Test
 	public void testCourtesyReasonDisabled() {
-		verifyTrue(setPermissions(new String[] { COURTESY_REASON_COLLECT }, new boolean[] { false }));
+		verifyTrue(setPermissions(new String[] { WN_SeleniumTest.COURTESY_REASON_COLLECT }, new boolean[] { false }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
 		verifyFalse(selenium.isElementPresent("id=courtesyReasonId"));
 		verifyFalse(selenium.isElementPresent("id=courtesyDescription"));
@@ -251,7 +249,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	
 	@Test
 	public void testCourtesyReasonEnabled() {
-		verifyTrue(setPermissions(new String[] { COURTESY_REASON_COLLECT }, new boolean[] { true }));
+		verifyTrue(setPermissions(new String[] { WN_SeleniumTest.COURTESY_REASON_COLLECT }, new boolean[] { true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
 		verifyTrue(selenium.isElementPresent("id=courtesyReasonId"));
 		assertEquals("Please Select Other Outside 4-Hour Claim Check on Another Carrier No Claim Check Conditional Acceptance", selenium.getText("id=courtesyReasonId"));

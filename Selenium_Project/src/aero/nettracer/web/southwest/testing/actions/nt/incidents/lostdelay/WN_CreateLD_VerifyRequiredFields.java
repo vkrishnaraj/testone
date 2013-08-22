@@ -522,6 +522,14 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	}
 
 	@Test
+	public void testCourtesyReasonDropdownValues() {
+		verifyTrue(setPermissions(new String[] { WN_SeleniumTest.COURTESY_REASON_COLLECT }, new boolean[] { true }));
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
+		verifyEquals("Please Select Other Outside 4-Hour Claim Check on Another Carrier No Claim Check Voluntary Separation Late Check", selenium.getText("id=courtesyReasonId"));
+		goToTaskManager();
+	}
+
+	@Test
 	public void testSecureRemarksDisabled() {
 		verifyTrue(setPermissions(new String[] { "335" }, new boolean[] { false }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
@@ -561,6 +569,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		verifyTrue(setPermissions(new String[] { "335" }, new boolean[] { false }));
 		goToTaskManager();
 	}
+	
 	
 	private void typeString(String locator, String string) {
 		char[] chars = string.toCharArray();

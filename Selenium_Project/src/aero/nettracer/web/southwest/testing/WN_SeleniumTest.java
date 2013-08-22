@@ -13,6 +13,8 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 	protected static final String INCIDENT_TYPE_MISSING = "Missing Articles";
 	protected static final String INCIDENT_TYPE_DAMAGED = "Damaged";
 	
+	protected static final String COURTESY_REASON_COLLECT = "648";
+	
 	protected boolean navigateToPermissionsPage() {
 		boolean success = false;
 		selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
