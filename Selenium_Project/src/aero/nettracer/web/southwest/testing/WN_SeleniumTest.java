@@ -76,7 +76,16 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 					waitForPageToLoadImproved();
 					if (checkNoErrorPage()) {
 						checkCopyrightAndQuestionMarks();
-						selenium.check("//input[@name='audit_id']");
+						int highestAuditItemIndex = 0;
+						for (int i = 1;;++i) {
+							if (selenium.isElementPresent("xpath=(//input[@name='audit_id'])[" + i + "]")) {
+								continue;
+							} else {
+								highestAuditItemIndex = i - 1;
+								break;
+							}
+						}
+						selenium.check(highestAuditItemIndex == 0 ? "xpath=(//input[@name='audit_id'])" : "xpath=(//input[@name='audit_id'])[" + highestAuditItemIndex + "]");
 						selenium.click("xpath=(//input[@id='button'])[3]");
 						waitForPageToLoadImproved();
 						if (checkNoErrorPage()) {

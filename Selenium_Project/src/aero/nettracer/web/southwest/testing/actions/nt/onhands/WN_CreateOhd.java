@@ -152,6 +152,7 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 
 	@Test
 	public void testSecureRemarksDisabled() {
+		verifyTrue(setSecureRemarksPermission(false));
 		verifyTrue(navigateToOnhand());
 		selenium.click("name=addremark");
 		waitForPageToLoadImproved();

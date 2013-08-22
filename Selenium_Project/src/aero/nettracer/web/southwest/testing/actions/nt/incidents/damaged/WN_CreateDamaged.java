@@ -12,11 +12,24 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	private String EXPEDITE_TAG_NUM_COLLECT = "639";
 	private String RX_TIMESTAMP_COLLECT = "640";
 	private String RX_TIMESTAMP_DELETE = "641";
+	private String COURTESY_REASON_COLLECT = "648";
 	
 	
 	@Test
 	public void testCreateDamagedIncident() {
-		verifyTrue(setPermissions(new String[] { EXPEDITE_TAG_NUM_COLLECT, RX_TIMESTAMP_COLLECT, RX_TIMESTAMP_DELETE }, new boolean[] { true, true, true }));
+		String[] permissions = new String[] {
+											  EXPEDITE_TAG_NUM_COLLECT, 
+											  RX_TIMESTAMP_COLLECT, 
+											  RX_TIMESTAMP_DELETE
+										    };
+		
+		boolean[] values = new boolean[] { 
+											true, 
+											true,
+											true
+										 };
+		
+		verifyTrue(setPermissions(permissions, values));
 		selenium.click("//a[@id='menucol_2.1']");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
@@ -211,4 +224,81 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 		goToTaskManager();
 	}
 	
+	@Test
+	public void testCourtesyReasonDisabled() {
+		verifyTrue(setPermissions(new String[] { COURTESY_REASON_COLLECT }, new boolean[] { false }));
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
+		verifyFalse(selenium.isElementPresent("id=courtesyReasonId"));
+		verifyFalse(selenium.isElementPresent("id=courtesyDescription"));
+		selenium.select("courtesyreport", "label=yes");
+		selenium.click("saveButton");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			verifyTrue(selenium.isTextPresent("Damaged Baggage Report has been modified."));
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to save the damaged incident in testCourtesyReasonDisabled. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+			verifyTrue(false);
+		}
+	}
+	
+	@Test
+	public void testCourtesyReasonAuditTrailDisabled() {
+		verifyTrue(navigateToIncidentAuditTrail());
+		verifyFalse(selenium.isTextPresent("Courtesy Reason :"));
+		verifyFalse(selenium.isTextPresent("Courtesy Reason Description :"));
+		goToTaskManager();
+	}
+	
+	@Test
+	public void testCourtesyReasonEnabled() {
+		verifyTrue(setPermissions(new String[] { COURTESY_REASON_COLLECT }, new boolean[] { true }));
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
+		verifyTrue(selenium.isElementPresent("id=courtesyReasonId"));
+		assertEquals("Please Select Other Outside 4-Hour Claim Check on Another Carrier No Claim Check Conditional Acceptance", selenium.getText("id=courtesyReasonId"));
+		verifyTrue(selenium.isElementPresent("id=courtesyDescription"));
+		selenium.select("courtesyreport", "label=yes");
+		selenium.select("courtesyReasonId", "label=Please Select");
+		selenium.click("saveButton");
+		assertEquals("Courtesy Reason is required.", selenium.getAlert());
+		selenium.select("id=courtesyReasonId", "label=Other");
+		selenium.click("name=saveButton");
+		assertEquals("Courtesy Reason Description is required.", selenium.getAlert());
+		selenium.type("id=courtesyDescription", "test");
+		selenium.click("name=saveButton");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			checkCopyrightAndQuestionMarks();
+			selenium.click("link=" + Settings.INCIDENT_ID_WN);
+			waitForPageToLoadImproved();
+			if (checkNoErrorPage()) {
+				checkCopyrightAndQuestionMarks();
+				selenium.type("id=courtesyDescription", "");
+				selenium.select("id=courtesyReasonId", "label=Outside 4-Hour");
+				selenium.click("name=saveButton");
+				waitForPageToLoadImproved();
+				if (checkNoErrorPage()) {
+					checkCopyrightAndQuestionMarks();
+					verifyTrue(selenium.isTextPresent("Damaged Baggage Report has been modified."));
+				} else {
+					System.out.println("!!!!!!!!!!!!!!! - Failed to save the damaged incident in testCourtesyReasonEnabled. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+					verifyTrue(false);
+				}
+			} else {
+				System.out.println("!!!!!!!!!!!!!!! - Failed to load the damaged incident in testCourtesyReasonEnabled. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+				verifyTrue(false);
+			}
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to save the damaged incident in testCourtesyReasonEnabled. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+			verifyTrue(false);
+		}
+		goToTaskManager();
+	}
+	
+	@Test
+	public void testCourtesyReasonAuditTrailEnabled() {
+		verifyTrue(navigateToIncidentAuditTrail());
+		verifyTrue(selenium.isTextPresent("Courtesy Reason : Outside 4-Hour"));
+		verifyTrue(selenium.isTextPresent("Courtesy Reason Description :"));
+		goToTaskManager();
+	}
 }
