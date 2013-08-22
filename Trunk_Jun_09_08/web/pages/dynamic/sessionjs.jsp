@@ -651,7 +651,7 @@
     else if (currentElementName.indexOf("courtesyreport") != -1) {
     	var courtesyReason = document.getElementById("courtesyReasonId");
     	if (courtesyReason) { 
-    		if (courtesyReason.options[courtesyReason.selectedIndex].value == 0) {
+    		if (courtesyReason.options[courtesyReason.selectedIndex].value == 1) {
 		        alert("<%= (String)bundle.getString("colname.courtesy.reason") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
 		        courtesyReason.focus();
 		        return false;
