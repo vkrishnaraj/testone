@@ -993,7 +993,7 @@
 				<td>
 					<bean:message key="colname.courtesy.reason" />
 					<br>
-					<html:select property="courtesyReasonId" styleClass="dropdown">
+					<html:select property="courtesyReasonId" styleId="courtesyReasonId" styleClass="dropdown">
 						<html:option value="0">
 							<bean:message key="select.please_select" />
 						</html:option>
