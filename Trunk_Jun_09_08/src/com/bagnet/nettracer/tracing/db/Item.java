@@ -87,8 +87,10 @@ public class Item implements Serializable {
 	
 	private String posId;
 	private String expediteTagNum;
-	
+
 	private int specialCondition;
+	private String other;
+	private boolean noAddFees;
 	
 	/**
 	 * @return Returns the bag_weight;
@@ -1166,6 +1168,28 @@ public class Item implements Serializable {
 
 	public void setSpecialCondition(int specialCondition) {
 		this.specialCondition = specialCondition;
+	}
+
+	/**
+	 * @hibernate.property type="string" length="50"
+	 */
+	public String getOther() {
+		return other;
+	}
+
+	public void setOther(String other) {
+		this.other = other;
+	}
+
+	/**
+	 * @hibernate.property type="boolean"
+	 */
+	public boolean isNoAddFees() {
+		return noAddFees;
+	}
+
+	public void setNoAddFees(boolean noAddFees) {
+		this.noAddFees = noAddFees;
 	}
 	
 }

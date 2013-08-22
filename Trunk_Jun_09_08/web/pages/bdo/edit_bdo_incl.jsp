@@ -6,10 +6,13 @@
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.DeliverCompany" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.DeliveryIntegrationType" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%@page import="com.bagnet.nettracer.reporting.ReportingConstants"%>
 <%@page import="com.bagnet.nettracer.tracing.forms.BDOForm"%>
+<%@page import="com.bagnet.nettracer.tracing.utils.BDOUtils"%>
 <%@page import="com.bagnet.nettracer.tracing.web.StatusListDisp" %>
 
 
@@ -17,14 +20,21 @@
 <%@page import="com.bagnet.nettracer.tracing.utils.StringTemplateProcessor"%>
 <%@page import="org.apache.struts.util.MessageResources"%>
 <%@page import="java.util.Locale"%>
+<%@page import="java.util.List"%>
 
 <%@page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
 
 <%@page import="com.bagnet.nettracer.tracing.db.Passenger"%>
 <%@page import="com.bagnet.nettracer.tracing.db.Incident_Claimcheck"%>
+
+<%
+Agent a = (Agent)session.getAttribute("user");
+BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
+boolean isServ=(myform.getDelivercompany_ID()!=0 && (((DeliverCompany)(BDOUtils.getDeliverCompany(myform.getDelivercompany_ID()))).getDelivery_integration_type()==DeliveryIntegrationType.SERV));
+%>
 <%@page import="com.bagnet.nettracer.tracing.db.Address"%><script language="javascript">
 
-  
+
 function toggledc(o) {
 	o.changeservice.value = "1";
 
@@ -32,12 +42,26 @@ function toggledc(o) {
 			postForm("BDOForm", true, function (req) { 
 				o.changeservice.value = "0";
 				document.getElementById("serviceleveldiv").innerHTML = req.responseText; 
-
+				isServ();
 		});
 		
 	}
   
-    function textCounter3(field, countfield, maxlimit) {
+  	function isServ(){
+
+		var selDC=document.getElementById("delivercompany_ID").value;
+  		document.getElementById("deliveryCostDiv").style.display = 'none';
+		<% List<DeliverCompany> servlist=BDOUtils.getSERVDeliverCompanies();
+		if(servlist!=null){
+		for(DeliverCompany dc:servlist){ %>
+			if(selDC==<%=dc.getDelivercompany_ID()%>){
+				document.getElementById("deliveryCostDiv").style.display = 'inline'; 
+			}
+		<% }
+		} %>
+	}
+	
+  	function textCounter3(field, countfield, maxlimit) {
       if (field.value.length > maxlimit) {
         field.value = field.value.substring(0, maxlimit);
       } else {
@@ -67,10 +91,6 @@ function toggledc(o) {
 
 </script>
 
-<%
-Agent a = (Agent)session.getAttribute("user");
-BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
-%>
   <bean:define id="ohd" name="BDOForm" property="ohd" type="com.bagnet.nettracer.tracing.db.OHD"/>
   <tr>
     <td colspan="3" id="navmenucell">
@@ -184,9 +204,8 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
 			<a href="#" onclick="cancelBdo()"><bean:message key="button.cancel.bdo"/></a>
 		</logic:equal>        
         </span>
-        
         <font color="red">
-          <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
+          <logic:messagesPresent message="true"><div style="display:block"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></div></logic:messagesPresent>
         </font>
         
         <logic:present name="integrationResponse" scope="request">
@@ -296,6 +315,7 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
                 <html:text property="cost" size="6" maxlength="10" styleClass="textfield" />
             </td>
           </tr>
+          
           <tr>
             <td colspan="5">
               <bean:message key="colname.delivery.remarks" />
@@ -304,6 +324,19 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
               <input name="textCounter2" type="text" value="300" size="4" maxlength="4" disabled="true" />
             </td>
           </tr>
+          
+            <logic:notEqual name="BDOForm" property="origDelivCost" value="0">
+	           <tr >
+	              <td >
+	              <bean:message key="original.delivery.cost"/>:
+	              <bean:write name="BDOForm" property="dispOrigDelivCost" />
+	              </td>
+	              <td colspan="2">
+	              <bean:message key="modified.delivery.cost"/>:
+	              <html:text name="BDOForm" property="modDelivCost" />
+	              </td>
+	           </tr>
+            </logic:notEqual>
         </table>
         <a name="contact"></a>
         <h1 class="green">
@@ -726,7 +759,7 @@ if (i.intValue() == 0) {
               </td>
             </tr>
             <tr>
-              <td nowrap colspan="3">
+              <td nowrap>
                 <bean:message key="colname.color" />
                 /
                 <bean:message key="colname.bagtype" />
@@ -734,6 +767,34 @@ if (i.intValue() == 0) {
                 <html:text property="ohd.color" size="2" styleClass="textfield" readonly="true" />
                 /
                 <html:text property="ohd.type" size="2" styleClass="textfield" readonly="true" />
+              </td>
+              <td nowrap>
+                <bean:message key="colname.noAddFees" /><br/>
+                <input type="checkbox" name="ohd.noAddFees" <% if(ohd.isNoAddFees()) {%> checked="true" <%} %>/>
+              </td>
+              <td>
+                <bean:message key="colname.other" />
+                <br>
+			  <html:select property="ohd.other" styleClass="dropdown" >
+                <html:option value="">
+                  <bean:message key="select.please_select" />
+                </html:option>
+                <html:options collection="bdoCategoryList" property="id" labelProperty="description" />
+              </html:select>
+
+              </td>
+            </tr>
+            
+            <tr>
+              <td colspan=3>
+             	<bean:message key="colname.special.conditions" />
+				<br>
+				<html:select name="ohd" property="specialCondition" styleClass="dropdown" indexed="true" >
+					<html:option value="0"><bean:message key="select.please_select" /></html:option> 
+					<html:option value="<%=String.valueOf(TracingConstants.SPECIAL_CONDITION_OVERWEIGHT) %>"><bean:message key="option.overweight" /></html:option> 
+					<html:option value="<%=String.valueOf(TracingConstants.SPECIAL_CONDITION_OVERSIZED) %>"><bean:message key="option.oversized" /></html:option> 
+					<html:option value="<%=String.valueOf(TracingConstants.SPECIAL_CONDITION_BOTH) %>"><bean:message key="option.both" /></html:option> 
+				</html:select>
               </td>
             </tr>
           </table>
@@ -794,16 +855,7 @@ if (i.intValue() == 0) {
               <bean:message key="colname.claimnum" />
               <br>
               <html:text name="theitem" property="claimchecknum" size="25" styleId="<%="bagtagId"+i %>" styleClass="textfield" indexed="true"/>
-              <select styleClass="dropdown" id="bagtagSelect<%=i %>" onchange="populateClaimNum(bagtagId<%=i %>,bagtagSelect<%=i %>); mapSimpleData(this.options.selectedIndex, items, itemArr); ">
-				<option value=""><bean:message key="pick.a.bag" /></option>
-				<logic:iterate id="item" name="BDOForm"  property="incident.claimchecks" indexId="i" type="com.bagnet.nettracer.tracing.db.Incident_Claimcheck">
-					<%
-					StringTemplateProcessor p = new StringTemplateProcessor();
-					p.addClass(item);
-					String bagNums = p.fillValues("{claimchecknum}");
-					%>
-					<option value="<%=bagNums.toString()%>"><%=bagNums%></option>
-				</logic:iterate>
+             
 			</html>
             </td>
           </tr>
@@ -825,7 +877,7 @@ if (i.intValue() == 0) {
             </td>
           </tr>
           <tr>
-            <td nowrap colspan="3">
+              <td nowrap>
               <bean:message key="colname.color" />
               /
               <bean:message key="colname.bagtype" />
@@ -834,7 +886,34 @@ if (i.intValue() == 0) {
               /
               <html:text name="theitem" property="bagtype" indexed="true" size="2" styleClass="textfield" readonly="true" />
             </td>
-          </tr>
+              <td nowrap>
+                <bean:message key="colname.noAddFees" /><br/>
+                <input type="checkbox" name="theitem[<%=i %>].noAddFees" <% if(theitem.isNoAddFees()) {%> checked="true" <%} %>/>
+              </td>
+              <td>
+                <bean:message key="colname.other" />
+                <br>
+				  <html:select name="theitem" property="other" styleClass="dropdown" indexed="true" >
+	                <html:option value="">
+	                  <bean:message key="select.please_select" />
+	                </html:option>
+	                <html:options collection="bdoCategoryList" property="description" labelProperty="description" />
+	              </html:select>
+              </td>
+            </tr>
+            
+            <tr>
+              <td colspan=3>
+             	<bean:message key="colname.special.conditions" />
+				<br>
+				<html:select name="theitem" property="specialCondition" styleClass="dropdown" indexed="true" >
+					<html:option value="0"><bean:message key="select.please_select" /></html:option> 
+					<html:option value="<%=String.valueOf(TracingConstants.SPECIAL_CONDITION_OVERWEIGHT) %>"><bean:message key="option.overweight" /></html:option> 
+					<html:option value="<%=String.valueOf(TracingConstants.SPECIAL_CONDITION_OVERSIZED) %>"><bean:message key="option.oversized" /></html:option> 
+					<html:option value="<%=String.valueOf(TracingConstants.SPECIAL_CONDITION_BOTH) %>"><bean:message key="option.both" /></html:option> 
+				</html:select>
+              </td>
+            </tr>
         </table>
       </logic:iterate>
     </logic:notEqual>
@@ -854,7 +933,6 @@ if (i.intValue() == 0) {
         </logic:equal>
         <logic:equal name="BDOForm" property="canceled" value="false">
         <html:hidden property="save" value = ""/>
-                <html:hidden property="save" value = ""/>
         <html:button property="saveButton" styleId="button" onclick="changebutton(); if(validateReqBDO(document.BDOForm)) {clearBeforeUnload(); document.BDOForm.submit();} else {undoChangebutton();}">
           <bean:message key="button.bdo_send" />
         </html:button>
@@ -863,8 +941,15 @@ if (i.intValue() == 0) {
         &nbsp;&nbsp;
         <input id="button" type="button" name="print" value="<bean:message key="button.bdo_sendprint" />" onclick="openReportWindow('bdo.do?receipt=1&toprint=<%=ReportingConstants.BDO_RECEIPT_RPT%>&bdo_id=<bean:write name="BDOForm" property="BDO_ID" />','BDOReceipt',800,600);return false;">
         </logic:present>
+        <div id="deliveryCostDiv" style="display:none">
+        <html:hidden property="requestDelivCost" value="" disabled="true" />
+        	<input type="submit" name="requestDelivCost" value='<bean:message key="button.requestDelivCost"/>' id="button">
+        </div>
       </td>
     </tr>
   </table>
   
+	<script>
+		isServ();
+	</script>
 

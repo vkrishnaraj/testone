@@ -41,9 +41,11 @@ import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.BDO_Passenger;
+import com.bagnet.nettracer.tracing.db.Category;
 import com.bagnet.nettracer.tracing.db.DeliverCo_Station;
 import com.bagnet.nettracer.tracing.db.DeliverCompany;
 import com.bagnet.nettracer.tracing.db.Deliver_ServiceLevel;
+import com.bagnet.nettracer.tracing.db.DeliveryIntegrationType;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Item;
@@ -523,6 +525,38 @@ public class BDOUtils {
 
 			cri.add(Expression.eq("station_ID", new Integer(station_ID)));
 			cri.addOrder(Order.asc("description"));
+
+			List list = cri.list();
+
+			return list;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
+	}
+
+	/** 
+	 * Method to get all SERV Delivery Companies to determine the if the Request Delivery Cost button should appear
+	 */
+	public static List getSERVDeliverCompanies() {
+		// populate delivery service
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(DeliverCompany.class);
+
+			cri.add(Expression.eq("delivery_integration_type", DeliveryIntegrationType.SERV));
+			cri.addOrder(Order.asc("id"));
 
 			List list = cri.list();
 
@@ -1382,5 +1416,37 @@ public class BDOUtils {
 		}
 
 		DeliveryIntegrationTypeUtils.integrate(bdo, a);
+	}
+	
+	/**
+	 * Method to get Categories that pertain to BDOs - Type "1"
+	 */
+	public static List getBDOCategories() {
+		Session sess = null;
+		try {
+
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Category.class);
+			cri.add(Expression.eq("type", new Integer(TracingConstants.BDO_TYPE)));
+			List<Category> ol = cri.list();
+//			List nl = new ArrayList();
+//
+//			for (int x = 0; x < ol.size(); ++x) {
+//				Category tmp = ol.get(x);
+//				nl.add(tmp);
+//			}
+			return ol;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }

@@ -63,6 +63,7 @@ public class OHD implements Serializable {
 	private boolean earlyBag;
 	private String matched_incident;
 	private String externaldesc;
+	private int specialCondition;
 
 	private Set items;
 	private Set remarks;
@@ -91,6 +92,9 @@ public class OHD implements Serializable {
 	private Date modifiedDate;
 	private String posId;
 	private boolean lateCheckInd;
+
+	private String other;
+	private boolean noAddFees;
 
 	public String getDisplaydate() {
 		Date completedate = DateUtils.convertToDate(this.getFounddate().toString() + " "
@@ -1137,6 +1141,39 @@ public class OHD implements Serializable {
 	public String getDispModifiedTime() {
 		String modTime = DateUtils.formatDate(this.getModifiedDate(), _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
 		return modTime != null ? modTime.substring(modTime.lastIndexOf(' '), modTime.length()) : "";
+	}
+
+	/**
+	 * @hibernate.property type="string" length="50"
+	 */
+	public String getOther() {
+		return other;
+	}
+	
+	public void setOther(String other) {
+		this.other = other;
+	}
+
+	/**
+	 * @hibernate.property type="boolean"
+	 */
+	public boolean isNoAddFees() {
+		return noAddFees;
+	}
+
+	public void setNoAddFees(boolean noAddFees) {
+		this.noAddFees = noAddFees;
+	}
+
+	/**
+	 * @hibernate.property type="int"
+	 */
+	public int getSpecialCondition() {
+		return specialCondition;
+	}
+
+	public void setSpecialCondition(int specialCondition) {
+		this.specialCondition = specialCondition;
 	}
 	
 }

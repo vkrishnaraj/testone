@@ -161,13 +161,30 @@ public class BDOAction extends Action {
 				.getStation().getStation_ID(), true));
 		if (list != null)
 			request.setAttribute("delivercompanies", list);
-
+		
+		if (session.getAttribute("bdoCategoryList") == null) {
+			list=new ArrayList(BDOUtils.getBDOCategories());
+			if(list!=null)
+				session.setAttribute("bdoCategoryList", list);
+		}
+		
 		if (request.getParameter("receipt") != null
 				&& request.getParameter("bdo_id") != null) {
 			request.setAttribute("bdo_id", request.getParameter("bdo_id"));
 			return (mapping.findForward(TracingConstants.RECEIPT_PARAMS));
 		}
 
+		/**
+		 * Requesting the Delivery Cost if the BDO Delivery Company is of Integration Type SERV
+		 */
+		if (request.getParameter("requestDelivCost") != null) {
+			//TODO: Find way to Persist Overweight, OverSize, Other, and NoAddFees values to carry to webcall
+			CostServiceUtils.calculateDeliveryCost(theform, user,messages);
+			saveMessages(request, messages);
+			request.setAttribute("showbdo", "1");
+			request.setAttribute("showprint", "1");
+			return (mapping.findForward(TracingConstants.BDO_MAIN));
+		}
 		// save bdo
 		if (request.getParameter("save") != null) {
 

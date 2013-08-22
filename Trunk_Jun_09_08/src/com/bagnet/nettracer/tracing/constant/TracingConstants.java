@@ -1220,6 +1220,8 @@ public class TracingConstants {
 	public static final String SPECIAL_CONDITION_NAME_OVERWEIGHT = "Overweight";
 	public static final String SPECIAL_CONDITION_NAME_OVERSIZED = "Oversized";
 	public static final String SPECIAL_CONDITION_NAME_BOTH = "Both";
+
+	public static final int BDO_TYPE = 1;
 	
 	public static final int DAMAGED_ITEM_STATUS_RETURNED = 800;
 	public static final int DAMAGED_ITEM_STATUS_DAMAGED = 801;

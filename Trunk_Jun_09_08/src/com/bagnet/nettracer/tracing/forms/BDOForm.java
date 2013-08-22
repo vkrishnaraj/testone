@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.forms;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -60,7 +61,9 @@ public final class BDOForm extends ValidatorForm {
 	private DeliveryStatusType deliveryStatus;
 	
 
-	
+
+	private double origDelivCost;
+	private double modDelivCost;
 	
     private String wt_id;
 	/**
@@ -469,5 +472,42 @@ public final class BDOForm extends ValidatorForm {
 		} else {
 			return DateUtils.formatDate(getLastDeliveryUpdate(), _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
 		}
+	}
+
+	/**
+	 * @return the origDelivCost
+	 */
+	public double getOrigDelivCost() {
+		return origDelivCost;
+	}
+
+	/**
+	 * @param origDelivCost the origDelivCost to set
+	 */
+	public void setOrigDelivCost(double origDelivCost) {
+		this.origDelivCost = origDelivCost;
+	}
+
+	/**
+	 * @return the modDelivCost
+	 */
+	public double getModDelivCost() {
+		return modDelivCost;
+	}
+
+	/**
+	 * @param modDelivCost the modDelivCost to set
+	 */
+	public void setModDelivCost(double modDelivCost) {
+		this.modDelivCost = modDelivCost;
+	}
+	
+
+	public String getDispOrigDelivCost(){
+		if(origDelivCost!=0){
+			DecimalFormat dec=new DecimalFormat("$###,##0.00");
+			return dec.format(origDelivCost);
+		}
+		return "";
 	}
 }

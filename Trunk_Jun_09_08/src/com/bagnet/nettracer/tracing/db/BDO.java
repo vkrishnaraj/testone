@@ -7,6 +7,7 @@
 package com.bagnet.nettracer.tracing.db;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -71,6 +72,8 @@ public class BDO implements Serializable {
 	private Date lastDeliveryUpdate;
 	private DeliveryStatusType deliveryStatus;
 	
+	private double origDelivCost;
+	private double modDelivCost;
 	/**
 	 * 
 	 * @hibernate.property type="timestamp"
@@ -549,5 +552,36 @@ public class BDO implements Serializable {
 	public void setDeliveryStatus(DeliveryStatusType deliveryStatus) {
   	this.deliveryStatus = deliveryStatus;
   }
+
+	/**
+	 * @return the origDelivCost
+	 * @hibernate.property type="double"
+	 */
+	public double getOrigDelivCost() {
+		return origDelivCost;
+	}
+
+	/**
+	 * @param origDelivCost the origDelivCost to set
+	 */
+	public void setOrigDelivCost(double origDelivCost) {
+		this.origDelivCost = origDelivCost;
+	}
+
+	/**
+	 * @return the modDelivCost
+	 * @hibernate.property type="double"
+	 */
+	public double getModDelivCost() {
+		return modDelivCost;
+	}
+
+	/**
+	 * @param modDelivCost the modDelivCost to set
+	 */
+	public void setModDelivCost(double modDelivCost) {
+		this.modDelivCost = modDelivCost;
+	}
+	
 
 }
