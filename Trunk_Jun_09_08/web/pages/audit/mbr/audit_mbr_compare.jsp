@@ -63,6 +63,7 @@ function updatePagination() {
  	boolean hasViewEditPassportPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSPORT_VIEW_EDIT, a);
  	
  	boolean collectAddItemInfo = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADDITIONAL_ITEM_INFORMATION_COLLECT, a);
+ 	boolean courtesyReasonCollect = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_INCIDENT_COURTESY_REASON_COLLECT, a);
  	
 %>
 <html:form action="audit_mbr.do" method="post">
@@ -528,6 +529,16 @@ function updatePagination() {
                   <bean:message key="select.yes" />
                 </logic:equal>
                 <br>
+                <% if (courtesyReasonCollect) { %>
+                	<bean:message key="colname.courtesy.reason" />
+                	:
+                	<bean:write name="audit_incident" property="dispCourtesyReason" />
+                	<br>
+                	<bean:message key="colname.courtesy.description" />
+                	:
+                	<bean:write name="audit_incident" property="courtesyDescription" />
+                	<br>
+                <% } %>
                 <bean:message key="colname.tsa" />
                 :
                 <logic:equal name="audit_incident" property="tsachecked" value="0">

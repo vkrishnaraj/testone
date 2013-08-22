@@ -26,6 +26,7 @@ import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
+import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 /**
  * @author Administrator
@@ -1032,6 +1033,10 @@ public class Audit_Incident implements Serializable {
 
 	public void setCourtesyReasonId(int courtesyReasonId) {
 		this.courtesyReasonId = courtesyReasonId;
+	}
+	
+	public String getDispCourtesyReason() {
+		return TracerUtils.getText(Status.getKey(getCourtesyReasonId()), (String) null);
 	}
 
 	/**
