@@ -789,7 +789,7 @@ if (i.intValue() == 0) {
               <td colspan=3>
              	<bean:message key="colname.special.conditions" />
 				<br>
-				<html:select name="ohd" property="specialCondition" styleClass="dropdown" indexed="true" >
+				<html:select property="ohd.specialCondition" styleClass="dropdown"  >
 					<html:option value="0"><bean:message key="select.please_select" /></html:option> 
 					<html:option value="<%=String.valueOf(TracingConstants.SPECIAL_CONDITION_OVERWEIGHT) %>"><bean:message key="option.overweight" /></html:option> 
 					<html:option value="<%=String.valueOf(TracingConstants.SPECIAL_CONDITION_OVERSIZED) %>"><bean:message key="option.oversized" /></html:option> 

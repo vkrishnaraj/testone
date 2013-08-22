@@ -271,29 +271,28 @@ public class CostServiceUtils {
 		req.setServiceType(DelivercompanyBMO.getServiceLevel(form.getServicelevel_ID()).getService_code());
 
 		logger.info("POINT 4\n\n");
-		if (form.getIncident() != null) {
-			if (form.getItemlist() != null) {
-				for (Item item: (ArrayList<Item>)form.getItemlist()) {
-					BagDeliveryType id = req.addNewBagDeliveryTypes();
-					if (item.getClaimchecknum() != null && item.getClaimchecknum().trim().length() > 0) {
-						id.setBagTag(item.getClaimchecknum());	
-					} else {
-						id.setBagTag("notAvailable");
-					}
-					id.setBagOtherCharge(item.getOther());
-					if(item.getSpecialCondition()==TracingConstants.SPECIAL_CONDITION_OVERSIZED){
-						id.setOversize(true);
-						id.setOverweight(false);
-					} else if(item.getSpecialCondition()==TracingConstants.SPECIAL_CONDITION_OVERWEIGHT){
-						id.setOversize(false);
-						id.setOverweight(true);
-					} else if(item.getSpecialCondition()==TracingConstants.SPECIAL_CONDITION_BOTH){
-						id.setOversize(true);
-						id.setOverweight(true);
-					}
-					id.setStandard(item.isNoAddFees());
+		if (form.getIncident() != null && form.getItemlist() != null && form.getItemlist().size()>0) {
+			for (Item item: (ArrayList<Item>)form.getItemlist()) {
+				BagDeliveryType id = req.addNewBagDeliveryTypes();
+				if (item.getClaimchecknum() != null && item.getClaimchecknum().trim().length() > 0) {
+					id.setBagTag(item.getClaimchecknum());	
+				} else {
+					id.setBagTag("notAvailable");
 				}
+				id.setBagOtherCharge(item.getOther());
+				if(item.getSpecialCondition()==TracingConstants.SPECIAL_CONDITION_OVERSIZED){
+					id.setOversize(true);
+					id.setOverweight(false);
+				} else if(item.getSpecialCondition()==TracingConstants.SPECIAL_CONDITION_OVERWEIGHT){
+					id.setOversize(false);
+					id.setOverweight(true);
+				} else if(item.getSpecialCondition()==TracingConstants.SPECIAL_CONDITION_BOTH){
+					id.setOversize(true);
+					id.setOverweight(true);
+				}
+				id.setStandard(item.isNoAddFees());
 			}
+			
 		} else if (form.getOhd() != null){
 			BagDeliveryType id = req.addNewBagDeliveryTypes();
 			if (form.getOhd().getClaimchecknum_bagnumber() != null && form.getOhd().getClaimchecknum_bagnumber().trim().length() > 0) {
