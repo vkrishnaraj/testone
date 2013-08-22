@@ -105,6 +105,8 @@ public class Audit_Incident implements Serializable {
 	private Agent tracingAgent;
 	
 	private Date rxTimestamp;
+	private int courtesyReasonId;
+	private String courtesyDescription;
 
 	/**
 	 * @return Returns the tracingStatus.
@@ -1019,6 +1021,28 @@ public class Audit_Incident implements Serializable {
 	
 	public String getDispRxTimestamp() {
 		return getRxTimestamp() != null ? DateUtils.formatDate(getRxTimestamp(), get_DATEFORMAT() + " " + get_TIMEFORMAT(), null, get_TIMEZONE()) : " ";
+	}
+
+	/**
+	 * @hibernate.property
+	 */
+	public int getCourtesyReasonId() {
+		return courtesyReasonId;
+	}
+
+	public void setCourtesyReasonId(int courtesyReasonId) {
+		this.courtesyReasonId = courtesyReasonId;
+	}
+
+	/**
+	 * @hibernate.property length="100"
+	 */
+	public String getCourtesyDescription() {
+		return courtesyDescription;
+	}
+
+	public void setCourtesyDescription(String courtesyDescription) {
+		this.courtesyDescription = courtesyDescription;
 	}
 
 }

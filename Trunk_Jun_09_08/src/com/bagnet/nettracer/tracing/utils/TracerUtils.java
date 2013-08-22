@@ -387,6 +387,7 @@ public class TracerUtils {
 		theform.setXDesc3(TracingConstants.XDESC_TYPE_X);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void populateLists(HttpSession session)
 			throws HibernateException {
 		Agent user = (Agent) session.getAttribute("user");
@@ -547,6 +548,23 @@ public class TracerUtils {
 				session.getAttribute("damagedItemStatusList") != null ?
 				session.getAttribute("damagedItemStatusList") :
 					getStatusList(TracingConstants.TABLE_DAMAGED_ITEM_STATUS, user.getCurrentlocale()));
+		
+		session.setAttribute("courtesyReasonList",
+				session.getAttribute("courtesyReasonList") != null ?
+				session.getAttribute("courtesyReasonList") :
+					getStatusList(TracingConstants.TABLE_COURTESY_REASON, user.getCurrentlocale()));
+		
+		session.setAttribute("damagedCourtesyReasonList",
+				session.getAttribute("damagedCourtesyReasonList") != null ?
+				session.getAttribute("damagedCourtesyReasonList") :
+					getStatusList(TracingConstants.TABLE_COURTESY_REASON, user.getCurrentlocale()));
+		((ArrayList<?>) session.getAttribute("damagedCourtesyReasonList")).addAll(getStatusList(TracingConstants.TABLE_COURTESY_REASON_DAMAGED, user.getCurrentlocale()));
+
+		session.setAttribute("lostDelayedCourtesyReasonList",
+				session.getAttribute("lostDelayedCourtesyReasonList") != null ?
+						session.getAttribute("lostDelayedCourtesyReasonList") :
+							getStatusList(TracingConstants.TABLE_COURTESY_REASON, user.getCurrentlocale()));
+		((ArrayList<?>) session.getAttribute("lostDelayedCourtesyReasonList")).addAll(getStatusList(TracingConstants.TABLE_COURTESY_REASON_LOST_DELAYED, user.getCurrentlocale()));
 
 	}
 

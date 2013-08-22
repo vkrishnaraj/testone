@@ -107,6 +107,9 @@ public final class IncidentForm extends ValidatorForm {
 	private int tracingStatus;
 	
 	private Date rxTimestamp;
+	
+	private int courtesyReasonId;
+	private String courtesyDescription;
 
 	public int getTracingStatus() {
 		return tracingStatus;
@@ -1388,4 +1391,21 @@ public final class IncidentForm extends ValidatorForm {
 	public String getDispRxTimestamp() {
 		return DateUtils.formatDate(getRxTimestamp(), get_DATEFORMAT() + " " + get_TIMEFORMAT(), null, get_TIMEZONE());
 	}
+
+	public int getCourtesyReasonId() {
+		return courtesyReasonId;
+	}
+
+	public void setCourtesyReasonId(int courtesyReasonId) {
+		this.courtesyReasonId = courtesyReasonId;
+	}
+
+	public String getCourtesyDescription() {
+		return courtesyDescription;
+	}
+
+	public void setCourtesyDescription(String courtesyDescription) {
+		this.courtesyDescription = courtesyDescription;
+	}
+	
 }

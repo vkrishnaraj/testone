@@ -132,6 +132,8 @@ public class Incident implements Serializable {
 	private Agent tracingAgent;
 	
 	private Date rxTimestamp;
+	private int courtesyReasonId;
+	private String courtesyDescription;
 
 	@Column(name="tracing_status_id")
 	public int getTracingStatus() {
@@ -1283,6 +1285,22 @@ public class Incident implements Serializable {
 	public void setRxTimestamp(Date rxTimestamp) {
 		this.rxTimestamp = rxTimestamp;
 	}
-	
+
+	public int getCourtesyReasonId() {
+		return courtesyReasonId;
+	}
+
+	public void setCourtesyReasonId(int courtesyReasonId) {
+		this.courtesyReasonId = courtesyReasonId;
+	}
+
+	@Column(length=100)
+	public String getCourtesyDescription() {
+		return courtesyDescription;
+	}
+
+	public void setCourtesyDescription(String courtesyDescription) {
+		this.courtesyDescription = courtesyDescription;
+	}
 	
 }

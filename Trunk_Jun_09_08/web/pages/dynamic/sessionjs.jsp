@@ -648,6 +648,28 @@
       }
     }
     
+    else if (currentElementName.indexOf("courtesyreport") != -1) {
+    	var courtesyReason = document.getElementById("courtesyReasonId");
+    	if (courtesyReason) { 
+    		if (courtesyReason.options[courtesyReason.selectedIndex].value == 0) {
+		        alert("<%= (String)bundle.getString("colname.courtesy.reason") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+		        courtesyReason.focus();
+		        return false;
+    		}
+    	}       
+    }
+    
+    else if (currentElementName.indexOf("courtesyReasonId") != -1) {
+    	var courtesyReasonValue = currentElement.options[currentElement.selectedIndex].value;
+    	if (courtesyReasonValue == 900) {
+			var courtesyDescription = document.getElementById("courtesyDescription");
+			if (courtesyDescription.value == null || courtesyDescription.value.length == 0) {
+		        alert("<%= (String)bundle.getString("colname.courtesy.description") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+		        courtesyDescription.focus();
+		        return false;
+			}
+		}
+    }
 	
     }
     

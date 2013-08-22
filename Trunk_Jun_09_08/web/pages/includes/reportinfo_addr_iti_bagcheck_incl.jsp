@@ -922,23 +922,17 @@
 		<tr>
 			<td><bean:message key="colname.bag_loc.req" /> <br> <jsp:include
 					page="/pages/includes/checkedlocation_incl.jsp" /></td>
-			<td><bean:message key="colname.courtesy_report" /> <br> <html:select
-					property="courtesyreport" styleClass="dropdown">
-					<html:option value="">
-						<bean:message key="select.please_select" />
-					</html:option>
-					<html:option value="1">
-						<bean:message key="select.yes" />
-					</html:option>
-					<html:option value="0">
-						<bean:message key="select.no" />
-					</html:option>
-				</html:select></td>
+			
 
 
-			<% boolean val2 = PropertyBMO.isTrue(PropertyBMO.PROPERTY_INCIDENT_CUSTOMCLEARED_SELECT); %>
+			<% 
+				boolean val2 = PropertyBMO.isTrue(PropertyBMO.PROPERTY_INCIDENT_CUSTOMCLEARED_SELECT); 
+			    boolean displayWeight = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BAGGAGE_WEIGHT, a);
+			    
+			%>
 
-			<td><bean:message key="colname.custom" /> <br> 
+			<td <% if (!displayWeight) { %>colspan="2"<% } %>>
+			<bean:message key="colname.custom" /> <br> 
 				<% if(!val2 || (myform.getCustomcleared()==1 || myform.getCustomcleared()==0)){ %>
 				<html:select name="incidentForm" property="customcleared" styleClass="dropdown" >
          			<html:option value="">
@@ -964,26 +958,64 @@
 					</html:option>
 				</html:select> <%  } %>
 				</td>
-		</tr>
-		<!-- provide space for bag weight feature - start -->
-		<%
-						    boolean val = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BAGGAGE_WEIGHT, a);
-						    if (val) {
-						%>
-		<tr id="bag_weight">
-			<td><bean:message key="colname.total.weight.and.units" /><br>
+			<% if (displayWeight) { %>
+				<td id="bag_weight"><bean:message key="colname.total.weight.and.units" /><br>
 				<html:text property="overall_weight" size="8" maxlength="10"
 					styleClass="textfield" /> <html:select
 					property="overall_weight_unit" styleClass="dropdown">
 					<html:option value="lbs">lbs</html:option>
 					<html:option value="kg">kg</html:option>
 				</html:select></td>
-			<td colspan="2"></td>
+			<% 
+			    }
+			%>
 		</tr>
-		<% 
-						    }
-						%>
-		<!-- provide space for bag weight feature - end -->
+		<tr >
+			<% 
+				boolean courtesyReasonCollect = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_INCIDENT_COURTESY_REASON_COLLECT, a);
+			%>
+			<td <% if (!courtesyReasonCollect) { %>colspan="3"<% } %>>
+				<bean:message key="colname.courtesy_report" />
+				<br>
+				<html:select property="courtesyreport" styleClass="dropdown">
+					<html:option value="">
+						<bean:message key="select.please_select" />
+					</html:option>
+					<html:option value="1">
+						<bean:message key="select.yes" />
+					</html:option>
+					<html:option value="0">
+						<bean:message key="select.no" />
+					</html:option>
+				</html:select>
+			</td>
+			<% if (courtesyReasonCollect) { %>
+				<td>
+					<bean:message key="colname.courtesy.reason" />
+					<br>
+					<html:select property="courtesyReasonId" styleClass="dropdown">
+						<html:option value="0">
+							<bean:message key="select.please_select" />
+						</html:option>
+						<% if (report_type == 0) { %>
+							<html:options collection="damagedCourtesyReasonList" property="status_ID" labelProperty="description" />
+						<% } else if (report_type == 1) { %>
+							<html:options collection="lostDelayedCourtesyReasonList" property="status_ID" labelProperty="description" />
+						<% } else { %>
+							<html:options collection="courtesyReasonList" property="status_ID" labelProperty="description" />
+						<% } %>			
+					</html:select>
+				</td>
+				<td>
+					<bean:message key="colname.courtesy.description" />
+					<br>
+					<html:textarea property="courtesyDescription" styleId="courtesyDescription" rows="3" cols="40" 
+          				onkeydown="textCounter2(courtesyDescription, courtesyDescriptionCount, 100);" 
+          				onkeyup="textCounter2(courtesyDescription, courtesyDescriptionCount, 100);" styleClass="textfield" />  
+          			<input name="courtesyDescriptionCount" id="courtesyDescriptionCount" type="text" value="100" size="4" maxlength="4" disabled="true" />
+				</td>
+			<% } %>
+		</tr>
 	</table>
 	<br> <br> &nbsp;&nbsp;&uarr; <a href="#"><bean:message
 			key="link.to_top" /></a> <br> <br>
