@@ -215,7 +215,7 @@ public class Audit_Item_Inventory implements Serializable {
 	}
 	
 	public String getDispInvItemCurrency() {
-		return CurrencyUtils.getCurrency(getInvItemCurrency()).getDescription();
+		return getInvItemCurrency() != null ? CurrencyUtils.getCurrency(getInvItemCurrency()).getDescription() : "";
 	}
 	
 	/**
