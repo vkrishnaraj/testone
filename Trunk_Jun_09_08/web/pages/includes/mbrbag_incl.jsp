@@ -454,7 +454,7 @@
 							<html:text disabled="true" property="<%="inventorylist[" + (i.intValue() * 20 + j.intValue()) + "].description"%>" size="80" maxlength="255" styleClass="textfield" /> 
 						<% } %>
 	                </td>
-	                <% if (!collectAddItemInfo) { %>
+	                <% if (!collectAddItemInfo || report_type != 0) { %>
 		            <td align="center">&nbsp;<br>
 	                    <% 
 	                    String check = "true";
