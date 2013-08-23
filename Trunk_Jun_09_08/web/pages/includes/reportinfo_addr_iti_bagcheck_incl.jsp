@@ -74,7 +74,18 @@
 		<% } %>
 	}
 	
-	
+	function updateCourtesyDescription() {
+		var courtesyReasonId = document.getElementById("courtesyReasonId");
+		if (!courtesyReasonId) return;
+
+		var courtesyDescription = document.getElementById("courtesyDescription");
+		if (courtesyReasonId.options[courtesyReasonId.selectedIndex].value == 900) {
+			courtesyDescription.disabled = false;
+		} else {
+			courtesyDescription.disabled = true;
+			courtesyDescription.value = "";
+		}
+	}
 
   </SCRIPT>
 
@@ -993,7 +1004,7 @@
 				<td>
 					<bean:message key="colname.courtesy.reason" />
 					<br>
-					<html:select property="courtesyReasonId" styleId="courtesyReasonId" styleClass="dropdown">
+					<html:select property="courtesyReasonId" styleId="courtesyReasonId" styleClass="dropdown" onchange="updateCourtesyDescription();">
 						<html:option value="0">
 							<bean:message key="select.please_select" />
 						</html:option>
@@ -1014,6 +1025,9 @@
           				onkeyup="textCounter2(courtesyDescription, courtesyDescriptionCount, 100);" styleClass="textfield" />  
           			<input name="courtesyDescriptionCount" id="courtesyDescriptionCount" type="text" value="100" size="4" maxlength="4" disabled="true" />
 				</td>
+				<script type="text/javascript">
+					updateCourtesyDescription();
+				</script>				
 			<% } %>
 		</tr>
 	</table>
