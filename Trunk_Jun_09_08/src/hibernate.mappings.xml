@@ -292,6 +292,7 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.LFNameAlias" />
 		<mapping class="com.bagnet.nettracer.tracing.db.lf.SubcompanyStation" />
 		
+		<mapping class="com.bagnet.nettracer.tracing.db.Category" />
 		<mapping class="com.bagnet.nettracer.tracing.db.Region"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.logger.GeneralLog"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.logger.GeneralLFLog"/>
