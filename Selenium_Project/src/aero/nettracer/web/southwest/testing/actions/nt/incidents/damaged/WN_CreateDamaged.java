@@ -370,7 +370,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	@Test
 	public void testAdditionalItemInformationAuditTrailDisabled() {
 		verifyTrue(navigateToIncidentAuditTrail());
-		verifyFalse(selenium.isTextPresent("Entered Date: 08/23/2013\n     Purchase Date: \n     Cost: \n     Currency: US Dollar\n     Status:"));
+		verifyFalse(selenium.isTextPresent("Entered Date: " + WN_CreateDamaged.TODAY + "\n     Purchase Date: \n     Cost: \n     Currency: US Dollar\n     Status:"));
 		goToTaskManager();
 	}
 	
@@ -413,6 +413,17 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 		
 		goToTaskManager();
 		
+	}
+	
+	@Test
+	public void testAdditionalItemInformationAuditTrailEnabled() {
+		verifyTrue(navigateToIncidentAuditTrail());
+		verifyTrue(selenium.isTextPresent("Entered Date: " + WN_CreateDamaged.TODAY));
+		verifyTrue(selenium.isTextPresent("Purchase Date: " + WN_CreateDamaged.TODAY));
+		verifyTrue(selenium.isTextPresent("Cost: 1.00"));
+		verifyTrue(selenium.isTextPresent("Currency: US Dollar"));
+		verifyTrue(selenium.isTextPresent("Status: Returned"));
+		goToTaskManager();		
 	}
 	
 	private void checkAdditionalItemInformationOtherIncidents() {
