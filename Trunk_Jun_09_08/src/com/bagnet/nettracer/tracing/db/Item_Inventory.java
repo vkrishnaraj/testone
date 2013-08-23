@@ -197,11 +197,11 @@ public class Item_Inventory implements Serializable {
 	}
 
 	public String getDispEnteredDate() {
-		return DateUtils.formatDate(getEnteredDate(), _DATEFORMAT, null, _TIMEZONE);
+		return DateUtils.formatDate(getEnteredDate(), _DATEFORMAT, null, null);
 	}
 	
 	public String getDispPurchaseDate() {
-		return DateUtils.formatDate(getPurchaseDate(), _DATEFORMAT, null, _TIMEZONE);
+		return DateUtils.formatDate(getPurchaseDate(), _DATEFORMAT, null, null);
 	}
 
 	public void setDispPurchaseDate(String date) {
