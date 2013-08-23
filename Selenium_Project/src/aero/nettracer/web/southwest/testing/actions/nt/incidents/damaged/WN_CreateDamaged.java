@@ -1,5 +1,8 @@
 package aero.nettracer.web.southwest.testing.actions.nt.incidents.damaged;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.junit.Test;
 
 import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
@@ -13,6 +16,13 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	private String RX_TIMESTAMP_COLLECT = "640";
 	private String RX_TIMESTAMP_DELETE = "641";
 	private String SPECIAL_CONDITIONS_COLLECT = "642";
+	private String ADDITIONAL_ITEM_INFORMATION_COLLECT = "644";
+	
+	private static String TODAY;
+	
+	static {
+		TODAY = new SimpleDateFormat("MM/dd/yyyy").format(new Date(System.currentTimeMillis()));
+	}
 	
 	@Test
 	public void testCreateDamagedIncident() {
@@ -271,8 +281,8 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
-				selenium.type("id=courtesyDescription", "");
 				selenium.select("id=courtesyReasonId", "label=Outside 4-Hour");
+				verifyFalse(selenium.isEditable("id=courtesyDescription"));
 				selenium.click("name=saveButton");
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
@@ -340,4 +350,117 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 		verifyFalse(selenium.isTextPresent("Special Conditions : Overweight "));
 		goToTaskManager();
 	}
+	
+	@Test
+	public void testAdditionalItemInformationDisabled() {
+		verifyTrue(setPermissions(new String[] { ADDITIONAL_ITEM_INFORMATION_COLLECT }, new boolean[] { false }));
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
+		verifyFalse(selenium.isTextPresent("Entered Date"));
+		verifyFalse(selenium.isElementPresent("name=inventorylist[0].dispPurchaseDate"));
+		verifyFalse(selenium.isElementPresent("name=inventorylist[0].dispInvItemCost"));
+		verifyFalse(selenium.isElementPresent("name=inventorylist[0].invItemCurrency"));
+		verifyFalse(selenium.isElementPresent("name=inventorylist[0].itemStatusId"));
+		verifyTrue(selenium.isElementPresent("name=deleteinventory_0"));
+		
+		checkAdditionalItemInformationOtherIncidents();
+		
+		goToTaskManager();
+	}
+	
+	@Test
+	public void testAdditionalItemInformationAuditTrailDisabled() {
+		verifyTrue(navigateToIncidentAuditTrail());
+		verifyFalse(selenium.isTextPresent("Entered Date: 08/23/2013\n     Purchase Date: \n     Cost: \n     Currency: US Dollar\n     Status:"));
+		goToTaskManager();
+	}
+	
+	@Test
+	public void testAdditionalItemInformationEnabled() {
+		verifyTrue(setPermissions(new String[] { ADDITIONAL_ITEM_INFORMATION_COLLECT }, new boolean[] { true }));
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
+		verifyTrue(selenium.isTextPresent("Entered Date"));
+		verifyTrue(selenium.isElementPresent("name=inventorylist[0].dispPurchaseDate"));
+		verifyTrue(selenium.isElementPresent("name=inventorylist[0].dispInvItemCost"));
+		verifyTrue(selenium.isElementPresent("name=inventorylist[0].invItemCurrency"));
+		verifyTrue(selenium.isElementPresent("name=inventorylist[0].itemStatusId"));
+		verifyTrue(selenium.isElementPresent("name=deleteinventory_0"));
+		
+		selenium.type("name=inventorylist[0].dispPurchaseDate", WN_CreateDamaged.TODAY);
+		selenium.type("name=inventorylist[0].dispInvItemCost", "1");
+		selenium.select("name=inventorylist[0].itemStatusId", "label=Returned");
+		selenium.click("name=saveButton");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			checkCopyrightAndQuestionMarks();
+			selenium.click("link=" + Settings.INCIDENT_ID_WN);
+			waitForPageToLoadImproved();
+			if (checkNoErrorPage()) {
+				checkCopyrightAndQuestionMarks();
+				verifyEquals(WN_CreateDamaged.TODAY, selenium.getValue("name=inventorylist[0].dispPurchaseDate"));
+				verifyEquals("1.00", selenium.getValue("name=inventorylist[0].dispInvItemCost"));
+				verifyEquals("USD", selenium.getValue("name=inventorylist[0].invItemCurrency"));
+				verifyEquals("800", selenium.getValue("name=inventorylist[0].itemStatusId"));
+			} else {
+				System.out.println("!!!!!!!!!!!!!!! - Failed to reload the incident in testAdditionalItemInformationEnabled. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+				verifyTrue(false);
+			}
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to save the incident in testAdditionalItemInformationEnabled. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+			verifyTrue(false);
+		}
+		
+		checkAdditionalItemInformationOtherIncidents();
+		
+		goToTaskManager();
+		
+	}
+	
+	private void checkAdditionalItemInformationOtherIncidents() {
+		selenium.click("id=menucol_1.1");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			checkCopyrightAndQuestionMarks();
+			selenium.click("name=skip_prepopulate");
+			waitForPageToLoadImproved();
+			if (checkNoErrorPage()) {
+				checkCopyrightAndQuestionMarks();
+				verifyFalse(selenium.isTextPresent("Entered Date"));
+				verifyFalse(selenium.isElementPresent("name=inventorylist[0].dispPurchaseDate"));
+				verifyFalse(selenium.isElementPresent("name=inventorylist[0].dispInvItemCost"));
+				verifyFalse(selenium.isElementPresent("name=inventorylist[0].invItemCurrency"));
+				verifyFalse(selenium.isElementPresent("name=inventorylist[0].itemStatusId"));
+				verifyTrue(selenium.isElementPresent("name=deleteinventory_0"));
+			} else {
+				System.out.println("!!!!!!!!!!!!!!! - Failed to load the lost/delay incident page after clicking skip prepopulate. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+				verifyTrue(false);
+			}
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to load the lost/delay incident prepopulation page. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+			verifyTrue(false);
+		}
+
+		selenium.click("id=menucol_3.1");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			checkCopyrightAndQuestionMarks();
+			selenium.click("name=skip_prepopulate");
+			waitForPageToLoadImproved();
+			if (checkNoErrorPage()) {
+				checkCopyrightAndQuestionMarks();
+				verifyFalse(selenium.isTextPresent("Entered Date"));
+				verifyFalse(selenium.isElementPresent("name=inventorylist[0].dispPurchaseDate"));
+				verifyFalse(selenium.isElementPresent("name=inventorylist[0].dispInvItemCost"));
+				verifyFalse(selenium.isElementPresent("name=inventorylist[0].invItemCurrency"));
+				verifyFalse(selenium.isElementPresent("name=inventorylist[0].itemStatusId"));
+				verifyTrue(selenium.isElementPresent("name=deleteinventory_0"));
+			} else {
+				System.out.println("!!!!!!!!!!!!!!! - Failed to load the missing incident page after clicking skip prepopulate. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+				verifyTrue(false);
+			}
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to load the missing incident prepopulation page. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+			verifyTrue(false);
+		}
+	}
+	
 }
