@@ -12,6 +12,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	private String EXPEDITE_TAG_NUM_COLLECT = "639";
 	private String RX_TIMESTAMP_COLLECT = "640";
 	private String RX_TIMESTAMP_DELETE = "641";
+	private String SPECIAL_CONDITIONS_COLLECT = "642";
 	
 	@Test
 	public void testCreateDamagedIncident() {
@@ -59,8 +60,8 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 				selenium.select("name=inventorylist[0].categorytype_ID", "label=Alcohol");
 				selenium.type("name=inventorylist[0].description", "TEST");
 				selenium.select("name=inventorylist[1].categorytype_ID", "label=Alcohol");
-				selenium.select("name=inventorylist[2].categorytype_ID", "label=Alcohol");
 				selenium.type("name=inventorylist[1].description", "TEST");
+				selenium.select("name=inventorylist[2].categorytype_ID", "label=Alcohol");
 				selenium.type("name=inventorylist[2].description", "TEST");
 				selenium.type("name=recordlocator", "TESTER");
 				selenium.click("saveButton");
@@ -297,6 +298,46 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 		verifyTrue(navigateToIncidentAuditTrail());
 		verifyTrue(selenium.isTextPresent("Courtesy Reason : Outside 4-Hour"));
 		verifyTrue(selenium.isTextPresent("Courtesy Reason Description :"));
+		goToTaskManager();
+	}
+	
+	@Test
+	public void testSpecialConditionsEnabled() {
+		verifyTrue(setPermissions(new String[] { SPECIAL_CONDITIONS_COLLECT }, new boolean[] { true }));
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
+		verifyTrue(selenium.isTextPresent("Special Conditions"));
+		verifyTrue(selenium.isElementPresent("name=theitem[0].specialCondition"));
+		verifyEquals("Please Select Overweight Oversized Both", selenium.getText("name=theitem[0].specialCondition"));
+		selenium.select("name=theitem[0].specialCondition", "label=Overweight");
+		selenium.click("name=saveButton");
+		waitForPageToLoadImproved();
+		if (!checkNoErrorPage()) {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to save the damaged incident after setting the special conditions field. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+			verifyTrue(false);
+		}
+		goToTaskManager();
+	}
+	
+	@Test
+	public void testSpecialConditionsAuditTrailEnabled() {
+		verifyTrue(navigateToIncidentAuditTrail());
+		verifyTrue(selenium.isTextPresent("Special Conditions : Overweight "));
+		goToTaskManager();
+	}
+	
+	@Test
+	public void testSpecialConditionsDisabled() {
+		verifyTrue(setPermissions(new String[] { SPECIAL_CONDITIONS_COLLECT }, new boolean[] { false }));
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
+		verifyFalse(selenium.isTextPresent("Special Conditions"));
+		verifyFalse(selenium.isElementPresent("name=theitem[0].specialCondition"));
+		goToTaskManager();
+	}
+
+	@Test
+	public void testSpecialConditionsAuditTrailDisabled() {
+		verifyTrue(navigateToIncidentAuditTrail());
+		verifyFalse(selenium.isTextPresent("Special Conditions : Overweight "));
 		goToTaskManager();
 	}
 }
