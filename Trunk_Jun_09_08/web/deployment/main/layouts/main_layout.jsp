@@ -1,3 +1,4 @@
+<%@page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
 <%@ taglib uri="/tags/struts-bean" prefix="bean" %>
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
 <%@ taglib uri="/tags/struts-logic" prefix="logic" %>
@@ -346,6 +347,7 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
 
 <script language="javascript">
 
+<% if (PropertyBMO.isTrue(PropertyBMO.SAVE_DATA_POPUP)) { %>
 jQuery(document).ready(function () {
     jQuery("#dirtyCheck-form").areYouSure();
     <% if (request.getAttribute("markDirty") != null) { %>
@@ -361,6 +363,7 @@ jQuery(document).ready(function () {
              function(){loadBeforeUnload($(window).data('beforeunload'));}
             );
 });
+<% } %>
 
 function clearBeforeUnload() {
 	var isOld = jQuery('html').hasClass('oldBrowser');

@@ -176,6 +176,7 @@ public class PropertyBMO {
 	public static final String LIMITED_CODES_LOSSDELAY = "limited.codes.lossdelay";
 	public static final String LIMITED_CODES_DAMAGED = "limited.codes.damaged";
 	public static final String LIMITED_CODES_MISSING = "limited.codes.missing";
+	public static final String LIMITED_CODES_DISPUTES = "limited.codes.disputes";
 	
 	public static final String THREAD_MONITOR_THREAD_TIMEOUT = "thread.monitor.thread.timeout";
 	public static final String THREAD_MONITOR_EMAIL_INTERVAL = "thread.monitor.email.interval";
@@ -198,10 +199,15 @@ public class PropertyBMO {
 	public static final String DUP_CLAIM_CACHE_EXPIRE_TIME = "dup.claim.cache.expire.time";
 	
 	public static final String HORNETQ_URL = "hornetq.url";
+	public static final String HORNETQ_HOST = "hornetq.host";
+	public static final String HORNETQ_PORT = "hornetq.port";
 	public static final String HORNETQ_DEST = "hornetq.dest";
 	public static final String HORNETQ_FACTORY = "hornetq.factory";
 	public static final String HORNETQ_USER = "hornetq.user";
 	public static final String HORNETQ_PASS = "hornetq.pass";
+	public static final String HORNETQ_REMOTE_CREDS = "hornetq.remote.creds";
+	public static final String HORNETQ_JMS_CREDS = "hornetq.jms.creds";
+	public static final String HORNETQ_USE_JNDI = "hornetq.use.jndi";
 	
 	public static final String RES_WS_TIMEOUT = "res.ws.timeout";
 	
@@ -219,6 +225,8 @@ public class PropertyBMO {
 	public static final String TRANSFIRST_ADDRESS_ENDPOINT="transfirst.address.endpoint";
 
 	public static final String POPULATE_STORAGE_LOCATION = "populate.storage.location";
+
+	public static final String SAVE_DATA_POPUP = "save.data.popup";
 	
 	public static final String CS2_EXPENSE_PAYCODE = "cs2.expense.paycode";
 	public static final String CS2_EXPENSE_STATUS = "cs2.expense.status";

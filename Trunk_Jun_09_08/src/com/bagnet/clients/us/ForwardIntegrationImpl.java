@@ -2,7 +2,9 @@ package com.bagnet.clients.us;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -22,6 +24,7 @@ import org.hornetq.api.core.TransportConfiguration;
 import org.hornetq.api.jms.HornetQJMSClient;
 import org.hornetq.api.jms.JMSFactoryType;
 import org.hornetq.core.remoting.impl.netty.NettyConnectorFactory;
+import org.hornetq.core.remoting.impl.netty.TransportConstants;
 
 import aero.nettracer.integrations.us.scanners.data.Forward;
 import aero.nettracer.integrations.us.scanners.data.Segment;
@@ -157,39 +160,62 @@ public class ForwardIntegrationImpl {
 
 	}
 
-    private static final String DEFAULT_DESTINATION = PropertyBMO.getValue(PropertyBMO.HORNETQ_DEST);
-    private static final String DEFAULT_FACTORY= PropertyBMO.getValue(PropertyBMO.HORNETQ_FACTORY);
-    private static final String DEFAULT_URL= PropertyBMO.getValue(PropertyBMO.HORNETQ_URL);
-    private static final String DEFAULT_USERNAME = PropertyBMO.getValue(PropertyBMO.HORNETQ_USER);//"nettracer";
-    private static final String DEFAULT_PASSWORD = PropertyBMO.getValue(PropertyBMO.HORNETQ_PASS);//"ntMSGpass1!";
-
 	private void sendMessage(ArrayList<Forward> payload) {
 		Connection connection = null;
 		InitialContext initialContext = null;
 
+	    String DEFAULT_DESTINATION = PropertyBMO.getValue(PropertyBMO.HORNETQ_DEST);
+	    String DEFAULT_FACTORY= PropertyBMO.getValue(PropertyBMO.HORNETQ_FACTORY);
+	    String DEFAULT_URL= PropertyBMO.getValue(PropertyBMO.HORNETQ_URL);
+	    String DEFAULT_HOST= PropertyBMO.getValue(PropertyBMO.HORNETQ_HOST);
+	    int DEFAULT_PORT= PropertyBMO.getValueAsInt(PropertyBMO.HORNETQ_PORT);
+	    String DEFAULT_USERNAME = PropertyBMO.getValue(PropertyBMO.HORNETQ_USER);//"nettracer";
+	    String DEFAULT_PASSWORD = PropertyBMO.getValue(PropertyBMO.HORNETQ_PASS);//"ntMSGpass1!";
+	    boolean REMOTE_CREDS = PropertyBMO.isTrue(PropertyBMO.HORNETQ_REMOTE_CREDS);
+	    boolean JMS_CREDS = PropertyBMO.isTrue(PropertyBMO.HORNETQ_JMS_CREDS);
+	    boolean USE_JNDI = PropertyBMO.isTrue(PropertyBMO.HORNETQ_USE_JNDI);
+
 		try {
-			Properties props = new Properties();
-			props.put(Context.INITIAL_CONTEXT_FACTORY, "org.jboss.naming.remote.client.InitialContextFactory");
-			props.put(Context.PROVIDER_URL, DEFAULT_URL);
-			props.put(Context.SECURITY_PRINCIPAL, DEFAULT_USERNAME);
-			props.put(Context.SECURITY_CREDENTIALS, DEFAULT_PASSWORD);
-			initialContext = new InitialContext(props);			
+			ConnectionFactory cf;
+			Queue queue;
 			
-			QueueConnectionFactory cf = (QueueConnectionFactory) initialContext.lookup(DEFAULT_FACTORY);
-			Queue queue = (Queue) initialContext.lookup(DEFAULT_DESTINATION);
+			if (USE_JNDI) {
+				
+				Properties props = new Properties();
+				props.put(Context.INITIAL_CONTEXT_FACTORY, "org.jboss.naming.remote.client.InitialContextFactory");
+				props.put(Context.PROVIDER_URL, DEFAULT_URL);
+				if (REMOTE_CREDS) {
+					props.put(Context.SECURITY_PRINCIPAL, DEFAULT_USERNAME);
+					props.put(Context.SECURITY_CREDENTIALS, DEFAULT_PASSWORD);
+				}
+				initialContext = new InitialContext(props);			
+				
+				cf = (ConnectionFactory) initialContext.lookup(DEFAULT_FACTORY);
+				queue = (Queue) initialContext.lookup(DEFAULT_DESTINATION);
+				
+			} else {
 			
-//			Queue queue = HornetQJMSClient.createQueue(DEFAULT_DESTINATION);
-//			
-//			TransportConfiguration tc = new TransportConfiguration(NettyConnectorFactory.class.getName());
-//
-//			// Step 3. Perform a lookup on the Connection Factory
-//			ConnectionFactory cf = (ConnectionFactory) HornetQJMSClient.createConnectionFactoryWithoutHA(JMSFactoryType.CF, tc);
+				Map<String, Object> connParams = new HashMap<String, Object>();
+				
+				connParams.put(TransportConstants.PORT_PROP_NAME, DEFAULT_PORT);
+				connParams.put(TransportConstants.HOST_PROP_NAME, DEFAULT_HOST);
+				
+				TransportConfiguration tc = new TransportConfiguration(NettyConnectorFactory.class.getName(), connParams);
+	
+				// Step 3. Perform a lookup on the Connection Factory
+				cf = (ConnectionFactory) HornetQJMSClient.createConnectionFactoryWithoutHA(JMSFactoryType.CF, tc);
+				queue = HornetQJMSClient.createQueue(DEFAULT_DESTINATION);
 
+			}
 			// Step 4.Create a JMS Connection
-			connection = cf.createConnection(DEFAULT_USERNAME, DEFAULT_PASSWORD);
+			if (JMS_CREDS) {
+				connection = cf.createConnection(DEFAULT_USERNAME, DEFAULT_PASSWORD);
+			} else {
+				connection = cf.createConnection();
+			}
 
-         //Step 5. Create a JMS Session
-         Session s = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+			//Step 5. Create a JMS Session
+			Session s = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
 			// Step 6. Create a JMS Message Producer
 			MessageProducer producer = s.createProducer(queue);

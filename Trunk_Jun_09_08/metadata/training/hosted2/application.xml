@@ -44,5 +44,11 @@
          <context-root>flyafrica</context-root>
      </web>
   </module>
+   <module>
+     <web>
+         <web-uri>demonstration_training.war</web-uri>
+         <context-root>demonstration</context-root>
+     </web>
+  </module>
  
 </application> 

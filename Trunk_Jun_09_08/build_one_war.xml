@@ -1244,6 +1244,7 @@
 		<antcall target="build-war-training-frontier"/>
 		<antcall target="build-war-training-southwest"/>
 		<antcall target="build-war-training-flyafrica"/>
+		<antcall target="build-war-training-demonstration"/>
 		<property name="app.xml.location" value="metadata/training/hosted2" />
 		<antcall target="donotrun-build-ear" />
 	</target>

@@ -24,6 +24,7 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.IssuanceItemBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.OtherSystemInformationBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
@@ -48,6 +49,11 @@ import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.issuance.IssuanceCategory;
+import com.bagnet.nettracer.tracing.db.issuance.IssuanceItem;
+import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemIncident;
+import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemInventory;
+import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemQuantity;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 
 /**
@@ -59,28 +65,45 @@ public class MBRActionUtils {
 	
 	static Logger logger = Logger.getLogger(MBRActionUtils.class);
 	
+	/**
+	 * This method is responsible for processing the Add buttons on the Incident pages.
+	 * 
+	 * @param theform
+	 * @param request
+	 * @param user
+	 * @param itemtype
+	 * @return
+	 */
 	public static boolean actionAdd(IncidentForm theform, HttpServletRequest request, Agent user, int itemtype) {
+		
+		// Permission for editing remarks on any incident. Split by incident type.
+		boolean editRemarks=false;
+		if(itemtype==TracingConstants.LOST_DELAY){
+			editRemarks=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_LD, user);
+		} else if (itemtype==TracingConstants.MISSING_ARTICLES){
+			editRemarks=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_MS, user);
+		} else if (itemtype==TracingConstants.DAMAGED_BAG){
+			editRemarks=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_DA, user);
+		}
+		
+		// Permission for editing item contents. Requires the remarks permission per client request.
+		boolean editContents = (editRemarks && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_NEW_CONTENTS, user));
+		
+		// Permission for editing the entire incident.
+		boolean editIncident = UserPermissions.hasIncidentSavePermission(user, theform.getIncident_ID());
+		
+
 		// when adding or deleting from the page,
 		// email_customer checkbox needs to be set to 0 if user unchecked it
-		boolean val2=false;
-		if(itemtype==TracingConstants.LOST_DELAY){
-			val2=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_LD, user);
-		} else if (itemtype==TracingConstants.MISSING_ARTICLES){
-			val2=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_MS, user);
-		} else if (itemtype==TracingConstants.DAMAGED_BAG){
-			val2=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_DA, user);
-		}
-		if(UserPermissions.hasIncidentSavePermission(user, theform.getIncident_ID()) || (val2 && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_NEW_CONTENTS, user)) ) {
-		
-		
-		
-			if (request.getParameter("email_customer") == null)
-				theform.setEmail_customer(0);
-				
-			int numberToAdd = 1;
-			int fileindex = -1;
-			StringTokenizer stt = null;
-			Enumeration e = request.getParameterNames();
+		if (request.getParameter("email_customer") == null)
+			theform.setEmail_customer(0);
+			
+		int numberToAdd = 1;
+		int fileindex = -1;
+		StringTokenizer stt = null;
+		Enumeration e = request.getParameterNames();
+		if (editIncident || editContents) {
+			// Adding contents to items.
 			while (e.hasMoreElements()) {
 				String parameter = (String) e.nextElement();
 				if (parameter.indexOf("addinventory") > -1) {
@@ -103,9 +126,10 @@ public class MBRActionUtils {
 					return true;
 				}
 			}
-	
-	
-	
+		}
+
+
+		if (editIncident || editRemarks) {
 			// add new remark box
 			if (request.getParameter("addremark") != null) {
 				//set new remark with current time
@@ -119,6 +143,8 @@ public class MBRActionUtils {
 				request.setAttribute("markDirty", 1);
 				return true;
 			}
+		}
+		if (editIncident) {
 			// add passenger
 			if (request.getParameter("addPassenger") != null) {
 				numberToAdd = TracerUtils.getNumberToAdd(request, "addPassengerNum");
@@ -172,7 +198,7 @@ public class MBRActionUtils {
 				request.setAttribute("markDirty", 1);
 				return true;
 			}
-			// add new itinerary box
+			// add new passenger itinerary box
 			if (request.getParameter("addpassit") != null) {		
 				numberToAdd = TracerUtils.getNumberToAdd(request, "addpassitNum");
 				for (int i=0; i<numberToAdd; ++i) {
@@ -182,6 +208,7 @@ public class MBRActionUtils {
 				request.setAttribute("markDirty", 1);
 				return true;
 			}
+			// add new bag itinerary box
 			if (request.getParameter("addbagit") != null) {
 				numberToAdd = TracerUtils.getNumberToAdd(request, "addbagitNum");
 				for (int i=0; i<numberToAdd; ++i) {
@@ -191,9 +218,82 @@ public class MBRActionUtils {
 				request.setAttribute("markDirty", 1);
 				return true;
 			}
-		}
+		} // end if (editIncident)
 		return false;
 		
+	}
+	
+	public static boolean actionIssueItem(IncidentForm theform, HttpServletRequest request, Agent user) {
+		// add new remark box
+		boolean issueQ = (request.getParameter("issueItem") != null);
+		boolean issueI = (request.getParameter("loanItem") != null || request.getParameter("tradeItem") != null);
+		if (issueQ || issueI) {
+			String type = request.getParameter("issuance_type");
+			String quantity = request.getParameter("issuance_quantity");
+			if (type != null && type.matches("^\\d+$")) {
+				IssuanceItemIncident iss_inc = new IssuanceItemIncident();
+				iss_inc.setIssueAgent(user);
+				iss_inc.setIssueDate(TracerDateTime.getGMTDate());
+				if (issueQ && quantity != null && quantity.matches("^\\d+$")) {
+					iss_inc.setQuantity(Integer.parseInt(quantity));
+					IssuanceItemQuantity qItem = IssuanceItemBMO.getQuantifiedItem(type);
+					iss_inc.setIssuanceItemQuantity(qItem);
+				} else if (issueI) {
+					IssuanceItemInventory iItem = IssuanceItemBMO.getInventoriedItem(type);
+					iss_inc.setIssuanceItemInventory(iItem);
+				} else { // issueQ but quantity is null or not a number
+					return false;
+				}
+				theform.getIssuanceItemIncidents().add(iss_inc);
+				request.setAttribute("markDirty", 1);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static void createIssuanceLists(HttpServletRequest request, Station station, int itemtype) {
+		List<IssuanceItemQuantity> returnQList = new ArrayList<IssuanceItemQuantity>();
+		List<IssuanceItemInventory> returnIList = new ArrayList<IssuanceItemInventory>();
+		List<IssuanceCategory> returnCList = new ArrayList<IssuanceCategory>();
+		if (station != null && station.getStation_ID() > 0) {
+			Station statObj = StationBMO.getStation(station.getStation_ID());
+			List<IssuanceItemQuantity> fullQList = IssuanceItemBMO.getQuantifiedItems(statObj);
+			List<IssuanceItemInventory> fullIList = IssuanceItemBMO.getInventoriedItems(statObj, TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_AVAILABLE);
+			for (IssuanceItemQuantity qItem : fullQList) {
+				if (isIssuanceItemActive(qItem.getIssuanceItem(), itemtype) && qItem.getQuantity() > 0) {
+					returnQList.add(qItem);
+					if (!returnCList.contains(qItem.getIssuanceItem().getCategory())) {
+						returnCList.add(qItem.getIssuanceItem().getCategory());
+					}
+				}
+			}
+			for (IssuanceItemInventory iItem : fullIList) {
+				if (isIssuanceItemActive(iItem.getIssuanceItem(), itemtype)) {
+					returnIList.add(iItem);
+					if (!returnCList.contains(iItem.getIssuanceItem().getCategory())) {
+						returnCList.add(iItem.getIssuanceItem().getCategory());
+					}
+				}
+			}
+		}
+		request.setAttribute("item_quantity_resultList", returnQList);
+		request.setAttribute("item_inventory_resultList", returnIList);
+		request.setAttribute("item_category_resultList", returnCList);
+	}
+	
+	private static boolean isIssuanceItemActive(IssuanceItem item, int itemtype) {
+		IssuanceCategory cat = item.getCategory();
+		if (!item.isActive() || !cat.isActive()) {
+			return false;
+		} else if(itemtype==TracingConstants.LOST_DELAY && !cat.isLostdelay()){
+			return false;
+		} else if (itemtype==TracingConstants.MISSING_ARTICLES && !cat.isMissing()){
+			return false;
+		} else if (itemtype==TracingConstants.DAMAGED_BAG && !cat.isDamage()){
+			return false;
+		}
+		return true;
 	}
 
 	public static boolean actionDelete(IncidentForm theform, HttpServletRequest request) {
