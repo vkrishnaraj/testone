@@ -16,6 +16,7 @@ public class ClaimsProperties {
 	public static final String SCANS_AVAILABLE = "scans_available";
 	public static final String MOBILE_LOCATION = "mobile_location";
 	public static final String CLAIMS_AVAILABLE = "claims_available";
+	public static final String AMERICAN_TEXT = "american_text";
 
 	private static final Logger logger = Logger.getLogger(ClaimsProperties.class);
 

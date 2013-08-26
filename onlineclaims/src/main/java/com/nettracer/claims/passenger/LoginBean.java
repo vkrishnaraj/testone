@@ -1,5 +1,7 @@
 package com.nettracer.claims.passenger;
 
+import com.nettracer.claims.utils.ClaimsProperties;
+
 /**
  * @author Utpal Description: This is needed for binding the user credential
  *         with the front end
@@ -9,6 +11,7 @@ public class LoginBean {
 	private String claimNumber;
 	private String lastName;
 	private String firstName;
+	private Boolean americanTextShown;
 
 	public LoginBean() {
 	}
@@ -46,6 +49,13 @@ public class LoginBean {
 
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
+	}
+	
+	public boolean isAmericanTextShown() {
+		if (americanTextShown == null) {
+			americanTextShown = ClaimsProperties.isTrue(ClaimsProperties.AMERICAN_TEXT);
+		}
+		return americanTextShown;
 	}
 
 }

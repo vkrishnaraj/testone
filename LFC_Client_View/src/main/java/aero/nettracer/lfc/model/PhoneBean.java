@@ -118,7 +118,11 @@ public class PhoneBean implements Serializable{
 	}
 
 	public String getLine() {
-		return line;
+		if(line!=null && !line.isEmpty())
+			return line;
+		else if (number!=null && !number.isEmpty())
+			return number;
+		return "";
 	}
 
 	public void setLine(String line) {

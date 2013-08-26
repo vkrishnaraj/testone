@@ -155,7 +155,7 @@ public class LostAndFoundLoginController {
 				if(report.getStatus().equals("Closed") || report.getDaysFromCreate() > 30 )  { 
 					return "closedform?faces-redirect=true";
 				} else if(report.isPaid()){
-					FacesUtil.addInfo("INFO: This lost report has already been paid for.");
+					FacesUtil.addInfo("A payment has already been processed to return this item.  No further action is required at this time.");
 				}   else {
 					session.setAttribute("edit", true);
 					return "shippingconfirm?faces-redirect=true";

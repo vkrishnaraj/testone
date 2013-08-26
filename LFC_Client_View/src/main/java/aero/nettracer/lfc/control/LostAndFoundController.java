@@ -227,7 +227,7 @@ public class LostAndFoundController {
 				return "shippingrates?faces-redirect=true";
 			} else {
 				FacesUtil
-						.addError("Shipping address did not return any services. Please confirm your address is correct. If this issue continues, please contact us at 1+(555)-555-5555");
+						.addError("We were unable to verify that FedEx is able to ship to your location. Please confirm your address is correct. If this issue persists, please contact us at 1+(256)-999-0980");
 				return null;
 			}
 			// FacesUtil.addError("Server Communication Error.");
@@ -265,7 +265,7 @@ public class LostAndFoundController {
 			session.setAttribute("shipbean", shipbean);
 			if (shipbean.getLost().isPaid()) {
 				FacesUtil
-						.addInfo("INFO: This Report has already been paid for.");
+						.addInfo("A payment has already been processed to return this item.  No further action is required at this time.");
 			} else {
 				lostReport.setPaid(true);
 				shipbean.getLost().setPaid(true);
@@ -507,7 +507,7 @@ public class LostAndFoundController {
 		boolean addressvalid = true;
 		if (prefAddress != null && !validateSameShipping()) {
 			FacesUtil
-					.addError("ERROR: Shipping Address information has been modified. Resubmitting to Fedex");
+					.addError("ERROR: Shipping Address information has been modified. Resubmitting to FedEx");
 
 		}
 		if (lostReport.getContact().getShippingName() == null
@@ -584,7 +584,7 @@ public class LostAndFoundController {
 					|| (validAddress != null && !validAddress.getScore()
 							.equals(BigInteger.valueOf(100)))) {
 				FacesUtil
-						.addError("ERROR: Address not valid within FedEx. Please check your address and confirm it's accurate before submitting again.");
+						.addError("ERROR: FedEx does not recognize the address you provided as valid. Please check your address and confirm it's accurate before submitting again.");
 				addressvalid = false;
 				isValid = false;
 			}
@@ -592,7 +592,7 @@ public class LostAndFoundController {
 
 		if (!addressvalid) {
 			FacesUtil
-					.addError("Shipping address was not valid. Please confirm your address is correct.");
+					.addError("The shipping address was not valid. Please confirm your address is correct.");
 		}
 
 		return isValid;

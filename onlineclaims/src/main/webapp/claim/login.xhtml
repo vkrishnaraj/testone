@@ -30,13 +30,19 @@
 			<div class="contentbodyspacing"></div>
 			<div class="contentbody">
 			<div id="htadj2ra"><!-- makes two inline divs the same height -->
-			<!-- Start body content --> <h:outputText id="l6" value="&#160;" />
-			<h:outputText id="l7" value="&#160;" /> <a4j:outputPanel
+			<!-- Start body content --> <a4j:outputPanel
 				id="passOutPutPanel" ajaxRendered="true">
 				<h:panelGrid id="mainPassPanel" columns="1" width="296">
 					<t:messages id="passLoginMsg" errorClass="loginerrormsg"
 						infoClass="infomsg" />
 					<h:outputText value="&#160;" />
+					<t:outputText value="Was your last flight on American Airlines?" style="font-weight:bold" rendered="#{passengerLoginController.loginBean.americanTextShown}"/>
+					<h:outputText value="If you arrived at your final destination on American, please go to aa.com to check bag status." rendered="#{passengerLoginController.loginBean.americanTextShown}"/>
+					<h:column rendered="#{passengerLoginController.loginBean.americanTextShown}">
+						<h:outputText value="Go to "/><a href="https://aa.com/bagstatus"><h:outputText value="aa.com/bagstatus"/></a>
+					</h:column>
+					<h:outputText value="Example TGGIBZ" rendered="#{passengerLoginController.loginBean.americanTextShown}" />
+					<h:outputText value="&#160;" rendered="#{passengerLoginController.loginBean.americanTextShown}" />
 					(<img src="../_images/reqbullet.gif" />Required )
 					<br/>
 					<p>&nbsp;<br /></p>
