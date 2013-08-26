@@ -37,12 +37,14 @@ import org.tempuri.SouthwestAirlinesStub;
 
 import com.bagnet.nettracer.integrations.delivery.DeliveryIntegrationResponse;
 import com.bagnet.nettracer.integrations.delivery.SERV;
+import com.bagnet.nettracer.tracing.bmo.CategoryBMO;
 import com.bagnet.nettracer.tracing.bmo.DelivercompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.BDO_Passenger;
+import com.bagnet.nettracer.tracing.db.Category;
 import com.bagnet.nettracer.tracing.db.DeliverCompany;
 import com.bagnet.nettracer.tracing.db.DeliveryIntegrationType;
 import com.bagnet.nettracer.tracing.db.Item;
@@ -279,7 +281,9 @@ public class CostServiceUtils {
 				} else {
 					id.setBagTag("notAvailable");
 				}
-				id.setBagOtherCharge(item.getOther());
+				Category o=CategoryBMO.getCategory(item.getOther());
+				if(o!=null)
+					id.setBagOtherCharge(o.getDescription());
 				if(item.getSpecialCondition()==TracingConstants.SPECIAL_CONDITION_OVERSIZED){
 					id.setOversize(true);
 					id.setOverweight(false);
@@ -300,7 +304,9 @@ public class CostServiceUtils {
 			} else {
 				id.setBagTag("notAvailable");
 			}
-			id.setBagOtherCharge(form.getOhd().getOther());
+			Category o=CategoryBMO.getCategory(form.getOhd().getOther());
+			if(o!=null)
+				id.setBagOtherCharge(o.getDescription());
 			if(form.getOhd().getSpecialCondition()==TracingConstants.SPECIAL_CONDITION_OVERSIZED){
 				id.setOversize(true);
 				id.setOverweight(false);

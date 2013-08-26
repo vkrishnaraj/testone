@@ -776,7 +776,7 @@ if (i.intValue() == 0) {
                 <bean:message key="colname.other" />
                 <br>
 			  <html:select property="ohd.other" styleClass="dropdown" >
-                <html:option value="">
+                <html:option value="0">
                   <bean:message key="select.please_select" />
                 </html:option>
                 <html:options collection="bdoCategoryList" property="id" labelProperty="description" />
@@ -894,10 +894,10 @@ if (i.intValue() == 0) {
                 <bean:message key="colname.other" />
                 <br>
 				  <html:select name="theitem" property="other" styleClass="dropdown" indexed="true" >
-	                <html:option value="">
+	                <html:option value="0">
 	                  <bean:message key="select.please_select" />
 	                </html:option>
-	                <html:options collection="bdoCategoryList" property="description" labelProperty="description" />
+	                <html:options collection="bdoCategoryList" property="id" labelProperty="description" />
 	              </html:select>
               </td>
             </tr>

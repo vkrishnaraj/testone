@@ -89,7 +89,7 @@ public class Item implements Serializable {
 	private String expediteTagNum;
 
 	private int specialCondition;
-	private String other;
+	private int other;
 	private boolean noAddFees;
 	
 	/**
@@ -1171,13 +1171,19 @@ public class Item implements Serializable {
 	}
 
 	/**
-	 * @hibernate.property type="string" length="50"
+	 * @return The Category of the Item
+	 * 
+	 * @hibernate.property type="int"
 	 */
-	public String getOther() {
+	public int getOther() {
 		return other;
 	}
 
-	public void setOther(String other) {
+	/**
+	 * @param other
+	 *          The other to set.
+	 */
+	public void setOther(int other) {
 		this.other = other;
 	}
 

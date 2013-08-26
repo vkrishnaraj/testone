@@ -13,8 +13,10 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TimeZone;
 
+import com.bagnet.nettracer.tracing.bmo.CategoryBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
+import com.bagnet.nettracer.tracing.utils.OHDUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 
@@ -93,7 +95,7 @@ public class OHD implements Serializable {
 	private String posId;
 	private boolean lateCheckInd;
 
-	private String other;
+	private int other;
 	private boolean noAddFees;
 
 	public String getDisplaydate() {
@@ -1144,13 +1146,19 @@ public class OHD implements Serializable {
 	}
 
 	/**
-	 * @hibernate.property type="string" length="50"
+	 * @return The Category of the OHD
+	 * 
+	 * @hibernate.property type="int"
 	 */
-	public String getOther() {
+	public int getOther() {
 		return other;
 	}
-	
-	public void setOther(String other) {
+
+	/**
+	 * @param other
+	 *          The other to set.
+	 */
+	public void setOther(int other) {
 		this.other = other;
 	}
 

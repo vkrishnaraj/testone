@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Expression;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.db.Category;
 import com.bagnet.nettracer.tracing.db.OHD_CategoryType;
 
 public class CategoryBMO {
@@ -49,6 +50,33 @@ public class CategoryBMO {
 			OHD_CategoryType tmp = (OHD_CategoryType) cri.list().get(0);
 			tmp.setLocale(locale);
 			return tmp;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public static Category getCategory(int categoryID) {
+		Session sess = null;
+		
+		try {
+			if(categoryID!=0){
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Category.class).add(
+					Expression.eq("id", Long.valueOf(categoryID)));
+			Category tmp = (Category) cri.list().get(0);
+			return tmp;
+			} else {
+				return null;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
