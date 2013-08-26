@@ -4391,7 +4391,10 @@
 		<copy todir="${basedir}/web/reports" file="companies/flyafrica/DamageReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/flyafrica/LostDelayReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/flyafrica/MissingReceipt.jrxml" />
-		
+
+		<copy todir="${basedir}/src" file="companies/flyafrica/report_email_ld.html" overwrite="true" />
+		<copy todir="${basedir}/src" file="companies/flyafrica/report_email_dam.html" overwrite="true" />
+		<copy todir="${basedir}/src" file="companies/flyafrica/report_email_pil.html" overwrite="true" />
 			
 		<antcall target="jasper_compile" />
 
