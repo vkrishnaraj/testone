@@ -255,9 +255,9 @@
               </table>
               <% } %>
               <div align="center">
-			                  <html:button property="back" styleId="button" onclick="history.back();">
+			                  <html:submit property="back" styleId="button">
 			                    <bean:message key="Back" />
-			                  </html:button>
+			                  </html:submit>
                     </div>
 					
                   </html:form>

@@ -39,6 +39,7 @@ import org.hibernate.annotations.Proxy;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.dr.Dispute;
+import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemIncident;
 import com.bagnet.nettracer.tracing.utils.ClientUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
@@ -134,6 +135,8 @@ public class Incident implements Serializable {
 	private Date rxTimestamp;
 	private int courtesyReasonId;
 	private String courtesyDescription;
+	
+	private List<IssuanceItemIncident> issuanceItemIncidents;
 
 	@Column(name="tracing_status_id")
 	public int getTracingStatus() {
@@ -955,7 +958,17 @@ public class Incident implements Serializable {
 		this.claims = claims;
 	}
 	
-	
+
+	@OneToMany(mappedBy = "incident", fetch=FetchType.EAGER)
+	@org.hibernate.annotations.OrderBy(clause = "issuedate")
+	@Fetch(FetchMode.SELECT)
+	public List<IssuanceItemIncident> getIssuanceItemIncidents() {
+		return issuanceItemIncidents;
+	}
+
+	public void setIssuanceItemIncidents(List<IssuanceItemIncident> issuanceItemIncidents) {
+		this.issuanceItemIncidents = issuanceItemIncidents;
+	}
 
 	/**
 	 * @return Returns the loss_code.

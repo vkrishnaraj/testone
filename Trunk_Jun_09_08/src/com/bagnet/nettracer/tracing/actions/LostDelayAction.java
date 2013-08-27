@@ -194,6 +194,8 @@ public class LostDelayAction extends CheckedAction {
 		if(user.getStation().getStation_ID() != theform.getStationassigned_ID()) {
 			request.setAttribute("cantmatch", "1");
 		}
+		
+		MBRActionUtils.createIssuanceLists(request, theform.getStationassigned(), TracingConstants.LOST_DELAY);
 
 		/** ****************** handle requests ******************** */
 
@@ -401,6 +403,12 @@ public class LostDelayAction extends CheckedAction {
 			return (mapping.findForward(TracingConstants.LD_MAIN));
 		}
 		if(MBRActionUtils.actionAdd(theform, request, user,TracingConstants.LOST_DELAY)) {
+			return (mapping.findForward(TracingConstants.LD_MAIN));
+		}
+		if(MBRActionUtils.actionIssueItem(theform, request, user)) {
+			return (mapping.findForward(TracingConstants.LD_MAIN));
+		}
+		if(MBRActionUtils.actionReturnItem(theform, request, user)) {
 			return (mapping.findForward(TracingConstants.LD_MAIN));
 		}
 
@@ -797,6 +805,7 @@ public class LostDelayAction extends CheckedAction {
 					saveMessages(request, errors);
 					request.setAttribute("prepopulate", new Integer("1"));
 				} else {
+					MBRActionUtils.createIssuanceLists(request, theform.getStationassigned(), TracingConstants.LOST_DELAY);
 					request.setAttribute("pnrlist", null);
 					session.setAttribute("pnrtrue", null);
 					request.setAttribute("markDirty", 1);
@@ -808,6 +817,8 @@ public class LostDelayAction extends CheckedAction {
 				request.setAttribute("prepopulate",new Integer("1"));
 			}
 		}
+
+		MBRActionUtils.createIssuanceLists(request, theform.getStationassigned(), TracingConstants.LOST_DELAY);
 		
 		return (mapping.findForward(TracingConstants.LD_MAIN));
 	}

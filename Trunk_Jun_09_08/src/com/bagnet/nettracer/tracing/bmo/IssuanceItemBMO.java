@@ -36,6 +36,31 @@ public class IssuanceItemBMO {
 	private static Logger logger = Logger.getLogger(IssuanceItemBMO.class);
 	
 	/**
+	 * Get an IssuanceItemQuantity by id. 
+	 * @param id
+	 * @return
+	 */
+	public static IssuanceItemQuantity getQuantifiedItem(String id) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			IssuanceItemQuantity qItem = (IssuanceItemQuantity) sess.load(IssuanceItemQuantity.class, Long.parseLong(id));
+			return  qItem;
+		} catch (Exception e) {
+			logger.fatal(e.getMessage());
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.fatal(e.getMessage());
+				}
+			}
+		}
+	}
+	
+	/**
 	 * Get quantified items by station. Do not return any inactive items with 0 quantity.
 	 * @param station
 	 * @return
@@ -48,6 +73,31 @@ public class IssuanceItemBMO {
 					+ "and not (q.quantity = 0 and (q.issuanceItem.active = 0 or q.issuanceItem.category.active = 0))");
 			query.setParameter("code", station.getStationcode());
 			return  query.list();
+		} catch (Exception e) {
+			logger.fatal(e.getMessage());
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.fatal(e.getMessage());
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Get an IssuanceItemInventory by id. 
+	 * @param id
+	 * @return
+	 */
+	public static IssuanceItemInventory getInventoriedItem(String id) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			IssuanceItemInventory invItem = (IssuanceItemInventory) sess.load(IssuanceItemInventory.class, Long.parseLong(id));
+			return  invItem;
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());
 			return null;
@@ -317,7 +367,7 @@ public class IssuanceItemBMO {
 	 * @param user
 	 * @param station
 	 */
-	public static void addInventoriedItem(long type, String desc, long barcode, int tradetype, Agent user, Station station) {
+	public static void addInventoriedItem(long type, String desc, String barcode, int tradetype, Agent user, Station station) {
 			Session sess = null;
 			Transaction t = null;
 			try {
@@ -363,7 +413,7 @@ public class IssuanceItemBMO {
 	 * @param tradetype
 	 * @param user
 	 */
-	public static void editInventoriedItem(long id, String desc, long barcode, int tradetype, Agent user) {
+	public static void editInventoriedItem(long id, String desc, String barcode, int tradetype, Agent user) {
 			Session sess = null;
 			Transaction t = null;
 			try {

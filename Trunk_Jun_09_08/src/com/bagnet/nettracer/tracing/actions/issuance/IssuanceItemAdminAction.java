@@ -150,8 +150,8 @@ public class IssuanceItemAdminAction extends Action {
 			String newDesc = (String) request.getParameter("item_desc");
 			String newBarcode = (String) request.getParameter("item_barcode");
 			String newTradetype = (String) request.getParameter("item_tradetype");
-			if (newBarcode != null && newBarcode.matches("^\\d+$") && newTradetype != null && newTradetype.matches("^\\d+$")) {
-				IssuanceItemBMO.addInventoriedItem(Long.parseLong(newType), newDesc, Long.parseLong(newBarcode), Integer.parseInt(newTradetype), user, searchStation);
+			if (newTradetype != null && newTradetype.matches("^\\d+$")) {
+				IssuanceItemBMO.addInventoriedItem(Long.parseLong(newType), newDesc, newBarcode, Integer.parseInt(newTradetype), user, searchStation);
 			}
 		}
 		
@@ -161,8 +161,8 @@ public class IssuanceItemAdminAction extends Action {
 				String newDesc = request.getParameter("item_desc_" + qID);
 				String newBarcode = request.getParameter("item_barcode_" + qID);
 				String newTradetype = request.getParameter("item_tradetype_" + qID);
-				if (newBarcode != null && newBarcode.matches("^\\d+$") && newTradetype != null && newTradetype.matches("^\\d+$")) {
-					IssuanceItemBMO.editInventoriedItem(Long.parseLong(qID), newDesc, Long.parseLong(newBarcode), Integer.parseInt(newTradetype), user);
+				if (newTradetype != null && newTradetype.matches("^\\d+$")) {
+					IssuanceItemBMO.editInventoriedItem(Long.parseLong(qID), newDesc, newBarcode, Integer.parseInt(newTradetype), user);
 				}
 			}
 		}

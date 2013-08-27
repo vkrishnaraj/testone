@@ -100,7 +100,9 @@ public final class EditIssuanceCategoryForm extends ActionForm {
 		if (category != null) {
 			category.setActive(false);
 			category.setDamage(false);
-			category.setInventory(false);
+			if (category.getId() <= 0) { // only reset inventory for new categories.
+				category.setInventory(false);
+			}
 			category.setLostdelay(false);
 			category.setMissing(false);
 			if (category.getItems() != null) {

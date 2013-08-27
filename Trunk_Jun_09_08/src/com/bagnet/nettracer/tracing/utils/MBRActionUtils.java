@@ -223,6 +223,25 @@ public class MBRActionUtils {
 		
 	}
 	
+	public static boolean actionReturnItem(IncidentForm theform, HttpServletRequest request, Agent user) {
+		if (request.getParameter("returnissuanceitem") != null) {
+			String index = request.getParameter("returnissuanceitem");
+			if (index != null && index.matches("^\\d+$")) {
+				int i = Integer.parseInt(index);
+				IssuanceItemIncident iItem = theform.getIssuanceItemIncidents().get(i);
+				if (iItem.getId() > 0) {
+					iItem.setReturned(true);
+				} else {
+					theform.getIssuanceItemIncidents().remove(i);
+				}
+				adjustIssuanceLists(request, null, null, iItem);
+				request.setAttribute("markDirty", 1);
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public static boolean actionIssueItem(IncidentForm theform, HttpServletRequest request, Agent user) {
 		// add new remark box
 		boolean issueQ = (request.getParameter("issueItem") != null);
@@ -237,10 +256,13 @@ public class MBRActionUtils {
 				if (issueQ && quantity != null && quantity.matches("^\\d+$")) {
 					iss_inc.setQuantity(Integer.parseInt(quantity));
 					IssuanceItemQuantity qItem = IssuanceItemBMO.getQuantifiedItem(type);
+					qItem.setQuantity(qItem.getQuantity() - iss_inc.getQuantity());
 					iss_inc.setIssuanceItemQuantity(qItem);
+					adjustIssuanceLists(request, qItem, null, null);
 				} else if (issueI) {
 					IssuanceItemInventory iItem = IssuanceItemBMO.getInventoriedItem(type);
 					iss_inc.setIssuanceItemInventory(iItem);
+					adjustIssuanceLists(request, null, iItem, null);
 				} else { // issueQ but quantity is null or not a number
 					return false;
 				}
@@ -250,6 +272,66 @@ public class MBRActionUtils {
 			}
 		}
 		return false;
+	}
+	
+	private static void adjustIssuanceLists(HttpServletRequest request, IssuanceItemQuantity qItem, IssuanceItemInventory iItem, IssuanceItemIncident item) {
+		List<IssuanceItemQuantity> returnQList = (ArrayList<IssuanceItemQuantity>) request.getAttribute("item_quantity_resultList");
+		List<IssuanceItemInventory> returnIList = (ArrayList<IssuanceItemInventory>) request.getAttribute("item_inventory_resultList");
+		List<IssuanceCategory> returnCList = new ArrayList<IssuanceCategory>();
+		boolean remove = true;
+		if (qItem != null) { // Issued Quantified Item
+			if (qItem.getQuantity() > 0) { // Only remove if quantity reduced to 0
+				remove = false;
+			}
+			int index = 0;
+			for (IssuanceItemQuantity lQItem : returnQList) { // Find item and either adjust quantity or remove from list
+				if (qItem.getId() == lQItem.getId()) {
+					if (remove) {
+						returnQList.remove(lQItem);
+					} else {
+						returnQList.set(index, qItem);
+					}
+				}
+				index++;
+			}
+		}
+		if (iItem != null) { // Issued Inventoried Item
+			for (IssuanceItemInventory lIItem : returnIList) {
+				if (iItem.getId() == lIItem.getId()) {
+					returnIList.remove(lIItem);
+				}
+			}
+		}
+		if (item != null) { // Returned an Issued Item
+			if (item.getIssuanceItemInventory() != null) { // For Inventoried just Add Item to List
+				returnIList.add(item.getIssuanceItemInventory());
+			} else { // For Quantified First try to adjust quantity if item available, if item not available then add it to list.
+				boolean addQItem = true;
+				for (IssuanceItemQuantity lQItem : returnQList) { // Adjusting quantity if possible
+					if (item.getIssuanceItemQuantity().getId() == lQItem.getId()) {
+						lQItem.setQuantity(lQItem.getQuantity() + item.getQuantity());
+						addQItem = false;
+					}
+				}
+				if (addQItem) { // Adding to list if quantity not adjusted
+					item.getIssuanceItemQuantity().setQuantity(item.getIssuanceItemQuantity().getQuantity() + item.getQuantity());
+					returnQList.add(item.getIssuanceItemQuantity());
+				}
+			}
+		}
+		for (IssuanceItemQuantity lQItem : returnQList) { // Reset categories for all Quantified Items
+			if (!returnCList.contains(lQItem.getIssuanceItem().getCategory())) {
+				returnCList.add(lQItem.getIssuanceItem().getCategory());
+			}
+		}
+		for (IssuanceItemInventory lIItem : returnIList) { // Reset categories for all Inventoried Items
+			if (!returnCList.contains(lIItem.getIssuanceItem().getCategory())) {
+				returnCList.add(lIItem.getIssuanceItem().getCategory());
+			}
+		}
+		request.setAttribute("item_quantity_resultList", returnQList);
+		request.setAttribute("item_inventory_resultList", returnIList);
+		request.setAttribute("item_category_resultList", returnCList);
 	}
 	
 	public static void createIssuanceLists(HttpServletRequest request, Station station, int itemtype) {

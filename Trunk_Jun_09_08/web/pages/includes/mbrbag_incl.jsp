@@ -1,3 +1,6 @@
+
+<%@page import="com.bagnet.nettracer.tracing.db.issuance.IssuanceItemInventory"%>
+<%@page import="com.bagnet.nettracer.tracing.db.issuance.IssuanceItem"%>
 <%@ page language="java" %>
 <%@ taglib uri="/tags/struts-bean" prefix="bean" %>
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
@@ -34,6 +37,15 @@
 		canAddContents=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_MS, a) && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_NEW_CONTENTS, a);
 	} else {
 		canAddContents=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_DA, a) && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_NEW_CONTENTS, a);
+	}
+	
+	boolean canIssueItems=false;
+	if(request.getAttribute("lostdelay")!=null){
+		canIssueItems=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_LOSTDELAY, a);
+	} else if (request.getAttribute("missing")!=null){
+		canIssueItems=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_MISSING, a);
+	} else {
+		canIssueItems=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_DAMAGE, a);
 	}
 %>
 
@@ -649,6 +661,151 @@
 	
 
     </script>
+<% if (canIssueItems) { %>
+    <br>
+    <br>
+        <script language="JavaScript">
+
+        var issItemType = "0";
+
+    	function populateType() {
+    		var catList=document.getElementById("issuance_category");
+    		var typeList=document.getElementById("issuance_type");
+    		var issueAddTR3=document.getElementById("issuanceAdd3");
+    		var issueAddTR4=document.getElementById("issuanceAdd4");
+    		var selectedCategory=catList.options[catList.selectedIndex].value;
+    		if (selectedCategory=="0") {
+        		typeList.options.length=0;
+				typeList.options[0]=new Option("No Category","0",false,false);
+        		typeList.disabled=true;
+	    		issueAddTR3.innerHTML="&nbsp;";
+	    		issueAddTR4.innerHTML="&nbsp;";
+        		return;
+        	}
+    		typeList.options.length=0;
+    		typeList.disabled=false;
+     		<logic:iterate indexId="i" id="c_item" name="item_category_resultList" type="com.bagnet.nettracer.tracing.db.issuance.IssuanceCategory" >
+    		if("<%=c_item.getId()%>"==selectedCategory)
+    			{	
+    				<%  boolean isInventoried = c_item.isInventory();
+    				    int index = 0;
+    					if (isInventoried) { %>
+    					    issItemType = "1";
+    						typeList.options[0]=new Option("Please Select","0",false,false);
+    						<% index++; %>
+    						<logic:iterate indexId="j" id="i_item" name="item_inventory_resultList" type="com.bagnet.nettracer.tracing.db.issuance.IssuanceItemInventory" >
+    						<% if (c_item.getId() == i_item.getIssuanceItem().getCategory().getId()) { 
+    								String customDesc = i_item.getIssuanceItem().getDescription() + "/" + i_item.getDescription() + "/" + i_item.getBarcode(); %>
+    							typeList.options[<%=index%>]=new Option("<%=customDesc%>","<%=i_item.getId()%>",false,false);
+    						<% index++; } %>
+    						</logic:iterate>
+				    		issueAddTR3.innerHTML="&nbsp;";
+				    		issueAddTR4.innerHTML="&nbsp;";
+    				<%  } else { %>
+    						issItemType = "0";
+							<logic:iterate indexId="j" id="q_item" name="item_quantity_resultList" type="com.bagnet.nettracer.tracing.db.issuance.IssuanceItemQuantity" >
+							<% if (c_item.getId() == q_item.getIssuanceItem().getCategory().getId()) { 
+									String customDesc = q_item.getIssuanceItem().getDescription() + "/" + q_item.getQuantity() + " Available"; %>
+								typeList.options[<%=index%>]=new Option("<%=customDesc%>","<%=q_item.getId()%>",false,false);
+							<% index++; } %>
+							</logic:iterate>
+				    		issueAddTR3.innerHTML="<bean:message key='issuance.item.quantity.issued' />" + "<br/><input type='text' name='issuance_quantity' class='textfield' value='1' />";
+				    		issueAddTR4.innerHTML="<input type='submit' name='issueItem' id='button' value='"+"<bean:message key='issuance.item.button.issue' />"+"' >";
+    				<%  } %>
+    			}
+    		</logic:iterate>
+    	}
+
+    	function populateInventoryOptions() {
+        	if ("1"==issItemType) {
+	    		var typeList=document.getElementById("issuance_type");
+				var issueAddTR3=document.getElementById("issuanceAdd3");
+	    		var issueAddTR4=document.getElementById("issuanceAdd4");
+	    		var selectedType=typeList.options[typeList.selectedIndex].value;
+		    	issueAddTR3.innerHTML="&nbsp;";
+		    	issueAddTR4.innerHTML="&nbsp;";
+				<logic:iterate indexId="i" id="i_item" name="item_inventory_resultList" type="com.bagnet.nettracer.tracing.db.issuance.IssuanceItemInventory" >
+	    			if("<%=i_item.getId()%>"==selectedType) {
+						<% boolean canLoan = (i_item.getTradeType() == TracingConstants.ISSUANCE_ITEM_INVENTORY_TYPE_BOTH || i_item.getTradeType() == TracingConstants.ISSUANCE_ITEM_INVENTORY_TYPE_LOAN_ONLY); %>
+						<% boolean canTradeout = (i_item.getTradeType() == TracingConstants.ISSUANCE_ITEM_INVENTORY_TYPE_BOTH || i_item.getTradeType() == TracingConstants.ISSUANCE_ITEM_INVENTORY_TYPE_TRADEOUT_ONLY); %>
+						<% if (canLoan) { %>
+				    		issueAddTR3.innerHTML="<input type='submit' name='loanItem' id='button' value='"+"<bean:message key='issuance.item.button.loan' />"+"' >";
+						<% }
+						   if (canTradeout) { %>
+				    		issueAddTR4.innerHTML="<input type='submit' name='tradeItem' id='button' value='"+"<bean:message key='issuance.item.button.tradeout' />"+"' >";
+						<% } %>
+	    			}
+				</logic:iterate>
+        	}
+    	}
+    	
+        </script>
+  <h1 class="green">
+      <bean:message key="header.issue_items" />
+      <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;">
+          <img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+      </h1>
+      <span class="reqfield">*</span>
+      <bean:message key="message.required" />
+        <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
+        <html:hidden property="returnissuanceitem" value="" disabled="true"/>
+      	<logic:iterate id="issuanceitem" indexId="iiIndex" name="incidentForm" property="issuanceItemIncidents" type="com.bagnet.nettracer.tracing.db.issuance.IssuanceItemIncident">
+      	<% boolean quantified = issuanceitem.getIssuanceItemQuantity() != null; %>
+      	<% IssuanceItem iItem; 
+      	if (quantified) { 
+      		iItem = issuanceitem.getIssuanceItemQuantity().getIssuanceItem();
+      	} else {
+      		iItem = issuanceitem.getIssuanceItemInventory().getIssuanceItem();
+      	}%>
+          <tr>
+          	<td><bean:message key="issuance.item.category" /><br/>
+          		<input type="text" class="textfield" disabled="true" value="<%=iItem.getCategory().getDescription() %>" /></td>
+          	<td><bean:message key="issuance.item.type" /><br/>
+          		<input type="text" class="textfield" disabled="true" value="<%=iItem.getDescription() %>" /></td>
+          	<td><bean:message key="issuance.item.description" /><br/>
+          		<input type="text" class="textfield" disabled="true" value="<% if (!quantified) { %><%=issuanceitem.getIssuanceItemInventory().getDescription() %><% } %>" /></td>
+          	<td><bean:message key="issuance.item.barcode" /><br/>
+          		<input type="text" class="textfield" disabled="true" value="<% if (!quantified) { %><%=issuanceitem.getIssuanceItemInventory().getBarcode() %><% } %>" /></td>
+          </tr><tr>
+          	<td><bean:message key="issuance.item.quantity.issued" /><br/>
+          		<input type="text" class="textfield" disabled="true" value="<% if (quantified) { %><%=issuanceitem.getQuantity() %><% } %>" /></td>
+          	<td><bean:message key="issuance.item.edit.agent" /><br/>
+          		<input type="text" class="textfield" disabled="true" value="<%=issuanceitem.getIssueAgent().getUsername() %>" /></td>
+          	<td><bean:message key="issuance.item.edit.date" /><br/>
+          		<input type="text" class="textfield" disabled="true" value="<%=TracingConstants.getDisplayDate(issuanceitem.getIssueDate(), a) %>" /></td>
+          	<td><% if (issuanceitem.isReturned()) { %>
+          			<bean:message key="issuance.item.returned" />
+          	    <% } else { %>
+          	    	<input type="submit" name="issuance_edit_<%=iiIndex%>" id="button" onclick="this.form.returnissuanceitem.value = <%=iiIndex%>; this.form.returnissuanceitem.disabled = false;" 
+						value="<bean:message key="issuance.item.button.return" />" >
+					</input>
+				<% } %></td>
+          </tr>
+          </logic:iterate>
+          <tr>
+          	<td colspan="4" align="center"><b><bean:message key="issuance.item.issue" /></b></td>
+          </tr>
+          <tr>
+          	<td><bean:message key="issuance.item.category" /><br/>
+	               <select id="issuance_category" name="issuance_category" class="dropdown" onchange="populateType()">
+	               	  <option value="0">Please Select</option>
+	                  <logic:iterate indexId="i" id="c_item" name="item_category_resultList" type="com.bagnet.nettracer.tracing.db.issuance.IssuanceCategory" >
+	                     <option value="<%=c_item.getId() %>" >
+	                     	<%=c_item.getDescription() %>
+	                     </option>
+	                  </logic:iterate>
+	               </select>
+          		</td>
+          	<td><bean:message key="issuance.item.type" /><br/>
+	               <select id="issuance_type" name="issuance_type" class="dropdown" disabled="true" onchange="populateInventoryOptions()">
+	               		<option value="0">No Category</option>
+	               </select>
+          		</td>
+          	<td id="issuanceAdd3" name="issuanceAdd3">&nbsp;</td>
+          	<td id="issuanceAdd4" name="issuanceAdd4">&nbsp;</td>
+          </tr>
+        </table>
+<% } %>
     <br>
     <br>
     &nbsp;&nbsp;&uarr;

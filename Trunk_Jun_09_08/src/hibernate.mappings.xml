@@ -307,4 +307,5 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.issuance.AuditIssuanceItemQuantity"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.issuance.IssuanceItemInventory"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.issuance.AuditIssuanceItemInventory"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.issuance.IssuanceItemIncident"/>
 		

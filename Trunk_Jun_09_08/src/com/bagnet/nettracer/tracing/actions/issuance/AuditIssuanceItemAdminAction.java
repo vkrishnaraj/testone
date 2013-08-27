@@ -37,7 +37,7 @@ import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
 public class AuditIssuanceItemAdminAction extends Action {
 	
-	private static final Logger logger = Logger.getLogger(IssuanceItemAdminAction.class);
+	private static final Logger logger = Logger.getLogger(AuditIssuanceItemAdminAction.class);
 	
 	/**
 	 * Action for auditIssuanceItemAdmin.do. JSP located at pages/issuance/auditIssuanceItemAdmin.jsp.
@@ -62,6 +62,11 @@ public class AuditIssuanceItemAdminAction extends Action {
 		AuditIssuanceItemAdminForm fform = (AuditIssuanceItemAdminForm) form;
 		
 		// HANDLE PARAMETERS FOR FIRST PAGE LOAD.
+		
+		if (request.getParameter("back") != null) {
+			response.sendRedirect("issuanceItemAdmin.do");
+			return null;
+		}
 		
 		Station searchStation = user.getStation();
 		if (request.getParameter("station") != null) {

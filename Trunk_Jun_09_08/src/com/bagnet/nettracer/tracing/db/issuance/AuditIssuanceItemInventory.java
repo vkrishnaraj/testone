@@ -36,7 +36,8 @@ public class AuditIssuanceItemInventory {
 	@Column(length = 100)
 	private String description;
 	
-	private long barcode;
+	@Column(length = 20)
+	private String barcode;
 
 	@ManyToOne
 	@JoinColumn(name = "inventory_status_id")
@@ -140,11 +141,11 @@ public class AuditIssuanceItemInventory {
 		this.description = description;
 	}
 
-	public long getBarcode() {
+	public String getBarcode() {
 		return barcode;
 	}
 
-	public void setBarcode(long barcode) {
+	public void setBarcode(String barcode) {
 		this.barcode = barcode;
 	}
 

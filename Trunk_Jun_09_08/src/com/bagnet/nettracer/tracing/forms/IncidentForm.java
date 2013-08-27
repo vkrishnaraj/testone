@@ -31,6 +31,7 @@ import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile;
+import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemIncident;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
@@ -263,6 +264,17 @@ public final class IncidentForm extends ValidatorForm {
 	private TimeZone _TIMEZONE;
 
 	private int email_customer;
+	
+	private List<IssuanceItemIncident> issuanceItemIncidents = new ArrayList<IssuanceItemIncident>();
+
+	public List<IssuanceItemIncident> getIssuanceItemIncidents() {
+		return issuanceItemIncidents;
+	}
+
+	public void setIssuanceItemIncidents(
+			List<IssuanceItemIncident> issuanceItemIncidents) {
+		this.issuanceItemIncidents = issuanceItemIncidents;
+	}
 
 	@Override
 	public void reset(org.apache.struts.action.ActionMapping mapping, javax.servlet.http.HttpServletRequest request) {

@@ -31,7 +31,7 @@ import com.bagnet.nettracer.tracing.utils.UserPermissions;
  */
 public class EditIssuanceCategoryAction extends Action {
 	
-	private static final Logger logger = Logger.getLogger(IssuanceItemAdminAction.class);
+	private static final Logger logger = Logger.getLogger(EditIssuanceCategoryAction.class);
 	
 	/**
 	 * This action runs before loading editIssuanceCategory.do. JSP located at pages/issuance/edit_issuance_category.jsp

@@ -2,9 +2,15 @@ package com.bagnet.nettracer.tracing.constant;
 
 import java.text.DecimalFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.TimeZone;
+
+import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 
 /**
@@ -268,6 +274,9 @@ public class TracingConstants {
 	
 	public static final String SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_STATION_ADMIN = "Issuance_Item_Station_Admin";
 	public static final String SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_GLOBAL_ADMIN = "Issuance_Item_Global_Admin";
+	public static final String SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_LOSTDELAY = "Issuance_Item_Lostdelay";
+	public static final String SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_DAMAGE = "Issuance_Item_Damage";
+	public static final String SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_MISSING = "Issuance_Item_Missing";
 	
 	//Table numbers for status
 	public final static int AJAX_STATUS_INC = 1;
@@ -1266,5 +1275,18 @@ public class TracingConstants {
 		} else {
 			return DB_DATETIMEFORMAT;
 		}
+	}
+
+	public static String getDisplayDate(Date toDisplay, Agent agent) {
+		String createDateDisp = "";
+		if (agent != null) {
+			String _DATEFORMAT = agent.getDateformat().getFormat();
+			String _TIMEFORMAT = agent.getTimeformat().getFormat();
+			TimeZone _TIMEZONE = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(agent.getDefaulttimezone()).getTimezone());
+			if (toDisplay != null) {
+				createDateDisp = DateUtils.formatDate(toDisplay, _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
+			}
+		}
+		return createDateDisp;
 	}
 }
