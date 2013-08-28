@@ -1861,6 +1861,17 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			WTRDelayedBagsCreateRQDocument d = WTRDelayedBagsCreateRQDocument.Factory.newInstance();
 			WTRDelayedBagsCreateRQ d1 = d.addNewWTRDelayedBagsCreateRQ();
 
+			String freeFormText = null;
+			if ((List<String>) fieldMap.get(WorldTracerField.FI) != null
+					&& ((List<String>) fieldMap.get(WorldTracerField.FI))
+							.size() > 0) {
+				freeFormText = ((List<String>) fieldMap
+						.get(WorldTracerField.FI)).get(0);
+			}
+
+			if (freeFormText != null) {
+				d1.addNewAdditionalInfo().setFurtherInfo(freeFormText);
+			}
 			// Set version & POS
 			d1.setVersion(VERSION_0_PT_1);
 			d1.addNewPOS().addNewSource().setAirlineVendorID(data.getAirlineCode());
@@ -1886,7 +1897,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			} else {
 				d2.setFaultStationCode(incident.getStationCode());
 			}
-
+			
 			PassengerPaymentType d3 = d2.addNewPassengerPayments().addNewPassengerPayment();
 
 			// String cs_fmt = "%02d %s/%s%1.2f";
@@ -2306,7 +2317,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			}
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.AG);
-			d1.setAgentID(fieldList.get(0));
+			d1.set(null);
 
 			// Send Message
 			WTRBagsCreateRSDocument wsresponse = null;
@@ -3027,6 +3038,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			rahl.setAhlId(ahlId);
 			rahl.setAirlineCode(ahlId.substring(3, 5));
 			rahl.setStationCode(ahlId.substring(0, 3));
+			
+			rahl.setFurtherInfo(wr1.getAdditionalInfo().getFurtherInfo());
 
 			if (wr1.getDiaryInfo() != null && wr1.getDiaryInfo().getCreateDate() != null) {
 				rahl.setCreateDate(wr1.getDiaryInfo().getCreateDate());
@@ -3064,6 +3077,10 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						int sal = mapSalutation(wsp.getTitle());
 						fPax.setSalutation(sal);
 					}
+					
+					if(wsp.getLanguage()!=null){
+						fPax.setLanguageFreeFlow(wsp.getLanguage());
+					}
 				}
 
 				if (wsp.getFrequentFlyerID() != null) {
@@ -3097,6 +3114,9 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 							add.setAddress1(ci.getPermanentAddress().getAddressLineArray(0));
 						if (length >= 2)
 							add.setAddress2(ci.getPermanentAddress().getAddressLineArray(1));
+					}
+					if(ci.getEmails()!=null){
+						add.setEmailAddress(ci.getEmails().getEmailArray(0));
 					}
 
 					add.setZip(ci.getZipCode());

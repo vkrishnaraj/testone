@@ -1620,6 +1620,8 @@ public class WorldTracerWebService implements WorldTracerConnector {
 			traceComp.setTime(i.getTracingComplete());
 			a.setTracingFinalized(traceComp);
 		}
+		
+		a.setFurtherInfo(i.getIncident_ID()+"");
 	}
 
 

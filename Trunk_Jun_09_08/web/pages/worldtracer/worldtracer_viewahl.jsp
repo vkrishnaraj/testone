@@ -188,6 +188,25 @@
 				
 				
 				%>
+				<br/>
+				
+					<bean:write name="passenger" property="address.emailAddress" />
+					<logic:notEmpty name="passenger.address" property="homePhone">
+						<bean:message key="wt.view.ahl.passenger.homephone"/> 
+						<bean:write name="passenger" property="address.homePhone" />
+					</logic:notEmpty>
+					<logic:notEmpty name="passenger.address" property="workPhone">
+						<bean:message key="wt.view.ahl.passenger.workphone"/>
+						<bean:write name="passenger" property="address.workPhone" />
+					</logic:notEmpty>
+					<logic:notEmpty name="passenger.address" property="mobilePhone">
+						<bean:message key="wt.view.ahl.passenger.mobilephone"/>
+						<bean:write name="passenger" property="address.mobilePhone" />
+					</logic:notEmpty>
+					<logic:notEmpty name="passenger.address" property="altPhone">
+						<bean:message key="wt.view.ahl.passenger.altphone"/>
+						<bean:write name="passenger" property="address.altPhone" />
+					</logic:notEmpty>
 				</logic:notEmpty>
 							
 				</td>
@@ -260,6 +279,8 @@
 					property="type" /> <br />
 				<span class="label"><bean:message key="wt.view.ahl.bag.description" /></span> <bean:write name="bag"
 					property="desc1" /> <br />
+				<span class="label"><bean:message key="wt.view.ahl.bag.manufacturer" /></span>
+				<bean:write name="bag" property="manufacturer" /> <br />
 				<dt>Contents:</dt>
 				<ul>
 				<logic:iterate id="content" name="bag" property="content"
@@ -275,6 +296,11 @@
 			</tr>
 		</logic:iterate>
        	
+       	<tr>
+			<td class="label"><span class="label"><bean:message key="wt.view.ahl.further.information" /></span></td>
+			<td><bean:write name="wtr" property="furtherInformation"/></td>
+			</tr>
+		<tr>
        	
        	</td>
 	</td>

@@ -21,6 +21,7 @@ public class Ahl {
 	private String faultStation;
 	private int faultReason;
 	private Calendar tracingFinalized;
+	private String furtherInfo;
 
 	public String getFaultReasonDescription() {
 		return faultReasonDescription;
@@ -164,6 +165,14 @@ public class Ahl {
 
 	public void setTracingFinalized(Calendar tracingFinalized) {
 		this.tracingFinalized = tracingFinalized;
+	}
+
+	public String getFurtherInfo() {
+		return furtherInfo;
+	}
+
+	public void setFurtherInfo(String furtherInfo) {
+		this.furtherInfo = furtherInfo;
 	}
 
 }

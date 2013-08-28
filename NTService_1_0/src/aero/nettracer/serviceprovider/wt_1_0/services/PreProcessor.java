@@ -374,6 +374,8 @@ public class PreProcessor {
 
 		addIncidentFieldEntry(WorldTracerField.PR, data.getPnrLocator(), result);
 
+		addIncidentFieldEntry(WorldTracerField.FI, data.getFurtherInfo(), result);
+
 		if (data.getBagItinerary() != null) {
 			for (Itinerary i : data.getBagItinerary()) {
 				getItineraryInfo(i, result, false);
