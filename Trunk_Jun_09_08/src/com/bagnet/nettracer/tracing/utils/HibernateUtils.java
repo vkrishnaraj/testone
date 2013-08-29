@@ -323,6 +323,7 @@ public class HibernateUtils {
 						c.getVariable().setScannerDefaultForward(obj.getVariable().getScannerDefaultForward());
 						
 						c.getVariable().setAuto_close_days_back(obj.getVariable().getAuto_close_days_back());
+						c.getVariable().setAuto_close_ohd_days_back(obj.getVariable().getAuto_close_ohd_days_back());
 						c.getVariable().setAuto_close_ld_code(obj.getVariable().getAuto_close_ld_code());
 						c.getVariable().setAuto_close_dam_code(obj.getVariable().getAuto_close_dam_code());
 						c.getVariable().setAuto_close_pil_code(obj.getVariable().getAuto_close_pil_code());
