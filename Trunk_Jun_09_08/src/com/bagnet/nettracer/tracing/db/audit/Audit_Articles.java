@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
@@ -23,6 +24,7 @@ public class Audit_Articles implements Serializable {
 	private int Articles_ID;
 	private String article;
 	private String description;
+	private Date enteredDate;
 	private Date purchasedate;
 	private double cost;
 	private String currency_ID;
@@ -30,6 +32,8 @@ public class Audit_Articles implements Serializable {
 	private String _DATEFORMAT;
 	
 	private Audit_Incident audit_incident;
+	
+	private int statusId;
 
 	/**
 	 * @return Returns the audit_articles_id.
@@ -159,7 +163,18 @@ public class Audit_Articles implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
+	/**
+	 * @hibernate.property type="date"
+	 */
+	public Date getEnteredDate() {
+		return enteredDate;
+	}
 
+	public void setEnteredDate(Date enteredDate) {
+		this.enteredDate = enteredDate;
+	}
+	
 	/**
 	 * @return Returns the purchasedate.
 	 * 
@@ -167,6 +182,14 @@ public class Audit_Articles implements Serializable {
 	 */
 	public Date getPurchasedate() {
 		return purchasedate;
+	}
+
+	public String getDisEnteredDate() {
+		return DateUtils.formatDate(getEnteredDate(), get_DATEFORMAT(), null, null);
+	}
+	
+	public void setDisEnteredDate(String disEnteredDate) {
+		setPurchasedate(DateUtils.convertToDate(disEnteredDate, get_DATEFORMAT(), null));
 	}
 
 	public String getDispurchasedate() {
@@ -199,6 +222,21 @@ public class Audit_Articles implements Serializable {
 	public void set_DATEFORMAT(String _dateformat) {
 
 		_DATEFORMAT = _dateformat;
+	}
+
+	/**
+	 * @hibernate.property
+	 */
+	public int getStatusId() {
+		return statusId;
+	}
+
+	public void setStatusId(int statusId) {
+		this.statusId = statusId;
+	}
+	
+	public String getDisStatusId() {
+		return TracerUtils.getText(Status.getKey(getStatusId()), (String) null);
 	}
 
 }

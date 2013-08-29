@@ -271,6 +271,7 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_SPECIAL_CONDITIONS = "Special_Conditions";
 	public static final String SYSTEM_COMPONENT_NAME_ADDITIONAL_ITEM_INFORMATION_COLLECT = "Additional_Item_Information_Collect";
 	public static final String SYSTEM_COMPONENT_NAME_INCIDENT_COURTESY_REASON_COLLECT = "Incident_Courtesy_Reason_Collect";
+	public static final String SYSTEM_COMPONENT_NAME_ADDITIONAL_MISSING_ITEM_INFORMATION_COLLECT = "Additional_Missing_Item_Information_Collect";
 	
 	public static final String SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_STATION_ADMIN = "Issuance_Item_Station_Admin";
 	public static final String SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_GLOBAL_ADMIN = "Issuance_Item_Global_Admin";

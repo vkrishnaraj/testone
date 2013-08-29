@@ -20,6 +20,7 @@
 
     IncidentForm myform = (IncidentForm) session.getAttribute("incidentForm");
 	boolean val2=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_MS, a) && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADD_NEW_CONTENTS, a);
+	boolean collectAddMissItemInfo = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADDITIONAL_MISSING_ITEM_INFORMATION_COLLECT, a);
 %>
 
 
@@ -355,57 +356,71 @@ function disableButton(aButton) {
         <span class="reqfield">*</span> <bean:message
           key="message.required" />
           
-          <logic:iterate id="article"
-          indexId="i" name="incidentForm" property="articlelist" type="com.bagnet.nettracer.tracing.db.Articles">
-          <div id="<%=TracingConstants.JSP_DELETE_ARTICLE %>_<%=i%>">
-          <table class="<%=cssFormClass %>" cellspacing="0"
-            cellpadding="0">
-            <tr>
-              <td><a name='addarticle<%= i %>'></a> <bean:message
-                key="colname.article.req" /> <br>
-              <html:text name="article" property="article" size="30"
-                maxlength="50" styleClass="textfield" indexed="true" />
-              </td>
-              <td><bean:message key="colname.purchase_date" /> <br>
-              <html:text name="article" property="dispurchasedate"
-                size="15" maxlength="10" styleClass="textfield"
-                indexed="true" /><img
-                src="deployment/main/images/calendar/calendar_icon.gif"
-                id="calendar5<%= i %>" name="calendar5<%= i %>"
-                height="15" width="20" border="0"
-                onmouseover="this.style.cursor='hand'"
-                onClick="cal1xx.select2(document.incidentForm, '<%= "article[" + i + "].dispurchasedate" %>','calendar5<%= i %>','<%= a.getDateformat().getFormat() %>'); return false;"></td>
-              <td><bean:message key="colname.cost.article" /> <br>
-              <html:text name="article" property="discost" size="13"
-                maxlength="12" styleClass="textfield" indexed="true" />
-              </td>
-              <td><bean:message key="colname.currency" /> <br>
-              <html:select name="article" property="currency_ID"
-                styleClass="dropdown" indexed="true">
-                <html:options collection="currencylist"
-                  property="currency_ID" labelProperty="id_desc" />
-              </html:select></td>
-            </tr>
-            <tr>
-              <td colspan=4><bean:message key="colname.desc" /> <br>
-<%
-            String remarkDescription = "article[" + i + "].description";
-            String remarkText        = "this.form.elements['" + remarkDescription + "']";
-            String remarkText2       = "this.form.elements['" + remarkDescription + "2']";
-%>
-              <textarea name="<%= remarkDescription %>"
-                cols="80" rows="5" onkeydown="textCounter2(<%= remarkText %>, <%= remarkText2 %>,255);"
-                onkeyup="textCounter2(<%= remarkText %>, <%= remarkText2 %>,255);"><%= article.getDescription() %></textarea>
-              <input name="<%= remarkDescription + "2" %>" type="text" value="255" size="4" maxlength="4" disabled="true" />
-                </td>
-            </tr>
-            <tr>
-              <td colspan=4>
-              <input type="button" value="<bean:message key="button.delete_article" />" onclick="hideThisDiv('<%=TracingConstants.JSP_DELETE_ARTICLE %>_<%=i%>', '<bean:message key="ma_article.lc" />')" id="button">              
-              </td>
-            </tr>
-          </table>
-          </div>
+          <logic:iterate id="article" indexId="i" name="incidentForm" property="articlelist" type="com.bagnet.nettracer.tracing.db.Articles">
+	          <div id="<%=TracingConstants.JSP_DELETE_ARTICLE %>_<%=i%>">
+		          <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
+		            <tr>
+		            <% if (collectAddMissItemInfo) { %>
+		              <td>
+		              	<bean:message key="colname.entered.date" />
+	            		<br>
+			            <html:text name="article" property="disEnteredDate" size="15" maxlength="10" styleClass="textfield" disabled="true" indexed="true" />
+		              </td>
+	              	<% } %>
+		              <td>
+			            <bean:message key="colname.purchase_date" />
+			            <br>
+			            <html:text name="article" property="dispurchasedate" size="15" maxlength="10" styleClass="textfield" indexed="true" />
+			            <img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar5<%= i %>" name="calendar5<%= i %>" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select2(document.incidentForm, '<%= "article[" + i + "].dispurchasedate" %>','calendar5<%= i %>','<%= a.getDateformat().getFormat() %>'); return false;">
+		              </td>
+		              <td>
+		              	<bean:message key="colname.cost.article" />
+		              	<br>
+		              	<html:text name="article" property="discost" size="13" maxlength="12" styleClass="textfield" indexed="true" />
+		              </td>
+		              <td>
+		              	<bean:message key="colname.currency" />
+		              	<br>
+		              	<html:select name="article" property="currency_ID" styleClass="dropdown" indexed="true">
+		                	<html:options collection="currencylist" property="currency_ID" labelProperty="id_desc" />
+		              	</html:select>
+	              	  </td>
+	              	  <% if (collectAddMissItemInfo) { %>
+	              	  <td>
+		              	<bean:message key="colname.item.status" />
+		              	<br>
+		              	<html:select name="article" property="statusId" styleClass="dropdown" indexed="true" >
+		              		<html:option value="0">
+								<bean:message key="select.please_select" />
+							</html:option>
+		              		<html:options collection="damagedItemStatusList" property="status_ID" labelProperty="description" />
+		              	</html:select>
+		           	  </td> 
+		           	  <% } %>
+		            </tr>
+		            <tr>
+		              <td>
+		              	<a name='addarticle<%= i %>'></a> <bean:message key="colname.article.req" />
+		              	<br>
+		              	<html:text name="article" property="article" size="30" maxlength="50" styleClass="textfield" indexed="true" />
+		              </td>
+		              <td <% if (collectAddMissItemInfo) { %>colspan=4<% } else { %>colspan=3<% } %>><bean:message key="colname.desc" /> <br>
+			<%
+			            String remarkDescription = "article[" + i + "].description";
+			            String remarkText        = "this.form.elements['" + remarkDescription + "']";
+			            String remarkText2       = "this.form.elements['" + remarkDescription + "2']";
+			%>
+			              <textarea name="<%= remarkDescription %>" cols="60" rows="5" onkeydown="textCounter2(<%= remarkText %>, <%= remarkText2 %>,255);" onkeyup="textCounter2(<%= remarkText %>, <%= remarkText2 %>,255);"><%= article.getDescription() %></textarea>
+			              <input name="<%= remarkDescription + "2" %>" type="text" value="255" size="4" maxlength="4" disabled="true" />
+		              </td>
+		            </tr>
+		            <tr>
+		              <td <% if (collectAddMissItemInfo) { %>colspan=5<% } else { %>colspan=4<% } %>>
+		      	        <input type="button" value="<bean:message key="button.delete_article" />" onclick="hideThisDiv('<%=TracingConstants.JSP_DELETE_ARTICLE %>_<%=i%>', '<bean:message key="ma_article.lc" />')" id="button">              
+		              </td>
+		            </tr>
+		          </table>
+	          </div>
         </logic:iterate>
         <center>
 <select name="addarticlesNum">

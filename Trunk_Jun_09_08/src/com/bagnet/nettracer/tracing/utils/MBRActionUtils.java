@@ -911,6 +911,7 @@ public class MBRActionUtils {
 			if (type == TracingConstants.MISSING_ARTICLES) {
 				Articles a = theform.getArticle(0);
 				a.set_DATEFORMAT(user.getDateformat().getFormat());
+				a.setEnteredDate(new Date());
 				a.setCurrency_ID(user.getDefaultcurrency());
 			}
 

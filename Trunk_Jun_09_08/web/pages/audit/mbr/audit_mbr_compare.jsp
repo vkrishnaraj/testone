@@ -63,6 +63,7 @@ function updatePagination() {
  	boolean hasViewEditPassportPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSPORT_VIEW_EDIT, a);
  	
  	boolean collectAddItemInfo = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADDITIONAL_ITEM_INFORMATION_COLLECT, a);
+ 	boolean collectAddMissItemInfo = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADDITIONAL_MISSING_ITEM_INFORMATION_COLLECT, a);
  	boolean courtesyReasonCollect = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_INCIDENT_COURTESY_REASON_COLLECT, a);
  	
 %>
@@ -828,14 +829,27 @@ function updatePagination() {
                     :
                     <bean:write name="article" property="article" />
                     <br>
+                    <% if (collectAddMissItemInfo) { %>
+		              	<bean:message key="colname.entered.date" />
+						:
+	            		<bean:write name="article" property="disEnteredDate" />
+	            		<br>
+                    <% } %>
                     <bean:message key="colname.purchase_date" />
                     :
                     <bean:write name="article" property="dispurchasedate" />
+                    <br>
                     <bean:message key="colname.cost" />
                     :
                     <bean:write name="article" property="discost" />
                     <bean:write name="article" property="currency_ID" />
                     <br>
+                    <% if (collectAddMissItemInfo) { %>
+		              	<bean:message key="colname.item.status" />
+						:
+	            		<bean:write name="article" property="disStatusId" />
+	            		<br>
+                    <% } %>
                     <bean:message key="colname.desc" />
                     :
                     <bean:write name="article" property="description" />

@@ -671,6 +671,7 @@ public final class IncidentForm extends ValidatorForm {
 		while (this.articlelist.size() <= index) {
 			Articles a = new Articles();
 			a.set_DATEFORMAT(agent.getDateformat().getFormat());
+			a.setEnteredDate(new Date());
 			this.articlelist.add(a);
 		}
 		return (Articles) this.articlelist.get(index);
