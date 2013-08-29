@@ -100,6 +100,7 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	private Integer auto_close_ld_station;
 	private Integer auto_close_dam_station;
 	private Integer auto_close_pil_station;
+	private Integer auto_close_ohd_days_back;
 
 	//lock incident
 	private Integer incident_lock_mins;
@@ -486,6 +487,14 @@ public final class MaintainCompanyForm extends ValidatorForm {
 
 	public void setIssuanceitemxdaysback(Integer issuanceitemxdaysback) {
 		this.issuanceitemxdaysback = issuanceitemxdaysback;
+	}
+
+	public Integer getAuto_close_ohd_days_back() {
+		return auto_close_ohd_days_back;
+	}
+
+	public void setAuto_close_ohd_days_back(Integer auto_close_ohd_days_back) {
+		this.auto_close_ohd_days_back = auto_close_ohd_days_back;
 	}
 
 

@@ -133,6 +133,7 @@ public final class ManageCompany extends Action {
 					dForm.setDefault_loss_code("" + cmpny.getVariable().getDefault_loss_code());
 					dForm.setEmail_customer(cmpny.getVariable().isEmail_customer());
 					dForm.setAutoCloseOhd(cmpny.getVariable().isAutoCloseOhd());
+					dForm.setAuto_close_ohd_days_back(cmpny.getVariable().getAuto_close_ohd_days_back());
 					dForm.setEmail_host("" + cmpny.getVariable().getEmail_host());
 					dForm.setEmail_port("" + cmpny.getVariable().getEmail_port());
 					dForm.setEmail_from("" + cmpny.getVariable().getEmail_from());
@@ -365,6 +366,10 @@ public final class ManageCompany extends Action {
 
 					if (dForm.getAuto_close_days_back() != null) {
 						var.setAuto_close_days_back(dForm.getAuto_close_days_back().intValue());
+					}
+
+					if (dForm.getAuto_close_ohd_days_back() != null) {
+						var.setAuto_close_ohd_days_back(dForm.getAuto_close_ohd_days_back().intValue());
 					}
 					if (dForm.getAuto_close_ld_code() != null) {
 						var.setAuto_close_ld_code(dForm.getAuto_close_ld_code().intValue());

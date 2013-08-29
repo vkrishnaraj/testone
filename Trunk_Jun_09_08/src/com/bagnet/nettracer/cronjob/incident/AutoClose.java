@@ -14,6 +14,7 @@ import org.hibernate.Session;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
@@ -23,11 +24,14 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCloseAhl;
+import com.bagnet.nettracer.tracing.db.wtq.WtqCloseOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqIncidentAction;
+import com.bagnet.nettracer.tracing.db.wtq.WtqOhdAction;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
@@ -158,6 +162,93 @@ public class AutoClose {
 					}
 
 					logger.info("CLOSED " + successfulCloses + " INCIDENTS WITH AUTO-CLOSE!");
+					
+				} catch (Exception e) {
+					logger.error("AUTO-CLOSE FAILURE: " + e);
+				} finally {
+					if (session != null) session.close();
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Cron process to auto close old ohds at LZ
+	 */
+	@SuppressWarnings("rawtypes")
+	public void autoCloseOHDs() {
+		
+		Company comp = CompanyBMO.getCompany(companyCode);
+		logger.debug("COMPANY LOADED: " + comp.getCompanyCode_ID());
+		
+		if (comp != null && comp.getVariable() != null) {
+			Company_Specific_Variable vars = comp.getVariable();
+			logger.debug("VARIABLES LOADED: " + vars.getAuto_close_ohd_days_back());
+			
+			if (vars.getAuto_close_ohd_days_back() > 0) {
+
+				logger.debug("RUNNING AUTO-CLOSE: " + vars.getAuto_close_ohd_days_back());
+				Session session = null;
+				try {
+					session = HibernateWrapper.getSession().openSession();
+					Calendar cal = Calendar.getInstance();
+					cal.add(Calendar.DATE, (-1 * vars.getAuto_close_ohd_days_back()));
+					String date = DateUtils.formatDate(cal.getTime(),TracingConstants.DB_DATEFORMAT,null,null);
+					String sql = "select OHD_ID from ohd where founddate < '" + date + "' and status_ID != " + TracingConstants.OHD_STATUS_CLOSED +" and holding_station_ID="+StationBMO.getStationByCode("LZ", companyCode).getStation_ID(); 
+					
+					logger.debug("QUERY PREPARED: " + sql);
+					
+					SQLQuery query = session.createSQLQuery(sql);
+
+					query.addScalar("OHD_ID", StandardBasicTypes.STRING);
+					
+					List results = query.list();
+					if (results == null) {
+						return;
+					}
+					String autoCloseAgent = "ntadmin";                                                                     // PROPERTY???
+			 		Agent agent = AdminUtils.getAgentBasedOnUsername(autoCloseAgent, companyCode);
+					int successfulCloses = 0;
+					
+					for (int i = 0; i < results.size(); i++) {
+						String ohd_id = (String) results.get(i);
+						OHD ohd = OhdBMO.getOHDByID(ohd_id, session);
+						ohd.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_CLOSED));
+						ohd.setDisposal_status(StatusBMO.getStatus(TracingConstants.LF_STATUS_SALVAGED));
+						ohd.setClose_date(TracerDateTime.getGMTDate());
+
+				 		Remark r = new Remark();
+				 		
+						r.setAgent(agent);
+						r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
+						String remarkText = PropertyBMO.getValue(PropertyBMO.AUTO_CLOSE_OHD_REMARK);
+						r.setRemarktext(remarkText != null ? remarkText.replace("{autoCloseDays}", String.valueOf(vars.getAuto_close_ohd_days_back())) : DEFAULT_REMARK);                
+						r.setOhd(ohd);
+						r.setRemarktype(TracingConstants.REMARK_REGULAR);
+						Set<Remark> remarks = ohd.getRemarks();
+						
+						remarks.add(r);
+						
+						OhdBMO oBMO = new OhdBMO();
+						boolean success = false;
+						success = oBMO.simpleSaveAndAuditOhd(ohd, agent, ohd.getFoundAtStation(), session);
+						if (!success) {
+							logger.error("OHD " + ohd.getOHD_ID() + " DID NOT SUCCESSFULLY AUTO-CLOSE!");
+							continue;
+						}
+						
+						if (ohd.getWtFile() != null && ohd.getWtFile().getWt_status() != WTStatus.CLOSED) {
+							WtqOhdAction wtq = new WtqCloseOhd();
+							wtq.setAgent(agent);
+							wtq.setCreatedate(TracerDateTime.getGMTDate());
+							wtq.setOhd(ohd);
+							WorldTracerQueueUtils.createOrReplaceQueue(wtq);
+						}
+
+						successfulCloses++;
+					}
+
+					logger.info("CLOSED " + successfulCloses + " OHDS WITH AUTO-CLOSE!");
 					
 				} catch (Exception e) {
 					logger.error("AUTO-CLOSE FAILURE: " + e);

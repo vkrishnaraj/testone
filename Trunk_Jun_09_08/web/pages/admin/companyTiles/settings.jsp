@@ -316,6 +316,15 @@
 	    
 	            </td>
 	          </tr>
+	          <tr>
+	            <td>
+	              <bean:message key="colname.auto.close.ohd.days.back" />
+	              :
+	            </td>
+	            <td>
+	              <html:text styleClass="textfield" name="companyForm" property="auto_close_ohd_days_back" size="4" maxlength="4" />
+	            </td>
+	          </tr>
 
 	          <logic:notEmpty name="fullStationList" scope="request">
 	            <tr>

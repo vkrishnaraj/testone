@@ -214,6 +214,12 @@
 		<property name="targetMethod" value="autoCloseIncidents" />
 		<property name="concurrent" value="false" />
 	</bean>
+	
+	<bean id="AutoCloseOHDJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetBeanName" value="AutoClose" />
+		<property name="targetMethod" value="autoCloseOHDs" />
+		<property name="concurrent" value="false" />
+	</bean>
 
 	<bean id="lockCleanupJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
 		<property name="targetBeanName" value="CronUtils" />
@@ -278,6 +284,11 @@
 		
 	<bean id="AutoCloseTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="AutoCloseIncidentsJob" />
+		<property name="cronExpression" value="${autoClose}" />
+	</bean>
+		
+	<bean id="AutoCloseOhdTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="AutoCloseOHDJob" />
 		<property name="cronExpression" value="${autoClose}" />
 	</bean>
 	

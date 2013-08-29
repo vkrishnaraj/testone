@@ -191,6 +191,8 @@ public class PropertyBMO {
 	
 	public static final String AUTO_CLOSE_REMARK = "auto.close.remark";
 	public static final String AUTO_CLOSE_REMARK_LOC = "auto.close.remark.loc";
+
+	public static final String AUTO_CLOSE_OHD_REMARK = "auto.close.ohd.remark";
 	
 	public static final String TRACING_STATUS_BLOCK_WT = "tracing.status.block.wt";
 	

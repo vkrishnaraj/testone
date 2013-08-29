@@ -3349,7 +3349,18 @@
 		<property name="cron.job.config.file" value="companies/southwest/environment/hudson/jobs/cronJobs.xml" />
 		<antcall target="cron-service" />
 	</target>
-		
+	
+	<target name="build-cron-local-ntsouthwest">
+		<property name="staging.project" value="cron" />
+		<property name="staging.env" value="local" />
+		<property name="ant_project_name" value="southwest" />
+		<property name="sub_path" value="local/" />
+		<property name="environment.name" value="local"/>
+		<property name="cron.job.config.file" value="companies/southwest/environment/local/jobs/cronJobs.xml" />
+		<property name="jarprefix" value="wnlocal-" />
+		<antcall target="cron-service" />
+	</target>
+	
 	<!-- END NTSOUTHWEST CRON TARGETS -->
 	
 	<!-- JETBLUE CRON TARGETS -->

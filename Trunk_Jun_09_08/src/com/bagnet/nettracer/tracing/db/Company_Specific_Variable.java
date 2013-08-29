@@ -97,6 +97,7 @@ public class Company_Specific_Variable implements Serializable {
 
 	//Incident Lock
 	private int incident_lock_mins;
+	private int auto_close_ohd_days_back;
 	
 	/**
 	 * @return the wt_write_enabled
@@ -1163,6 +1164,22 @@ public class Company_Specific_Variable implements Serializable {
 	
 	public void setIssuance_edit_last_x_days(int issuance_edit_last_x_days) {
 		this.issuance_edit_last_x_days = issuance_edit_last_x_days;
+	}
+
+	/**
+	 * @return
+	 * @hibernate.property type="integer"
+	 */
+	public int getAuto_close_ohd_days_back() {
+		return auto_close_ohd_days_back;
+	}
+	
+	/**
+	 * @Parameter auto_close_ohd_days_back
+	 * 	to set auto_close_ohd_days_back
+	 */
+	public void setAuto_close_ohd_days_back(int auto_close_ohd_days_back) {
+		this.auto_close_ohd_days_back = auto_close_ohd_days_back;
 	}
 	
 }
