@@ -1,5 +1,8 @@
 package aero.nettracer.web.southwest.testing;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import aero.nettracer.web.utility.DefaultSeleneseTestCase;
 import aero.nettracer.web.utility.Settings;
 
@@ -8,6 +11,12 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 	protected static final String DRIVERS_LICENSE = "12345";
 	protected static final String PASSPORT_NUMBER = "1234567890";
 	protected static final String EXPEDITE_TAG_NUM = "012345678912";
+	protected static String TODAY;
+	
+	// set up the current date for use throughout the tests
+	static {
+		TODAY = new SimpleDateFormat("MM/dd/yyyy").format(new Date(System.currentTimeMillis()));
+	}
 	
 	protected static final String INCIDENT_TYPE_LOSTDELAY = "Lost/Delayed";
 	protected static final String INCIDENT_TYPE_MISSING = "Missing Articles";

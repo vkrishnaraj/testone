@@ -6,6 +6,8 @@ import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
 import aero.nettracer.web.utility.Settings;
 
 public class WN_CreateMissing extends WN_SeleniumTest {
+	
+	public final String ADDITIONAL_MISSING_ITEM_INFORMATION = "649";
 
 	@Test
 	public void testCreateMissingIncident() {
@@ -72,4 +74,68 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 		goToTaskManager();
 	}
 	
+	@Test
+	public void testAdditionalMissingItemInformationDisabled() {
+		verifyTrue(setPermissions(new String[] { ADDITIONAL_MISSING_ITEM_INFORMATION }, new boolean[] { false }));
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_MISSING));
+		verifyFalse(selenium.isElementPresent("name=article[0].disEnteredDate"));
+		verifyFalse(selenium.isElementPresent("name=article[0].statusId"));
+		goToTaskManager();
+	}
+	
+	@Test
+	public void testAdditionalMissingItemInformationAuditTrailDisabled() {
+		verifyTrue(navigateToIncidentAuditTrail());
+		verifyFalse(selenium.isTextPresent("Entered Date : " + WN_SeleniumTest.TODAY));
+		verifyFalse(selenium.isTextPresent("Status : Returned"));
+		goToTaskManager();
+	}
+	
+	@Test
+	public void testAdditionalMissingItemInformationEnabled() {
+		verifyTrue(setPermissions(new String[] { ADDITIONAL_MISSING_ITEM_INFORMATION }, new boolean[] { true }));
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_MISSING));
+		verifyTrue(selenium.isElementPresent("name=article[0].disEnteredDate"));
+		verifyTrue(selenium.isElementPresent("name=article[0].statusId"));
+
+		selenium.type("name=article[0].dispurchasedate", WN_SeleniumTest.TODAY);
+		selenium.type("name=article[0].discost", "1");
+		selenium.select("name=article[0].statusId", "label=Returned");
+		selenium.type("name=article[0].article", "Test Article");
+		selenium.type("name=article[0].description", "Test article description.");
+		selenium.click("id=saveButton");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			checkCopyrightAndQuestionMarks();
+			verifyTrue(selenium.isTextPresent("Missing Articles Incident has been modified."));
+			selenium.click("link=" + Settings.INCIDENT_ID_WN);
+			waitForPageToLoadImproved();
+			if (checkNoErrorPage()) {
+				checkCopyrightAndQuestionMarks();
+				verifyEquals(WN_SeleniumTest.TODAY, selenium.getValue("name=article[0].dispurchasedate"));
+				verifyEquals("1.00", selenium.getValue("name=article[0].discost"));
+				verifyEquals("USD", selenium.getValue("name=article[0].currency_ID"));
+				verifyEquals("800", selenium.getValue("name=article[0].statusId"));
+			} else {
+				System.out.println("!!!!!!!!!!!!!!! - Failed to reload the incident in testAdditionalMissingItemInformationEnabled. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+				verifyTrue(false);
+			}
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to save the incident in testAdditionalMissingItemInformationEnabled. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+			verifyTrue(false);
+		}
+		goToTaskManager();
+	}
+	
+	@Test
+	public void testAdditionalMissingItemInformationAuditTrailEnabled() {
+		verifyTrue(navigateToIncidentAuditTrail());
+		verifyTrue(selenium.isTextPresent("Article : Test Article"));
+		verifyTrue(selenium.isTextPresent("Entered Date : " + WN_SeleniumTest.TODAY));
+		verifyTrue(selenium.isTextPresent("Purchase Date : " + WN_SeleniumTest.TODAY));
+		verifyTrue(selenium.isTextPresent("Cost : 1.00 USD"));
+		verifyTrue(selenium.isTextPresent("Status : Returned"));
+		verifyTrue(selenium.isTextPresent("Description : Test article description."));
+		goToTaskManager();
+	}
 }

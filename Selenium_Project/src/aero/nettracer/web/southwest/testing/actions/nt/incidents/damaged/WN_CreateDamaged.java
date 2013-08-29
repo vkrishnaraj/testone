@@ -18,12 +18,6 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	private String SPECIAL_CONDITIONS_COLLECT = "642";
 	private String ADDITIONAL_ITEM_INFORMATION_COLLECT = "644";
 	
-	private static String TODAY;
-	
-	static {
-		TODAY = new SimpleDateFormat("MM/dd/yyyy").format(new Date(System.currentTimeMillis()));
-	}
-	
 	@Test
 	public void testCreateDamagedIncident() {
 		String[] permissions = new String[] {
@@ -370,7 +364,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	@Test
 	public void testAdditionalItemInformationAuditTrailDisabled() {
 		verifyTrue(navigateToIncidentAuditTrail());
-		verifyFalse(selenium.isTextPresent("Entered Date: " + WN_CreateDamaged.TODAY + "\n     Purchase Date: \n     Cost: \n     Currency: US Dollar\n     Status:"));
+		verifyFalse(selenium.isTextPresent("Entered Date: " + WN_SeleniumTest.TODAY + "\n     Purchase Date: \n     Cost: \n     Currency: US Dollar\n     Status:"));
 		goToTaskManager();
 	}
 	
@@ -385,7 +379,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 		verifyTrue(selenium.isElementPresent("name=inventorylist[0].itemStatusId"));
 		verifyTrue(selenium.isElementPresent("name=deleteinventory_0"));
 		
-		selenium.type("name=inventorylist[0].dispPurchaseDate", WN_CreateDamaged.TODAY);
+		selenium.type("name=inventorylist[0].dispPurchaseDate", WN_SeleniumTest.TODAY);
 		selenium.type("name=inventorylist[0].dispInvItemCost", "1");
 		selenium.select("name=inventorylist[0].itemStatusId", "label=Returned");
 		selenium.click("name=saveButton");
@@ -396,7 +390,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
-				verifyEquals(WN_CreateDamaged.TODAY, selenium.getValue("name=inventorylist[0].dispPurchaseDate"));
+				verifyEquals(WN_SeleniumTest.TODAY, selenium.getValue("name=inventorylist[0].dispPurchaseDate"));
 				verifyEquals("1.00", selenium.getValue("name=inventorylist[0].dispInvItemCost"));
 				verifyEquals("USD", selenium.getValue("name=inventorylist[0].invItemCurrency"));
 				verifyEquals("800", selenium.getValue("name=inventorylist[0].itemStatusId"));
@@ -418,8 +412,8 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	@Test
 	public void testAdditionalItemInformationAuditTrailEnabled() {
 		verifyTrue(navigateToIncidentAuditTrail());
-		verifyTrue(selenium.isTextPresent("Entered Date: " + WN_CreateDamaged.TODAY));
-		verifyTrue(selenium.isTextPresent("Purchase Date: " + WN_CreateDamaged.TODAY));
+		verifyTrue(selenium.isTextPresent("Entered Date: " + WN_SeleniumTest.TODAY));
+		verifyTrue(selenium.isTextPresent("Purchase Date: " + WN_SeleniumTest.TODAY));
 		verifyTrue(selenium.isTextPresent("Cost: 1.00"));
 		verifyTrue(selenium.isTextPresent("Currency: US Dollar"));
 		verifyTrue(selenium.isTextPresent("Status: Returned"));
