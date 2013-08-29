@@ -55,6 +55,8 @@ public class Ohd_DTO {
 	private boolean intelligentTagSearch;
 	private int intelligentTagSearchType;
 	private String claimcheck2;
+	
+	private String posId;
 
 	public void populate(OHD ohd) {
 
@@ -77,6 +79,7 @@ public class Ohd_DTO {
 		}
 		if (ohd.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_OPEN) closed = false;
 		else closed = true;
+		this.posId = ohd.getPosId();
 	}
 
 	public String getDescription() {
@@ -555,4 +558,13 @@ public class Ohd_DTO {
 	public void setClaimcheck2(String claimcheck2) {
 		this.claimcheck2 = claimcheck2;
 	}
+
+	public String getPosId() {
+		return posId != null ? posId : "";
+	}
+
+	public void setPosId(String posId) {
+		this.posId = posId;
+	}
+	
 }

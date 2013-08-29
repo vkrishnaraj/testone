@@ -11,6 +11,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
+  boolean collectPosId = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_COLLECT_POS_ID, a);
 %>
   
   <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
@@ -207,7 +208,7 @@ function sortSearchOhd(sortOrder) {
                 </td>
               </tr>
               <tr>
-                <td colspan="2">
+                <td <% if (!collectPosId) { %>colspan="2"<% } %>>
                   <bean:message key="colname.date_range" />
                   (
                   <%= a.getDateformat().getFormat() %>)
@@ -219,6 +220,13 @@ function sortSearchOhd(sortOrder) {
                   <br>
                   <html:text property="agent" size="20" maxlength="20" styleClass="textfield" />
                 </td>
+                <% if (collectPosId) { %>
+                	<td>
+                		<bean:message key="colname.posId" />
+                		<br>
+                		<html:text property="posId" size="6" maxlength="6" styleClass="textfield" />
+                	</td>
+                <% } %>
               </tr>
               <tr>
                 <td colspan="4" align="center" valign="top">

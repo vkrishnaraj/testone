@@ -736,6 +736,10 @@ public class OhdBMO {
 			if (oDTO.getFlightnum() != null && oDTO.getFlightnum().length() > 0) {
 				sql.append(" and itinerary.flightnum like :flightnum");
 			}
+			
+			if (!oDTO.getPosId().isEmpty()) {
+				sql.append(" and ohd.posId = :posId");
+			}
 
 
 			Date sdate = null, edate = null;
@@ -894,6 +898,10 @@ public class OhdBMO {
 
 			if (oDTO.getMiddlename() != null && oDTO.getMiddlename().trim().length() > 0) {
 				q.setString("middlename", oDTO.getMiddlename());
+			}
+			
+			if (!oDTO.getPosId().isEmpty()) {
+				q.setString("posId", oDTO.getPosId());
 			}
 
 			//check if description is not empty

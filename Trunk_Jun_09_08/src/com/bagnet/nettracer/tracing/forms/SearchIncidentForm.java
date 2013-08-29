@@ -73,7 +73,8 @@ public final class SearchIncidentForm extends ValidatorForm {
 	private String e_station_assignment_time = "";
 	private int assigned2StationWithin24hrs;
 	
-	private String expediteTagNum = "";	
+	private String expediteTagNum = "";
+	private String posId = "";
 	
 	public int getAssigned2StationWithin24hrs() {
 		return assigned2StationWithin24hrs;
@@ -802,6 +803,14 @@ public final class SearchIncidentForm extends ValidatorForm {
 
 	public void setExpediteTagNum(String expediteTagNum) {
 		this.expediteTagNum = expediteTagNum;
+	}
+
+	public String getPosId() {
+		return posId;
+	}
+
+	public void setPosId(String posId) {
+		this.posId = posId;
 	}
 	
 }
