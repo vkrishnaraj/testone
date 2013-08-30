@@ -14,6 +14,7 @@
 
 <%
   Agent a = (Agent)session.getAttribute("user");
+  boolean collectPosId = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_COLLECT_POS_ID, a);
 %>
   
   <%@page import="com.bagnet.nettracer.tracing.forms.SearchIncidentForm"%>
@@ -66,9 +67,27 @@
 				document.getElementById("claimtitle").innerHTML="<bean:message key="colname.claimnum" />";
 			}
     		currentStatusId = type;
+    		updateFields(currentStatusId);
     	}
 	}
-	
+
+	function updateFields(type) {
+		var posIdTd = document.getElementById("posIdTd");
+		if (!posIdTd) return;
+
+		var colspan = 1;
+		if (type != 2) {
+			colspan = 2;
+			posIdTd.style.display = "none";
+		} else {
+			posIdTd.style.display = "inline";
+		}
+
+		var assignStationTd = document.getElementById("assignStationTd");
+		if (assignStationTd) {
+			assignStationTd.colSpan = colspan;
+		}
+	}
 
   </SCRIPT>
   
@@ -281,10 +300,7 @@ function updatePagination() {
                   </html:select>
               	 
               	</td>
-              	<td colspan=2>
-              	
-				
-                 
+              	<td id="assignStationTd" colspan=2 >                 
                   <span id="assignstation">	
               	 	<bean:message key="colname.assigned_station"/>
               	 </span><br/>
@@ -295,8 +311,18 @@ function updatePagination() {
                     <html:options collection="stationlist" property="station_ID" labelProperty="stationcode" />
                   </html:select>
               	</td>
+           		<% if (collectPosId) { %>
+              	<td id="posIdTd">
+              		<bean:message key="colname.posId" />
+              		<br>
+              		<html:text property="posId" size="6" maxlength="6" styleClass="textfield" />
+              	</td>
+         		<% } %>
               </tr>
             </table>
+            <script language="javascript" >
+            	updateFields(currentStatusId);
+            </script>
             <h1 class="green">
               <bean:message key="header.pax_information" />
               <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
@@ -917,8 +943,6 @@ function updatePagination() {
                   </table>
                   <script language=javascript>
                     
-  
-  
   document.location.href="#result";
 
                   </script>

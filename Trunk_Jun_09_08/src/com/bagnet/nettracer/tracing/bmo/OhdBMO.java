@@ -738,7 +738,7 @@ public class OhdBMO {
 			}
 			
 			if (!oDTO.getPosId().isEmpty()) {
-				sql.append(" and ohd.posId = :posId");
+				sql.append(" and ohd.posId like :posId");
 			}
 
 
@@ -1031,6 +1031,10 @@ public class OhdBMO {
 				s.append(" and ohd.wtFile.wt_id like :wt_id ");
 			}
 			
+			if (!siDTO.getPosId().isEmpty()) {
+				s.append(" and ohd.posId like :posId");
+			}
+			
 			Date sdate = null, edate = null;
 			Date sdate1 = null, edate1 = null; // add one for timezone
 			Date stime = null; // time to compare (04:00 if eastern, for example)
@@ -1297,6 +1301,11 @@ public class OhdBMO {
 			if(siDTO.getStationassigned_ID()>0){
 				q.setInteger("holdingstation_ID", siDTO.getStationassigned_ID());
 			}
+			
+			if (!siDTO.getPosId().isEmpty()) {
+				q.setString("posId", siDTO.getPosId());
+			}
+			
 			List results = q.list();
 			return results;
 		} catch (Exception e) {
