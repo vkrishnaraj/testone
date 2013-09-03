@@ -745,6 +745,16 @@ function updatePagination() {
                     :
                     <bean:write name="theitem" property="bagtype" />
                     <br>
+                    <% if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_DISABLED_BAG, a) && (theitem.getBagtype().equals("94") || theitem.getBagtype().equals("95"))) {%>
+	                    <bean:message key="colname.assist.device.type" />
+	                    :
+	                    <bean:write name="theitem" property="assistDeviceType" />
+	                    <br>
+	                    <bean:message key="colname.assist.device.check" />
+	                    :
+	                    <bean:write name="theitem" property="assistDeviceCheck" />
+	                    <br>
+                    <% } %>
                     <bean:message key="colname.x_desc" />
                     :
                     <br>

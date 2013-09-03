@@ -19,11 +19,13 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.CategoryBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Articles;
+import com.bagnet.nettracer.tracing.db.Category;
 import com.bagnet.nettracer.tracing.db.DeliveryInstructions;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
@@ -360,6 +362,9 @@ public class AuditIncidentUtils {
 					a_item = new Audit_Item();
 					BeanUtils.copyProperties(a_item, item);
 					a_item.setAudit_incident(audit_inc);
+					Category c=CategoryBMO.getCategory(item.getAssistDeviceType());
+					if(c!=null)
+						a_item.setAssistDeviceType(c.getDescription());
 
 					// convert photo
 					iplist = new ArrayList();

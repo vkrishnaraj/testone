@@ -122,6 +122,14 @@ public class MissingAction extends CheckedAction {
 		//add to the loss codes
 		request.setAttribute("losscodes", codes);
 
+		List list = new ArrayList();
+		if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_DISABLED_BAG, user) 
+				&& session.getAttribute("assistDeviceList") == null) {
+			list=new ArrayList(MBRActionUtils.getAssistDeviceTypes());
+
+			if(list!=null)
+				session.setAttribute("assistDeviceList", list);
+		}
 		BagService bs = new BagService();
 
 		request.setAttribute("missing", "1");

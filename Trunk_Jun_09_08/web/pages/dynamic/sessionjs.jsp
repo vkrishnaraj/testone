@@ -670,7 +670,34 @@
 			}
 		}
     }
-	
+    else if(currentElementName.indexOf("bagtype")!=-1){
+    
+    	var bagtypeValue = currentElement.options[currentElement.selectedIndex].value;
+    	if (bagtypeValue == 94 || bagtypeValue == 95) {
+    		var pos=currentElement.id.substring(7);
+    		var deviceTypeValue=document.getElementById("deviceType"+pos);
+    		var deviceCheckValue=document.getElementById("deviceCheck"+pos);
+    		
+	   		if (deviceTypeValue!=null) {
+		    	if (deviceTypeValue.value == 0) {
+			        alert("<%= (String)bundle.getString("colname.assist.device.type") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+			        deviceTypeValue.focus();
+			        return false;
+				}
+		    }
+	    
+	     	if (deviceCheckValue!=null) {
+		    	
+				if (deviceCheckValue.value == null || deviceCheckValue.value.length == 0) {
+			        alert("<%= (String)bundle.getString("colname.assist.device.check") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+			        deviceCheckValue.focus();
+			        return false;
+				}
+				
+		    }
+	    }
+    }
+    
     }
     
 

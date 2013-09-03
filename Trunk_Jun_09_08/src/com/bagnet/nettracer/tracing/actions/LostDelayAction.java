@@ -76,6 +76,7 @@ import com.bagnet.nettracer.tracing.db.wtq.WtqSuspendAhl;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.history.IncidentHistoryObject;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.BDOUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.ClientUtils;
 import com.bagnet.nettracer.tracing.utils.DisputeResolutionUtils;
@@ -121,7 +122,15 @@ public class LostDelayAction extends CheckedAction {
 			theform.setEmail_customer(0);
 		
 		Agent user = (Agent) session.getAttribute("user");
+		List list = new ArrayList();
+		if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_DISABLED_BAG, user) 
+				&& session.getAttribute("assistDeviceList") == null) {
+			list=new ArrayList(MBRActionUtils.getAssistDeviceTypes());
 
+			if(list!=null)
+				session.setAttribute("assistDeviceList", list);
+		}
+		
 		if(!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
 				&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_LD, user))
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));

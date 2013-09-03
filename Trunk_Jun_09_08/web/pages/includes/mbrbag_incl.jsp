@@ -66,11 +66,24 @@
   
   function checkBagType(pos) {
 		var btype=document.getElementById("bagtype"+pos);
-		var cr=document.getElementById("childRestraint");
+		var disableBag=<%=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_DISABLED_BAG, a)%>
 		if(btype.value=="71"){
 			document.getElementById("childRestraint"+pos).style.display = "block";
-		} else {
+			document.getElementById("disableBag"+pos).style.display="none";
+			if(disableBag){
+				document.getElementById("deviceType"+pos).value="0";
+				document.getElementById("deviceCheck"+pos).value="";
+			}
+		} else if(btype.value=="94" || btype.value=="95"){
 			document.getElementById("childRestraint"+pos).style.display = "none";
+			document.getElementById("disableBag"+pos).style.display="block";	
+		}	else {
+			document.getElementById("childRestraint"+pos).style.display = "none";
+			document.getElementById("disableBag"+pos).style.display="none";
+			if(disableBag){
+				document.getElementById("deviceType"+pos).value="0";
+				document.getElementById("deviceCheck"+pos).value="";
+			}
 		}
 		
 	}
@@ -275,6 +288,28 @@
 						<html:option value="2"><bean:message key="child.restraint.2"/></html:option>
 			        </html:select>
 			        <% } %>
+              </div>
+              <div id="disableBag<%=i %>" style="display:none">
+              <% if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_DISABLED_BAG, a)){ %>
+              		<% String devType="deviceType"+i;
+              			String devTypeCheck="deviceCheck"+i;
+              		%>
+              		<bean:message key="colname.assist.device.type" /><br>
+              	 	<html:select name="theitem" property="assistDeviceType" styleId="<%=devType %>" styleClass="dropdown" indexed="true">
+						<html:option value="0">
+		                  <bean:message key="select.please_select" />
+		                </html:option>
+		                <html:options collection="assistDeviceList" property="id" labelProperty="description" />
+			        </html:select><br/>
+			        <br/>
+			        <bean:message key="colname.assist.device.inspection.check" /><br>
+              	 	<html:select name="theitem" property="assistDeviceCheck" styleId="<%=devTypeCheck %>"  styleClass="dropdown" indexed="true">
+						<html:option value=""><bean:message key="select.please_select"/></html:option>
+						<html:option value="Yes"><bean:message key="select.yes"/></html:option>
+						<html:option value="No"><bean:message key="select.no"/></html:option>
+			        </html:select><br/>
+			        <br/>
+		      <% } %>
               </div>
             </td>
             <td valign="top">

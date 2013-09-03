@@ -92,6 +92,10 @@ public class Item implements Serializable {
 	private int other;
 	private boolean noAddFees;
 	
+
+	private int assistDeviceType;
+	private String assistDeviceCheck;
+	
 	/**
 	 * @return Returns the bag_weight;
 	 * 
@@ -1196,6 +1200,42 @@ public class Item implements Serializable {
 
 	public void setNoAddFees(boolean noAddFees) {
 		this.noAddFees = noAddFees;
+	}
+
+
+	/**
+	 * @return The AssistDeviceType of the Item if the bag is type 94 or 95
+	 * 
+	 * @hibernate.property type="int"
+	 */
+	public int getAssistDeviceType() {
+		return assistDeviceType;
+	}
+
+	/**
+	 * @param assistDeviceType
+	 *          The assistDeviceType to set.
+	 */
+	public void setAssistDeviceType(int assistDeviceType) {
+		this.assistDeviceType = assistDeviceType;
+	}
+
+	/**
+	 * @return If the assistDevice was tag checked
+	 * 
+	 * @hibernate.property type="string" length="12"
+	 */
+	public String getAssistDeviceCheck() {
+		return assistDeviceCheck;
+	}
+
+
+	/**
+	 * @param assistDeviceTypeCheck
+	 *          The assistDeviceTypeCheck to set.
+	 */
+	public void setAssistDeviceCheck(String assistDeviceCheck) {
+		this.assistDeviceCheck = assistDeviceCheck;
 	}
 	
 }

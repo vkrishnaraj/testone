@@ -123,7 +123,15 @@ public class DamagedAction extends CheckedAction {
 		if(request.getAttribute("currentstatus") != null) {
 			checkLLC = Integer.parseInt((String)request.getAttribute("currentstatus")) == TracingConstants.MBR_STATUS_CLOSED;
 		}
-		
+
+		List list = new ArrayList();
+		if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_DISABLED_BAG, user) 
+				&& session.getAttribute("assistDeviceList") == null) {
+			list=new ArrayList(MBRActionUtils.getAssistDeviceTypes());
+
+			if(list!=null)
+				session.setAttribute("assistDeviceList", list);
+		}
 		//the company specific codes..
 		List codes = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.DAMAGED_BAG, true, user, checkLLC);
 		//add to the loss codes

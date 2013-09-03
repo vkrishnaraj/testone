@@ -22,7 +22,11 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.criterion.Expression;
 
+import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.IssuanceItemBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
@@ -36,6 +40,7 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.AirlineMembership;
 import com.bagnet.nettracer.tracing.db.Articles;
 import com.bagnet.nettracer.tracing.db.BDO;
+import com.bagnet.nettracer.tracing.db.Category;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.DeliveryInstructions;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -1259,5 +1264,32 @@ public class MBRActionUtils {
 		return IncidentBMO.getIncidentsByPNR(pnr, lastXDays);
 		// TODO Auto-generated method stub
 		
+	}
+	
+
+	/**
+	 * Method to get Assist Device Types - Category Type "2"
+	 */
+	public static List getAssistDeviceTypes() {
+		Session sess = null;
+		try {
+
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Category.class);
+			cri.add(Expression.eq("type", new Integer(TracingConstants.ASSIST_DEVICE_TYPE)));
+			List<Category> ol = cri.list();
+			return ol;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }

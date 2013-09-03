@@ -45,6 +45,7 @@ import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.HistoryUtils;
+import com.bagnet.nettracer.tracing.utils.MBRActionUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
@@ -83,6 +84,15 @@ public class SearchIncidentAction extends Action {
 		BagService bs = new BagService();
 		IncidentForm theform = new IncidentForm();
 		Incident foundinc = null;
+		
+		// Getting the AssistDeviceType List for Incidents
+		List list = new ArrayList();
+		if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_DISABLED_BAG, user) 
+				&& session.getAttribute("assistDeviceList") == null) {
+			list=new ArrayList(MBRActionUtils.getAssistDeviceTypes());
+			if(list!=null)
+				session.setAttribute("assistDeviceList", list);
+		}
 		
 		// user passed in worldtracer id, so find it in db or retrieve it from worldtracer
 		if (request.getParameter("wt_id") != null && request.getParameter("wt_id").length() == 10) {

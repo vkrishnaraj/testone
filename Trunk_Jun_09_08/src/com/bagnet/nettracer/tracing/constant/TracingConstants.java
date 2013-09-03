@@ -367,6 +367,7 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_BAGGAGE_WEIGHT = "Baggage Weight";
 	
 	public static final String SYSTEM_COMPONENT_CHILD_RESTRAINT_SYSTEM = "Child Restraint System";
+	public static final String SYSTEM_COMPONENT_DISABLED_BAG ="Capture ACAA Information";
 	
 	public static final String SYSTEM_COMPONENT_NAME_BAGBUZZ = "BagBuzz";
 	public static final String SYSTEM_COMPONENT_NAME_BAGBUZZ_ADMIN = "BagBuzzAdmin";
@@ -1236,6 +1237,7 @@ public class TracingConstants {
 	public static final String SPECIAL_CONDITION_NAME_BOTH = "Both";
 
 	public static final int BDO_TYPE = 1;
+	public static final int ASSIST_DEVICE_TYPE = 2;
 	
 	public static final int DAMAGED_ITEM_STATUS_RETURNED = 800;
 	public static final int DAMAGED_ITEM_STATUS_DAMAGED = 801;

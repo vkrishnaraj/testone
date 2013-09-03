@@ -73,6 +73,10 @@ public class Audit_Item implements Serializable {
 	private String expediteTagNum;
 	
 	private int specialCondition;
+
+	private String assistDeviceType;
+	private String assistDeviceCheck;
+	
 	
 	/**
 	 * @return Returns the bag_weight.
@@ -830,6 +834,41 @@ public class Audit_Item implements Serializable {
 			default:
 				return "";
 		}
+	}
+
+	/**
+	 * @return The AssistDeviceType of the Item if the bag is type 94 or 95
+	 * 
+	 * @hibernate.property type="string"  length="100"
+	 */
+	public String getAssistDeviceType() {
+		return assistDeviceType;
+	}
+
+	/**
+	 * @param assistDeviceType
+	 *          The assistDeviceType to set.
+	 */
+	public void setAssistDeviceType(String assistDeviceType) {
+		this.assistDeviceType = assistDeviceType;
+	}
+
+	/**
+	 * @return If the assistDevice was tag checked
+	 * 
+	 * @hibernate.property type="string" length="12"
+	 */
+	public String getAssistDeviceCheck() {
+		return assistDeviceCheck;
+	}
+
+
+	/**
+	 * @param assistDeviceTypeCheck
+	 *          The assistDeviceTypeCheck to set.
+	 */
+	public void setAssistDeviceCheck(String assistDeviceCheck) {
+		this.assistDeviceCheck = assistDeviceCheck;
 	}
 	
 }
