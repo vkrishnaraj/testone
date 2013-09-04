@@ -2317,7 +2317,9 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			}
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.AG);
-			d1.set(null);
+			if (fieldList != null && fieldList.size() > 0) {
+				d1.setAgentID(fieldList.get(0));
+			}
 
 			// Send Message
 			WTRBagsCreateRSDocument wsresponse = null;
