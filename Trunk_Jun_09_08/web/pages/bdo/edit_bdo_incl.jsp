@@ -327,13 +327,13 @@ function toggledc(o) {
           
             <logic:notEqual name="BDOForm" property="origDelivCost" value="0">
 	           <tr >
-	              <td >
+	              <td colspan="2">
 	              <bean:message key="original.delivery.cost"/>:
 	              <bean:write name="BDOForm" property="dispOrigDelivCost" />
 	              </td>
-	              <td colspan="2">
+	              <td colspan="3">
 	              <bean:message key="modified.delivery.cost"/>:
-	              <html:text name="BDOForm" property="modDelivCost" />
+	              <bean:write name="BDOForm" property="dispModDelivCost" />
 	              </td>
 	           </tr>
             </logic:notEqual>

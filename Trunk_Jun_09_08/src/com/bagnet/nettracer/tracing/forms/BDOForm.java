@@ -505,8 +505,15 @@ public final class BDOForm extends ValidatorForm {
 
 	public String getDispOrigDelivCost(){
 		if(origDelivCost!=0){
-			DecimalFormat dec=new DecimalFormat("$###,##0.00");
+			DecimalFormat dec=new DecimalFormat("###,##0.00 USD");
 			return dec.format(origDelivCost);
+		}
+		return "";
+	}
+	public String getDispModDelivCost(){
+		if(modDelivCost!=0){
+			DecimalFormat dec=new DecimalFormat("###,##0.00");
+			return dec.format(modDelivCost) +" "+getCurrency();
 		}
 		return "";
 	}

@@ -8,7 +8,6 @@ package com.bagnet.nettracer.tracing.utils;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -374,7 +373,11 @@ public class BDOUtils {
 				dsl.setServicelevel_ID(theform.getServicelevel_ID());
 				bdo.setServicelevel(dsl);
 			}
-
+			
+			if (theform.getCost()!=null && theform.getCost().length()>0){
+				bdo.setModDelivCost(Double.valueOf(theform.getCost()));
+			}
+			
 			if (theform.getIncident().getIncident_ID() != null) {
 				// prevent hibernate from erroring out
 				bdo.setOhd(null);
@@ -1429,12 +1432,6 @@ public class BDOUtils {
 			Criteria cri = sess.createCriteria(Category.class);
 			cri.add(Expression.eq("type", new Integer(TracingConstants.BDO_TYPE)));
 			List<Category> ol = cri.list();
-//			List nl = new ArrayList();
-//
-//			for (int x = 0; x < ol.size(); ++x) {
-//				Category tmp = ol.get(x);
-//				nl.add(tmp);
-//			}
 			return ol;
 		} catch (Exception e) {
 			e.printStackTrace();

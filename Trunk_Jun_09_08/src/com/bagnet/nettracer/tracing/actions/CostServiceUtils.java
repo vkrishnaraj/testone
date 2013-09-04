@@ -327,7 +327,13 @@ public class CostServiceUtils {
 	    	CalculateDeliveryCostResponse reply = replyDoc.getCalculateDeliveryCostResponse();
 	    	SouthwestAirlinesCalculateDeliveryCostResponse a= reply.getCalculateDeliveryCostResult();
 			if(a.getErrorCodes()==null || (a.getErrorCodes()!=null && a.getErrorCodes().sizeOfErrorCodeEnumArray()==0)){
-				form.setOrigDelivCost(a.getTotalAirlineCost().doubleValue());
+				form.setCost(a.getTotalAirlineCost().toString());
+				form.setCurrency("USD");
+				if(form.getOrigDelivCost()==0){
+					form.setOrigDelivCost(a.getTotalAirlineCost().doubleValue());
+				} else {
+					form.setModDelivCost(a.getTotalAirlineCost().doubleValue());
+				}
 			} else {
 				boolean specificError=false;
 				for(Enum err:a.getErrorCodes().getErrorCodeEnumArray()){
