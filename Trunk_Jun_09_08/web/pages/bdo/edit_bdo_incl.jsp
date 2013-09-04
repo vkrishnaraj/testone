@@ -855,7 +855,16 @@ if (i.intValue() == 0) {
               <bean:message key="colname.claimnum" />
               <br>
               <html:text name="theitem" property="claimchecknum" size="25" styleId="<%="bagtagId"+i %>" styleClass="textfield" indexed="true"/>
-             
+              <select styleClass="dropdown" id="bagtagSelect<%=i %>" onchange="populateClaimNum(bagtagId<%=i %>,bagtagSelect<%=i %>); mapSimpleData(this.options.selectedIndex, items, itemArr); ">
+				<option value=""><bean:message key="pick.a.bag" /></option>
+				<logic:iterate id="item" name="BDOForm"  property="incident.claimchecks" indexId="i" type="com.bagnet.nettracer.tracing.db.Incident_Claimcheck">
+					<%
+					StringTemplateProcessor p = new StringTemplateProcessor();
+					p.addClass(item);
+					String bagNums = p.fillValues("{claimchecknum}");
+					%>
+					<option value="<%=bagNums.toString()%>"><%=bagNums%></option>
+				</logic:iterate>
 			</html>
             </td>
           </tr>

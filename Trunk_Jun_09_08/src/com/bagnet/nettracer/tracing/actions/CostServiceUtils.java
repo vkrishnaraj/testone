@@ -107,7 +107,6 @@ public class CostServiceUtils {
 				}
 				BDOAddDocument validate=BDOAddDocument.Factory.newInstance();
 				BDOAdd request=validate.addNewBDOAdd();
-				logger.info("POINT 2\n\n");
 				request.setVendorImportCode(dc.getIntegration_key());
 				request.setAirportCode(user.getStation().getStationcode());
 				
@@ -123,7 +122,6 @@ public class CostServiceUtils {
 				request.setFirstName(pax.getFirstname());
 				request.setEmailAddress(pax.getEmail());
 		
-				logger.info("POINT 3\n\n");
 				request.setLocalPhone(pax.getHotel());
 				request.setPermanentPhone(pax.getHomephone());
 				request.setMobilePhone(pax.getMobile());
@@ -139,7 +137,6 @@ public class CostServiceUtils {
 				request.setRoute("");
 				request.setServiceLevel(DelivercompanyBMO.getServiceLevel(bdo.getServicelevel().getServicelevel_ID()).getService_code());
 		
-				logger.info("POINT 4\n\n");
 				Calendar claimCal = Calendar.getInstance();
 				if (bdo.getIncident() != null) {
 					request.setClaimReferenceNumber(bdo.getIncident().getIncident_ID());
@@ -158,8 +155,6 @@ public class CostServiceUtils {
 				}
 				request.setClaimDateSpecified(true);
 		
-				logger.info("POINT 5\n\n");
-		
 				Calendar deliveryCal = Calendar.getInstance();
 				if (bdo.getDeliverydate() != null) {
 					deliveryCal.setTime(bdo.getDeliverydate());
@@ -174,7 +169,6 @@ public class CostServiceUtils {
 				
 				request.setDeliveryRemarks(remarks.toString());
 		
-				logger.info("POINT 6\n\n");
 				bdo.set_DATEFORMAT(TracingConstants.DISPLAY_DATEFORMAT);
 				bdo.set_TIMEFORMAT(TracingConstants.DISPLAY_TIMEFORMAT_B);
 				bdo.set_TIMEZONE(TimeZone.getTimeZone("GMT")); //agent.getCurrenttimezone()
@@ -186,7 +180,6 @@ public class CostServiceUtils {
 				
 				ArrayOfItemData array = request.addNewItemsData();
 		
-				logger.info("POINT 7\n\n");
 				if (bdo.getItems() != null && bdo.getIncident() != null) {
 					for (Item item: (Set<Item>)bdo.getItems()) {
 						ItemData id = array.addNewItemData();
@@ -240,10 +233,6 @@ public class CostServiceUtils {
 	public static BDOForm calculateDeliveryCost(BDOForm form, Agent user,  ActionMessages messages){
 		SouthwestAirlinesStub stub=null;
 		Logger logger = Logger.getLogger(CostServiceUtils.class);
-//		BDO bdo=BDOUtils.getBDOFromDB(bdo_id);
-		DeliverCompany dc=null;
-		if(form!=null)
-			dc= DelivercompanyBMO.getDeliveryCompany(form.getDelivercompany_ID() + "");
 		try {
 			stub = new SouthwestAirlinesStub(PropertyBMO.getValue(PropertyBMO.SWA_SERVICE_ADDRESS_ENDPOINT));
 
@@ -251,18 +240,21 @@ public class CostServiceUtils {
 			stub._getServiceClient().getOptions().setProperty(HTTPConstants.SO_TIMEOUT, timeout==0?DEFAULT_RES_WS_TIMEOUT:timeout);
 			stub._getServiceClient().getOptions().setProperty(HTTPConstants.CONNECTION_TIMEOUT, timeout==0?DEFAULT_RES_WS_TIMEOUT:timeout);
 		} catch (AxisFault e2) {
-			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
 		CalculateDeliveryCostDocument validate=CalculateDeliveryCostDocument.Factory.newInstance();
 		CalculateDeliveryCost req2=validate.addNewCalculateDeliveryCost();
 		SouthwestAirlinesCalculateDeliveryCostRequest req=req2.addNewRequest();
-		logger.info("POINT 2\n\n");
-		req.setVendorImportCode(dc.getIntegration_key());
+
+		DeliverCompany dc=null;
+		if(form!=null && form.getDelivercompany_ID()!=0){
+			dc= DelivercompanyBMO.getDeliveryCompany(form.getDelivercompany_ID() + "");
+			if(dc!=null)
+				req.setVendorImportCode(dc.getIntegration_key());
+		}
 		
 		BDO_Passenger pax = form.getPassenger(0);
 
-		logger.info("POINT 3\n\n");
 		Address add=req.addNewAddress();
 		add.setAddress1(pax.getAddress1());
 		add.setAddress2(pax.getAddress2());
@@ -272,7 +264,6 @@ public class CostServiceUtils {
 		
 		req.setServiceType(DelivercompanyBMO.getServiceLevel(form.getServicelevel_ID()).getService_code());
 
-		logger.info("POINT 4\n\n");
 		if (form.getIncident() != null && form.getItemlist() != null && form.getItemlist().size()>0) {
 			for (Item item: (ArrayList<Item>)form.getItemlist()) {
 				BagDeliveryType id = req.addNewBagDeliveryTypes();
@@ -320,7 +311,6 @@ public class CostServiceUtils {
 			id.setStandard(form.getOhd().isNoAddFees());
 		}
 
-		logger.info("POINT 6\n\n");
 		form.set_DATEFORMAT(TracingConstants.DISPLAY_DATEFORMAT);
 		form.set_TIMEFORMAT(TracingConstants.DISPLAY_TIMEFORMAT_B);
 		form.set_TIMEZONE(TimeZone.getTimeZone("GMT")); //agent.getCurrenttimezone()
@@ -339,31 +329,36 @@ public class CostServiceUtils {
 			if(a.getErrorCodes()==null || (a.getErrorCodes()!=null && a.getErrorCodes().sizeOfErrorCodeEnumArray()==0)){
 				form.setOrigDelivCost(a.getTotalAirlineCost().doubleValue());
 			} else {
+				boolean specificError=false;
 				for(Enum err:a.getErrorCodes().getErrorCodeEnumArray()){
 					if(err.equals(ErrorCodeEnum.ZIP_CODE_OUTSIDE_DELIVERY_AREA)){
-						//TODO: Put Error Code Message
 						ActionMessage error = new ActionMessage("error.zip.out.delivery");
 						messages.add(ActionMessages.GLOBAL_MESSAGE, error);
+						specificError=true;
 					} 
 					if(err.equals(ErrorCodeEnum.UNKNOWN_ZIP_CODE)){
-						//TODO: Put Error Code Message
 						ActionMessage error = new ActionMessage("error.unknown.zip");
 						messages.add(ActionMessages.GLOBAL_MESSAGE, error);
+						specificError=true;
 					} 
 					if(err.equals(ErrorCodeEnum.INVALID_VENDOR_CODE)){
 
 						ActionMessage error = new ActionMessage("error.invalid.vendor");
 						messages.add(ActionMessages.GLOBAL_MESSAGE, error);
-						//TODO: Put Error Code Message
+						specificError=true;
 					}
 				}
-				
-				ActionMessage error = new ActionMessage("error.general.delivery.request");
-				messages.add(ActionMessages.GLOBAL_MESSAGE, error);
+				if(!specificError){
+					ActionMessage error = new ActionMessage("error.general.delivery.request");
+					messages.add(ActionMessages.GLOBAL_MESSAGE, error);
+				}
 			}
 			
 			return form;
 		} catch (Exception e) {
+
+			ActionMessage error = new ActionMessage("error.cannot.connect.delivery.request");
+			messages.add(ActionMessages.GLOBAL_MESSAGE, error);
             e.printStackTrace();
 		}
 
