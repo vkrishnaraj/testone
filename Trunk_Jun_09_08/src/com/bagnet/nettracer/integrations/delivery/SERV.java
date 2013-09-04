@@ -64,7 +64,7 @@ public class SERV implements BDOIntegration {
 			ws.setMiddleName(pax.getMiddlename());
 			ws.setFirstName(pax.getFirstname());
 			ws.setEmailAddress(pax.getEmail());
-
+			
 			logger.info("POINT 3\n\n");
 			ws.setLocalPhone(pax.getHotel());
 			ws.setPermanentPhone(pax.getHomephone());
@@ -80,7 +80,13 @@ public class SERV implements BDOIntegration {
 			ws.setFlightDateSpecified(false);
 			ws.setRoute("");
 			ws.setServiceLevel(DelivercompanyBMO.getServiceLevel(bdo.getServicelevel().getServicelevel_ID()).getService_code());
-
+			
+			if(bdo.getModDelivCost()!=0){
+				ws.setEstimatedCost(bdo.getModDelivCost());
+			} else if(bdo.getOrigDelivCost()!=0) {
+				ws.setEstimatedCost(bdo.getOrigDelivCost());
+			}
+			
 			logger.info("POINT 4\n\n");
 			Calendar claimCal = Calendar.getInstance();
 			if (bdo.getIncident() != null) {
