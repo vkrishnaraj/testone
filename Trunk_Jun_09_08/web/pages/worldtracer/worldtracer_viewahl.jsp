@@ -191,19 +191,19 @@
 				<br/>
 				
 					<bean:write name="passenger" property="address.emailAddress" />
-					<logic:notEmpty name="passenger.address" property="homePhone">
+					<logic:notEmpty name="passenger" property="address.homePhone">
 						<bean:message key="wt.view.ahl.passenger.homephone"/> 
 						<bean:write name="passenger" property="address.homePhone" />
 					</logic:notEmpty>
-					<logic:notEmpty name="passenger.address" property="workPhone">
+					<logic:notEmpty name="passenger" property="address.workPhone">
 						<bean:message key="wt.view.ahl.passenger.workphone"/>
 						<bean:write name="passenger" property="address.workPhone" />
 					</logic:notEmpty>
-					<logic:notEmpty name="passenger.address" property="mobilePhone">
+					<logic:notEmpty name="passenger" property="address.mobilePhone">
 						<bean:message key="wt.view.ahl.passenger.mobilephone"/>
 						<bean:write name="passenger" property="address.mobilePhone" />
 					</logic:notEmpty>
-					<logic:notEmpty name="passenger.address" property="altPhone">
+					<logic:notEmpty name="passenger" property="address.altPhone">
 						<bean:message key="wt.view.ahl.passenger.altphone"/>
 						<bean:write name="passenger" property="address.altPhone" />
 					</logic:notEmpty>
@@ -298,7 +298,7 @@
        	
        	<tr>
 			<td class="label"><span class="label"><bean:message key="wt.view.ahl.further.information" /></span></td>
-			<td><bean:write name="wtr" property="furtherInformation"/></td>
+			<td><bean:write name="wtr" property="furtherInfo"/></td>
 			</tr>
 		<tr>
        	
