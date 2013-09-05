@@ -486,6 +486,7 @@ public class TracingConstants {
 	public final static int EXPENSEPAYOUT_STATUS_PAID = 55;
 
 	// bag status
+	public final static int ITEM_STATUS_DISPOSED_LOCALLY = 46;
 	public final static int ITEM_STATUS_OPEN = 47;
 	public final static int ITEM_STATUS_MATCHED = 48;
 	public final static int ITEM_STATUS_TOBEDELIVERED = 49;

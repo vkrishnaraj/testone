@@ -12,6 +12,9 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%@ page import="com.bagnet.nettracer.tracing.forms.OnHandForm"%>
 <%@page import="com.bagnet.nettracer.tracing.db.Station"%>
+<%@page import="com.bagnet.nettracer.tracing.db.OHD"%>
+<%@page import="com.bagnet.nettracer.tracing.db.Remark"%>
+<%@page import="com.bagnet.nettracer.tracing.utils.OHDUtils"%>
 <%@page import="com.bagnet.nettracer.tracing.bmo.StationBMO"%>
 <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
 
@@ -43,7 +46,7 @@
 	  }
       
       var buttonSelected = null;
-
+      
       function validateThis(form) {
          if (buttonSelected == null) {
             return true;
@@ -122,7 +125,16 @@
   </SCRIPT>
 
 <script language="javascript">
-
+	<%
+	boolean isDisposeLocal=false;
+	OHD o=null;
+	if(onHandForm.getOhd_id()!=null && onHandForm.getOhd_id().length()>0 && onHandForm.getDisposal_status()!=null){
+		o=OHDUtils.getOHD(onHandForm.getOhd_id());
+		isDisposeLocal=(o.getDisposal_status()!=null && onHandForm.getRemarklist().size()<=o.getRemarks().size() 
+				&& onHandForm.getDisposal_status().getStatus_ID()!=o.getDisposal_status().getStatus_ID()
+				&& onHandForm.getDisposal_status().getStatus_ID()==TracingConstants.ITEM_STATUS_DISPOSED_LOCALLY);
+	}%>
+	var disposeLocal=<%=isDisposeLocal%>;
 
   function validateStatus(form)
   {	
@@ -185,6 +197,29 @@ function gotoHistoricalReport() {
 	}
   }
 
+
+  function isDisposedCheck(){
+	  var disValue=document.getElementById("disposal_status.status_ID");
+	  if(disValue.value==<%=TracingConstants.ITEM_STATUS_DISPOSED_LOCALLY%>){
+		  <% if(o!=null) {
+		  		int lastStatus=0;
+		  		if(o.getDisposal_status()!=null)
+		  			lastStatus=o.getDisposal_status().getStatus_ID();%>
+		  		if(disValue.value!=<%=lastStatus%> && <%= onHandForm.getRemarklist().size()<=o.getRemarks().size() %>)
+		  			disposeLocal=true;
+		  <% } else { %>
+		    var remText=document.getElementById("remark[0].remarktext");
+		  	if(remText!=null && remText.value!=null && remText.value.replace(/\s*/g, "").length==0){
+				disposeLocal=true;
+		  	} else {
+		  		disposeLocal=false;
+		  	}
+		  <% } %>
+	  } else {
+		  disposeLocal=false;
+	  }
+	  
+  }
   </SCRIPT>
 
 <html:form styleId="dirtyCheck-form" action="addOnHandBag.do" method="post"
@@ -568,10 +603,10 @@ function gotoHistoricalReport() {
         <td><bean:message key="colname.disposal_status" /> <br>
 
         <html:select name="OnHandForm"
-          property="disposal_status.status_ID" styleClass="dropdown">
+          property="disposal_status.status_ID" styleClass="dropdown" onchange="isDisposedCheck()">
           <OPTION VALUE=""><bean:message key="select.none" /></option>
           <html:options collection="dStatusList" property="status_ID"
-            labelProperty="description" />
+            labelProperty="description"/>
         </html:select></td>
 
 
@@ -1372,7 +1407,7 @@ function gotoHistoricalReport() {
                       String remarkText2 = "this.form.elements['"
                             + remarkDescription + "2']";
  %> <textarea name="<%=remarkDescription%>" cols="80" rows="10"
-              onkeydown="textCounter2(<%=remarkText%>, <%=remarkText2%>,1500);"
+              onkeydown="textCounter2(<%=remarkText%>, <%=remarkText2%>,1500); "
               onkeyup="textCounter2(<%=remarkText%>, <%=remarkText2%>,1500);"
               <logic:equal name="OnHandForm" property="readonly" value="1"><%if (remark.getRemark_ID() > 0) {%> readonly="readonly"<%}%></logic:equal>><%=remark.getRemarktext()%> </textarea>
 
@@ -1415,16 +1450,16 @@ function gotoHistoricalReport() {
            if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_TEMP_INCIDENTS, a)) {
         %>
         <input type="button" name="s" value="Save as Temporary"
-        	onclick="if (validatereqOHDForm(this.form)){ saveOHDTemporary(this.form)};" id="button">
+        	onclick="isDisposedCheck();  if (validatereqOHDForm(this.form)){ saveOHDTemporary(this.form)};" id="button">
         &nbsp;&nbsp;&nbsp;
         <% } %>
-        <html:submit styleId="button" property="savetracing" onclick="return validatereqOHDForm(this.form);">
+        <html:submit styleId="button" property="savetracing" onclick="isDisposedCheck();  return validatereqOHDForm(this.form);">
            <bean:message key="button.savetracingohd" />
         </html:submit>
     </c:if>
 
      <c:if test="${!empty OnHandForm.status}">
-         <html:submit styleId="button" property="savetracing" onclick="return (validateStatus(this.form) && validatereqOHDForm(this.form));">
+         <html:submit styleId="button" property="savetracing" onclick="isDisposedCheck();  return (validateStatus(this.form) && validatereqOHDForm(this.form));">
           <bean:message key="button.saveohd" />
         </html:submit>
 	     <%
@@ -1439,7 +1474,7 @@ function gotoHistoricalReport() {
 		%>
 			&nbsp;&nbsp;&nbsp;&nbsp;
 	                <logic:notEqual name="OnHandForm" property="status.status_ID" value="<%="" + TracingConstants.OHD_STATUS_CLOSED%>">
-	                  <html:submit property="savetowt" styleId="wtbutton" onclick="return (validateStatus(this.form) && validatereqOHDForm(this.form));">
+	                  <html:submit property="savetowt" styleId="wtbutton" onclick="isDisposedCheck();  return (validateStatus(this.form) && validatereqOHDForm(this.form));">
 	                    <bean:message key="button.savetoWT" />
 	                  </html:submit>
 	                </logic:notEqual>
@@ -1451,7 +1486,7 @@ function gotoHistoricalReport() {
 	            %>
 			&nbsp;&nbsp;&nbsp;&nbsp;
 	                <logic:notEqual name="OnHandForm" property="status.status_ID" value="<%="" + TracingConstants.OHD_STATUS_CLOSED%>">
-	                  <html:submit property="amendtowt" styleId="wtbutton" onclick="return (validateStatus(this.form) && validatereqOHDForm(this.form));">
+	                  <html:submit property="amendtowt" styleId="wtbutton" onclick="isDisposedCheck();  return (validateStatus(this.form) && validatereqOHDForm(this.form));">
 	                    <bean:message key="button.amendWT" />
 	                  </html:submit>
 	                </logic:notEqual>
@@ -1469,7 +1504,7 @@ function gotoHistoricalReport() {
             <td align="center" valign="top"><br>
             <logic:notEmpty name="OnHandForm" property="status">
               <html:submit property="savetracing" styleId="button"
-                onclick="return (validateStatus(this.form) && validatereqOHDForm(this.form));">
+                onclick="isDisposedCheck();  return (validateStatus(this.form) && validatereqOHDForm(this.form));">
                 <bean:message key="button.saveremark" />
               </html:submit>
             </logic:notEmpty></td>

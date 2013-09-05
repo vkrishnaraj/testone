@@ -5,7 +5,8 @@
 <%@ page import="java.util.Locale" %>
 
 <%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
-
+<%@page import="com.bagnet.nettracer.tracing.utils.OHDUtils"%>
+<%@page import="com.bagnet.nettracer.tracing.db.OHD"%>
 <%
 	Agent a = (Agent) session.getAttribute("user");
 
@@ -98,7 +99,25 @@
     
   function validatereqOHDForm(form) {
     returnValue = true;
-        
+    
+    for (var j=0;j < form.length; j++) {
+	    currentElement = form.elements[j];
+	    currentElementName=currentElement.name;
+	    if (currentElementName.indexOf("disposal_status.status_ID") != -1) {
+      		var disposeStatus=currentElement.options[currentElement.selectedIndex].value;
+      		if(disposeStatus!="" && disposeStatus==<%=TracingConstants.ITEM_STATUS_DISPOSED_LOCALLY%>){
+      			if(disposeLocal!=false){
+      				alert("<%=(String) bundle
+							.getString( "disposal.remark")%>" + " <%=(String) bundle.getString(
+							"error.validation.isRequired")%>");
+	        		currentElement.focus();
+      				return false;
+      			}
+      			
+      		}
+      	}
+    }
+    
     returnValue = validatereqWtOHDForm(form);
     if (validatereqOHDFields(form) == false) { return false; }
     if (returnValue == false) { return returnValue; }
