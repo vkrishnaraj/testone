@@ -236,6 +236,8 @@ public class MBRActionUtils {
 				IssuanceItemIncident iItem = theform.getIssuanceItemIncidents().get(i);
 				if (iItem.getId() > 0) {
 					iItem.setReturned(true);
+					iItem.setReturnDate(TracerDateTime.getGMTDate());
+					iItem.setUpdated(true);
 				} else {
 					theform.getIssuanceItemIncidents().remove(i);
 				}
@@ -250,22 +252,29 @@ public class MBRActionUtils {
 	public static boolean actionIssueItem(IncidentForm theform, HttpServletRequest request, Agent user) {
 		// add new remark box
 		boolean issueQ = (request.getParameter("issueItem") != null);
-		boolean issueI = (request.getParameter("loanItem") != null || request.getParameter("tradeItem") != null);
-		if (issueQ || issueI) {
+		boolean issueL = (request.getParameter("loanItem") != null);
+		boolean issueT = (request.getParameter("tradeItem") != null);
+		if (issueQ || issueL || issueT) {
 			String type = request.getParameter("issuance_type");
 			String quantity = request.getParameter("issuance_quantity");
 			if (type != null && type.matches("^\\d+$")) {
 				IssuanceItemIncident iss_inc = new IssuanceItemIncident();
 				iss_inc.setIssueAgent(user);
 				iss_inc.setIssueDate(TracerDateTime.getGMTDate());
+				iss_inc.setUpdated(true);
 				if (issueQ && quantity != null && quantity.matches("^\\d+$")) {
 					iss_inc.setQuantity(Integer.parseInt(quantity));
 					IssuanceItemQuantity qItem = IssuanceItemBMO.getQuantifiedItem(type);
 					qItem.setQuantity(qItem.getQuantity() - iss_inc.getQuantity());
 					iss_inc.setIssuanceItemQuantity(qItem);
 					adjustIssuanceLists(request, qItem, null, null);
-				} else if (issueI) {
+				} else if (issueL || issueT) {
 					IssuanceItemInventory iItem = IssuanceItemBMO.getInventoriedItem(type);
+					if (issueL) {
+						iItem.setInventoryStatus(StatusBMO.getStatus(TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_ONLOAN));
+					} else {
+						iItem.setInventoryStatus(StatusBMO.getStatus(TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_ISSUED));
+					}
 					iss_inc.setIssuanceItemInventory(iItem);
 					adjustIssuanceLists(request, null, iItem, null);
 				} else { // issueQ but quantity is null or not a number
@@ -324,22 +333,13 @@ public class MBRActionUtils {
 				}
 			}
 		}
-		for (IssuanceItemQuantity lQItem : returnQList) { // Reset categories for all Quantified Items
-			if (!returnCList.contains(lQItem.getIssuanceItem().getCategory())) {
-				returnCList.add(lQItem.getIssuanceItem().getCategory());
-			}
-		}
-		for (IssuanceItemInventory lIItem : returnIList) { // Reset categories for all Inventoried Items
-			if (!returnCList.contains(lIItem.getIssuanceItem().getCategory())) {
-				returnCList.add(lIItem.getIssuanceItem().getCategory());
-			}
-		}
+		returnCList = getIssuanceCategories(returnQList, returnIList);
 		request.setAttribute("item_quantity_resultList", returnQList);
 		request.setAttribute("item_inventory_resultList", returnIList);
 		request.setAttribute("item_category_resultList", returnCList);
 	}
 	
-	public static void createIssuanceLists(HttpServletRequest request, Station station, int itemtype) {
+	public static void createIssuanceLists(HttpServletRequest request, Station station, int itemtype, List<IssuanceItemIncident> iItems) {
 		List<IssuanceItemQuantity> returnQList = new ArrayList<IssuanceItemQuantity>();
 		List<IssuanceItemInventory> returnIList = new ArrayList<IssuanceItemInventory>();
 		List<IssuanceCategory> returnCList = new ArrayList<IssuanceCategory>();
@@ -350,23 +350,100 @@ public class MBRActionUtils {
 			for (IssuanceItemQuantity qItem : fullQList) {
 				if (isIssuanceItemActive(qItem.getIssuanceItem(), itemtype) && qItem.getQuantity() > 0) {
 					returnQList.add(qItem);
-					if (!returnCList.contains(qItem.getIssuanceItem().getCategory())) {
-						returnCList.add(qItem.getIssuanceItem().getCategory());
-					}
 				}
 			}
 			for (IssuanceItemInventory iItem : fullIList) {
 				if (isIssuanceItemActive(iItem.getIssuanceItem(), itemtype)) {
 					returnIList.add(iItem);
-					if (!returnCList.contains(iItem.getIssuanceItem().getCategory())) {
-						returnCList.add(iItem.getIssuanceItem().getCategory());
-					}
 				}
 			}
 		}
+		adjustItems(iItems, returnQList, returnIList);
+		returnCList = getIssuanceCategories(returnQList, returnIList);
 		request.setAttribute("item_quantity_resultList", returnQList);
 		request.setAttribute("item_inventory_resultList", returnIList);
 		request.setAttribute("item_category_resultList", returnCList);
+	}
+	
+	/**
+	 * This method is insane and I hate that its needed. It adjusts the lists of quantified items and inventoried items based on issuance item actions
+	 * that have occurred on the incident but have not yet been saved. It has been extra commented to help guide you through the jungle of logic and I
+	 * apologize for the eight brackets at the end but this is what happens after around 12 iterations of trying to handle this tricky edge case.
+	 * @param incItems
+	 * @param qItems
+	 * @param iItems
+	 */
+	private static void adjustItems(List<IssuanceItemIncident> incItems, List<IssuanceItemQuantity> qItems, List<IssuanceItemInventory> iItems) {
+		if (incItems != null) {
+			for (IssuanceItemIncident item : incItems) {
+				if (item != null && item.isUpdated()) { // ADJUST LIST FOR UPDATED BUT NOT SAVED ITEMS ONLY!!!
+					if (item.getIssuanceItemQuantity() != null && qItems != null) { // THIS IS A QUANTIFIED ITEM
+						boolean notAdjusted = true;
+						for (IssuanceItemQuantity qItem : qItems) { // CHECK IF ITEM IS IN LIST THEN INCREMENT IF ITEM IS BEING RETURNED, DECREMENT OTHERWISE
+							if (qItem != null && qItem.getId() == item.getIssuanceItemQuantity().getId()) {
+								if (item.isReturned()) {
+									qItem.setQuantity(qItem.getQuantity() + item.getQuantity());
+								} else {
+									qItem.setQuantity(qItem.getQuantity() - item.getQuantity());
+									if (qItem.getQuantity() <= 0) { // IF DECREMENTING REDUCES ITEM TO 0 THEN REMOVE IT
+										qItems.remove(qItem);
+									}
+								}
+								notAdjusted = false;
+								break;
+							}
+						}
+						if (notAdjusted && item.isReturned()) { // IF ITEM IS NOT CURRENTLY IN LIST AND IS BEING RETURNED, THEN INCREMENT AND ADD TO LIST
+							IssuanceItemQuantity qItem = item.getIssuanceItemQuantity();
+							qItem.setQuantity(qItem.getQuantity() + item.getQuantity());
+							qItems.add(qItem);
+						}
+					} // END QUANTIFIED ITEM
+					if (item.getIssuanceItemInventory() != null && iItems != null) { // THIS IS AN INVENTORIED ITEM
+						if (item.isReturned()) { // BEING RETURNED, THEREFORE ADD IT TO THE LIST
+							IssuanceItemInventory iItem = item.getIssuanceItemInventory();
+							iItems.add(iItem);
+						} else { // BEING ISSUED, THEREFORE REMOVE IT FROM THE LIST
+							for (IssuanceItemInventory iItem : iItems) {
+								if (iItem != null && iItem.getId() == item.getIssuanceItemInventory().getId()) {
+									iItems.remove(iItem);
+								}
+							}
+						}
+					} // END INVENTORIED ITEM
+				} // END if(item != null && item.isUpdated())
+			} // END for (IssuanceItemIncident item : incItems)
+		} // END if (incItmes != null)
+	}
+	
+	private static List<IssuanceCategory> getIssuanceCategories(List<IssuanceItemQuantity> qItems, List<IssuanceItemInventory> iItems) {
+		List<IssuanceCategory> returnCList = new ArrayList<IssuanceCategory>();
+		if (qItems != null) {
+			for (IssuanceItemQuantity lQItem : qItems) { // Reset categories for all Quantified Items
+				if (!isCategoryExists(lQItem.getIssuanceItem().getCategory().getId(), returnCList)) {
+					returnCList.add(lQItem.getIssuanceItem().getCategory());
+				}
+			}
+		}
+		if (iItems != null) {
+			for (IssuanceItemInventory lIItem : iItems) { // Reset categories for all Inventoried Items
+				if (!isCategoryExists(lIItem.getIssuanceItem().getCategory().getId(), returnCList)) {
+					returnCList.add(lIItem.getIssuanceItem().getCategory());
+				}
+			}
+		}
+		return returnCList;
+	}
+	
+	private static boolean isCategoryExists(long catID, List<IssuanceCategory> cats) {
+		if (cats != null) {
+			for (IssuanceCategory cat : cats) {
+				if (cat != null && catID == cat.getId()) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	private static boolean isIssuanceItemActive(IssuanceItem item, int itemtype) {

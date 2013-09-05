@@ -204,7 +204,7 @@ public class LostDelayAction extends CheckedAction {
 			request.setAttribute("cantmatch", "1");
 		}
 		
-		MBRActionUtils.createIssuanceLists(request, theform.getStationassigned(), TracingConstants.LOST_DELAY);
+		MBRActionUtils.createIssuanceLists(request, theform.getStationassigned(), TracingConstants.LOST_DELAY, theform.getIssuanceItemIncidents());
 
 		/** ****************** handle requests ******************** */
 
@@ -814,7 +814,7 @@ public class LostDelayAction extends CheckedAction {
 					saveMessages(request, errors);
 					request.setAttribute("prepopulate", new Integer("1"));
 				} else {
-					MBRActionUtils.createIssuanceLists(request, theform.getStationassigned(), TracingConstants.LOST_DELAY);
+					MBRActionUtils.createIssuanceLists(request, theform.getStationassigned(), TracingConstants.LOST_DELAY, theform.getIssuanceItemIncidents());
 					request.setAttribute("pnrlist", null);
 					session.setAttribute("pnrtrue", null);
 					request.setAttribute("markDirty", 1);
@@ -827,7 +827,7 @@ public class LostDelayAction extends CheckedAction {
 			}
 		}
 
-		MBRActionUtils.createIssuanceLists(request, theform.getStationassigned(), TracingConstants.LOST_DELAY);
+		MBRActionUtils.createIssuanceLists(request, theform.getStationassigned(), TracingConstants.LOST_DELAY, theform.getIssuanceItemIncidents());
 		
 		return (mapping.findForward(TracingConstants.LD_MAIN));
 	}

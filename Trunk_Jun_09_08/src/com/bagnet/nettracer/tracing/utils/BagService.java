@@ -38,6 +38,7 @@ import com.bagnet.nettracer.reporting.LostDelayReceipt;
 import com.bagnet.nettracer.tracing.bmo.ClaimBMO;
 import com.bagnet.nettracer.tracing.bmo.ForwardNoticeBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.IssuanceItemBMO;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.bmo.LostFoundBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
@@ -88,6 +89,7 @@ import com.bagnet.nettracer.tracing.db.audit.Audit_Claim;
 import com.bagnet.nettracer.tracing.db.audit.Audit_ClaimProrate;
 import com.bagnet.nettracer.tracing.db.audit.Audit_ExpensePayout;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Prorate_Itinerary;
+import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemIncident;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCloseOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqOhdAction;
 import com.bagnet.nettracer.tracing.dto.Ohd_DTO;
@@ -762,6 +764,14 @@ public class BagService {
 			// tracer
 			// will pick it up.
 			iDTO.setOhd_lasttraced(null);
+			
+			// set incident for all issuance items just before saving.
+			for (IssuanceItemIncident iItem : iDTO.getIssuanceItemIncidents()) {
+				iItem.setIncident(iDTO);
+				if (iItem.isUpdated()) {
+					IssuanceItemBMO.adjustIssuanceItem(iItem);
+				}
+			}
 
 			int result = -1;
 			// if it is readonly and update remark then only update remark

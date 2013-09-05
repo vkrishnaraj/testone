@@ -381,6 +381,8 @@ public class SearchIncidentAction extends Action {
 					IHO.setObjectType(TracingConstants.HIST_DESCRIPTION_DELAYED+" "+TracingConstants.HIST_DESCRIPTION_INCIDENT);
 					IHO.setStatusDesc(TracingConstants.HIST_DESCRIPTION_LOAD+" "+TracingConstants.HIST_DESCRIPTION_DELAYED+" "+TracingConstants.HIST_DESCRIPTION_INCIDENT);
 					HistoryUtils.AddToHistoryContainer(session, IHO, null);
+
+					MBRActionUtils.createIssuanceLists(request, inc.getStationassigned(), TracingConstants.LOST_DELAY, inc.getIssuanceItemIncidents());
 					
 					return (mapping.findForward(TracingConstants.LD_MAIN));
 				case TracingConstants.DAMAGED_BAG:
@@ -408,6 +410,9 @@ public class SearchIncidentAction extends Action {
 					IHO.setObjectType(TracingConstants.HIST_DESCRIPTION_DAMAGED+" "+TracingConstants.HIST_DESCRIPTION_INCIDENT);
 					IHO.setStatusDesc(TracingConstants.HIST_DESCRIPTION_LOAD+" "+TracingConstants.HIST_DESCRIPTION_DAMAGED+" "+TracingConstants.HIST_DESCRIPTION_INCIDENT);
 					HistoryUtils.AddToHistoryContainer(session, IHO, null);
+
+					MBRActionUtils.createIssuanceLists(request, inc.getStationassigned(), TracingConstants.DAMAGED_BAG, inc.getIssuanceItemIncidents());
+					
 					return (mapping.findForward(TracingConstants.DAMAGED_MAIN));
 				case TracingConstants.MISSING_ARTICLES:
 					if(UserPermissions.hasLimitedSavePermission(user, inc)) {
@@ -434,6 +439,9 @@ public class SearchIncidentAction extends Action {
 					IHO.setObjectType(TracingConstants.HIST_DESCRIPTION_MISSING+" "+TracingConstants.HIST_DESCRIPTION_INCIDENT);
 					IHO.setStatusDesc(TracingConstants.HIST_DESCRIPTION_LOAD+" "+TracingConstants.HIST_DESCRIPTION_MISSING+" "+TracingConstants.HIST_DESCRIPTION_INCIDENT);
 					HistoryUtils.AddToHistoryContainer(session, IHO, null);
+
+					MBRActionUtils.createIssuanceLists(request, inc.getStationassigned(), TracingConstants.MISSING_ARTICLES, inc.getIssuanceItemIncidents());
+					
 					return (mapping.findForward(TracingConstants.MISSING_MAIN));
 				default:
 					return (mapping.findForward(TracingConstants.SEARCH_INCIDENT));

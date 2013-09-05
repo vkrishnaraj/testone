@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -59,6 +60,9 @@ public class IssuanceItemIncident {
 	@ManyToOne
 	@JoinColumn(name = "issueagent_id")
 	private Agent issueAgent;
+	
+	@Transient
+	boolean updated = false;
 
 	public long getId() {
 		return id;
@@ -130,6 +134,14 @@ public class IssuanceItemIncident {
 
 	public void setIssueAgent(Agent issueAgent) {
 		this.issueAgent = issueAgent;
+	}
+
+	public boolean isUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(boolean updated) {
+		this.updated = updated;
 	}
 	
 }

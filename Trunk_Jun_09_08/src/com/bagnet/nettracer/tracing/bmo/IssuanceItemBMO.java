@@ -22,6 +22,7 @@ import com.bagnet.nettracer.tracing.db.issuance.AuditIssuanceItemInventory;
 import com.bagnet.nettracer.tracing.db.issuance.AuditIssuanceItemQuantity;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceCategory;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItem;
+import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemIncident;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemInventory;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemQuantity;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
@@ -310,6 +311,8 @@ public class IssuanceItemBMO {
 	
 	/**
 	 * Edits the data for a quantified item. Only minQuantity and quantity can be edited.
+	 * If minQuantity is less than 0 it will not be edited.
+	 * If quantity is less than 0 then the items quantity will be decremented by the negative number.
 	 * Also provides incidentID and agent for the audit data which gets created for each edit.
 	 * @param id
 	 * @param quantity
@@ -324,10 +327,13 @@ public class IssuanceItemBMO {
 				sess = HibernateWrapper.getSession().openSession();
 				IssuanceItemQuantity qItem = (IssuanceItemQuantity) sess.load(IssuanceItemQuantity.class, id);
 				int oldQuant = qItem.getQuantity();
-				if (quantity > 0) {
+				if (quantity >= 0) {
 					qItem.setQuantity(quantity);
-				} else if (qItem.getQuantity() > 0){
-					qItem.setQuantity(qItem.getQuantity() - 1);
+				} else {
+					qItem.setQuantity(qItem.getQuantity() + quantity);
+					if (qItem.getQuantity() < 0) {
+						qItem.setQuantity(0);
+					}
 				}
 				if (minQuantity > 0) {
 					qItem.setMinimuActiveQuantity(minQuantity);
@@ -547,6 +553,26 @@ public class IssuanceItemBMO {
 				} catch (Exception e) {
 					logger.fatal(e.getMessage());
 				}
+			}
+		}
+	}
+	
+	public static void adjustIssuanceItem(IssuanceItemIncident iItem) {
+		boolean isInventoried = (iItem.getIssuanceItemInventory() != null);
+		if (iItem.isReturned()) {
+			if (isInventoried) {
+				moveInventoriedItem(iItem.getIssuanceItemInventory().getId(), TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_AVAILABLE, iItem.getIssueAgent(), iItem.getIncident().getIncident_ID(), "Returned from Incident");
+			} else {
+				int quantity = iItem.getIssuanceItemQuantity().getQuantity() + iItem.getQuantity();
+				editQuantifiedItem(iItem.getIssuanceItemQuantity().getId(), quantity, -1, iItem.getIssueAgent(), iItem.getIncident().getIncident_ID());
+			}
+		} else {
+			if (isInventoried) {
+				int status_id = iItem.getIssuanceItemInventory().getInventoryStatus().getStatus_ID();
+				moveInventoriedItem(iItem.getIssuanceItemInventory().getId(), status_id, iItem.getIssueAgent(), iItem.getIncident().getIncident_ID(), "Issued/Loaned from Incident");
+			} else {
+				int quantity = -1 * iItem.getQuantity();
+				editQuantifiedItem(iItem.getIssuanceItemQuantity().getId(), quantity, -1, iItem.getIssueAgent(), iItem.getIncident().getIncident_ID());
 			}
 		}
 	}
