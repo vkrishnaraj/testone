@@ -77,6 +77,10 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 			selenium.click("name=lateCheckValue");
 			selenium.select("name=bagColor", "label=BK - Black");
 			selenium.select("name=bagType", "label=22");
+			selenium.select("name=disposal_status.status_ID", "label=Disposed of Locally");
+			selenium.click("name=savetracing");
+			assertEquals("Remark for Local Disposal is required.", selenium.getAlert());
+			selenium.type("name=remark[0].remarktext", "Test Remark Text");
 			selenium.click("name=savetracing");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
@@ -203,6 +207,45 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 		}
 	}
 
+	@Test
+	public void testDisposedLocalReq() {
+		verifyTrue(navigateToOnhand());
+		selenium.select("name=disposal_status.status_ID", "label=Please Select");
+		selenium.click("name=savetracing");
+		waitForPageToLoadImproved();
+
+		if (checkNoErrorPage()) {
+			verifyTrue(navigateToOnhand());
+			selenium.select("name=disposal_status.status_ID", "label=Disposed of Locally");
+			selenium.click("name=savetracing");
+			assertEquals("Remark for Local Disposal is required.", selenium.getAlert());
+			selenium.click("name=additem");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("Failed to save Onhand Disposal Status to 'Please Select'");
+		}
+		
+		
+		if (checkNoErrorPage()) {
+			selenium.click("name=savetracing");
+			assertEquals("Remark for Local Disposal is required.", selenium.getAlert());
+			selenium.click("name=addremark");
+			selenium.type("name=remark[1].remarktext", "General Test");
+			selenium.click("name=savetracing");
+			waitForPageToLoadImproved();
+
+		} else {
+			System.out.println("Failed to add content item to OHD");
+		}
+		
+		if (checkNoErrorPage()) {
+			assertEquals(Settings.ONHAND_ID_WN,selenium.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a"));
+			goToTaskManager();
+		} else {
+			System.out.println("Failed to save Remark");
+		}
+		
+	}
 	
 	private boolean setSecureRemarksPermission(boolean secureRemarks) {
 		boolean success = false;
