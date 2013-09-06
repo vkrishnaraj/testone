@@ -374,10 +374,6 @@ public class BDOUtils {
 				bdo.setServicelevel(dsl);
 			}
 			
-			if (theform.getCost()!=null && theform.getCost().length()>0){
-				bdo.setModDelivCost(Double.valueOf(theform.getCost()));
-			}
-			
 			if (theform.getIncident().getIncident_ID() != null) {
 				// prevent hibernate from erroring out
 				bdo.setOhd(null);

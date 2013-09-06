@@ -329,11 +329,8 @@ public class CostServiceUtils {
 			if(a.getErrorCodes()==null || (a.getErrorCodes()!=null && a.getErrorCodes().sizeOfErrorCodeEnumArray()==0)){
 				form.setCost(a.getTotalAirlineCost().toString());
 				form.setCurrency("USD");
-				if(form.getOrigDelivCost()==0){
-					form.setOrigDelivCost(a.getTotalAirlineCost().doubleValue());
-				} else {
-					form.setModDelivCost(a.getTotalAirlineCost().doubleValue());
-				}
+				form.setOrigDelivCost(a.getTotalAirlineCost().doubleValue());
+				
 			} else {
 				boolean specificError=false;
 				for(Enum err:a.getErrorCodes().getErrorCodeEnumArray()){

@@ -63,7 +63,6 @@ public final class BDOForm extends ValidatorForm {
 
 
 	private double origDelivCost;
-	private double modDelivCost;
 	
     private String wt_id;
 	/**
@@ -488,32 +487,10 @@ public final class BDOForm extends ValidatorForm {
 		this.origDelivCost = origDelivCost;
 	}
 
-	/**
-	 * @return the modDelivCost
-	 */
-	public double getModDelivCost() {
-		return modDelivCost;
-	}
-
-	/**
-	 * @param modDelivCost the modDelivCost to set
-	 */
-	public void setModDelivCost(double modDelivCost) {
-		this.modDelivCost = modDelivCost;
-	}
-	
-
 	public String getDispOrigDelivCost(){
 		if(origDelivCost!=0){
 			DecimalFormat dec=new DecimalFormat("###,##0.00 USD");
 			return dec.format(origDelivCost);
-		}
-		return "";
-	}
-	public String getDispModDelivCost(){
-		if(modDelivCost!=0){
-			DecimalFormat dec=new DecimalFormat("###,##0.00");
-			return dec.format(modDelivCost) +" "+getCurrency();
 		}
 		return "";
 	}

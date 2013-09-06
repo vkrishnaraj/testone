@@ -313,6 +313,10 @@ function toggledc(o) {
                   <html:options collection="currencylist" property="currency_ID" labelProperty="id_desc" />
                 </html:select>&nbsp;
                 <html:text property="cost" size="6" maxlength="10" styleClass="textfield" />
+                <br>
+                
+	              <bean:message key="original.delivery.cost"/>:
+	              <bean:write name="BDOForm" property="dispOrigDelivCost" />
             </td>
           </tr>
           
@@ -324,20 +328,7 @@ function toggledc(o) {
               <input name="textCounter2" type="text" value="300" size="4" maxlength="4" disabled="true" />
             </td>
           </tr>
-          
-            <logic:notEqual name="BDOForm" property="origDelivCost" value="0">
-	           <tr >
-	              <td colspan="2">
-	              <bean:message key="original.delivery.cost"/>:
-	              <bean:write name="BDOForm" property="dispOrigDelivCost" />
-	              </td>
-	              <td colspan="3">
-	              <bean:message key="modified.delivery.cost"/>:
-	              <bean:write name="BDOForm" property="dispModDelivCost" />
-	              </td>
-	           </tr>
-            </logic:notEqual>
-        </table>
+         </table>
         <a name="contact"></a>
         <h1 class="green">
           <bean:message key="header.passenger_info" />

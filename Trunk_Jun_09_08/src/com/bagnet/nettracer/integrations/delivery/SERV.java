@@ -81,10 +81,8 @@ public class SERV implements BDOIntegration {
 			ws.setRoute("");
 			ws.setServiceLevel(DelivercompanyBMO.getServiceLevel(bdo.getServicelevel().getServicelevel_ID()).getService_code());
 			
-			if(bdo.getModDelivCost()!=0){
-				ws.setEstimatedCost(bdo.getModDelivCost());
-			} else if(bdo.getOrigDelivCost()!=0) {
-				ws.setEstimatedCost(bdo.getOrigDelivCost());
+			if(bdo.getExpensePayout().getCheckamt()!=0){
+				ws.setEstimatedCost(bdo.getExpensePayout().getCheckamt());
 			}
 			
 			logger.info("POINT 4\n\n");
