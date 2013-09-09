@@ -27,13 +27,50 @@ public class TracingConstants {
 		GROUP ("group"),
 		STATION ("station"),
 		INCIDENT ("incident"),
+		OHD ("ohd"),
 		CREATEDATE ("createdate"),
 		DUE_DATE ("due_date"),
 		REMINDER_DATE ("reminder_date"),
 		FILE_REF_NUMBER ("file_ref_number"),
 		STATUS ("status"),
 		PRIORITY ("priority"),
-		ASSIGNED_TO ("assigned_to");
+		ASSIGNED_TO ("assigned_to"), 
+		/*
+		 * OHD Sort columns
+		 */
+		OHD_NAME ("ohd_name"),
+		OHD_NAMEREV ("ohd_nameRev"), 
+		OHD_DESTINATION ("ohd_destination"),
+		OHD_DESTINATIONREV ("ohd_destinationRev"),
+		OHD_INCIDENT ("ohd_incident"),
+		OHD_INCIDENTREV ("ohd_incidentRev"),
+		OHD_DATE ("ohd_date"),
+		OHD_DATEREV ("ohd_dateRev"),
+		OHD_MODDATE ("ohd_moddate"),
+		OHD_MODDATEREV ("ohd_moddateRev"),
+		OHD_BAGTAG("ohd_bagtag"),
+		OHD_BAGTAGREV ("ohd_bagtagRev"),
+		OHD_STATUS("ohd_status"),
+		OHD_STATUSREV ("ohd_statusRev"),
+		OHD_COLOR("ohd_color"),
+		OHD_COLORREV ("ohd_colorRev"),
+		OHD_TYPE("ohd_type"),
+		OHD_TYPEREV ("ohd_typeRev"),
+		OHD_NUM("ohd_num"),
+		OHD_NUMREV ("ohd_numRev"),
+		OHD_COMMENTS("ohd_comments"),
+		OHD_COMMENTSREV ("ohd_commentsRev"),
+		OHD_WTID("ohd_wtid"),
+		OHD_WTIDREV ("ohd_wtidRev"),
+		OHD_POSID("ohd_posid"),
+		OHD_POSIDREV ("ohd_posidRev"),
+		OHD_AIRLINEFOUND("ohd_airlinefound"),
+		OHD_AIRLINEFOUNDREV ("ohd_airlinefoundRev"),
+		OHD_STATIONFOUND("ohd_stationfound"),
+		OHD_STATIONFOUNDREV ("ohd_stationfoundRev"),
+		OHD_HOLDSTATION("ohd_holdstation"),
+		OHD_HOLDSTATIONREV ("ohd_holdstationRev")
+		;
 		
 		private final String param;
 		SortParam(String param){

@@ -68,7 +68,7 @@ function sortSearchOhd(sortOrder) {
 <%
     } else {
 %>
-      <input type=hidden name=sort value="ohdnum">
+      <input type=hidden name=sort value="<%=TracingConstants.SortParam.OHD_NUM.getParamString()%>">
 <%
     }
 %>
@@ -272,143 +272,143 @@ function sortSearchOhd(sortOrder) {
             
             <table class="form2" cellspacing="0" cellpadding="0">
               <tr>
-              	<logic:notEqual name="sort" value="ohdnum" scope="request">
+              	<logic:notEqual name="sort" value="<%=TracingConstants.SortParam.OHD_NUM.getParamString()%>" scope="request">
                 <td>
                   <strong>
-                     <a href="#" onclick="sortSearchOhd('ohdnum');"><bean:message key="colname.on_hand_report_number" /></a>
+                     <a href="#" onclick="sortSearchOhd('<%=TracingConstants.SortParam.OHD_NUM.getParamString()%>');"><bean:message key="colname.on_hand_report_number" /></a>
                   </strong>
                 </td>
                 </logic:notEqual>
-                <logic:equal name="sort" value="ohdnum" scope="request">
+                <logic:equal name="sort" value="<%=TracingConstants.SortParam.OHD_NUM.getParamString()%>" scope="request">
                 <td>
                   <strong>
-                     <a href="#" onclick="sortSearchOhd('ohdnumRev');"><bean:message key="colname.on_hand_report_number" /></a>
+                     <a href="#" onclick="sortSearchOhd('<%=TracingConstants.SortParam.OHD_NUMREV.getParamString()%>');"><bean:message key="colname.on_hand_report_number" /></a>
                   </strong>
                 </td>
                 </logic:equal>
-              	<logic:notEqual name="sort" value="ohdCreateDate" scope="request">
+              	<logic:notEqual name="sort" value="<%=TracingConstants.SortParam.OHD_DATE.getParamString()%>" scope="request">
                 <td>
                   <strong>
-                    <a href="#" onclick="sortSearchOhd('ohdCreateDate');"><bean:message key="colname.ohd_create_date" /></a>
+                    <a href="#" onclick="sortSearchOhd('<%=TracingConstants.SortParam.OHD_DATE.getParamString()%>');"><bean:message key="colname.ohd_create_date" /></a>
                   </strong>
                 </td>
                 </logic:notEqual>
-                <logic:equal name="sort" value="ohdCreateDate" scope="request">
+                <logic:equal name="sort" value="<%=TracingConstants.SortParam.OHD_DATE.getParamString()%>" scope="request">
                 <td>
                   <strong>
-                    <a href="#" onclick="sortSearchOhd('ohdCreateDateRev');"><bean:message key="colname.ohd_create_date" /></a>
+                    <a href="#" onclick="sortSearchOhd('<%=TracingConstants.SortParam.OHD_DATEREV.getParamString()%>');"><bean:message key="colname.ohd_create_date" /></a>
                   </strong>
                 </td>
                 </logic:equal>
-                <logic:notEqual name="sort" value="bagtagnum" scope="request">
+                <logic:notEqual name="sort" value="<%=TracingConstants.SortParam.OHD_BAGTAG.getParamString()%>" scope="request">
                 <td>
                   <strong>
-                    <a href="#" onclick="sortSearchOhd('bagtagnum');"><bean:message key="colname.bag_tag_number" /></a>
+                    <a href="#" onclick="sortSearchOhd('<%=TracingConstants.SortParam.OHD_BAGTAG.getParamString()%>');"><bean:message key="colname.bag_tag_number" /></a>
                   </strong>
                 </td>
                 </logic:notEqual>
-                <logic:equal name="sort" value="bagtagnum" scope="request">
+                <logic:equal name="sort" value="<%=TracingConstants.SortParam.OHD_BAGTAG.getParamString()%>" scope="request">
                 <td>
                   <strong>
-                    <a href="#" onclick="sortSearchOhd('bagtagnumRev');"><bean:message key="colname.bag_tag_number" /></a>
+                    <a href="#" onclick="sortSearchOhd('<%=TracingConstants.SortParam.OHD_BAGTAGREV.getParamString()%>');"><bean:message key="colname.bag_tag_number" /></a>
                   </strong>
                 </td>
                 </logic:equal>
-              	<logic:notEqual name="sort" value="status" scope="request">
+              	<logic:notEqual name="sort" value="<%=TracingConstants.SortParam.OHD_STATUS.getParamString()%>" scope="request">
                 <td>
                   <strong>
-                    <a href="#" onclick="sortSearchOhd('status');"><bean:message key="header.status" /></a>
+                    <a href="#" onclick="sortSearchOhd('<%=TracingConstants.SortParam.OHD_STATUS.getParamString()%>');"><bean:message key="header.status" /></a>
                   </strong>
                 </td>
                 </logic:notEqual>
-              	<logic:equal name="sort" value="status" scope="request">
+              	<logic:equal name="sort" value="<%=TracingConstants.SortParam.OHD_STATUS.getParamString()%>" scope="request">
                 <td>
                   <strong>
-                    <a href="#" onclick="sortSearchOhd('statusRev');"><bean:message key="header.status" /></a>
+                    <a href="#" onclick="sortSearchOhd('<%=TracingConstants.SortParam.OHD_STATUSREV.getParamString()%>');"><bean:message key="header.status" /></a>
                   </strong>
                 </td>
                 </logic:equal>
-                <logic:notEqual name="sort" value="color" scope="request">
+                <logic:notEqual name="sort" value="<%=TracingConstants.SortParam.OHD_COLOR.getParamString()%>" scope="request">
                 <td>
                   <strong>
-                    <a href="#" onclick="sortSearchOhd('color');"><bean:message key="colname.color" /></a>
+                    <a href="#" onclick="sortSearchOhd('<%=TracingConstants.SortParam.OHD_COLOR.getParamString()%>');"><bean:message key="colname.color" /></a>
                   </strong>
                 </td>
                 </logic:notEqual>
-                <logic:equal name="sort" value="color" scope="request">
+                <logic:equal name="sort" value="<%=TracingConstants.SortParam.OHD_COLOR.getParamString()%>" scope="request">
                 <td>
                   <strong>
-                    <a href="#" onclick="sortSearchOhd('colorRev');"><bean:message key="colname.color" /></a>
+                    <a href="#" onclick="sortSearchOhd('<%=TracingConstants.SortParam.OHD_COLORREV.getParamString()%>');"><bean:message key="colname.color" /></a>
                   </strong>
                 </td>
                 </logic:equal>
-              	<logic:notEqual name="sort" value="bagtype" scope="request">
+              	<logic:notEqual name="sort" value="<%=TracingConstants.SortParam.OHD_TYPE.getParamString()%>" scope="request">
                 <td>
                   <strong>
-                    <a href="#" onclick="sortSearchOhd('bagtype');"><bean:message key="colname.bagtype" /></a>
+                    <a href="#" onclick="sortSearchOhd('<%=TracingConstants.SortParam.OHD_TYPE.getParamString()%>');"><bean:message key="colname.bagtype" /></a>
                   </strong>
                 </td>
                 </logic:notEqual>
-              	<logic:equal name="sort" value="bagtype" scope="request">
+              	<logic:equal name="sort" value="<%=TracingConstants.SortParam.OHD_TYPE.getParamString()%>" scope="request">
                 <td>
                   <strong>
-                    <a href="#" onclick="sortSearchOhd('bagtypeRev');"><bean:message key="colname.bagtype" /></a>
+                    <a href="#" onclick="sortSearchOhd('<%=TracingConstants.SortParam.OHD_TYPEREV.getParamString()%>');"><bean:message key="colname.bagtype" /></a>
                   </strong>
                 </td>
                 </logic:equal>
-                <logic:notEqual name="sort" value="foundComp" scope="request">
+                <logic:notEqual name="sort" value="<%=TracingConstants.SortParam.OHD_AIRLINEFOUND.getParamString()%>" scope="request">
                 <td>
                   <strong>
-                    <a href="#" onclick="sortSearchOhd('foundComp');"><bean:message key="colname.found_company" /></a>
+                    <a href="#" onclick="sortSearchOhd('<%=TracingConstants.SortParam.OHD_AIRLINEFOUND.getParamString()%>');"><bean:message key="colname.found_company" /></a>
                   </strong>
                 </td>
                 </logic:notEqual>
-                <logic:equal name="sort" value="foundComp" scope="request">
+                <logic:equal name="sort" value="<%=TracingConstants.SortParam.OHD_AIRLINEFOUND.getParamString()%>" scope="request">
                 <td>
                   <strong>
-                    <a href="#" onclick="sortSearchOhd('foundCompRev');"><bean:message key="colname.found_company" /></a>
+                    <a href="#" onclick="sortSearchOhd('<%=TracingConstants.SortParam.OHD_AIRLINEFOUNDREV.getParamString()%>');"><bean:message key="colname.found_company" /></a>
                   </strong>
                 </td>
                 </logic:equal>
-              	<logic:notEqual name="sort" value="foundStation" scope="request">
+              	<logic:notEqual name="sort" value="<%=TracingConstants.SortParam.OHD_STATIONFOUND.getParamString()%>" scope="request">
                 <td>
                   <strong>
-                    <a href="#" onclick="sortSearchOhd('foundStation');" id="foundStation"><bean:message key="colname.found_station" /></a>
+                    <a href="#" onclick="sortSearchOhd('<%=TracingConstants.SortParam.OHD_STATIONFOUND.getParamString()%>');" id="foundStation"><bean:message key="colname.found_station" /></a>
                   </strong>
                 </td>
                 </logic:notEqual>
-                <logic:equal name="sort" value="foundStation" scope="request">
+                <logic:equal name="sort" value="<%=TracingConstants.SortParam.OHD_STATIONFOUND.getParamString()%>" scope="request">
                 <td>
                   <strong>
-                    <a href="#" onclick="sortSearchOhd('foundStationRev');" id="foundStation"><bean:message key="colname.found_station" /></a>
+                    <a href="#" onclick="sortSearchOhd('<%=TracingConstants.SortParam.OHD_STATIONFOUNDREV.getParamString()%>');" id="foundStation"><bean:message key="colname.found_station" /></a>
                   </strong>
                 </td>
                 </logic:equal>
-              	<logic:notEqual name="sort" value="holdStation" scope="request">
+              	<logic:notEqual name="sort" value="<%=TracingConstants.SortParam.OHD_HOLDSTATION.getParamString()%>" scope="request">
 	                <td>
 	                  <strong>
-	                    <a href="#" onclick="sortSearchOhd('holdStation');" id="holdStation"><bean:message key="colname.holding_station" /></a>
+	                    <a href="#" onclick="sortSearchOhd('<%=TracingConstants.SortParam.OHD_HOLDSTATION.getParamString()%>');" id="holdStation"><bean:message key="colname.holding_station" /></a>
 	                  </strong>
 	                </td>
                 </logic:notEqual>
-                <logic:equal name="sort" value="holdStation" scope="request">
+                <logic:equal name="sort" value="<%=TracingConstants.SortParam.OHD_HOLDSTATION.getParamString()%>" scope="request">
 	                <td>
 	                  <strong>
-	                    <a href="#" onclick="sortSearchOhd('holdStationRev');" id="holdStation"><bean:message key="colname.holding_station" /></a>
+	                    <a href="#" onclick="sortSearchOhd('<%=TracingConstants.SortParam.OHD_HOLDSTATIONREV.getParamString()%>');" id="holdStation"><bean:message key="colname.holding_station" /></a>
 	                  </strong>
 	                </td>
                 </logic:equal>
-              	<logic:notEqual name="sort" value="name" scope="request">
+              	<logic:notEqual name="sort" value="<%=TracingConstants.SortParam.OHD_NAME.getParamString()%>" scope="request">
 	                <td>
 	                  <strong>
-	                    <a href="#" onclick="sortSearchOhd('name');"><bean:message key="colname.name" /></a>
+	                    <a href="#" onclick="sortSearchOhd('<%=TracingConstants.SortParam.OHD_NAME.getParamString()%>');"><bean:message key="colname.name" /></a>
 	                  </strong>
 	                </td>
                 </logic:notEqual>
-                <logic:equal name="sort" value="name" scope="request">
+                <logic:equal name="sort" value="<%=TracingConstants.SortParam.OHD_NAME.getParamString()%>" scope="request">
 	                <td>
 	                  <strong>
-	                    <a href="#" onclick="sortSearchOhd('nameRev');"><bean:message key="colname.name" /></a>
+	                    <a href="#" onclick="sortSearchOhd('<%=TracingConstants.SortParam.OHD_NAMEREV.getParamString()%>');"><bean:message key="colname.name" /></a>
 	                  </strong>
 	                </td>
                 </logic:equal>
@@ -416,17 +416,17 @@ function sortSearchOhd(sortOrder) {
                 	if(a.getStation().getCompany().getVariable().getWt_enabled()==1){
                 %>
                 
-              	<logic:notEqual name="sort" value="wtid" scope="request">
+              	<logic:notEqual name="sort" value="<%=TracingConstants.SortParam.OHD_WTID.getParamString()%>" scope="request">
 	                <td>
 	                	<strong>
-	                		<a href="#" onclick="sortSearchOhd('wtid');"><bean:message key="colname.worldtracer_id"/></a>
+	                		<a href="#" onclick="sortSearchOhd('<%=TracingConstants.SortParam.OHD_WTID.getParamString()%>');"><bean:message key="colname.worldtracer_id"/></a>
 	                	</strong>
 	                </td>
                 </logic:notEqual>
-                <logic:equal name="sort" value="wtid" scope="request">
+                <logic:equal name="sort" value="<%=TracingConstants.SortParam.OHD_WTID.getParamString()%>" scope="request">
 	                <td>
 	                	<strong>
-	                		<a href="#" onclick="sortSearchOhd('wtidRev');"><bean:message key="colname.worldtracer_id"/></a>
+	                		<a href="#" onclick="sortSearchOhd('<%=TracingConstants.SortParam.OHD_WTIDREV.getParamString()%>');"><bean:message key="colname.worldtracer_id"/></a>
 	                	</strong>
 	                </td>
                 </logic:equal>

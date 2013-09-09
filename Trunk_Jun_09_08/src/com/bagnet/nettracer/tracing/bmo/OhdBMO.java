@@ -26,6 +26,7 @@ import org.hibernate.criterion.Expression;
 import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.constant.TracingConstants.SortParam;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.ControlLog;
 import com.bagnet.nettracer.tracing.db.OHD;
@@ -631,7 +632,7 @@ public class OhdBMO {
 			else sql.append("select distinct ohd from com.bagnet.nettracer.tracing.db.OHD ohd ");
 
 			if (oDTO.getFirstname().trim().length() > 0 || oDTO.getLastname().trim().length() > 0
-					|| oDTO.getMiddlename().trim().length() > 0 || (sort != null && (sort.equals("name") || sort.equals("nameRev")))) {
+					|| oDTO.getMiddlename().trim().length() > 0 || (sort != null && (sort.equalsIgnoreCase(SortParam.OHD_NAME.getParamString()) || sort.equalsIgnoreCase(SortParam.OHD_NAMEREV.getParamString())))) {
 				sql.append(" left outer join ohd.passengers passengers ");
 			}
 
@@ -640,7 +641,7 @@ public class OhdBMO {
 				sql.append(" join ohd.items items ");
 			}
 
-			if (oDTO.getAirline().length() > 0 || oDTO.getFlightnum().trim().length() > 0 || (sort != null && (sort.equals("destination") || sort.equals("destinationRev")))) {
+			if (oDTO.getAirline().length() > 0 || oDTO.getFlightnum().trim().length() > 0 || (sort != null && (sort.equalsIgnoreCase(SortParam.OHD_DESTINATION.getParamString()) || sort.equalsIgnoreCase(SortParam.OHD_DESTINATIONREV.getParamString())))) {
 				sql.append(" join ohd.itinerary itinerary ");
 			}
 
@@ -774,69 +775,69 @@ public class OhdBMO {
 					sql.append(" order by ohd.OHD_ID");
 				} else {
 					String sortq = " order by ";
-					if (sort.equals("ohdnum"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_NUM.getParamString()))
 						sortq += " ohd.OHD_ID asc, ";
-					if (sort.equals("ohdnumRev"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_NUMREV.getParamString()))
 						sortq += " ohd.OHD_ID desc, ";
-					if (sort.equals("incnum"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_INCIDENT.getParamString()))
 						sortq += " ohd.matched_incident asc, ";
-					if (sort.equals("incnumRev"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_INCIDENTREV.getParamString()))
 						sortq += " ohd.matched_incident desc, ";
-					if (sort.equals("ohdCreateDate"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_DATE.getParamString()))
 						sortq += " ohd.founddate asc";
-					if (sort.equals("ohdCreateDateRev"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_DATEREV.getParamString()))
 						sortq += " ohd.founddate desc";
-					if (sort.equals("ohdModDate"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_MODDATE.getParamString()))
 						sortq += " ohd.modifiedDate asc, ";
-					if (sort.equals("ohdModDateRev"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_MODDATEREV.getParamString()))
 						sortq += " ohd.modifiedDate desc, ";
-					if (sort.equals("bagtagnum"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_BAGTAG.getParamString()))
 						sortq += " ohd.claimnum asc, ";
-					if (sort.equals("bagtagnumRev"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_BAGTAGREV.getParamString()))
 						sortq += "ohd.claimnum desc, ";
-					if (sort.equals("status"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_STATUS.getParamString()))
 						sortq += " ohd.status.status_ID asc, ";
-					if (sort.equals("statusRev"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_STATUSREV.getParamString()))
 						sortq += " ohd.status.status_ID desc, ";
-					if (sort.equals("color"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_COLOR.getParamString()))
 						sortq += " ohd.color asc, ";
-					if (sort.equals("colorRev"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_COLORREV.getParamString()))
 						sortq += " ohd.color desc, ";
-					if (sort.equals("bagtype"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_TYPE.getParamString()))
 						sortq += " ohd.type asc, ";
-					if (sort.equals("bagtypeRev"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_TYPEREV.getParamString()))
 						sortq += " ohd.type desc, ";
-					if (sort.equals("pos"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_POSID.getParamString()))
 						sortq += " ohd.posId asc, ";
-					if (sort.equals("posRev"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_POSIDREV.getParamString()))
 						sortq += " ohd.posId desc, ";
-					if (sort.equals("foundComp"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_AIRLINEFOUND.getParamString()))
 						sortq += " ohd.foundAtStation.company.companyCode_ID asc, ";
-					if (sort.equals("foundCompRev"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_AIRLINEFOUNDREV.getParamString()))
 						sortq += " ohd.foundAtStation.company.companyCode_ID desc, ";
-					if (sort.equals("foundStation"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_STATIONFOUND.getParamString()))
 						sortq += " ohd.foundAtStation.stationcode asc, ";
-					if (sort.equals("foundStationRev"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_STATIONFOUNDREV.getParamString()))
 						sortq += " ohd.foundAtStation.stationcode desc, ";
-					if (sort.equals("holdStation"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_HOLDSTATION.getParamString()))
 						sortq += " ohd.holdingStation.stationcode asc, ";
-					if (sort.equals("holdStationRev"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_HOLDSTATIONREV.getParamString()))
 						sortq += " ohd.holdingStation.stationcode desc, ";
-					if (sort.equals("name"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_NAME.getParamString()))
 						sortq += " passengers.lastname asc, ";
-					if (sort.equals("nameRev"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_NAMEREV.getParamString()))
 						sortq += " passengers.lastname desc, ";
-					if (sort.equals("destination"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_DESTINATION.getParamString()))
 						sortq += " itinerary.legto asc, ";
-					if (sort.equals("destinationRev"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_DESTINATIONREV.getParamString()))
 						sortq += " itinerary.legto desc, ";
-					if (sort.equals("storage"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_COMMENTS.getParamString()))
 						sortq += " ohd.storage_location asc, ";
-					if (sort.equals("storageRev"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_COMMENTSREV.getParamString()))
 						sortq += " ohd.storage_location desc, ";
-					if (sort.equals("wtid"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_WTID.getParamString()))
 						sortq += " ohd.wtFile.wt_id asc, ";
-					if (sort.equals("wtidRev"))
+					if (sort.equalsIgnoreCase(SortParam.OHD_WTIDREV.getParamString()))
 						sortq += " ohd.wtFile.wt_id desc, ";
 					
 					if(!((sort.equals("ohdCreateDate")) || (sort.equals("ohdCreateDateRev"))))

@@ -23,6 +23,7 @@ import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.constant.TracingConstants.SortParam;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.Station;
@@ -87,9 +88,11 @@ public class ViewOnhands extends Action {
 		 */
 		String sort=request.getParameter((new ParamEncoder("ohd")).encodeParameterName(TableTagParameters.PARAMETER_SORT));
 		if(sort==null){
-			sort=request.getParameter("sortBy")!=null?request.getParameter("sortBy").toString():"ohdnum";
+			sort=request.getParameter("sortBy")!=null?request.getParameter("sortBy").toString():TracingConstants.SortParam.OHD_NUM.getParamString();
 		}
-		request.setAttribute("sortNum", sort);
+		
+		if (sort != null && sort.length() > 0 && SortParam.isValid(sort)) request.setAttribute("sortNum", sort);
+		
 		if ((resultlist = bs.findOnHandBagsBySearchCriteria(daform, user, 0, 0, true, true, true,sort)) == null
 				|| resultlist.size() <= 0) {
 			int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_SEARCH_PAGES, session);

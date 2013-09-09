@@ -25,6 +25,7 @@ import org.apache.struts.action.ActionMessages;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.constant.TracingConstants.SortParam;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
@@ -70,7 +71,7 @@ public class SearchOnHandAction extends Action {
 		
 		String sort = request.getParameter("sort");
 
-		if (sort != null && sort.length() > 0) request.setAttribute("sort", sort);
+		if (sort != null && sort.length() > 0 && SortParam.isValid(sort)) request.setAttribute("sort", sort);
 
 		if (request.getParameter("search") == null && request.getParameter("generateReport") == null) {
 			
