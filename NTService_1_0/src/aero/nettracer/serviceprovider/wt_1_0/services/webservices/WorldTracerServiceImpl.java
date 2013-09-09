@@ -77,6 +77,7 @@ import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracer
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerRule;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerService;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerRule.Format;
+import aero.sita.www.bag.wtr._2009._01.AdditionalInfoAmendType.FurtherInfo;
 import aero.sita.www.bag.wtr._2009._01.AlphaLength2To16;
 import aero.sita.www.bag.wtr._2009._01.AmountType;
 import aero.sita.www.bag.wtr._2009._01.BagDescType;
@@ -623,13 +624,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				freeFormText = ((List<String>) fieldMap
 						.get(WorldTracerField.FI)).get(0);
 			}
-
-			if (freeFormText != null) {
-				d1.setFurtherInfo(freeFormText);
-				WTROnhandBagsRequestRQ.SupplimentalInfo si = d1.addNewSupplimentalInfo();
-				si.addTextLine(freeFormText);
-			}
-
+			
 			// TODO there is no teletype field in the wsdl
 			// String[] myTeletypes = data.getTeletype();
 			// if(myTeletypes != null) {
@@ -748,12 +743,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 							.size() > 0) {
 				freeFormText = ((List<String>) fieldMap
 						.get(WorldTracerField.FI)).get(0);
-			}
-
-			if (freeFormText != null) {
-				d1.setFurtherInfo(freeFormText);
-				WTROnhandBagsRequestRQ.SupplimentalInfo si = d1.addNewSupplimentalInfo();
-				si.addTextLine(freeFormText);
 			}
 
 			// TODO there is no teletype field in the wsdl
@@ -3041,7 +3030,9 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			rahl.setAirlineCode(ahlId.substring(3, 5));
 			rahl.setStationCode(ahlId.substring(0, 3));
 			
-			rahl.setFurtherInfo(wr1.getAdditionalInfo().getFurtherInfo());
+			if(wr1.getAdditionalInfo()!=null){
+				rahl.setFurtherInfo(wr1.getAdditionalInfo().getFurtherInfo());
+			}
 
 			if (wr1.getDiaryInfo() != null && wr1.getDiaryInfo().getCreateDate() != null) {
 				rahl.setCreateDate(wr1.getDiaryInfo().getCreateDate());
