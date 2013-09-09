@@ -1006,4 +1006,12 @@
         <put name="center"   value="/pages/issuance/edit_issuance_category.jsp"/>
     </definition>
 
+    <definition name="editDocumentTemplate" extends="user_menu">
+        <put name="center"   value="/pages/templates/edit_document_template.jsp"/>
+    </definition>
+    
+    <definition name="searchDocumentTemplate" extends="user_menu">
+    	<put name="center" value="/pages/templates/search_document_template.jsp"/>
+    </definition>
+
  </tiles-definitions>

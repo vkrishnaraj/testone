@@ -291,6 +291,9 @@
 		<form-bean name="auditIssuanceItemAdminForm" type="com.bagnet.nettracer.tracing.forms.issuance.AuditIssuanceItemAdminForm" />
 		<form-bean name="editIssuanceCategoryForm" type="com.bagnet.nettracer.tracing.forms.issuance.EditIssuanceCategoryForm" />	
 
+		<form-bean name="documentTemplateForm" type="com.bagnet.nettracer.tracing.forms.templates.DocumentTemplateForm" />	
+		<form-bean name="documentTemplateSearchForm" type="com.bagnet.nettracer.tracing.forms.templates.DocumentTemplateSearchForm" />	
+
 	</form-beans>
 	<!-- global exception -->
 	<global-exceptions>
@@ -590,6 +593,9 @@
 		<forward name="editIssuanceCategory" path="editIssuanceCategory" />
 
 		<forward name="setRxDate" path="setRxDate" />
+
+		<forward name="editDocumentTemplate" path="editDocumentTemplate" />
+		<forward name="searchDocumentTemplate" path="searchDocumentTemplate" />
 		
 	</global-forwards>
 
@@ -954,6 +960,9 @@
 		<action path="/auditIssuanceItemAdmin" type="com.bagnet.nettracer.tracing.actions.issuance.AuditIssuanceItemAdminAction" name="auditIssuanceItemAdminForm" scope="session" validate="false"></action>
 		<action path="/editIssuanceCategory" type="com.bagnet.nettracer.tracing.actions.issuance.EditIssuanceCategoryAction" name="editIssuanceCategoryForm" scope="session" validate="false"></action>
 		
+		<action path="/documentTemplate" type="com.bagnet.nettracer.tracing.actions.templates.DocumentTemplateEditAction" name="documentTemplateForm" scope="session" validate="false" ></action>
+		<action path="/searchDocumentTemplate" type="com.bagnet.nettracer.tracing.actions.templates.DocumentTemplateSearchAction" name="documentTemplateSearchForm" scope="request" validate="false" ></action>
+		
 	</action-mappings>
 
 	<!-- ========== Controller Configuration ================================ -->
@@ -976,5 +985,4 @@
 		<set-property property="definitions-config" value="/WEB-INF/tiles-defs.xml" />
 		<set-property property="moduleAware" value="true" />
 	</plug-in>
-
 </struts-config>

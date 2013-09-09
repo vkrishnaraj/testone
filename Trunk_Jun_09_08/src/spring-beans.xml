@@ -119,4 +119,10 @@
 	<bean id="ntManagementBean" class="com.bagnet.nettracer.jmx.NetTracerManagementBean" >
 	</bean>
 	
+	<bean id="documentTemplateDao" class="com.bagnet.nettracer.tracing.dao.impl.DocumentTemplateDAOImpl" />
+	
+	<bean id="documentTemplateService" class="com.bagnet.nettracer.tracing.service.impl.DocumentTemplateServiceImpl" >
+		<property name="dao" ref="documentTemplateDao" />
+	</bean>
+	
 </beans>

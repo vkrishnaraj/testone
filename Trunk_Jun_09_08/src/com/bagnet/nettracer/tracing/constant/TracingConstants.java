@@ -309,6 +309,7 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_ADDITIONAL_ITEM_INFORMATION_COLLECT = "Additional_Item_Information_Collect";
 	public static final String SYSTEM_COMPONENT_NAME_INCIDENT_COURTESY_REASON_COLLECT = "Incident_Courtesy_Reason_Collect";
 	public static final String SYSTEM_COMPONENT_NAME_ADDITIONAL_MISSING_ITEM_INFORMATION_COLLECT = "Additional_Missing_Item_Information_Collect";
+	public static final String SYSTEM_COMPONENT_NAME_DOCUMENT_TEMPLATES_MANAGE = "Document_Templates_Manage";
 	
 	public static final String SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_STATION_ADMIN = "Issuance_Item_Station_Admin";
 	public static final String SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_GLOBAL_ADMIN = "Issuance_Item_Global_Admin";
@@ -339,6 +340,7 @@ public class TracingConstants {
 	public final static int TABLE_COURTESY_REASON = 21;
 	public final static int TABLE_COURTESY_REASON_DAMAGED = 22;
 	public final static int TABLE_COURTESY_REASON_LOST_DELAYED = 23;
+	public final static int TABLE_DOCUMENT_TEMPLATE_STATUS = 24;
 	
 	public final static int PRIORITY_LOW = 1;
 	public final static int PRIORITY_MEDIUM = 2;
@@ -1280,6 +1282,17 @@ public class TracingConstants {
 	public static final int DAMAGED_ITEM_STATUS_RETURNED = 800;
 	public static final int DAMAGED_ITEM_STATUS_DAMAGED = 801;
 	public static final int DAMAGED_ITEM_STATUS_MISSING = 802;
+	
+	public static final String EDIT_DOCUMENT_TEMPLATE = "editDocumentTemplate";
+	public static final String SEARCH_DOCUMENT_TEMPLATE = "searchDocumentTemplate";
+	
+	public static final String COMMAND_CREATE = "create";
+	public static final String COMMAND_UPDATE = "update";
+	public static final String COMMAND_DELETE = "delete";
+	
+	public static final int ACTIVE_SEARCH_BOTH = 1200;
+	public static final int ACTIVE_SEARCH_ACTIVE = 1201;
+	public static final int ACTIVE_SEARCH_INACTIVE = 1202;
 	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {
