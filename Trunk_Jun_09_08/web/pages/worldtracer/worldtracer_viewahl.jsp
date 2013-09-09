@@ -191,23 +191,30 @@
 				<br/>
 				
 					<bean:write name="passenger" property="address.emailAddress" />
+				<br/>
 					<logic:notEmpty name="passenger" property="address.homePhone">
 						<bean:message key="wt.view.ahl.passenger.homephone"/> 
 						<bean:write name="passenger" property="address.homePhone" />
+				<br/>
 					</logic:notEmpty>
 					<logic:notEmpty name="passenger" property="address.workPhone">
 						<bean:message key="wt.view.ahl.passenger.workphone"/>
 						<bean:write name="passenger" property="address.workPhone" />
+				<br/>
 					</logic:notEmpty>
 					<logic:notEmpty name="passenger" property="address.mobilePhone">
 						<bean:message key="wt.view.ahl.passenger.mobilephone"/>
 						<bean:write name="passenger" property="address.mobilePhone" />
+				<br/>
 					</logic:notEmpty>
 					<logic:notEmpty name="passenger" property="address.altPhone">
 						<bean:message key="wt.view.ahl.passenger.altphone"/>
 						<bean:write name="passenger" property="address.altPhone" />
+				<br/>
 					</logic:notEmpty>
 				</logic:notEmpty>
+				<bean:write name="passenger" property="languageFreeFlow"/>
+				<br/>
 							
 				</td>
 				</tr>
