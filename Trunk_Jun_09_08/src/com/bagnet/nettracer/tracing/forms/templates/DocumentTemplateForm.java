@@ -32,8 +32,6 @@ public class DocumentTemplateForm extends ValidatorForm {
 	
 	private String data;
 	
-	private Set<DocumentTemplateVar> variables;
-
 	private String _DATEFORMAT;
 	
 	private String _TIMEFORMAT;
@@ -94,14 +92,6 @@ public class DocumentTemplateForm extends ValidatorForm {
 
 	public void setActive(boolean active) {
 		this.active = active;
-	}
-
-	public Set<DocumentTemplateVar> getVariables() {
-		return variables;
-	}
-
-	public void setVariables(Set<DocumentTemplateVar> variables) {
-		this.variables = variables;
 	}
 
 	public String getData() {

@@ -1289,10 +1289,17 @@ public class TracingConstants {
 	public static final String COMMAND_CREATE = "create";
 	public static final String COMMAND_UPDATE = "update";
 	public static final String COMMAND_DELETE = "delete";
+	public static final String COMMAND_CLEAR = "clear";
+	public static final String COMMAND_SEARCH = "search";
 	
 	public static final int ACTIVE_SEARCH_BOTH = 1200;
 	public static final int ACTIVE_SEARCH_ACTIVE = 1201;
 	public static final int ACTIVE_SEARCH_INACTIVE = 1202;
+
+	public static final String TABLE_ID_TEMPLATES = "templates";
+	
+	public static final String SORT_ASCENDING = "1";
+	public static final String SORT_DESCENDING = "2";
 	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {

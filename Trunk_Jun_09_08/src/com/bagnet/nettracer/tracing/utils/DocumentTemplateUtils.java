@@ -8,9 +8,9 @@ import org.springframework.beans.BeanUtils;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.templates.DocumentTemplate;
 import com.bagnet.nettracer.tracing.db.templates.DocumentTemplateVar;
+import com.bagnet.nettracer.tracing.dto.DocumentTemplateSearchDTO;
 import com.bagnet.nettracer.tracing.forms.templates.DocumentTemplateForm;
 import com.bagnet.nettracer.tracing.forms.templates.DocumentTemplateSearchForm;
-import com.bagnet.nettracer.tracing.service.impl.DocumentTemplateSearchDTO;
 /**
  * This class is used to provide basic tasks related to Document Template management 
  * (ie: converting between DocumentTemplate and DocmentTemplateForm, etc...).
@@ -29,7 +29,6 @@ public class DocumentTemplateUtils {
 			form.setCreateDate(now);
 			form.setLastUpdated(now);
 			form.setId(0);
-			form.setVariables(new LinkedHashSet<DocumentTemplateVar>());
 			form.setActive(false);
 			form.setName("");
 			form.setDescription("");
@@ -63,6 +62,15 @@ public class DocumentTemplateUtils {
 		}
 		
 		return dto;
+	}
+	
+	public static void resetSearchForm(DocumentTemplateSearchForm form) {
+		form.setId(0);
+		form.setActive(TracingConstants.ACTIVE_SEARCH_BOTH);
+		form.setName(null);
+		form.setS_createtime(null);
+		form.setE_createtime(null);
+		form.setCommand(null);
 	}
 	
 }

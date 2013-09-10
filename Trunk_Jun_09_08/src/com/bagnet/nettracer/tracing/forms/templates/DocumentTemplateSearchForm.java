@@ -1,10 +1,6 @@
 package com.bagnet.nettracer.tracing.forms.templates;
 
-import java.util.Date;
-
 import org.apache.struts.validator.ValidatorForm;
-
-import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 public class DocumentTemplateSearchForm extends ValidatorForm {
 
@@ -15,6 +11,7 @@ public class DocumentTemplateSearchForm extends ValidatorForm {
 	private String prevpage;
 	private String pagination;
 	private String _DATEFORMAT;
+	private String command;
 	
 	private long id;
 	
@@ -63,6 +60,14 @@ public class DocumentTemplateSearchForm extends ValidatorForm {
 
 	public void set_DATEFORMAT(String _DATEFORMAT) {
 		this._DATEFORMAT = _DATEFORMAT;
+	}
+
+	public String getCommand() {
+		return command;
+	}
+
+	public void setCommand(String command) {
+		this.command = command;
 	}
 
 	public long getId() {

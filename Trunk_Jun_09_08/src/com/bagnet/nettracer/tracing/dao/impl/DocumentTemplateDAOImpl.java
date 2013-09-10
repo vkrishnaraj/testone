@@ -2,8 +2,10 @@ package com.bagnet.nettracer.tracing.dao.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -20,11 +22,20 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.DocumentTemplateDAO;
 import com.bagnet.nettracer.tracing.db.templates.DocumentTemplate;
 import com.bagnet.nettracer.tracing.db.templates.DocumentTemplateVar;
-import com.bagnet.nettracer.tracing.service.impl.DocumentTemplateSearchDTO;
+import com.bagnet.nettracer.tracing.dto.DocumentTemplateSearchDTO;
 
 public class DocumentTemplateDAOImpl implements DocumentTemplateDAO {
 
 	private static Logger logger = Logger.getLogger(DocumentTemplateDAOImpl.class);
+	
+	private static Map<String, String> map = new LinkedHashMap<String, String>();
+	
+	static {		
+		map.put("id", 			"t.id");
+		map.put("name", 		"name");
+		map.put("createDate", 	"t.createDate");
+		map.put("active", 		"t.active");
+	}
 	
 	public DocumentTemplate load(long documentTemplateId) {
 		DocumentTemplate template = null;
@@ -220,6 +231,26 @@ public class DocumentTemplateDAOImpl implements DocumentTemplateDAO {
 		}
 		return count;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<DocumentTemplate> listDocumentTemplates(DocumentTemplateSearchDTO dto) {
+		List<DocumentTemplate> results = new ArrayList<DocumentTemplate>();
+		Session session = null;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			Criteria criteria = getCriteriaFromDto(session, dto);
+			applyOrder(dto, criteria);
+			results = (List<DocumentTemplate>) criteria.list();
+		} catch (Exception e) {
+			logger.error("An error occurred while attempting to get a list of document templates", e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return results;
+	}
 	
 	private Criteria getCriteriaFromDto(Session session, DocumentTemplateSearchDTO dto) {
 		Criteria criteria = session.createCriteria(DocumentTemplate.class, "t");
@@ -246,7 +277,28 @@ public class DocumentTemplateDAOImpl implements DocumentTemplateDAO {
 			criteria.add(Restrictions.lt("t.createDate", end));
 		}
 		
+		if (dto.getRowsPerPage() > 0) {
+			criteria.setFirstResult(dto.getCurrentPage() * dto.getRowsPerPage());
+			criteria.setMaxResults(dto.getRowsPerPage());
+		}
+		
 		return criteria;
+	}
+	
+	private void applyOrder(DocumentTemplateSearchDTO dto, Criteria criteria) {
+		String orderVar = DocumentTemplateDAOImpl.map.get(dto.getSort());
+		if (orderVar == null) {
+			orderVar = "t.id";
+			logger.warn("Illegal sort value found for document templates: " + dto.getSort());
+		}
+		
+		String dir = dto.getDir();
+		if (!TracingConstants.SORT_ASCENDING.equals(dir) && !TracingConstants.SORT_DESCENDING.equals(dir)) {
+			dir = TracingConstants.SORT_ASCENDING;
+			logger.warn("Illegal sort direction value found for document templates: " + dto.getDir());
+		}
+		
+		criteria.addOrder(TracingConstants.SORT_ASCENDING.equals(dir) ? Order.asc(orderVar) : Order.desc(orderVar));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -268,5 +320,6 @@ public class DocumentTemplateDAOImpl implements DocumentTemplateDAO {
 		}		
 		return toReturn;
 	}
+
 	
 }

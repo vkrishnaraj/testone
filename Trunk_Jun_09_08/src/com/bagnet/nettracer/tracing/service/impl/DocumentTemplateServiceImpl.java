@@ -8,9 +8,12 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.DocumentTemplateDAO;
 import com.bagnet.nettracer.tracing.db.templates.DocumentTemplate;
 import com.bagnet.nettracer.tracing.db.templates.DocumentTemplateVar;
+import com.bagnet.nettracer.tracing.dto.DocumentTemplateDTO;
+import com.bagnet.nettracer.tracing.dto.DocumentTemplateSearchDTO;
 import com.bagnet.nettracer.tracing.service.DocumentTemplateService;
 
 public class DocumentTemplateServiceImpl implements DocumentTemplateService {
@@ -111,5 +114,25 @@ public class DocumentTemplateServiceImpl implements DocumentTemplateService {
 	@Override
 	public int getDocumentTemplateCount(DocumentTemplateSearchDTO dto) {
 		return dao.getDocumentTemplateCount(dto);
+	}
+
+	@Override
+	public List<DocumentTemplateDTO> listDocumentTemplates(DocumentTemplateSearchDTO dto) {
+		List<DocumentTemplateDTO> results = new ArrayList<DocumentTemplateDTO>();
+		List<DocumentTemplate> fromDb = dao.listDocumentTemplates(dto);
+		if (fromDb != null && !fromDb.isEmpty()) {
+			for (DocumentTemplate template: fromDb) {
+				DocumentTemplateDTO dtdto = new DocumentTemplateDTO();
+				dtdto.set_DATEFORMAT(dto.get_DATEFORMAT());
+				dtdto.set_TIMEFORMAT(dto.get_TIMEFORMAT());
+				dtdto.set_TIMEZONE(dto.get_TIMEZONE());
+				dtdto.setId(template.getId());
+				dtdto.setName(template.getName());
+				dtdto.setCreateDate(template.getCreateDate());
+				dtdto.setActive(template.isActive());
+				results.add(dtdto);
+			}
+		}		
+		return results;
 	}
 }

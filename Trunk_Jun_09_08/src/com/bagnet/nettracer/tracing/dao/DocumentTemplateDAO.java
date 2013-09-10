@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.bagnet.nettracer.tracing.db.templates.DocumentTemplate;
 import com.bagnet.nettracer.tracing.db.templates.DocumentTemplateVar;
-import com.bagnet.nettracer.tracing.service.impl.DocumentTemplateSearchDTO;
+import com.bagnet.nettracer.tracing.dto.DocumentTemplateSearchDTO;
 
 public interface DocumentTemplateDAO {
 	public DocumentTemplate load(long documentTemplateId);
@@ -15,4 +15,5 @@ public interface DocumentTemplateDAO {
 	public boolean haveDefinitionsForDocumentTemplateVars(List<String> vars);
 	public String getFirstInvalidVar(List<String> vars);
 	public int getDocumentTemplateCount(DocumentTemplateSearchDTO dto);
+	public List<DocumentTemplate> listDocumentTemplates(DocumentTemplateSearchDTO dto);
 }
