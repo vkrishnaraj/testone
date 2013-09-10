@@ -61,6 +61,8 @@ public class DocumentTemplateSearchAction extends CheckedAction {
 		int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_SEARCH_PAGES, session);
 
 		if (TracingConstants.COMMAND_SEARCH.equals(dtsf.getCommand())) {
+			
+			currpage = dtsf.getCurrpage() != null ? Integer.parseInt(dtsf.getCurrpage()) : 0;
 			if (dtsf.getNextpage() != null && dtsf.getNextpage().equals("1")) {
 				currpage++;
 			}
