@@ -624,7 +624,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				freeFormText = ((List<String>) fieldMap
 						.get(WorldTracerField.FI)).get(0);
 			}
-			
+
+			if (freeFormText != null) {
+				d1.setFurtherInfo(freeFormText);
+				WTROnhandBagsRequestRQ.SupplimentalInfo si = d1.addNewSupplimentalInfo();
+				si.addTextLine(freeFormText);
+			}
+
 			// TODO there is no teletype field in the wsdl
 			// String[] myTeletypes = data.getTeletype();
 			// if(myTeletypes != null) {
@@ -743,6 +749,12 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 							.size() > 0) {
 				freeFormText = ((List<String>) fieldMap
 						.get(WorldTracerField.FI)).get(0);
+			}
+
+			if (freeFormText != null) {
+				d1.setFurtherInfo(freeFormText);
+				WTROnhandBagsRequestRQ.SupplimentalInfo si = d1.addNewSupplimentalInfo();
+				si.addTextLine(freeFormText);
 			}
 
 			// TODO there is no teletype field in the wsdl
