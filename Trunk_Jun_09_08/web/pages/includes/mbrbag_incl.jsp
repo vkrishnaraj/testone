@@ -775,6 +775,7 @@
     	}
     	
         </script>
+  <a name="addissuanceitem"></a>
   <h1 class="green">
       <bean:message key="header.issue_items" />
       <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;">

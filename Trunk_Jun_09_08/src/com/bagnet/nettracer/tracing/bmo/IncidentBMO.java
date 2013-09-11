@@ -460,12 +460,14 @@ public class IncidentBMO {
 			}
 			
 			// adjust numbers and statuses of issuance items, being done here so that incident ID is always available
-			for (IssuanceItemIncident iItem : iDTO.getIssuanceItemIncidents()) {
-				if (iItem.isUpdated()) {
-					IssuanceItemBMO.adjustIssuanceItem(iItem);
-					// PUT REMARKS METHOD CALL HERE
-				}
-			}	
+			if (iDTO != null && iDTO.getIssuanceItemIncidents() != null) {
+				for (IssuanceItemIncident iItem : iDTO.getIssuanceItemIncidents()) {
+					if (iItem.isUpdated()) {
+						IssuanceItemBMO.adjustIssuanceItem(iItem);
+					}
+				}	
+				IssuanceItemBMO.addIssuanceItemRemarks(iDTO, mod_agent);
+			}
 
 			// change the photo names from temppath_ to incident_ID _
 

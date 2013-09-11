@@ -826,6 +826,10 @@
 	document.location.href="#addremark<bean:write name="remark" scope="request" />";
 </logic:present>
 
+<logic:present name="issuanceitem" scope="request">
+	document.location.href="#addissuanceitem";
+</logic:present>
+
 
     </script>
   </html:form>

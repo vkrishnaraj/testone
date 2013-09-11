@@ -242,6 +242,7 @@ public class MBRActionUtils {
 					theform.getIssuanceItemIncidents().remove(i);
 				}
 				adjustIssuanceLists(request, null, null, iItem);
+				request.setAttribute("issuanceitem", "1");
 				request.setAttribute("markDirty", 1);
 				return true;
 			}
@@ -281,6 +282,7 @@ public class MBRActionUtils {
 					return false;
 				}
 				theform.getIssuanceItemIncidents().add(iss_inc);
+				request.setAttribute("issuanceitem", "1");
 				request.setAttribute("markDirty", 1);
 				return true;
 			}

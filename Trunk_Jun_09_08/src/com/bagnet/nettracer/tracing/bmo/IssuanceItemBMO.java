@@ -3,9 +3,11 @@
  */
 package com.bagnet.nettracer.tracing.bmo;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 import org.dozer.DozerBeanMapperSingletonWrapper;
@@ -17,6 +19,8 @@ import org.hibernate.Transaction;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.issuance.AuditIssuanceItemInventory;
 import com.bagnet.nettracer.tracing.db.issuance.AuditIssuanceItemQuantity;
@@ -25,6 +29,7 @@ import com.bagnet.nettracer.tracing.db.issuance.IssuanceItem;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemIncident;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemInventory;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemQuantity;
+import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
@@ -573,6 +578,67 @@ public class IssuanceItemBMO {
 			} else {
 				int quantity = -1 * iItem.getQuantity();
 				editQuantifiedItem(iItem.getIssuanceItemQuantity().getId(), quantity, -1, iItem.getIssueAgent(), iItem.getIncident().getIncident_ID());
+			}
+		}
+	}
+	
+	private static String generateRemark(IssuanceItemIncident iItem) {
+		boolean isInventoried = (iItem.getIssuanceItemInventory() != null);
+		String toReturn = "";
+		if (iItem.isReturned()) {
+			if (isInventoried) {
+				IssuanceItemInventory item = iItem.getIssuanceItemInventory();
+				toReturn = item.getDescription() + " #" + item.getBarcode() + " WAS RETURNED TO A CUSTOMER ON THIS REPORT\n";
+			} else {
+				int quantity = iItem.getQuantity();
+				String wasWere = " WAS";
+				if (quantity > 1) {
+					wasWere = "s WERE";
+				}
+				toReturn = quantity + " " + iItem.getIssuanceItemQuantity().getIssuanceItem().getDescription() + wasWere + " RETURNED TO A CUSTOMER ON THIS REPORT\n";
+			}
+		} else {
+			if (isInventoried) {
+				IssuanceItemInventory item = iItem.getIssuanceItemInventory();
+				int status_id = item.getInventoryStatus().getStatus_ID();
+				String action = "LOANED";
+				if (status_id == TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_ISSUED) {
+					action = "ISSUED";
+				}
+				toReturn = item.getDescription() + " #" + item.getBarcode() + " WAS " + action + " TO A CUSTOMER ON THIS REPORT\n";
+			} else {
+				int quantity = iItem.getQuantity();
+				String wasWere = " WAS";
+				if (quantity > 1) {
+					wasWere = "s WERE";
+				}
+				toReturn = quantity + " " + iItem.getIssuanceItemQuantity().getIssuanceItem().getDescription() + wasWere + " ISSUED TO A CUSTOMER ON THIS REPORT\n";
+			}
+		}
+		return toReturn;
+	}
+	
+	public static void addIssuanceItemRemarks(Incident iDTO, Agent user) {
+		if (iDTO != null && iDTO.getIssuanceItemIncidents() != null) {
+			boolean saveRemark = false;
+			String remarktext = "";
+			for (IssuanceItemIncident iItem : iDTO.getIssuanceItemIncidents()) {
+				if (iItem.isUpdated()) {
+					saveRemark = true;
+					remarktext += generateRemark(iItem);
+				}
+			}	
+			if (saveRemark) {
+				Remark r = new Remark();
+				r.setRemarktext(remarktext);
+				r.setRemarktype(TracingConstants.REMARK_REGULAR);
+				r.setCreatetime(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(TracerDateTime.getGMTDate()));
+				r.setAgent(user);
+				r.set_DATEFORMAT(user.getDateformat().getFormat());
+				r.set_TIMEFORMAT(user.getTimeformat().getFormat());
+				r.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+				r.setIncident(iDTO);
+				iDTO.getRemarks().add(r);
 			}
 		}
 	}
