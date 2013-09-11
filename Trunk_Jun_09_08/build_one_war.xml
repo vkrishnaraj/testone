@@ -3827,6 +3827,9 @@
 		<property name="hibernate_dialect" value="mysql" />
 		<antcall target="generate-hibernate-xmls" />
 		
+		<copy todir="${basedir}/src" file="companies/flyafrica/report_email_ld.html" overwrite="true" />
+		<copy todir="${basedir}/src" file="companies/flyafrica/report_email_dam.html" overwrite="true" />
+		<copy todir="${basedir}/src" file="companies/flyafrica/report_email_pil.html" overwrite="true" />
 		<antcall target="jasper_compile" />
 
 		<copy todir="${basedir}/src" file="companies/alaska-fs/custom_ui.properties" />

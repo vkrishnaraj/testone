@@ -11,6 +11,8 @@
 		http://www.springframework.org/schema/aop 
 		http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
 
+	<bean class="org.springframework.context.annotation.CommonAnnotationBeanPostProcessor" />
+
 	<bean
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<!--<property name="location" value="file:/tracer.properties" />-->
@@ -49,8 +51,11 @@
 	<bean id="sharesIntegration"
 		class="com.bagnet.clients.SharesIntegrationThreadHandler" />
 		
-	<bean id="incidentLock" class="com.bagnet.nettracer.tracing.utils.lock.CacheLockFile" >
+	<bean id="incidentLock" class="com.bagnet.nettracer.tracing.utils.lock.AsyncCacheLockFile" >
+		<property name="lockFile" ref="asyncIncidentLockImpl" />
 	</bean>
+	
+	<bean id="asyncIncidentLockImpl" class="com.bagnet.nettracer.tracing.utils.lock.CacheLockFile" />
 
 	<!-- Hibernate config -->
 	

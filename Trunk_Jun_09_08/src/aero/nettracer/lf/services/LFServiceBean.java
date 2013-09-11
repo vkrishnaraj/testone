@@ -77,13 +77,33 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	private static int EMAIL_FIRST_NOTICE_DAY = 3;
 	
 	private static int EMAIL_SECOND_NOTICE_DAY = 7;
-	
+	private static final String CALCULATE_RETURNED_ITEMS_QUERY = 
+			"SELECT dt, sum(val) FROM (SELECT date(f.deliveredDate) AS dt, CASE count(*) WHEN NULL THEN 0 ELSE count(*) END AS val " +
+			"FROM lfitem i JOIN lffound f ON f.id = i.found_id LEFT OUTER JOIN lfmatchhistory h ON h.found_id = f.id AND h.status_Status_ID = 608 " +
+			"LEFT OUTER JOIN lflost l ON l.id = h.lost_id LEFT OUTER JOIN lfitem i2 ON i2.lost_id = l.id AND i2.type = 1 WHERE i.value = :value " +
+			"AND f.deliveredDate < :enddate AND f.deliveredDate >= :lastweek AND ( ( i.trackingNumber IS NOT NULL AND i.trackingNumber != '') " +
+			"OR i.deliveryRejected = 1 OR ( i2.trackingNumber IS NOT NULL AND i2.trackingNumber != '') OR i2.deliveryRejected = 1) " +
+			"GROUP BY date(f.deliveredDate) UNION SELECT date(l.closeDate) AS dt, CASE count(*) WHEN NULL THEN 0 ELSE count(*) END AS val " +
+			"FROM lfitem i JOIN lffound f ON f.id = i.found_id LEFT OUTER JOIN lfmatchhistory h ON h.found_id = f.id AND h.status_Status_ID = 608 " +
+			"LEFT OUTER JOIN lflost l ON l.id = h.lost_id LEFT OUTER JOIN lfitem i2 ON i2.lost_id = l.id AND i2.type = 1 WHERE i.value = :value " +
+			"AND l.closeDate < :enddate AND l.closeDate >= :lastweek AND ( ( i.trackingNumber IS NULL OR i.trackingNumber = '') AND " +
+			"i.deliveryRejected != 1 AND (( i2.trackingNumber IS NOT NULL AND i2.trackingNumber != '') OR i2.deliveryRejected = 1)) " +
+			"GROUP BY date(l.closeDate)) tb1 GROUP BY dt ";
 	private static String autoagent = "autoagent";
 	
 	private static Agent auto;
+	private static ResourceBundle resources = null;
+	private static int HIGH_VALUE = 1;
+	private static int LOW_VALUE = 0;
 	
-	private static ResourceBundle resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale("US"));
-	
+	// Try/catch block inserted only to allow email to be sent from jUnit test.  
+	static {
+			try {
+				resources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale("US"));
+			} catch (Exception e) {
+			}	
+		}
+
 	public Agent getAutoAgent(){
 		if (auto == null) {
 			GeneralServiceBean bean = new GeneralServiceBean();
@@ -1563,7 +1583,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 
 	private String getTraceResultsQuery(Station station, Subcompany subcomp){
-		//TODO location criteria
+		
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory mh";
 				
 		sql += " where mh.status.status_ID = " + TracingConstants.LF_TRACING_OPEN;
@@ -2129,7 +2149,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				try {
 					saveOrUpdateFoundItem(match.getFound(), agent);
 				} catch (UpdateException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 					return false;
 				}
@@ -2574,8 +2593,8 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		getBoxesEntered(h,endDate,week);	
 		getHighValueEntered(h,endDate,week);
 		getLowValueEntered(h,endDate,week);
-		getHighValueReturned(h,endDate,week);
-		getLowValueReturned(h,endDate,week);
+		getReturnedForValueType(HIGH_VALUE,"HighReturned", h,endDate,week);
+		getReturnedForValueType(LOW_VALUE,"LowReturned", h,endDate,week);
 		getMTDTotals(h,endDate,beginMonth);
 		getYTDTotals(h,endDate,beginYear);
 		getWeekItemCounts(h,endDate,fourWeek);		
@@ -2815,20 +2834,19 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			}
 		}
 	}
-	
-	public void getHighValueReturned(HashMap h, Date endDate, Date week)
+
+	public void getReturnedForValueType(int type, String fieldNameLabel, HashMap h, Date endDate, Date startDate)
 	{
 		int weeklyTotal=0;
-		//High Value Items returned
-		String sql = "select f.deliveredDate, case count(*) when null then 0 else count(*) end from lfitem i join lffound f on f.id=i.found_id "+
-				"where i.value=1 and f.deliveredDate < :enddate and f.deliveredDate >= :lastweek and ((trackingNumber is not null and trackingNumber != '') or i.deliveryRejected = 1) group by date(f.deliveredDate)";
-		SQLQuery q = null;
+		
+		String sql = CALCULATE_RETURNED_ITEMS_QUERY;
+ 		SQLQuery q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
 			q = sess.createSQLQuery(sql.toString());
 			
 			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
-			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("lastweek", DateUtils.formatDate(startDate, TracingConstants.DB_DATEFORMAT, null, null));
 			
 			List lis = q.list();
 			Object[] o;
@@ -2838,15 +2856,15 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				for(int j=1; j<8; j++){
 					if(DateUtils.formatDate((Date)o[0], TracingConstants.DISPLAY_DATEFORMAT, null, null).equals(h.get("date"+j))){
 						if(o[1]!=null){
-							h.put("HighReturned"+(j), o[1].toString());
+							h.put(fieldNameLabel+(j), o[1].toString());
 							weeklyTotal+=Integer.valueOf(o[1].toString());
 						} else {
-							h.put("HighReturned"+(j), "0");					
+							h.put(fieldNameLabel+(j), "0");					
 						}
 					}
-					else if(h.get("HighReturned"+(j))==(null))
+					else if(h.get(fieldNameLabel+(j))==(null))
 					{
-						h.put("HighReturned"+(j), "0");
+						h.put(fieldNameLabel+(j), "0");
 					}
 				}
 			}
@@ -2854,66 +2872,10 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			else
 			{
 				for(int j=1; j<8; j++){
-					h.put("HighReturned"+(j), "0");
+					h.put(fieldNameLabel+(j), "0");
 				}
 			}
-			h.put("HighReturnedWeek", weeklyTotal);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return;
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-	
-	public void getLowValueReturned(HashMap h, Date endDate, Date week)
-	{
-		int weeklyTotal=0;
-		//Low Value Items returned
-		String sql = "select f.deliveredDate, case count(*) when null then 0 else count(*) end from lfitem i join lffound f on f.id=i.found_id "+
-				"where i.value=0 and f.deliveredDate < :enddate and f.deliveredDate >= :lastweek and ((trackingNumber is not null and trackingNumber != '') or i.deliveryRejected = 1) group by date(f.deliveredDate)";
-		SQLQuery q = null;
-		Session sess = HibernateWrapper.getSession().openSession();
-		try {
-			q = sess.createSQLQuery(sql.toString());
-			
-			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
-			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
-			
-			List lis = q.list();
-			Object[] o;
-			if(lis.size()!=0){
-			for (int i = 0; i < lis.size(); ++i) {
-				o = (Object[]) lis.get(i);
-				for(int j=1; j<8; j++){
-					if(DateUtils.formatDate((Date)o[0], TracingConstants.DISPLAY_DATEFORMAT, null, null).equals(h.get("date"+j))){
-						if(o[1]!=null){
-							h.put("LowReturned"+(j), o[1].toString());
-							weeklyTotal+=Integer.valueOf(o[1].toString());
-						} else {
-							h.put("LowReturned"+(j), "0");
-						}
-					}
-					else if(h.get("LowReturned"+(j))==(null))
-					{
-						h.put("LowReturned"+(j), "0");
-					}
-				}
-			}
-			}
-			else
-			{
-				for(int j=1; j<8; j++){
-					h.put("LowReturned"+(j), "0");
-				}
-			}
-			h.put("LowReturnedWeek", weeklyTotal);
+			h.put(fieldNameLabel, weeklyTotal);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return;
@@ -2930,16 +2892,16 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	
 	public void getMTDTotals(HashMap h, Date endDate, Date week)
 	{
-		//Low Value Items returned
-		String sql = "select f.deliveredDate, case count(*) when null then 0 else count(*) end from lfitem i join lffound f on f.id=i.found_id "+
-				"where i.value=0 and f.deliveredDate < :enddate and f.deliveredDate >= :lastweek and ((trackingNumber is not null and trackingNumber != '') or i.deliveryRejected = 1)";
+		//Low Value Items returned MTD
+		String sql = CALCULATE_RETURNED_ITEMS_QUERY;
 		SQLQuery q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
-			q = sess.createSQLQuery(sql.toString());
+			q = sess.createSQLQuery(sql);
 			
 			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
 			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setInteger("value", LOW_VALUE);
 			
 			List lis = q.list();
 			Object[] o;
@@ -2969,15 +2931,15 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		
 		//High Value Items Returned Month to Date
-		sql = "select f.deliveredDate, case count(*) when null then 0 else count(*) end from lfitem i join lffound f on f.id=i.found_id "+
-				"where i.value=1 and f.deliveredDate < :enddate and f.deliveredDate >= :lastweek and ((trackingNumber is not null and trackingNumber != '') or i.deliveryRejected = 1)";
+		sql = CALCULATE_RETURNED_ITEMS_QUERY;
 		q = null;
 		sess = HibernateWrapper.getSession().openSession();
 		try {
-			q = sess.createSQLQuery(sql.toString());
+			q = sess.createSQLQuery(sql);
 			
 			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
 			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setInteger("value", HIGH_VALUE);
 			
 			List lis = q.list();
 			Object[] o;
@@ -3162,16 +3124,15 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	public void getYTDTotals(HashMap h, Date endDate, Date week)
 	{
 		//Low Value Items returned
-		String sql = "select f.deliveredDate, case count(*) when null then 0 else count(*) end from lfitem i join lffound f on f.id=i.found_id "+
-				"where i.value=0 and f.deliveredDate < :enddate and f.deliveredDate >= :lastweek and ((trackingNumber is not null and trackingNumber != '') or i.deliveryRejected = 1)";
+		String sql = CALCULATE_RETURNED_ITEMS_QUERY;
 		SQLQuery q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
-			q = sess.createSQLQuery(sql.toString());
+			q = sess.createSQLQuery(sql);
 			
 			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
 			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
-			
+			q.setInteger("value", LOW_VALUE);
 			List lis = q.list();
 			Object[] o;
 			if(lis.size()!=0){
@@ -3200,8 +3161,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		
 		//High Value Items Returned year to Date
-		sql = "select f.deliveredDate, case count(*) when null then 0 else count(*) end from lfitem i join lffound f on f.id=i.found_id "+
-				"where i.value=1 and f.deliveredDate < :enddate and f.deliveredDate >= :lastweek and ((trackingNumber is not null and trackingNumber != '') or i.deliveryRejected = 1)";
+		sql = CALCULATE_RETURNED_ITEMS_QUERY;
 		q = null;
 		sess = HibernateWrapper.getSession().openSession();
 		try {
@@ -3209,6 +3169,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			
 			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
 			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setInteger("value", HIGH_VALUE);
 			
 			List lis = q.list();
 			Object[] o;
@@ -3441,15 +3402,25 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			}
 		}
 		sess = HibernateWrapper.getSession().openSession();
-		sql = "select q1.val, q1.wk1, q1.ct1, q2.ct2, q3.ct3, (q2.ct2+q3.ct3)/q1.ct1*100 as 'Return' "+ 
-			"from (select case  value when 0 then 'Low Value' else 'High Value' END as val,  DATE_ADD(f.receivedDate, INTERVAL(1-DAYOFWEEK(f.receivedDate)) DAY) as wk1, "+
-			"case count(*) when null then 0 else count(*) end as ct1 from lfitem i join lffound f on i.found_id = f.id where type = 2 and f.receivedDate < :enddate and f.receivedDate >= :fourweek group by value, wk1) as q1 left outer join "+
-			"(select case  value when 0 then 'Low Value' else 'High Value' END as val, DATE_ADD(f.receivedDate, INTERVAL(1-DAYOFWEEK(f.receivedDate)) DAY) as wk2, "+
-			"case count(*) when null then 0 else count(*) end as ct2 from lfitem i join lffound f on i.found_id = f.id where type = 2 and f.receivedDate < :enddate and f.receivedDate >= :fourweek and ((trackingNumber is not null and trackingNumber != '') or i.deliveryRejected = 1) group by value,wk2) q2 "+
-			"on q2.val = q1.val and q1.wk1 = q2.wk2 left outer join "+
-			"(select case  value when 0 then 'Low Value' else 'High Value' END as val, DATE_ADD(f.receivedDate, INTERVAL(1-DAYOFWEEK(f.receivedDate)) DAY) as wk3, "+
-			"case count(*) when null then 0 else count(*) end as ct3  from lfitem i join lffound f on i.found_id = f.id where type = 2 and f.receivedDate < :enddate and f.receivedDate >= :fourweek and (trackingNumber is null or trackingNumber = '') and lost_id is not null group by value,wk3) q3 "+
-			"on q3.val = q1.val and q3.wk3 = q1.wk1 group by val, q1.wk1 order by q1.wk1 asc, q1.val desc";
+		// The query below can be copied and inserted directly into Toad and formatted.  It is a fully functional SQL Query.
+		sql = "select q1.val, q1.wk1 'Week', q1.ct1 'Entered', q2.ct2 'Returned', q3.ct3 'Waiting on Customer', " +
+				"(q2.ct2+q3.ct3)/q1.ct1*100 as 'Return Rate' from (select case value when 0 then 'Low Value' else 'High Value' END as val, " +
+				"DATE_ADD(f.receivedDate, INTERVAL(1-DAYOFWEEK(f.receivedDate)) DAY) as wk1, " +
+				"case count(*) when null then 0 else count(*) end as ct1 from lfitem i join lffound f on i.found_id = f.id where type = 2 and " +
+				"f.receivedDate < :enddate and f.receivedDate >= :fourweek group by value, wk1) as q1 left outer join " +
+				"( SELECT CASE i.value WHEN 0 THEN 'Low Value' ELSE 'High Value' END AS val, DATE_ADD(f.receivedDate, " +
+				"INTERVAL (1 - DAYOFWEEK(f.receivedDate)) DAY) AS wk2, CASE count(*) WHEN NULL THEN 0 ELSE count(*) END AS ct2 FROM lfitem i JOIN " +
+				"lffound f ON i.found_id = f.id LEFT OUTER JOIN lfmatchhistory h on h.found_id = f.id and h.status_Status_ID = 608 LEFT OUTER JOIN " +
+				"lflost l on l.id = h.lost_id LEFT OUTER JOIN lfitem i2 on i2.lost_id = l.id and i2.type = 1 WHERE i.type = 2 AND f.receivedDate < :enddate " +
+				"AND f.receivedDate >= :fourweek AND ( (i.trackingNumber IS NOT NULL AND i.trackingNumber != '') OR i.deliveryRejected = 1 OR " +
+				"(i2.trackingNumber IS NOT NULL AND i2.trackingNumber != '') OR i2.deliveryRejected = 1) GROUP BY i.value, wk2 ) q2 on q2.val = q1.val and " +
+				"q1.wk1 = q2.wk2 left outer join ( SELECT CASE i.value WHEN 0 THEN 'Low Value' ELSE 'High Value' END AS val, DATE_ADD(f.receivedDate, " +
+				"INTERVAL (1 - DAYOFWEEK(f.receivedDate)) DAY) AS wk3, CASE count(*) WHEN NULL THEN 0 ELSE count(*) END AS ct3 FROM lfitem i JOIN lffound f ON " +
+				"i.found_id = f.id LEFT OUTER JOIN lfmatchhistory h on h.found_id = f.id and h.status_Status_ID = 608 LEFT OUTER JOIN lflost l on l.id = h.lost_id " +
+				"LEFT OUTER JOIN lfitem i2 on i2.lost_id = l.id and i2.type = 1 WHERE i.type = 2 AND f.receivedDate < :enddate AND f.receivedDate >= :fourweek " +
+				"AND ( ((i.trackingNumber IS NULL OR i.trackingNumber = '') AND i.lost_id IS NOT NULL) OR (l.foundemail = 1 AND i2.found_id = i.found_id AND " +
+				"(i2.trackingNumber IS NULL OR i2.trackingNumber = '') AND (i.trackingNumber IS NULL OR i.trackingNumber = '')) ) " +
+				"GROUP BY i.value, wk3 ) q3 on q3.val = q1.val and q3.wk3 = q1.wk1 group by val, q1.wk1 order by q1.wk1 asc, q1.val desc";
 //		sql = "select case  value when 0 then 'Low Value' else 'High Value' END as val, makedate(year(f.receivedDate), 7*week(f.receivedDate,1)-6) as wk3, "+
 //			"case count(*) when null then 0 else count(*) end as ct2  from lfitem i join lffound f on i.found_id = f.id where type = 2 and f.receivedDate < :enddate and f.receivedDate >= :fourweek and (trackingNumber is null or trackingNumber = '') and lost_id is not null group by value, week(f.receivedDate, 3)";
 	    q = null;

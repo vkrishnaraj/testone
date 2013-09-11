@@ -59,28 +59,24 @@ public final class LostReportForm extends ActionForm {
 	public void setPrimaryInternationalNumber(String primaryInternationalNumber) {
 		LFPhone phone = getPhone(LFPhone.PRIMARY);
 		phone.setDecryptedCountry(primaryInternationalNumber);
-		phone.setDecryptedPhoneNumber(""+phone.getDecryptedCountry()+phone.getDecryptedArea()+phone.getDecryptedExchange()+phone.getDecryptedLine());
 		setPhone(phone);
 	}
 
 	public void setPrimaryAreaNumber(String primaryAreaNumber) {
 		LFPhone phone = getPhone(LFPhone.PRIMARY);
 		phone.setDecryptedArea(primaryAreaNumber);
-		phone.setDecryptedPhoneNumber(""+phone.getDecryptedCountry()+phone.getDecryptedArea()+phone.getDecryptedExchange()+phone.getDecryptedLine());
 		setPhone(phone);
 	}
 
 	public void setPrimaryExchangeNumber(String primaryExchangeNumber) {
 		LFPhone phone = getPhone(LFPhone.PRIMARY);
 		phone.setDecryptedExchange(primaryExchangeNumber);
-		phone.setDecryptedPhoneNumber(""+phone.getDecryptedCountry()+phone.getDecryptedArea()+phone.getDecryptedExchange()+phone.getDecryptedLine());
 		setPhone(phone);
 	}
 
 	public void setPrimaryLineNumber(String primaryLineNumber) {
 		LFPhone phone = getPhone(LFPhone.PRIMARY);
 		phone.setDecryptedLine(primaryLineNumber);
-		phone.setDecryptedPhoneNumber(""+phone.getDecryptedCountry()+phone.getDecryptedArea()+phone.getDecryptedExchange()+phone.getDecryptedLine());
 		setPhone(phone);
 	}
 	
@@ -196,28 +192,24 @@ public final class LostReportForm extends ActionForm {
 	public void setSecondaryInternationalNumber(String secondaryInternationalNumber) {
 		LFPhone phone = getPhone(LFPhone.SECONDARY);
 		phone.setDecryptedCountry(secondaryInternationalNumber);
-		phone.setDecryptedPhoneNumber(""+phone.getDecryptedCountry()+phone.getDecryptedArea()+phone.getDecryptedExchange()+phone.getDecryptedLine());
 		setPhone(phone);
 	}
 
 	public void setSecondaryAreaNumber(String secondaryAreaNumber) {
 		LFPhone phone = getPhone(LFPhone.SECONDARY);
 		phone.setDecryptedArea(secondaryAreaNumber);
-		phone.setDecryptedPhoneNumber(""+phone.getDecryptedCountry()+phone.getDecryptedArea()+phone.getDecryptedExchange()+phone.getDecryptedLine());
 		setPhone(phone);
 	}
 
 	public void setSecondaryExchangeNumber(String secondaryExchangeNumber) {
 		LFPhone phone = getPhone(LFPhone.SECONDARY);
 		phone.setDecryptedExchange(secondaryExchangeNumber);
-		phone.setDecryptedPhoneNumber(""+phone.getDecryptedCountry()+phone.getDecryptedArea()+phone.getDecryptedExchange()+phone.getDecryptedLine());
 		setPhone(phone);
 	}
 
 	public void setSecondaryLineNumber(String secondaryLineNumber) {
 		LFPhone phone = getPhone(LFPhone.SECONDARY);
 		phone.setDecryptedLine(secondaryLineNumber);
-		phone.setDecryptedPhoneNumber(""+phone.getDecryptedCountry()+phone.getDecryptedArea()+phone.getDecryptedExchange()+phone.getDecryptedLine());
 		setPhone(phone);
 	}
 	

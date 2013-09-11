@@ -210,6 +210,7 @@ public class LFPhone implements Serializable{
 			e.printStackTrace();
 			this.countryNumber = null;
 		}
+		setDecryptedPhoneNumber(""+getDecryptedCountry()+getDecryptedArea()+getDecryptedExchange()+getDecryptedLine());
 	}
 
 	public void setCountryNumber(String countryNumber) {
@@ -244,6 +245,7 @@ public class LFPhone implements Serializable{
 			e.printStackTrace();
 			this.areaNumber = null;
 		}
+		setDecryptedPhoneNumber(""+getDecryptedCountry()+getDecryptedArea()+getDecryptedExchange()+getDecryptedLine());
 	}
 
 	public void setAreaNumber(String areaNumber) {
@@ -278,6 +280,7 @@ public class LFPhone implements Serializable{
 			e.printStackTrace();
 			this.exchangeNumber = null;
 		}
+		setDecryptedPhoneNumber(""+getDecryptedCountry()+getDecryptedArea()+getDecryptedExchange()+getDecryptedLine());
 	}	
 
 	public void setExchangeNumber(String exchangeNumber) {
@@ -312,6 +315,7 @@ public class LFPhone implements Serializable{
 			e.printStackTrace();
 			this.lineNumber = null;
 		}
+		setDecryptedPhoneNumber(""+getDecryptedCountry()+getDecryptedArea()+getDecryptedExchange()+getDecryptedLine());
 	}	
 
 	public void setLineNumber(String lineNumber) {

@@ -19,6 +19,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import aero.nettracer.lf.services.LFServiceBean;
 import aero.nettracer.lf.services.LFServiceWrapper;
 import aero.nettracer.lf.services.LFUtils;
 import aero.nettracer.lf.services.exception.UpdateException;
@@ -66,7 +67,8 @@ public class LostReportAction extends CheckedAction {
 		boolean isLFC = TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(user.getCompanycode_ID()!=null?user.getCompanycode_ID():"");
 		
 		LFUtils.getLists(user, session);
-		
+
+		LFServiceBean serviceBean = new LFServiceBean();
 		LostReportForm lrForm = (LostReportForm) form;
 		lrForm.setDateFormat(user.getDateformat().getFormat());
 		
@@ -157,6 +159,23 @@ public class LostReportAction extends CheckedAction {
 		if (request.getParameter("save") != null) {
 			try {
 				populateRemarks(lostReport);
+
+				if(lostReport.getItem() != null && lostReport.getItem().getTrackingNumber()!=null && lostReport.getItem().getTrackingNumber().length()>0){
+					if (lostReport.getItem().getFound() != null && lostReport.getItem().getFound().getItem() != null && lostReport.getItem().getFound().getItem().getFound()==null){
+						lostReport.getItem().getFound().getItem().setLost(lostReport);
+					} else {
+						List<LFItem> itemList=serviceBean.getItemsByLostFoundId(lostReport.getId(), 1);
+						for(LFItem i:itemList){
+							if(i.getLost().getId()==lostReport.getId() && i.getFound()!=null){
+								if(i.getFound().getItem() != null){
+									i.getFound().getItem().setLost(lostReport);
+								}
+								lostReport.getItem().setFound(i.getFound());
+							}
+						}
+					}
+				}
+				
 				LFServiceWrapper.getInstance().saveOrUpdateLostReport(lostReport, user);
 				if (lostReport.getItem().getFound() != null) {
 					LFServiceWrapper.getInstance().saveOrUpdateFoundItem(lostReport.getItem().getFound(), user);

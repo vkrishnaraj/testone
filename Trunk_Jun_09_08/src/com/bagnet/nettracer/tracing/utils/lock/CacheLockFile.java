@@ -104,8 +104,7 @@ public class CacheLockFile implements LockFile{
 		}
 	}
 	
-	@Override
-	public List<Object[]> getIncidentAccessLogs(String incidentId) {
+	private List<Object[]> getIncidentAccessLogs(String incidentId) {
 		try{
 			String cacheName = PropertyBMO.getValue(PropertyBMO.LOCK_CACHE_CLUSTER);
 			if(cacheName == null || cacheName.trim().length() == 0){
@@ -142,25 +141,6 @@ public class CacheLockFile implements LockFile{
 			e.printStackTrace();
 			return null;
 		}
-	}
-	
-	@Override
-	public synchronized void cleanIncidentAccessLogs() {
-//		if(new Date().getTime() - lastCleaned.getTime() > 600000){//10 mins
-//			Date now = TracerDateTime.getGMTDate();
-//			long lock_interval = getLockInterval();
-//			for(String incidentId: cache.keySet()){
-//				for(Integer agentId:cache.get(incidentId).keySet()){
-//					if(now.getTime() - cache.get(incidentId).get(agentId).getLoadTimestamp().getTime() > lock_interval){
-//						cache.get(incidentId).remove(agentId);
-//					}
-//				}
-//				if(cache.get(incidentId).isEmpty()){
-//					cache.remove(incidentId);
-//				}
-//			}
-//			lastCleaned = new Date();
-//		}
 	}
 
 	@Override

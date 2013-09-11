@@ -149,6 +149,9 @@ public class FoundItemAction extends CheckedAction {
 						if(found.getItem().getLost().getItem() != null){
 							found.getItem().getLost().getItem().setDispositionId(TracingConstants.LF_DISPOSITION_DELIVERED);
 							found.getItem().getLost().getItem().setTrackingNumber(found.getItem().getTrackingNumber());
+							if(found.getItem().getLost().getItem().getFound()==null){
+								found.getItem().getLost().getItem().setFound(found);
+							}
 						}
 					} else {
 						List<LFItem> itemList=serviceBean.getItemsByLostFoundId(found.getId(), 2);
@@ -158,6 +161,7 @@ public class FoundItemAction extends CheckedAction {
 								if(i.getLost().getItem() != null){
 									i.getLost().getItem().setDispositionId(TracingConstants.LF_DISPOSITION_DELIVERED);
 									i.getLost().getItem().setTrackingNumber(found.getItem().getTrackingNumber());
+									i.getLost().getItem().setFound(found);
 								}
 								found.getItem().setLost(i.getLost());
 							}
