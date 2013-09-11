@@ -959,7 +959,7 @@ public class Incident implements Serializable {
 	}
 	
 
-	@OneToMany(mappedBy = "incident", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy = "incident", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@org.hibernate.annotations.OrderBy(clause = "issuedate")
 	@Fetch(FetchMode.SELECT)
 	public List<IssuanceItemIncident> getIssuanceItemIncidents() {

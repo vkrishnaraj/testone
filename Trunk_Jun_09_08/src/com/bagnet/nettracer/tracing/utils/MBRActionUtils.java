@@ -298,21 +298,25 @@ public class MBRActionUtils {
 				remove = false;
 			}
 			int index = 0;
-			for (IssuanceItemQuantity lQItem : returnQList) { // Find item and either adjust quantity or remove from list
+			List<IssuanceItemQuantity> qListForLoop = new ArrayList<IssuanceItemQuantity>(returnQList);
+			for (IssuanceItemQuantity lQItem : qListForLoop) { // Find item and either adjust quantity or remove from list
 				if (qItem.getId() == lQItem.getId()) {
 					if (remove) {
 						returnQList.remove(lQItem);
 					} else {
 						returnQList.set(index, qItem);
 					}
+					break;
 				}
 				index++;
 			}
 		}
 		if (iItem != null) { // Issued Inventoried Item
-			for (IssuanceItemInventory lIItem : returnIList) {
+			List<IssuanceItemInventory> iListForLoop = new ArrayList<IssuanceItemInventory>(returnIList);
+			for (IssuanceItemInventory lIItem : iListForLoop) {
 				if (iItem.getId() == lIItem.getId()) {
 					returnIList.remove(lIItem);
+					break;
 				}
 			}
 		}
@@ -379,7 +383,8 @@ public class MBRActionUtils {
 				if (item != null && item.isUpdated()) { // ADJUST LIST FOR UPDATED BUT NOT SAVED ITEMS ONLY!!!
 					if (item.getIssuanceItemQuantity() != null && qItems != null) { // THIS IS A QUANTIFIED ITEM
 						boolean notAdjusted = true;
-						for (IssuanceItemQuantity qItem : qItems) { // CHECK IF ITEM IS IN LIST THEN INCREMENT IF ITEM IS BEING RETURNED, DECREMENT OTHERWISE
+						List<IssuanceItemQuantity> qListForLoop = new ArrayList<IssuanceItemQuantity>(qItems);
+						for (IssuanceItemQuantity qItem : qListForLoop) { // CHECK IF ITEM IS IN LIST THEN INCREMENT IF ITEM IS BEING RETURNED, DECREMENT OTHERWISE
 							if (qItem != null && qItem.getId() == item.getIssuanceItemQuantity().getId()) {
 								if (item.isReturned()) {
 									qItem.setQuantity(qItem.getQuantity() + item.getQuantity());
@@ -404,9 +409,11 @@ public class MBRActionUtils {
 							IssuanceItemInventory iItem = item.getIssuanceItemInventory();
 							iItems.add(iItem);
 						} else { // BEING ISSUED, THEREFORE REMOVE IT FROM THE LIST
-							for (IssuanceItemInventory iItem : iItems) {
+							List<IssuanceItemInventory> iListForLoop = new ArrayList<IssuanceItemInventory>(iItems);
+							for (IssuanceItemInventory iItem : iListForLoop) {
 								if (iItem != null && iItem.getId() == item.getIssuanceItemInventory().getId()) {
 									iItems.remove(iItem);
+									break;
 								}
 							}
 						}

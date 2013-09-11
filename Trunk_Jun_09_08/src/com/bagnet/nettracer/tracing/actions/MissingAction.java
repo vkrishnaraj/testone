@@ -104,6 +104,8 @@ public class MissingAction extends CheckedAction {
 		/** ****************** handle requests ******************** */
 
 		IncidentForm theform = (IncidentForm) form;
+
+		MBRActionUtils.createIssuanceLists(request, theform.getStationassigned(), TracingConstants.MISSING_ARTICLES, theform.getIssuanceItemIncidents());
 		
 		if (request.getParameter("email_customer") != null)
 			theform.setEmail_customer(1);
@@ -299,6 +301,12 @@ public class MissingAction extends CheckedAction {
 			return (mapping.findForward(TracingConstants.MISSING_MAIN));
 		}
 		if (MBRActionUtils.actionAdd(theform, request, user,TracingConstants.MISSING_ARTICLES)) {
+			return (mapping.findForward(TracingConstants.MISSING_MAIN));
+		}
+		if(MBRActionUtils.actionIssueItem(theform, request, user)) {
+			return (mapping.findForward(TracingConstants.MISSING_MAIN));
+		}
+		if(MBRActionUtils.actionReturnItem(theform, request, user)) {
 			return (mapping.findForward(TracingConstants.MISSING_MAIN));
 		}
 
@@ -571,6 +579,7 @@ public class MissingAction extends CheckedAction {
 					saveMessages(request, errors);
 					request.setAttribute("prepopulate",new Integer("1"));
 				} else {
+					MBRActionUtils.createIssuanceLists(request, theform.getStationassigned(), TracingConstants.MISSING_ARTICLES, theform.getIssuanceItemIncidents());
 					request.setAttribute("pnrlist", null);
 					session.setAttribute("pnrtrue", null);
 					request.setAttribute("markDirty", 1);
@@ -584,6 +593,8 @@ public class MissingAction extends CheckedAction {
 			}
 			
 		}
+
+		MBRActionUtils.createIssuanceLists(request, theform.getStationassigned(), TracingConstants.MISSING_ARTICLES, theform.getIssuanceItemIncidents());
 		
 		return (mapping.findForward(TracingConstants.MISSING_MAIN));
 	}

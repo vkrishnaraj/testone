@@ -197,6 +197,7 @@ public class DamagedAction extends CheckedAction {
 		if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_DA, user))
 			theform.setAllow_remark_update(1);
 
+		MBRActionUtils.createIssuanceLists(request, theform.getStationassigned(), TracingConstants.DAMAGED_BAG, theform.getIssuanceItemIncidents());
 		/** ****************** handle requests ******************** */
 		
 		//set default weight unit
@@ -322,6 +323,12 @@ public class DamagedAction extends CheckedAction {
 			return (mapping.findForward(TracingConstants.DAMAGED_MAIN));
 		}
 		if (MBRActionUtils.actionAdd(theform, request, user,TracingConstants.DAMAGED_BAG)) {
+			return (mapping.findForward(TracingConstants.DAMAGED_MAIN));
+		}
+		if(MBRActionUtils.actionIssueItem(theform, request, user)) {
+			return (mapping.findForward(TracingConstants.DAMAGED_MAIN));
+		}
+		if(MBRActionUtils.actionReturnItem(theform, request, user)) {
 			return (mapping.findForward(TracingConstants.DAMAGED_MAIN));
 		}
 
@@ -598,6 +605,7 @@ public class DamagedAction extends CheckedAction {
 					saveMessages(request, errors);
 					request.setAttribute("prepopulate",new Integer("1"));
 				} else {
+					MBRActionUtils.createIssuanceLists(request, theform.getStationassigned(), TracingConstants.DAMAGED_BAG, theform.getIssuanceItemIncidents());
 					request.setAttribute("markDirty", 1);
 				}
 				return (mapping.findForward(TracingConstants.DAMAGED_MAIN));
@@ -609,6 +617,8 @@ public class DamagedAction extends CheckedAction {
 			}
 		
 		}
+
+		MBRActionUtils.createIssuanceLists(request, theform.getStationassigned(), TracingConstants.DAMAGED_BAG, theform.getIssuanceItemIncidents());
 
 		return (mapping.findForward(TracingConstants.DAMAGED_MAIN));
 	}

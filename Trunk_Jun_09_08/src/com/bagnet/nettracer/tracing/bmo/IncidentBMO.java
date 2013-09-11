@@ -60,6 +60,7 @@ import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.TraceIncident;
 import com.bagnet.nettracer.tracing.db.audit.Audit_ExpensePayout;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Incident;
+import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemIncident;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue.WtqStatus;
 import com.bagnet.nettracer.tracing.dto.SearchIncident_DTO;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
@@ -369,8 +370,7 @@ public class IncidentBMO {
 						throw new StaleStateException();
 					}
 				}
-			}
-			
+			}		
 
 			t = sess.beginTransaction();
 
@@ -458,6 +458,14 @@ public class IncidentBMO {
 			} else {
 				return 0;
 			}
+			
+			// adjust numbers and statuses of issuance items, being done here so that incident ID is always available
+			for (IssuanceItemIncident iItem : iDTO.getIssuanceItemIncidents()) {
+				if (iItem.isUpdated()) {
+					IssuanceItemBMO.adjustIssuanceItem(iItem);
+					// PUT REMARKS METHOD CALL HERE
+				}
+			}	
 
 			// change the photo names from temppath_ to incident_ID _
 

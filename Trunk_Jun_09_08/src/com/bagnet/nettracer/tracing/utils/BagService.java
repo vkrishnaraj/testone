@@ -768,9 +768,6 @@ public class BagService {
 			// set incident for all issuance items just before saving.
 			for (IssuanceItemIncident iItem : iDTO.getIssuanceItemIncidents()) {
 				iItem.setIncident(iDTO);
-				if (iItem.isUpdated()) {
-					IssuanceItemBMO.adjustIssuanceItem(iItem);
-				}
 			}
 
 			int result = -1;
