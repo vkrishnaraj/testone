@@ -43,7 +43,8 @@ public class DocumentTemplate {
 	@Type(type = "text")
 	private String data;
 	
-	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL} )
+//	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL} )
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "document_template_var_mapping",
 			   joinColumns = {@JoinColumn(name = "documentTemplateId")},
 			   inverseJoinColumns = {@JoinColumn(name = "documentTemplateVarId")})

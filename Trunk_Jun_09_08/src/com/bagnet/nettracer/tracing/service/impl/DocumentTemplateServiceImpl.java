@@ -101,11 +101,13 @@ public class DocumentTemplateServiceImpl implements DocumentTemplateService {
 	}
 	
 	private List<String> getVarsFromData(String data) {
-		String[] varData = StringUtils.substringsBetween(data, "{", "}");
 		ArrayList<String> vars = new ArrayList<String>();
-		for (String var: varData) {
-			if (!vars.contains(var)) {
-				vars.add(var);
+		String[] varData = StringUtils.substringsBetween(data, "{", "}");
+		if (varData != null && varData.length > 0) {
+			for (String var: varData) {
+				if (!vars.contains(var)) {
+					vars.add(var);
+				}
 			}
 		}
 		return vars;
@@ -128,6 +130,7 @@ public class DocumentTemplateServiceImpl implements DocumentTemplateService {
 				dtdto.set_TIMEZONE(dto.get_TIMEZONE());
 				dtdto.setId(template.getId());
 				dtdto.setName(template.getName());
+				dtdto.setDescription(template.getDescription());
 				dtdto.setCreateDate(template.getCreateDate());
 				dtdto.setActive(template.isActive());
 				results.add(dtdto);

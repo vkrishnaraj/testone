@@ -25,10 +25,11 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.DocumentTemplateUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
+import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
 public class DocumentTemplateEditAction extends CheckedAction {
 
-	private static Logger logger = Logger.getLogger(DocumentTemplateEditAction.class);
+	private Logger logger = Logger.getLogger(DocumentTemplateEditAction.class);
 	
 	private DocumentTemplateService service = (DocumentTemplateService) SpringUtils.getBean("documentTemplateService");
 	
@@ -43,13 +44,22 @@ public class DocumentTemplateEditAction extends CheckedAction {
 			return null;
 		}
 		
+		if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DOCUMENT_TEMPLATES_MANAGE, user))
+			return (mapping.findForward(TracingConstants.NO_PERMISSION));
+		
+		if(!manageToken(request)) {
+			return (mapping.findForward(TracingConstants.INVALID_TOKEN));
+		}
+		
 		if (session.getAttribute("documentTemplateVars") == null) {
 			session.setAttribute("documentTemplateVars", service.getDocumentTemplateVars());
 		}
 		
-		DocumentTemplate template = null;
 		DocumentTemplateForm dtf = (DocumentTemplateForm) form;
+		setUserDataOnForm(dtf, user);
+
 		ActionMessages messages = new ActionMessages();
+		DocumentTemplate template = null;
 		boolean success = false;
 		boolean redirect = false;
 
@@ -80,9 +90,6 @@ public class DocumentTemplateEditAction extends CheckedAction {
 			request.setAttribute("success", success);
 		}
 		
-		dtf.set_DATEFORMAT(user.getDateformat().getFormat());
-		dtf.set_TIMEFORMAT(user.getTimeformat().getFormat());
-		dtf.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
 		
 		if (redirect) {
 			return mapping.findForward(TracingConstants.SEARCH_DOCUMENT_TEMPLATE);
@@ -123,17 +130,15 @@ public class DocumentTemplateEditAction extends CheckedAction {
 		messages.add(ActionMessages.GLOBAL_MESSAGE, getActionMessage(TracingConstants.COMMAND_DELETE, success, name));
 		return success;
 	}
+	
+	private void setUserDataOnForm(DocumentTemplateForm dtf, Agent user) {
+		dtf.set_DATEFORMAT(user.getDateformat().getFormat());
+		dtf.set_TIMEFORMAT(user.getTimeformat().getFormat());
+		dtf.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+	}
 
 	private ActionMessage getActionMessage(String action, boolean success, String name) {
-		return new ActionMessage(success ? "document.template." + action + ".success" : "document.template.update.failed", new Object[] { name });
+		return new ActionMessage(success ? "document.template." + action + ".success" : "document.template." + action + ".failed", new Object[] { name });
 	}
 
-	public DocumentTemplateService getService() {
-		return service;
-	}
-
-	public void setService(DocumentTemplateService service) {
-		this.service = service;
-	}
-	
 }

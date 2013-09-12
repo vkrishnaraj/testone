@@ -1,7 +1,6 @@
 package com.bagnet.nettracer.tracing.forms.templates;
 
 import java.util.Date;
-import java.util.Set;
 import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.ValidatorForm;
 
-import com.bagnet.nettracer.tracing.db.templates.DocumentTemplateVar;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 public class DocumentTemplateForm extends ValidatorForm {

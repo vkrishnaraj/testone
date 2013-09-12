@@ -26,10 +26,11 @@ import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DocumentTemplateUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
+import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
 public class DocumentTemplateSearchAction extends CheckedAction {
 
-	private static Logger logger = Logger.getLogger(DocumentTemplateEditAction.class);
+	private Logger logger = Logger.getLogger(DocumentTemplateEditAction.class);
 	
 	private DocumentTemplateService service = (DocumentTemplateService) SpringUtils.getBean("documentTemplateService");
 	
@@ -43,17 +44,22 @@ public class DocumentTemplateSearchAction extends CheckedAction {
 			return null;
 		}
 		
-		if (TracingConstants.COMMAND_CREATE.equals(request.getParameter(TracingConstants.COMMAND_CREATE))) {
+		if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DOCUMENT_TEMPLATES_MANAGE, user))
+			return (mapping.findForward(TracingConstants.NO_PERMISSION));
+		
+		if(!manageToken(request)) {
+			return (mapping.findForward(TracingConstants.INVALID_TOKEN));
+		}
+		
+		DocumentTemplateSearchForm dtsf = (DocumentTemplateSearchForm) form;
+		if (TracingConstants.COMMAND_CREATE.equals(dtsf.getCommand()) || TracingConstants.COMMAND_CREATE.equals(request.getParameter(TracingConstants.COMMAND_CREATE))) {
 			response.sendRedirect("documentTemplate.do?create=1");
 			return null;
 		}
 
-		DocumentTemplateSearchForm dtsf = (DocumentTemplateSearchForm) form;
 		List<DocumentTemplateDTO> results = new ArrayList<DocumentTemplateDTO>();
 		DocumentTemplateSearchDTO dto = DocumentTemplateUtils.fromForm(dtsf);
-		dto.set_DATEFORMAT(user.getDateformat().getFormat());
-		dto.set_TIMEFORMAT(user.getTimeformat().getFormat());
-		dto.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+		setUserInfoOnDto(user, dto);
 		getSortCriteria(dto, request);
 		
 		int currpage = 0;
@@ -115,6 +121,12 @@ public class DocumentTemplateSearchAction extends CheckedAction {
 		request.setAttribute("currpage", Integer.toString(currpage));	
 		dtsf.set_DATEFORMAT(user.getDateformat().getFormat());
 		return mapping.findForward(TracingConstants.SEARCH_DOCUMENT_TEMPLATE);
+	}
+
+	private void setUserInfoOnDto(Agent user, DocumentTemplateSearchDTO dto) {
+		dto.set_DATEFORMAT(user.getDateformat().getFormat());
+		dto.set_TIMEFORMAT(user.getTimeformat().getFormat());
+		dto.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
 	}
 	
 	private void getSortCriteria(DocumentTemplateSearchDTO dto, HttpServletRequest request) {

@@ -16,7 +16,10 @@
 <%
 	Agent a = (Agent)session.getAttribute("user");
 	
-	long id = ((DocumentTemplateSearchForm) request.getAttribute("documentTemplateSearchForm")).getId();
+	long id = 0;
+	if (request.getAttribute("documentTemplateSearchForm") != null) {
+		((DocumentTemplateSearchForm) request.getAttribute("documentTemplateSearchForm")).getId();
+	}
 %>
   
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
@@ -91,32 +94,37 @@
             			<bean:message key="colname.template.id" />
             			<br>
             			<% if (id == 0) { %>
-           					<html:text property="id" value="" styleClass="textfield" />
+           					<html:text property="id" value="" styleId="id" styleClass="textfield" />
            				<% } else { %>
-           					<html:text property="id" styleClass="textfield" />
+           					<html:text property="id" styleId="id" styleClass="textfield" />
            				<% } %>
             		</td>
             		<td nowrap>
 		                <bean:message key="colname.date_range" />
 		                (<%= a.getDateformat().getFormat() %>)
 		                <br>
-		                <html:text property="s_createtime" size="10" maxlength="10" styleClass="textfield" />&nbsp;<img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.documentTemplateSearchForm.s_createtime,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">
+		                <html:text property="s_createtime" size="10" maxlength="10" styleId="s_createtime" styleClass="textfield" />&nbsp;<img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.documentTemplateSearchForm.s_createtime,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">
 		                &nbsp;-&nbsp;
-		                <html:text property="e_createtime" size="10" maxlength="10" styleClass="textfield" />&nbsp;<img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.documentTemplateSearchForm.e_createtime,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;">
+		                <html:text property="e_createtime" size="10" maxlength="10" styleId="e_createtime" styleClass="textfield" />&nbsp;<img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.documentTemplateSearchForm.e_createtime,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;">
 	                </td>
             		<td>
             			<bean:message key="colname.template.active" />
 						<br>
-						<html:select property="active" styleClass="dropdown" >
+						<html:select property="active" styleId="active" styleClass="dropdown" >
 							<html:options collection="documentTemplateStatusList" property="status_ID" labelProperty="description" />
 						</html:select>
             		</td>
             	</tr>
             	<tr>
-            		<td colspan="3">
+            		<td>
             			<bean:message key="colname.template.name" />
 						<br>
-						<html:text property="name" size="60" styleClass="textfield" />
+						<html:text property="name" styleId="name" styleClass="textfield" />
+            		</td>
+            		<td colspan="2">
+            			<bean:message key="colname.template.description" />
+						<br>
+						<html:text property="description" size="60" styleId="description" styleClass="textfield" />
             		</td>
             	</tr>
             	<tr>
@@ -138,6 +146,7 @@
               	<display:table requestURI="/searchDocumentTemplate.do" name="requestScope.results" sort="external" class="form2" cellspacing="0" cellpadding="0" id="<%=TracingConstants.TABLE_ID_TEMPLATES %>" defaultsort="1" >
           			<display:column titleKey="colname.template.id" property="id" href="documentTemplate.do" paramId="template_id" paramProperty="id" sortable="true" sortName="id" />
           			<display:column titleKey="colname.template.name" property="name" href="documentTemplate.do" paramId="template_id" paramProperty="id" sortable="true" sortName="name" />
+          			<display:column titleKey="colname.template.description" property="description" sortable="false" />
           			<display:column titleKey="colname.create.date" property="dispCreateDate" sortable="true" sortName="createDate" />
           			<display:column titleKey="colname.template.active" property="dispActive" sortable="true" sortName="active" />
  			    	<display:footer>

@@ -1,7 +1,6 @@
 package com.bagnet.nettracer.tracing.actions;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 

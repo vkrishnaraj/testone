@@ -1,13 +1,11 @@
 package com.bagnet.nettracer.tracing.utils;
 
 import java.util.Date;
-import java.util.LinkedHashSet;
 
 import org.springframework.beans.BeanUtils;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.templates.DocumentTemplate;
-import com.bagnet.nettracer.tracing.db.templates.DocumentTemplateVar;
 import com.bagnet.nettracer.tracing.dto.DocumentTemplateSearchDTO;
 import com.bagnet.nettracer.tracing.forms.templates.DocumentTemplateForm;
 import com.bagnet.nettracer.tracing.forms.templates.DocumentTemplateSearchForm;
@@ -51,6 +49,7 @@ public class DocumentTemplateUtils {
 		DocumentTemplateSearchDTO dto = new DocumentTemplateSearchDTO();
 		dto.setId(dtsf.getId());
 		dto.setName(dtsf.getName());
+		dto.setDescription(dtsf.getDescription());
 		dto.setActive(dtsf.getActive());
 		
 		if (dtsf.getS_createtime() != null && !dtsf.getS_createtime().isEmpty()) {

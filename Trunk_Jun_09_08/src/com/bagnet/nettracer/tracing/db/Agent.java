@@ -113,13 +113,13 @@ public class Agent implements Serializable {
 	public String getInitial() {
 		StringBuffer sb = new StringBuffer(3);
 		if (firstname != null && firstname.length() > 1) {
-			sb.append(firstname.substring(0, 1));
+			sb.append(firstname.substring(0, 1).toUpperCase());
 		}
 		if (mname != null && mname.length() > 1) {
-			sb.append(mname.substring(0, 1));
+			sb.append(mname.substring(0, 1).toUpperCase());
 		}
 		if (lastname != null && lastname.length() > 1) {
-			sb.append(lastname.substring(0, 1));
+			sb.append(lastname.substring(0, 1).toUpperCase());
 		}
 		return sb.toString();
 	}

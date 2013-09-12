@@ -147,5 +147,15 @@
   	return true;
   }
   
+  function validateTemplateForm(form) {
+  		var name = document.getElementById("name");
+  		if (name.value == null || name.value.length == 0) {
+  			alert('<%=(String) bundle.getString( "colname.template.name") + " " + (String) bundle.getString("error.validation.isRequired")%>');
+  			name.focus();
+  			return false;
+ 		}
+ 		return true;
+  }
+  
   function checkDeleteCount(bagNum, report_type) { return true; }
   function checkOhdDeleteCount(bagNum) { return true; }

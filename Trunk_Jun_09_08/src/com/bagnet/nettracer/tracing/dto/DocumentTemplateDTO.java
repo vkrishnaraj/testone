@@ -13,6 +13,7 @@ public class DocumentTemplateDTO {
 	
 	private long id;
 	private String name;
+	private String description;
 	private Date createDate;
 	private boolean active;
 	
@@ -56,6 +57,14 @@ public class DocumentTemplateDTO {
 		this.name = name;
 	}
 	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public Date getCreateDate() {
 		return createDate;
 	}

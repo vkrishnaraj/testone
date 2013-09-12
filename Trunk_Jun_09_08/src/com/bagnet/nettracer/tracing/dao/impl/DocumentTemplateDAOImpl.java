@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -93,8 +94,8 @@ public class DocumentTemplateDAOImpl implements DocumentTemplateDAO {
 			if (oldTemplate == null) return false;			
 			
 			template.setCreateDate(oldTemplate.getCreateDate());
-			BeanUtils.copyProperties(template, oldTemplate);
 			template.setVariables(new LinkedHashSet<DocumentTemplateVar>(getVarsForDocumentTemplate(template)));
+			BeanUtils.copyProperties(template, oldTemplate);
 			
 			transaction = session.beginTransaction();			
 			session.merge(template);
@@ -147,8 +148,8 @@ public class DocumentTemplateDAOImpl implements DocumentTemplateDAO {
 		Session session = null;
 		try {
 			session = HibernateWrapper.getSession().openSession();
-			Criteria criteria = session.createCriteria(DocumentTemplateVar.class, "var");
-			criteria.addOrder(Order.asc("var.associatedClass"));
+			Criteria criteria = session.createCriteria(DocumentTemplateVar.class, "v");
+			criteria.addOrder(Order.asc("v.associatedClass"));
 			vars = criteria.list();
 		} catch (Exception e) {
 			logger.error("Exception caught while attempting to load the Document Template Variables", e);
@@ -163,49 +164,23 @@ public class DocumentTemplateDAOImpl implements DocumentTemplateDAO {
 	@Override
 	public boolean haveDefinitionsForDocumentTemplateVars(List<String> vars) {
 		if (vars == null || vars.isEmpty()) return true;
-		
-		boolean valid = false;
-		Session session = null;
-		try {
-			session = HibernateWrapper.getSession().openSession();
-			Criteria criteria = session.createCriteria(DocumentTemplateVar.class, "v");
-			criteria.add(Restrictions.in("v.displayTag", vars));
-			List<?> fromDb = criteria.list();
-			valid = fromDb != null && !fromDb.isEmpty() && fromDb.size() == vars.size();
-		} catch (Exception e) {
-			logger.error("Failed to look up requested variables", e);
-		} finally {
-			if (session != null) {
-				session.close();
+		for (String var: vars) {
+			if (getVarFromData(var) == null) {
+				return false;
 			}
 		}
-		return valid;
+		return true;
 	}
 
 	@Override
 	public String getFirstInvalidVar(List<String> vars) {
 		if (vars == null || vars.isEmpty()) return null;
-		String firstInvalidVar = null;
-		Session session = null;
-		try {
-			session = HibernateWrapper.getSession().openSession();
-			for (String var: vars) {
-				Criteria criteria = session.createCriteria(DocumentTemplateVar.class, "v");
-				criteria.add(Restrictions.eq("v.displayTag", var));
-				Object fromDb = criteria.uniqueResult();
-				if (fromDb == null) {
-					firstInvalidVar = var;
-					break;
-				}
-			}
-		} catch (Exception e) {
-			logger.error("An error occurred while trying to find an invalid variable", e);
-		} finally {
-			if (session != null) {
-				session.close();
+		for (String var: vars) {
+			if (getVarFromData(var) == null) {
+				return var;
 			}
 		}
-		return firstInvalidVar;
+		return null;
 	}
 
 	@Override
@@ -263,6 +238,10 @@ public class DocumentTemplateDAOImpl implements DocumentTemplateDAO {
 			criteria.add(Restrictions.like("t.name", dto.getName()));
 		}
 		
+		if (dto.getDescription() != null && !dto.getDescription().isEmpty()) {
+			criteria.add(Restrictions.like("t.description", "%" + dto.getDescription() + "%"));
+		}
+		
 		if (dto.getActive() != TracingConstants.ACTIVE_SEARCH_BOTH && dto.getActive() != 0) {
 			criteria.add(Restrictions.eq("t.active", dto.getActive() == TracingConstants.ACTIVE_SEARCH_ACTIVE));
 		}
@@ -301,25 +280,43 @@ public class DocumentTemplateDAOImpl implements DocumentTemplateDAO {
 		criteria.addOrder(TracingConstants.SORT_ASCENDING.equals(dir) ? Order.asc(orderVar) : Order.desc(orderVar));
 	}
 	
-	@SuppressWarnings("unchecked")
 	private List<DocumentTemplateVar> getVarsForDocumentTemplate(DocumentTemplate template) {
-		String[] vars = StringUtils.substringsBetween(template.getData(), "{", "}");
 		ArrayList<DocumentTemplateVar> toReturn = new ArrayList<DocumentTemplateVar>();
+		String[] vars = StringUtils.substringsBetween(template.getData(), "{", "}");
+		if (vars != null && vars.length > 0) {
+			LinkedHashMap<String, DocumentTemplateVar> processed = new LinkedHashMap<String, DocumentTemplateVar>();
+			for (String var: vars) {
+				if (!processed.containsKey(var)) {
+					DocumentTemplateVar fromDb = getVarFromData(var);
+					toReturn.add(fromDb);
+					processed.put(var, fromDb);
+				}
+			}
+		}
+		return toReturn;
+	}
+
+	private DocumentTemplateVar getVarFromData(String fromData) {
+		DocumentTemplateVar fromDb = null;
 		Session session = null;
 		try {
+			String[] tokens = fromData.split("\\.");
+			String associatedClass = tokens[0];
+			String displayTag = tokens[1];
 			session = HibernateWrapper.getSession().openSession();
 			Criteria criteria = session.createCriteria(DocumentTemplateVar.class, "v");
-			criteria.add(Restrictions.in("v.displayTag", vars));
-			toReturn.addAll(criteria.list());
+			Conjunction and = Restrictions.conjunction();
+			and.add(Restrictions.eq("v.displayTag", displayTag));
+			and.add(Restrictions.eq("v.associatedClass", associatedClass));
+			criteria.add(and);
+			fromDb = (DocumentTemplateVar) criteria.uniqueResult();
 		} catch (Exception e) {
-			logger.error("Error occurred while trying to retrieve the template variables", e);
+			logger.error("An error occurred while trying to load variable: " + fromData, e);
 		} finally {
 			if (session != null) {
 				session.close();
 			}
-		}		
-		return toReturn;
+		}
+		return fromDb;
 	}
-
-	
 }

@@ -3,14 +3,17 @@
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
 <%@ taglib uri="/tags/struts-logic" prefix="logic" %>
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
-
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
+
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
+<%@ page import="java.util.ResourceBundle" %>
+<%@ page import="java.util.Locale" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
 <%
 	Agent a = (Agent) session.getAttribute("user");
+	ResourceBundle bundle = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
 %>
 
 <script type="text/javascript" src="deployment/main/js/fckeditor/fckeditor.js"></script>
@@ -42,8 +45,16 @@
 		document.getElementById('command').value = command;
 	}
 
+	function confirmDelete() {
+		var del = confirm('<%=bundle.getString("message.confirm.delete") %>');
+		if (del == true) {
+			setCommand("<%=TracingConstants.COMMAND_DELETE %>")
+			document.getElementById("documentTemplateForm").submit();
+		}
+	}
+
 </script>
-<html:form action="documentTemplate.do" method="post" >
+<html:form action="documentTemplate.do" method="post" onsubmit="return validateTemplateForm(this);" >
 <html:hidden property="command"/>
 	<tr>
 		<td id="middlecolumn">        
@@ -78,24 +89,26 @@
 						<td>
 							<bean:message key="colname.template.id" />
 							<br>
-							<html:text name="documentTemplateForm" property="id" readonly="true" styleClass="textfield" />
+							<html:text name="documentTemplateForm" property="id" readonly="true" styleId="id" styleClass="textfield" />
 						</td>
 						<td>
 							<bean:message key="colname.create.date" />
 							<br>
-							<html:text name="documentTemplateForm" property="disCreateDate" styleClass="textfield" disabled="true" />
+							<html:text name="documentTemplateForm" property="disCreateDate" styleId="disCreateDate" styleClass="textfield" disabled="true" />
 						</td>
 						<td>
 							<bean:message key="colname.updated.date" />
 							<br>
-							<html:text name="documentTemplateForm" property="disLastUpdatedDate" styleClass="textfield" disabled="true" />
+							<html:text name="documentTemplateForm" property="disLastUpdatedDate" styleId="disLastUpdateDate" styleClass="textfield" disabled="true" />
 						</td>
 					</tr>
+				</table>
+				<table class="form2_dam" cellspacing="0" cellpadding="0">
 					<tr>
-						<td colspan="2">
+						<td>
 							<bean:message key="colname.template.name" />
 							<br>
-							<html:text name="documentTemplateForm" property="name" size="60" styleClass="textfield" />
+							<html:text name="documentTemplateForm" property="name" size="60" styleId="name" styleClass="textfield" />
 						</td>
 						<td>
 							<bean:message key="colname.template.active" />
@@ -104,17 +117,12 @@
 						</td>
 					</tr>
 					<tr>
-						<td colspan="3">
+						<td colspan="2">
 							<bean:message key="colname.template.description" />
 							<br>
-							<html:textarea name="documentTemplateForm" property="description" cols="80" rows="3" />
+							<html:textarea name="documentTemplateForm" property="description" styleId="description" cols="80" rows="3" />
 						</td>
 					</tr>
-				</table>
-				<h1>
-						<bean:message key="colname.template.data" />
-				</h1>
-				<table class="form2_dam" cellspacing="0" cellpadding="0">
 					<tr>
 						<td>
 							<textarea id="data" name="data"><bean:write name="documentTemplateForm" property="data" /></textarea>
@@ -122,7 +130,7 @@
 						<td>
 							<bean:message key="colname.template.variables" />
 							<br>
-							<select ondblclick="insertVariable(this);" styleClass="dropdown" size="27" >
+							<select ondblclick="insertVariable(this);" class="dropdown" size="33" >
 							<% 
 								Map<String, List<String>> documentTemplateVars = (Map<String, List<String>>) session.getAttribute("documentTemplateVars"); 
 								for (String group: documentTemplateVars.keySet()) {	
@@ -131,7 +139,7 @@
 										<% 
 											for (String var: documentTemplateVars.get(group)) {
 										%>
-												<option value="<%=var %>" ><%=var %></option>													
+												<option value="<%=group + "." + var %>" ><%=var %></option>													
 										<%
 											}
 										%>	
@@ -157,7 +165,7 @@
 				<input type="submit" class="button" value='<bean:message key="button.save" />' onclick="saveOrUpdateTemplate();">
 				<logic:notEqual name="documentTemplateForm" property="id" value="0">
 					&nbsp;&nbsp;
-					<input type="submit" class="button" value='<bean:message key="button.delete" />' onclick="setCommand('<%=TracingConstants.COMMAND_DELETE %>');">
+					<input type="button" class="button" value='<bean:message key="button.delete" />' onclick="confirmDelete();">
 				</logic:notEqual>
 			</div>
 		</td>
