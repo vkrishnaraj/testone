@@ -431,6 +431,11 @@ public class IncidentBMO {
 					if (oldinc.getPrintedreceipt() != null && iDTO.getPrintedreceipt() == null){
 						iDTO.setPrintedreceipt(oldinc.getPrintedreceipt());
 					}
+					
+					// add remarks for issuance item changes
+					if (iDTO != null && iDTO.getIssuanceItemIncidents() != null) {
+						IssuanceItemBMO.addIssuanceItemRemarks(iDTO, mod_agent);
+					}
 
 					// The purpose is to allow a user to identify specific incidents that were assigned to them in a given date range.
 					if (oldinc.getStationassigned().getStation_ID() != iDTO.getStationassigned().getStation_ID()) {
@@ -466,7 +471,6 @@ public class IncidentBMO {
 						IssuanceItemBMO.adjustIssuanceItem(iItem);
 					}
 				}	
-				IssuanceItemBMO.addIssuanceItemRemarks(iDTO, mod_agent);
 			}
 
 			// change the photo names from temppath_ to incident_ID _
