@@ -309,5 +309,7 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.issuance.AuditIssuanceItemInventory"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.issuance.IssuanceItemIncident"/>
 	
-		<mapping class="com.bagnet.nettracer.tracing.db.templates.DocumentTemplate" />		
-		<mapping class="com.bagnet.nettracer.tracing.db.templates.DocumentTemplateVar" />		
+		<mapping class="com.bagnet.nettracer.tracing.db.documents.templates.Template" />		
+		<mapping class="com.bagnet.nettracer.tracing.db.documents.templates.TemplateVar" />		
+		<mapping class="com.bagnet.nettracer.tracing.db.documents.templates.TemplateVarDependency" />		
+		<mapping class="com.bagnet.nettracer.tracing.db.documents.Document" />		

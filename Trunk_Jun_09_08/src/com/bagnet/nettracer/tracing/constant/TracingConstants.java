@@ -340,7 +340,7 @@ public class TracingConstants {
 	public final static int TABLE_COURTESY_REASON = 21;
 	public final static int TABLE_COURTESY_REASON_DAMAGED = 22;
 	public final static int TABLE_COURTESY_REASON_LOST_DELAYED = 23;
-	public final static int TABLE_DOCUMENT_TEMPLATE_STATUS = 24;
+	public final static int TABLE_TEMPLATE_STATUS = 24;
 	
 	public final static int PRIORITY_LOW = 1;
 	public final static int PRIORITY_MEDIUM = 2;
@@ -1283,8 +1283,8 @@ public class TracingConstants {
 	public static final int DAMAGED_ITEM_STATUS_DAMAGED = 801;
 	public static final int DAMAGED_ITEM_STATUS_MISSING = 802;
 	
-	public static final String EDIT_DOCUMENT_TEMPLATE = "editDocumentTemplate";
-	public static final String SEARCH_DOCUMENT_TEMPLATE = "searchDocumentTemplate";
+	public static final String EDIT_TEMPLATE = "editTemplate";
+	public static final String SEARCH_TEMPLATE = "searchTemplate";
 	
 	public static final String COMMAND_CREATE = "create";
 	public static final String COMMAND_UPDATE = "update";
@@ -1300,6 +1300,9 @@ public class TracingConstants {
 	
 	public static final String SORT_ASCENDING = "1";
 	public static final String SORT_DESCENDING = "2";
+	
+	public static final String DOCUMENT_SERVICE_BEAN = "documentService";
+	public static final String TEMPLATE_SERVICE_BEAN = "templateService";
 	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {

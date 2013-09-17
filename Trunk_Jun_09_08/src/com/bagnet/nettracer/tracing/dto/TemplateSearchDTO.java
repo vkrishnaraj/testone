@@ -3,7 +3,7 @@ package com.bagnet.nettracer.tracing.dto;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class DocumentTemplateSearchDTO {
+public class TemplateSearchDTO {
 
 	private String _DATEFORMAT;
 	private String _TIMEFORMAT;

@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="autotest"/>
+	<classpathentry kind="src" path="metadata"/>
+	<classpathentry kind="src" path="companies"/>
+	<classpathentry kind="src" path="web"/>
+	<classpathentry kind="src" path="utils"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/jars/activation-1.1.jar"/>
@@ -54,7 +59,6 @@
 	<classpathentry kind="lib" path="lib/jars/sqljdbc.jar"/>
 	<classpathentry kind="lib" path="lib/jars/commons-digester-1.7.jar"/>
 	<classpathentry kind="lib" path="lib/jars/commons-javaflow-20060411.jar"/>
-	<classpathentry kind="lib" path="lib/jars/iText-2.1.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="lib/jars/backport-util-concurrent.jar"/>
 	<classpathentry kind="lib" path="lib/build-client/catalina.jar"/>
@@ -107,7 +111,6 @@
 	<classpathentry kind="lib" path="lib/jars/ReservationService_1_0.jar"/>
 	<classpathentry kind="lib" path="lib/jars/dozer-5.1.jar"/>
 	<classpathentry kind="lib" path="lib/jars/commons-collections-3.1.jar"/>
-	<classpathentry kind="lib" path="lib/jars/commons-lang-2.3.jar"/>
 	<classpathentry kind="lib" path="lib/jars/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/jars/xmlbeans-2.3.0.jar"/>
 	<classpathentry kind="lib" path="lib/jars/DynamicJasper-3.0.16.jar"/>
@@ -131,6 +134,7 @@
 	<classpathentry kind="lib" path="lib/jars/opencsv-2.3.jar"/>
 	<classpathentry kind="lib" path="lib/jars/nt_fs_client.jar"/>
 	<classpathentry kind="lib" path="lib/jars/ScannerMbrQueryService.jar"/>
+	<classpathentry kind="lib" path="C:/workspace/Trunk_Jun_09_08/lib/jars/FraudService.jar"/>
 	<classpathentry kind="lib" path="lib/provided/jbosscache-core.jar"/>
 	<classpathentry kind="lib" path="lib/jars/rmiio-2.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/jars/FraudService.jar"/>
@@ -167,11 +171,14 @@
 	<classpathentry kind="lib" path="C:/jboss-as-7.1.1.Final/modules/org/hibernate/main/hibernate-commons-annotations-4.0.1.Final.jar"/>
 	<classpathentry kind="lib" path="C:/jboss-as-7.1.1.Final/modules/org/hibernate/main/hibernate-entitymanager-4.0.1.Final.jar"/>
 	<classpathentry kind="lib" path="lib/jars/OnhandScanningService.jar"/>
-	<classpathentry kind="lib" path="lib/jars/AddressValidationService-test-client.jar"/>
 	<classpathentry kind="lib" path="lib/jars/WN_CS2Service.jar"/>
 	<classpathentry kind="lib" path="lib/jars/MerchantWebServices-test-client.jar"/>
 	<classpathentry kind="lib" path="lib/jars/BaggageDeliveryStatusInfoService-test-client.jar"/>
 	<classpathentry kind="lib" path="lib/jars/displaytag-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/jars/ntwscore_schemas.jar"/>
+	<classpathentry kind="lib" path="lib/jars/mockito-all-1.9.5.jar"/>
+	<classpathentry kind="lib" path="lib/provided/commons-lang-2.6.jar"/>
+	<classpathentry kind="lib" path="lib/jars/iText-2.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/jars/core-renderer.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

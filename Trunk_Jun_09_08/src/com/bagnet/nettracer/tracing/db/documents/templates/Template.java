@@ -1,11 +1,12 @@
-package com.bagnet.nettracer.tracing.db.templates;
+package com.bagnet.nettracer.tracing.db.documents.templates;
 
 import java.util.Date;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -18,9 +19,11 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Type;
 
+import com.bagnet.nettracer.tracing.enums.TemplateType;
+
 @Entity
-@Table(name="document_template")
-public class DocumentTemplate {
+@Table(name="template")
+public class Template {
 	
 	@Id
 	@GeneratedValue
@@ -31,6 +34,10 @@ public class DocumentTemplate {
 	
 	@Column(length = 256)
 	private String description;
+	
+	@Column(nullable = false)
+	@Enumerated(EnumType.ORDINAL)
+	private TemplateType type;
 	
 	private boolean active;
 	
@@ -43,12 +50,11 @@ public class DocumentTemplate {
 	@Type(type = "text")
 	private String data;
 	
-//	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL} )
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "document_template_var_mapping",
-			   joinColumns = {@JoinColumn(name = "documentTemplateId")},
-			   inverseJoinColumns = {@JoinColumn(name = "documentTemplateVarId")})
-	private Set<DocumentTemplateVar> variables;
+	@JoinTable(name = "template_var_mapping",
+			   joinColumns = {@JoinColumn(name = "templateId")},
+			   inverseJoinColumns = {@JoinColumn(name = "templateVarId")})
+	private Set<TemplateVar> variables;
 
 	public long getId() {
 		return id;
@@ -82,6 +88,14 @@ public class DocumentTemplate {
 		this.active = active;
 	}
 
+	public TemplateType getType() {
+		return type;
+	}
+
+	public void setType(TemplateType type) {
+		this.type = type;
+	}
+
 	public Date getCreateDate() {
 		return createDate;
 	}
@@ -106,11 +120,11 @@ public class DocumentTemplate {
 		this.data = data;
 	}
 
-	public Set<DocumentTemplateVar> getVariables() {
+	public Set<TemplateVar> getVariables() {
 		return variables;
 	}
 
-	public void setVariables(Set<DocumentTemplateVar> variables) {
+	public void setVariables(Set<TemplateVar> variables) {
 		this.variables = variables;
 	}
 

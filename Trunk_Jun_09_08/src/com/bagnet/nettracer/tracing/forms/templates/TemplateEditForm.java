@@ -10,11 +10,13 @@ import org.apache.struts.validator.ValidatorForm;
 
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
-public class DocumentTemplateForm extends ValidatorForm {
+public class TemplateEditForm extends ValidatorForm {
 
 	private static final long serialVersionUID = 2248013898627441965L;
 	
 	private String command;
+	
+	private boolean preview;
 	
 	private long id;
 	
@@ -42,6 +44,14 @@ public class DocumentTemplateForm extends ValidatorForm {
 
 	public void setCommand(String command) {
 		this.command = command;
+	}
+
+	public boolean isPreview() {
+		return preview;
+	}
+
+	public void setPreview(boolean preview) {
+		this.preview = preview;
 	}
 
 	public long getId() {

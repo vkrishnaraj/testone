@@ -7,18 +7,24 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.Query;
-import org.hibernate.Transaction;
-//import org.hibernate.classic.Session;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.type.StandardBasicTypes;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Claim;
+import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.forms.SearchClaimForm;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
+//import org.hibernate.classic.Session;
 
 public class ClaimDAO {
 	
@@ -414,4 +420,22 @@ public class ClaimDAO {
 		return toReturn.toString();
 	}
 	
+	public static String getClaimTypeDescription(int claimTypeId) {
+		Session session = null;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			SQLQuery query = session.createSQLQuery("select description from ItemType where ItemType_ID = :claimTypeId");
+			query.setInteger("claimTypeId", claimTypeId);
+			query.addScalar("description", StandardBasicTypes.STRING);
+			String result = (String) query.uniqueResult();
+			return result != null ? result : "";
+		} catch (Exception e) {
+			logger.error("Error caught looking up ItemType with id: " + claimTypeId, e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return null;
+	}
 }

@@ -16,36 +16,39 @@ import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.BeanUtils;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
-import com.bagnet.nettracer.tracing.dao.DocumentTemplateDAO;
-import com.bagnet.nettracer.tracing.db.templates.DocumentTemplate;
-import com.bagnet.nettracer.tracing.db.templates.DocumentTemplateVar;
-import com.bagnet.nettracer.tracing.dto.DocumentTemplateSearchDTO;
+import com.bagnet.nettracer.tracing.dao.TemplateDAO;
+import com.bagnet.nettracer.tracing.db.documents.templates.Template;
+import com.bagnet.nettracer.tracing.db.documents.templates.TemplateVar;
+import com.bagnet.nettracer.tracing.db.documents.templates.TemplateVarDependency;
+import com.bagnet.nettracer.tracing.dto.TemplateSearchDTO;
 
-public class DocumentTemplateDAOImpl implements DocumentTemplateDAO {
+public class TemplateDAOImpl implements TemplateDAO {
 
-	private static Logger logger = Logger.getLogger(DocumentTemplateDAOImpl.class);
+	private static Logger logger = Logger.getLogger(TemplateDAOImpl.class);
 	
 	private static Map<String, String> map = new LinkedHashMap<String, String>();
 	
 	static {		
 		map.put("id", 			"t.id");
-		map.put("name", 		"name");
+		map.put("name", 		"t.name");
 		map.put("createDate", 	"t.createDate");
 		map.put("active", 		"t.active");
 	}
 	
-	public DocumentTemplate load(long documentTemplateId) {
-		DocumentTemplate template = null;
+	@Override
+	public Template load(long templateId) {
+		Template template = null;
 		Session session = null;
 		try {
 			session = HibernateWrapper.getSession().openSession();
-			template = (DocumentTemplate) session.get(DocumentTemplate.class, documentTemplateId);			
+			template = (Template) session.get(Template.class, templateId);			
 		} catch (Exception e) {
-			logger.error("Exception caught while attempting to load document template with id: " + documentTemplateId, e);
+			logger.error("Exception caught while attempting to load template with id: " + templateId, e);
 		} finally {
 			if (session != null) {
 				session.close();
@@ -54,21 +57,22 @@ public class DocumentTemplateDAOImpl implements DocumentTemplateDAO {
 		return template;
 	}
 	
-	public boolean delete(long documentTemplateId) {
+	@Override
+	public boolean delete(long templateId) {
 		boolean success = false;
-		if (documentTemplateId <= 0) return success;
+		if (templateId <= 0) return success;
 		
 		Session session = null;
 		Transaction transaction = null;
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			transaction = session.beginTransaction();
-			DocumentTemplate template = (DocumentTemplate) session.createCriteria(DocumentTemplate.class, "d").add(Restrictions.eq("d.id", documentTemplateId)).uniqueResult();
+			Template template = (Template) session.createCriteria(Template.class, "t").add(Restrictions.eq("t.id", templateId)).uniqueResult();
 			session.delete(template);
 			transaction.commit();
 			success = true;
 		} catch (Exception e) {
-			logger.error("Failed to delete template with id: " + documentTemplateId, e);
+			logger.error("Failed to delete template with id: " + templateId, e);
 			if (transaction != null) {
 				transaction.rollback();
 			}
@@ -80,7 +84,8 @@ public class DocumentTemplateDAOImpl implements DocumentTemplateDAO {
 		return success;
 	}
 	
-	public boolean update(DocumentTemplate template) {
+	@Override
+	public boolean update(Template template) {
 		boolean success = false;
 		if (template == null) {
 			return success;
@@ -90,11 +95,11 @@ public class DocumentTemplateDAOImpl implements DocumentTemplateDAO {
 		
 		try {
 			session = HibernateWrapper.getSession().openSession();
-			DocumentTemplate oldTemplate = (DocumentTemplate) session.get(DocumentTemplate.class, template.getId());
+			Template oldTemplate = (Template) session.get(Template.class, template.getId());
 			if (oldTemplate == null) return false;			
 			
 			template.setCreateDate(oldTemplate.getCreateDate());
-			template.setVariables(new LinkedHashSet<DocumentTemplateVar>(getVarsForDocumentTemplate(template)));
+			template.setVariables(new LinkedHashSet<TemplateVar>(getVarsForDocumentTemplate(template)));
 			BeanUtils.copyProperties(template, oldTemplate);
 			
 			transaction = session.beginTransaction();			
@@ -114,7 +119,8 @@ public class DocumentTemplateDAOImpl implements DocumentTemplateDAO {
 		return success;
 	}
 	
-	public long save(DocumentTemplate template) {
+	@Override
+	public long save(Template template) {
 		long id = 0;
 		if (template == null) {
 			return id;
@@ -125,12 +131,12 @@ public class DocumentTemplateDAOImpl implements DocumentTemplateDAO {
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			transaction = session.beginTransaction();			
-			template.setVariables(new LinkedHashSet<DocumentTemplateVar>(getVarsForDocumentTemplate(template)));
+			template.setVariables(new LinkedHashSet<TemplateVar>(getVarsForDocumentTemplate(template)));
 			session.save(template);
 			transaction.commit();
 			id = template.getId();
 		} catch (Exception e) {
-			logger.error("Failed to update template with id: " + template.getId(), e);
+			logger.error("Failed to save template: " + template.getName(), e);
 			if (transaction != null) {
 				transaction.rollback();
 			}
@@ -142,17 +148,21 @@ public class DocumentTemplateDAOImpl implements DocumentTemplateDAO {
 		return id;
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.bagnet.nettracer.tracing.dao.TemplateDAO#getTemplateVars()
+	 */
 	@SuppressWarnings("unchecked")
-	public List<DocumentTemplateVar> getDocumentTemplateVars() {
-		List<DocumentTemplateVar> vars = new ArrayList<DocumentTemplateVar>();
+	public List<TemplateVar> getTemplateVars() {
+		List<TemplateVar> vars = new ArrayList<TemplateVar>();
 		Session session = null;
 		try {
 			session = HibernateWrapper.getSession().openSession();
-			Criteria criteria = session.createCriteria(DocumentTemplateVar.class, "v");
+			Criteria criteria = session.createCriteria(TemplateVar.class, "v");
 			criteria.addOrder(Order.asc("v.associatedClass"));
+			criteria.addOrder(Order.asc("v.displayTag"));
 			vars = criteria.list();
 		} catch (Exception e) {
-			logger.error("Exception caught while attempting to load the Document Template Variables", e);
+			logger.error("Exception caught while attempting to load the Template Variables", e);
 		} finally {
 			if (session != null) {
 				session.close();
@@ -161,8 +171,11 @@ public class DocumentTemplateDAOImpl implements DocumentTemplateDAO {
 		return vars;		
 	}
 
+	/* (non-Javadoc)
+	 * @see com.bagnet.nettracer.tracing.dao.TemplateDAO#haveDefinitionsForTemplateVars(java.util.List)
+	 */
 	@Override
-	public boolean haveDefinitionsForDocumentTemplateVars(List<String> vars) {
+	public boolean haveDefinitionsForTemplateVars(List<String> vars) {
 		if (vars == null || vars.isEmpty()) return true;
 		for (String var: vars) {
 			if (getVarFromData(var) == null) {
@@ -172,6 +185,9 @@ public class DocumentTemplateDAOImpl implements DocumentTemplateDAO {
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.bagnet.nettracer.tracing.dao.TemplateDAO#getFirstInvalidVar(java.util.List)
+	 */
 	@Override
 	public String getFirstInvalidVar(List<String> vars) {
 		if (vars == null || vars.isEmpty()) return null;
@@ -183,8 +199,11 @@ public class DocumentTemplateDAOImpl implements DocumentTemplateDAO {
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.bagnet.nettracer.tracing.dao.TemplateDAO#getTemplateCount(com.bagnet.nettracer.tracing.dto.TemplateSearchDTO)
+	 */
 	@Override
-	public int getDocumentTemplateCount(DocumentTemplateSearchDTO dto) {
+	public int getTemplateCount(TemplateSearchDTO dto) {
 		Session session = null;
 		int count = 0;
 		try {
@@ -195,10 +214,10 @@ public class DocumentTemplateDAOImpl implements DocumentTemplateDAO {
 			if (result != null) {
 				count = ((Long) result).intValue();
 			} else {
-				logger.error("Received null result for count in DocumentTemplateDAOImpl.getDocumentTemplateCount");
+				logger.error("Received null result for count in TemplateDAOImpl.getDocumentTemplateCount");
 			}
 		} catch (Exception e) {
-			logger.error("An error occurred while attempting to retrieve the document template count", e);
+			logger.error("An error occurred while attempting to retrieve the template count", e);
 		} finally {
 			if (session != null) {
 				session.close();
@@ -207,18 +226,30 @@ public class DocumentTemplateDAOImpl implements DocumentTemplateDAO {
 		return count;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.bagnet.nettracer.tracing.dao.TemplateDAO#listTemplates(com.bagnet.nettracer.tracing.dto.TemplateSearchDTO)
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<DocumentTemplate> listDocumentTemplates(DocumentTemplateSearchDTO dto) {
-		List<DocumentTemplate> results = new ArrayList<DocumentTemplate>();
+	public List<Template> listTemplates(TemplateSearchDTO dto) {
+		List<Template> results = new ArrayList<Template>();
 		Session session = null;
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			Criteria criteria = getCriteriaFromDto(session, dto);
 			applyOrder(dto, criteria);
-			results = (List<DocumentTemplate>) criteria.list();
+			criteria.setProjection(Projections.projectionList()
+					.add(Projections.groupProperty("t.id").as("id"))
+					.add(Projections.property("t.name").as("name"))
+					.add(Projections.property("t.description").as("description"))
+					.add(Projections.property("t.active").as("active"))
+					.add(Projections.property("t.createDate").as("createDate"))
+					.add(Projections.property("t.lastUpdated").as("lastUpdated"))
+					.add(Projections.property("t.data").as("data")));
+			criteria.setResultTransformer(Transformers.aliasToBean(Template.class));
+			results = (List<Template>) criteria.list();
 		} catch (Exception e) {
-			logger.error("An error occurred while attempting to get a list of document templates", e);
+			logger.error("An error occurred while attempting to get a list of templates", e);
 		} finally {
 			if (session != null) {
 				session.close();
@@ -227,8 +258,8 @@ public class DocumentTemplateDAOImpl implements DocumentTemplateDAO {
 		return results;
 	}
 	
-	private Criteria getCriteriaFromDto(Session session, DocumentTemplateSearchDTO dto) {
-		Criteria criteria = session.createCriteria(DocumentTemplate.class, "t");
+	private Criteria getCriteriaFromDto(Session session, TemplateSearchDTO dto) {
+		Criteria criteria = session.createCriteria(Template.class, "t");
 		
 		if (dto.getId() > 0) {
 			criteria.add(Restrictions.eq("t.id", dto.getId()));
@@ -264,30 +295,30 @@ public class DocumentTemplateDAOImpl implements DocumentTemplateDAO {
 		return criteria;
 	}
 	
-	private void applyOrder(DocumentTemplateSearchDTO dto, Criteria criteria) {
-		String orderVar = DocumentTemplateDAOImpl.map.get(dto.getSort());
+	private void applyOrder(TemplateSearchDTO dto, Criteria criteria) {
+		String orderVar = TemplateDAOImpl.map.get(dto.getSort());
 		if (orderVar == null) {
 			orderVar = "t.id";
-			logger.warn("Illegal sort value found for document templates: " + dto.getSort());
+			logger.warn("Illegal sort value found for templates: " + dto.getSort());
 		}
 		
 		String dir = dto.getDir();
 		if (!TracingConstants.SORT_ASCENDING.equals(dir) && !TracingConstants.SORT_DESCENDING.equals(dir)) {
 			dir = TracingConstants.SORT_ASCENDING;
-			logger.warn("Illegal sort direction value found for document templates: " + dto.getDir());
+			logger.warn("Illegal sort direction value found for templates: " + dto.getDir());
 		}
 		
 		criteria.addOrder(TracingConstants.SORT_ASCENDING.equals(dir) ? Order.asc(orderVar) : Order.desc(orderVar));
 	}
 	
-	private List<DocumentTemplateVar> getVarsForDocumentTemplate(DocumentTemplate template) {
-		ArrayList<DocumentTemplateVar> toReturn = new ArrayList<DocumentTemplateVar>();
+	private List<TemplateVar> getVarsForDocumentTemplate(Template template) {
+		ArrayList<TemplateVar> toReturn = new ArrayList<TemplateVar>();
 		String[] vars = StringUtils.substringsBetween(template.getData(), "{", "}");
 		if (vars != null && vars.length > 0) {
-			LinkedHashMap<String, DocumentTemplateVar> processed = new LinkedHashMap<String, DocumentTemplateVar>();
+			LinkedHashMap<String, TemplateVar> processed = new LinkedHashMap<String, TemplateVar>();
 			for (String var: vars) {
 				if (!processed.containsKey(var)) {
-					DocumentTemplateVar fromDb = getVarFromData(var);
+					TemplateVar fromDb = getVarFromData(var);
 					toReturn.add(fromDb);
 					processed.put(var, fromDb);
 				}
@@ -296,20 +327,20 @@ public class DocumentTemplateDAOImpl implements DocumentTemplateDAO {
 		return toReturn;
 	}
 
-	private DocumentTemplateVar getVarFromData(String fromData) {
-		DocumentTemplateVar fromDb = null;
+	private TemplateVar getVarFromData(String fromData) {
+		TemplateVar fromDb = null;
 		Session session = null;
 		try {
 			String[] tokens = fromData.split("\\.");
 			String associatedClass = tokens[0];
 			String displayTag = tokens[1];
 			session = HibernateWrapper.getSession().openSession();
-			Criteria criteria = session.createCriteria(DocumentTemplateVar.class, "v");
+			Criteria criteria = session.createCriteria(TemplateVar.class, "v");
 			Conjunction and = Restrictions.conjunction();
 			and.add(Restrictions.eq("v.displayTag", displayTag));
 			and.add(Restrictions.eq("v.associatedClass", associatedClass));
 			criteria.add(and);
-			fromDb = (DocumentTemplateVar) criteria.uniqueResult();
+			fromDb = (TemplateVar) criteria.uniqueResult();
 		} catch (Exception e) {
 			logger.error("An error occurred while trying to load variable: " + fromData, e);
 		} finally {
@@ -319,4 +350,25 @@ public class DocumentTemplateDAOImpl implements DocumentTemplateDAO {
 		}
 		return fromDb;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<TemplateVarDependency> getVarDependencies(List<String> classNames) {
+		List<TemplateVarDependency> results = new ArrayList<TemplateVarDependency>();
+		if (classNames == null || classNames.isEmpty()) return results;
+		Session session = null;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			Criteria criteria = session.createCriteria(TemplateVarDependency.class, "d");
+			criteria.add(Restrictions.in("d.associatedClass", classNames));
+			results = (List<TemplateVarDependency>) criteria.list();
+		} catch (Exception e) {
+			logger.error("Error occurred while attempting to get template variable dependencies", e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return results;
+	}
+	
 }

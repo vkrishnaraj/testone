@@ -6,7 +6,7 @@
 <%@ taglib uri="http://displaytag.sf.net" prefix="display" %>
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 
-<%@ page import="com.bagnet.nettracer.tracing.forms.templates.DocumentTemplateSearchForm" %>
+<%@ page import="com.bagnet.nettracer.tracing.forms.templates.TemplateSearchForm" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.DateUtils" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
@@ -17,8 +17,8 @@
 	Agent a = (Agent)session.getAttribute("user");
 	
 	long id = 0;
-	if (request.getAttribute("documentTemplateSearchForm") != null) {
-		((DocumentTemplateSearchForm) request.getAttribute("documentTemplateSearchForm")).getId();
+	if (request.getAttribute("templateSearchForm") != null) {
+		((TemplateSearchForm) request.getAttribute("templateSearchForm")).getId();
 	}
 %>
   
@@ -31,21 +31,21 @@
 	var cal1xx = new CalendarPopup();	
 
 	function goprev() {
-	  o = document.documentTemplateSearchForm;
+	  o = document.templateSearchForm;
 	  o.prevpage.value = "1";
 	  o.pagination.value="1";
 	  o.submit();
 	}
 	
 	function gonext() {
-	  o = document.documentTemplateSearchForm;
+	  o = document.templateSearchForm;
 	  o.nextpage.value="1";
 	  o.pagination.value="1";
 	  o.submit();
 	}
 	
 	function gopage(i) {
-		  o = document.documentTemplateSearchForm;
+		  o = document.templateSearchForm;
 		  o.currpage.value = i;
 		  o.pagination.value="1";
 		  o.submit();
@@ -63,7 +63,7 @@
   
   
 <jsp:include page="/pages/includes/validation_search.jsp" />
-<html:form action="searchDocumentTemplate.do" method="post">
+<html:form action="searchTemplate.do" method="post">
 	<html:hidden property="command" />
 	<html:hidden property="_DATEFORMAT" />
 	<jsp:include page="/pages/includes/taskmanager_header.jsp" />
@@ -111,7 +111,7 @@
             			<bean:message key="colname.template.active" />
 						<br>
 						<html:select property="active" styleId="active" styleClass="dropdown" >
-							<html:options collection="documentTemplateStatusList" property="status_ID" labelProperty="description" />
+							<html:options collection="templateStatusList" property="status_ID" labelProperty="description" />
 						</html:select>
             		</td>
             	</tr>
@@ -143,9 +143,9 @@
                 	<bean:message key="header.search_result" />
              	</h1>
               	<a name="result"></a>
-              	<display:table requestURI="/searchDocumentTemplate.do" name="requestScope.results" sort="external" class="form2" cellspacing="0" cellpadding="0" id="<%=TracingConstants.TABLE_ID_TEMPLATES %>" defaultsort="1" >
-          			<display:column titleKey="colname.template.id" property="id" href="documentTemplate.do" paramId="template_id" paramProperty="id" sortable="true" sortName="id" />
-          			<display:column titleKey="colname.template.name" property="name" href="documentTemplate.do" paramId="template_id" paramProperty="id" sortable="true" sortName="name" />
+              	<display:table requestURI="/searchTemplate.do" name="requestScope.results" sort="external" class="form2" cellspacing="0" cellpadding="0" id="<%=TracingConstants.TABLE_ID_TEMPLATES %>" defaultsort="1" >
+          			<display:column titleKey="colname.template.id" property="id" href="editTemplate.do" paramId="template_id" paramProperty="id" sortable="true" sortName="id" />
+          			<display:column titleKey="colname.template.name" property="name" href="editTemplate.do" paramId="template_id" paramProperty="id" sortable="true" sortName="name" />
           			<display:column titleKey="colname.template.description" property="description" sortable="false" />
           			<display:column titleKey="colname.create.date" property="dispCreateDate" sortable="true" sortName="createDate" />
           			<display:column titleKey="colname.template.active" property="dispActive" sortable="true" sortName="active" />

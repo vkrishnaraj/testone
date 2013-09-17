@@ -15,7 +15,6 @@
 	Agent a = (Agent) session.getAttribute("user");
 	ResourceBundle bundle = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
 %>
-
 <script type="text/javascript" src="deployment/main/js/fckeditor/fckeditor.js"></script>
 <script type="text/javascript">
 
@@ -39,6 +38,12 @@
 		} else {
 			setCommand("<%=TracingConstants.COMMAND_UPDATE %>");
 		}
+		document.templateEditForm.submit();
+	}
+
+	function saveAndPreview() {
+		document.getElementById('preview').value = "true";
+		saveOrUpdateTemplate();
 	}
 	
 	function setCommand(command) {
@@ -49,13 +54,18 @@
 		var del = confirm('<%=bundle.getString("message.confirm.delete") %>');
 		if (del == true) {
 			setCommand("<%=TracingConstants.COMMAND_DELETE %>")
-			document.getElementById("documentTemplateForm").submit();
+			document.templateEditForm.submit();
 		}
 	}
 
+	function openPreviewWindow(fileName) {
+		window.open("editTemplate.do?preview_document="+fileName, '', 'width=600,height=800,resizable=yes');
+	}
+
 </script>
-<html:form action="documentTemplate.do" method="post" onsubmit="return validateTemplateForm(this);" >
+<html:form focus="name" action="editTemplate.do" method="post" onsubmit="return validateTemplateForm(this);" >
 <html:hidden property="command"/>
+<html:hidden property="preview"/>
 	<tr>
 		<td id="middlecolumn">        
 			<div id="maincontent">
@@ -67,39 +77,55 @@
 					<span>
 						<font color="<%=color %>" >
 							<html:messages id="msg" message="true">
-								<bean:write name="msg"/>
-								<br><br>
+								<bean:write name="msg"/><br>								
 							</html:messages>
 						</font>
+						<br>
 					</span>
 				</logic:messagesPresent>
-				<h1 class="green">
-					<logic:equal name="documentTemplateForm" property="id" value="0">
-						<bean:message key="header.create" />
-					</logic:equal>
-					<logic:notEqual name="documentTemplateForm" property="id" value="0">
-						<bean:message key="header.edit" />
-					</logic:notEqual>
-					<bean:message key="header.document.template" />
-   				</h1>
-				<span class="reqfield">*</span>
-				<bean:message key="message.required" /> 
+				<table id="pageheaderright" cellspacing="0" cellpadding="0" >
+					<tr>
+						<td>
+							<h1 class="green">
+								<logic:equal name="templateEditForm" property="id" value="0">
+									<bean:message key="header.create" />
+								</logic:equal>
+								<logic:notEqual name="templateEditForm" property="id" value="0">
+									<bean:message key="header.edit" />
+								</logic:notEqual>
+								<bean:message key="header.document.template" />
+			   				</h1>
+							<span class="reqfield">*</span>
+							<bean:message key="message.required" />
+						</td>
+						<td style="text-align:right;">
+							<logic:present name="previewLink" scope="request" >
+								<a href="#" onclick="openPreviewWindow('<%=(String) request.getAttribute("previewLink") %>');">
+									<bean:message key="document.preview" />
+								</a>
+							</logic:present>
+							<logic:notPresent name="previewLink" scope="request" >
+								&nbsp;
+							</logic:notPresent>
+						</td>
+					</tr>			
+				</table> 
 				<table class="form2_dam" cellspacing="0" cellpadding="0">
 					<tr>
 						<td>
 							<bean:message key="colname.template.id" />
 							<br>
-							<html:text name="documentTemplateForm" property="id" readonly="true" styleId="id" styleClass="textfield" />
+							<html:text property="id" readonly="true" styleId="id" styleClass="textfield" />
 						</td>
 						<td>
 							<bean:message key="colname.create.date" />
 							<br>
-							<html:text name="documentTemplateForm" property="disCreateDate" styleId="disCreateDate" styleClass="textfield" disabled="true" />
+							<html:text property="disCreateDate" styleId="disCreateDate" styleClass="textfield" disabled="true" />
 						</td>
 						<td>
 							<bean:message key="colname.updated.date" />
 							<br>
-							<html:text name="documentTemplateForm" property="disLastUpdatedDate" styleId="disLastUpdateDate" styleClass="textfield" disabled="true" />
+							<html:text property="disLastUpdatedDate" styleId="disLastUpdateDate" styleClass="textfield" disabled="true" />
 						</td>
 					</tr>
 				</table>
@@ -108,7 +134,7 @@
 						<td>
 							<bean:message key="colname.template.name" />
 							<br>
-							<html:text name="documentTemplateForm" property="name" size="60" styleId="name" styleClass="textfield" />
+							<html:text property="name" size="60" styleId="name" styleClass="textfield" />
 						</td>
 						<td>
 							<bean:message key="colname.template.active" />
@@ -120,24 +146,24 @@
 						<td colspan="2">
 							<bean:message key="colname.template.description" />
 							<br>
-							<html:textarea name="documentTemplateForm" property="description" styleId="description" cols="80" rows="3" />
+							<html:textarea property="description" styleId="description" cols="80" rows="3" />
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<textarea id="data" name="data"><bean:write name="documentTemplateForm" property="data" /></textarea>
+							<textarea id="data" name="data"><bean:write name="templateEditForm" property="data" /></textarea>
 						</td>
 						<td>
 							<bean:message key="colname.template.variables" />
 							<br>
 							<select ondblclick="insertVariable(this);" class="dropdown" size="33" >
 							<% 
-								Map<String, List<String>> documentTemplateVars = (Map<String, List<String>>) session.getAttribute("documentTemplateVars"); 
-								for (String group: documentTemplateVars.keySet()) {	
+								Map<String, List<String>> templateVars = (Map<String, List<String>>) session.getAttribute("templateVars"); 
+								for (String group: templateVars.keySet()) {	
 							%>
 									<optgroup label="<%=group %>" >
 										<% 
-											for (String var: documentTemplateVars.get(group)) {
+											for (String var: templateVars.get(group)) {
 										%>
 												<option value="<%=group + "." + var %>" ><%=var %></option>													
 										<%
@@ -162,8 +188,10 @@
 			</div>
 			<div style="text-align:center;">
 				<br>
-				<input type="submit" class="button" value='<bean:message key="button.save" />' onclick="saveOrUpdateTemplate();">
-				<logic:notEqual name="documentTemplateForm" property="id" value="0">
+				<input type="button" class="button" value='<bean:message key="button.save" />' onclick="saveOrUpdateTemplate();">
+				&nbsp;&nbsp;
+				<input type="button" class="button" value='<bean:message key="button.save.preview" />' onclick="saveAndPreview();">
+				<logic:notEqual name="templateEditForm" property="id" value="0">
 					&nbsp;&nbsp;
 					<input type="button" class="button" value='<bean:message key="button.delete" />' onclick="confirmDelete();">
 				</logic:notEqual>

@@ -18,21 +18,21 @@ import org.displaytag.util.ParamEncoder;
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
-import com.bagnet.nettracer.tracing.dto.DocumentTemplateDTO;
-import com.bagnet.nettracer.tracing.dto.DocumentTemplateSearchDTO;
-import com.bagnet.nettracer.tracing.forms.templates.DocumentTemplateSearchForm;
-import com.bagnet.nettracer.tracing.service.DocumentTemplateService;
+import com.bagnet.nettracer.tracing.dto.TemplateDTO;
+import com.bagnet.nettracer.tracing.dto.TemplateSearchDTO;
+import com.bagnet.nettracer.tracing.forms.templates.TemplateSearchForm;
+import com.bagnet.nettracer.tracing.service.TemplateService;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
-import com.bagnet.nettracer.tracing.utils.DocumentTemplateUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
+import com.bagnet.nettracer.tracing.utils.TemplateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
-public class DocumentTemplateSearchAction extends CheckedAction {
+public class TemplateSearchAction extends CheckedAction {
 
-	private Logger logger = Logger.getLogger(DocumentTemplateEditAction.class);
+	private Logger logger = Logger.getLogger(TemplateEditAction.class);
 	
-	private DocumentTemplateService service = (DocumentTemplateService) SpringUtils.getBean("documentTemplateService");
+	private TemplateService templateService = (TemplateService) SpringUtils.getBean(TracingConstants.TEMPLATE_SERVICE_BEAN);
 	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		HttpSession session = request.getSession();
@@ -47,18 +47,14 @@ public class DocumentTemplateSearchAction extends CheckedAction {
 		if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DOCUMENT_TEMPLATES_MANAGE, user))
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
 		
-		if(!manageToken(request)) {
-			return (mapping.findForward(TracingConstants.INVALID_TOKEN));
-		}
-		
-		DocumentTemplateSearchForm dtsf = (DocumentTemplateSearchForm) form;
+		TemplateSearchForm dtsf = (TemplateSearchForm) form;
 		if (TracingConstants.COMMAND_CREATE.equals(dtsf.getCommand()) || TracingConstants.COMMAND_CREATE.equals(request.getParameter(TracingConstants.COMMAND_CREATE))) {
-			response.sendRedirect("documentTemplate.do?create=1");
+			response.sendRedirect("editTemplate.do?create=1");
 			return null;
 		}
 
-		List<DocumentTemplateDTO> results = new ArrayList<DocumentTemplateDTO>();
-		DocumentTemplateSearchDTO dto = DocumentTemplateUtils.fromForm(dtsf);
+		List<TemplateDTO> results = new ArrayList<TemplateDTO>();
+		TemplateSearchDTO dto = TemplateUtils.fromForm(dtsf);
 		setUserInfoOnDto(user, dto);
 		getSortCriteria(dto, request);
 		
@@ -77,7 +73,7 @@ public class DocumentTemplateSearchAction extends CheckedAction {
 				currpage--;
 			}
 	
-			rowcount = service.getDocumentTemplateCount(dto);
+			rowcount = templateService.getTemplateCount(dto);
 			
 			dto.setCurrentPage(currpage);
 			dto.setRowsPerPage(rowsperpage);
@@ -99,37 +95,37 @@ public class DocumentTemplateSearchAction extends CheckedAction {
 				request.setAttribute("pages", al);
 			}
 			
-			results = service.listDocumentTemplates(dto);
+			results = templateService.listTemplates(dto);
 			
 			if (!end && results.size() == 1) {
 				long templateId = results.iterator().next().getId();
-				response.sendRedirect("documentTemplate.do?template_id=" + templateId);
+				response.sendRedirect("editTemplate.do?template_id=" + templateId);
 				return null;
 			}
 			
 			request.setAttribute("results", results);
 		} else {
-			DocumentTemplateUtils.resetSearchForm(dtsf);
+			TemplateUtils.resetSearchForm(dtsf);
 		}
 		
-		if (session.getAttribute("documentTemplateStatusList") == null) {
-			session.setAttribute("documentTemplateStatusList", TracerUtils.getStatusList(TracingConstants.TABLE_DOCUMENT_TEMPLATE_STATUS, user.getDefaultlocale()));
+		if (session.getAttribute("templateStatusList") == null) {
+			session.setAttribute("templateStatusList", TracerUtils.getStatusList(TracingConstants.TABLE_TEMPLATE_STATUS, user.getDefaultlocale()));
 		}
 		
 		request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
 		request.setAttribute("rowcount", Integer.toString(rowcount));
 		request.setAttribute("currpage", Integer.toString(currpage));	
 		dtsf.set_DATEFORMAT(user.getDateformat().getFormat());
-		return mapping.findForward(TracingConstants.SEARCH_DOCUMENT_TEMPLATE);
+		return mapping.findForward(TracingConstants.SEARCH_TEMPLATE);
 	}
 
-	private void setUserInfoOnDto(Agent user, DocumentTemplateSearchDTO dto) {
+	private void setUserInfoOnDto(Agent user, TemplateSearchDTO dto) {
 		dto.set_DATEFORMAT(user.getDateformat().getFormat());
 		dto.set_TIMEFORMAT(user.getTimeformat().getFormat());
 		dto.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
 	}
 	
-	private void getSortCriteria(DocumentTemplateSearchDTO dto, HttpServletRequest request) {
+	private void getSortCriteria(TemplateSearchDTO dto, HttpServletRequest request) {
 		ParamEncoder encoder = new ParamEncoder(TracingConstants.TABLE_ID_TEMPLATES);
 		String sort = request.getParameter(encoder.encodeParameterName(TableTagParameters.PARAMETER_SORT));
 		dto.setSort(sort != null ? sort : "id");

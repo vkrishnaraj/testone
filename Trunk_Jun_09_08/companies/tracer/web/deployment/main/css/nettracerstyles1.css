@@ -190,7 +190,7 @@ table#pageheaderright td {
 	padding:0px;
 	text-align:left;
 }
-table#pageheaderright a {
+table#pageheaderright,table#templateheader a {
 	background-position:top;
 	color: #2758AF;
 	font-size:1.0em;
@@ -199,8 +199,8 @@ table#pageheaderright a {
 	text-decoration:none;
 	padding:0px 2px;
 }
-table#pageheaderright a:hover, 
-table#pageheaderright a:active {
+table#pageheaderright,table#templateheader a:hover, 
+table#pageheaderright,table#templateheader a:active {
 	text-decoration:underline;
 	color:#166AAE;
 }

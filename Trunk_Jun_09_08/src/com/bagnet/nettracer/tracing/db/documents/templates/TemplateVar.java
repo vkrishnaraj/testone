@@ -1,4 +1,4 @@
-package com.bagnet.nettracer.tracing.db.templates;
+package com.bagnet.nettracer.tracing.db.documents.templates;
 
 import java.util.Set;
 
@@ -10,8 +10,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="document_template_var")
-public class DocumentTemplateVar {
+@Table(name="template_var")
+public class TemplateVar {
 
 	@Id
 	@GeneratedValue
@@ -23,11 +23,8 @@ public class DocumentTemplateVar {
 	@Column(nullable = false)
 	private String associatedClass;
 	
-	@Column(nullable = false)
-	private String classVar;
-
 	@ManyToMany(mappedBy = "variables")
-	private Set<DocumentTemplate> templates;
+	private Set<Template> templates;
 	
 	public long getId() {
 		return id;
@@ -52,13 +49,18 @@ public class DocumentTemplateVar {
 	public void setAssociatedClass(String associatedClass) {
 		this.associatedClass = associatedClass;
 	}
-
-	public String getClassVar() {
-		return classVar;
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o.getClass() != this.getClass()) return false;
+		TemplateVar that = (TemplateVar) o;
+		return this.associatedClass.equals(that.associatedClass) && this.displayTag.equals(that.displayTag);
 	}
-
-	public void setClassVar(String classVar) {
-		this.classVar = classVar;
+	
+	@Override
+	public String toString() {
+		if (associatedClass == null || displayTag == null) return "";
+		return "{" + this.associatedClass + "." + this.displayTag + "}";
 	}
 
 }

@@ -2,7 +2,7 @@ package com.bagnet.nettracer.tracing.forms.templates;
 
 import org.apache.struts.validator.ValidatorForm;
 
-public class DocumentTemplateSearchForm extends ValidatorForm {
+public class TemplateSearchForm extends ValidatorForm {
 
 	private static final long serialVersionUID = -1493188726906374136L;
 	

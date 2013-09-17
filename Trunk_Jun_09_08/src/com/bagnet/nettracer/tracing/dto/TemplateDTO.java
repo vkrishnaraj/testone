@@ -5,7 +5,7 @@ import java.util.TimeZone;
 
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
-public class DocumentTemplateDTO {
+public class TemplateDTO {
 	
 	private String _DATEFORMAT;
 	private String _TIMEFORMAT;
