@@ -64,8 +64,8 @@
 
 </script>
 <html:form focus="name" action="editTemplate.do" method="post" onsubmit="return validateTemplateForm(this);" >
-<html:hidden property="command"/>
-<html:hidden property="preview"/>
+<html:hidden property="command" styleId="command" />
+<html:hidden property="preview" styleId="preview" />
 	<tr>
 		<td id="middlecolumn">        
 			<div id="maincontent">
@@ -156,7 +156,7 @@
 						<td>
 							<bean:message key="colname.template.variables" />
 							<br>
-							<select ondblclick="insertVariable(this);" class="dropdown" size="33" >
+							<select id="variableSelect" ondblclick="insertVariable(this);" class="dropdown" size="33" >
 							<% 
 								Map<String, List<String>> templateVars = (Map<String, List<String>>) session.getAttribute("templateVars"); 
 								for (String group: templateVars.keySet()) {	

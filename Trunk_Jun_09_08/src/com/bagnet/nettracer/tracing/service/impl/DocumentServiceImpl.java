@@ -72,7 +72,7 @@ public class DocumentServiceImpl implements DocumentService {
 					content = content.replace(toReplace, (String) getter.invoke(adapter, new Object[] { }));
 				} catch (NoSuchMethodException nsme) {
 					// MJS: not catastrophic; make note of the exception and move on
-					logger.warn("NoSuchMethodException caught attempting to find method: TemplateAdapter.get" + associatedClass + displayTag + "()");
+					logger.info("NoSuchMethodException caught attempting to find method: TemplateAdapter.get" + associatedClass + displayTag + "()");
 					continue;
 				} catch (Exception e) {
 					// MJS: catching generic Exception since there's nothing 

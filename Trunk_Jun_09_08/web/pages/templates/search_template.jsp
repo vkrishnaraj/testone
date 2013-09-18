@@ -57,6 +57,7 @@
 	
 	function setCommand(command) {
 		document.getElementById("command").value = command;
+		document.templateSearchForm.submit();
 	}
 
 </SCRIPT>
@@ -64,7 +65,7 @@
   
 <jsp:include page="/pages/includes/validation_search.jsp" />
 <html:form action="searchTemplate.do" method="post">
-	<html:hidden property="command" />
+	<html:hidden property="command" styleId="command" />
 	<html:hidden property="_DATEFORMAT" />
 	<jsp:include page="/pages/includes/taskmanager_header.jsp" />
     <tr>
@@ -129,11 +130,11 @@
             	</tr>
             	<tr>
             		<td align="center" colspan="3">
-            			<input type="submit" class="button" value='<bean:message key="button.search" />' onclick="setCommand('<%=TracingConstants.COMMAND_SEARCH %>')" />
+            			<input type="button" class="button" value='<bean:message key="button.search" />' onclick="setCommand('<%=TracingConstants.COMMAND_SEARCH %>')" />
             			&nbsp;&nbsp;
-            			<input type="submit" class="button" value='<bean:message key="button.reset" />' onclick="setCommand('<%=TracingConstants.COMMAND_CLEAR %>')" />
+            			<input type="button" class="button" value='<bean:message key="button.reset" />' onclick="setCommand('<%=TracingConstants.COMMAND_CLEAR %>')" />
             			&nbsp;&nbsp;
-            			<input type="submit" class="button" value='<bean:message key="button.create" />' onclick="setCommand('<%=TracingConstants.COMMAND_CREATE %>')" />
+            			<input type="button" class="button" value='<bean:message key="button.create" />' onclick="setCommand('<%=TracingConstants.COMMAND_CREATE %>')" />
               		</td>
             	</tr>
             </table>
