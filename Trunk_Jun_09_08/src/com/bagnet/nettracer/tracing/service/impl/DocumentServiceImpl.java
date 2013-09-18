@@ -70,11 +70,15 @@ public class DocumentServiceImpl implements DocumentService {
 				try {
 					Method getter = adapter.getClass().getDeclaredMethod("get" + associatedClass + displayTag, new Class[] { });
 					content = content.replace(toReplace, (String) getter.invoke(adapter, new Object[] { }));
+				} catch (NoSuchMethodException nsme) {
+					// MJS: not catastrophic; make note of the exception and move on
+					logger.warn("NoSuchMethodException caught attempting to find method: TemplateAdapter.get" + associatedClass + displayTag + "()");
+					continue;
 				} catch (Exception e) {
 					// MJS: catching generic Exception since there's nothing 
 					// different to do depending on which type of exception is caught
 					logger.error(e);
-					result.setMessageKey("document.merge.failure");
+					result.setMessageKey("document.generated.failure");
 					return result;
 				}
 				
@@ -83,7 +87,7 @@ public class DocumentServiceImpl implements DocumentService {
 			document.setContent(content);
 		}
 		
-		result.setMessageKey("document.merge.success");
+		result.setMessageKey("document.generated.success");
 		result.setSuccess(true);
 		return result;
 	}
