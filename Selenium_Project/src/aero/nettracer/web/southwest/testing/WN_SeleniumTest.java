@@ -23,6 +23,7 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 	protected static final String INCIDENT_TYPE_DAMAGED = "Damaged";
 	
 	protected static final String COURTESY_REASON_COLLECT = "648";
+	protected final static String MAINTAIN_TEMPLATES_PERMISSION = "651";
 	
 	protected boolean navigateToPermissionsPage() {
 		boolean success = false;

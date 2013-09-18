@@ -208,6 +208,6 @@ public class Settings {
 	public static String PILFERAGE_ID_WN = "";
 	public static String ONHAND_ID_WN = "";
 	public static String FOUND_ID_WN = "";
-
+	public static String TEMPLATE_ID_WN = "";
 	
 }
