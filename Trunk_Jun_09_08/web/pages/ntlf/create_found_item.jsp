@@ -78,7 +78,7 @@
 		    document.getElementById("matchId").value=matchId;
 	   		document.getElementById("weight").value=validWeight;
 	   		form.submit();*/
-	   		location.replace("create_found_item.do?email=1&matchId="+matchId+"&validWeight="+validWeight);
+	   		location.replace("ntlf_create_found_item.do?email=1&matchId="+matchId+"&validWeight="+validWeight);
 	   } else {
 		   return false;
 	   }
@@ -670,7 +670,7 @@
 						<bean:write name="foundItemForm" property="disDeliveredDate" />
 					</td>
 					<td>
-						<a href='create_found_item.do?undo=1&itemId=<bean:write name="foundItemForm" property="foundItem.id" />'><bean:message key="lf.undo" /></a>
+						<a href='ntlf_create_found_item.do?undo=1&itemId=<bean:write name="foundItemForm" property="foundItem.id" />'><bean:message key="lf.undo" /></a>
 					</td>
 					</tr>
 				<% } else { %>
@@ -685,10 +685,10 @@
 							<html:text name="foundItemForm" property="foundItem.trackingNumber" size="20" styleClass="textfield" styleId="trackingNumber" />
 						</td>
 						<td  style="width:25%;" >
-							<a href='create_found_item.do?deliveryRejected=1&itemId=<bean:write name="foundItemForm" property="foundItem.id" />'><bean:message key="lf.delivery.rejected"/></a>
+							<a href='ntlf_create_found_item.do?deliveryRejected=1&itemId=<bean:write name="foundItemForm" property="foundItem.id" />'><bean:message key="lf.delivery.rejected"/></a>
 						</td>
 						<td style="width:25%;" >
-							<a href='create_found_item.do?pickup=1&itemId=<bean:write name="foundItemForm" property="foundItem.id" />'><bean:message key="lf.picked.up"/></a>
+							<a href='ntlf_create_found_item.do?pickup=1&itemId=<bean:write name="foundItemForm" property="foundItem.id" />'><bean:message key="lf.picked.up"/></a>
 						</td>
 					</tr>
 				<% } %>

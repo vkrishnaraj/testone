@@ -261,10 +261,10 @@
               			<tr>
               				<td>
               					<logic:equal name="searchLostFoundForm" property="type" value="<%=String.valueOf(TracingConstants.LF_TYPE_LOST) %>" >
-              						<a href="create_lost_report.do?lostId=<%=result.getId() %>"><bean:write name="result" property="id" /></a>
+              						<a href="ntlf_create_lost_report.do?lostId=<%=result.getId() %>"><bean:write name="result" property="id" /></a>
               					</logic:equal>
               					<logic:equal name="searchLostFoundForm" property="type" value="<%=String.valueOf(TracingConstants.LF_TYPE_FOUND) %>" >
-              						<a href="create_found_item.do?foundId=<%=result.getId() %>"><bean:write name="result" property="id" /></a>
+              						<a href="ntlf_create_found_item.do?foundId=<%=result.getId() %>"><bean:write name="result" property="id" /></a>
               					</logic:equal>
               				</td>
               				<td>
