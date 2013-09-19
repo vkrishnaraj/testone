@@ -186,9 +186,12 @@ public class LostDelayAction extends CheckedAction {
 		//the company specific codes..
 		List codes = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.LOST_DELAY, true, user, checkLLC);
 		//add to the loss codes
-
 		request.setAttribute("losscodes", codes);
 
+		TracerUtils.populateWtCompanyLists(session);
+		TracerUtils.populateWtStationLists(session, user.getCompanycode_ID());
+		
+		
 		request.setAttribute("LOST_DELAY_RECEIPT", Integer.toString(ReportingConstants.LOST_RECEIPT_RPT));
 		request.setAttribute("lostdelay", "1");
 
@@ -702,6 +705,8 @@ public class LostDelayAction extends CheckedAction {
 				saveMessages(request, errors);
 				return (mapping.findForward(TracingConstants.SEARCH_INCIDENT));
 			}
+
+			request.setAttribute("stationID", inc.getWtStationId());
 			session.setAttribute("incidentObj", inc);
 			List<ActionMessage> lockErrors = SpringUtils.getLockFile().getLockActionMessages(inc.getIncident_ID(), user);
 			if(lockErrors != null){

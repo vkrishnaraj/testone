@@ -3288,7 +3288,7 @@
 			<property name="sub_path" value="train/" />
 			<property name="environment.name" value="train"/>
 			<property name="cron.job.config.file" value="companies/demonstration/environment/train/jobs/cronJobs.xml" />
-			<property name="jarprefix" value="z7train-" />
+			<property name="jarprefix" value="datrain-" />
 			<antcall target="cron-service" />
 		</target>
 			

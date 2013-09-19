@@ -136,6 +136,10 @@ public class Incident implements Serializable {
 	private int courtesyReasonId;
 	private String courtesyDescription;
 	
+
+	private String wtStationId;
+	private String wtCompanyId;
+	
 	private List<IssuanceItemIncident> issuanceItemIncidents;
 
 	@Column(name="tracing_status_id")
@@ -1314,6 +1318,24 @@ public class Incident implements Serializable {
 
 	public void setCourtesyDescription(String courtesyDescription) {
 		this.courtesyDescription = courtesyDescription;
+	}
+
+	@Column(name = "wtStationId", length=3)
+	public String getWtStationId() {
+		return wtStationId;
+	}
+
+	public void setWtStationId(String wtStationId) {
+		this.wtStationId = wtStationId;
+	}
+
+	@Column(name = "wtCompanyId", length=3)
+	public String getWtCompanyId() {
+		return wtCompanyId;
+	}
+
+	public void setWtCompanyId(String wtCompanyId) {
+		this.wtCompanyId = wtCompanyId;
 	}
 	
 }

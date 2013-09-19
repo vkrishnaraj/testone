@@ -86,6 +86,27 @@
 			courtesyDescription.value = "";
 		}
 	}
+	
+
+	function getStations() {
+		var compList=document.getElementById("WtAirlineId");
+		var stationList=document.getElementById("WtStationId");
+		var selectedCompany=compList.options[compList.selectedIndex].value;
+		stationList.options.length=1;
+		
+		stationList.options[0]=new Option("<bean:message key="option.lf.please.select" />","",true,false);
+		<logic:iterate indexId="i" id="cList" name="wtCompList"  type="com.bagnet.nettracer.tracing.db.Company" >
+		if("<%=cList.getCompanyCode_ID()%>"==selectedCompany)
+			{	
+				<% String source="wtStationList"+cList.getCompanyCode_ID();%>
+				<logic:iterate indexId="j" id="scList" name="<%=source%>"  type="com.bagnet.nettracer.tracing.db.Station" >
+					stationList.options[<%=j+1%>]=new Option("<%=scList.getStationcode()%>","<%=scList.getStation_ID()%>",false,false);
+				</logic:iterate>
+			}
+		</logic:iterate>
+		
+		//document.getElementById("subCategory"+selectedCategory).style.display="inline";
+	}
 
   </SCRIPT>
 
@@ -172,6 +193,7 @@
 				href="worldtraceraf.do?rawtext=1&ahl_id=<bean:write name="incidentForm" property="wt_id" />">
 				<c:out value="${incidentForm.wt_id}" />
 			</a>
+			<input type="hidden" value="<%=myform.getWt_id() %>" id="wtid"/>
 			<br />
 			<c:choose>
 				<c:when test="${!empty pendingWtAction}">
@@ -464,6 +486,51 @@
 				</div>
 			</td>
 		</tr>
+		<% if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_WT_OTHER_CARRIER, a) && request.getAttribute("lostdelay") != null){ %>
+		<logic:empty  name="incidentForm" property="wt_id">
+		<tr>
+			<td colspan="3">
+				<bean:message key="colname.wt.airline" />
+				<br/>
+				<html:select name="incidentForm"  property="wtCompanyId" styleClass="dropdown" styleId="WtAirlineId" onchange="getStations();">
+           			<html:option value=""><bean:message key="option.none" /></html:option>
+           			<html:options collection="wtCompList" property="companyCode_ID" labelProperty="companydesc" />
+				</html:select>
+      			
+			</td>
+			<td colspan="4">
+				<bean:message key="colname.wt.station" />
+				<br>
+           		<html:select name="incidentForm"  property="wtStationId" styleClass="dropdown" styleId="WtStationId">
+           			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
+           			<html:options collection="wtStationList" property="station_ID" labelProperty="stationcode" />
+           		</html:select>
+			</td>
+		</tr>
+		</logic:empty>
+		<logic:notEmpty  name="incidentForm" property="wt_id">
+		<tr>
+			<td colspan="3">
+				<bean:message key="colname.wt.airline" />
+				<br/>
+				<html:select disabled="true" name="incidentForm"  property="wtCompanyId" styleClass="dropdown" styleId="WtAirlineId" onchange="getStations();">
+           			<html:option value=""><bean:message key="option.none" /></html:option>
+           			<html:options collection="wtCompList" property="companyCode_ID" labelProperty="companydesc" />
+				</html:select>
+      			<input type="hidden" name="wtCompanyId" value="<bean:write name="incidentForm" property="wtCompanyId"/>"/>
+			</td>
+			<td colspan="4">
+				<bean:message key="colname.wt.station" />
+				<br>
+           		<html:select disabled="true" name="incidentForm"  property="wtStationId" styleClass="dropdown" styleId="WtStationId">
+           			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
+           			<html:options collection="wtStationList" property="station_ID" labelProperty="stationcode" />
+           		</html:select>
+      			<input type="hidden" name="wtStationId" value="<bean:write name="incidentForm" property="wtCompanyId"/>"/>
+			</td>
+		</tr>
+		</logic:notEmpty>
+		<%} %>
 	</table>
 	<br> <br> &nbsp;&nbsp;&uarr; <a href="#"><bean:message
 			key="link.to_top" /></a> <br> <br>
@@ -1033,3 +1100,15 @@
 	</table>
 	<br> <br> &nbsp;&nbsp;&uarr; <a href="#"><bean:message
 			key="link.to_top" /></a> <br> <br>
+			
+		<% if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_WT_OTHER_CARRIER, a) && request.getAttribute("lostdelay") != null){ %>
+			<script>
+			getStations();
+
+			var stationList=document.getElementById("wtStationId");
+			var matchid=<%=request.getAttribute("stationID")%>
+			if(matchid!=null){
+				stationList.value=matchid;
+			}
+			</script>
+			<% } %>
