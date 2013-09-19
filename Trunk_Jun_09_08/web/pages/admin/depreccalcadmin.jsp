@@ -100,7 +100,7 @@
 				</html:select>
 				
 			</td>
-			<td><input type="checkbox" name="category[<%=i %>] %>].notCoveredCoc" <logic:equal name="category" property="notCoveredCoc" value="true">checked="checked"</logic:equal> /></td>
+			<td><input type="checkbox" name="category[<%=i %>].notCoveredCoc" <logic:equal name="category" property="notCoveredCoc" value="true">checked="checked"</logic:equal> /></td>
 			<td><html:text  name="category" property="flatRate" size="5" styleClass="textfield" indexed="true"/></td>
 			<td><html:text  name="category" property="firstYear" size="5" styleClass="textfield" indexed="true" /></td>
 			<td><html:text  name="category" property="secondYear" size="5" styleClass="textfield" indexed="true" /></td>
