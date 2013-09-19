@@ -15,17 +15,14 @@
 	Agent a = (Agent) session.getAttribute("user");
 	ResourceBundle bundle = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
 %>
-<script type="text/javascript" src="deployment/main/js/fckeditor/fckeditor.js"></script>
+<script type="text/javascript" src="deployment/main/js/ckeditor/ckeditor.js"></script>
 <script type="text/javascript">
 
-	var oFCKeditor;
-	
 	function insertVariable(variableSelect) {
 		if (variableSelect.selectedIndex != -1) {
 			var option = variableSelect.options[variableSelect.selectedIndex];
 			if (option.value != -1) {
-				var editor = FCKeditorAPI.GetInstance('data');
-				editor.InsertHtml('\{' + option.value + '\}');
+				CKEDITOR.instances['data'].insertHtml('\{' + option.value + '\}');
 				variableSelect.selectedIndex = -1;	
 			}
 		}
@@ -178,22 +175,20 @@
 					</tr>
 				</table>
 				<script type="text/javascript" >
-					oFCKeditor = new FCKeditor('data') ;
-					oFCKeditor.BasePath = 'deployment/main/js/fckeditor/' ;
-					oFCKeditor.ToolbarSet = 'bagbuzz';
-					oFCKeditor.Height	= 450 ;
-					oFCKeditor.Width    = 550 ;
-					oFCKeditor.ReplaceTextarea() ;
+					CKEDITOR.replace('data',
+						{
+							toolbar: 'TemplateToolbar'
+						});
 				</script>
 			</div>
 			<div style="text-align:center;">
 				<br>
-				<input type="button" class="button" value='<bean:message key="button.save" />' onclick="saveOrUpdateTemplate();">
+				<input id="saveButton" type="button" class="button" value='<bean:message key="button.save" />' onclick="saveOrUpdateTemplate();">
 				&nbsp;&nbsp;
-				<input type="button" class="button" value='<bean:message key="button.save.preview" />' onclick="saveAndPreview();">
+				<input id="savePreviewButton" type="button" class="button" value='<bean:message key="button.save.preview" />' onclick="saveAndPreview();">
 				<logic:notEqual name="templateEditForm" property="id" value="0">
 					&nbsp;&nbsp;
-					<input type="button" class="button" value='<bean:message key="button.delete" />' onclick="confirmDelete();">
+					<input id="deleteButton" type="button" class="button" value='<bean:message key="button.delete" />' onclick="confirmDelete();">
 				</logic:notEqual>
 			</div>
 		</td>

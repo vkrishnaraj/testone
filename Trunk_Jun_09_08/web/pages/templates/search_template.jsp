@@ -130,11 +130,11 @@
             	</tr>
             	<tr>
             		<td align="center" colspan="3">
-            			<input type="button" class="button" value='<bean:message key="button.search" />' onclick="setCommand('<%=TracingConstants.COMMAND_SEARCH %>')" />
+            			<input id="searchButton" type="button" class="button" value='<bean:message key="button.search" />' onclick="setCommand('<%=TracingConstants.COMMAND_SEARCH %>')" />
             			&nbsp;&nbsp;
-            			<input type="button" class="button" value='<bean:message key="button.reset" />' onclick="setCommand('<%=TracingConstants.COMMAND_CLEAR %>')" />
+            			<input id="resetButton" type="button" class="button" value='<bean:message key="button.reset" />' onclick="setCommand('<%=TracingConstants.COMMAND_CLEAR %>')" />
             			&nbsp;&nbsp;
-            			<input type="button" class="button" value='<bean:message key="button.create" />' onclick="setCommand('<%=TracingConstants.COMMAND_CREATE %>')" />
+            			<input id="createButton" type="button" class="button" value='<bean:message key="button.create" />' onclick="setCommand('<%=TracingConstants.COMMAND_CREATE %>')" />
               		</td>
             	</tr>
             </table>
