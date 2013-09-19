@@ -1021,5 +1021,18 @@
     <definition name="searchTemplate" extends="user_menu">
     	<put name="center" value="/pages/templates/search_template.jsp"/>
     </definition>
+    
+    <definition name="ntlf_enter_items" extends="user_menu">
+        <put name="center"   value="/pages/ntlf/enter_items.jsp"/>
+    </definition>
+    <definition name="ntlf_create_found_item" extends="user_menu">
+        <put name="center"   value="/pages/ntlf/create_found_item.jsp"/>
+    </definition>
+    <definition name="ntlf_create_found_item_ro" extends="user_menu">
+        <put name="center"   value="/pages/ntlf/create_found_item_ro.jsp"/>
+    </definition>
+    <definition name="ntlf_search_lost_found" extends="user_menu">
+        <put name="center"   value="/pages/ntlf/search_lost_found.jsp"/>
+    </definition>
 
  </tiles-definitions>

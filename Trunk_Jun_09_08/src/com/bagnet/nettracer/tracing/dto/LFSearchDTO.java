@@ -51,6 +51,7 @@ public class LFSearchDTO extends ActionForm  {
 	private int dispositionId;
 	private int statusId;
 	private int stationId;
+	private String trackingNumber;
 	
 	public String getFirstName() {
 		return firstName;
@@ -354,6 +355,14 @@ public class LFSearchDTO extends ActionForm  {
 
 	public void setExtension(String extension) {
 		this.extension = extension;
+	}
+
+	public String getTrackingNumber() {
+		return trackingNumber;
+	}
+
+	public void setTrackingNumber(String trackingNumber) {
+		this.trackingNumber = trackingNumber;
 	}
 		
 }

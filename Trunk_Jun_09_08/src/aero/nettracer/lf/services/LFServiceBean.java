@@ -224,13 +224,14 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		boolean haveBrand = dto.getBrand() != null && !dto.getBrand().isEmpty();
 		boolean haveDesc = dto.getItemDescription() != null && !dto.getItemDescription().isEmpty();
 		boolean haveSerial = dto.getSerialNumber() != null && !dto.getSerialNumber().isEmpty();
+		boolean haveTracking = dto.getTrackingNumber() != null && !dto.getTrackingNumber().isEmpty();
 		
 		if(TracingConstants.LF_LF_COMPANY_ID.equals(dto.getAgent().getCompanycode_ID()) && dto.getType() == TracingConstants.LF_TYPE_LOST && dto.getStationId() != -1)
 		{
 			sql += "left outer join o.segments seg";
 		}
 		
-		if (category > 0 || haveBrand || haveDesc || haveSerial) {
+		if (category > 0 || haveBrand || haveDesc || haveSerial || haveTracking) {
 			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
 				sql += " left outer join o.items i";
 			} else {
@@ -306,7 +307,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		sql += " where 1=1";
 
-		if (category > 0 || haveBrand || haveDesc || haveSerial) {
+		if (category > 0 || haveBrand || haveDesc || haveSerial || haveTracking) {
 			String itemSql = " and i.type = " + dto.getType();
 			if (category > 0) {
 				itemSql += " and i.category = " + category;
@@ -331,6 +332,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 						itemSql += " and i.serialNumber = \'" + sn + "\'";
 					}
 				}
+			}
+			if (haveTracking) {
+				itemSql += " and i.trackingNumber = \'" + dto.getTrackingNumber().trim() + "\'";
 			}
 			
 			sql += itemSql;
