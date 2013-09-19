@@ -15,7 +15,7 @@ public class WN_SearchTemplates extends WN_SeleniumTest {
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
-				selenium.click("//input[@value='Create']");
+				selenium.click("id=createButton");
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
 					checkCopyrightAndQuestionMarks();
@@ -23,7 +23,7 @@ public class WN_SearchTemplates extends WN_SeleniumTest {
 					selenium.type("id=name", "Test Template");
 					selenium.click("name=active");
 					selenium.type("id=description", "Test create template");
-					selenium.click("//input[@value='Save']");
+					selenium.click("id=saveButton");
 					waitForPageToLoadImproved();
 					if (checkNoErrorPage()) {
 						verifyEquals("Successfully created template: Test Template", selenium.getText("//div[@id='maincontent']/span/font"));
@@ -53,7 +53,7 @@ public class WN_SearchTemplates extends WN_SeleniumTest {
 		selenium.click("id=menucol_9.16");
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
-			selenium.click("//input[@value='Search']");
+			selenium.click("id=searchButton");
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
 				verifyEquals("Results", selenium.getText("//div[@id='maincontent']/h1[2]"));

@@ -27,7 +27,7 @@ public class WN_EditTemplates extends WN_SeleniumTest {
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
-			selenium.click("//input[@value='Create']");
+			selenium.click("id=createButton");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
@@ -35,7 +35,7 @@ public class WN_EditTemplates extends WN_SeleniumTest {
 				selenium.type("id=name", "Test Template");
 				selenium.click("name=active");
 				selenium.type("id=description", "Test create template");
-				selenium.click("//input[@value='Save']");
+				selenium.click("id=saveButton");
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
 					verifyEquals("Successfully created template: Test Template", selenium.getText("//div[@id='maincontent']/span/font"));
@@ -79,14 +79,14 @@ public class WN_EditTemplates extends WN_SeleniumTest {
 			verifyEquals("Successfully updated template: Test Template", selenium.getText("//div[@id='maincontent']/span/font"));
 			selenium.select("id=variableSelect", "label=Address1");
 			selenium.doubleClick("id=variableSelect");
-			selenium.click("//input[@value='Save & Preview']");
+			selenium.click("id=savePreviewButton");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
 				verifyEquals("Successfully updated template: Test Template\nUnable to generate document: The template contains unresolved variable dependencies.", selenium.getText("//div[@id='maincontent']/span/font"));
 				selenium.select("id=variableSelect", "label=Id");
 				selenium.doubleClick("id=variableSelect");
-				selenium.click("//input[@value='Save & Preview']");
+				selenium.click("id=savePreviewButton");
 				if (checkNoErrorPage()) {
 					checkCopyrightAndQuestionMarks();
 					verifyEquals("Successfully updated template: Test Template\nDocument successfully generated", selenium.getText("//div[@id='maincontent']/span/font"));
@@ -108,9 +108,9 @@ public class WN_EditTemplates extends WN_SeleniumTest {
 	@Test
 	public void testDelete() {
 		selenium.chooseCancelOnNextConfirmation();
-		selenium.click("//input[@value='Delete']");
+		selenium.click("id=deleteButton");
 		assertTrue(selenium.getConfirmation().matches("^Are you sure you want to delete this template[\\s\\S]$"));
-		selenium.click("//input[@value='Delete']");
+		selenium.click("id=deleteButton");
 		assertTrue(selenium.getConfirmation().matches("^Are you sure you want to delete this template[\\s\\S]$"));
 		verifyEquals("Successfully deleted template: Test Template", selenium.getText("//div[@id='maincontent']/span/font"));
 		verifyEquals("Criteria", selenium.getText("//div[@id='maincontent']/h1"));
