@@ -95,7 +95,6 @@
 			</td>
 			<td>
 				<html:select name="category" property="calcMethod" styleClass="dropdown" indexed="true" >
-					<html:option value="<%=String.valueOf(TracingConstants.ACTUAL_CASH_VALUE) %>"><bean:message key="deprec.actual.cash.value" /></html:option> 
 					<html:option value="<%=String.valueOf(TracingConstants.DEFINED_RATE) %>"><bean:message key="deprec.defined.rate"/></html:option> 
 					<html:option value="<%=String.valueOf(TracingConstants.FLAT_RATE) %>"><bean:message key="deprec.flat.rate" /></html:option> 
 				</html:select>
