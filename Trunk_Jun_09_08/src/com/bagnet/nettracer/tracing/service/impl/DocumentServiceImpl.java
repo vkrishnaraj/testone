@@ -123,7 +123,7 @@ public class DocumentServiceImpl implements DocumentService {
 			result.setPayload(fileName);
 		} catch (Exception e) {
 			logger.error("Error occurred while attempting to generate document: " + document.getName(), e);
-			result.setMessageKey("document.geterated.failure");
+			result.setMessageKey("document.generated.failure");
 		}
 		
 		return result;
