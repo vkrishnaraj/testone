@@ -39,13 +39,13 @@ public class Settings {
 	
 	
 	//////////////////////////////////////////////////////////GENERIC TEST SETTINGS////////////////////////////////////////////////////////
-	
+
 	//URL ROOT FOR WEB APP BEING TESTED
 //	public static final String APP_URL_LOCAL = "https://hudson.nettracer.aero/";
 //	public static final String APP_URL_LOCAL = "http://172.30.68.3:8180/";
 	public static final String APP_URL_LOCAL = "http://172.30.68.3";
 //	public static final String APP_URL_LOCAL = "http://172.30.68.3:8380/";
-//	public static final String APP_URL_LOCAL = "http://192.168.2.106:8080/";
+//	public static final String APP_URL_LOCAL = "http://localhost/";
 	
 
 	public static String PORT1=":8180/";
@@ -202,6 +202,7 @@ public class Settings {
 	/////////////////////////////////////////////////////////// SOUTHWEST ///////////////////////////////////////////////////////
 		
 	public static final String START_URL_WN = "ntsouthwest";
+	public static String CLAIMREQ_ID_WN = "";
 	//public static final String START_URL_WS = "wjtracer/";
 	public static String INCIDENT_ID_WN = "";
 	public static String DAMAGE_ID_WN = "";
