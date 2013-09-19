@@ -491,7 +491,11 @@
  	<definition name="edit_deliverycompany" extends="user_menu">
     	<put name="center" value="/pages/admin/deliverycompany_edit.jsp"/>
     </definition>
-
+    
+ 	<definition name="deprec_calc_admin" extends="user_menu">
+    	<put name="center" value="/pages/admin/depreccalcadmin.jsp"/>
+    </definition>
+    
  	<definition name="edit_servicelevel" extends="user_menu">
     	<put name="center" value="/pages/admin/servicelevel_edit.jsp"/>
     </definition>
@@ -867,6 +871,10 @@
 
     <definition name="create_claim" extends="user_menu">
         <put name="center"   value="/pages/claims/create_claim.jsp"/>
+    </definition>
+    
+ 	<definition name="claim_deprec_calc" extends="user_menu">
+    	<put name="center" value="/pages/claims/claim_deprec_calc.jsp"/>
     </definition>
 
     <definition name="create_claim_prorate" extends="user_menu">

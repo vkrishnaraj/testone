@@ -26,6 +26,8 @@ import com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code;
 import com.bagnet.nettracer.tracing.db.DeliverCo_Station;
 import com.bagnet.nettracer.tracing.db.DeliverCompany;
 import com.bagnet.nettracer.tracing.db.Deliver_ServiceLevel;
+import com.bagnet.nettracer.tracing.db.Depreciation_Category;
+import com.bagnet.nettracer.tracing.db.GeneralDepreciationRules;
 import com.bagnet.nettracer.tracing.db.IATA_irregularity_code;
 import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.Lz;
@@ -482,8 +484,67 @@ public class HibernateUtils {
 			if (sess != null) sess.close();
 		}
 	}
-
 	
+	/**
+	 * 
+	 * @param obj
+	 * @throws Exception
+	 */
+	public static void saveDepreciationCategory(Depreciation_Category obj, Agent user) throws Exception {
+		Session sess = null;
+		Transaction t = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			t = sess.beginTransaction();
+			//Figure out if new or old.
+			boolean isNew = obj.getId() != 0 ? false: true;
+			if (isNew) {
+				sess.save(obj);
+			} else {
+				sess.saveOrUpdate(obj);
+			}
+
+			t.commit();
+		} catch (Exception e) {
+			if (t != null) {
+				t.rollback();
+			}
+			throw e;
+		} finally {
+			if (sess != null) sess.close();
+		}
+	}
+
+
+	/**
+	 * 
+	 * @param obj
+	 * @throws Exception
+	 */
+	public static void saveDepreciationRules(GeneralDepreciationRules obj, Agent user) throws Exception {
+		Session sess = null;
+		Transaction t = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			t = sess.beginTransaction();
+			//Figure out if new or old.
+			boolean isNew = obj.getId() != 0 ? false: true;
+			if (isNew) {
+				sess.save(obj);
+			} else {
+				sess.saveOrUpdate(obj);
+			}
+
+			t.commit();
+		} catch (Exception e) {
+			if (t != null) {
+				t.rollback();
+			}
+			throw e;
+		} finally {
+			if (sess != null) sess.close();
+		}
+	}
 	
 	/**
 	 * 

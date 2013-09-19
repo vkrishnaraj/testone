@@ -102,11 +102,14 @@ import com.bagnet.nettracer.reporting.SimpleReportRow;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.SalvageDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Claim_Type;
+import com.bagnet.nettracer.tracing.db.Depreciation_Category;
 import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.Report;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.salvage.Salvage;
+import com.bagnet.nettracer.tracing.dto.DeprecSumDTO;
 import com.bagnet.nettracer.tracing.dto.DisputeResolutionReportDTO;
 import com.bagnet.nettracer.tracing.dto.FraudValuationReportDTO;
 import com.bagnet.nettracer.tracing.dto.ScannerDTO;
@@ -202,6 +205,12 @@ public class ReportBMO {
 						ReportingConstants.RPT_10_NAME, messages.getMessage(
 								new Locale(user.getCurrentlocale()),
 								"header.reportnum.10"));
+
+			case ReportingConstants.RPT_11:
+				return create_deprec_sum(srDTO, ReportingConstants.RPT_11,
+						ReportingConstants.RPT_11_NAME, messages.getMessage(
+								new Locale(user.getCurrentlocale()),
+								"header.reportnum.11"));
 			case ReportingConstants.RPT_20:
 				if (srDTO.getCustomreportnum() == ReportingConstants.RPT_20_CUSTOM_95) {
 					return createRonKitIssuanceReport(srDTO, ReportBMO
@@ -3417,6 +3426,12 @@ public class ReportBMO {
 		return this.create_onhand_rpt(srDTO, reportnum, reportname,
 				reporttitle, false);
 	}
+	
+	private String create_deprec_sum(StatReportDTO srDTO, int reportnum,
+			String reportname, String reporttitle) throws HibernateException {
+		return this.create_deprec_sum(srDTO, reportnum, reportname,
+				reporttitle, false);
+	}
 
 	public String create_earlyBag_rpt(StatReportDTO srDTO, int reportnum,
 			String reportname, String reporttitle) throws HibernateException {
@@ -3669,9 +3684,7 @@ public class ReportBMO {
 			// Connection conn = sess.connection();
 			// Statement stmt = conn.createStatement();
 			//ResultSet rs = null;
-			String sql = ""
-
-					+ "select c.id, i.airlineIncidentId, c.claimDate, c.amountClaimed, c.amountClaimedCurrency, c.amountPaid, c.amountPaidCurrency, s.description "
+			String sql = "select c.id, i.airlineIncidentId, c.claimDate, c.amountClaimed, c.amountClaimedCurrency, c.amountPaid, c.amountPaidCurrency, s.description "
 					+ "from fsfile f, fsclaim c, fsincident i, status s where 1=1 ";
 
 			Date sdate = null, edate = null;
@@ -3819,6 +3832,142 @@ public class ReportBMO {
 		}
 	} // end of fraud valuation report
 
+
+	private String create_deprec_sum(StatReportDTO srDTO, int reportnum,
+			String reportname, String reporttitle, boolean b) {
+		Session sess = HibernateWrapper.getDirtySession().openSession();
+		try {
+			Map parameters = new HashMap();
+			ResourceBundle myResources = ResourceBundle
+					.getBundle(
+							"com.bagnet.nettracer.tracing.resources.ApplicationResources",
+							new Locale(user.getCurrentlocale()));
+			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
+
+			parameters.put("title", reporttitle);
+
+			TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(
+					user.getDefaulttimezone()).getTimezone());
+
+			/*************** use direct jdbc sql statement **************/
+
+			String sql = "select d.claim_id, d.dateCalculate, d.claimType_id, d.totalWeight, d.weightMetric," +
+					"i.amountClaimed, i.datePurchase, i.category_id, i.proofOwnership, i.notCoveredCoc, i.calcValue, i.claimValue, i.description, i.claim_depreciation_id, d.totalApprovedPayout" +
+					" from claim_depreciation d inner join depreciation_item i on i.claim_depreciation_id=d.id where 1=1 ";
+
+			if(srDTO.getClaimId()!=0){ 
+				sql += " and d.claim_id = :claimid";
+			}
+			
+			DeprecSumDTO dsd = null;
+			List claimDeprecList = new ArrayList();
+			List<String> idList = new ArrayList<String>();
+
+			SQLQuery query = sess.createSQLQuery(sql);
+
+			if(srDTO.getClaimId()!=0){ 
+				query.setParameter("claimid", srDTO.getClaimId());
+				parameters.put("claimid",srDTO.getClaimId());
+			}
+			
+			List results=query.list();
+			List<Depreciation_Category> catList=CategoryBMO.getDepreciationCategories(srDTO.getCompanyCode());
+			List<Claim_Type> typeList=ClaimBMO.getClaimTypes();
+			Object[] row;
+			
+			for(int i=0;i<results.size();i++){
+				row=(Object[])results.get(i);
+				dsd = new DeprecSumDTO();
+				dsd.setClaimID(row[0].toString());
+				
+				String dateCalc=DateUtils.formatDate((Date)row[1], srDTO.getDateFormat(), TracingConstants.DB_DATETIMEFORMAT, null);
+				dsd.setDateCalculate(dateCalc); //todo DateUtils
+				if(parameters.get("dateCalculated")==null)
+					parameters.put("dateCalculated",dateCalc);
+
+				int ctid=Integer.valueOf(row[2].toString());
+				for(Claim_Type t:typeList){
+					if(ctid==t.getId()){
+						dsd.setClaimType(t.getDescription());
+						if(parameters.get("claimType")==null)
+							parameters.put("claimType", t.getDescription());
+						break;
+					}
+				}
+				if(row[3]!=null)
+					dsd.setTotalWeight(row[3].toString());
+				if(row[4]!=null)
+					dsd.setWeightMetric(row[4].toString());
+				if(parameters.get("totalWeight")==null && row[3]!=null && row[4]!=null)
+					parameters.put("totalWeight", row[3].toString()+" "+row[4].toString());
+				
+				dsd.setAmountClaimed((Double)row[5]);
+				dsd.setDatePurchase(DateUtils.formatDate((Date)row[6], srDTO.getDateFormat(), TracingConstants.DB_DATETIMEFORMAT, null)); //todo DateUtils
+				int cid=Integer.valueOf(row[7].toString());
+				for(Depreciation_Category dc:catList){
+					if(cid==dc.getId()){
+						dsd.setCategory(dc.getName());
+						break;
+					}
+				}
+				
+				int proof=0;
+				if(row[8]!=null){
+					proof=Integer.valueOf(row[8].toString());
+				}
+				if(proof==TracingConstants.DEPREC_PROOF_NO_PROOF){
+					dsd.setReceiptProvided(myResources.getString("deprec.option.no.proof")); //ToDo: set up resources
+				} else if(proof==TracingConstants.DEPREC_PROOF_CHECK){
+					dsd.setReceiptProvided(myResources.getString("deprec.option.check"));
+				} else if(proof==TracingConstants.DEPREC_PROOF_PHOTO){
+					dsd.setReceiptProvided(myResources.getString("deprec.option.photo"));
+				} else if(proof==TracingConstants.DEPREC_PROOF_APPRAISAL){
+					dsd.setReceiptProvided(myResources.getString("deprec.option.appraisal"));
+				} else if(proof==TracingConstants.DEPREC_PROOF_CC_RECEIPT){
+					dsd.setReceiptProvided(myResources.getString("deprec.option.cc.receipt"));
+				} else if(proof==TracingConstants.DEPREC_PROOF_RECEIPT){
+					dsd.setReceiptProvided(myResources.getString("deprec.option.proof.receipt"));
+				} else {
+					dsd.setReceiptProvided("");
+				}
+				
+				if(row[9].toString().equals("1")){
+					dsd.setNotCoveredCoc("True");
+				} else {
+					dsd.setNotCoveredCoc("False");
+				}
+				dsd.setCalculatedValue(row[10].toString());
+				dsd.setClaimValue((Double)row[11]);
+				dsd.setItemDesc(row[12].toString());
+				dsd.setClaimDeprecID(row[13].toString());
+				dsd.setTotalApprovedPayout(row[14].toString());
+				parameters.put("totalApprovedPayout",row[14].toString());
+				
+				dsd.set_DATEFORMAT(user.getDateformat().getFormat());
+				dsd.set_TIMEZONE(tz);
+
+				claimDeprecList.add(dsd);
+			}
+
+			if (dsd == null) {
+				logger.debug("no data for report");
+				return "";
+			}
+
+			parameters.put("reportLocale", new Locale(user.getCurrentlocale()));
+			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(
+					claimDeprecList);
+			return ClaimDeprecReportBMO.getReportFileDj(ds, parameters,
+					reportname, rootpath, srDTO.getOutputtype(), req, this);
+		} catch (Exception e) {
+			logger.error("unable to create report " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			sess.close();
+		}
+	}
+	
 	private String create_onhand_rpt(StatReportDTO srDTO, int reportnum,
 			String reportname, String reporttitle, boolean earlyBag)
 			throws HibernateException {
@@ -4235,121 +4384,6 @@ public class ReportBMO {
 
 				// toReturn.add(reportRow);
 			}
-
-			// while (results.next()) {
-			// if (lastohdid == null ||
-			// !(rs.getString("OHD_ID").equals(lastohdid))) {
-			// if (lastohdid != null) {
-			// list2.add(sr);
-			// lastpassname = "";
-			// lastit = "";
-			// }
-			// sr = new StatReport_OHD_DTO();
-			//
-			// sr.setStation_ID(rs.getInt("found_station_ID"));
-			// sr.setStationcode(rs.getString("fscode"));
-			// sr.setHoldingstation(rs.getString("hscode"));
-			// sr.setOHD_ID(rs.getString("OHD_ID"));
-			// lastohdid = sr.getOHD_ID();
-			// sr.setFounddate(rs.getDate("founddate"));
-			// sr.setFoundtime(rs.getTime("foundtime"));
-			// sr.setStatusdesc(resources.getString("STATUS_KEY_"+rs.getString("stdesc")));
-			// if(rs.getString("bdesc")!=null){
-			// sr.setBagdispdesc(resources.getString("STATUS_KEY_"+rs.getString("bdesc")));
-			// } else {
-			// sr.setBagdispdesc("");
-			// }
-			//
-			// // new requirements: fault city & fault code
-			// sr.setFaultstationcode(rs.getString("faultstationcode"));
-			// sr.setLoss_code(rs.getInt("loss_code"));
-			//
-			//
-			// // passenger
-			// if (rs.getString("lastname") != null &&
-			// rs.getString("lastname").length() > 0)
-			// temppassname += rs.getString("lastname");
-			// if (rs.getString("firstname") != null &&
-			// rs.getString("firstname").length() > 0)
-			// temppassname += ", " + rs.getString("firstname");
-			//
-			// if (lastpassname.length() > 0) {
-			// if (lastpassname.indexOf(temppassname) < 0) lastpassname += "\n"
-			// + temppassname;
-			// } else lastpassname = temppassname;
-			// temppassname = "";
-			//
-			// sr.setCustomer_name(lastpassname);
-			//
-			// // itinerary
-			// if (rs.getString("legfrom") != null &&
-			// rs.getString("legfrom").length() > 0)
-			// tempit += rs.getString("legfrom");
-			// if (rs.getString("flightnum") != null &&
-			// rs.getString("flightnum").length() > 0)
-			// tempit += " " + rs.getString("flightnum");
-			//
-			// if (lastit.length() > 0) {
-			// if (lastit.indexOf(tempit) < 0) lastit += "\n" + tempit;
-			// } else lastit = tempit;
-			// tempit = "";
-			//
-			// sr.setItinerary(lastit);
-			//
-			// if (rs.getString("legto") != null &&
-			// rs.getString("legto").length() > 0)
-			// sr.setFinal_destination(rs.getString("legto"));
-			//
-			//
-			// } else {
-			// // equal to last incident, simply attach passenger and leg to
-			// // passenger
-			// if (rs.getString("lastname") != null &&
-			// rs.getString("lastname").length() > 0)
-			// temppassname += rs.getString("lastname");
-			// if (rs.getString("firstname") != null &&
-			// rs.getString("firstname").length() > 0)
-			// temppassname += ", " + rs.getString("firstname");
-			//
-			// if (lastpassname.length() > 0) {
-			// if (lastpassname.indexOf(temppassname) < 0) lastpassname += "\n"
-			// + temppassname;
-			// } else lastpassname = temppassname;
-			// temppassname = "";
-			//
-			// sr.setCustomer_name(lastpassname);
-			//
-			// // itinerary
-			// if (rs.getString("legfrom") != null &&
-			// rs.getString("legfrom").length() > 0)
-			// tempit += rs.getString("legfrom");
-			// if (rs.getString("flightnum") != null &&
-			// rs.getString("flightnum").length() > 0)
-			// tempit += " " + rs.getString("flightnum");
-			//
-			// if (lastit.length() > 0) {
-			// if (lastit.indexOf(tempit) < 0) lastit += "\n" + tempit;
-			// } else lastit = tempit;
-			// tempit = "";
-			//
-			// sr.setItinerary(lastit);
-			//
-			// if (rs.getString("legto") != null &&
-			// rs.getString("legto").length() > 0)
-			// sr.setFinal_destination(rs.getString("legto"));
-			// }
-			//
-			// if (sr.getFinal_destination() == null)
-			// sr.setFinal_destination("");
-			//
-			// sr.set_DATEFORMAT(user.getDateformat().getFormat());
-			// sr.set_TIMEFORMAT(user.getTimeformat().getFormat());
-			// sr.set_TIMEZONE(tz);
-			//
-			// }
-			//
-			// // stmt.close();
-			// rs.close();
 
 			if (sr == null) {
 				logger.debug("no data for report");

@@ -5,13 +5,19 @@
  */
 package com.bagnet.nettracer.tracing.bmo;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.Claim;
+import com.bagnet.nettracer.tracing.db.Claim_Depreciation;
+import com.bagnet.nettracer.tracing.db.Claim_Type;
+import com.bagnet.nettracer.tracing.db.Depreciation_Item;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Claim;
@@ -122,6 +128,127 @@ public class ClaimBMO {
 			sess.close();
 		}
 		return true;
+	}
+	
+	public static List<Claim_Type> getClaimTypes(){
+		String sql = "from com.bagnet.nettracer.tracing.db.Claim_Type";
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			
+			List<Claim_Type> ilist= (List<Claim_Type>) q.list();
+			return ilist;
+		} catch (Exception e) {
+			logger.error("Error in get Claim Types: " + e);
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.error("unable to close hibernate session: " + e);
+				}
+			}
+		}
+	}
+
+	public List<Depreciation_Item> getDeprecItems(String claim) {
+		String sql = "from com.bagnet.nettracer.tracing.db.Depreciation_Item di where claim_depreciation.claim.id=:claim";
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			long claimid=0;
+			try{
+				claimid=Long.valueOf(claim);
+			} catch(Exception ex){
+
+				logger.error("Error in get Claim Types: " + ex);
+			}
+			q.setParameter("claim", claimid);
+			List<Depreciation_Item> ilist= (List<Depreciation_Item>) q.list();
+			return ilist;
+		} catch (Exception e) {
+			logger.error("Error in get Claim Types: " + e);
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.error("unable to close hibernate session: " + e);
+				}
+			}
+		}
+	}
+	
+	public Claim_Depreciation getClaimDeprec(String claim) {
+		String sql = "from com.bagnet.nettracer.tracing.db.Claim_Depreciation cd where claim.id=:claim";
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			long claimid=0;
+			try{
+				claimid=Long.valueOf(claim);
+			} catch(Exception ex){
+
+				logger.error("Error in get Claim Types: " + ex);
+			}
+			q.setParameter("claim", claimid);
+			List<Claim_Depreciation> ilist= (List<Claim_Depreciation>) q.list();
+			if(ilist.size()>0){
+				return ilist.get(0);
+			} else {
+				return new Claim_Depreciation();
+			}
+		} catch (Exception e) {
+			logger.error("Error in get Claim Types: " + e);
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.error("unable to close hibernate session: " + e);
+				}
+			}
+		}
+	}
+
+	public void saveDepreciationItems(List<Depreciation_Item> items) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Transaction tx = sess.beginTransaction();
+			for(Depreciation_Item i : items)
+				sess.saveOrUpdate(i);
+			tx.commit();
+			sess.flush();
+			sess.close();
+
+		} catch (Exception e){
+
+			logger.error("Error in get Claim Types: " + e);
+		}
+	}
+
+
+	public void saveClaimDepreciation(Claim_Depreciation claimDeprec) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Transaction tx = sess.beginTransaction();
+			sess.saveOrUpdate(claimDeprec);
+			tx.commit();
+			sess.flush();
+			sess.close();
+
+		} catch (Exception e){
+
+			logger.error("Error in get Claim Types: " + e);
+		}
 	}
 
 }

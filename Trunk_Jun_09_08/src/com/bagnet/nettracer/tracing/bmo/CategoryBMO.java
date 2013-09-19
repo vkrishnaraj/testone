@@ -3,11 +3,13 @@ package com.bagnet.nettracer.tracing.bmo;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Expression;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.Category;
+import com.bagnet.nettracer.tracing.db.Depreciation_Category;
 import com.bagnet.nettracer.tracing.db.OHD_CategoryType;
 
 public class CategoryBMO {
@@ -90,5 +92,56 @@ public class CategoryBMO {
 			}
 		}
 	}
+	
+	public static List<Depreciation_Category> getDepreciationCategories(String companycode){
+		String sql = "from com.bagnet.nettracer.tracing.db.Depreciation_Category dc where dc.companyCode=:companycode";
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			q.setParameter("companycode", companycode);
+			List<Depreciation_Category> ilist= (List<Depreciation_Category>) q.list();
+			return ilist;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public static Depreciation_Category getDepreciationCategory(int categoryID) {
+		Session sess = null;
+		
+		try {
+			if(categoryID!=0){
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Depreciation_Category.class).add(
+					Expression.eq("id", Long.valueOf(categoryID)));
+			Depreciation_Category tmp = (Depreciation_Category) cri.list().get(0);
+			return tmp;
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 
 }

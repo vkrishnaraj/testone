@@ -158,6 +158,7 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_DELETE_BAGTAG_BAGS = "Delete Bagtags to Bags";
 	public final static String SYSTEM_COMPONENT_NAME_CLONE_OHD="Clone OHDs";
 	public final static String SYSTEM_COMPONENT_NAME_EXTERNAL_LINKS="External Links";
+	public final static String SYSTEM_COMPONENT_NAME_CREATE_WT_OTHER_CARRIER = "Create WT Files for other Carriers";
 	
 	//TODO: adding three sub items under last one to get the itemized view for WS
 	public final static String SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS_TYPE_DELAYED = "Incoming Incidents Type Delayed";
@@ -196,6 +197,8 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_FORWARD_NOTICES = "Forward Copies";
 	public final static String SYSTEM_COMPONENT_NAME_CAPTCHAS = "Captcha";
 	public static final String SYSTEM_COMPONENT_NAME_BOX_COUNT = "Box Count";
+	public final static String SYSTEM_COMPONENT_NAME_CLAIM_DEPREC_CALCULATOR = "Claim Depreciation Calculator";
+	public final static String SYSTEM_COMPONENT_NAME_DEPREC_CALCULATOR_ADMIN = "Depreciation Calculator Administration";
 	
 	public final static String SYSTEM_COMPONENT_FORWARD_PCN = "pcn";
 
@@ -924,7 +927,10 @@ public class TracingConstants {
 	public final static String EDIT_STATION_DELIVERY_COMPANY = "editstationdeliverycompany";
 	public final static String VIEW_DELIVERY_COMPANIES = "viewdeliverycompanies";
 	public final static String EDIT_SERVICE_LEVEL = "editservicelevels";
-		
+
+	public final static String DEPREC_CALC_ADMIN = "depreccalcadmin";
+	public final static String CLAIM_DEPREC_CALC = "claim_deprec_calc";
+	
 	public final static String EDIT_AIRPORT = "editairport";
 	public final static String VIEW_AIRPORTS = "viewairports";
 
@@ -1303,6 +1309,29 @@ public class TracingConstants {
 	
 	public static final String DOCUMENT_SERVICE_BEAN = "documentService";
 	public static final String TEMPLATE_SERVICE_BEAN = "templateService";
+	
+	public static final int ACTUAL_CASH_VALUE=1;
+	public static final int DEFINED_RATE=2;
+	public static final int FLAT_RATE=3;
+	
+	public static final int NODATE_NO_IMPACT=1;
+	public static final int NODATE_SAME_NO_RECEIPT=2;
+	public static final int NODATE_SAME_MAX_DEPREC=3;
+
+	public static final int COMPMEMBER_DONOTHING=1;
+	public static final int COMPMEMBER_DONOTDEPREC=2;
+	
+	public static final int DEPREC_PROOF_NO_PROOF=0;
+	public static final int DEPREC_PROOF_CHECK=1;
+	public static final int DEPREC_PROOF_PHOTO=2;
+	public static final int DEPREC_PROOF_APPRAISAL=3;
+	public static final int DEPREC_PROOF_CC_RECEIPT=4;
+	public static final int DEPREC_PROOF_RECEIPT=5;
+	
+	public static final int WARSAW_CONVENTION=3;
+	public static final int MONTREAL_CONVENTION=2;
+	
+	
 	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {

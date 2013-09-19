@@ -45,6 +45,9 @@ public class ReportingConstants {
 	public final static int RPT_10 = 10; // onhand report
 	public final static String RPT_10_NAME = "stat_rpt_10";
 	
+	public static final int RPT_11 = 11; //Depreciation Summary
+	public final static String RPT_11_NAME = "depreciation_summary";
+	
 	public final static int LOST_RECEIPT_RPT = 15;
 	public final static int BDO_RECEIPT_RPT = 16;
 	public final static int DAMAGE_RECEPIT_RPT = 17;

@@ -51,6 +51,7 @@
 		<form-bean name="viewFraudRequestForm" type="com.bagnet.nettracer.tracing.forms.ViewFraudRequestForm" />
 		<form-bean name="viewOHDLZedForm" type="com.bagnet.nettracer.tracing.forms.ViewOHDLZedForm" />
 		<form-bean name="claimForm" type="com.bagnet.nettracer.tracing.forms.ClaimForm" />
+		<form-bean name="claimDeprecCalcForm" type="com.bagnet.nettracer.tracing.forms.ClaimDeprecCalcForm" />
 		<form-bean name="expensePayoutForm" type="com.bagnet.nettracer.tracing.forms.ExpensePayoutForm" />
 		<form-bean name="searchExpenseForm" type="com.bagnet.nettracer.tracing.forms.SearchExpenseForm" />
 		
@@ -72,6 +73,7 @@
 		<form-bean name="BDOForm" type="com.bagnet.nettracer.tracing.forms.BDOForm" />
 		<form-bean name="WorldTracerSearchForm" type="com.bagnet.nettracer.tracing.forms.WorldTracerSearchForm" />
 		<form-bean name="MaintainDeliveryCompanyForm" type="com.bagnet.nettracer.tracing.forms.MaintainDeliveryCompanyForm" />
+		<form-bean name="deprecCalcAdminForm" type="com.bagnet.nettracer.tracing.forms.DeprecCalcAdminForm" />
 		<form-bean name="companyForm" type="com.bagnet.nettracer.tracing.forms.MaintainCompanyForm" />
 		<form-bean name="listNewPaxCommunicationForm" type="com.bagnet.nettracer.tracing.forms.ListNewPaxCommunicationForm" />
 		<form-bean name="captchaForm" type="com.bagnet.nettracer.tracing.forms.CaptchaForm" />
@@ -429,6 +431,8 @@
 		<forward name="viewagents" path="view_agents" />
 		<forward name="viewdeliverycompanies" path="view_deliverycompany" />
 		<forward name="editdeliverycompany" path="edit_deliverycompany" />
+		<forward name="depreccalcadmin" path="deprec_calc_admin" />
+		<forward name="claim_deprec_calc" path="claim_deprec_calc" />
 		<forward name="editservicelevels" path="edit_servicelevel" />
 		<forward name="viewtask" path="view_task" />
 		<forward name="forwarderror" path="forward_error" />
@@ -640,6 +644,8 @@
 		<!-- claims -->
 		<action path="/claims" type="com.bagnet.nettracer.tracing.actions.ClaimsTask" name="claimToBeProcessedForm" scope="session" validate="false"></action>
 
+		<action path="/claim_deprec_calc" type="com.bagnet.nettracer.tracing.actions.ClaimDeprecCalcAction" name="claimDeprecCalcForm" scope="session" validate="false"></action>
+
 		<action path="/claim_resolution" type="com.bagnet.nettracer.tracing.actions.ModifyClaimAction" name="claimForm" scope="session" validate="false"></action>
 
 		<action path="/claim_prorate" type="com.bagnet.nettracer.tracing.actions.ClaimProrateAction" name="claimProrateForm" scope="session" validate="false"></action>
@@ -805,6 +811,8 @@
 		
 		
 		<action path="/bdoAdmin" type="com.bagnet.nettracer.tracing.actions.admin.ManageDeliveryCompanies" name="MaintainDeliveryCompanyForm" scope="request" validate="false"></action>
+
+		<action path="/deprecCalcAdmin" type="com.bagnet.nettracer.tracing.actions.admin.ManageDeprecCalc" name="deprecCalcAdminForm" scope="request" validate="false"></action>
 
 		<!-- Administer Shifts -->
 		<action path="/shiftAdmin" type="com.bagnet.nettracer.tracing.actions.admin.ManageShift" name="shiftForm" scope="request" validate="false"></action>

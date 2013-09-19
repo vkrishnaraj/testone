@@ -10,6 +10,7 @@ import org.hibernate.criterion.Expression;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
+import com.bagnet.nettracer.tracing.db.GeneralDepreciationRules;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
@@ -83,5 +84,29 @@ public class CompanyBMO {
 			}
 		}
 		return retVal;
+	}
+
+	public static GeneralDepreciationRules getDeprecRules(String companyCode) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(GeneralDepreciationRules.class).add(
+					Expression.eq("companyCode", companyCode));
+			if (cri.list().size() > 0)
+				return (GeneralDepreciationRules) cri.list().get(0);
+			else
+				return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }

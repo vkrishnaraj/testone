@@ -244,6 +244,8 @@ public class PropertyBMO {
 	public static final String NT_USER="nt.user";
 	public static final String NTFS_USER="ntfs.user";
 	
+	public static final String DOMESIC_PAYOUT_VALUE="domestic.payout.value";
+	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;
 		if(key != null && value != null){

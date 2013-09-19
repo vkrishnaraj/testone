@@ -724,6 +724,16 @@ public class StatReportDTO {
 		this.showAll = showAll;
 	}
 
+	private long claimId;
+
+	public long getClaimId() {
+		return claimId;
+	}
+
+	public void setClaimId(long claimId) {
+		this.claimId = claimId;
+	}
+
 
 	public int getNumChecked()
 	{
