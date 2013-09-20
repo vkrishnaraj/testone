@@ -29,13 +29,15 @@
 	}
 
 	function saveOrUpdateTemplate() {
-		var id = document.getElementById('id');
-		if (id.value == 0) {
-			setCommand("<%=TracingConstants.COMMAND_CREATE %>");
-		} else {
-			setCommand("<%=TracingConstants.COMMAND_UPDATE %>");
+		if (validateTemplateForm(document.templateEditForm)) {
+			var id = document.getElementById('id');
+			if (id.value == 0) {
+				setCommand("<%=TracingConstants.COMMAND_CREATE %>");
+			} else {
+				setCommand("<%=TracingConstants.COMMAND_UPDATE %>");
+			}
+			document.templateEditForm.submit();
 		}
-		document.templateEditForm.submit();
 	}
 
 	function saveAndPreview() {
@@ -60,7 +62,7 @@
 	}
 
 </script>
-<html:form focus="name" action="editTemplate.do" method="post" onsubmit="return validateTemplateForm(this);" >
+<html:form focus="name" action="editTemplate.do" method="post" >
 <html:hidden property="command" styleId="command" />
 <html:hidden property="preview" styleId="preview" />
 	<tr>
@@ -153,7 +155,7 @@
 						<td>
 							<bean:message key="colname.template.variables" />
 							<br>
-							<select id="variableSelect" ondblclick="insertVariable(this);" class="dropdown" size="33" >
+							<select id="variableSelect" ondblclick="insertVariable(this);" class="dropdown" size="40" >
 							<% 
 								Map<String, List<String>> templateVars = (Map<String, List<String>>) session.getAttribute("templateVars"); 
 								for (String group: templateVars.keySet()) {	
