@@ -36,8 +36,6 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
 
-import aero.nettracer.lf.services.LFServiceBean;
-
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
@@ -518,12 +516,6 @@ public class TracerUtils {
 				|| session.getAttribute("companylistById") == null) {
 			populateCompanyLists(session);
 		}
-		
-		// set wtCompany lists
-		if (session.getAttribute("companylistByName") == null
-				|| session.getAttribute("companylistById") == null) {
-			populateCompanyLists(session);
-		}
 
 		// set expense type list
 		session.setAttribute("expensetypelist", session
@@ -623,116 +615,10 @@ public class TracerUtils {
 	}
 
 	public static void populateWtCompanyLists(HttpSession session) {
-
 		ArrayList<Company> result = getWtCompanyLists();
 		session.setAttribute("wtCompList", result);
-		HashMap<String, List<Station>> stationComps=new HashMap();
-		for(Company c:result){
-			if(stationComps.get(c.getCompanyCode_ID())==null){
-				List stations=new ArrayList();
-				stationComps.put(c.getCompanyCode_ID(),stations);
-			}
-		}
-		List<Station> companyStations = getWtStationList(null);
-		for (Station s: companyStations) {
-			if(s.getCompany()!=null){
-				if(stationComps.get(s.getCompany().getCompanyCode_ID())!=null){
-					List stations=stationComps.get(s.getCompany().getCompanyCode_ID());
-					stations.add(s);
-					stationComps.put(s.getCompany().getCompanyCode_ID(),stations);
-				} else {
-					List stations=new ArrayList();
-					stations.add(s);
-					stationComps.put(s.getCompany().getCompanyCode_ID(),stations);
-				}
-			}
-		}
-		for(String key:stationComps.keySet()){
-			session.setAttribute("wtStationList"+key, stationComps.get(key));
-		}
 	}
-
-	public static void populateWtStationLists(HttpSession session, String compCode) {
-			session.setAttribute("wtStationList", session
-			.getAttribute("wtStationList") != null ? session
-			.getAttribute("wtStationList") : getWtStationList(null));
-	}
-
-//	public static ClaimForm populateClaim(ClaimForm cform,
-//			IncidentForm theform, HttpServletRequest request) {
-//		try {
-//			Claim claim = null;
-//			HttpSession session = request.getSession();
-//
-//			cform = new ClaimForm();
-//			session.setAttribute("claimForm", cform);
-//
-//			Agent user = (Agent) session.getAttribute("user");
-//
-//			session.setAttribute("claimstatuslist", session
-//					.getAttribute("claimstatuslist") != null ? session
-//					.getAttribute("claimstatuslist") : getStatusList(TracingConstants.TABLE_CLAIM, user.getCurrentlocale()));
-//
-//			IncidentBMO iBmo = new IncidentBMO();
-//			Incident incident = iBmo.findIncidentByID(theform.getIncident_ID());
-//			
-//			if ((claim = theform.getClaim()) != null) {
-//				cform.setClaim(claim);
-////				BeanUtils.copyProperties(cform, claim);
-//				if (cform.getClaim().getStatus() == null) {
-//					Status status = new Status();
-//					status.setStatus_ID(TracingConstants.CLAIM_STATUS_INPROCESS);
-//					status.setLocale(user);
-//					cform.getClaim().setStatus(status);
-//				}
-//				
-//				if (cform.getClaim().getIncident() == null) {
-//					FsIncident fsIncident = new FsIncident();
-//					Reservation reservation = new Reservation();
-//					reservation.setPnrData(new PnrData());
-//					fsIncident.setReservation(reservation);
-//					
-//					cform.getClaim().setIncident(fsIncident);
-//				}
-//				if (cform.getClaim().getAmountClaimedCurrency() == null)
-//					cform.getClaim().setAmountClaimedCurrency(user.getDefaultcurrency());
-//				
-//				Person person = new Person();
-//				FsAddress address = new FsAddress();
-//				Phone phone = new Phone();
-//				person.getAddresses().add(address);
-//				person.getPhones().add(phone);
-//				claim.getClaimants().add(person);
-//			} else {
-//				cform.setClaim(ClaimUtils.createClaim(user));
-//			}
-//			
-//			claim.setNtIncident(incident);
-//
-//			// TODO: VERIFY THAT THIS IS NO LONGER NEEDED
-////			Passenger pa = (Passenger) theform.getPassenger(0);
-////			String passengername = pa.getFirstname() + " " + pa.getLastname();
-////			cform.getClaim().setPassengername(passengername);
-//
-//			if (theform.getExpenselist() != null)
-//				cform.getClaim().getNtIncident().setExpenselist(theform.getExpenselist());
-//
-//			cform.set_DATEFORMAT(user.getDateformat().getFormat());
-//			cform.set_TIMEFORMAT(user.getTimeformat().getFormat());
-//			cform.set_TIMEZONE(TimeZone
-//					.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
-//
-//			session.setAttribute("claimForm", cform);
-//
-//			return cform;
-//
-//		} catch (Exception e) {
-//			logger.error("bean copy claim form error on populateClaim: " + e);
-//			e.printStackTrace();
-//			return cform;
-//		}
-//	}
-
+	
 	public static void populateClaimProrate(ClaimProrateForm cpform,
 			IncidentForm theform, HttpServletRequest request) {
 		try {
@@ -928,7 +814,7 @@ public class TracerUtils {
 				sql += " order by stationcode";
 
 			} else {
-				sql = "select distinct station.station_ID,station.stationcode from com.bagnet.nettracer.tracing.db.Station station where 1 = 1 and  station.company.variable.wt_enabled=1 ";
+				sql = "select distinct station.station_ID,station.stationcode from com.bagnet.nettracer.tracing.db.Station station where 1 = 1 ";
 				if (status != TracingConstants.AgentActiveStatus.ALL)
 					sql += " and station.active = :active ";
 				sql += " order by stationcode";
@@ -968,71 +854,6 @@ public class TracerUtils {
 		} finally {
 			sess.close();
 		}
-	}
-	
-	public static ArrayList getWtStationList(String company, TracingConstants.AgentActiveStatus status) throws HibernateException {
-
-		Session sess = HibernateWrapper.getSession().openSession();
-		try {
-			// when company is null, return all distinct stationscodes, for
-			// itinerary
-			// dropdown
-
-			String sql = "";
-			if (company != null) {
-				sql = "select station.station_ID, station.stationcode, station.company from com.bagnet.nettracer.tracing.db.Station station where wt_stationcode!=null and wt_stationcode!='' "
-						+ "station.company.companyCode_ID = :company ";
-				if (status != TracingConstants.AgentActiveStatus.ALL)
-					sql += " and station.active = :active ";
-				sql += " order by stationcode";
-
-			} else {
-				sql = "select station.station_ID, station.stationcode, station.company from com.bagnet.nettracer.tracing.db.Station station where 1 = 1 and wt_stationcode!=null and wt_stationcode!='' ";
-				if (status != TracingConstants.AgentActiveStatus.ALL)
-					sql += " and station.active = :active ";
-				sql += " order by stationcode";
-			}
-			Query q = sess.createQuery(sql);
-			if (status != TracingConstants.AgentActiveStatus.ALL)
-				if (status == TracingConstants.AgentActiveStatus.ACTIVE)
-					q.setParameter("active", true);
-			if (status == TracingConstants.AgentActiveStatus.INACTIVE)
-				q.setParameter("active", false);
-			if (company != null)
-				q.setParameter("company", company);
-
-			List list = q.list();
-
-			if (list.size() == 0) {
-				logger.debug("unable to find station");
-				return null;
-			}
-
-			Station station = null;
-			ArrayList al = new ArrayList();
-			Object[] o = null;
-			for (int i = 0; i < list.size(); i++) {
-				o = (Object[]) list.get(i);
-				station = new Station();
-				station.setStation_ID(((Integer) o[0]).intValue());
-				station.setStationcode((String) o[1]);
-				station.setCompany((Company) o[2]);
-				al.add(station);
-			}
-			return al;
-
-		} catch (Exception e) {
-			logger.error("unable to retrieve station from database: " + e);
-			e.printStackTrace();
-			return null;
-		} finally {
-			sess.close();
-		}
-	}
-
-	public static ArrayList getWtStationList(String company)
-			throws HibernateException {
-		return getWtStationList(company, TracingConstants.AgentActiveStatus.ACTIVE);
 	}
 
 	public static ArrayList getStationList(String company)

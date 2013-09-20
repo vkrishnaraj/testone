@@ -188,8 +188,9 @@ public class LostDelayAction extends CheckedAction {
 		//add to the loss codes
 		request.setAttribute("losscodes", codes);
 
-		TracerUtils.populateWtCompanyLists(session);
-		TracerUtils.populateWtStationLists(session, user.getCompanycode_ID());
+		if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_WT_OTHER_CARRIER,user)){
+			TracerUtils.populateWtCompanyLists(session);
+		}
 		
 		
 		request.setAttribute("LOST_DELAY_RECEIPT", Integer.toString(ReportingConstants.LOST_RECEIPT_RPT));
