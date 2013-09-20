@@ -730,7 +730,7 @@
     						<% index++; %>
     						<logic:iterate indexId="j" id="i_item" name="item_inventory_resultList" type="com.bagnet.nettracer.tracing.db.issuance.IssuanceItemInventory" >
     						<% if (c_item.getId() == i_item.getIssuanceItem().getCategory().getId()) { 
-    								String customDesc = i_item.getIssuanceItem().getDescription() + "/" + i_item.getDescription() + "/" + i_item.getBarcode(); %>
+    								String customDesc = i_item.getIssuanceItem().getDescription() + " - " + i_item.getDescription() + " (" + i_item.getBarcode() + ")"; %>
     							typeList.options[<%=index%>]=new Option("<%=customDesc%>","<%=i_item.getId()%>",false,false);
     						<% index++; } %>
     						</logic:iterate>
@@ -740,7 +740,7 @@
     						issItemType = "0";
 							<logic:iterate indexId="j" id="q_item" name="item_quantity_resultList" type="com.bagnet.nettracer.tracing.db.issuance.IssuanceItemQuantity" >
 							<% if (c_item.getId() == q_item.getIssuanceItem().getCategory().getId()) { 
-									String customDesc = q_item.getIssuanceItem().getDescription() + "/" + q_item.getQuantity() + " Available"; %>
+									String customDesc = q_item.getIssuanceItem().getDescription() + " (" + q_item.getQuantity() + " Available)"; %>
 								typeList.options[<%=index%>]=new Option("<%=customDesc%>","<%=q_item.getId()%>",false,false);
 							<% index++; } %>
 							</logic:iterate>

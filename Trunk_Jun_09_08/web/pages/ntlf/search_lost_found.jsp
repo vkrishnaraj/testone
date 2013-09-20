@@ -1,3 +1,4 @@
+<%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
 <%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%@ page language="java" %>
 <%@ taglib uri="/tags/struts-bean" prefix="bean" %>
@@ -254,6 +255,9 @@
 	            %>
 	            <div id="pageheaderright">
 	              <select name="outputtype">
+	                <% if (!TracerProperties.isTrue(a.getCompanycode_ID(),TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
+	                  <option value="0" selected="selected"><bean:message key="radio.pdf" /></option>
+	                <% } %>
 	                <option value="1"><bean:message key="radio.html" /></option>
 	              </select>
 	              <input type="submit" name="generateReport" id="button" value="<bean:message key="button.generateReport" />">

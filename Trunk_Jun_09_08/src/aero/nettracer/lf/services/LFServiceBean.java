@@ -232,7 +232,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			sql += "left outer join o.segments seg";
 		}
 		
-		if (category > 0 || haveBrand || haveDesc || haveSerial || haveTracking || value > 0) {
+		if (category > 0 || haveBrand || haveDesc || haveSerial || haveTracking || value > -1) {
 			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
 				sql += " left outer join o.items i";
 			} else {
@@ -308,7 +308,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		sql += " where 1=1";
 
-		if (category > 0 || haveBrand || haveDesc || haveSerial || haveTracking || value > 0) {
+		if (category > 0 || haveBrand || haveDesc || haveSerial || haveTracking || value > -1) {
 			String itemSql = " and i.type = " + dto.getType();
 			if (category > 0) {
 				itemSql += " and i.category = " + category;
@@ -337,7 +337,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			if (haveTracking) {
 				itemSql += " and i.trackingNumber = \'" + dto.getTrackingNumber().trim() + "\'";
 			}
-			if (value > 0) {
+			if (value > -1) {
 				itemSql += " and i.value = " + value;
 			}
 			
