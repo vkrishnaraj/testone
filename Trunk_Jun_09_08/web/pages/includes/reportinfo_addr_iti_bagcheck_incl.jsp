@@ -87,7 +87,7 @@
 		}
 	}
 	
-
+	
 	function getStations() {
 		var compList=document.getElementById("WtAirlineId");
 		var stationList=document.getElementById("WtStationId");
@@ -95,6 +95,7 @@
 		stationList.options.length=1;
 		
 		stationList.options[0]=new Option("<bean:message key="option.lf.please.select" />","",true,false);
+		<% if(request.getAttribute("wtCompList")!=null){%>
 		<logic:iterate indexId="i" id="cList" name="wtCompList"  type="com.bagnet.nettracer.tracing.db.Company" >
 		if("<%=cList.getCompanyCode_ID()%>"==selectedCompany)
 			{	
@@ -104,7 +105,7 @@
 				</logic:iterate>
 			}
 		</logic:iterate>
-		
+		<%}%>
 		//document.getElementById("subCategory"+selectedCategory).style.display="inline";
 	}
 
