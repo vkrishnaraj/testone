@@ -83,6 +83,11 @@
 		<mapping resource="com/bagnet/nettracer/tracing/db/Incident_Range.hbm.xml"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/OHD_Range.hbm.xml"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.Claim"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.Claim_Type"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.Depreciation_Item"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.Depreciation_Category"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.Claim_Depreciation"/>
+		<mapping class="com.bagnet.nettracer.tracing.db.GeneralDepreciationRules"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.ExpensePayout"/>
 		<mapping resource="com/bagnet/nettracer/tracing/db/ExpenseType.hbm.xml"/>
 
