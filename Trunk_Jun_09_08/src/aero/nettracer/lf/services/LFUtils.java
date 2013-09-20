@@ -292,5 +292,21 @@ public class LFUtils {
 		}
 		return category;
 	}
+	
+	public static LFSubCategory loadSubCategory(long id) {
+		Session session = null;
+		LFSubCategory subcategory = null;
+		
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			subcategory = (LFSubCategory) session.get(LFSubCategory.class, id);
+		} catch (Exception e) {
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return subcategory;
+	}
 
 }

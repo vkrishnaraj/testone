@@ -5,6 +5,8 @@ import java.util.Date;
 import org.apache.struts.action.ActionForm;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import aero.nettracer.lf.services.LFUtils;
+
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -402,6 +404,20 @@ public class LFSearchDTO extends ActionForm  {
 			return "High";
 		} else if (value == 0) {
 			return "Low";
+		}
+		return "";
+	}
+	
+	public String getCategoryDisp() {
+		if (category > 0) {
+			return LFUtils.loadCategory(category).getDescription();
+		}
+		return "";
+	}
+	
+	public String getSubCategoryDisp() {
+		if (subCategory > 0) {
+			return LFUtils.loadSubCategory(subCategory).getDescription();
 		}
 		return "";
 	}

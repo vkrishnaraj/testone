@@ -603,6 +603,8 @@ public class TracingConstants {
 	public final static int LF_TRACING_REJECTED = 609;
 	public final static int LF_TRACING_CLOSED = 610;
 	public final static int LF_STAGED_FOR_SHIPPING = 613;
+	public final static int LF_DISPOSITION_SENT_TO_LFC = 614;
+	public final static int LF_DISPOSITION_REMOVED = 615;
 	
 	public final static int LF_TYPE_LOST = 1;
 	public final static int LF_TYPE_FOUND = 2;

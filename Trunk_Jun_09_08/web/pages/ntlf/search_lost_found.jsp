@@ -126,11 +126,10 @@
                				<html:select name="searchLostFoundForm" property="dispositionId" styleClass="dropdown" >
                					<html:option value="<%=String.valueOf(TracingConstants.LF_STATUS_ALL) %>"><bean:message key="search.option.all" /></html:option>
                					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_OTHER) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_OTHER) %>" /></html:option>
-               					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED) %>" /></html:option>
                					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_DELIVERED) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_DELIVERED) %>" /></html:option>
                					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_PICKED_UP) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_PICKED_UP) %>" /></html:option>
-               					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_SALVAGED) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_SALVAGED) %>" /></html:option>
-               					<html:option value="<%=String.valueOf(TracingConstants.LF_STAGED_FOR_SHIPPING) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_STAGED_FOR_SHIPPING) %>" /></html:option>
+               					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_SENT_TO_LFC) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_SENT_TO_LFC) %>" /></html:option>
+               					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_REMOVED) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_REMOVED) %>" /></html:option>
                				</html:select>                  
              			</td>
            			</tr>

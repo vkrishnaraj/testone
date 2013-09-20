@@ -92,6 +92,7 @@ public class FoundItemAction extends CheckedAction {
 		}
 		if (found == null) {
 			found = LFUtils.createLFFound(user);
+			found.setCompanyId(user.getCompanycode_ID());
 		}
 		if(found!=null){
 			request.setAttribute("stationID", found.getLocation().getStation_ID());
@@ -135,64 +136,23 @@ public class FoundItemAction extends CheckedAction {
 			try {
 				populateRemarks(found);
 				if(found.getItem() != null && found.getItem().getTrackingNumber() != null && found.getItem().getTrackingNumber().trim().length() > 0){
-					//we have a manual delivery
-					found.getItem().setDispositionId(TracingConstants.LF_DISPOSITION_DELIVERED);
+					int dispId = found.getItem().getDispositionId();
+					if (dispId != TracingConstants.LF_DISPOSITION_DELIVERED && dispId != TracingConstants.LF_DISPOSITION_SENT_TO_LFC) {
+						found.getItem().setDispositionId(TracingConstants.LF_DISPOSITION_SENT_TO_LFC);
+					}
 					found.setDeliveredDate(new Date());
 					found.setStatusId(TracingConstants.LF_STATUS_CLOSED);
-					
-					if (found.getItem().getLost() != null) {
-						found.getItem().getLost().setStatusId(TracingConstants.LF_STATUS_CLOSED);
-						if(found.getItem().getLost().getItem() != null){
-							found.getItem().getLost().getItem().setDispositionId(TracingConstants.LF_DISPOSITION_DELIVERED);
-							found.getItem().getLost().getItem().setTrackingNumber(found.getItem().getTrackingNumber());
-							if(found.getItem().getLost().getItem().getFound()==null){
-								found.getItem().getLost().getItem().setFound(found);
-							}
-						}
-					} else {
-						List<LFItem> itemList=serviceBean.getItemsByLostFoundId(found.getId(), 2);
-						for(LFItem i:itemList){
-							if(i.getFound().getId()==found.getId() && i.getLost()!=null){
-								i.getLost().setStatusId(TracingConstants.LF_STATUS_CLOSED);
-								if(i.getLost().getItem() != null){
-									i.getLost().getItem().setDispositionId(TracingConstants.LF_DISPOSITION_DELIVERED);
-									i.getLost().getItem().setTrackingNumber(found.getItem().getTrackingNumber());
-									i.getLost().getItem().setFound(found);
-								}
-								found.getItem().setLost(i.getLost());
-							}
-						}
-					}
-				}
-				
-				if(found.getSalvageBoxId()==null)
-				{
-					found.setSalvageBoxId("");
 				}
 				
 				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
-				if (found.getItem().getLost() != null) {
-					LFServiceWrapper.getInstance().saveOrUpdateLostReport(found.getItem().getLost(), user);
-				}
-				if (found.getStatus().getStatus_ID() == TracingConstants.LF_STATUS_OPEN){
-					if(isLFC){
-						try{
-							TraceHandler.trace(found);//Async tracing for LFC
-						} catch (RemoteConnectionException re){
-							//do not prevent item entry even if tracing fails
-						}
-					} else {
-						LFServiceWrapper.getInstance().traceFoundItem(found.getId());
-					}
-				}
 				ActionMessage error = new ActionMessage("message.found.save.success");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
 				
 				FoundHistoryObject FHO=new FoundHistoryObject();
 				FHO.setFound(found);
-				FHO.setObjectID(found.getBarcode());
-				FHO.setLinkURL("create_found_item.do?barcode=");
+				FHO.setObjectID(found.getId() + "");
+				FHO.setLinkURL("create_found_item.do?foundId=");
 				FHO.setStatusDesc(TracingConstants.HIST_DESCRIPTION_SAVE+" "+TracingConstants.HIST_DESCRIPTION_FOUNDITEM);
 				FHO.setObjectType(TracingConstants.HIST_DESCRIPTION_FOUNDITEM);
 				HistoryUtils.AddToHistoryContainer(session, FHO, null);
@@ -228,123 +188,24 @@ public class FoundItemAction extends CheckedAction {
 		
 			if (item != null) {
 				int disposition;
-				if(item.getFound() != null && item.getLost() != null && 
-					LFServiceWrapper.getInstance().findConfirmedMatch(item.getLost().getId(), item.getFound().getId()) > 0){
-					disposition = TracingConstants.LF_DISPOSITION_TO_BE_DELIVERED;
-				} else {
-					disposition = TracingConstants.LF_DISPOSITION_OTHER;
-				}
+				disposition = TracingConstants.LF_DISPOSITION_OTHER;
 				
 				item.setDispositionId(disposition);
 				item.setTrackingNumber(null);
-				
-				if(item.getLost() != null){
-					if(item.getLost().getItem() != null){
-						item.getLost().getItem().setDispositionId(disposition);
-						item.getLost().getItem().setTrackingNumber(null);
-					}
-					item.getLost().setStatusId(TracingConstants.LF_STATUS_OPEN);
-					LFServiceWrapper.getInstance().saveOrUpdateLostReport(item.getLost(), user);
-				}
-				
-				if (item.getDeliveryRejected()) {
-					item.setDeliveryRejected(false);
-					if (item.getLost() != null) {
-						item.getLost().getItem().setDeliveryRejected(false);
-					}
-				}
 			}
 			found.setDeliveredDate(null);
 			found.setStatusId(TracingConstants.LF_STATUS_OPEN);
 			LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
 		} else if (request.getParameter("pickup") != null){
-			if(found.getItem() != null && found.getCheckAmount() == 0){
+			if(found.getItem() != null){
 				found.getItem().setDispositionId(TracingConstants.LF_DISPOSITION_PICKED_UP);
 				found.setDeliveredDate(new Date());
 				found.setStatusId(TracingConstants.LF_STATUS_CLOSED);
-				if(found.getItem().getLost() != null){
-					found.getItem().getLost().setStatusId(TracingConstants.LF_STATUS_CLOSED);
-					if(found.getItem().getLost().getItem() != null){
-						//loupas - even though the model supports multiple items for a lost, the way tracing and matching currently works
-						//multiple items per lost cannot work unless there is some major refactoring
-						found.getItem().getLost().getItem().setDispositionId(TracingConstants.LF_DISPOSITION_PICKED_UP);
-					}
-					LFServiceWrapper.getInstance().saveOrUpdateLostReport(found.getItem().getLost(), user);
-				} else {
-					List<LFItem> itemList=serviceBean.getItemsByLostFoundId(found.getId(), 2);
-					for(LFItem i:itemList){
-						if(i.getFound().getId()==found.getId() && i.getLost()!=null){
-							i.getLost().setStatusId(TracingConstants.LF_STATUS_CLOSED);
-							if(i.getLost().getItem() != null){
-								i.getLost().getItem().setDispositionId(TracingConstants.LF_DISPOSITION_PICKED_UP);
-							}
-							LFServiceWrapper.getInstance().saveOrUpdateLostReport(i.getLost(), user);
-						}
-					}
-				}
 				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
-			} else {
-				ActionMessage error = new ActionMessage("error.message.check.tracking.required");
-				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-				saveMessages(request, errors);
-			}
-		} else if (request.getParameter("deliveryRejected") != null) {
-			if(found.getItem() != null && found.getCheckAmount() == 0){
-				found.getItem().setDeliveryRejected(true);
-				found.getItem().setDispositionId(TracingConstants.LF_DISPOSITION_OTHER);
-				found.setDeliveredDate(new Date());
-				found.setStatusId(TracingConstants.LF_STATUS_CLOSED);
-				if(found.getItem().getLost() != null){
-					found.getItem().getLost().setStatusId(TracingConstants.LF_STATUS_CLOSED);
-					if(found.getItem().getLost().getItem() != null){
-						//loupas - even though the model supports multiple items for a lost, the way tracing and matching currently works
-						//multiple items per lost cannot work unless there is some major refactoring
-						found.getItem().getLost().getItem().setDeliveryRejected(true);
-						found.getItem().getLost().getItem().setDispositionId(TracingConstants.LF_DISPOSITION_OTHER);
-					}
-					LFServiceWrapper.getInstance().saveOrUpdateLostReport(found.getItem().getLost(), user);
-				} else {
-					List<LFItem> itemList=serviceBean.getItemsByLostFoundId(found.getId(), 2);
-					for(LFItem i:itemList){
-						if(i.getFound().getId()==found.getId() && i.getLost()!=null){
-							i.getLost().setStatusId(TracingConstants.LF_STATUS_CLOSED);
-							if(i.getLost().getItem() != null){
-								i.getLost().getItem().setDeliveryRejected(true);
-								i.getLost().getItem().setDispositionId(TracingConstants.LF_DISPOSITION_OTHER);
-							}
-
-							LFServiceWrapper.getInstance().saveOrUpdateLostReport(i.getLost(), user);
-						}
-					}
-				}
-				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
-			} else {
-				ActionMessage error = new ActionMessage("error.message.check.tracking.required");
-				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-				saveMessages(request, errors);
-			}
-		} 
-
-		fiForm.setFound(found);
-		if (isLFC && found.getId() != 0) {
-			TraceResultsFilter filter = new TraceResultsFilter();
-			filter.setRejected(true);
-			filter.setFoundId(found.getId());
-			fiForm.setRejectedResults(serviceBean.getFilteredTraceResultsPaginatedList(user.getStation(), filter, 0, 5000,user.getSubcompany()));
-			
-			filter.setBarcode(found.getBarcode());
-			filter.setOpen(true);
-			filter.setConfirmed(true);
-			filter.setRejected(false);
-			filter.setFoundId(found.getId());
-			fiForm.setTraceResults(serviceBean.getFilteredTraceResultsPaginatedList(user.getStation(), filter, 0, 5000,user.getSubcompany()));
-
-			if (fiForm.getFound().getStatus().getStatus_ID() == TracingConstants.LF_STATUS_CLOSED || user.getSubcompany()!=null) {
-				//if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LFC_REOPEN_LOST_FOUND, user)) {
-					return mapping.findForward(TracingConstants.NTLF_CREATE_FOUND_ITEM_RO);
-				//}
 			}
 		}
+
+		fiForm.setFound(found);
 		
 		return mapping.findForward(TracingConstants.NTLF_CREATE_FOUND_ITEM);
 		

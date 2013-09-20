@@ -319,15 +319,15 @@
          					</html:select>
          				</td>
 						<td>
-         					<bean:message key="colname.lf.item.location" />
-         					<br>
-         					<html:select name="foundItemForm" property="found.itemLocation" styleClass="dropdown" >
-         						<html:option value="<%=String.valueOf(TracingConstants.LF_LOCATION_SHELF) %>"><bean:message key="lf.location.shelf" /></html:option>
-         						<html:option value="<%=String.valueOf(TracingConstants.LF_LOCATION_VERIFICATION) %>"><bean:message key="lf.location.verification" /></html:option>
-         						<html:option value="<%=String.valueOf(TracingConstants.LF_LOCATION_WAITING) %>"><bean:message key="lf.location.waiting" /></html:option>
-         						<html:option value="<%=String.valueOf(TracingConstants.LF_LOCATION_DELIVERY) %>"><bean:message key="lf.location.delivery" /></html:option>
-         						<html:option value="<%=String.valueOf(TracingConstants.LF_LOCATION_SALVAGED) %>"><bean:message key="lf.location.salvaged" /></html:option>
-         					</html:select>
+               				<bean:message key="colname.lf.disposition" />
+               				<br>
+               				<html:select name="foundItemForm" property="found.item.dispositionId" styleClass="dropdown" >
+               					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_OTHER) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_OTHER) %>" /></html:option>
+               					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_DELIVERED) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_DELIVERED) %>" /></html:option>
+               					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_PICKED_UP) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_PICKED_UP) %>" /></html:option>
+               					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_SENT_TO_LFC) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_SENT_TO_LFC) %>" /></html:option>
+               					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_REMOVED) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_REMOVED) %>" /></html:option>
+               				</html:select>  
          				</td>
 					</tr>
 				</table>
@@ -468,7 +468,7 @@
        					if (item.getType() == TracingConstants.LF_TYPE_FOUND) { 
 							dispositionId = item.getDispositionId();
        						deliveryRejected = item.getDeliveryRejected();
-       						haveDeliveryInformation = (dispositionId == TracingConstants.LF_DISPOSITION_DELIVERED || dispositionId == TracingConstants.LF_DISPOSITION_PICKED_UP) || item.getDeliveryRejected();
+       						haveDeliveryInformation = (dispositionId == TracingConstants.LF_DISPOSITION_DELIVERED || dispositionId == TracingConstants.LF_DISPOSITION_PICKED_UP || dispositionId == TracingConstants.LF_DISPOSITION_SENT_TO_LFC);
        						%>
          				<tr>
 	         				<td>
@@ -656,9 +656,10 @@
 							<bean:write name="foundItemForm" property="foundItem.trackingNumber" />
 						</td>
 					</logic:equal>
-	         		<logic:equal name="foundItemForm" property="foundItem.deliveryRejected" value="true" >
+	         		<logic:equal name="foundItemForm" property="foundItem.disposition.status_ID" value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_SENT_TO_LFC) %>" >
 						<td>
-							<bean:message key="lf.delivery.rejected" />
+							<bean:message key="colname.lf.tracking.number" />:&nbsp;
+							<bean:write name="foundItemForm" property="foundItem.trackingNumber" />
 						</td>
 					</logic:equal>
 	         		<logic:equal name="foundItemForm" property="foundItem.disposition.status_ID" value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_PICKED_UP) %>" >
@@ -675,7 +676,7 @@
 					</tr>
 				<% } else { %>
 					<tr>
-						<td colspan=3 class="header" >
+						<td colspan=2 class="header" >
 							<bean:message key="lf.colname.enter.delivery.information" />
 						</td>
 					</tr>
@@ -683,9 +684,6 @@
 						<td style="width:50%;" >
 							<bean:message key="colname.lf.tracking.number" />:&nbsp;
 							<html:text name="foundItemForm" property="foundItem.trackingNumber" size="20" styleClass="textfield" styleId="trackingNumber" />
-						</td>
-						<td  style="width:25%;" >
-							<a href='ntlf_create_found_item.do?deliveryRejected=1&itemId=<bean:write name="foundItemForm" property="foundItem.id" />'><bean:message key="lf.delivery.rejected"/></a>
 						</td>
 						<td style="width:25%;" >
 							<a href='ntlf_create_found_item.do?pickup=1&itemId=<bean:write name="foundItemForm" property="foundItem.id" />'><bean:message key="lf.picked.up"/></a>
