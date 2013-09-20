@@ -785,6 +785,16 @@
       <bean:message key="message.required" />
         <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
         <html:hidden property="returnissuanceitem" value="" disabled="true"/>
+          <tr>
+          	<td><b><bean:message key="issuance.item.category" /></b></td>
+          	<td><b><bean:message key="issuance.item.type" /></b></td>
+          	<td><b><bean:message key="issuance.item.description" /></b></td>
+          	<td><b><bean:message key="issuance.item.barcode" /></b></td>
+          	<td><b><bean:message key="issuance.item.quantity.issued" /></b></td>
+          	<td><b><bean:message key="issuance.item.edit.agent" /></b></td>
+          	<td><b><bean:message key="issuance.item.edit.date" /></b></td>
+          	<td><b><bean:message key="issuance.item.button.return" /></b></td>
+          </tr>
       	<logic:iterate id="issuanceitem" indexId="iiIndex" name="incidentForm" property="issuanceItemIncidents" type="com.bagnet.nettracer.tracing.db.issuance.IssuanceItemIncident">
       	<% boolean quantified = issuanceitem.getIssuanceItemQuantity() != null; %>
       	<% IssuanceItem iItem; 
@@ -794,21 +804,13 @@
       		iItem = issuanceitem.getIssuanceItemInventory().getIssuanceItem();
       	}%>
           <tr>
-          	<td><bean:message key="issuance.item.category" /><br/>
-          		<input type="text" class="textfield" disabled="true" value="<%=iItem.getCategory().getDescription() %>" /></td>
-          	<td><bean:message key="issuance.item.type" /><br/>
-          		<input type="text" class="textfield" disabled="true" value="<%=iItem.getDescription() %>" /></td>
-          	<td><bean:message key="issuance.item.description" /><br/>
-          		<input type="text" class="textfield" disabled="true" value="<% if (!quantified) { %><%=issuanceitem.getIssuanceItemInventory().getDescription() %><% } %>" /></td>
-          	<td><bean:message key="issuance.item.barcode" /><br/>
-          		<input type="text" class="textfield" disabled="true" value="<% if (!quantified) { %><%=issuanceitem.getIssuanceItemInventory().getBarcode() %><% } %>" /></td>
-          </tr><tr>
-          	<td><bean:message key="issuance.item.quantity.issued" /><br/>
-          		<input type="text" class="textfield" disabled="true" value="<% if (quantified) { %><%=issuanceitem.getQuantity() %><% } %>" /></td>
-          	<td><bean:message key="issuance.item.edit.agent" /><br/>
-          		<input type="text" class="textfield" disabled="true" value="<%=issuanceitem.getIssueAgent().getUsername() %>" /></td>
-          	<td><bean:message key="issuance.item.edit.date" /><br/>
-          		<input type="text" class="textfield" disabled="true" value="<%=TracingConstants.getDisplayDate(issuanceitem.getIssueDate(), a) %>" /></td>
+          	<td><%=iItem.getCategory().getDescription() %>&nbsp;</td>
+          	<td><%=iItem.getDescription() %>&nbsp;</td>
+          	<td><% if (!quantified) { %><%=issuanceitem.getIssuanceItemInventory().getDescription() %><% } %>&nbsp;</td>
+          	<td><% if (!quantified) { %><%=issuanceitem.getIssuanceItemInventory().getBarcode() %><% } %>&nbsp;</td>
+            <td><% if (quantified) { %><%=issuanceitem.getQuantity() %><% } %>&nbsp;</td>
+          	<td><%=issuanceitem.getIssueAgent().getUsername() %>&nbsp;</td>
+          	<td><%=TracingConstants.getDisplayDate(issuanceitem.getIssueDate(), a) %>&nbsp;</td>
           	<td><% if (issuanceitem.isReturned()) { %>
           			<bean:message key="issuance.item.returned" />
           	    <% } else { %>
@@ -819,10 +821,10 @@
           </tr>
           </logic:iterate>
           <tr>
-          	<td colspan="4" align="center"><b><bean:message key="issuance.item.issue" /></b></td>
+          	<td colspan="8" align="center"><b><bean:message key="issuance.item.issue" /></b></td>
           </tr>
           <tr>
-          	<td><bean:message key="issuance.item.category" /><br/>
+          	<td colspan="2"><bean:message key="issuance.item.category" /><br/>
 	               <select id="issuance_category" name="issuance_category" class="dropdown" onchange="populateType()">
 	               	  <option value="0">Please Select</option>
 	                  <logic:iterate indexId="i" id="c_item" name="item_category_resultList" type="com.bagnet.nettracer.tracing.db.issuance.IssuanceCategory" >
@@ -832,13 +834,13 @@
 	                  </logic:iterate>
 	               </select>
           		</td>
-          	<td><bean:message key="issuance.item.type" /><br/>
+          	<td colspan="2"><bean:message key="issuance.item.type" /><br/>
 	               <select id="issuance_type" name="issuance_type" class="dropdown" disabled="true" onchange="populateInventoryOptions()">
 	               		<option value="0">No Category</option>
 	               </select>
           		</td>
-          	<td id="issuanceAdd3" name="issuanceAdd3">&nbsp;</td>
-          	<td id="issuanceAdd4" name="issuanceAdd4">&nbsp;</td>
+          	<td colspan="2" id="issuanceAdd3" name="issuanceAdd3">&nbsp;</td>
+          	<td colspan="2" id="issuanceAdd4" name="issuanceAdd4">&nbsp;</td>
           </tr>
         </table>
 <% } %>

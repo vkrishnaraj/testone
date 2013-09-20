@@ -63,17 +63,6 @@ public class EnterItemsAction extends CheckedAction {
 				request.setAttribute("formName", "enterItemsForm");
 				return mapping.findForward(TracingConstants.AJAX_SUBCATEGORY);
 			}
-			
-			String fhoId = (String) request.getParameter("fhoId");
-			if (fhoId != null && !fhoId.isEmpty()) {
-				HistoryContainer hc = (HistoryContainer) session.getAttribute("historyContainer");
-				FoundHistoryObject fho = (FoundHistoryObject) hc.get(fhoId);
-				fho.getFound().setLocation(StationBMO.getStationByCode(fho.getFound().getLocation().getStationcode(), user.getCompanycode_ID()));
-				fho.getFound().setEntryStatus(TracingConstants.LF_STATUS_MOVED);
-				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(fho.getFound(), user);
-				request.setAttribute("divId", request.getParameter("divId"));
-				return mapping.findForward(TracingConstants.AJAX_ITEM_SUMMARY);
-			}
 		}
 		
 		LFFound found = eiForm.getFound();

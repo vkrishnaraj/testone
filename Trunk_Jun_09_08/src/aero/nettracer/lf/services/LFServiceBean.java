@@ -225,13 +225,14 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		boolean haveDesc = dto.getItemDescription() != null && !dto.getItemDescription().isEmpty();
 		boolean haveSerial = dto.getSerialNumber() != null && !dto.getSerialNumber().isEmpty();
 		boolean haveTracking = dto.getTrackingNumber() != null && !dto.getTrackingNumber().isEmpty();
+		int value = dto.getValue();
 		
 		if(TracingConstants.LF_LF_COMPANY_ID.equals(dto.getAgent().getCompanycode_ID()) && dto.getType() == TracingConstants.LF_TYPE_LOST && dto.getStationId() != -1)
 		{
 			sql += "left outer join o.segments seg";
 		}
 		
-		if (category > 0 || haveBrand || haveDesc || haveSerial || haveTracking) {
+		if (category > 0 || haveBrand || haveDesc || haveSerial || haveTracking || value > 0) {
 			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
 				sql += " left outer join o.items i";
 			} else {
@@ -307,7 +308,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		sql += " where 1=1";
 
-		if (category > 0 || haveBrand || haveDesc || haveSerial || haveTracking) {
+		if (category > 0 || haveBrand || haveDesc || haveSerial || haveTracking || value > 0) {
 			String itemSql = " and i.type = " + dto.getType();
 			if (category > 0) {
 				itemSql += " and i.category = " + category;
@@ -335,6 +336,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			}
 			if (haveTracking) {
 				itemSql += " and i.trackingNumber = \'" + dto.getTrackingNumber().trim() + "\'";
+			}
+			if (value > 0) {
+				itemSql += " and i.value = " + value;
 			}
 			
 			sql += itemSql;
@@ -917,7 +921,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			if (start > -1 && offset > -1 ) {
 				q.setFirstResult(start);
 				q.setMaxResults(offset);
-			} else {
+			} else if (start != -99 && offset != -99){
 				throw new Exception("Invalided pagination bounds");
 			}
 			

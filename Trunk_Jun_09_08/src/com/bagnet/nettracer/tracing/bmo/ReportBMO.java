@@ -87,6 +87,7 @@ import ar.com.fdvs.dj.domain.entities.DJGroup;
 import ar.com.fdvs.dj.domain.entities.columns.AbstractColumn;
 import ar.com.fdvs.dj.domain.entities.columns.PropertyColumn;
 
+import com.bagnet.nettracer.datasources.JRFoundItemDataSource;
 import com.bagnet.nettracer.datasources.JRIncidentDataSource;
 import com.bagnet.nettracer.datasources.JROnhandDataSource;
 import com.bagnet.nettracer.exceptions.AmountOfDataOutOfRangeException;
@@ -108,6 +109,7 @@ import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.Report;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.salvage.Salvage;
 import com.bagnet.nettracer.tracing.dto.DeprecSumDTO;
 import com.bagnet.nettracer.tracing.dto.DisputeResolutionReportDTO;
@@ -6490,6 +6492,37 @@ public class ReportBMO {
 		}
 		virtualizer.cleanup();
 		return fileName;
+	}
+
+	public static String createSearchFoundItemReport(List<LFFound> lfcArray,
+			HttpServletRequest request, int outputtype, String language,
+			String reportPath, ReportBMO rbmo) {
+		try {
+
+			Map parameters = new HashMap();
+			HttpSession session = request.getSession();
+			Agent user = (Agent) session.getAttribute("user");
+
+			ResourceBundle myResources = ResourceBundle
+					.getBundle(
+							"com.bagnet.nettracer.tracing.resources.ApplicationResources",
+							new Locale(language));
+			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
+			parameters.put("showdetail", "1");
+			parameters.put("form", request.getAttribute("searchLostFoundForm"));
+
+			JasperReport jasperReport = getCompiledReport(
+					ReportingConstants.SEARCH_FOUNDITEM_RPT_NAME, reportPath);
+			JRDataSource ds = new JRFoundItemDataSource(jasperReport, lfcArray, user);
+			return rbmo.getReportFile(jasperReport, ds, parameters,
+					ReportingConstants.SEARCH_FOUNDITEM_RPT_NAME, reportPath,
+					outputtype);
+
+		} catch (Exception e) {
+			logger.error("unable to search incident report: " + e);
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

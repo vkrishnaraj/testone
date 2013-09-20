@@ -323,6 +323,7 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_NTLF_FOUND_ITEM = "NTLF_Found_Items";
 	public static final String SYSTEM_COMPONENT_NAME_NTLF_ENTER_ITEM = "NTLF_Enter_Items";
 	public static final String SYSTEM_COMPONENT_NAME_NTLF_SEARCH_ITEM = "NTLF_Search_Items";
+	public static final String SYSTEM_COMPONENT_NAME_NTLF_TM_OPEN_HV_ITEMS = "NTLF_TM_Open_HV_Items";
 	
 	//Table numbers for status
 	public final static int AJAX_STATUS_INC = 1;

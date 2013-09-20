@@ -11,11 +11,14 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
 import aero.nettracer.lf.services.LFServiceBean;
 import aero.nettracer.lf.services.LFUtils;
 
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
+import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -25,6 +28,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.dto.LFSearchDTO;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
@@ -65,7 +69,54 @@ public class SearchLostFoundAction extends CheckedAction {
 			searchDto.setType(type);
 		}
 		
-		List resultSet = new ArrayList();
+		if (request.getParameter("tmhvSearch") != null) {
+			searchDto.setValue(TracingConstants.LFC_ITEM_HIGH_VALUE);
+			searchDto.setStationId(user.getStation().getStation_ID());
+			searchDto.setStatusId(TracingConstants.LF_STATUS_OPEN);
+			searchDto.setDispositionId(-1);
+		}
+
+		if (request.getParameter("generateReport") != null && 
+				request.getParameter("outputtype") != null) {
+			LFServiceBean serviceBean = new LFServiceBean();
+			
+			try {
+				String reportPath = getServlet().getServletContext().getRealPath("/");
+				int outputType = new Integer(request.getParameter("outputtype")).intValue();
+				String reportFile = null;
+								
+				int rc = serviceBean.searchFoundCount(searchDto);
+				int maxRc = TracerProperties.getMaxReportRows(user.getStation().getCompany().getCompanyCode_ID()); 
+									
+				if (rc < maxRc) {
+					List<LFFound> resultArray =  serviceBean.searchFound(searchDto, -99, -99);
+					ReportBMO rbmo = new ReportBMO(request);
+
+					reportFile = ReportBMO.createSearchFoundItemReport(resultArray, request, outputType, user.getCurrentlocale(), reportPath, rbmo);
+					
+					if (rbmo.getErrormsg() != null) {
+						ActionMessages errors = new ActionMessages();
+						ActionMessage error = new ActionMessage(rbmo.getErrormsg());
+						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+						saveMessages(request, errors);
+					} else {
+						request.setAttribute("reportfile", reportFile);
+						request.setAttribute("outputtype", outputType);
+					} 
+
+				} else {
+					ActionMessages errors = new ActionMessages();
+					ActionMessage error = new ActionMessage("error.maxdata");
+					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+					saveMessages(request, errors);
+				}
+				
+			} catch (Exception e) {
+				logger.error(e.getStackTrace());
+			} 
+		}
+		
+		List<LFFound> resultSet = new ArrayList<LFFound>();
 		if (request.getParameter("clear") == null) {
 			LFServiceBean serviceBean = new LFServiceBean();
 			long rowcount;

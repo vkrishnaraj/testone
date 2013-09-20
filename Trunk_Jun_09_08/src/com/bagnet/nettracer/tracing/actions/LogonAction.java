@@ -47,6 +47,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.taskmanager.GeneralTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.MorningDutiesTask;
 import com.bagnet.nettracer.tracing.dto.ActivityDTO;
+import com.bagnet.nettracer.tracing.dto.LFSearchDTO;
 import com.bagnet.nettracer.tracing.dto.PcnSearchDTO;
 import com.bagnet.nettracer.tracing.forms.ClaimsToBeProcessedForm;
 import com.bagnet.nettracer.tracing.forms.CreatedInterimExpenseRequestForm;
@@ -572,6 +573,18 @@ public class LogonAction extends Action {
 																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_LF_TO_BE_SHIPPED)) {
 																					int x = new LFServiceBean().getToBeShippedCount(agent);
 																					if (x != -1) {
+																						entries = x;
+																					}
+																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_NTLF_TM_OPEN_HV_ITEMS)) {
+																					LFSearchDTO lfDTO = new LFSearchDTO();
+																					lfDTO.setType(TracingConstants.LF_TYPE_FOUND);
+																					lfDTO.setValue(TracingConstants.LFC_ITEM_HIGH_VALUE);
+																					lfDTO.setStationId(s.getStation_ID());
+																					lfDTO.setStatusId(TracingConstants.LF_STATUS_OPEN);
+																					lfDTO.setDispositionId(-1);
+																					lfDTO.setAgent(agent);
+																					int x = new LFServiceBean().searchFoundCount(lfDTO);
+																					if (x > 0) {
 																						entries = x;
 																					}
 																				}

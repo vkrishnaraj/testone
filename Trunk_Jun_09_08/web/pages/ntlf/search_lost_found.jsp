@@ -1,3 +1,4 @@
+<%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%@ page language="java" %>
 <%@ taglib uri="/tags/struts-bean" prefix="bean" %>
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
@@ -141,10 +142,18 @@
 			                <html:text property="startDate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchLostFoundForm.startDate,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">&nbsp;-
 			                <html:text property="endDate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchLostFoundForm.endDate,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;">
 		                </td>
-		                <td nowrap colspan=2>
+		                <td>
 			                <bean:message key="colname.agent.name" /><br/>
 			                <html:text name="searchLostFoundForm" property="agentName" size="15" maxlength="20" styleClass="textfield" />
 			               
+		                </td>
+		                <td>
+	         				<bean:message key="colname.lfc.value" /><br/>
+               				<html:select name="searchLostFoundForm" property="value" styleClass="dropdown" >
+               					<html:option value="<%=String.valueOf(TracingConstants.LF_STATUS_ALL) %>"><bean:message key="search.option.all" /></html:option>
+			              		<html:option value="<%=String.valueOf(TracingConstants.LFC_ITEM_HIGH_VALUE) %>"><bean:message key="lfc.high.value" /></html:option>
+			              		<html:option value="<%=String.valueOf(TracingConstants.LFC_ITEM_LOW_VALUE) %>"><bean:message key="lfc.low.value" /></html:option>
+			              	</html:select>
 		                </td>
            			</tr>
            			<tr>
@@ -235,10 +244,29 @@
            			</tr>
 				</table>
 				<br />
-                <h1 class="green">
-                	<bean:message key="header.search_result" />
-                	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
-              	</h1>
+	            <div id="pageheaderleft">
+	                <h1 class="green">
+	                	<bean:message key="header.search_result" />
+	                	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
+	              	</h1>
+	            </div>
+	           <%
+	              if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_QUERY_REPORTS, a)) {
+	            %>
+	            <div id="pageheaderright">
+	              <select name="outputtype">
+	                <option value="1"><bean:message key="radio.html" /></option>
+	              </select>
+	              <input type="submit" name="generateReport" id="button" value="<bean:message key="button.generateReport" />">
+	              <logic:present name="reportfile" scope="request">
+	                <script language="javascript">
+	                    openReportWindow('reporting?outputtype=<%= request.getAttribute("outputtype") %>&reportfile=<bean:write name="reportfile" scope="request" />','report',800,600);
+	                </script>
+	              </logic:present>
+	            </div>
+	            <%
+	              }
+	            %>
               	<table class="<%=cssFormClass %>" cellpadding="0" cellspacing="0" >
               		<tr>
               			<td class="header">

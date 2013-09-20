@@ -5,6 +5,8 @@ import java.util.Date;
 import org.apache.struts.action.ActionForm;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
+import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
@@ -52,6 +54,7 @@ public class LFSearchDTO extends ActionForm  {
 	private int statusId;
 	private int stationId;
 	private String trackingNumber;
+	private int value = -1;
 	
 	public String getFirstName() {
 		return firstName;
@@ -363,6 +366,44 @@ public class LFSearchDTO extends ActionForm  {
 
 	public void setTrackingNumber(String trackingNumber) {
 		this.trackingNumber = trackingNumber;
+	}
+
+	public int getValue() {
+		return value;
+	}
+
+	public void setValue(int value) {
+		this.value = value;
+	}
+	
+	public String getStationDisp() {
+		if (stationId > 0) {
+			return StationBMO.getStation(stationId).getStationcode();
+		}
+		return "";
+	}
+	
+	public String getStatusDisp() {
+		if (statusId > 0) {
+			return StatusBMO.getStatus(statusId).getDescription();
+		}
+		return "";
+	}
+	
+	public String getDispositionDisp() {
+		if (dispositionId > 0) {
+			return StatusBMO.getStatus(dispositionId).getDescription();
+		}
+		return "";
+	}
+	
+	public String getValueDisp() {
+		if (value == 1) {
+			return "High";
+		} else if (value == 0) {
+			return "Low";
+		}
+		return "";
 	}
 		
 }
