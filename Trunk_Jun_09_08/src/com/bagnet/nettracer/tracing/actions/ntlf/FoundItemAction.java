@@ -1,11 +1,8 @@
 package com.bagnet.nettracer.tracing.actions.ntlf;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -20,7 +17,6 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
-import aero.nettracer.lf.services.LFServiceBean;
 import aero.nettracer.lf.services.LFServiceWrapper;
 import aero.nettracer.lf.services.LFUtils;
 import aero.nettracer.lf.services.exception.NonUniqueBarcodeException;
@@ -31,20 +27,14 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
-import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFRemark;
-import com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory;
 import com.bagnet.nettracer.tracing.forms.lf.FoundItemForm;
-import com.bagnet.nettracer.tracing.forms.lf.TraceResultsFilter;
+import com.bagnet.nettracer.tracing.history.FoundHistoryObject;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.HistoryUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
-import com.bagnet.nettracer.tracing.utils.lf.RemoteConnectionException;
-import com.bagnet.nettracer.tracing.utils.lf.TraceHandler;
-
-import com.bagnet.nettracer.tracing.history.FoundHistoryObject;
 
 public class FoundItemAction extends CheckedAction {
 	
@@ -67,14 +57,11 @@ public class FoundItemAction extends CheckedAction {
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
 		}
 		
-		boolean isLFC = TracingConstants.LF_LF_COMPANY_ID.equalsIgnoreCase(user.getCompanycode_ID()!=null?user.getCompanycode_ID():"");
-
 		if (session.getAttribute("stationList") == null) {
 			session.setAttribute("stationList", AdminUtils.getStations(null, user.getCompanycode_ID(), 0, 0));
 		}
 		
 		LFUtils.getLists(user, session);
-		LFServiceBean serviceBean = new LFServiceBean();
 		FoundItemForm fiForm = (FoundItemForm) form;
 		fiForm.setDateFormat(user.getDateformat().getFormat());
 		
@@ -213,15 +200,6 @@ public class FoundItemAction extends CheckedAction {
 	
 	private LFItem getItemById(Set<LFItem> items, long id) {
 		for (LFItem item: items) {
-			if (item.getId() == id) {
-				return item;
-			}
-		}
-		return null;
-	}
-
-	private LFMatchHistory getMatchById(List<LFMatchHistory> items, long id) {
-		for (LFMatchHistory item: items) {
 			if (item.getId() == id) {
 				return item;
 			}

@@ -97,12 +97,12 @@
              			<td>
                				<bean:message key="colname.reference.id" />
                				<br>
-               				<logic:empty name="searchLostFoundForm" property="id" >
+	               			<logic:equal name="searchLostFoundForm" property="id" value="0" >
 	               				<html:text name="searchLostFoundForm" property="id" value="" size="10" styleClass="textfield" />
-               				</logic:empty>
-               				<logic:notEmpty name="searchLostFoundForm" property="id" >
+	               			</logic:equal>
+	               			<logic:greaterThan name="searchLostFoundForm" property="id" value="0" >
 	               				<html:text name="searchLostFoundForm" property="id" size="10" styleClass="textfield" />
-               				</logic:notEmpty>
+	               			</logic:greaterThan>
              			</td>
 						<td>
 							<bean:message key="colname.station_number" />
