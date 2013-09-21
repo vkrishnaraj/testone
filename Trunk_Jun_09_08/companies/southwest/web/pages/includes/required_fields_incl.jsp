@@ -110,7 +110,7 @@
       				alert("<%=(String) bundle
 							.getString( "disposal.remark")%>" + " <%=(String) bundle.getString(
 							"error.validation.isRequired")%>");
-	        		currentElement.focus();
+	        		
       				return false;
       			}
       			

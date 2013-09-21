@@ -329,7 +329,7 @@
 								<html:text styleId="<%=descriptionID %>" size="30" styleClass="textfield" name="deprecItem" property="description"  indexed="true" />
 	
 								<a onclick="googleshop(<%=t1%>);" >
-									<img border=0 src="deployment/main/ico.png" width="16" height="16" />
+									<img border=0 src="deployment/main/images/icon/barcode.png" width="16" height="16" />
 								</a>
 							</td>
 	

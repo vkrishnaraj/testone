@@ -199,24 +199,24 @@ function gotoHistoricalReport() {
 
 
   function isDisposedCheck(){
+	  disposeLocal=false;
 	  var disValue=document.getElementById("disposal_status.status_ID");
 	  if(disValue.value==<%=TracingConstants.ITEM_STATUS_DISPOSED_LOCALLY%>){
 		  <% if(o!=null) {
 		  		int lastStatus=0;
 		  		if(o.getDisposal_status()!=null)
 		  			lastStatus=o.getDisposal_status().getStatus_ID();%>
-		  		if(disValue.value!=<%=lastStatus%> && <%= onHandForm.getRemarklist().size()<=o.getRemarks().size() %>)
+
+				    var remText=document.getElementById("remark["+(<%=onHandForm.getRemarklist().size()-1%>)+"].remarktext");
+		  		if(disValue.value!=<%=lastStatus%> && (<%= onHandForm.getRemarklist().size()<=o.getRemarks().size() %> 
+		  			|| (remText!=null && remText.value!=null && remText.value.replace(/\s*/g, "").length==0 )))
 		  			disposeLocal=true;
 		  <% } else { %>
 		    var remText=document.getElementById("remark[0].remarktext");
 		  	if(remText!=null && remText.value!=null && remText.value.replace(/\s*/g, "").length==0){
 				disposeLocal=true;
-		  	} else {
-		  		disposeLocal=false;
 		  	}
 		  <% } %>
-	  } else {
-		  disposeLocal=false;
 	  }
 	  
   }
