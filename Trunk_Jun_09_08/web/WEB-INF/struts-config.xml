@@ -603,7 +603,6 @@
 		
 		<forward name="ntlf_enter_items" path="ntlf_enter_items" />
 		<forward name="ntlf_create_found_item" path="ntlf_create_found_item" />
-		<forward name="ntlf_create_found_item_ro" path="ntlf_create_found_item_ro" />
 		<forward name="ntlf_search_lost_found" path="ntlf_search_lost_found" />
 		
 	</global-forwards>
@@ -977,8 +976,7 @@
 		<action path="/searchTemplate" type="com.bagnet.nettracer.tracing.actions.templates.TemplateSearchAction" name="templateSearchForm" scope="request" validate="false" ></action>
 		
 		<action path="/ntlf_enter_items" type="com.bagnet.nettracer.tracing.actions.ntlf.EnterItemsAction" name="enterItemsForm" scope="session" validate="false"></action>
-		<action path="/ntlf_create_found_item" type="com.bagnet.nettracer.tracing.actions.ntlf.FoundItemAction" name="foundItemForm" scope="session" validate="false"></action>		
-		<action path="/ntlf_create_found_item_ro" type="com.bagnet.nettracer.tracing.actions.ntlf.FoundItemAction" name="foundItemForm" scope="session" validate="false"></action>		
+		<action path="/ntlf_create_found_item" type="com.bagnet.nettracer.tracing.actions.ntlf.FoundItemAction" name="foundItemForm" scope="session" validate="false"></action>			
 		<action path="/ntlf_search_lost_found" type="com.bagnet.nettracer.tracing.actions.ntlf.SearchLostFoundAction" name="searchLostFoundForm" scope="request" validate="false"></action>	
 		
 	</action-mappings>

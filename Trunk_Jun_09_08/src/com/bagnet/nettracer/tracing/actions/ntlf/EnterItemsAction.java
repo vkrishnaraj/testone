@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionMessages;
 import aero.nettracer.lf.services.LFServiceWrapper;
 import aero.nettracer.lf.services.LFUtils;
 import aero.nettracer.lf.services.exception.NonUniqueBarcodeException;
+import aero.nettracer.lf.services.exception.UpdateException;
 
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
@@ -70,7 +71,7 @@ public class EnterItemsAction extends CheckedAction {
 				
 				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
 				
-				// 1. create the history object
+				// 1. create the history object for quick history popup.
 				FoundHistoryObject fho = new FoundHistoryObject();
 				found.setLocation(StationBMO.getStation(found.getLocationId()));
 				fho.setFound(found);
@@ -79,17 +80,26 @@ public class EnterItemsAction extends CheckedAction {
 				fho.setObjectType("Found Item");
 				fho.setObjectID(found.getId() + "");
 				fho.setLinkURL("ntlf_create_found_item.do?foundId=");
-				// 2. add the history object to the history container
+				// 2. add the history object to the quick history container
 				HistoryContainer history = (HistoryContainer) session.getAttribute("historyContainer");
-				history.put(fho.getUniqueId(), fho);
-				
-				// 4. clone the found and set it on the form
+				history.put(fho.getUniqueId(), fho);				
+				// 3. clone the found and set it on the form
 				eiForm.setFound(duplicateFound(found, user));
 
 				request.setAttribute("stationID", eiForm.getFound().getLocation().getStation_ID());
 			} catch (NonUniqueBarcodeException nube) {
 				logger.error(nube, nube);
-				ActionMessage error = new ActionMessage("error.non.unique.barcode");
+				ActionMessage error = new ActionMessage("error.failed.to.save");
+				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, errors);
+			} catch (UpdateException ue) {
+				logger.error(ue, ue);
+				ActionMessage error = new ActionMessage("error.failed.to.save");
+				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, errors);
+			} catch (Exception e) {
+				logger.error(e, e);
+				ActionMessage error = new ActionMessage("error.failed.to.save");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
 			}

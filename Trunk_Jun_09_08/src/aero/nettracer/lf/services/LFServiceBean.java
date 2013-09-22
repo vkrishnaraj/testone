@@ -921,6 +921,10 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			if (start > -1 && offset > -1 ) {
 				q.setFirstResult(start);
 				q.setMaxResults(offset);
+			// Replaced the below else statement with an else if that will allow a full unpaginated search
+			// when you provide the value -99 for both the start and the offset. This is needed to run a
+		    // report and was done this way to maintain the functionality in other parts of the application
+			// that expect this exception to be thrown. CG 9/22/13
 			} else if (start != -99 && offset != -99){
 				throw new Exception("Invalided pagination bounds");
 			}

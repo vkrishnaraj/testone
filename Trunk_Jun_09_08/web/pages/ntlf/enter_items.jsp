@@ -26,9 +26,6 @@
  	 
  	ArrayList categoryList = (ArrayList) request.getSession().getAttribute("lfcategorylist");
  	ResourceBundle bundle = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
- 	
- 	int itemCount = PropertyBMO.getValueAsInt("lfc.item.entry.display.count");
- 	ArrayList<FoundHistoryObject> history = ((HistoryContainer) request.getSession().getAttribute("historyContainer")).getNewestFoundHistoryItems(itemCount);
 %>
 
 

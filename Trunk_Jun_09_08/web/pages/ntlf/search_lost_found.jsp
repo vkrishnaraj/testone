@@ -244,7 +244,7 @@
            			</tr>
 				</table>
 				<br />
-	            <div id="pageheaderleft">
+	            <div id="pageheaderleft" style="width:400px;">
 	                <h1 class="green">
 	                	<bean:message key="header.search_result" />
 	                	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>

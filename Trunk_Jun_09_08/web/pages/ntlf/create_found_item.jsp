@@ -71,19 +71,6 @@
 	   	<% } %>
 	}
 	
-	function validateWeight(matchId, form) {
-	   var validWeight=prompt("Please confirm this is the correct weight:",document.getElementById("weight").value)
-	   if(validWeight != "" && validWeight !== null) {
-		    /*document.getElementById("confirm").value="1";
-		    document.getElementById("matchId").value=matchId;
-	   		document.getElementById("weight").value=validWeight;
-	   		form.submit();*/
-	   		location.replace("ntlf_create_found_item.do?email=1&matchId="+matchId+"&validWeight="+validWeight);
-	   } else {
-		   return false;
-	   }
-   }
-	
 	function fieldChanged(field) {
 		var state = document.getElementById('state');
 		var province = document.getElementById('province');
@@ -180,12 +167,6 @@
 				break;
 			}
 		}
-	}
-	
-	function setLostId(lostId, matchItem, itemId) {
-		document.getElementById('lostId').value = lostId;
-		document.getElementById('matchItem').value = matchItem;
-		document.getElementById('itemId').value = itemId;
 	}
 	
     function show(name,link1,link2) {

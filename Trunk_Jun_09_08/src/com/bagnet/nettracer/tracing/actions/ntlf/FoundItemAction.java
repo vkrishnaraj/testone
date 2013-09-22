@@ -136,6 +136,7 @@ public class FoundItemAction extends CheckedAction {
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
 				
+				// Create FHO and add to History Container for Quick History Popup.
 				FoundHistoryObject FHO=new FoundHistoryObject();
 				FHO.setFound(found);
 				FHO.setObjectID(found.getId() + "");
@@ -145,12 +146,17 @@ public class FoundItemAction extends CheckedAction {
 				HistoryUtils.AddToHistoryContainer(session, FHO, null);
 			} catch (NonUniqueBarcodeException nube) {
 				logger.error(nube, nube);
-				ActionMessage error = new ActionMessage("error.non.unique.barcode");
+				ActionMessage error = new ActionMessage("error.failed.to.save");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
 				request.setAttribute("enableIdField", "true");
 			} catch (UpdateException ue) {
 				logger.error(ue, ue);
+				ActionMessage error = new ActionMessage("error.failed.to.save");
+				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, errors);
+			} catch (Exception ex) {
+				logger.error(ex, ex);
 				ActionMessage error = new ActionMessage("error.failed.to.save");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
