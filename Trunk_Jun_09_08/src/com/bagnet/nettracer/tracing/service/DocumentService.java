@@ -1,7 +1,10 @@
 package com.bagnet.nettracer.tracing.service;
 
+import javax.servlet.http.HttpServletResponse;
+
 import com.bagnet.nettracer.tracing.actions.templates.DocumentTemplateResult;
 import com.bagnet.nettracer.tracing.adapter.TemplateAdapter;
+import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.documents.Document;
 import com.bagnet.nettracer.tracing.exceptions.InsufficientInformationException;
 
@@ -30,11 +33,30 @@ public interface DocumentService {
 	
 	/**
 	 * The generatePdf method creates a pdf file on the file share from the contents of the given document.
+	 * @param user requesting the pdf be generated
 	 * @param document from which the file will be created
-	 * @param rootPath is the root path to the file system on which the pdf file will be saved
 	 * @return a DocumentTemplateResult containing meta data regarding the results of the generatePdf operation
 	 * @throws InsufficientInformationException if the method is called without both the document and the 
 	 * root path to the file share being supplied
 	 */
-	public DocumentTemplateResult generatePdf(Document document, String rootPath) throws InsufficientInformationException;
+	public DocumentTemplateResult generatePdf(Agent user, Document document) throws InsufficientInformationException;
+	
+	/**
+	 * Verifies that the given fielName exists on the file share
+	 * @param user requesting the file preview
+	 * @param fileName the name of the file to verify
+	 * @return DocumentTemplateResult indicating whether or not the file
+	 * exists on the file share
+	 */
+	public DocumentTemplateResult canPreviewFile(Agent user, String fileName);
+	
+	/**
+	 * The previewFile method sets the required attributes on the given HttpServletResponse and writes the 
+	 * pdf file content to its OutputStream for viewing in the web page.
+	 * @param user the Agent requesting the file preview
+	 * @param fileName the name of the file to preview
+	 * @param response the HttpServletResponse to output the pdf content too.
+	 * @return a DocumentTemplateResult containing the results of the previewFile operation
+	 */
+	public DocumentTemplateResult previewFile(Agent user, String fileName, HttpServletResponse response);
 }

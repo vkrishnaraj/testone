@@ -246,6 +246,8 @@ public class PropertyBMO {
 	
 	public static final String DOMESIC_PAYOUT_VALUE="domestic.payout.value";
 	
+	public static final String FOUND_ITEM_RECEIPT_TEMPLATE = "found.item.receipt.template";
+	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;
 		if(key != null && value != null){

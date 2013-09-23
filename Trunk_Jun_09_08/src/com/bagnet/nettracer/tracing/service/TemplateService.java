@@ -2,12 +2,13 @@ package com.bagnet.nettracer.tracing.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.bagnet.nettracer.tracing.actions.templates.DocumentTemplateResult;
 import com.bagnet.nettracer.tracing.db.documents.templates.Template;
+import com.bagnet.nettracer.tracing.db.documents.templates.TemplateTypeMapping;
 import com.bagnet.nettracer.tracing.dto.TemplateDTO;
 import com.bagnet.nettracer.tracing.dto.TemplateSearchDTO;
-import com.bagnet.nettracer.tracing.enums.TemplateType;
 
 /**
  * The TemplateService interface defines methods which provide database and maintenance operations 
@@ -77,7 +78,7 @@ public interface TemplateService {
 	 * Determines the type of template based on the dependencies between the variables
 	 * embedded in the template data
 	 * @param template for which the type needs to be determined
-	 * @return the TemplateType for the given template
+	 * @return the TemplateTypeMappings for the given template
 	 */
-	public TemplateType determineRequiredTemplateType(Template template);
+	public Set<TemplateTypeMapping> determineRequiredTemplateTypes(Template template);
 }

@@ -226,22 +226,23 @@
    	<tr>
    		<td id="middlecolumn">        
      		<div id="maincontent">
+     			<logic:messagesPresent message="true">
+				<%
+					Object success = request.getAttribute("success");
+					String color = (success != null && ((Boolean) success)) ? "green" : "red";						
+				%>
+				<span>
+					<font color="<%=color %>" >
+						<html:messages id="msg" message="true">
+							<bean:write name="msg"/>
+							<br><br>
+						</html:messages>
+					</font>
+				</span>
+			</logic:messagesPresent>
          		<logic:present name="reportfile" scope="request">
             		<center><a href="#" onclick="openReportWindow('reporting?outputtype=<%= request.getAttribute("outputtype") %>&reportfile=<bean:write name="reportfile" scope="request"/>','report',800,600);return false;"><b><bean:message key="link.view_report" /></b></a></center>
            		</logic:present>
-   				<center>
-   					<font color="red">
-         				<logic:messagesPresent message="true">
-         					<html:messages id="msg" message="true">
-         						<br/>
-         						<bean:write name="msg"/>
-         						<br/>
-         						<br/>
-       						</html:messages>
-   						</logic:messagesPresent>
-         			</font>
-       			</center>
-       			
 				<h1 class="green">
 		        	<bean:message key="header.report.information" />
 		        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
@@ -731,4 +732,11 @@
    			</div>
    		</td>
    	</tr>
+   	<logic:present name="receiptName" scope="request">
+	    <script language=javascript>
+	    	var fileName = '<%=(String) request.getAttribute("receiptName") %>';
+   			var foundId = document.getElementById('found.id').value;
+   			window.open("ntlf_create_found_item.do?displayReceipt="+fileName+"&foundId="+foundId, '', 'width=600,height=800,resizable=yes');
+	    </script>
+    </logic:present>
 </html:form>

@@ -1032,4 +1032,6 @@
         <put name="center"   value="/pages/ntlf/search_lost_found.jsp"/>
     </definition>
 
+	<definition name="fileNotFound" path="/pages/includes/file_not_found.jsp"></definition>
+	
  </tiles-definitions>

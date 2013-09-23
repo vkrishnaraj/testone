@@ -1,7 +1,9 @@
 package com.bagnet.nettracer.tracing.utils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.BeanUtils;
@@ -17,6 +19,12 @@ import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.documents.templates.Template;
+import com.bagnet.nettracer.tracing.db.documents.templates.TemplateTypeMapping;
+import com.bagnet.nettracer.tracing.db.lf.LFAddress;
+import com.bagnet.nettracer.tracing.db.lf.LFFound;
+import com.bagnet.nettracer.tracing.db.lf.LFItem;
+import com.bagnet.nettracer.tracing.db.lf.LFPerson;
+import com.bagnet.nettracer.tracing.db.lf.LFPhone;
 import com.bagnet.nettracer.tracing.dto.TemplateAdapterDTO;
 import com.bagnet.nettracer.tracing.dto.TemplateSearchDTO;
 import com.bagnet.nettracer.tracing.enums.TemplateType;
@@ -85,6 +93,19 @@ public class TemplateUtils {
 		form.setCommand(null);
 	}
 	
+	public static TemplateAdapterDTO getTemplateAdapterDTO(Agent user, Template template) {
+		TemplateAdapterDTO dto = new TemplateAdapterDTO();
+		dto.setAgent(user);
+		
+		List<TemplateType> types = new ArrayList<TemplateType>();
+		for (TemplateTypeMapping mapping: template.getTypes()) {
+			types.add(TemplateType.fromOrdinal(mapping.getOrdinal()));
+		}
+		
+		dto.setTypes(types);
+		return dto;
+	}
+	
 	public static TemplateAdapterDTO getDummyAdapterDTO(Agent user) {
 		
 		// dummy incident
@@ -145,10 +166,53 @@ public class TemplateUtils {
 		claim.setClaimType(1);
 		claim.setClaimants(claimPassengers);
 		
-		TemplateAdapterDTO dto = new TemplateAdapterDTO(TemplateType.COMBINED);
+		
+		// dummy found item
+		LFAddress lfAddress = new LFAddress();
+		lfAddress.setDecryptedAddress1("2675 Paces Ferry Rd.");
+		lfAddress.setDecryptedAddress2("Suite 240");
+		lfAddress.setDecryptedCity("Atlanta");
+		lfAddress.setDecryptedState("GA");
+		lfAddress.setDecryptedZip("30339");
+		
+		LFPhone lfPhone = new LFPhone();
+		lfPhone.setDecryptedCountry("1");
+		lfPhone.setDecryptedArea("404");
+		lfPhone.setDecryptedExchange("555");
+		lfPhone.setDecryptedLine("1234");
+		Set<LFPhone> phones = new LinkedHashSet<LFPhone>();
+		phones.add(lfPhone);
+		
+		LFPerson lfPerson = new LFPerson();
+		lfPerson.setFirstName("Jane");
+		lfPerson.setLastName("Doe");
+		
+		lfPerson.setAddress(lfAddress);
+		lfPerson.setPhones(phones);
+		
+		LFItem item = new LFItem();
+		item.setId(42l);
+		item.setSubCategory(46);
+		item.setColor("Black");
+		item.setDescription("Found Item");
+		item.setLongDescription("This is an item that we found");
+		item.setCaseColor("Blue");
+				
+		LFFound found = new LFFound();
+		found.setItem(item);
+		found.setClient(lfPerson);
+
+		List<TemplateType> types = new ArrayList<TemplateType>();
+		types.add(TemplateType.INCIDENT);
+		types.add(TemplateType.CLAIM);
+		types.add(TemplateType.FOUND_ITEM);
+		
+		TemplateAdapterDTO dto = new TemplateAdapterDTO();
+		dto.setTypes(types);
 		dto.setAgent(user);
 		dto.setIncident(incident);
 		dto.setClaim(claim);
+		dto.setFound(found);
 		
 		return dto;
 	}

@@ -32,13 +32,22 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	// Passenger info
 	private String passengerFirstName = "";
 	private String passengerLastName = "";
+	private String passengerPhoneNumber = "";
+	
+	// Found Item info
+	private String foundItemId = "";
+	private String foundItemType = "";
+	private String foundItemColor = "";
+	private String foundItemItem = "";
+	private String foundItemDescription = "";
+	private String foundItemCaseColor = "";
 	
 	public void setDateFormat(String dateFormat) {
 		this.dateFormat = dateFormat;
 	}
 
 	public String getAddressAddress1() {
-		return addressAddress1;
+		return addressAddress1 != null ? addressAddress1 : "";
 	}
 	
 	public void setAddressAddress1(String addressAddress1) {
@@ -46,7 +55,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 	
 	public String getAddressAddress2() {
-		return addressAddress2;
+		return addressAddress2 != null ? addressAddress2 : "";
 	}
 	
 	public void setAddressAddress2(String addressAddress2) {
@@ -54,7 +63,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 	
 	public String getAddressCity() {
-		return addressCity;
+		return addressCity != null ? addressCity : "";
 	}
 	
 	public void setAddressCity(String addressCity) {
@@ -62,7 +71,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 	
 	public String getAddressState() {
-		return addressState;
+		return addressState != null ? addressState : "";
 	}
 	
 	public void setAddressState(String addressState) {
@@ -70,7 +79,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 	
 	public String getAddressZip() {
-		return addressZip;
+		return addressZip != null ? addressZip : "";
 	}
 	
 	public void setAddressZip(String addressZip) {
@@ -78,7 +87,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 	
 	public String getAgentFirstName() {
-		return agentFirstName;
+		return agentFirstName != null ? agentFirstName : "";
 	}
 	
 	public void setAgentFirstName(String agentFirstName) {
@@ -86,7 +95,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 	
 	public String getAgentLastName() {
-		return agentLastName;
+		return agentLastName != null ? agentLastName : "";
 	}
 	
 	public void setAgentLastName(String agentLastName) {
@@ -94,7 +103,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 	
 	public String getAgentInitials() {
-		return agentInitials;
+		return agentInitials != null ? agentInitials : "";
 	}
 	
 	public void setAgentInitials(String agentInitials) {
@@ -102,7 +111,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 	
 	public String getClaimId() {
-		return claimId;
+		return claimId != null ? claimId : "";
 	}
 	
 	public void setClaimId(String claimId) {
@@ -110,7 +119,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 	
 	public String getClaimType() {
-		return claimType;
+		return claimType != null ? claimType : "";
 	}
 	
 	public void setClaimType(String claimType) {
@@ -118,7 +127,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 	
 	public String getIncidentId() {
-		return incidentId;
+		return incidentId != null ? incidentId : "";
 	}
 	
 	public void setIncidentId(String incidentId) {
@@ -126,7 +135,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 	
 	public String getIncidentType() {
-		return incidentType;
+		return incidentType != null ? incidentType : "";
 	}
 	
 	public void setIncidentType(String incidentType) {
@@ -134,7 +143,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 	
 	public String getPassengerFirstName() {
-		return passengerFirstName;
+		return passengerFirstName != null ? passengerFirstName : "";
 	}
 	
 	public void setPassengerFirstName(String passengerFirstName) {
@@ -142,13 +151,69 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 	
 	public String getPassengerLastName() {
-		return passengerLastName;
+		return passengerLastName != null ? passengerLastName : "";
 	}
 	
 	public void setPassengerLastName(String passengerLastName) {
 		this.passengerLastName = passengerLastName;
 	}
 	
+	public String getPassengerPhoneNumber() {
+		return passengerPhoneNumber != null ? passengerPhoneNumber : "";
+	}
+
+	public void setPassengerPhoneNumber(String passengerPhoneNumber) {
+		this.passengerPhoneNumber = passengerPhoneNumber;
+	}
+
+	public String getFoundItemId() {
+		return foundItemId != null ? foundItemId : "";
+	}
+
+	public void setFoundItemId(String foundItemId) {
+		this.foundItemId = foundItemId;
+	}
+
+	public String getFoundItemType() {
+		return foundItemType != null ? foundItemType : "";
+	}
+
+	public void setFoundItemType(String foundItemType) {
+		this.foundItemType = foundItemType;
+	}
+
+	public String getFoundItemColor() {
+		return foundItemColor != null ? foundItemColor : "";
+	}
+
+	public void setFoundItemColor(String foundItemColor) {
+		this.foundItemColor = foundItemColor;
+	}
+
+	public String getFoundItemItem() {
+		return foundItemItem != null ? foundItemItem : "";
+	}
+
+	public void setFoundItemItem(String foundItemItem) {
+		this.foundItemItem = foundItemItem;
+	}
+
+	public String getFoundItemDescription() {
+		return foundItemDescription != null ? foundItemDescription : "";
+	}
+
+	public void setFoundItemDescription(String foundItemDescription) {
+		this.foundItemDescription = foundItemDescription;
+	}
+
+	public String getFoundItemCaseColor() {
+		return foundItemCaseColor != null ? foundItemCaseColor : "";
+	}
+
+	public void setFoundItemCaseColor(String foundItemCaseColor) {
+		this.foundItemCaseColor = foundItemCaseColor;
+	}
+
 	public String getDateToday() {
 		return DateUtils.formatDate(new Date(), this.dateFormat, null, null);
 	}

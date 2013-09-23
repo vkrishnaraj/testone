@@ -1,29 +1,29 @@
 package com.bagnet.nettracer.tracing.dto;
 
+import java.util.List;
+
 import aero.nettracer.fs.model.FsClaim;
 
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.enums.TemplateType;
 
 public class TemplateAdapterDTO {
 	
-	private TemplateType type;
+	private List<TemplateType> types;
 	
 	private Agent agent;
 	private FsClaim claim;
 	private Incident incident;
+	private LFFound found;
 	
-	public TemplateAdapterDTO(TemplateType type) {
-		this.type = type;
-	}
-	
-	public TemplateType getType() {
-		return type;
+	public List<TemplateType> getTypes() {
+		return types;
 	}
 
-	public void setType(TemplateType type) {
-		this.type = type;
+	public void setTypes(List<TemplateType> types) {
+		this.types = types;
 	}
 
 	public Agent getAgent() {
@@ -48,6 +48,14 @@ public class TemplateAdapterDTO {
 	
 	public void setIncident(Incident incident) {
 		this.incident = incident;
+	}
+
+	public LFFound getFound() {
+		return found;
+	}
+
+	public void setFound(LFFound found) {
+		this.found = found;
 	}	
 
 }

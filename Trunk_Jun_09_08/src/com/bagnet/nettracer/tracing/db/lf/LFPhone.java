@@ -322,4 +322,14 @@ public class LFPhone implements Serializable{
 		this.lineNumber = lineNumber;
 	}
 	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(getDecryptedCountry() + " ");
+		sb.append("(" + getDecryptedArea() + ") ");
+		sb.append(getDecryptedExchange() + "-");
+		sb.append(getDecryptedLine());
+		return sb.toString();
+	}
+	
 }

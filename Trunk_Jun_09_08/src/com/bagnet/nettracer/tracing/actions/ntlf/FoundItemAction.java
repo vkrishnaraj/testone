@@ -23,15 +23,26 @@ import aero.nettracer.lf.services.exception.NonUniqueBarcodeException;
 import aero.nettracer.lf.services.exception.UpdateException;
 
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
+import com.bagnet.nettracer.tracing.actions.templates.DocumentTemplateResult;
+import com.bagnet.nettracer.tracing.adapter.TemplateAdapter;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.documents.Document;
+import com.bagnet.nettracer.tracing.db.documents.templates.Template;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFRemark;
+import com.bagnet.nettracer.tracing.dto.TemplateAdapterDTO;
+import com.bagnet.nettracer.tracing.factory.TemplateAdapterFactory;
 import com.bagnet.nettracer.tracing.forms.lf.FoundItemForm;
 import com.bagnet.nettracer.tracing.history.FoundHistoryObject;
+import com.bagnet.nettracer.tracing.service.DocumentService;
+import com.bagnet.nettracer.tracing.service.TemplateService;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.HistoryUtils;
+import com.bagnet.nettracer.tracing.utils.SpringUtils;
+import com.bagnet.nettracer.tracing.utils.TemplateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
@@ -39,6 +50,9 @@ import com.bagnet.nettracer.tracing.utils.UserPermissions;
 public class FoundItemAction extends CheckedAction {
 	
 	private static final Logger logger = Logger.getLogger(FoundItemAction.class);
+	
+	private DocumentService documentService = (DocumentService) SpringUtils.getBean(TracingConstants.DOCUMENT_SERVICE_BEAN);
+	private TemplateService templateService = (TemplateService) SpringUtils.getBean(TracingConstants.TEMPLATE_SERVICE_BEAN);
 	
 	@SuppressWarnings("rawtypes")
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -82,6 +96,21 @@ public class FoundItemAction extends CheckedAction {
 			found.setCompanyId(user.getCompanycode_ID());
 		}
 		if(found!=null){
+			if (request.getParameter("displayReceipt") != null) {
+				String fileName = request.getParameter("displayReceipt");
+				DocumentTemplateResult result = documentService.canPreviewFile(user, fileName);
+				if (!result.isSuccess()) {
+					logger.error("Unable to generate receipt: " + fileName + " for found with id: " + found.getId());
+					request.setAttribute("fileName", fileName);
+					return mapping.findForward(TracingConstants.FILE_NOT_FOUND);
+				}
+				
+				result = documentService.previewFile(user, (String) request.getParameter("displayReceipt"), response);
+				if (result.isSuccess()) {
+					return null;
+				}
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(result.getMessageKey()));
+			}
 			request.setAttribute("stationID", found.getLocation().getStation_ID());
 		}
 		
@@ -205,9 +234,15 @@ public class FoundItemAction extends CheckedAction {
 				found.setDeliveredDate(new Date());
 				found.setStatusId(TracingConstants.LF_STATUS_CLOSED);
 				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
+				DocumentTemplateResult result = generateFoundItemReceipt(user, found);
+				if (result.isSuccess()) {
+					request.setAttribute("receiptName", result.getPayload());
+				} else {
+					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(result.getMessageKey()));
+				}
+				request.setAttribute("success", result.isSuccess());
 				ActionMessage error = new ActionMessage("message.found.save.success");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-				saveMessages(request, errors);
 			}
 		} else if (request.getParameter("deliver") != null){
 			if(found.getItem() != null){
@@ -242,6 +277,9 @@ public class FoundItemAction extends CheckedAction {
 		}
 
 		fiForm.setFound(found);
+		if (!errors.isEmpty()) {
+			saveMessages(request, errors);
+		}
 		
 		return mapping.findForward(TracingConstants.NTLF_CREATE_FOUND_ITEM);
 		
@@ -269,6 +307,47 @@ public class FoundItemAction extends CheckedAction {
 				found.getAgentRemarks().remove(lfr);
 			}
 		}
+	}
+	
+	private DocumentTemplateResult generateFoundItemReceipt(Agent user, LFFound found) {
+		DocumentTemplateResult result = new DocumentTemplateResult();
+		// 1. load the PPU receipt template
+		long templateId = 0;
+		String templateIdStr = PropertyBMO.getValue(PropertyBMO.FOUND_ITEM_RECEIPT_TEMPLATE);
+		try {
+			templateId = Long.valueOf(templateIdStr);
+		} catch (NumberFormatException nfe) {
+			logger.error("Invalid value for found receipt template id: " + templateIdStr , nfe);
+			result.setMessageKey("no.found.receipt.template.defined");
+			return result;
+		}
+		
+		Template template = templateService.load(templateId);
+		if (template == null) {
+			result.setMessageKey("no.found.receipt.template.defined");
+			return result;
+		}
+		
+		// 2. get the template adapter
+		TemplateAdapterDTO dto = TemplateUtils.getTemplateAdapterDTO(user, template);
+		dto.setFound(found);
+		
+		try {
+			TemplateAdapter adapter = TemplateAdapterFactory.getTemplateAdapter(dto);
+			Document document = new Document(template);
+			
+			// 3. merge the template and adapter
+			result = documentService.merge(document, adapter);
+			if (!result.isSuccess()) return result;
+			
+			// 4. create the pdf
+			result = documentService.generatePdf(user, document);
+			
+		} catch (Exception e) {
+			logger.error("Failed to generate the found item receipt for LFFound with id: " + found.getId(), e);
+		}
+		
+		return result;
 	}
 	
 }

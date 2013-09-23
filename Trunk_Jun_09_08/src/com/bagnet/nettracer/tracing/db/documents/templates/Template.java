@@ -5,8 +5,6 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -18,8 +16,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Type;
-
-import com.bagnet.nettracer.tracing.enums.TemplateType;
 
 @Entity
 @Table(name="template")
@@ -35,9 +31,11 @@ public class Template {
 	@Column(length = 256)
 	private String description;
 	
-	@Column(nullable = false)
-	@Enumerated(EnumType.ORDINAL)
-	private TemplateType type;
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "template_type_mapping",
+			   joinColumns = {@JoinColumn(name = "templateId")},
+			   inverseJoinColumns = {@JoinColumn(name = "templateTypeId")})
+	private Set<TemplateTypeMapping> types;
 	
 	private boolean active;
 	
@@ -80,20 +78,20 @@ public class Template {
 		this.description = description;
 	}
 
+	public Set<TemplateTypeMapping> getTypes() {
+		return types;
+	}
+
+	public void setTypes(Set<TemplateTypeMapping> types) {
+		this.types = types;
+	}
+
 	public boolean isActive() {
 		return active;
 	}
 
 	public void setActive(boolean active) {
 		this.active = active;
-	}
-
-	public TemplateType getType() {
-		return type;
-	}
-
-	public void setType(TemplateType type) {
-		this.type = type;
 	}
 
 	public Date getCreateDate() {

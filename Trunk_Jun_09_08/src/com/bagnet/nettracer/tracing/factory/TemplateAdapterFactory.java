@@ -1,5 +1,7 @@
 package com.bagnet.nettracer.tracing.factory;
 
+import java.util.Iterator;
+
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.Person;
@@ -11,7 +13,12 @@ import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Passenger;
+import com.bagnet.nettracer.tracing.db.lf.LFAddress;
+import com.bagnet.nettracer.tracing.db.lf.LFFound;
+import com.bagnet.nettracer.tracing.db.lf.LFPerson;
+import com.bagnet.nettracer.tracing.db.lf.LFPhone;
 import com.bagnet.nettracer.tracing.dto.TemplateAdapterDTO;
+import com.bagnet.nettracer.tracing.enums.TemplateType;
 import com.bagnet.nettracer.tracing.exceptions.InsufficientInformationException;
 import com.bagnet.nettracer.tracing.exceptions.InvalidDocumentTypeException;
 
@@ -29,36 +36,25 @@ public class TemplateAdapterFactory {
 	private TemplateAdapterFactory() { }
 	
 	public static TemplateAdapter getTemplateAdapter(TemplateAdapterDTO dto) throws InvalidDocumentTypeException,InsufficientInformationException {
-		switch(dto.getType()) {
-			case STATIC:
-				return instance.createAdapter(dto);
-			case INCIDENT:
-				return instance.getIncidentTemplateAdapter(dto);
-			case CLAIM:
-				return instance.getClaimTemplateAdapter(dto);
-			case COMBINED:
-				return instance.getCombinedTemplateAdapter(dto);
-			default:
-				throw new InvalidDocumentTypeException();
+		TemplateAdapter adapter = instance.createAdapter(dto);
+		for (TemplateType type: dto.getTypes()) {
+			switch(type) {
+				case STATIC:
+				case INVALID:
+					break;
+				case INCIDENT:
+					instance.getIncidentInfo(dto, adapter);
+					break;
+				case CLAIM:
+					instance.getClaimInfo(dto, adapter);
+					break;
+				case FOUND_ITEM:
+					instance.getFoundItemInfo(dto, adapter);
+					break;
+				default:
+					throw new InvalidDocumentTypeException();
+			}
 		}
-	}
-	
-	private TemplateAdapter getIncidentTemplateAdapter(TemplateAdapterDTO dto) throws InsufficientInformationException {
-		TemplateAdapter adapter = createAdapter(dto);
-		getIncidentInfo(dto, adapter);
-		return adapter;
-	}
-
-	private TemplateAdapter getClaimTemplateAdapter(TemplateAdapterDTO dto) throws InsufficientInformationException {
-		TemplateAdapter adapter = createAdapter(dto);
-		getClaimInfo(dto, adapter);
-		return adapter;
-	}
-
-	private TemplateAdapter getCombinedTemplateAdapter(TemplateAdapterDTO dto) throws InsufficientInformationException {
-		TemplateAdapter adapter = createAdapter(dto);
-		getIncidentInfo(dto, adapter);
-		getClaimInfo(dto, adapter);
 		return adapter;
 	}
 	
@@ -121,5 +117,37 @@ public class TemplateAdapterFactory {
 		adapter.setAddressState(address.getState());
 		adapter.setAddressZip(address.getZip());		
 	}	
+	
+	private void getFoundItemInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) throws InsufficientInformationException {
+		if (dto.getFound() == null) throw new InsufficientInformationException(LFFound.class);
+		LFFound found = dto.getFound();
+		adapter.setFoundItemId(String.valueOf(found.getId()));
+		adapter.setFoundItemItem(found.getItem().getDescription());
+		adapter.setFoundItemDescription(found.getItem().getLongDescription());
+		adapter.setFoundItemColor(found.getItem().getColor());
+		adapter.setFoundItemCaseColor(found.getItem().getCaseColor());
+		getFoundItemPassengerInfo(dto, adapter);
+		getFoundItemAddressInfo(dto, adapter);
+	}
+	
+	private void getFoundItemPassengerInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) {
+		LFPerson person = dto.getFound().getClient();
+		adapter.setPassengerFirstName(person.getFirstName());
+		adapter.setPassengerLastName(person.getLastName());
+		
+		Iterator<LFPhone> i = person.getPhones().iterator();
+		if (i.hasNext()) {
+			adapter.setPassengerPhoneNumber(i.next().toString());
+		}
+	}
+	
+	private void getFoundItemAddressInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) {
+		LFAddress address = dto.getFound().getClient().getAddress();
+		adapter.setAddressAddress1(address.getDecryptedAddress1());
+		adapter.setAddressAddress2(address.getDecryptedAddress2());
+		adapter.setAddressCity(address.getDecryptedCity());
+		adapter.setAddressState(address.getDecryptedState());
+		adapter.setAddressZip(address.getDecryptedZip());
+	}
 	
 }

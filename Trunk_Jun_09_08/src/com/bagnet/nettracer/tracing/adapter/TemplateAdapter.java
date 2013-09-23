@@ -36,6 +36,20 @@ public interface TemplateAdapter {
 	public void setPassengerFirstName(String passengerFirstName);
 	public String getPassengerLastName();
 	public void setPassengerLastName(String passengerLastName);
+	public String getPassengerPhoneNumber();
+	public void setPassengerPhoneNumber(String passengerPhoneNumber);
 	public void setDateFormat(String dateFormat);
 	public String getDateToday();
+	public String getFoundItemId();
+	public void setFoundItemId(String foundItemId);
+	public String getFoundItemType();
+	public void setFoundItemType(String foundItemType);
+	public String getFoundItemColor();
+	public void setFoundItemColor(String foundItemColor);
+	public String getFoundItemItem();
+	public void setFoundItemItem(String foundItemItem);
+	public String getFoundItemDescription();
+	public void setFoundItemDescription(String foundItemDescription);
+	public String getFoundItemCaseColor();
+	public void setFoundItemCaseColor(String foundItemCaseColor);
 }

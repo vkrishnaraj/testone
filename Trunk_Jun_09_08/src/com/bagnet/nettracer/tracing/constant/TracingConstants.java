@@ -1344,7 +1344,7 @@ public class TracingConstants {
 	public static final int WARSAW_CONVENTION=3;
 	public static final int MONTREAL_CONVENTION=2;
 	
-	
+	public static final String FILE_NOT_FOUND = "fileNotFound";
 	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {

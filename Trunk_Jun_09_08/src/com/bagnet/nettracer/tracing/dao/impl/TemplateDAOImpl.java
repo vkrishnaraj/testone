@@ -23,9 +23,11 @@ import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.TemplateDAO;
 import com.bagnet.nettracer.tracing.db.documents.templates.Template;
+import com.bagnet.nettracer.tracing.db.documents.templates.TemplateTypeMapping;
 import com.bagnet.nettracer.tracing.db.documents.templates.TemplateVar;
 import com.bagnet.nettracer.tracing.db.documents.templates.TemplateVarDependency;
 import com.bagnet.nettracer.tracing.dto.TemplateSearchDTO;
+import com.bagnet.nettracer.tracing.enums.TemplateType;
 
 public class TemplateDAOImpl implements TemplateDAO {
 
@@ -97,12 +99,12 @@ public class TemplateDAOImpl implements TemplateDAO {
 			session = HibernateWrapper.getSession().openSession();
 			Template oldTemplate = (Template) session.get(Template.class, template.getId());
 			if (oldTemplate == null) return false;			
+			transaction = session.beginTransaction();		
 			
 			template.setCreateDate(oldTemplate.getCreateDate());
 			template.setVariables(new LinkedHashSet<TemplateVar>(getVarsForDocumentTemplate(template)));
 			BeanUtils.copyProperties(template, oldTemplate);
 			
-			transaction = session.beginTransaction();			
 			session.merge(template);
 			transaction.commit();
 			success = true;
@@ -256,6 +258,30 @@ public class TemplateDAOImpl implements TemplateDAO {
 			}
 		}
 		return results;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.bagnet.nettracer.tracing.dao.TemplateDAO#getTemplateTypeMapping(com.bagnet.nettracer.tracing.enums.TemplateType)
+	 */
+	public TemplateTypeMapping getTemplateTypeMapping(TemplateType type) {
+		TemplateTypeMapping mapping = null;
+		Session session = null;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			Criteria criteria = session.createCriteria(TemplateTypeMapping.class, "tt");
+			Conjunction and = Restrictions.conjunction();
+			and.add(Restrictions.eq("tt.ordinal", type.ordinal()));
+			and.add(Restrictions.eq("tt.defaultName", type.getDefaultName()));
+			criteria.add(and);
+			mapping = (TemplateTypeMapping) criteria.uniqueResult();
+		} catch (Exception e) {
+			logger.error("Failed to load TemplateTypeMapping", e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return mapping;
 	}
 	
 	private Criteria getCriteriaFromDto(Session session, TemplateSearchDTO dto) {

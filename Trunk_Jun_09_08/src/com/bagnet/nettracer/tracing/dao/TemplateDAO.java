@@ -3,9 +3,11 @@ package com.bagnet.nettracer.tracing.dao;
 import java.util.List;
 
 import com.bagnet.nettracer.tracing.db.documents.templates.Template;
+import com.bagnet.nettracer.tracing.db.documents.templates.TemplateTypeMapping;
 import com.bagnet.nettracer.tracing.db.documents.templates.TemplateVar;
 import com.bagnet.nettracer.tracing.db.documents.templates.TemplateVarDependency;
 import com.bagnet.nettracer.tracing.dto.TemplateSearchDTO;
+import com.bagnet.nettracer.tracing.enums.TemplateType;
 
 public interface TemplateDAO {
 	public Template load(long templateId);
@@ -56,4 +58,12 @@ public interface TemplateDAO {
 	 * @return a list of class dependencies for the given variable class names
 	 */
 	public List<TemplateVarDependency> getVarDependencies(List<String> classNames);
+	
+	/**
+	 * Loads the TemplateTypeMapping for the given TemplateType
+	 * @param type to load the TemplateTypeMapping for
+	 * @return the TemplateTypeMapping for the given TemplateType
+	 */
+	public TemplateTypeMapping getTemplateTypeMapping(TemplateType type);
+	
 }

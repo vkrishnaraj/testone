@@ -605,6 +605,7 @@
 		<forward name="ntlf_create_found_item" path="ntlf_create_found_item" />
 		<forward name="ntlf_search_lost_found" path="ntlf_search_lost_found" />
 		
+		<forward name="fileNotFound" path="fileNotFound" />
 	</global-forwards>
 
 	<!-- ========== Action Mapping Definitions ============================== -->

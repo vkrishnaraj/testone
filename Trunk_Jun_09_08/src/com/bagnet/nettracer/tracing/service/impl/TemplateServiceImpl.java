@@ -5,12 +5,14 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.bagnet.nettracer.tracing.actions.templates.DocumentTemplateResult;
 import com.bagnet.nettracer.tracing.dao.TemplateDAO;
 import com.bagnet.nettracer.tracing.db.documents.templates.Template;
+import com.bagnet.nettracer.tracing.db.documents.templates.TemplateTypeMapping;
 import com.bagnet.nettracer.tracing.db.documents.templates.TemplateVar;
 import com.bagnet.nettracer.tracing.db.documents.templates.TemplateVarDependency;
 import com.bagnet.nettracer.tracing.dto.TemplateDTO;
@@ -145,10 +147,14 @@ public class TemplateServiceImpl implements TemplateService {
 	 */
 	@Override
 	public DocumentTemplateResult validateTemplate(Template template) {
-		DocumentTemplateResult result = new DocumentTemplateResult();		
-		if (TemplateType.INVALID == template.getType()) {
-			result.setMessageKey("document.template.invalid.dependencies");
-			return result;
+		DocumentTemplateResult result = new DocumentTemplateResult();
+		
+		for (TemplateTypeMapping typeMapping: template.getTypes()) {
+			TemplateType toCheck = TemplateType.fromOrdinal(typeMapping.getOrdinal());
+			if (toCheck == null || toCheck == TemplateType.INVALID) {
+				result.setMessageKey("document.template.invalid.dependencies");
+				return result;
+			}
 		}
 		
 		result.setSuccess(true);
@@ -159,32 +165,36 @@ public class TemplateServiceImpl implements TemplateService {
 	 * @see com.bagnet.nettracer.tracing.service.TemplateService#determineRequiredTemplateType(com.bagnet.nettracer.tracing.db.documents.templates.Template)
 	 */
 	@Override
-	public TemplateType determineRequiredTemplateType(Template template) {
+	public Set<TemplateTypeMapping> determineRequiredTemplateTypes(Template template) {
 		List<String> varsInData = getVarsFromData(template.getData());
 		List<TemplateVarDependency> dependencies = getVariableDependencies(varsInData);
-		TemplateType type = TemplateType.INVALID;
 		
+		Set<TemplateTypeMapping> types = new LinkedHashSet<TemplateTypeMapping>();
 		// if there are no variables or no dependencies, then assume the template is static
 		if (varsInData.isEmpty() || dependencies.isEmpty()) {
-			type = TemplateType.STATIC;
+			types.add(dao.getTemplateTypeMapping(TemplateType.STATIC));
+			return types;
 		}
 		
 		List<String> varClassNames = getClassNamesFromDataVars(varsInData);
-		boolean incidentType = varClassNames.contains("Incident");		
-		boolean claimType = varClassNames.contains("Claim");
-
+		
 		// if there are unmet dependencies, then the template is invalid (ie: we can't make a document from it)
 		if (!allDependenciesMet(varClassNames, dependencies)) {
-			type = TemplateType.INVALID;
-		} else if (incidentType && claimType) {
-			type = TemplateType.COMBINED;
-		} else if (incidentType) {
-			type = TemplateType.INCIDENT;
-		} else if (claimType) {
-			type = TemplateType.CLAIM;
+			types.add(dao.getTemplateTypeMapping(TemplateType.INVALID));
+			return types;
 		}
 		
-		return type;
+		for (TemplateType type: TemplateType.getDependencyTemplateTypes()) {
+			if (varClassNames.contains(type.getDefaultName())) {
+				types.add(dao.getTemplateTypeMapping(type));
+			}
+		}
+
+		if (types.isEmpty()) {
+			types.add(dao.getTemplateTypeMapping(TemplateType.INVALID));
+		}
+		
+		return types;
 	}
 	
 	public TemplateDAO getDao() {

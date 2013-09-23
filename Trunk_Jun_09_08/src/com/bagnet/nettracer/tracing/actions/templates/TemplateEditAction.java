@@ -1,9 +1,5 @@
 package com.bagnet.nettracer.tracing.actions.templates;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -48,6 +44,7 @@ public class TemplateEditAction extends CheckedAction {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		HttpSession session = request.getSession();
 		TracerUtils.checkSession(session);
+		ActionMessages messages = new ActionMessages();
 
 		Agent user = (Agent) session.getAttribute("user");
 
@@ -64,14 +61,16 @@ public class TemplateEditAction extends CheckedAction {
 		}
 		
 		if (request.getParameter("preview_document") != null) {
-			previewFile(user, request.getParameter("preview_document"), response);
+			DocumentTemplateResult result = documentService.previewFile(user, request.getParameter("preview_document"), response);
+			if (!result.isSuccess()) {
+				messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(result.getMessageKey(), result.getPayload() != null ? result.getPayload() : null));
+			}
 			return null;
 		}
 		
 		TemplateEditForm dtf = (TemplateEditForm) form;
 		setUserDataOnForm(dtf, user);
 
-		ActionMessages messages = new ActionMessages();
 		Template template = null;
 		boolean success = false;
 		boolean redirect = false;
@@ -116,7 +115,7 @@ public class TemplateEditAction extends CheckedAction {
 		}
 	}
 	
-	public boolean saveTemplate(TemplateEditForm dtf, ActionMessages messages) {
+	private boolean saveTemplate(TemplateEditForm dtf, ActionMessages messages) {
 		boolean success = false;
 		if (templateService.containsValidVariables(dtf.getData())) {
 			long id = templateService.save(getTemplateAndSetType(dtf));
@@ -129,7 +128,7 @@ public class TemplateEditAction extends CheckedAction {
 		return success;
 	}
 	
-	public boolean updateTemplate(TemplateEditForm dtf, ActionMessages messages) {
+	private boolean updateTemplate(TemplateEditForm dtf, ActionMessages messages) {
 		boolean success = false;
 		if (templateService.containsValidVariables(dtf.getData())) {
 			dtf.setLastUpdated(DateUtils.convertToGMTDate(new Date()));
@@ -141,14 +140,14 @@ public class TemplateEditAction extends CheckedAction {
 		return success;
 	}
 
-	public boolean deleteTemplate(TemplateEditForm dtf, ActionMessages messages) {
+	private boolean deleteTemplate(TemplateEditForm dtf, ActionMessages messages) {
 		String name = dtf.getName();
 		boolean success = templateService.delete(dtf.getId());
 		messages.add(ActionMessages.GLOBAL_MESSAGE, getActionMessage(TracingConstants.COMMAND_DELETE, success, name));
 		return success;
 	}
 	
-	public DocumentTemplateResult generateTemplatePreview(TemplateEditForm dtf, Agent user) {
+	private DocumentTemplateResult generateTemplatePreview(TemplateEditForm dtf, Agent user) {
 		dtf.setPreview(false);
 		Template template = templateService.load(dtf.getId());
 		// 1. validate the template to be used
@@ -167,11 +166,10 @@ public class TemplateEditAction extends CheckedAction {
 			}
 			
 			// 3. create the pdf file		
-			String documentStorePath = TracerProperties.get(user.getCompanycode_ID(),"document_store") + "temp";
-			result = documentService.generatePdf(document, documentStorePath);
+			result = documentService.generatePdf(user, document);
 			
 		} catch (InvalidDocumentTypeException e) {
-			logger.error("Failed to create adapter for template type: " + template.getType().getDefaultName(), e);
+			logger.error("Failed to create adapter for template type", e);
 			return new DocumentTemplateResult(false, "document.template.type.error");
 		} catch (InsufficientInformationException e) {
 			logger.error("Insufficient information to create the template adapter.", e);
@@ -193,49 +191,8 @@ public class TemplateEditAction extends CheckedAction {
 	
 	private Template getTemplateAndSetType(TemplateEditForm tef) {
 		Template template = TemplateUtils.fromForm(tef);
-		template.setType(templateService.determineRequiredTemplateType(template));
+		template.setTypes(templateService.determineRequiredTemplateTypes(template));
 		return template;
 	}
 	
-	private boolean previewFile(Agent user, String fileName, HttpServletResponse response) {
-		boolean success = false;
-		
-		String documentStorePath = TracerProperties.get(user.getCompanycode_ID(),"document_store") + "temp/";
-		File toPreview = new File(documentStorePath + fileName);
-		if (!toPreview.exists()) {
-			return false;
-		}
-		
-		response.setContentType("application/pdf");
-		response.setContentLength((int) toPreview.length());
-		
-		FileInputStream in = null;
-		OutputStream out = null;
-		try {
-			in = new FileInputStream(toPreview);
-			out = response.getOutputStream();
-			
-			int current = -1;
-			while ((current = in.read()) > -1) {
-				out.write(current);
-			}
-
-			success = true;
-		} catch (IOException e) {
-			logger.error("Failed to read the preview file: " + fileName, e);
-		} finally {
-			try {
-				if (in != null) in.close();
-				if (out != null) {
-					out.flush();
-					out.close();
-				}
-			} catch (IOException e) {
-				logger.error("Failed to close the input and output streams in file preview", e);
-			}
-		}
-		
-		return success;
-	}
-
 }

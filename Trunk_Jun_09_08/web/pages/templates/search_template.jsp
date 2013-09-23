@@ -147,7 +147,7 @@
               	<display:table requestURI="/searchTemplate.do" name="requestScope.results" sort="external" class="form2" cellspacing="0" cellpadding="0" id="<%=TracingConstants.TABLE_ID_TEMPLATES %>" defaultsort="1" >
           			<display:column titleKey="colname.template.id" property="id" href="editTemplate.do" paramId="template_id" paramProperty="id" sortable="true" sortName="id" />
           			<display:column titleKey="colname.template.name" property="name" href="editTemplate.do" paramId="template_id" paramProperty="id" sortable="true" sortName="name" />
-          			<display:column titleKey="colname.template.description" property="description" sortable="false" />
+          			<display:column titleKey="colname.template.description" property="description" sortable="false" style="width:35%;" />
           			<display:column titleKey="colname.create.date" property="dispCreateDate" sortable="true" sortName="createDate" />
           			<display:column titleKey="colname.template.active" property="dispActive" sortable="true" sortName="active" />
  			    	<display:footer>
