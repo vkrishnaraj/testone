@@ -182,7 +182,6 @@ function toggledc(o) {
 	    <% } %>
         <h1 class="green">
           <bean:message key="header.bdo_general" />
-          <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#bdo/bdo.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
   </h1>
         <span class="reqfield">*</span>
         <bean:message key="message.required" />

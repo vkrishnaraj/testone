@@ -516,14 +516,20 @@ public class WSCoreOHDUtil {
 			ohd.setItems(ii_set);
 		}
 		
+		return WStoOHDItinMapping(ws,ohd);
+ 	}
+
+ 	public OHD WStoOHDItinMapping(WSOHD wsohd, OHD ohd){
  		// itinerary
 		HashSet<OHD_Itinerary> oi_set = new HashSet<OHD_Itinerary>();
+		String datetimestr = null;
+ 		Date thedate = null;
 		
 		OHD_Itinerary oi = null;
 		WSItinerary wit = null;
-		if (ws.getItinerariesArray() != null) {
-			for (int i=0;i<ws.getItinerariesArray().length;i++) {
-				wit = ws.getItinerariesArray(i);
+		if (wsohd.getItinerariesArray() != null) {
+			for (int i=0;i<wsohd.getItinerariesArray().length;i++) {
+				wit = wsohd.getItinerariesArray(i);
 				if (wit != null) {
 					oi = new OHD_Itinerary();
 					oi.setOhd(ohd);
@@ -533,7 +539,7 @@ public class WSCoreOHDUtil {
 					if(datetimestr != null){
 						thedate = DateUtils.convertToDate(datetimestr, WSCoreUtil.WS_TIMEFORMAT, null);
 						if (thedate == null) {
-							ws.setErrorcode("invalid time format for actual arrive time, please use NT standard: " + WSCoreUtil.WS_TIMEFORMAT);
+							wsohd.setErrorcode("invalid time format for actual arrive time, please use NT standard: " + WSCoreUtil.WS_TIMEFORMAT);
 							return null;
 						}
 						oi.setActarrivetime(thedate);
@@ -543,7 +549,7 @@ public class WSCoreOHDUtil {
 					if(datetimestr != null){
 						thedate = DateUtils.convertToDate(datetimestr, WSCoreUtil.WS_TIMEFORMAT, null);
 						if (thedate == null) {
-							ws.setErrorcode("invalid time format for actual depart time, please use NT standard: " + WSCoreUtil.WS_TIMEFORMAT);
+							wsohd.setErrorcode("invalid time format for actual depart time, please use NT standard: " + WSCoreUtil.WS_TIMEFORMAT);
 							return null;
 						}
 						oi.setActdeparttime(thedate);
@@ -555,7 +561,7 @@ public class WSCoreOHDUtil {
 					if(datetimestr != null){
 						thedate = DateUtils.convertToDate(datetimestr, WSCoreUtil.WS_DATEFORMAT, null);
 						if (thedate == null) {
-							ws.setErrorcode("invalid time format for arrive date, please use NT standard: " + WSCoreUtil.WS_DATEFORMAT);
+							wsohd.setErrorcode("invalid time format for arrive date, please use NT standard: " + WSCoreUtil.WS_DATEFORMAT);
 							return null;
 						}
 						oi.setArrivedate(thedate);
@@ -566,7 +572,7 @@ public class WSCoreOHDUtil {
 					if(datetimestr != null){
 						thedate = DateUtils.convertToDate(datetimestr, WSCoreUtil.WS_DATEFORMAT, null);
 						if (thedate == null) {
-							ws.setErrorcode("invalid time format for depart date, please use NT standard: " + WSCoreUtil.WS_DATEFORMAT);
+							wsohd.setErrorcode("invalid time format for depart date, please use NT standard: " + WSCoreUtil.WS_DATEFORMAT);
 							return null;
 						}
 						oi.setDepartdate(thedate);
@@ -581,7 +587,7 @@ public class WSCoreOHDUtil {
 					if(datetimestr != null){
 						thedate = DateUtils.convertToDate(datetimestr, WSCoreUtil.WS_TIMEFORMAT, null);
 						if (thedate == null) {
-							ws.setErrorcode("invalid time format for scheduled arrive time, please use NT standard: " + WSCoreUtil.WS_TIMEFORMAT);
+							wsohd.setErrorcode("invalid time format for scheduled arrive time, please use NT standard: " + WSCoreUtil.WS_TIMEFORMAT);
 							return null;
 						}
 						oi.setScharrivetime(thedate);
@@ -592,7 +598,7 @@ public class WSCoreOHDUtil {
 					if(datetimestr != null){
 						thedate = DateUtils.convertToDate(datetimestr, WSCoreUtil.WS_TIMEFORMAT, null);
 						if (thedate == null) {
-							ws.setErrorcode("invalid time format for scheduled depart time, please use NT standard: " + WSCoreUtil.WS_TIMEFORMAT);
+							wsohd.setErrorcode("invalid time format for scheduled depart time, please use NT standard: " + WSCoreUtil.WS_TIMEFORMAT);
 							return null;
 						}
 						oi.setSchdeparttime(thedate);
@@ -600,12 +606,11 @@ public class WSCoreOHDUtil {
 					oi_set.add(oi);
 				}
 			}
-			ohd.setItinerary(oi_set);
 		}
-		
+		ohd.setItinerary(oi_set);
 		return ohd;
  	}
-
+ 	
   /**
    * insert ohd into nt from outside
    * @param insertQOHD

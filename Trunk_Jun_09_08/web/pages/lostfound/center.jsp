@@ -99,7 +99,6 @@ function gotoHistoricalReport() {
           <div id="maincontent">
             <h1 class="green">
               <bean:message key="header.item_info" />
-              <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#On_Hand_Bag.htm#Found_and_unclaimed');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
             </h1>
             <p align="right">
               <logic:notEqual name="LostAndFoundForm" property="file_ref_number" value="">

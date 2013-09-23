@@ -111,13 +111,13 @@ jQuery(document).ready(function() {
 	<% if (createMissing || createDelayed || createDamaged) { %>
 	<select id="qPrepopulateType">
 	<%   if (createDelayed) { %>
-		<option value="1">Delayed</option>
+		<option value="1"><bean:message key="ITEMTYPE_1"/></option>
 	<%   }
 	     if (createDamaged) { %>
-		<option value="3">Damaged</option>
+		<option value="3"><bean:message key="ITEMTYPE_3"/></option>
 	<%   }
 	     if (createMissing) { %>
-		<option value="2">Pilfered</option>
+		<option value="2"><bean:message key="ITEMTYPE_2"/></option>
 	<%   } %>
 	</select>
 	<% List pnrlist=new ArrayList();

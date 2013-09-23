@@ -100,7 +100,6 @@ function updatePagination() {
           <br>
           <h1 class="green">
             <bean:message key="header.search_result" />
-            <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm#NetTracer.htm#My_Task_Manager.htm#View_Created_Requests');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>
           </h1>
           <font color=red>
             <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>

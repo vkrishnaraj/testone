@@ -31,6 +31,22 @@
         /**
          * Auto generated method signature
          * 
+                                     * @param addBagForLZ
+         */
+        
+                 public com.bagnet.nettracer.ws.wn.onhandscanning.AddBagForLZResponseDocument addBagForLZ
+                  (
+                  com.bagnet.nettracer.ws.wn.onhandscanning.AddBagForLZDocument addBagForLZ
+                  )
+            {
+                //TODO : fill this with the necessary business logic
+                throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#addBagForLZ");
+        }
+     
+         
+        /**
+         * Auto generated method signature
+         * 
                                      * @param echo
          */
         

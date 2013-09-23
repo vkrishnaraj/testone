@@ -36,6 +36,7 @@ public class ServiceResponse {
 	private String createUpdateIndicator;
 	private String returnStatus;
 	private String assoicatedIncidentId;
+	private boolean TBI;
 	
 	public String getClaimCheckInd() {
 		return claimCheckInd;
@@ -72,6 +73,12 @@ public class ServiceResponse {
 	}
 	public void setAssoicatedIncidentId(String assoicatedIncidentId) {
 		this.assoicatedIncidentId = assoicatedIncidentId;
+	}
+	public boolean isTBI() {
+		return TBI;
+	}
+	public void setTBI(boolean tBI) {
+		TBI = tBI;
 	}
 	private String positiveIdInd;
 	

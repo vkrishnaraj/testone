@@ -130,7 +130,7 @@
                         <xs:element minOccurs="0" name="tagNumber" nillable="true" type="xs:string"/>
                         <xs:element minOccurs="0" name="claimCheckInd" nillable="true" type="xs:string"/>
                         <xs:element minOccurs="0" name="customerSignature" nillable="true" type="xs:string"/>
-                        <xs:element minOccurs="0" name="foundStation" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="holdingStation" nillable="true" type="xs:string"/>
                         <xs:element minOccurs="0" name="positiveIdInd" nillable="true" type="xs:string"/>
                     </xs:sequence>
                 </xs:complexType>
@@ -147,7 +147,7 @@
                     <xs:sequence>
                         <xs:element minOccurs="0" name="authentication" nillable="true" type="ax22:Authentication"/>
                         <xs:element minOccurs="0" name="tagNumber" nillable="true" type="xs:string"/>
-                        <xs:element minOccurs="0" name="foundStation" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="holdingStation" nillable="true" type="xs:string"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -163,7 +163,7 @@
                     <xs:sequence>
                         <xs:element minOccurs="0" name="authentication" nillable="true" type="ax22:Authentication"/>
                         <xs:element minOccurs="0" name="tagNumber" nillable="true" type="xs:string"/>
-                        <xs:element minOccurs="0" name="foundStation" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="holdingStation" nillable="true" type="xs:string"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -217,6 +217,22 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+            <xs:element name="addBagForLZ">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="authentication" nillable="true" type="ax22:Authentication"/>
+                        <xs:element minOccurs="0" name="TBI" type="xs:boolean"/>
+                        <xs:element minOccurs="0" name="onhand" nillable="true" type="ax25:WS_OHD"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="addBagForLZResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax24:ServiceResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
         </xs:schema>
         <xs:schema xmlns:ax26="http://pojo.core.ws.nettracer.bagnet.com/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://pojo.onhandscanning.wn.ws.nettracer.bagnet.com/xsd">
             <xs:import namespace="http://pojo.core.ws.nettracer.bagnet.com/xsd"/>
@@ -232,6 +248,7 @@
             </xs:complexType>
             <xs:complexType name="ServiceResponse">
                 <xs:sequence>
+                    <xs:element minOccurs="0" name="TBI" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="assoicatedIncidentId" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="bagDrop" nillable="true" type="ax23:BagDrop"/>
                     <xs:element minOccurs="0" name="claimCheckInd" nillable="true" type="xs:string"/>
@@ -246,6 +263,12 @@
             </xs:complexType>
         </xs:schema>
     </wsdl:types>
+    <wsdl:message name="addBagForLZRequest">
+        <wsdl:part name="parameters" element="ns:addBagForLZ"/>
+    </wsdl:message>
+    <wsdl:message name="addBagForLZResponse">
+        <wsdl:part name="parameters" element="ns:addBagForLZResponse"/>
+    </wsdl:message>
     <wsdl:message name="lookupOnhandReturnRequest">
         <wsdl:part name="parameters" element="ns:lookupOnhandReturn"/>
     </wsdl:message>
@@ -289,6 +312,10 @@
         <wsdl:part name="parameters" element="ns:lookupOnhandLZResponse"/>
     </wsdl:message>
     <wsdl:portType name="OnhandScanningServicePortType">
+        <wsdl:operation name="addBagForLZ">
+            <wsdl:input message="ns:addBagForLZRequest" wsaw:Action="urn:addBagForLZ"/>
+            <wsdl:output message="ns:addBagForLZResponse" wsaw:Action="urn:addBagForLZResponse"/>
+        </wsdl:operation>
         <wsdl:operation name="lookupOnhandReturn">
             <wsdl:input message="ns:lookupOnhandReturnRequest" wsaw:Action="urn:lookupOnhandReturn"/>
             <wsdl:output message="ns:lookupOnhandReturnResponse" wsaw:Action="urn:lookupOnhandReturnResponse"/>
@@ -320,6 +347,15 @@
     </wsdl:portType>
     <wsdl:binding name="OnhandScanningServiceSoap11Binding" type="ns:OnhandScanningServicePortType">
         <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="addBagForLZ">
+            <soap:operation soapAction="urn:addBagForLZ" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="lookupOnhandReturn">
             <soap:operation soapAction="urn:lookupOnhandReturn" style="document"/>
             <wsdl:input>
@@ -386,6 +422,15 @@
     </wsdl:binding>
     <wsdl:binding name="OnhandScanningServiceSoap12Binding" type="ns:OnhandScanningServicePortType">
         <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="addBagForLZ">
+            <soap12:operation soapAction="urn:addBagForLZ" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="lookupOnhandReturn">
             <soap12:operation soapAction="urn:lookupOnhandReturn" style="document"/>
             <wsdl:input>
@@ -452,6 +497,15 @@
     </wsdl:binding>
     <wsdl:binding name="OnhandScanningServiceHttpBinding" type="ns:OnhandScanningServicePortType">
         <http:binding verb="POST"/>
+        <wsdl:operation name="addBagForLZ">
+            <http:operation location="OnhandScanningService/addBagForLZ"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="addBagForLZ"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="addBagForLZ"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="lookupOnhandReturn">
             <http:operation location="OnhandScanningService/lookupOnhandReturn"/>
             <wsdl:input>

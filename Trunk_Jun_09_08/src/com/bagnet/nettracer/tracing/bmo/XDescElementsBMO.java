@@ -41,7 +41,7 @@ public class XDescElementsBMO {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(XDescElement.class).add(
 					Expression.eq("code", code));
-			return (Integer) cri.list().get(0);
+			return ((XDescElement)cri.list().get(0)).getXDesc_ID();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 7;

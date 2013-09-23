@@ -2,7 +2,6 @@ package com.bagnet.nettracer.ws.wn.onhandscanning;
 
 import com.bagnet.nettracer.ws.core.pojo.WS_OHD;
 import com.bagnet.nettracer.ws.wn.onhandscanning.pojo.BagDrop;
-import com.bagnet.nettracer.ws.wn.onhandscanning.pojo.DeviceUser;
 import com.bagnet.nettracer.ws.wn.onhandscanning.pojo.ServiceResponse;
 import com.bagnet.nettracer.ws.wn.pojo.Authentication;
 
@@ -19,15 +18,19 @@ public class OnhandScanningService {
 		return null;
 	}
 	
-	public ServiceResponse lookupOnhandLZ(Authentication authentication, String tagNumber, String foundStation){
+	public ServiceResponse lookupOnhandLZ(Authentication authentication, String tagNumber, String holdingStation){
 		return null;
 	}
 	
-	public ServiceResponse lookupOnhandReturn(Authentication authentication, String tagNumber, String foundStation){
+	public ServiceResponse addBagForLZ(Authentication authentication, boolean TBI, WS_OHD onhand){
 		return null;
 	}
 	
-	public ServiceResponse returnOnhand(Authentication authentication,  String tagNumber, String claimCheckInd, String customerSignature, String foundStation, String positiveIdInd){
+	public ServiceResponse lookupOnhandReturn(Authentication authentication, String tagNumber, String holdingStation){
+		return null;
+	}
+	
+	public ServiceResponse returnOnhand(Authentication authentication,  String tagNumber, String claimCheckInd, String customerSignature, String holdingStation, String positiveIdInd){
 		return null;
 	}
 	

@@ -13,6 +13,10 @@
             <actionMapping>urn:lookupOnhandLZ</actionMapping>
             <outputActionMapping>urn:lookupOnhandLZResponse</outputActionMapping>
         </operation>
+        <operation name="addBagForLZ" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://onhandscanning.wn.ws.nettracer.bagnet.com">
+            <actionMapping>urn:addBagForLZ</actionMapping>
+            <outputActionMapping>urn:addBagForLZResponse</outputActionMapping>
+        </operation>
         <operation name="echo" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://onhandscanning.wn.ws.nettracer.bagnet.com">
             <actionMapping>urn:echo</actionMapping>
             <outputActionMapping>urn:echoResponse</outputActionMapping>
