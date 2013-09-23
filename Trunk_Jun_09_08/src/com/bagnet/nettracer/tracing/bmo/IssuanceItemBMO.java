@@ -76,7 +76,8 @@ public class IssuanceItemBMO {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Query query = sess.createQuery("from IssuanceItemQuantity q where q.station.stationcode = :code "
-					+ "and not (q.quantity = 0 and (q.issuanceItem.active = 0 or q.issuanceItem.category.active = 0))");
+					+ "and not (q.quantity = 0 and (q.issuanceItem.active = 0 or q.issuanceItem.category.active = 0)) "
+					+ "order by q.issuanceItem.category.description, q.issuanceItem.description");
 			query.setParameter("code", station.getStationcode());
 			return  query.list();
 		} catch (Exception e) {
@@ -134,6 +135,7 @@ public class IssuanceItemBMO {
 				queryString += " and i.issueDate > :daysBack";
 			}
 		}
+		queryString += " order by i.issuanceItem.category.description, i.issuanceItem.description, i.description";
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
