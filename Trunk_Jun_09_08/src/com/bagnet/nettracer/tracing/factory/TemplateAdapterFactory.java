@@ -1,7 +1,5 @@
 package com.bagnet.nettracer.tracing.factory;
 
-import java.util.Iterator;
-
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.Person;
@@ -135,9 +133,9 @@ public class TemplateAdapterFactory {
 		adapter.setPassengerFirstName(person.getFirstName());
 		adapter.setPassengerLastName(person.getLastName());
 		
-		Iterator<LFPhone> i = person.getPhones().iterator();
-		if (i.hasNext()) {
-			adapter.setPassengerPhoneNumber(i.next().toString());
+		LFPhone[] phones = person.getPhones() != null ? person.getPhones().toArray(new LFPhone[person.getPhones().size()]) : null;
+		if (phones != null && phones.length > 0) {
+			adapter.setPassengerPhoneNumber(phones[phones.length-1].toString());
 		}
 	}
 	
