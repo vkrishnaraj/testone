@@ -133,7 +133,7 @@
 				} else {
 					calcVal=0;
 				}
-				calcVal=calcVal.toFixed(2);
+				calcVal=Number(calcVal).toFixed(2);
 				fieldb.value = calcVal.toString();
 				fieldc.value = fieldb.value;
 				fieldd.value = calcVal.toString();
