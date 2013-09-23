@@ -74,7 +74,7 @@ public final class ManageDeprecCalc extends Action {
 
 			rules.setTwentyOnefiftyDeprec(theform.getTwentyOnefiftyDeprec());
 			rules.setLessTwentyDeprec(theform.getLessTwentyDeprec());
-			rules.setOnefiftyDeprec(theform.getCompMembers());
+			rules.setOnefiftyDeprec(theform.getOnefiftyDeprec());
 			rules.setNoDates(theform.getNoDates());
 			try {
 				HibernateUtils.saveDepreciationRules(rules, user);
