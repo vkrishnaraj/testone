@@ -126,7 +126,7 @@
                				<br>
                				<html:select name="searchLostFoundForm" property="dispositionId" styleClass="dropdown" >
                					<html:option value="<%=String.valueOf(TracingConstants.LF_STATUS_ALL) %>"><bean:message key="search.option.all" /></html:option>
-               					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_OTHER) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_OTHER) %>" /></html:option>
+               					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_OTHER) %>"><bean:message key="none" /></html:option>
                					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_DELIVERED) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_DELIVERED) %>" /></html:option>
                					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_PICKED_UP) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_PICKED_UP) %>" /></html:option>
                					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_SENT_TO_LFC) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_SENT_TO_LFC) %>" /></html:option>
@@ -254,7 +254,7 @@
 	              if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_QUERY_REPORTS, a)) {
 	            %>
 	            <div id="pageheaderright">
-	              <select name="outputtype">
+	              <select class="dropdown" name="outputtype">
 	                <% if (!TracerProperties.isTrue(a.getCompanycode_ID(),TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
 	                  <option value="0" selected="selected"><bean:message key="radio.pdf" /></option>
 	                <% } %>

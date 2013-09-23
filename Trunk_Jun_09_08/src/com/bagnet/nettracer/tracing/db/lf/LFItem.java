@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.io.Serializable;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -131,6 +132,9 @@ public class LFItem implements Serializable{
 	
 	@Transient
 	private boolean selected;
+	
+	@Column(length=200)
+	private String removalReason;
 	
 	public long getId() {
 		return id;
@@ -423,4 +427,13 @@ public class LFItem implements Serializable{
 	public void setWeight(float weight) {
 		this.weight = weight;
 	}
+
+	public String getRemovalReason() {
+		return removalReason;
+	}
+
+	public void setRemovalReason(String removalReason) {
+		this.removalReason = removalReason;
+	}
+	
 }

@@ -433,18 +433,6 @@
 	<columnHeader>
 		<band height="36">
 			<rectangle radius="0">
-				<reportElement key="rectangle-1" mode="Opaque" x="3" y="-591" width="727" height="23" forecolor="#000000" backcolor="#CCCCCC"/>
-				<graphicElement fill="Solid">
-					<pen lineWidth="0.0" lineStyle="Solid"/>
-				</graphicElement>
-			</rectangle>
-			<rectangle radius="0">
-				<reportElement key="rectangle-2" mode="Opaque" x="3" y="-591" width="727" height="23" forecolor="#000000" backcolor="#CCCCCC"/>
-				<graphicElement fill="Solid">
-					<pen lineWidth="0.0" lineStyle="Solid"/>
-				</graphicElement>
-			</rectangle>
-			<rectangle radius="0">
 				<reportElement key="rectangle-3" mode="Opaque" x="0" y="0" width="782" height="36" forecolor="#000000" backcolor="#CCCCCC"/>
 				<graphicElement fill="Solid">
 					<pen lineWidth="0.0" lineStyle="Solid"/>

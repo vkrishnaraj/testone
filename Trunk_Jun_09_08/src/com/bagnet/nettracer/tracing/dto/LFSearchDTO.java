@@ -9,6 +9,7 @@ import aero.nettracer.lf.services.LFUtils;
 
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
@@ -394,6 +395,9 @@ public class LFSearchDTO extends ActionForm  {
 	
 	public String getDispositionDisp() {
 		if (dispositionId > 0) {
+			if (dispositionId == TracingConstants.LF_DISPOSITION_OTHER) {
+				return "None";
+			}
 			return StatusBMO.getStatus(dispositionId).getDescription();
 		}
 		return "";

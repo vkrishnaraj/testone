@@ -66,10 +66,14 @@ public class EnterItemsAction extends CheckedAction {
 		if (found == null) {
 			eiForm.setFound(LFUtils.createLFFound(user));
 			eiForm.getFound().setCompanyId(user.getCompanycode_ID());
+			eiForm.getFound().getItem().setValue(TracingConstants.LFC_ITEM_HIGH_VALUE);
 		} else if (request.getParameter("save") != null) {
 			try {
 				
 				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
+				ActionMessage error = new ActionMessage("message.found.save.success");
+				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, errors);
 				
 				// 1. create the history object for quick history popup.
 				FoundHistoryObject fho = new FoundHistoryObject();

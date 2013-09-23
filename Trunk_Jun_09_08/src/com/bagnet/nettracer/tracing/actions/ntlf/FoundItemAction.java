@@ -126,9 +126,15 @@ public class FoundItemAction extends CheckedAction {
 					int dispId = found.getItem().getDispositionId();
 					if (dispId != TracingConstants.LF_DISPOSITION_DELIVERED && dispId != TracingConstants.LF_DISPOSITION_SENT_TO_LFC) {
 						found.getItem().setDispositionId(TracingConstants.LF_DISPOSITION_SENT_TO_LFC);
+						found.setDeliveredDate(new Date());
+						found.setStatusId(TracingConstants.LF_STATUS_CLOSED);
 					}
-					found.setDeliveredDate(new Date());
-					found.setStatusId(TracingConstants.LF_STATUS_CLOSED);
+				}
+				if(found.getItem() != null && found.getItem().getRemovalReason() != null && found.getItem().getRemovalReason().trim().length() > 0){
+					int dispId = found.getItem().getDispositionId();
+					if (dispId != TracingConstants.LF_DISPOSITION_REMOVED) {
+						found.getItem().setRemovalReason(null);
+					}
 				}
 				
 				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
@@ -185,16 +191,53 @@ public class FoundItemAction extends CheckedAction {
 				
 				item.setDispositionId(disposition);
 				item.setTrackingNumber(null);
+				item.setRemovalReason(null);
 			}
 			found.setDeliveredDate(null);
 			found.setStatusId(TracingConstants.LF_STATUS_OPEN);
 			LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
+			ActionMessage error = new ActionMessage("message.found.save.success");
+			errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+			saveMessages(request, errors);
 		} else if (request.getParameter("pickup") != null){
 			if(found.getItem() != null){
 				found.getItem().setDispositionId(TracingConstants.LF_DISPOSITION_PICKED_UP);
 				found.setDeliveredDate(new Date());
 				found.setStatusId(TracingConstants.LF_STATUS_CLOSED);
 				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
+				ActionMessage error = new ActionMessage("message.found.save.success");
+				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, errors);
+			}
+		} else if (request.getParameter("deliver") != null){
+			if(found.getItem() != null){
+				found.getItem().setDispositionId(TracingConstants.LF_DISPOSITION_DELIVERED);
+				found.setDeliveredDate(new Date());
+				found.setStatusId(TracingConstants.LF_STATUS_CLOSED);
+				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
+				ActionMessage error = new ActionMessage("message.found.save.success");
+				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, errors);
+			}
+		} else if (request.getParameter("remove") != null){
+			if(found.getItem() != null){
+				found.getItem().setDispositionId(TracingConstants.LF_DISPOSITION_REMOVED);
+				found.setDeliveredDate(new Date());
+				found.setStatusId(TracingConstants.LF_STATUS_CLOSED);
+				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
+				ActionMessage error = new ActionMessage("message.found.save.success");
+				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, errors);
+			}
+		} else if (request.getParameter("sendToLFC") != null){
+			if(found.getItem() != null){
+				found.getItem().setDispositionId(TracingConstants.LF_DISPOSITION_SENT_TO_LFC);
+				found.setDeliveredDate(new Date());
+				found.setStatusId(TracingConstants.LF_STATUS_CLOSED);
+				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
+				ActionMessage error = new ActionMessage("message.found.save.success");
+				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, errors);
 			}
 		}
 

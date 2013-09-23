@@ -253,7 +253,7 @@ function sortSearchOhd(sortOrder) {
               if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_QUERY_REPORTS, a)) {
             %>
             <div id="pageheaderright">
-              <select name="outputtype">
+              <select class="dropdown" name="outputtype">
                 <% if (!TracerProperties.isTrue(a.getCompanycode_ID(),TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
                   <option value="0" selected="selected"><bean:message key="radio.pdf" /></option>
                 <% } %>

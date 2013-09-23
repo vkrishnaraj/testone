@@ -294,7 +294,7 @@
 						<td>
          					<bean:message key="colname.lf.status" />&nbsp;<span class="reqfield">*</span>
          					<br>
-         					<html:select name="foundItemForm" property="found.statusId" styleClass="dropdown" >
+         					<html:select name="foundItemForm" property="found.statusId" styleClass="dropdown" disabled="true">
          						<html:option value="-1"><bean:message key="option.lf.please.select" /></html:option>
          						<html:options collection="lfstatuslist" property="status_ID" labelProperty="description" />
          					</html:select>
@@ -302,8 +302,8 @@
 						<td>
                				<bean:message key="colname.lf.disposition" />
                				<br>
-               				<html:select name="foundItemForm" property="found.item.dispositionId" styleClass="dropdown" >
-               					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_OTHER) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_OTHER) %>" /></html:option>
+               				<html:select name="foundItemForm" property="foundItem.disposition.status_ID" styleClass="dropdown" disabled="true" >
+               					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_OTHER) %>"><bean:message key="none" /></html:option>
                					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_DELIVERED) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_DELIVERED) %>" /></html:option>
                					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_PICKED_UP) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_PICKED_UP) %>" /></html:option>
                					<html:option value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_SENT_TO_LFC) %>"><bean:message key="<%="STATUS_KEY_" + String.valueOf(TracingConstants.LF_DISPOSITION_SENT_TO_LFC) %>" /></html:option>
@@ -424,15 +424,10 @@
 		              	</td>
 		              </tr>
 		              <tr>
-		              	<td colspan="2" >
+		              	<td colspan="5" >
 		              		<bean:message key="colname.lf.email" />
 		              		<br />
 		              		<html:text name="foundItemForm" property="found.client.decryptedEmail" styleId="email"  size="35" maxlength="100" styleClass="textfield" />
-		              	</td>
-		              	<td colspan="3" >
-		              		<bean:message key="colname.lf.confirm.email" />
-		              		<br />
-		              		<html:text name="foundItemForm" property="found.client.confirmEmail" styleId="confirmemail" size="35" maxlength="100" styleClass="textfield" />
 		              	</td>
 		              </tr>
 				</table>
@@ -448,8 +443,7 @@
          			<% 
        					if (item.getType() == TracingConstants.LF_TYPE_FOUND) { 
 							dispositionId = item.getDispositionId();
-       						deliveryRejected = item.getDeliveryRejected();
-       						haveDeliveryInformation = (dispositionId == TracingConstants.LF_DISPOSITION_DELIVERED || dispositionId == TracingConstants.LF_DISPOSITION_PICKED_UP || dispositionId == TracingConstants.LF_DISPOSITION_SENT_TO_LFC);
+       						haveDeliveryInformation = (dispositionId != TracingConstants.LF_DISPOSITION_OTHER);
        						%>
          				<tr>
 	         				<td>
@@ -464,13 +458,13 @@
 	         				<td>
 	         					<bean:message key="colname.lfc.condition" />
 	         					<br>
-		              			<html:select name="item" styleId="itemcondition_<%=i %>"  property="itemCondition" styleClass="dropdown" >
-			              			<html:option value=""><bean:message key="option.lf.please.select" /></html:option>
-			              			<html:option value="<%=TracingConstants.LFC_CONDITION_NEW%>"><bean:message key="option.lfc.condition.new" /></html:option>
-			              			<html:option value="<%=TracingConstants.LFC_CONDITION_GOOD %>"><bean:message key="option.lfc.condition.good" /></html:option>
-			              			<html:option value="<%=TracingConstants.LFC_CONDITION_AVERAGE %>"><bean:message key="option.lfc.condition.average" /></html:option>
-			              			<html:option value="<%=TracingConstants.LFC_CONDITION_POOR %>"><bean:message key="option.lfc.condition.poor" /></html:option>
-		              			</html:select>
+		              			<select name="item[<%=i %>].itemCondition" id="itemcondition_<%=i %>" class="dropdown" >
+			              			<option value=""><bean:message key="option.lf.please.select" /></option>
+			              			<option value="<%=TracingConstants.LFC_CONDITION_NEW%>" <% if (TracingConstants.LFC_CONDITION_NEW.equals(item.getItemCondition())) { %>selected<% } %> ><bean:message key="option.lfc.condition.new" /></option>
+			              			<option value="<%=TracingConstants.LFC_CONDITION_GOOD %>" <% if (TracingConstants.LFC_CONDITION_GOOD.equals(item.getItemCondition())) { %>selected<% } %> ><bean:message key="option.lfc.condition.good" /></option>
+			              			<option value="<%=TracingConstants.LFC_CONDITION_AVERAGE %>" <% if (TracingConstants.LFC_CONDITION_AVERAGE.equals(item.getItemCondition())) { %>selected<% } %> ><bean:message key="option.lfc.condition.average" /></option>
+			              			<option value="<%=TracingConstants.LFC_CONDITION_POOR %>" <% if (TracingConstants.LFC_CONDITION_POOR.equals(item.getItemCondition())) { %>selected<% } %> ><bean:message key="option.lfc.condition.poor" /></option>
+		              			</select>
 	         				</td>
 	         				<td>
 	         					<bean:message key="colname.lf.size" />
@@ -648,6 +642,12 @@
 							<bean:message key="lf.picked.up" />
 						</td>
 					</logic:equal>
+	         		<logic:equal name="foundItemForm" property="foundItem.disposition.status_ID" value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_REMOVED) %>" >
+						<td>
+							<bean:message key="lf.removed" />:&nbsp;
+							<bean:write name="foundItemForm" property="foundItem.removalReason" />
+						</td>
+					</logic:equal>
 					<td>
 						<bean:write name="foundItemForm" property="disDeliveredDate" />
 					</td>
@@ -657,8 +657,8 @@
 					</tr>
 				<% } else { %>
 					<tr>
-						<td colspan=2 class="header" >
-							<bean:message key="lf.colname.enter.delivery.information" />
+						<td colspan=3 class="header" >
+							<bean:message key="lf.colname.change.item.disposition" />
 						</td>
 					</tr>
 					<tr>
@@ -667,7 +667,29 @@
 							<html:text name="foundItemForm" property="foundItem.trackingNumber" size="20" styleClass="textfield" styleId="trackingNumber" />
 						</td>
 						<td style="width:25%;" >
-							<a href='ntlf_create_found_item.do?pickup=1&itemId=<bean:write name="foundItemForm" property="foundItem.id" />'><bean:message key="lf.picked.up"/></a>
+							<html:hidden property="deliver" value="" disabled="true" />
+							<a href="###" onclick="if (document.getElementById('trackingNumber').value.length > 0) { document.foundItemForm.deliver.disabled = false; document.foundItemForm.submit(); } 
+								else {window.alert('<bean:message key="colname.lf.tracking.number" /> <bean:message key="error.validation.isRequired" />')}"><bean:message key="lf.deliver.to.customer"/></a>
+						</td>
+						<td style="width:25%;" >
+							<html:hidden property="sendToLFC" value="" disabled="true" />
+							<a href="###" onclick="if (document.getElementById('trackingNumber').value.length > 0) { document.foundItemForm.sendToLFC.disabled = false; document.foundItemForm.submit(); } 
+								else {window.alert('<bean:message key="colname.lf.tracking.number" /> <bean:message key="error.validation.isRequired" />')}"><bean:message key="lf.send.to.lfc"/></a>
+						</td>
+					</tr>
+					<tr>
+						<td style="width:50%;" >
+							<bean:message key="colname.lf.removal.reason" />:&nbsp;
+							<html:text name="foundItemForm" property="foundItem.removalReason" size="20" styleClass="textfield" styleId="removalReason" />
+						</td>
+						<td style="width:25%;" >
+							<html:hidden property="remove" value="" disabled="true" />
+							<a href="###" onclick="if (document.getElementById('removalReason').value.length > 0) { document.foundItemForm.remove.disabled = false; document.foundItemForm.submit(); } 
+							else {window.alert('<bean:message key="colname.lf.removal.reason" /> <bean:message key="error.validation.isRequired" />')}"><bean:message key="lf.remove.item"/></a>
+						</td>
+						<td style="width:25%;" >
+							<html:hidden property="pickup" value="" disabled="true" />
+							<a href="###" onclick="document.foundItemForm.pickup.disabled = false; document.foundItemForm.submit();"><bean:message key="lf.picked.up"/></a>
 						</td>
 					</tr>
 				<% } %>
