@@ -233,16 +233,19 @@ public class FoundItemAction extends CheckedAction {
 				found.getItem().setDispositionId(TracingConstants.LF_DISPOSITION_PICKED_UP);
 				found.setDeliveredDate(new Date());
 				found.setStatusId(TracingConstants.LF_STATUS_CLOSED);
-				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
+				
 				DocumentTemplateResult result = generateFoundItemReceipt(user, found);
 				if (result.isSuccess()) {
+					found.setReceiptFileName((String) result.getPayload());
 					request.setAttribute("receiptName", result.getPayload());
 				} else {
 					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(result.getMessageKey()));
 				}
-				request.setAttribute("success", result.isSuccess());
+				
+				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
 				ActionMessage error = new ActionMessage("message.found.save.success");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				request.setAttribute("success", result.isSuccess());
 			}
 		} else if (request.getParameter("deliver") != null){
 			if(found.getItem() != null){

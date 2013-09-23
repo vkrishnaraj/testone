@@ -89,6 +89,8 @@ public class LFFound implements LFObject, Serializable {
 	@Fetch(FetchMode.SELECT)
 	private LFSalvage salvage;
 		
+	private String receiptFileName;
+	
 	@Transient
 	private int entryStatus;
 	
@@ -391,6 +393,14 @@ public class LFFound implements LFObject, Serializable {
 
 	public long getLastLoaded() {
 		return lastLoaded;
+	}
+
+	public String getReceiptFileName() {
+		return receiptFileName;
+	}
+
+	public void setReceiptFileName(String receiptFileName) {
+		this.receiptFileName = receiptFileName;
 	}
 	
 }

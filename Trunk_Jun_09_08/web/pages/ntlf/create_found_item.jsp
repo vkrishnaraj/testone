@@ -196,6 +196,10 @@
 	      field.value = field.value.substring(0, maxlimit);
 	    }
 	}
+
+	function displayPPUReceipt(fileName, foundId) {
+		window.open("ntlf_create_found_item.do?displayReceipt="+fileName+"&foundId="+foundId, '', 'width=600,height=800,resizable=yes');
+	}
 	
 </SCRIPT>
 <jsp:include page="/pages/includes/validation_search.jsp" />
@@ -654,6 +658,10 @@
 					</td>
 					<td>
 						<a href='ntlf_create_found_item.do?undo=1&itemId=<bean:write name="foundItemForm" property="foundItem.id" />'><bean:message key="lf.undo" /></a>
+						<logic:notEmpty name="foundItemForm" property="found.receiptFileName" >
+							&nbsp;,
+							<a href="#" onclick="displayPPUReceipt('<bean:write name="foundItemForm" property="found.receiptFileName" />', <bean:write name="foundItemForm" property="found.id" />)"><bean:message key="print.ppu" /></a>
+						</logic:notEmpty>
 					</td>
 					</tr>
 				<% } else { %>
@@ -736,7 +744,7 @@
 	    <script language=javascript>
 	    	var fileName = '<%=(String) request.getAttribute("receiptName") %>';
    			var foundId = document.getElementById('found.id').value;
-   			window.open("ntlf_create_found_item.do?displayReceipt="+fileName+"&foundId="+foundId, '', 'width=600,height=800,resizable=yes');
+   			displayPPUReceipt(fileName, foundId);
 	    </script>
     </logic:present>
 </html:form>
