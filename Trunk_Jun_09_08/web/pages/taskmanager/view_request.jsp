@@ -120,6 +120,9 @@ function sortIncomingRequests(sortOrder) {
                 <b><a href="#" onclick="sortIncomingRequests('incident');"><bean:message key="header.file" /></a></b>
               </td>
               <td>
+                <b><a href="#" onclick="sortIncomingRequests('bagtag');"><bean:message key="colname.bag_tag_number" /></a></b>
+              </td>              
+              <td>
                 <b><bean:message key="header.match" /></b>
               </td>
               <td>
@@ -162,6 +165,9 @@ function sortIncomingRequests(sortOrder) {
                       &nbsp;
                     </logic:notPresent>
                   </td>
+                  <td>
+					<bean:write name="req" property="ohd.claimnum" />
+                  </td>                  
                   <logic:notEqual name="req" property="match_id" value="0">
                     <td>
                       <A HREF="viewMatches.do?showMatch=1&match_ID=<bean:write name="req" property="match_id"/>"><bean:message key="details" /></a>
@@ -202,14 +208,14 @@ function sortIncomingRequests(sortOrder) {
             </logic:present>
             
             <tr>
-              <td colspan="6">
+              <td colspan="7">
                 <jsp:include page="/pages/includes/pagination_incl.jsp" />
                 
               </td>
             </tr>
             
             <tr>
-              <td colspan="6" align="center">
+              <td colspan="7" align="center">
                 <INPUT type="button" value="Back" onClick="history.back()" Id="button">
                 &nbsp;
               </td>
