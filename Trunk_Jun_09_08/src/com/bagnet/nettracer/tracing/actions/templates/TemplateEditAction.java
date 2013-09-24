@@ -118,10 +118,14 @@ public class TemplateEditAction extends CheckedAction {
 	private boolean saveTemplate(TemplateEditForm dtf, ActionMessages messages) {
 		boolean success = false;
 		if (templateService.containsValidVariables(dtf.getData())) {
-			long id = templateService.save(getTemplateAndSetType(dtf));
+			Template template = getTemplateAndSetType(dtf);
+			long id = templateService.save(template);
 			dtf.setId(id);
 			success = id != 0;
 			messages.add(ActionMessages.GLOBAL_MESSAGE, getActionMessage(TracingConstants.COMMAND_CREATE, success, dtf.getName()));
+			if (!template.isValid()) {
+				messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("document.template.invalid"));
+			}
 		} else {
 			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("document.template.invalid.variable", templateService.getFirstInvalidVar(dtf.getData())));
 		}
@@ -131,9 +135,13 @@ public class TemplateEditAction extends CheckedAction {
 	private boolean updateTemplate(TemplateEditForm dtf, ActionMessages messages) {
 		boolean success = false;
 		if (templateService.containsValidVariables(dtf.getData())) {
+			Template template = getTemplateAndSetType(dtf);
 			dtf.setLastUpdated(DateUtils.convertToGMTDate(new Date()));
-			success = templateService.update(getTemplateAndSetType(dtf));
+			success = templateService.update(template);
 			messages.add(ActionMessages.GLOBAL_MESSAGE, getActionMessage(TracingConstants.COMMAND_UPDATE, success, dtf.getName()));
+			if (!template.isValid()) {
+				messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("document.template.invalid"));
+			}
 		} else {
 			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("document.template.invalid.variable", templateService.getFirstInvalidVar(dtf.getData())));
 		}

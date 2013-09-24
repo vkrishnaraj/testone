@@ -3,6 +3,7 @@ package com.bagnet.nettracer.tracing.factory;
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.Person;
+import aero.nettracer.fs.model.Phone;
 
 import com.bagnet.nettracer.tracing.adapter.TemplateAdapter;
 import com.bagnet.nettracer.tracing.adapter.impl.TemplateAdapterImpl;
@@ -72,49 +73,61 @@ public class TemplateAdapterFactory {
 	
 	private void getIncidentInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) throws InsufficientInformationException {
 		if (dto.getIncident() == null) throw new InsufficientInformationException(Incident.class);
-		adapter.setIncidentId(dto.getIncident().getIncident_ID());
-		adapter.setIncidentType(dto.getIncident().getItemtype().getDescription());
-		getIncidentPassengerInfo(dto, adapter);
-		getIncidentAddressInfo(dto, adapter);
+		Incident incident = dto.getIncident();
+		adapter.setIncidentId(incident.getIncident_ID());
+		adapter.setIncidentType(incident.getItemtype().getDescription());
+		
+		Passenger p = incident.getPassenger_list().get(0);
+		adapter.setIncidentFirstName(p.getFirstname());
+		adapter.setIncidentLastName(p.getLastname());
+		
+		Address a = p.getAddress(0);
+		adapter.setIncidentAddress1(a.getAddress1());
+		adapter.setIncidentAddress2(a.getAddress2());
+		adapter.setIncidentCity(a.getCity());
+		adapter.setIncidentState(a.getState());
+		adapter.setIncidentZip(a.getZip());
+		
+		adapter.setIncidentHomePhone(a.getHomephone());
+		adapter.setIncidentBusinessPhone(a.getWorkphone());
+		adapter.setIncidentMobilePhone(a.getMobile());
 	}
 	
 	private void getClaimInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) throws InsufficientInformationException {
 		if (dto.getClaim() == null) throw new InsufficientInformationException(FsClaim.class);
-		adapter.setClaimId(String.valueOf(dto.getClaim().getId()));
-		adapter.setClaimType(ClaimDAO.getClaimTypeDescription(dto.getClaim().getClaimType()));
-		getClaimPassengerInfo(dto, adapter);
-		getClaimAddressInfo(dto, adapter);
+		FsClaim claim = dto.getClaim();
+		
+		adapter.setClaimId(String.valueOf(claim.getId()));
+		adapter.setClaimType(ClaimDAO.getClaimTypeDescription(claim.getClaimType()));
+		
+		Person p = claim.getClaimant();
+		adapter.setClaimFirstName(p.getFirstName());
+		adapter.setClaimLastName(p.getLastName());
+		
+		FsAddress a = p.getAddress();
+		adapter.setClaimAddress1(a.getAddress1());
+		adapter.setClaimAddress2(a.getAddress2());
+		adapter.setClaimCity(a.getCity());
+		adapter.setClaimState(a.getState());
+		adapter.setClaimZip(a.getZip());
+		
+		for (Phone phone: p.getPhones()) {
+			switch(phone.getType()) {
+				case Phone.HOME:
+					adapter.setClaimHomePhone(phone.getPhoneNumber());
+					break;
+				case Phone.WORK:
+					adapter.setClaimBusinessPhone(phone.getPhoneNumber());
+					break;
+				case Phone.MOBILE:
+					adapter.setClaimMobilePhone(phone.getPhoneNumber());
+					break;
+				default:
+					continue;
+			}
+		}
+		
 	}
-	
-	private void getIncidentPassengerInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) {
-		Passenger passenger = dto.getIncident().getPassenger_list().get(0);
-		adapter.setPassengerFirstName(passenger.getFirstname());
-		adapter.setPassengerLastName(passenger.getLastname());
-	}
-	
-	private void getClaimPassengerInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) {
-		Person person = dto.getClaim().getClaimant();
-		adapter.setPassengerFirstName(person.getFirstName());
-		adapter.setPassengerLastName(person.getLastName());
-	}
-
-	private void getIncidentAddressInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) {
-		Address address = dto.getIncident().getPassenger_list().get(0).getAddress(0);
-		adapter.setAddressAddress1(address.getAddress1());
-		adapter.setAddressAddress2(address.getAddress2());
-		adapter.setAddressCity(address.getCity());
-		adapter.setAddressState(address.getState());
-		adapter.setAddressZip(address.getZip());
-	}
-	
-	private void getClaimAddressInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) {
-		FsAddress address = dto.getClaim().getClaimant().getAddress();
-		adapter.setAddressAddress1(address.getAddress1());
-		adapter.setAddressAddress2(address.getAddress2());
-		adapter.setAddressCity(address.getCity());
-		adapter.setAddressState(address.getState());
-		adapter.setAddressZip(address.getZip());		
-	}	
 	
 	private void getFoundItemInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) throws InsufficientInformationException {
 		if (dto.getFound() == null) throw new InsufficientInformationException(LFFound.class);
@@ -124,28 +137,34 @@ public class TemplateAdapterFactory {
 		adapter.setFoundItemDescription(found.getItem().getLongDescription());
 		adapter.setFoundItemColor(found.getItem().getColor());
 		adapter.setFoundItemCaseColor(found.getItem().getCaseColor());
-		getFoundItemPassengerInfo(dto, adapter);
-		getFoundItemAddressInfo(dto, adapter);
-	}
-	
-	private void getFoundItemPassengerInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) {
-		LFPerson person = dto.getFound().getClient();
-		adapter.setPassengerFirstName(person.getFirstName());
-		adapter.setPassengerLastName(person.getLastName());
+
+		LFPerson p = found.getClient();
+		adapter.setFoundItemFirstName(p.getFirstName());
+		adapter.setFoundItemLastName(p.getLastName());
 		
-		LFPhone[] phones = person.getPhones() != null ? person.getPhones().toArray(new LFPhone[person.getPhones().size()]) : null;
-		if (phones != null && phones.length > 0) {
-			adapter.setPassengerPhoneNumber(phones[phones.length-1].toString());
+		LFAddress a = p.getAddress();
+		adapter.setFoundItemAddress1(a.getDecryptedAddress1());
+		adapter.setFoundItemAddress2(a.getDecryptedAddress2());
+		adapter.setFoundItemCity(a.getDecryptedCity());
+		adapter.setFoundItemState(a.getDecryptedState());
+		adapter.setFoundItemZip(a.getDecryptedZip());
+		
+		for (LFPhone phone: p.getPhones()) {
+			switch(phone.getNumberType()) {
+				case LFPhone.HOME:
+					adapter.setFoundItemHomePhone(phone.toString());
+					break;
+				case LFPhone.WORK:
+					adapter.setFoundItemBusinessPhone(phone.toString());
+					break;
+				case LFPhone.MOBILE:
+					adapter.setFoundItemMobilePhone(phone.toString());
+					break;
+				default:
+					continue;
+			}
 		}
-	}
 	
-	private void getFoundItemAddressInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) {
-		LFAddress address = dto.getFound().getClient().getAddress();
-		adapter.setAddressAddress1(address.getDecryptedAddress1());
-		adapter.setAddressAddress2(address.getDecryptedAddress2());
-		adapter.setAddressCity(address.getDecryptedCity());
-		adapter.setAddressState(address.getDecryptedState());
-		adapter.setAddressZip(address.getDecryptedZip());
 	}
 	
 }

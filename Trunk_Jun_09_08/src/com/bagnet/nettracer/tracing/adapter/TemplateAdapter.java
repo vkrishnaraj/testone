@@ -8,38 +8,41 @@ package com.bagnet.nettracer.tracing.adapter;
  *
  */
 public interface TemplateAdapter {
-	public String getAddressAddress1();
-	public void setAddressAddress1(String address1);
-	public String getAddressAddress2();
-	public void setAddressAddress2(String address2);
-	public String getAddressCity();
-	public void setAddressCity(String city);
-	public String getAddressState();
-	public void setAddressState(String state);
-	public String getAddressZip();
-	public void setAddressZip(String zip);
+	// Agent data
 	public String getAgentFirstName();
 	public void setAgentFirstName(String agentFirstName);
 	public String getAgentLastName();
 	public void setAgentLastName(String agentLastName);
 	public String getAgentInitials();
 	public void setAgentInitials(String agentInitials);
+
+	// Claim data
 	public String getClaimId();
 	public void setClaimId(String claimId);
 	public String getClaimType();
 	public void setClaimType(String claimType);
-	public String getIncidentId();
-	public void setIncidentId(String incidentId);
-	public String getIncidentType();
-	public void setIncidentType(String incidentType);
-	public String getPassengerFirstName();
-	public void setPassengerFirstName(String passengerFirstName);
-	public String getPassengerLastName();
-	public void setPassengerLastName(String passengerLastName);
-	public String getPassengerPhoneNumber();
-	public void setPassengerPhoneNumber(String passengerPhoneNumber);
-	public void setDateFormat(String dateFormat);
-	public String getDateToday();
+	public String getClaimFirstName();
+	public void setClaimFirstName(String claimFirstName);
+	public String getClaimLastName();
+	public void setClaimLastName(String claimLastName);
+	public String getClaimAddress1();
+	public void setClaimAddress1(String claimAddress1);
+	public String getClaimAddress2();
+	public void setClaimAddress2(String claimAddress2);
+	public String getClaimCity();
+	public void setClaimCity(String claimCity);
+	public String getClaimState();
+	public void setClaimState(String claimState);
+	public String getClaimZip();
+	public void setClaimZip(String claimZip);
+	public String getClaimHomePhone();
+	public void setClaimHomePhone(String claimHomePhone);
+	public String getClaimBusinessPhone();
+	public void setClaimBusinessPhone(String claimBusinessPhone);
+	public String getClaimMobilePhone();
+	public void setClaimMobilePhone(String claimHomePhone);
+	
+	// Found Item data
 	public String getFoundItemId();
 	public void setFoundItemId(String foundItemId);
 	public String getFoundItemType();
@@ -52,4 +55,54 @@ public interface TemplateAdapter {
 	public void setFoundItemDescription(String foundItemDescription);
 	public String getFoundItemCaseColor();
 	public void setFoundItemCaseColor(String foundItemCaseColor);
+	public String getFoundItemFirstName();
+	public void setFoundItemFirstName(String foundItemFirstName);
+	public String getFoundItemLastName();
+	public void setFoundItemLastName(String foundItemLastName);
+	public String getFoundItemAddress1();
+	public void setFoundItemAddress1(String foundItemAddress1);
+	public String getFoundItemAddress2();
+	public void setFoundItemAddress2(String foundItemAddress2);
+	public String getFoundItemCity();
+	public void setFoundItemCity(String foundItemCity);
+	public String getFoundItemState();
+	public void setFoundItemState(String foundItemState);
+	public String getFoundItemZip();
+	public void setFoundItemZip(String foundItemZip);
+	public String getFoundItemHomePhone();
+	public void setFoundItemHomePhone(String foundItemHomePhone);
+	public String getFoundItemBusinessPhone();
+	public void setFoundItemBusinessPhone(String foundItemBusinessPhone);
+	public String getFoundItemMobilePhone();
+	public void setFoundItemMobilePhone(String foundItemHomePhone);
+	
+	// Incident data
+	public String getIncidentId();
+	public void setIncidentId(String incidentId);
+	public String getIncidentType();
+	public void setIncidentType(String incidentType);
+	public String getIncidentFirstName();
+	public void setIncidentFirstName(String incidentFirstName);
+	public String getIncidentLastName();
+	public void setIncidentLastName(String incidentLastName);
+	public String getIncidentAddress1();
+	public void setIncidentAddress1(String incidentAddress1);
+	public String getIncidentAddress2();
+	public void setIncidentAddress2(String incidentAddress2);
+	public String getIncidentCity();
+	public void setIncidentCity(String incidentCity);
+	public String getIncidentState();
+	public void setIncidentState(String incidentState);
+	public String getIncidentZip();
+	public void setIncidentZip(String incidentZip);
+	public String getIncidentHomePhone();
+	public void setIncidentHomePhone(String incidentHomePhone);
+	public String getIncidentBusinessPhone();
+	public void setIncidentBusinessPhone(String incidentBusinessPhone);
+	public String getIncidentMobilePhone();
+	public void setIncidentMobilePhone(String incidentHomePhone);
+	
+	// Generic data
+	public void setDateFormat(String dateFormat);
+	public String getDateToday();
 }

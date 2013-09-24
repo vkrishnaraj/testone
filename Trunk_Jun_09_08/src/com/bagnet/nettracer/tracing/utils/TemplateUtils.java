@@ -11,6 +11,7 @@ import org.springframework.beans.BeanUtils;
 import aero.nettracer.fs.model.FsAddress;
 import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.Person;
+import aero.nettracer.fs.model.Phone;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
@@ -108,6 +109,124 @@ public class TemplateUtils {
 	
 	public static TemplateAdapterDTO getDummyAdapterDTO(Agent user) {
 		
+		TemplateAdapterDTO dto = new TemplateAdapterDTO();
+		dto.setAgent(user);
+		dto.setIncident(getDummyIncident(user));
+		dto.setClaim(getDummyClaim());
+		dto.setFound(getDummyFoundItem());
+
+		List<TemplateType> types = new ArrayList<TemplateType>();
+		types.add(TemplateType.INCIDENT);
+		types.add(TemplateType.CLAIM);
+		types.add(TemplateType.FOUND_ITEM);
+		
+		dto.setTypes(types);
+		
+		return dto;
+	}
+
+	private static LFFound getDummyFoundItem() {
+		// dummy found item
+		LFAddress lfAddress = new LFAddress();
+		lfAddress.setDecryptedAddress1("2675 Paces Ferry Rd.");
+		lfAddress.setDecryptedAddress2("Suite 240");
+		lfAddress.setDecryptedCity("Atlanta");
+		lfAddress.setDecryptedState("GA");
+		lfAddress.setDecryptedZip("30339");
+		
+		LFPhone home = new LFPhone();
+		home.setNumberType(LFPhone.HOME);
+		home.setDecryptedCountry("1");
+		home.setDecryptedArea("404");
+		home.setDecryptedExchange("555");
+		home.setDecryptedLine("1234");
+		
+		LFPhone business = new LFPhone();
+		business.setNumberType(LFPhone.WORK);
+		business.setDecryptedCountry("1");
+		business.setDecryptedArea("404");
+		business.setDecryptedExchange("555");
+		business.setDecryptedLine("1234");
+		
+		LFPhone mobile = new LFPhone();
+		mobile.setNumberType(LFPhone.MOBILE);
+		mobile.setDecryptedCountry("1");
+		mobile.setDecryptedArea("404");
+		mobile.setDecryptedExchange("555");
+		mobile.setDecryptedLine("1234");
+		
+		Set<LFPhone> phones = new LinkedHashSet<LFPhone>();
+		phones.add(home);
+		phones.add(business);
+		phones.add(mobile);
+		
+		LFPerson lfPerson = new LFPerson();
+		lfPerson.setFirstName("Jane");
+		lfPerson.setLastName("Doe");
+		
+		lfPerson.setAddress(lfAddress);
+		lfPerson.setPhones(phones);
+		
+		LFItem item = new LFItem();
+		item.setId(42l);
+		item.setSubCategory(46);
+		item.setColor("Black");
+		item.setDescription("Found Item");
+		item.setLongDescription("This is an item that we found");
+		item.setCaseColor("Blue");
+				
+		LFFound found = new LFFound();
+		found.setItem(item);
+		found.setClient(lfPerson);
+		return found;
+	}
+
+	private static FsClaim getDummyClaim() {
+		// dummy claim
+		FsAddress claimAddress = new FsAddress();
+		claimAddress.setAddress1("2675 Paces Ferry Rd.");
+		claimAddress.setAddress2("Suite 240");
+		claimAddress.setCity("Atlanta");
+		claimAddress.setState("GA");
+		claimAddress.setZip("30339");
+		Set<FsAddress> claimAddresses = new LinkedHashSet<FsAddress>();
+		claimAddresses.add(claimAddress);
+		
+		Person person = new Person();
+		person.setFirstName("John");
+		person.setLastName("Doe");
+		person.setAddresses(claimAddresses);
+		
+		LinkedHashSet<Phone> phones = new LinkedHashSet<Phone>();
+		Phone home = new Phone();
+		home.setType(Phone.HOME);
+		home.setPhoneNumber("404 555-1234");
+
+		Phone business = new Phone();
+		business.setType(Phone.HOME);
+		business.setPhoneNumber("404 555-1234");
+		
+		Phone mobile = new Phone();
+		mobile.setType(Phone.MOBILE);
+		mobile.setPhoneNumber("404 555-1234");
+		
+		phones.add(home);
+		phones.add(business);
+		phones.add(mobile);
+		
+		person.setPhones(phones);
+		
+		Set<Person> claimPassengers = new LinkedHashSet<Person>();
+		claimPassengers.add(person);
+		
+		FsClaim claim = new FsClaim();
+		claim.setId(100l);
+		claim.setClaimType(1);
+		claim.setClaimants(claimPassengers);
+		return claim;
+	}
+
+	private static Incident getDummyIncident(Agent user) {
 		// dummy incident
 		Incident incident = new Incident();
 		StringBuilder incidentId = new StringBuilder();
@@ -131,6 +250,10 @@ public class TemplateUtils {
 		incidentAddress.setCity("Atlanta");
 		incidentAddress.setState_ID("GA");
 		incidentAddress.setZip("30339");
+		incidentAddress.setHomephone("404 555-1234");
+		incidentAddress.setWorkphone("404 555-1234");
+		incidentAddress.setMobile("404 555-1234");
+		
 		Set<Address> incidentAddresses = new LinkedHashSet<Address>();
 		incidentAddresses.add(incidentAddress);
 		
@@ -143,78 +266,7 @@ public class TemplateUtils {
 		incidentPassengers.add(passenger);
 		
 		incident.setPassengers(incidentPassengers);
-		
-		// dummy claim
-		FsAddress claimAddress = new FsAddress();
-		claimAddress.setAddress1("2675 Paces Ferry Rd.");
-		claimAddress.setAddress2("Suite 240");
-		claimAddress.setCity("Atlanta");
-		claimAddress.setState("GA");
-		claimAddress.setZip("30339");
-		Set<FsAddress> claimAddresses = new LinkedHashSet<FsAddress>();
-		claimAddresses.add(claimAddress);
-		
-		Person person = new Person();
-		person.setFirstName("John");
-		person.setLastName("Doe");
-		person.setAddresses(claimAddresses);
-		Set<Person> claimPassengers = new LinkedHashSet<Person>();
-		claimPassengers.add(person);
-		
-		FsClaim claim = new FsClaim();
-		claim.setId(100l);
-		claim.setClaimType(1);
-		claim.setClaimants(claimPassengers);
-		
-		
-		// dummy found item
-		LFAddress lfAddress = new LFAddress();
-		lfAddress.setDecryptedAddress1("2675 Paces Ferry Rd.");
-		lfAddress.setDecryptedAddress2("Suite 240");
-		lfAddress.setDecryptedCity("Atlanta");
-		lfAddress.setDecryptedState("GA");
-		lfAddress.setDecryptedZip("30339");
-		
-		LFPhone lfPhone = new LFPhone();
-		lfPhone.setDecryptedCountry("1");
-		lfPhone.setDecryptedArea("404");
-		lfPhone.setDecryptedExchange("555");
-		lfPhone.setDecryptedLine("1234");
-		Set<LFPhone> phones = new LinkedHashSet<LFPhone>();
-		phones.add(lfPhone);
-		
-		LFPerson lfPerson = new LFPerson();
-		lfPerson.setFirstName("Jane");
-		lfPerson.setLastName("Doe");
-		
-		lfPerson.setAddress(lfAddress);
-		lfPerson.setPhones(phones);
-		
-		LFItem item = new LFItem();
-		item.setId(42l);
-		item.setSubCategory(46);
-		item.setColor("Black");
-		item.setDescription("Found Item");
-		item.setLongDescription("This is an item that we found");
-		item.setCaseColor("Blue");
-				
-		LFFound found = new LFFound();
-		found.setItem(item);
-		found.setClient(lfPerson);
-
-		List<TemplateType> types = new ArrayList<TemplateType>();
-		types.add(TemplateType.INCIDENT);
-		types.add(TemplateType.CLAIM);
-		types.add(TemplateType.FOUND_ITEM);
-		
-		TemplateAdapterDTO dto = new TemplateAdapterDTO();
-		dto.setTypes(types);
-		dto.setAgent(user);
-		dto.setIncident(incident);
-		dto.setClaim(claim);
-		dto.setFound(found);
-		
-		return dto;
+		return incident;
 	}
 	
 }

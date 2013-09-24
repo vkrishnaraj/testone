@@ -324,11 +324,38 @@ public class LFPhone implements Serializable{
 	
 	@Override
 	public String toString() {
+		String country = getDecryptedCountry();
+		String area = getDecryptedArea();
+		String exchange = getDecryptedExchange();
+		String line = getDecryptedLine();
+		if (country == null && area == null && exchange == null && line == null) return "";
+		
+		boolean countryValid = country != null && !country.isEmpty();
+		boolean areaValid = area != null && !area.isEmpty();
+		boolean exchangeValid = exchange != null && !exchange.isEmpty();
+		boolean lineValid = exchange != null && !exchange.isEmpty();
+		
 		StringBuilder sb = new StringBuilder();
-		sb.append(getDecryptedCountry() + " ");
-		sb.append("(" + getDecryptedArea() + ") ");
-		sb.append(getDecryptedExchange() + "-");
-		sb.append(getDecryptedLine());
+		
+		if (countryValid) {
+			sb.append(getDecryptedCountry() + " ");
+		}
+		
+		if (areaValid) {
+			sb.append("(" + getDecryptedArea() + ") ");
+		}
+		
+		if (exchangeValid) {
+			sb.append(exchange);
+		}
+		
+		if (exchangeValid && lineValid) {
+			sb.append("-");
+		}
+		
+		if (lineValid) {
+			sb.append(line);
+		}
 		return sb.toString();
 	}
 	

@@ -659,7 +659,7 @@
 					<td>
 						<a href='ntlf_create_found_item.do?undo=1&itemId=<bean:write name="foundItemForm" property="foundItem.id" />'><bean:message key="lf.undo" /></a>
 						<logic:notEmpty name="foundItemForm" property="found.receiptFileName" >
-							&nbsp;,
+							,&nbsp;
 							<a href="#" onclick="displayPPUReceipt('<bean:write name="foundItemForm" property="found.receiptFileName" />', <bean:write name="foundItemForm" property="found.id" />)"><bean:message key="print.ppu" /></a>
 						</logic:notEmpty>
 					</td>

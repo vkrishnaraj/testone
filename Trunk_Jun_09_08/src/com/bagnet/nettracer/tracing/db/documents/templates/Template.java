@@ -17,6 +17,8 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Type;
 
+import com.bagnet.nettracer.tracing.enums.TemplateType;
+
 @Entity
 @Table(name="template")
 public class Template {
@@ -124,6 +126,15 @@ public class Template {
 
 	public void setVariables(Set<TemplateVar> variables) {
 		this.variables = variables;
+	}
+	
+	public boolean isValid() {
+		for (TemplateTypeMapping mapping: types) {
+			if (TemplateType.INVALID == TemplateType.fromOrdinal(mapping.getOrdinal())) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 }
