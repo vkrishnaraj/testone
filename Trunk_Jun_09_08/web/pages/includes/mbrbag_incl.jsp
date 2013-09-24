@@ -745,7 +745,7 @@
 							<% index++; } %>
 							</logic:iterate>
 				    		issueAddTR3.innerHTML="<bean:message key='issuance.item.quantity.issued' />" + "<br/><input type='text' name='issuance_quantity' class='textfield' value='1' />";
-				    		issueAddTR4.innerHTML="<input type='submit' name='issueItem' id='button' value='"+"<bean:message key='issuance.item.button.issue' />"+"' >";
+				    		issueAddTR4.innerHTML="<br/><input type='submit' name='issueItem' id='button' value='"+"<bean:message key='issuance.item.button.issue' />"+"' >";
     				<%  } %>
     			}
     		</logic:iterate>
@@ -764,10 +764,10 @@
 						<% boolean canLoan = (i_item.getTradeType() == TracingConstants.ISSUANCE_ITEM_INVENTORY_TYPE_BOTH || i_item.getTradeType() == TracingConstants.ISSUANCE_ITEM_INVENTORY_TYPE_LOAN_ONLY); %>
 						<% boolean canTradeout = (i_item.getTradeType() == TracingConstants.ISSUANCE_ITEM_INVENTORY_TYPE_BOTH || i_item.getTradeType() == TracingConstants.ISSUANCE_ITEM_INVENTORY_TYPE_TRADEOUT_ONLY); %>
 						<% if (canLoan) { %>
-				    		issueAddTR3.innerHTML="<input type='submit' name='loanItem' id='button' value='"+"<bean:message key='issuance.item.button.loan' />"+"' >";
+				    		issueAddTR3.innerHTML="<br/><input type='submit' name='loanItem' id='button' value='"+"<bean:message key='issuance.item.button.loan' />"+"' >";
 						<% }
 						   if (canTradeout) { %>
-				    		issueAddTR4.innerHTML="<input type='submit' name='tradeItem' id='button' value='"+"<bean:message key='issuance.item.button.tradeout' />"+"' >";
+				    		issueAddTR4.innerHTML="<br/><input type='submit' name='tradeItem' id='button' value='"+"<bean:message key='issuance.item.button.tradeout' />"+"' >";
 						<% } %>
 	    			}
 				</logic:iterate>
@@ -811,13 +811,13 @@
             <td><% if (quantified) { %><%=issuanceitem.getQuantity() %><% } %>&nbsp;</td>
           	<td><%=issuanceitem.getIssueAgent().getUsername() %>&nbsp;</td>
           	<td><%=TracingConstants.getDisplayDate(issuanceitem.getIssueDate(), a) %>&nbsp;</td>
-          	<td><% if (issuanceitem.isReturned()) { %>
-          			<bean:message key="issuance.item.returned" />
+          		<% if (issuanceitem.isReturned()) { %>
+          			<td><bean:message key="issuance.item.returned" /></td>
           	    <% } else { %>
-          	    	<input type="submit" name="issuance_edit_<%=iiIndex%>" id="button" onclick="this.form.returnissuanceitem.value = <%=iiIndex%>; this.form.returnissuanceitem.disabled = false;" 
+          	    	<td align="center"><input type="submit" name="issuance_edit_<%=iiIndex%>" id="button" onclick="this.form.returnissuanceitem.value = <%=iiIndex%>; this.form.returnissuanceitem.disabled = false;" 
 						value="<bean:message key="issuance.item.button.return" />" >
-					</input>
-				<% } %></td>
+					</input></td>
+				<% } %>
           </tr>
           </logic:iterate>
           <tr>
@@ -839,8 +839,8 @@
 	               		<option value="0">No Category</option>
 	               </select>
           		</td>
-          	<td colspan="2" id="issuanceAdd3" name="issuanceAdd3">&nbsp;</td>
-          	<td colspan="2" id="issuanceAdd4" name="issuanceAdd4">&nbsp;</td>
+          	<td align="center" colspan="2" id="issuanceAdd3" name="issuanceAdd3">&nbsp;</td>
+          	<td align="center" colspan="2" id="issuanceAdd4" name="issuanceAdd4">&nbsp;</td>
           </tr>
         </table>
 <% } %>

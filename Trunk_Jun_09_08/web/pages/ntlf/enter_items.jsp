@@ -173,11 +173,23 @@
    		<td id="middlecolumn">        
      		<div id="maincontent">
      			<div>
-     				<center>
-	     				<font color=red>
-		                  <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/><br/></html:messages></logic:messagesPresent>
+     				<% 	String color="red";
+     					if (request.getAttribute("success") != null) { 
+     						color = "green";
+     					} %>
+	     				<font color="<%=color %>">
+		                  <logic:messagesPresent message="true">
+                      		<logic:empty name="success" scope="request">
+		                    <html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/><br/></html:messages>
+                            </logic:empty>
+                      		<logic:notEmpty name="success" scope="request">
+		                    <html:messages id="msg" message="true"><br/><bean:write name="msg"/></html:messages>
+		                      <a href="ntlf_create_found_item.do?foundId=<bean:write name="success" scope="request"/>">
+            					<bean:message key="message.found.id" />&nbsp;<bean:write name="success" scope="request"/>
+            				  </a><br/><br/>
+            			    </logic:notEmpty>
+            			  </logic:messagesPresent>
 		                </font>
-	                </center>
      				<h1 class="green">
 			        	<bean:message key="header.entry.information" />
 			        	<a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><img src="deployment/main/images/nettracer/button_help.gif" width="20" height="21" border="0"></a>

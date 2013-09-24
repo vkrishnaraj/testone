@@ -689,7 +689,7 @@
 					<tr>
 						<td style="width:50%;" >
 							<bean:message key="colname.lf.removal.reason" />:&nbsp;
-							<html:text name="foundItemForm" property="foundItem.removalReason" size="20" styleClass="textfield" styleId="removalReason" />
+							<html:text name="foundItemForm" property="foundItem.removalReason" size="20" maxlength="200" styleClass="textfield" styleId="removalReason" />
 						</td>
 						<td style="width:25%;" >
 							<html:hidden property="remove" value="" disabled="true" />

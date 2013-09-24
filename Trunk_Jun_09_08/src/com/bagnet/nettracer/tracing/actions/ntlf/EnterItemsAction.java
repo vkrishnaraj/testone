@@ -71,6 +71,7 @@ public class EnterItemsAction extends CheckedAction {
 			try {
 				
 				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
+				request.setAttribute("success", found.getId());
 				ActionMessage error = new ActionMessage("message.found.save.success");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
