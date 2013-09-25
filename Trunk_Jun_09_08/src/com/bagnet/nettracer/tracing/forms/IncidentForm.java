@@ -89,12 +89,6 @@ public final class IncidentForm extends ValidatorForm {
 	private String bagTagNumber;
 	private String language;
 	
-	//WT for Other One World Carrier
-	@Column(length = 3)
-	private String wtStationId;
-	@Column(length = 3)
-	private String wtCompanyId;
-	
 	private Double overall_weight;
 	private String overall_weight_unit;
 	
@@ -1426,22 +1420,6 @@ public final class IncidentForm extends ValidatorForm {
 
 	public void setCourtesyDescription(String courtesyDescription) {
 		this.courtesyDescription = courtesyDescription;
-	}
-
-	public String getWtCompanyId() {
-		return wtCompanyId;
-	}
-
-	public void setWtCompanyId(String wtCompanyId) {
-		this.wtCompanyId = wtCompanyId;
-	}
-
-	public String getWtStationId() {
-		return wtStationId;
-	}
-
-	public void setWtStationId(String wtStationId) {
-		this.wtStationId = wtStationId;
 	}
 	
 }

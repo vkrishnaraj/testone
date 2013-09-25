@@ -614,10 +614,6 @@ public class TracerUtils {
 				.get(COMPANY_LIST_BY_ID_INDEX));
 	}
 
-	public static void populateWtCompanyLists(HttpSession session) {
-		ArrayList<Company> result = getWtCompanyLists();
-		session.setAttribute("wtCompList", result);
-	}
 	
 	public static void populateClaimProrate(ClaimProrateForm cpform,
 			IncidentForm theform, HttpServletRequest request) {
@@ -908,45 +904,6 @@ public class TracerUtils {
 			result.add(companyByName);
 			result.add(companyById);
 			return result;
-
-		} catch (Exception e) {
-			logger.error("unable to retrieve company from database: " + e);
-			e.printStackTrace();
-			return null;
-		} finally {
-			sess.close();
-		}
-	}
-	
-	public static ArrayList<Company> getWtCompanyLists() throws HibernateException {
-		Session sess = HibernateWrapper.getSession().openSession();
-		try {
-
-			// when company is null, return all distinct stationscodes, for
-			// itinerary
-			// dropdown
-			ArrayList<Company> companyList = new ArrayList<Company>();
-			String sql = "select distinct company.companyCode_ID,company.companydesc from com.bagnet.nettracer.tracing.db.Company company where company.variable.wt_enabled=1 order by companydesc ";
-			
-			Query q = sess.createQuery(sql);
-
-			List list = q.list();
-
-			if (list.size() == 0) {
-				logger.debug("unable to find company");
-				return companyList;
-			}
-
-			Company company = null;
-			Object[] o = null;
-			for (int i = 0; i < list.size(); i++) {
-				o = (Object[]) list.get(i);
-				company = new Company();
-				company.setCompanyCode_ID((String) o[0]);
-				company.setCompanydesc((String) o[1]);
-				companyList.add(company);
-			}
-			return companyList;
 
 		} catch (Exception e) {
 			logger.error("unable to retrieve company from database: " + e);

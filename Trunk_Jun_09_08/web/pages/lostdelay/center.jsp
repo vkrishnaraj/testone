@@ -71,6 +71,23 @@
     }
 
      function confirmWt() {
+    	 <% if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_WT_OTHER_CARRIER, a) && request.getAttribute("lostdelay") != null){ %>
+ 		
+    	 var wtAirline= document.getElementById("wtAirlineId"); 
+    	 var wtStation= document.getElementById("wtStationId"); 
+ 			var hasWTID=document.getElementById("wtid"); 
+ 		  if (wtAirline.value!="" && wtStation.value == "")
+ 	      {
+ 	        alert("<%= (String)bundle.getString( "colname.wt.station") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+ 	       wtStation.focus();
+ 	        return false;
+ 	      } else if (hasWTID==null && wtAirline.value != "" && wtAirline.value !="<%=a.getCompanycode_ID() %>")
+ 	      {
+ 	        if(!(confirm("You are creating a WorldTracer File on behalf of another airline. Is this correct?"))){
+ 		        return false;
+ 	        }
+ 	      }
+    	 <% } %>
          <% if (!PropertyBMO.isTrue("confirm.wt.inc.action")) { %>
          	return true;
          <% } else { %>

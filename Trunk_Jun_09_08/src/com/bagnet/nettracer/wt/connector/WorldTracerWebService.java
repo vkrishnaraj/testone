@@ -114,7 +114,6 @@ import aero.nettracer.serviceprovider.wt_1_0.common.xsd.WorldTracerResponse;
 import com.bagnet.nettracer.tracing.bmo.CategoryBMO;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
-import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.AirlineMembership;
 import com.bagnet.nettracer.tracing.db.BDO;
@@ -1531,18 +1530,9 @@ public class WorldTracerWebService implements WorldTracerConnector {
 		if (c != null) {
 			a.setAhlId(c);
 		}
-		if(i.getWtCompanyId()!=null && i.getWtCompanyId().length()>0){
-			a.setAirlineCode(i.getWtCompanyId());
-		} else {
-			a.setAirlineCode(i.getStationcreated().getCompany().getCompanyCode_ID());
-		}
- 
-		if(i.getWtStationId()!=null && i.getWtStationId().length()>0){
-			Station s=StationBMO.getStation(Integer.valueOf(i.getWtStationId()));
-			a.setStationCode(s.getWt_stationcode());
-		} else {
-			a.setStationCode(i.getStationcreated().getWt_stationcode());
-		}
+		a.setAirlineCode(i.getStationcreated().getCompany().getCompanyCode_ID());
+
+		a.setStationCode(i.getStationcreated().getWt_stationcode());
 		
 		GregorianCalendar cal = new GregorianCalendar();
 		cal.setTime(i.getCreatedate());

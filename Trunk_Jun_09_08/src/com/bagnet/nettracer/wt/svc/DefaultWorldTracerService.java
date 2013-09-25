@@ -104,10 +104,6 @@ public class DefaultWorldTracerService implements WorldTracerService {
 			String companyCode=incident.getStationassigned().getCompany().getCompanyCode_ID();
 			String stationCode=incident.getStationassigned().getWt_stationcode();
 			
-			if(incident.getWtCompanyId()!=null && incident.getWtCompanyId().length()>0)
-				companyCode=incident.getWtCompanyId();
-			if(incident.getWtStationId()!=null && incident.getWtStationId().length()>0)
-				stationCode=incident.getWtStationId();
 			wt_id = wtConnector.insertIncident(incident, companyCode, stationCode, dto);
 
 		} catch (CaptchaException e) {

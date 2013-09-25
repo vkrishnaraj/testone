@@ -111,7 +111,6 @@ import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.salvage.Salvage;
-import com.bagnet.nettracer.tracing.dto.DeprecSumDTO;
 import com.bagnet.nettracer.tracing.dto.DisputeResolutionReportDTO;
 import com.bagnet.nettracer.tracing.dto.FraudValuationReportDTO;
 import com.bagnet.nettracer.tracing.dto.ScannerDTO;
