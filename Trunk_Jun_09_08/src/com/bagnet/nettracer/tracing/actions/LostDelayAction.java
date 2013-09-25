@@ -188,9 +188,6 @@ public class LostDelayAction extends CheckedAction {
 		//add to the loss codes
 		request.setAttribute("losscodes", codes);
 
-		if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_WT_OTHER_CARRIER,user)){
-			TracerUtils.populateWtCompanyLists(session);
-		}
 		
 		
 		request.setAttribute("LOST_DELAY_RECEIPT", Integer.toString(ReportingConstants.LOST_RECEIPT_RPT));
@@ -707,7 +704,6 @@ public class LostDelayAction extends CheckedAction {
 				return (mapping.findForward(TracingConstants.SEARCH_INCIDENT));
 			}
 
-			request.setAttribute("stationID", inc.getWtStationId());
 			session.setAttribute("incidentObj", inc);
 			List<ActionMessage> lockErrors = SpringUtils.getLockFile().getLockActionMessages(inc.getIncident_ID(), user);
 			if(lockErrors != null){
