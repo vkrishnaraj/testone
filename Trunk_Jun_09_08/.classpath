@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="autotest"/>
-	<classpathentry kind="src" path="metadata"/>
-	<classpathentry kind="src" path="companies"/>
 	<classpathentry kind="src" path="web"/>
-	<classpathentry kind="src" path="utils"/>
-	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/jars/activation-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/jars/ajaxtags-1.2-beta2.jar"/>
@@ -134,7 +129,6 @@
 	<classpathentry kind="lib" path="lib/jars/opencsv-2.3.jar"/>
 	<classpathentry kind="lib" path="lib/jars/nt_fs_client.jar"/>
 	<classpathentry kind="lib" path="lib/jars/ScannerMbrQueryService.jar"/>
-	<classpathentry kind="lib" path="C:/workspace/Trunk_Jun_09_08/lib/jars/FraudService.jar"/>
 	<classpathentry kind="lib" path="lib/provided/jbosscache-core.jar"/>
 	<classpathentry kind="lib" path="lib/jars/rmiio-2.0.0.jar"/>
 	<classpathentry kind="lib" path="lib/jars/FraudService.jar"/>
@@ -180,5 +174,7 @@
 	<classpathentry kind="lib" path="lib/provided/commons-lang-2.6.jar"/>
 	<classpathentry kind="lib" path="lib/jars/iText-2.1.0.jar"/>
 	<classpathentry kind="lib" path="lib/jars/core-renderer.jar"/>
+	<classpathentry kind="lib" path="lib/jars/AddressValidationService-test-client.jar"/>
+	<classpathentry kind="lib" path="lib/provided/infinispan-core-5.1.2.FINAL.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
