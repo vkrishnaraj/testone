@@ -313,7 +313,9 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.issuance.IssuanceItemInventory"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.issuance.AuditIssuanceItemInventory"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.issuance.IssuanceItemIncident"/>
-	
+		
+		<!-- 3.6.0 code, should not be used in 3.8.0 testing <mapping class="com.bagnet.nettracer.tracing.db.WTCompany"/>-->
+		
 		<mapping class="com.bagnet.nettracer.tracing.db.documents.templates.Template" />		
 		<mapping class="com.bagnet.nettracer.tracing.db.documents.templates.TemplateTypeMapping" />		
 		<mapping class="com.bagnet.nettracer.tracing.db.documents.templates.TemplateVar" />		
