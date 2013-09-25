@@ -351,8 +351,25 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		//Populated default information that is required by NetTracer but not required by SWA
 		populateMissingOHDFields(wsohd, agent);
 		
-		//Find existing OHD
+		//check bagtag and holding station, these fields are required for looking up an existing OHD
+		boolean hasReqFields = true;
 		Station holdingstation = StationBMO.getStationByCode(wsohd.getHoldingStation(), agent.getCompanycode_ID());
+		if(wsohd.getBagtagnum() == null || wsohd.getBagtagnum().length() == 0){
+			serviceResponse.addError(ERROR_REQ_BAGTAG);
+			hasReqFields = false;
+		}
+		if(holdingstation == null){
+			serviceResponse.addError(ERROR_REQ_HOLDINGSTATION);
+			hasReqFields = false;
+		}
+		if(!hasReqFields){
+			serviceResponse.setSuccess(false);
+			serviceResponse.setReturnStatus(STATUS_MANUAL_ADD_REQUIRED);
+			logger.info(resDoc);
+			return resDoc;
+		}
+		
+		//Find existing OHD
 		String ohdId = null;
 		OHD incomingOHD = null;
 		if((ohdId =  OnhandScanningServiceUtil.lookupBagtag(wsohd.getBagtagnum(), holdingstation.getStation_ID()))!= null){
@@ -583,10 +600,18 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		}
 		serviceResponse.setValidUser(true);
 
+		//Check required fields
 		Station holdingstation = StationBMO.getStationByCode(lookupOnhandLZ.getLookupOnhandLZ().getHoldingStation(), agent.getCompanycode_ID());
+		String bagtag = lookupOnhandLZ.getLookupOnhandLZ().getTagNumber();
+		boolean hasReqFields = true;
 		if(holdingstation == null){
-			serviceResponse.setSuccess(false);
 			serviceResponse.addError(ERROR_REQ_HOLDINGSTATION);
+		}
+		if(bagtag == null || bagtag.length() == 0){
+			serviceResponse.addError(ERROR_REQ_HOLDINGSTATION);
+		}
+		if(!hasReqFields){
+			serviceResponse.setSuccess(false);
 			logger.info(resDoc);
 			return resDoc;
 		}
@@ -738,6 +763,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		OhdBMO obmo = new OhdBMO();
 		OHD ohd = obmo.findOHDByID(id);
 		addOHDUpdateRemark(ohd, agent, REMARK_SCANNED);
+		obmo.insertOHD(ohd, ohd.getAgent());
 		return ohd;
 	}
 
@@ -753,6 +779,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		OhdBMO obmo = new OhdBMO();
 		OHD ohd = obmo.findOHDByID(id);
 		addOHDUpdateRemark(ohd, agent, REMARK_SCANNED);
+		obmo.insertOHD(ohd, ohd.getAgent());
 		return ohd;
 	}
 	
@@ -895,8 +922,26 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		WSOHD wsohd = addBagForLZ.getAddBagForLZ().getOnhand();
 		boolean TBI = addBagForLZ.getAddBagForLZ().getTBI();
 		
-		//retrieve OHD
+		
+		
+		//check bagtag and holding station, these fields are required for looking up an existing OHD
+		boolean hasReqFields = true;
 		Station holdingstation = StationBMO.getStationByCode(wsohd.getHoldingStation(), agent.getCompanycode_ID());
+		if(wsohd.getBagtagnum() == null || wsohd.getBagtagnum().length() == 0){
+			serviceResponse.addError(ERROR_REQ_BAGTAG);
+			hasReqFields = false;
+		}
+		if(holdingstation == null){
+			serviceResponse.addError(ERROR_REQ_HOLDINGSTATION);
+			hasReqFields = false;
+		}
+		if(!hasReqFields){
+			serviceResponse.setSuccess(false);
+			serviceResponse.setReturnStatus(STATUS_RETURN_LZ_UPDATE_REQUIRED);
+			logger.info(resDoc);
+			return resDoc;
+		}
+
 		String ohdId = null;
 		OHD incomingOHD = null;
 		OhdBMO obmo = new OhdBMO();
@@ -917,8 +962,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		} else {
 			populateMissingOHDFields(wsohd, agent);
 			if(!addOhdReqFields(wsohd, serviceResponse)){
-				serviceResponse.setSuccess(true);
-				serviceResponse.setValidUser(true);
+				serviceResponse.setSuccess(false);
 				serviceResponse.setReturnStatus(STATUS_RETURN_LZ_UPDATE_REQUIRED);
 				logger.info(resDoc);
 				return resDoc;
