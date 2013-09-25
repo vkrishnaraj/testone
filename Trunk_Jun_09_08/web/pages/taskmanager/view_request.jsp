@@ -114,10 +114,10 @@ function sortIncomingRequests(sortOrder) {
           <table class="form2" cellspacing="0" cellpadding="0">
             <tr>
               <td>
-                <b><a href="#" onclick="sortIncomingRequests('ohd');"><bean:message key="header.ohd" /></a></b>
+                <b><a href="#" onclick="sortIncomingRequests('ohd_num');"><bean:message key="header.ohd" /></a></b>
               </td>
               <td>
-                <b><a href="#" onclick="sortIncomingRequests('incident');"><bean:message key="header.file" /></a></b>
+                <b><a href="#" onclick="sortIncomingRequests('incident_num');"><bean:message key="header.file" /></a></b>
               </td>
               <td>
                 <b><a href="#" onclick="sortIncomingRequests('bagtag');"><bean:message key="colname.bag_tag_number" /></a></b>

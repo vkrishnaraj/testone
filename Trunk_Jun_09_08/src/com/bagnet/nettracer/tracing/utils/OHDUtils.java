@@ -83,10 +83,10 @@ public class OHDUtils {
 			if (sort != null && sort.length() > 0) {
 				if (sort.equalsIgnoreCase("ohd_num")) {
 					sql += " order by request.ohd.OHD_ID asc ";
-				} else {
-					if (sort.equalsIgnoreCase("incident_num")) {
-						sql += " order by request.incident_ID asc ";
-					}
+				} else if (sort.equalsIgnoreCase("incident_num")) {
+					sql += " order by request.incident_ID asc ";
+				} else if (sort.equalsIgnoreCase("bagtag")) {
+					sql += " order by request.ohd.claimnum asc ";
 				}
 			} else {
 				sql += " order by request.requestTime desc ";
