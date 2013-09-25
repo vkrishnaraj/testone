@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="depreciation_summary" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="3.7974983358324375"/>
+	<property name="ireport.x" value="479"/>
+	<property name="ireport.y" value="495"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="com.bagnet.nettracer.tracing.forms.SearchIncidentForm"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<subDataset name="Table Dataset 1"/>
+	<parameter name="form" class="com.bagnet.nettracer.tracing.forms.ClaimDeprecCalcForm" isForPrompting="false"/>
+	<field name="claimId" class="java.lang.String"/>
+	<field name="claimTypeVal" class="java.lang.String"/>
+	<field name="dateCalc" class="java.lang.String"/>
+	<field name="approvedTotal" class="java.lang.String"/>
+	<field name="refNum" class="java.lang.String"/>
+	<field name="description" class="java.lang.String"/>
+	<field name="amountClaimed" class="java.lang.Double"/>
+	<field name="dispDatePurchase" class="java.lang.String"/>
+	<field name="categoryName" class="java.lang.String"/>
+	<field name="proofOwn" class="java.lang.String"/>
+	<field name="coc" class="java.lang.String"/>
+	<field name="calcValue" class="java.lang.Double"/>
+	<field name="claimValue" class="java.lang.Double"/>
+	<field name="valueTotal" class="java.lang.Double"/>
+	<field name="claimTotal" class="java.lang.Double"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="161">
+			<textField>
+				<reportElement mode="Transparent" x="140" y="123" width="395" height="16"/>
+				<textElement lineSpacing="Single">
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{valueTotal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="140" y="90" width="395" height="17"/>
+				<textElement lineSpacing="Single">
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dateCalc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="140" y="74" width="395" height="16"/>
+				<textElement lineSpacing="Single">
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{claimTypeVal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="3" y="90" width="137" height="17"/>
+				<textElement textAlignment="Left" lineSpacing="Single">
+					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{deprec.report.date.calc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="140" y="58" width="395" height="16"/>
+				<textElement lineSpacing="Single">
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{claimId}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="140" y="107" width="395" height="16"/>
+				<textElement lineSpacing="Single">
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{claimTotal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="3" y="74" width="137" height="16"/>
+				<textElement textAlignment="Left" lineSpacing="Single">
+					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{deprec.report.claim.type}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="93" y="0" width="352" height="25"/>
+				<textElement textAlignment="Center" lineSpacing="Single">
+					<font size="14" isBold="true" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{deprec.report.title}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="140" y="41" width="395" height="17"/>
+				<textElement lineSpacing="Single">
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{refNum}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="3" y="107" width="137" height="16"/>
+				<textElement lineSpacing="Single">
+					<font fontName="Arial" size="10" isBold="true" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{deprec.report.total.claimed}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="3" y="58" width="137" height="16"/>
+				<textElement lineSpacing="Single">
+					<font fontName="Arial" size="10" isBold="true" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{deprec.report.claim}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="3" y="139" width="137" height="16"/>
+				<textElement textAlignment="Left" lineSpacing="Single">
+					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{deprec.report.total.approved}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="3" y="123" width="137" height="16"/>
+				<textElement textAlignment="Left" lineSpacing="Single">
+					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{deprec.report.total.value}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="3" y="41" width="137" height="17"/>
+				<textElement textAlignment="Left" lineSpacing="Single">
+					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{deprec.report.incident}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="140" y="139" width="395" height="16"/>
+				<textElement lineSpacing="Single">
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{approvedTotal}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band height="41">
+			<line>
+				<reportElement x="291" y="2" width="1" height="39"/>
+			</line>
+			<line>
+				<reportElement x="344" y="1" width="1" height="40"/>
+			</line>
+			<line>
+				<reportElement x="469" y="2" width="1" height="39"/>
+			</line>
+			<rectangle radius="0">
+				<reportElement key="rectangle-1" mode="Opaque" x="3" y="-591" width="727" height="23" forecolor="#000000" backcolor="#CCCCCC"/>
+				<graphicElement fill="Solid">
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle radius="0">
+				<reportElement key="rectangle-2" mode="Opaque" x="3" y="-591" width="727" height="23" forecolor="#000000" backcolor="#CCCCCC"/>
+				<graphicElement fill="Solid">
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle radius="0">
+				<reportElement key="rectangle-3" mode="Transparent" x="0" y="2" width="535" height="36" forecolor="#000000" backcolor="#FFFFFF"/>
+				<graphicElement fill="Solid">
+					<pen lineWidth="0.0" lineStyle="Solid"/>
+				</graphicElement>
+			</rectangle>
+			<textField>
+				<reportElement x="3" y="2" width="90" height="36"/>
+				<textElement lineSpacing="Single">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{deprec.report.item.description}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="94" y="2" width="56" height="36"/>
+				<textElement lineSpacing="Single">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{deprec.report.amount.claimed}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="153" y="2" width="55" height="36"/>
+				<textElement lineSpacing="Single">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{deprec.report.date.purchased}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="209" y="2" width="82" height="36"/>
+				<textElement lineSpacing="Single">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{deprec.report.category}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="292" y="2" width="52" height="36"/>
+				<textElement lineSpacing="Single">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{deprec.report.proof.ownership}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="412" y="2" width="58" height="36"/>
+				<textElement lineSpacing="Single">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{deprec.report.calculated.value}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="470" y="2" width="63" height="36"/>
+				<textElement lineSpacing="Single">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{deprec.report.claim.value}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="1" width="534" height="1"/>
+			</line>
+			<line>
+				<reportElement x="534" y="1" width="1" height="40"/>
+			</line>
+			<textField>
+				<reportElement x="345" y="2" width="67" height="37"/>
+				<textElement lineSpacing="Single">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{deprec.report.coc.covered}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="411" y="2" width="1" height="39"/>
+			</line>
+			<line>
+				<reportElement x="208" y="2" width="1" height="39"/>
+			</line>
+			<line>
+				<reportElement x="151" y="2" width="1" height="39"/>
+			</line>
+			<line>
+				<reportElement x="93" y="2" width="1" height="39"/>
+			</line>
+			<line>
+				<reportElement x="0" y="2" width="1" height="39"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30">
+			<line>
+				<reportElement x="0" y="29" width="535" height="1"/>
+			</line>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-6" x="1" y="4" width="92" height="20">
+					<printWhenExpression><![CDATA[new Boolean($F{description} != null ? true : false)]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{description}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-8" x="292" y="4" width="52" height="20">
+					<printWhenExpression><![CDATA[new Boolean($F{proofOwn} != null ? true : false)]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{proofOwn}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-9" x="345" y="4" width="67" height="20">
+					<printWhenExpression><![CDATA[new Boolean($F{coc} != null ? true : false)]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{coc}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-10" x="94" y="4" width="56" height="20">
+					<printWhenExpression><![CDATA[new Boolean($F{amountClaimed} != null ? true : false)]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{amountClaimed}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-11" x="153" y="4" width="55" height="20">
+					<printWhenExpression><![CDATA[new Boolean($F{dispDatePurchase} != null ? true : false)]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dispDatePurchase}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-17" x="470" y="4" width="65" height="20">
+					<printWhenExpression><![CDATA[new Boolean($F{claimValue} != null ? true : false)]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{claimValue}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-13" x="209" y="4" width="82" height="20" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[new Boolean($F{categoryName} != null ? true : false)]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{categoryName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-16" x="412" y="4" width="58" height="20">
+					<printWhenExpression><![CDATA[new Boolean($F{calcValue} != null ? true : false)]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{calcValue}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="0" width="535" height="1"/>
+			</line>
+			<line>
+				<reportElement x="469" y="1" width="1" height="28"/>
+			</line>
+			<line>
+				<reportElement x="411" y="0" width="1" height="29"/>
+			</line>
+			<line>
+				<reportElement x="344" y="0" width="1" height="29"/>
+			</line>
+			<line>
+				<reportElement x="291" y="1" width="1" height="28"/>
+			</line>
+			<line>
+				<reportElement x="208" y="0" width="1" height="29"/>
+			</line>
+			<line>
+				<reportElement x="534" y="1" width="1" height="28"/>
+			</line>
+			<line>
+				<reportElement x="0" y="0" width="1" height="29"/>
+			</line>
+			<line>
+				<reportElement x="93" y="0" width="1" height="29"/>
+			</line>
+			<line>
+				<reportElement x="151" y="1" width="1" height="28"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="25">
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-4" mode="Transparent" x="320" y="4" width="174" height="19" forecolor="#000000" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+					<font fontName="Helvetica" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="CP1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Page " + $V{PAGE_NUMBER} + " of "]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-5" mode="Transparent" x="494" y="4" width="41" height="18" forecolor="#000000" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+					<font fontName="Helvetica" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="CP1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="7"/>
+	</summary>
+</jasperReport>
