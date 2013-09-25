@@ -1,9 +1,12 @@
 package com.bagnet.nettracer.tracing.bmo;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Expression;
 
@@ -11,6 +14,7 @@ import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.GeneralDepreciationRules;
+import com.bagnet.nettracer.tracing.db.WTCompany;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
@@ -96,6 +100,29 @@ public class CompanyBMO {
 				return (GeneralDepreciationRules) cri.list().get(0);
 			else
 				return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public static List<WTCompany> getWTCarriers(String companycode){
+		String sql = "from com.bagnet.nettracer.tracing.db.WTCompany wtc where wtc.company_id=:companycode order by wtc.wtCompanyCode";
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			q.setParameter("companycode", companycode);
+			List<WTCompany> ilist= (List<WTCompany>) q.list();
+			return ilist;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

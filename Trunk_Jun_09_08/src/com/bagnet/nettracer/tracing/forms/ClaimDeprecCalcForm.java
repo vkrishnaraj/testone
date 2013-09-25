@@ -15,6 +15,7 @@ import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
 import aero.nettracer.fs.model.Segment;
 
+import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.Claim_Depreciation;
 import com.bagnet.nettracer.tracing.db.Depreciation_Category;
@@ -33,6 +34,7 @@ public final class ClaimDeprecCalcForm extends ActionForm {
 	private long claim_id;
 	private int addNum;
 	private Claim_Depreciation claimDeprec;
+	private Agent agent;
 
 	private String _DATEFORMAT; // current login agent's date format
 	
@@ -96,6 +98,14 @@ public final class ClaimDeprecCalcForm extends ActionForm {
 			}
 		}
 		
+	}
+
+	public Agent getAgent() {
+		return agent;
+	}
+
+	public void setAgent(Agent agent) {
+		this.agent = agent;
 	}
 	
 }

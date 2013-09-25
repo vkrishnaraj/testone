@@ -30,6 +30,16 @@
     
 	  <div id="maincontent">
 	  
+          <font color=red>
+            <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
+          </font>
+          <logic:present name="saved" scope="request">
+          <br>
+          <center><font color=green>
+            <bean:message key="deprec.calc.rules.saved" />
+          </font></center>
+        </logic:present>
+        <br>
 
 <!--  POC0 -->
 

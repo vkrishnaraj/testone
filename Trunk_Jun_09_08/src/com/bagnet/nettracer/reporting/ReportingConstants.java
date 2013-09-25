@@ -53,6 +53,7 @@ public class ReportingConstants {
 	public final static int DAMAGE_RECEPIT_RPT = 17;
 	public final static int MISSING_RECEPIT_RPT = 18;
 	public static final int PPLC_RPT = 19;
+	public static final int DEPREC_SUMMARY = 20;
 	
 	// report titles
 	public static String CLAIM_PAYOUT_TITLE = "Claim Payout";

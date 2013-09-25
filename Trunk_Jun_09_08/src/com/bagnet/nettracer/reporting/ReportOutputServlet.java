@@ -25,6 +25,7 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.forms.BDOForm;
+import com.bagnet.nettracer.tracing.forms.ClaimDeprecCalcForm;
 import com.bagnet.nettracer.tracing.forms.ClaimForm;
 import com.bagnet.nettracer.tracing.forms.ClaimProrateForm;
 import com.bagnet.nettracer.tracing.forms.ClaimSettlementForm;
@@ -165,6 +166,11 @@ public class ReportOutputServlet extends HttpServlet {
 							ClaimSettlementForm theform4 = (ClaimSettlementForm) session.getAttribute("claimSettlementForm");
 							
 							iFile = getFile(PPLCReport.createReport(theform4, sc, request, language, outputtype), sc);
+							break;
+						case ReportingConstants.DEPREC_SUMMARY:
+							ClaimDeprecCalcForm deprecForm = (ClaimDeprecCalcForm) session.getAttribute("claimDeprecCalcForm");
+							
+							iFile = getFile(DeprecSummary.createReport(deprecForm, sc, request, outputtype,language),sc);
 							break;
 						default:
 							break;

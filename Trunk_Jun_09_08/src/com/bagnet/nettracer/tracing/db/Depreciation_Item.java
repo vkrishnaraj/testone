@@ -16,8 +16,11 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Proxy;
 
+import com.bagnet.nettracer.tracing.bmo.CategoryBMO;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 /**
  * @author Sean Fine
@@ -32,7 +35,7 @@ public class Depreciation_Item {
 	private String description;
 	private double amountClaimed;
 	private Date datePurchase; 
-	private int category_id;
+	private Depreciation_Category category;
 	private int proofOwnership;
 	private boolean notCoveredCoc; 
 	private double calcValue;
@@ -105,12 +108,38 @@ public class Depreciation_Item {
 		setProofOwnership(p);
 	}
 
-	public int getCategory_id() {
-		return category_id;
+	@ManyToOne
+	@JoinColumn(name = "category_id", nullable = true)
+	@NotFound(action=NotFoundAction.IGNORE)
+	@Fetch(FetchMode.SELECT)
+	public Depreciation_Category getCategory() {
+		return category;
 	}
 
-	public void setCategory_id(int category_id) {
-		this.category_id = category_id;
+	public void setCategory(Depreciation_Category category) {
+		this.category = category;
+	}
+	
+	@Transient
+	public int getCategoryId() {
+		if(category!=null)
+			return category.getId();
+		else 
+			return 0;
+	}
+
+	public void setCategoryId(int categoryId) {
+		if(categoryId!=0){
+			Depreciation_Category cat=CategoryBMO.getDepreciationCategory(categoryId);
+			if(cat!=null){
+				this.category=cat;
+			} else {
+				this.category=new Depreciation_Category();
+				this.category.setId(categoryId);
+			}
+		} else {
+			this.category=null;
+		}
 	}
 
 	public Date getDatePurchase() {
@@ -156,4 +185,109 @@ public class Depreciation_Item {
 	public String getDispDatePurchase() {
 		return DateUtils.formatDate(getDatePurchase(), _DATEFORMAT, null, null);
 	}
+	
+	@Transient
+	public String getRefNum() {
+		if(getClaimDepreciation().getClaim()!=null &&getClaimDepreciation().getClaim().getIncident()!=null
+				&& getClaimDepreciation().getClaim().getIncident().getAirlineIncidentId()!=null && getClaimDepreciation().getClaim().getIncident().getAirlineIncidentId().length()>0){
+			return getClaimDepreciation().getClaim().getIncident().getAirlineIncidentId();
+		} else {
+			return "";
+		}
+	}
+	
+	@Transient
+	public String getClaimId() {
+		if(getClaimDepreciation().getClaim()!=null && getClaimDepreciation().getClaim().getId()!=0){
+			return String.valueOf(getClaimDepreciation().getClaim().getId());
+		} else {
+			return "";
+		}
+	}
+	
+	@Transient
+	public String getClaimTypeVal() {
+		if(getClaimDepreciation().getClaimType()!=null && getClaimDepreciation().getClaimType().getDescription()!=null 
+				&& getClaimDepreciation().getClaimType().getDescription().length()>0){
+			return getClaimDepreciation().getClaimType().getDescription();
+		} else {
+			return "";
+		}
+	}
+
+	@Transient
+	public String getDateCalc() {
+		if(getClaimDepreciation()!=null && getClaimDepreciation().getDispDateCalculate()!=null 
+				&& getClaimDepreciation().getDispDateCalculate().length()>0){
+			return getClaimDepreciation().getDispDateCalculate();
+		} else {
+			return "";
+		}
+	}
+
+	@Transient
+	public String getApprovedTotal() {
+		if(getClaimDepreciation()!=null){
+			return String.valueOf(getClaimDepreciation().getTotalApprovedPayout());
+		} else {
+			return "";
+		}
+	}
+	
+	@Transient
+	public String getCategoryName() {
+		if(getCategory()!=null && getCategory().getName()!=null && getCategory().getName().length()>0){
+			return getCategory().getName();
+		} else {
+			return "";
+		}
+		
+	}
+	
+	@Transient
+	public String getProofOwn() {
+		if(proofOwnership==0)
+			return "No Proof";
+		else if(proofOwnership==1){
+			return "Check";
+		} else if(proofOwnership==2){
+			return "Photo";
+		} else if(proofOwnership==3){
+			return "Appraisal";
+		} else if(proofOwnership==4){
+			return "CC Receipt";
+		} else if(proofOwnership==5){
+			return "Receipt";
+		} else {
+			return "";
+		}
+	}
+	
+
+	@Transient
+	public double getClaimTotal() {
+		if(getClaimDepreciation()!=null)
+			return getClaimDepreciation().getTotalClaim();
+		else 
+			return 0;
+	}
+	
+	@Transient
+	public double getValueTotal() {
+		if(getClaimDepreciation()!=null)
+			return getClaimDepreciation().getTotalValue();
+		else 
+			return 0;
+	}
+
+	@Transient
+	public String getCoc(){
+		if(isNotCoveredCoc()){
+			return "Not Covered";
+		} else {
+			return "";
+		}
+	}
+
+	
 }

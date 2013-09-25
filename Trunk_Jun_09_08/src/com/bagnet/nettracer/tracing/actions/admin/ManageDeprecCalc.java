@@ -24,6 +24,7 @@ import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Depreciation_Category;
+import com.bagnet.nettracer.tracing.db.Depreciation_Item;
 import com.bagnet.nettracer.tracing.db.GeneralDepreciationRules;
 import com.bagnet.nettracer.tracing.forms.DeprecCalcAdminForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
@@ -89,12 +90,14 @@ public final class ManageDeprecCalc extends Action {
 							
 				try {
 					HibernateUtils.saveDepreciationCategory(dc, user);
+					request.setAttribute("saved", 1);
 				} catch (Exception ex) {
 					ActionMessage error = new ActionMessage("error.creating.deprec.cat");
 					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 					saveMessages(request, errors);
 				}
 			}
+
 		}
 
 		
@@ -139,27 +142,22 @@ public final class ManageDeprecCalc extends Action {
 				while (iterator.hasNext()) {
 					Depreciation_Category category = iterator.next();
 					if (i == indexToRemove) {
-//						remark.setFound(null);
-						catList.remove(category);
-						if(category.getId()!=0)
-							HibernateUtils.delete(category);
-						break;
+						List<Depreciation_Item> ilist=CategoryBMO.getDeprecItemsByCategory(category.getId());
+						if(ilist!=null && ilist.size()==0){
+							catList.remove(category);
+							if(category.getId()!=0)
+								HibernateUtils.delete(category);
+							request.setAttribute("catDeleted", 1);
+							break;
+						} else {
+							ActionMessage error = new ActionMessage("error.delete.used.cat");
+							errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+							saveMessages(request, errors);
+						}
 					}
 					++i;
 				}
 			}
-		}
-		
-		//figure out the company to be used.
-		if (request.getParameter("companyCode") != null) 
-			companyCode = request.getParameter("companyCode");
-		
-		if (request.getParameter("delete1") != null && !request.getParameter("delete1").equals("")) {
-			
-		}
-
-		if (request.getParameter("save") != null) {
-			
 		}
 
 		return mapping.findForward(TracingConstants.DEPREC_CALC_ADMIN);

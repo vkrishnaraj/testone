@@ -6,6 +6,7 @@
  */
 package com.bagnet.nettracer.tracing.actions;
 
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
@@ -67,29 +68,32 @@ public class ClaimDeprecCalcAction extends Action {
 		ClaimDeprecCalcForm theform = (ClaimDeprecCalcForm) form;
 		ActionMessages errors = new ActionMessages();
 
-
 		TracerUtils.populateLists(session);
+		theform.setAgent(user);
 		
+		String claim = request.getParameter("claim_id");
+		if (claim == null) {
+			claim = String.valueOf(theform.getClaim_id());
+		}
+		
+
 		if(request.getParameter("save")!=null){
 			if(theform.getClaim_id()!=0){
-			ClaimBMO cBMO=new ClaimBMO();
-			Claim c=cBMO.findClaimByID(theform.getClaim_id());
-			theform.getClaimDeprec().setClaim(c);
-			cBMO.saveClaimDepreciation(theform.getClaimDeprec());
+				ClaimBMO cBMO=new ClaimBMO();
+				if(theform.getClaimDeprec().getClaim()==null){
+					Claim c=cBMO.findClaimByID(theform.getClaim_id());
+					theform.getClaimDeprec().setClaim(c);
+				}
+				cBMO.saveClaimDepreciation(theform.getClaimDeprec());
+				request.setAttribute("saved", 1);
 			} else {
-				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.noclaim"));
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.noclaim.save"));
 				saveMessages(request, errors);
 				request.setAttribute("noclaim", "1");
 			}
 		}
 		
-		
-		String claim = request.getParameter("claim_id");
-		if (claim == null) {
-			claim = (String) request.getAttribute("claim_id");
-		}
-		
-		if (claim != null ) {
+		if (claim != null && claim!="0" ) {
 			ClaimBMO cBMO = new ClaimBMO();
 			Claim_Depreciation CD=cBMO.getClaimDeprec(claim);
 			if(CD!=null && CD.getItemlist()!=null){
@@ -97,13 +101,19 @@ public class ClaimDeprecCalcAction extends Action {
 				for(Depreciation_Item di:CD.getItemlist()){
 					di.set_DATEFORMAT(user.getDateformat().getFormat());
 				}
+				if(CD.getDateCalculate()==null){
+					CD.setDateCalculate(new Date());
+				}
 				theform.setClaimDeprec(CD);
 			} else if (CD == null) {
 				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.load.claim.deprec"));
 				saveMessages(request, errors);
 			}
-		} else if (request.getParameter("clear") != null) {
+		} else {
 			// came here from claim menu, need to show form to enter incident id
+			theform.setClaim_id(0);
+			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.no.claim"));
+			saveMessages(request, errors);
 			request.setAttribute("noclaim", "1");
 		}
 		
@@ -158,42 +168,7 @@ public class ClaimDeprecCalcAction extends Action {
 			}
 		}
 		
-		if(request.getParameter("printDeprecSum")!=null && request.getParameter("claimDeprecId")!=null){
-			MessageResources messages = MessageResources
-					.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
-			StatReportDTO dsDTO=new StatReportDTO();
-			ReportBMO rBMO=new ReportBMO(request);
-			String claimDeprec=request.getParameter("claimDeprecId");
-			dsDTO.setClaimId(Long.valueOf(claimDeprec));
-			dsDTO.setReportnum(ReportingConstants.RPT_11);
-			dsDTO.setOutputtype(TracingConstants.REPORT_OUTPUT_PDF);
-			dsDTO.setCompanyCode(user.getCompanycode_ID());
-			dsDTO.setDateFormat(user.getDateformat().getFormat());
-			ServletContext sc = getServlet().getServletContext();
-			String reportpath = sc.getRealPath("/");
-
-			String reportfile = null;
-			reportfile= rBMO.createReport(reportpath, dsDTO, user);
-			
-			if (reportfile == null || reportfile.equals("")) {
-				//no data to report
-				if (rBMO.getErrormsg() != null && rBMO.getErrormsg().length() > 0) {
-					ActionMessage error = new ActionMessage(rBMO.getErrormsg());
-					errors.add(ActionMessages.GLOBAL_MESSAGE,error);
-				} else {
-					ActionMessage error = new ActionMessage("message.nodata");
-					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-				}
-				
-				saveMessages(request, errors);
-			} else {
-
-				response.sendRedirect("reporting?outputtype=0&reportfile=" + reportfile);
-			}
-		}
 		
-			
-
 		return (mapping.findForward(TracingConstants.CLAIM_DEPREC_CALC));
 	}
 	

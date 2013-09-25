@@ -207,12 +207,6 @@ public class ReportBMO {
 						ReportingConstants.RPT_10_NAME, messages.getMessage(
 								new Locale(user.getCurrentlocale()),
 								"header.reportnum.10"));
-
-			case ReportingConstants.RPT_11:
-				return create_deprec_sum(srDTO, ReportingConstants.RPT_11,
-						ReportingConstants.RPT_11_NAME, messages.getMessage(
-								new Locale(user.getCurrentlocale()),
-								"header.reportnum.11"));
 			case ReportingConstants.RPT_20:
 				if (srDTO.getCustomreportnum() == ReportingConstants.RPT_20_CUSTOM_95) {
 					return createRonKitIssuanceReport(srDTO, ReportBMO
@@ -3429,12 +3423,6 @@ public class ReportBMO {
 				reporttitle, false);
 	}
 	
-	private String create_deprec_sum(StatReportDTO srDTO, int reportnum,
-			String reportname, String reporttitle) throws HibernateException {
-		return this.create_deprec_sum(srDTO, reportnum, reportname,
-				reporttitle, false);
-	}
-
 	public String create_earlyBag_rpt(StatReportDTO srDTO, int reportnum,
 			String reportname, String reporttitle) throws HibernateException {
 		return this.create_onhand_rpt(srDTO, reportnum, reportname,
@@ -3835,141 +3823,6 @@ public class ReportBMO {
 	} // end of fraud valuation report
 
 
-	private String create_deprec_sum(StatReportDTO srDTO, int reportnum,
-			String reportname, String reporttitle, boolean b) {
-		Session sess = HibernateWrapper.getDirtySession().openSession();
-		try {
-			Map parameters = new HashMap();
-			ResourceBundle myResources = ResourceBundle
-					.getBundle(
-							"com.bagnet.nettracer.tracing.resources.ApplicationResources",
-							new Locale(user.getCurrentlocale()));
-			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
-
-			parameters.put("title", reporttitle);
-
-			TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(
-					user.getDefaulttimezone()).getTimezone());
-
-			/*************** use direct jdbc sql statement **************/
-
-			String sql = "select d.claim_id, d.dateCalculate, d.claimType_id, d.totalWeight, d.weightMetric," +
-					"i.amountClaimed, i.datePurchase, i.category_id, i.proofOwnership, i.notCoveredCoc, i.calcValue, i.claimValue, i.description, i.claim_depreciation_id, d.totalApprovedPayout" +
-					" from claim_depreciation d inner join depreciation_item i on i.claim_depreciation_id=d.id where 1=1 ";
-
-			if(srDTO.getClaimId()!=0){ 
-				sql += " and d.claim_id = :claimid";
-			}
-			
-			DeprecSumDTO dsd = null;
-			List claimDeprecList = new ArrayList();
-			List<String> idList = new ArrayList<String>();
-
-			SQLQuery query = sess.createSQLQuery(sql);
-
-			if(srDTO.getClaimId()!=0){ 
-				query.setParameter("claimid", srDTO.getClaimId());
-				parameters.put("claimid",srDTO.getClaimId());
-			}
-			
-			List results=query.list();
-			List<Depreciation_Category> catList=CategoryBMO.getDepreciationCategories(srDTO.getCompanyCode());
-			List<Claim_Type> typeList=ClaimBMO.getClaimTypes();
-			Object[] row;
-			
-			for(int i=0;i<results.size();i++){
-				row=(Object[])results.get(i);
-				dsd = new DeprecSumDTO();
-				dsd.setClaimID(row[0].toString());
-				
-				String dateCalc=DateUtils.formatDate((Date)row[1], srDTO.getDateFormat(), TracingConstants.DB_DATETIMEFORMAT, null);
-				dsd.setDateCalculate(dateCalc); //todo DateUtils
-				if(parameters.get("dateCalculated")==null)
-					parameters.put("dateCalculated",dateCalc);
-
-				int ctid=Integer.valueOf(row[2].toString());
-				for(Claim_Type t:typeList){
-					if(ctid==t.getId()){
-						dsd.setClaimType(t.getDescription());
-						if(parameters.get("claimType")==null)
-							parameters.put("claimType", t.getDescription());
-						break;
-					}
-				}
-				if(row[3]!=null)
-					dsd.setTotalWeight(row[3].toString());
-				if(row[4]!=null)
-					dsd.setWeightMetric(row[4].toString());
-				if(parameters.get("totalWeight")==null && row[3]!=null && row[4]!=null)
-					parameters.put("totalWeight", row[3].toString()+" "+row[4].toString());
-				
-				dsd.setAmountClaimed((Double)row[5]);
-				dsd.setDatePurchase(DateUtils.formatDate((Date)row[6], srDTO.getDateFormat(), TracingConstants.DB_DATETIMEFORMAT, null)); //todo DateUtils
-				int cid=Integer.valueOf(row[7].toString());
-				for(Depreciation_Category dc:catList){
-					if(cid==dc.getId()){
-						dsd.setCategory(dc.getName());
-						break;
-					}
-				}
-				
-				int proof=0;
-				if(row[8]!=null){
-					proof=Integer.valueOf(row[8].toString());
-				}
-				if(proof==TracingConstants.DEPREC_PROOF_NO_PROOF){
-					dsd.setReceiptProvided(myResources.getString("deprec.option.no.proof")); //ToDo: set up resources
-				} else if(proof==TracingConstants.DEPREC_PROOF_CHECK){
-					dsd.setReceiptProvided(myResources.getString("deprec.option.check"));
-				} else if(proof==TracingConstants.DEPREC_PROOF_PHOTO){
-					dsd.setReceiptProvided(myResources.getString("deprec.option.photo"));
-				} else if(proof==TracingConstants.DEPREC_PROOF_APPRAISAL){
-					dsd.setReceiptProvided(myResources.getString("deprec.option.appraisal"));
-				} else if(proof==TracingConstants.DEPREC_PROOF_CC_RECEIPT){
-					dsd.setReceiptProvided(myResources.getString("deprec.option.cc.receipt"));
-				} else if(proof==TracingConstants.DEPREC_PROOF_RECEIPT){
-					dsd.setReceiptProvided(myResources.getString("deprec.option.proof.receipt"));
-				} else {
-					dsd.setReceiptProvided("");
-				}
-				
-				if(row[9].toString().equals("1")){
-					dsd.setNotCoveredCoc("True");
-				} else {
-					dsd.setNotCoveredCoc("False");
-				}
-				dsd.setCalculatedValue(row[10].toString());
-				dsd.setClaimValue((Double)row[11]);
-				dsd.setItemDesc(row[12].toString());
-				dsd.setClaimDeprecID(row[13].toString());
-				dsd.setTotalApprovedPayout(row[14].toString());
-				parameters.put("totalApprovedPayout",row[14].toString());
-				
-				dsd.set_DATEFORMAT(user.getDateformat().getFormat());
-				dsd.set_TIMEZONE(tz);
-
-				claimDeprecList.add(dsd);
-			}
-
-			if (dsd == null) {
-				logger.debug("no data for report");
-				return "";
-			}
-
-			parameters.put("reportLocale", new Locale(user.getCurrentlocale()));
-			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(
-					claimDeprecList);
-			return ClaimDeprecReportBMO.getReportFileDj(ds, parameters,
-					reportname, rootpath, srDTO.getOutputtype(), req, this);
-		} catch (Exception e) {
-			logger.error("unable to create report " + e);
-			e.printStackTrace();
-			return null;
-		} finally {
-			sess.close();
-		}
-	}
-	
 	private String create_onhand_rpt(StatReportDTO srDTO, int reportnum,
 			String reportname, String reporttitle, boolean earlyBag)
 			throws HibernateException {

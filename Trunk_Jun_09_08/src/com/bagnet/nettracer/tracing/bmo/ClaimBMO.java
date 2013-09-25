@@ -8,15 +8,18 @@ package com.bagnet.nettracer.tracing.bmo;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Expression;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.Claim_Depreciation;
 import com.bagnet.nettracer.tracing.db.Claim_Type;
+import com.bagnet.nettracer.tracing.db.Depreciation_Category;
 import com.bagnet.nettracer.tracing.db.Depreciation_Item;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -248,6 +251,33 @@ public class ClaimBMO {
 		} catch (Exception e){
 
 			logger.error("Error in get Claim Types: " + e);
+		}
+	}
+
+	public static Claim_Type getClaimTypeById(int claimTypeId) {
+		Session sess = null;
+		
+		try {
+			if(claimTypeId!=0){
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Claim_Type.class).add(
+					Expression.eq("id", claimTypeId));
+			Claim_Type tmp = (Claim_Type) cri.list().get(0);
+			return tmp;
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 

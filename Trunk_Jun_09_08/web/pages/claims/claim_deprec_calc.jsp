@@ -13,6 +13,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
+<%@ page import="com.bagnet.nettracer.reporting.ReportingConstants" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
 %>
@@ -23,6 +24,17 @@
       
       <td id="middlecolumn">
         <div id="maincontent">
+        
+          <font color=red>
+            <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
+          </font>
+          <logic:present name="saved" scope="request">
+          <br>
+          <center><font color=green>
+            <bean:message key="deprec.calc.saved" />
+          </font></center>
+        </logic:present>
+        <br>
           <script type="text/javascript">
 			var cal1xx = new CalendarPopup();	
 			
@@ -70,6 +82,7 @@
 				purchaseDate=new Date(fieldf.value);
 				var milliPerYear=1000*60*60*24*365.26;
 				yearDiff=(nowDate-purchaseDate)/milliPerYear;
+				yearDiff=yearDiff.toFixed();
 				var deprecPerc=0;
 				var calcVal=fielda.value;
 				<% GeneralDepreciationRules rules=CompanyBMO.getDeprecRules(a.getCompanycode_ID());%>
@@ -139,7 +152,8 @@
 				fieldd.value = calcVal.toString();
 				
 				
-				calculateAll();
+				calculateTotalValue();
+				calculateTotalClaim();
 			
 			}
 
@@ -163,36 +177,9 @@
 				return field;
 			}
 			
-			function calculateAll() {
+
+			function calculateTotalClaim() {
 				<% int j=0;%>
-				<logic:iterate indexId="i" id="item" name="claimDeprecCalcForm" property="claimDeprec.itemlist">
-				var a<%=j%> = calculateValue("dep_value_<%=j%>");
-				<% j++;%>
-				</logic:iterate>
-
-				<% j=0;%>
-				var e=0;
-				<logic:iterate indexId="i" id="item" name="claimDeprecCalcForm" property="claimDeprec.itemlist">
-				 	e += a<%=j%>;
-				<% j++;%>
-				</logic:iterate>
-				e = e.toFixed(2);
-				document.getElementById('payout').value =e;
-				if (e > 3300) {
-					document.getElementById('payout').style.backgroundColor='red';
-				} else {
-					document.getElementById('payout').style.backgroundColor='white';
-				}
-				
-				var type=document.getElementById('claimType');
-				if(type!=null && !(type.value==<%=TracingConstants.MONTREAL_CONVENTION%> || type.value==<%=TracingConstants.WARSAW_CONVENTION%>)){
-					document.getElementById('totalApprovedPayout').value=e;
-				} else {
-					document.getElementById('totalApprovedPayout').value="";
-				}
-				
-
-				<%  j=0;%>
 				<logic:iterate indexId="i" id="item" name="claimDeprecCalcForm" property="claimDeprec.itemlist">
 					 b<%=j%> = calculateValue("dep_amount_<%=j%>");
 				<% j++;%>
@@ -206,7 +193,29 @@
 				</logic:iterate>
 				e = e.toFixed(2);
 				document.getElementById('claimed').value = e;
-				
+			}
+
+			function calculateTotalValue() {
+				<% j=0;%>
+				<logic:iterate indexId="i" id="item" name="claimDeprecCalcForm" property="claimDeprec.itemlist">
+				var a<%=j%> = calculateValue("dep_value_<%=j%>");
+				<% j++;%>
+				</logic:iterate>
+
+				<% j=0;%>
+				var e=0;
+				<logic:iterate indexId="i" id="item" name="claimDeprecCalcForm" property="claimDeprec.itemlist">
+				 	e += a<%=j%>;
+				<% j++;%>
+				</logic:iterate>
+				e = e.toFixed(2);
+				document.getElementById('payout').value =e;
+				var domesPayValue=<%=PropertyBMO.getValueAsInt(PropertyBMO.DOMESIC_PAYOUT_VALUE)%>;
+				if (e > domesPayValue) {
+					document.getElementById('payout').style.backgroundColor='red';
+				} else {
+					document.getElementById('payout').style.backgroundColor='white';
+				}
 			}
 			
 
@@ -220,27 +229,15 @@
 			}
 				
 			</script>
-			<font color=red>
-		      <logic:messagesPresent message="true">
-		        <html:messages id="msg" message="true">
-		          <br />
-		          <bean:write name="msg" />
-		          <br />
-		        </html:messages>
-		      </logic:messagesPresent> </font> <br>
 				<a name="poc"></a>
-				<h1 class="green"><bean:message key="header.deprec.calc"/> <a href="#"
-						onclick="openHelp('pages/WebHelp/nettracerhelp.htm#lost_delayed_bag_reports/interim_expense.htm#top');return false;">
-						<img src="deployment/main/images/nettracer/button_help.gif"
-						width="20" height="21" border="0">
-					</a>
+				<h1 class="green"><bean:message key="header.deprec.calc"/> 
 				</h1>
 				<table class='form2_ld' cellspacing="0" cellpadding="0">
 					<tr>
 						<td class="header" width="20%"><strong><bean:message key="deprec.calc.claim.type"/>:</strong></td>
 						<td><html:select styleClass="dropdown" styleId="claimType" name="claimDeprecCalcForm"
-						 		property="claimDeprec.claimType_id" onchange="hideshow('drop_hide_this'); calculateAll();">
-								<html:options collection="claimtypes" property="id" labelProperty="description" />
+						 		property="claimDeprec.claimTypeId" onchange="hideshow('drop_hide_this');">
+					 			<html:options collection="claimtypes" property="id" labelProperty="description" />
 						</html:select></td>
 					</tr>
 					<tr id="drop_hide_this" style="display: none">
@@ -254,7 +251,7 @@
 					<tr>
 						<td class="header" width="10%"><strong><bean:message key="deprec.calc.date.calculation"/>: </strong></td>
 						<td><html:text styleId="calculationDate"  name="claimDeprecCalcForm" property="claimDeprec.dispDateCalculate"
-								size="8" styleClass="textfield"	onchange="calculateAll()" /> 
+								size="8" styleClass="textfield" /> 
 								
 								<img
 								src="deployment/main/images/calendar/calendar_icon.gif"
@@ -283,10 +280,8 @@
 							</span>
 							<logic:notEmpty name="claimDeprecCalcForm" property="claimDeprec.claim">
 							<span style="float: right">
-								<a href="claim_deprec_calc.do?printDeprecSum=1&claimDeprecId=<bean:write name="claimDeprecCalcForm" property="claimDeprec.claim.id"/>" target="_blank"><img
-									src="deployment/main/images/nettracer/icon_printrecpt.gif">
-									<bean:message key="deprec.calc.print.deprec.sum"/>
-								</a>
+								<a href="#" onclick="openReportWindow('reporting?print=<%=ReportingConstants.DEPREC_SUMMARY%>&claimId=<bean:write name="claimDeprecCalcForm" property="claim_id" />&outputtype=0','LostReceipt',800,600);return false;"><img src="deployment/main/images/nettracer/icon_printrpt.gif" width="12" height="12"><bean:message key="deprec.calc.print.deprec.sum"/></a>
+								
 							</span>
 							</logic:notEmpty>
 						</td>
@@ -346,9 +341,8 @@
 								border="0" onmouseover="this.style.cursor='hand'"
 								onClick="cal1xx.select2(document.claimDeprecCalcForm, '<%="deprecItem[" + i + "].dispDatePurchase"%>','calendar<%=t1 %>','MM/dd/yyyy'); return false;"></td>
 	
-							<td><html:select styleClass="dropdown" indexed="true" styleId="<%=categoryId %>" name="deprecItem" property="category_id" onchange="<%=changeCat %>">
-									<html:option value=""><bean:message key="select.please_select"/></html:option>
-									
+							<td><html:select styleClass="dropdown" indexed="true" styleId="<%=categoryId %>" name="deprecItem" property="categoryId" onchange="<%=changeCat %>">
+									<html:option value="0"><bean:message key="select.please_select"/></html:option>
 									<html:options collection="categories" property="id" labelProperty="name" />
 							</html:select></td>
 							
@@ -370,8 +364,8 @@
 								<input type="hidden" id="calc<%=t1 %>" name="deprecItem[<%=i %>].calcValue" value="<bean:write name="deprecItem" property="calcValue"/>" />
 								</td>
 	
-							<td><html:text size="5" styleClass="textfield" name="deprecItem" property="claimValue"  indexed="true" onchange="calculateAll()"
-								styleId="<%=valueId %>" onkeydown="<%=checkvalue %>" />
+							<td><html:text size="5" styleClass="textfield" name="deprecItem" property="claimValue"  indexed="true" onchange="calculateTotalValue()"
+								styleId="<%=valueId %>" onkeydown="<%=checkvalue %>" onkeyup="<%=checkvalue %>" />
 							</td>
 							<td>
 								  <html:submit styleId="button" property="deleteItem" indexed="true">
@@ -406,6 +400,7 @@
 						<html:option value="2">2</html:option>
 						<html:option value="3">3</html:option>
 						<html:option value="4">4</html:option>
+						<html:option value="5">5</html:option>
 					</html:select> &nbsp;
 			<html:submit property="addItems" styleId="button" >
 				<bean:message key="deprec.add.items"/>
@@ -419,5 +414,11 @@
 				
 				<script>
 					hideshow('drop_hide_this');
-					/*calculateAll();*/
+					calculateTotalClaim();
+					calculateTotalValue();
+					var approved=document.getElementById("totalApprovedPayout");
+					var totalVal=document.getElementById("payout");
+					if(totalVal!=null && approved!=null && totalVal.value!=approved.value){
+						approved.style.backgroundColor='yellow';
+					}
 				</script>
