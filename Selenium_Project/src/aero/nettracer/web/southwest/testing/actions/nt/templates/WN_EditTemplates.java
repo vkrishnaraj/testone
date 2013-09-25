@@ -23,7 +23,7 @@ public class WN_EditTemplates extends WN_SeleniumTest {
 	
 	@Test
 	public void testCreateTemplate() {
-		selenium.click("//a[@id='menucol_9.16']");
+		selenium.click("//a[contains(@href, 'searchTemplate.do')]");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
@@ -72,7 +72,7 @@ public class WN_EditTemplates extends WN_SeleniumTest {
 		selenium.doubleClick("id=variableSelect");
 		selenium.select("id=variableSelect", "label=LastName");
 		selenium.doubleClick("id=variableSelect");
-		selenium.click("//input[@value='Save']");
+		selenium.click("id=saveButton");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
@@ -83,18 +83,8 @@ public class WN_EditTemplates extends WN_SeleniumTest {
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
-				verifyEquals("Successfully updated template: Test Template\nUnable to generate document: The template contains unresolved variable dependencies.", selenium.getText("//div[@id='maincontent']/span/font"));
-				selenium.select("id=variableSelect", "label=Id");
-				selenium.doubleClick("id=variableSelect");
-				selenium.click("id=savePreviewButton");
-				if (checkNoErrorPage()) {
-					checkCopyrightAndQuestionMarks();
-					verifyEquals("Successfully updated template: Test Template\nDocument successfully generated", selenium.getText("//div[@id='maincontent']/span/font"));
-					verifyTrue(selenium.isElementPresent("link=Preview Document"));
-				} else {
-					System.out.println("!!!!!!!!!!!!!!! - Failed to save & preview on the edit template page. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-					verifyTrue(false);
-				}
+				verifyEquals("Successfully updated template: Test Template\nDocument successfully generated", selenium.getText("//div[@id='maincontent']/span/font"));
+				verifyTrue(selenium.isElementPresent("link=Preview Document"));
 			} else {
 				System.out.println("!!!!!!!!!!!!!!! - Failed to save & preview on the edit template page. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 				verifyTrue(false);

@@ -1,17 +1,16 @@
 package aero.nettracer.web.southwest.testing.actions.nt.templates;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
 
 public class WN_SearchTemplates extends WN_SeleniumTest {
 
-	@Before
-	public void setup() {
+	@Test
+	public void testTemplateSearchResults() {
 		verifyTrue(setPermissions(new String[] { WN_SeleniumTest.MAINTAIN_TEMPLATES_PERMISSION }, new boolean[] { true }));
 		for (int i = 0; i < 2; ++i) {
-			selenium.click("//a[@id='menucol_9.16']");
+			selenium.click("//a[contains(@href, 'searchTemplate.do')]");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
@@ -46,11 +45,8 @@ public class WN_SearchTemplates extends WN_SeleniumTest {
 				verifyTrue(false);
 			}
 		}
-	}
-	
-	@Test
-	public void testTemplateSearchResults() {
-		selenium.click("id=menucol_9.16");
+		
+		selenium.click("//a[contains(@href, 'searchTemplate.do')]");
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
 			selenium.click("id=searchButton");
