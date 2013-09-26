@@ -729,7 +729,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 	}
 
 	/**
-	 * Updates damaged incident assigned station and adds 'Improper Foward' and 'Scanned' remarks
+	 * Updates damaged incident assigned station, sets the rxTimestamp and adds 'Improper Forward' and 'Scanned' remarks
 	 * Copies elements of incident into OHD
 	 * 
 	 * @param id
@@ -740,7 +740,12 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 	private OHD handleLzDamagedBagBSO(String id, Agent agent, Station holdingstation){
 		IncidentBMO ibmo = new IncidentBMO();
 		Incident inc = ibmo.getIncidentByID(id, null);
+
+		//Assign to LZ and set damaged receive by LZ timestamp
 		inc.setStationassigned(holdingstation);
+		inc.setRxTimestamp(DateUtils.convertToGMTDate(new Date()));
+		
+		//Add remarks
 		addIncidentUpdateRemark(inc, agent, REMARK_IMPROPER_FOWARD);
 		addIncidentUpdateRemark(inc, agent, REMARK_SCANNED);
 		try {

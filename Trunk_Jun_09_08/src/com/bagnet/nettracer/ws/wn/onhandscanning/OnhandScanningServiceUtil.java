@@ -80,13 +80,11 @@ public class OnhandScanningServiceUtil {
 	
 	/**
 	 * Searches damage open incidents at LZ by either bagtag or expedite tag 
-	 * TODO - searching by expedite tag to be completed in iteration 2
 	 * 
 	 * @param bagtag
 	 * @return
 	 */
 	protected static String lzDamagedList(String bagtag, int assignedStationID){
-		//TODO search expedite (part of iteration 2)
 		if(bagtag == null || bagtag.isEmpty() || assignedStationID == 0){
 			return null;
 		}
@@ -95,7 +93,8 @@ public class OnhandScanningServiceUtil {
 		try {
 			String query = "select i.incident_id from incident i " +
 					"left outer join item it on i.incident_ID = it.incident_ID  " +
-					"where (claimchecknum=:claimnum1 or claimchecknum=:claimnum2) " +
+					"where (it.claimchecknum=:claimnum1 or it.claimchecknum=:claimnum2 " +
+					"or it.expediteTagNum=:claimnum1 or it.expediteTagNum=:claimnum2) " +
 					"and i.status_id =:status " +
 					"and stationassigned_id =:assignedStationID " +
 					"and i.itemtype_ID = :type " +
@@ -138,13 +137,11 @@ public class OnhandScanningServiceUtil {
 	
 	/**
 	 * Searches damaged open incidents at any station by bagtag or expedite
-	 * TODO - searching by expedite tag to be completed in iteration 2
 	 * 
 	 * @param bagtag
 	 * @return
 	 */
 	protected static String lzDamagedBagBSO(String bagtag, String companycode){
-		//TODO search expedite (part of iteration 2)
 		if(bagtag == null || bagtag.isEmpty()){
 			return null;
 		}
@@ -154,7 +151,8 @@ public class OnhandScanningServiceUtil {
 			String query = "select i.incident_id from incident i " +
 					"left outer join station s on i.stationassigned_id = s.station_ID " +
 					"left outer join item it on i.incident_ID = it.incident_ID  " +
-					"where (claimchecknum=:claimnum1 or claimchecknum=:claimnum2) " +
+					"where (it.claimchecknum=:claimnum1 or it.claimchecknum=:claimnum2 " +
+					"or it.expediteTagNum=:claimnum1 or it.expediteTagNum=:claimnum2) "  +
 					"and i.status_id =:status " +
 					"and s.companycode_id =:companycode " +
 					"and i.itemtype_ID = :type " +
