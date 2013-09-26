@@ -393,6 +393,9 @@ public class HibernateUtils {
 						c.getVariable().setWt_write_enabled(obj.getVariable().getWt_write_enabled());
 						c.getVariable().setAuto_wt_amend(obj.getVariable().isAuto_wt_amend());
 					}
+					if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_STATUSMESSAGE)) {
+						c.getVariable().setStatus_message(obj.getVariable().getStatus_message());
+					}
 				}
 				sess.saveOrUpdate(c);
 

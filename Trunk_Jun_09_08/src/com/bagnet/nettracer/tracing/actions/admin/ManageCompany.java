@@ -222,6 +222,10 @@ public final class ManageCompany extends Action {
 					dForm.setAuto_wt_amend(cmpny.getVariable().isAuto_wt_amend());
 				}
 				
+				if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_STATUSMESSAGE)) {
+					dForm.setStatusMessage("" + cmpny.getVariable().getStatus_message());
+				}
+								
 			}
 			return mapping.findForward(TracingConstants.EDIT_COMPANY);
 		}
@@ -481,6 +485,11 @@ public final class ManageCompany extends Action {
 					var.setAuto_wt_amend(dForm.isAuto_wt_amend());
 					
 				}
+				if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_STATUSMESSAGE)){
+
+					var.setStatus_message((String) dForm.getStatusMessage());
+
+				}				
 
 			} catch (Exception e) {
 				e.printStackTrace();

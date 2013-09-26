@@ -91,7 +91,8 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	private Integer pass_x_history;
 	private Integer pnrlastxdays;
 	private Integer issuanceitemxdaysback;
-	
+	private String statusMessage;
+
 	//AUTO CLOSE
 	private Integer auto_close_days_back;
 	private Integer auto_close_ld_code;
@@ -496,7 +497,14 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	public void setAuto_close_ohd_days_back(Integer auto_close_ohd_days_back) {
 		this.auto_close_ohd_days_back = auto_close_ohd_days_back;
 	}
+	
+	public String getStatusMessage() {
+		return statusMessage;
+	}
 
+	public void setStatusMessage(String statusMessage) {
+		this.statusMessage = statusMessage;
+	}
 
 
 }

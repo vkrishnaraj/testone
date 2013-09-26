@@ -14,7 +14,7 @@
   Agent  loginuser = (Agent)session.getAttribute("user");
 %>
 
-<% String a = "", b = "", c = "", d = "", e="", f="", g="";
+<% String a = "", b = "", c = "", d = "", e="", f="", g="", h="";
 
 if (request.getAttribute("pageState").equals(TracingConstants.COMPANY_PAGESTATE_INFO)) {
 	a = "b";
@@ -30,7 +30,9 @@ if (request.getAttribute("pageState").equals(TracingConstants.COMPANY_PAGESTATE_
 	f = "b";
 } else if (request.getAttribute("pageState").equals(TracingConstants.COMPANY_PAGESTATE_MOVETOLZ)) {
 	g = "b";
-}
+} else if (request.getAttribute("pageState").equals(TracingConstants.COMPANY_PAGESTATE_STATUSMESSAGE)) {
+	h = "b";
+}	
 %>
 <html:form action="companyAdmin.do" method="post" onsubmit="return validateThisForm(this);">
   <html:javascript formName="companyForm" />
@@ -284,6 +286,15 @@ if (request.getAttribute("pageState").equals(TracingConstants.COMPANY_PAGESTATE_
 	                <br />
 	                &nbsp;</span></a>
 	          </dd>
+	          <dd>
+	            <a href="companyAdmin.do?edit=1&companyCode=<%=request.getParameter("companyCode") %>&pageState=8"><span class="aa<%= h %>">&nbsp;
+	                <br />
+	                &nbsp;</span>
+	              <span class="bb<%= h %>"><bean:message key="menu.company.statusmessage" /></span>
+	              <span class="cc<%= h %>">&nbsp;
+	                <br />
+	                &nbsp;</span></a>
+	          </dd>	          
 	          <%
 
 				if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_WORLD_TRACER, loginuser)) {
@@ -338,7 +349,11 @@ if (request.getAttribute("pageState").equals(TracingConstants.COMPANY_PAGESTATE_
           <logic:equal name="pageState" scope="request" value="5">
 			<jsp:include page="./companyTiles/webservices.jsp" />
 	      </logic:equal>
-	      
+		  
+          <logic:equal name="pageState" scope="request" value="8">
+			<jsp:include page="./companyTiles/statusmessage.jsp" />
+	      </logic:equal>
+	  	      
 	      
           <logic:equal name="pageState" scope="request" value="6">
 			<%

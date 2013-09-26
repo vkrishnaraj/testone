@@ -79,6 +79,7 @@ public class Company_Specific_Variable implements Serializable {
 	private String blindEmail;
 	private int min_pass_size;
 	private int pass_x_history;
+	private String status_message;
 	/**
 	 * Variable to determine the last amount of days to include incidents for a PNR Prepopulation Check. -Sean Fine
 	 */
@@ -1182,4 +1183,20 @@ public class Company_Specific_Variable implements Serializable {
 		this.auto_close_ohd_days_back = auto_close_ohd_days_back;
 	}
 	
+	/**
+	 * @return Returns the status_message.
+	 * @hibernate.property type="string"
+	 */
+	public String getStatus_message() {
+		if (status_message == null) return "";
+		return status_message;
+	}
+	/**
+	 * @param status_message The status_message to set.
+	 */
+	public void setStatus_message(String status_message) {
+		this.status_message = status_message;
+	}
+	
+		
 }

@@ -587,6 +587,7 @@ public class TracingConstants {
 	public final static String COMPANY_PAGESTATE_WEB_SERVICES = "5";
 	public final static String COMPANY_PAGESTATE_WORLDTRACER = "6";
 	public final static String COMPANY_PAGESTATE_MOVETOLZ = "7";
+	public final static String COMPANY_PAGESTATE_STATUSMESSAGE = "8";	
 	
 	public final static int STATUS_SUSPECTED_FRAUD = 37;
 	public final static int STATUS_KNOWN_FRAUD = 38;

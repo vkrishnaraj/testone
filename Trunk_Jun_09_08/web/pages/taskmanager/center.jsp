@@ -122,7 +122,23 @@
 		%>
 		</h2>
 		</center>
-		
+
+		<%
+			String message = (String) request.getAttribute("taskManagerStatusMessage");
+			if (!message.equals("")) {
+		%>
+		<div align="left" style="width:100%;">
+			<font color="red" size="3" ><span >
+		<% 		
+				out.println(message);
+		%>
+			</span></font>
+		</div>			
+		<% 
+			}
+		%>
+
+				
 		<% if (hasLoadFoundPermission) { %> 
 			<script>
 			

@@ -29,6 +29,7 @@ import aero.nettracer.fs.utilities.TransportMapper;
 import aero.nettracer.lf.services.LFServiceBean;
 import aero.nettracer.selfservice.fraud.client.ClaimClientRemote;
 
+import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.ExpensePayoutBMO;
 import com.bagnet.nettracer.tracing.bmo.ForwardNoticeBMO;
 import com.bagnet.nettracer.tracing.bmo.PaxCommunicationBMO;
@@ -295,7 +296,7 @@ public class LogonAction extends Action {
 		}
 		
 		request.setAttribute("taskManagerAlerts", alertList);
-		
+		request.setAttribute("taskManagerStatusMessage", CompanyBMO.getTaskManagerStatusMessage(agent.getCompanycode_ID()));		
 
 		if (taskList != null && agent != null) {
 			ArrayList list = new ArrayList();
