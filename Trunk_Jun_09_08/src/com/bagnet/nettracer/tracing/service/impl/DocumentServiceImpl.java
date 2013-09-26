@@ -67,8 +67,8 @@ public class DocumentServiceImpl implements DocumentService {
 		
 		DocumentTemplateResult result = new DocumentTemplateResult();
 		Set<TemplateVar> vars = document.getTemplate().getVariables();
+		String content = document.getTemplate().getData();
 		if (vars != null && !vars.isEmpty()) {
-			String content = document.getTemplate().getData();
 			for (TemplateVar var: vars) {
 				String associatedClass = var.getAssociatedClass();
 				String displayTag = var.getDisplayTag();
@@ -91,8 +91,8 @@ public class DocumentServiceImpl implements DocumentService {
 				
 			}
 			
-			document.setContent(content);
 		}
+		document.setContent(content);
 		
 		result.setMessageKey("document.generated.success");
 		result.setSuccess(true);
