@@ -131,7 +131,7 @@
 				<table class="form2_dam" cellspacing="0" cellpadding="0">
 					<tr>
 						<td>
-							<bean:message key="colname.template.name" />
+							*&nbsp;<bean:message key="colname.template.name" />
 							<br>
 							<html:text property="name" size="60" styleId="name" styleClass="textfield" />
 						</td>
