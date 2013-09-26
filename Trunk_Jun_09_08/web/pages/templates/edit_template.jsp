@@ -150,6 +150,8 @@
 					</tr>
 					<tr>
 						<td>
+							<bean:message key="colname.template.data" />
+							<br>
 							<textarea id="data" name="data"><bean:write name="templateEditForm" property="data" /></textarea>
 						</td>
 						<td>
