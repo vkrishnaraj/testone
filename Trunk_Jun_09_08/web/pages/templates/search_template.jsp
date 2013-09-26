@@ -152,7 +152,7 @@
           			<display:column titleKey="colname.template.active" property="dispActive" sortable="true" sortName="active" />
  			    	<display:footer>
 		               	<tr>
-			                <td colspan="4">
+			                <td colspan="5">
 			                  <jsp:include page="/pages/includes/pagination_incl.jsp" />
 			                </td>
 		              	</tr>
