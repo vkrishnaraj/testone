@@ -168,6 +168,7 @@ public class FoundItemAction extends CheckedAction {
 				
 				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
 				ActionMessage error = new ActionMessage("message.found.save.success");
+				request.setAttribute("success", true);
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
 				
@@ -226,6 +227,7 @@ public class FoundItemAction extends CheckedAction {
 			found.setStatusId(TracingConstants.LF_STATUS_OPEN);
 			LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
 			ActionMessage error = new ActionMessage("message.found.save.success");
+			request.setAttribute("success", true);
 			errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 			saveMessages(request, errors);
 		} else if (request.getParameter("pickup") != null){
@@ -254,6 +256,7 @@ public class FoundItemAction extends CheckedAction {
 				found.setStatusId(TracingConstants.LF_STATUS_CLOSED);
 				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
 				ActionMessage error = new ActionMessage("message.found.save.success");
+				request.setAttribute("success", true);
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
 			}
@@ -264,6 +267,7 @@ public class FoundItemAction extends CheckedAction {
 				found.setStatusId(TracingConstants.LF_STATUS_CLOSED);
 				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
 				ActionMessage error = new ActionMessage("message.found.save.success");
+				request.setAttribute("success", true);
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
 			}
@@ -274,6 +278,7 @@ public class FoundItemAction extends CheckedAction {
 				found.setStatusId(TracingConstants.LF_STATUS_CLOSED);
 				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
 				ActionMessage error = new ActionMessage("message.found.save.success");
+				request.setAttribute("success", true);
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
 			}
