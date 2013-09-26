@@ -166,7 +166,13 @@ function sortIncomingRequests(sortOrder) {
                     </logic:notPresent>
                   </td>
                   <td>
-					<bean:write name="req" property="ohd.claimnum" />
+                    <logic:notEmpty name="req" property="ohd.claimnum">
+                      <bean:write name="req" property="ohd.claimnum" />
+                    </logic:notEmpty>
+                    <logic:empty name="req" property="ohd.claimnum">
+                      &nbsp;
+                    </logic:empty>                  
+					
                   </td>                  
                   <logic:notEqual name="req" property="match_id" value="0">
                     <td>
