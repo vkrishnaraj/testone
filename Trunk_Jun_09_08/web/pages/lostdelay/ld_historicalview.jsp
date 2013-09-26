@@ -353,18 +353,6 @@ function CBG_check(obj) {
                 <% } %>
                 <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("1") || TracerProperties.isTrue(a.getCompanycode_ID(),TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %> checked <% } %> value="1">
                 <bean:message key="radio.html" />
-                <% /*if (!TracerProperties.isTrue(a.getCompanycode_ID(),TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
-                  <!-- REMOVED FROM OPTIONS -->
-                  <!-- 
-                  <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("2")) { %> checked <% } %> value="2">
-                  <bean:message key="radio.xls" />
-                  <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("3")) { %> checked <% } %> value="3">
-                  <bean:message key="radio.csv" />
-                  <input type="radio" name="outputtype" <% if (request.getAttribute("outputtype").equals("4")) { %> checked <% } %> value="4">
-                  <bean:message key="radio.xml" />
-                   -->
-                  <!-- REMOVED FROM OPTIONS -->
-                <% }*/ %>
                 <% 
 				if (canTeletype) {
 				%>
