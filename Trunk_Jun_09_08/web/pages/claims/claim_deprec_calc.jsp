@@ -328,7 +328,7 @@
 								</a>
 							</td>
 	
-							<td><html:text size="5" styleClass="textfield" name="deprecItem" property="amountClaimed"  indexed="true"
+							<td><html:text size="5" maxlength="200" styleClass="textfield" name="deprecItem" property="amountClaimed"  indexed="true"
 								styleId="<%=amountClaimId %>" onblur="<%=calcThis %>" /></td>
 	
 							<td nowrap="nowrap">

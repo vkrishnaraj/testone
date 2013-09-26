@@ -96,7 +96,7 @@
 				
 				<input type="hidden" name="category[<%=i %>].id" value="<bean:write name="category" property="id"/>" />
 				<logic:equal value="0" property="id" name="category">
-					<html:text  name="category" property="name" styleClass="textfield" size="10" indexed="true"/>
+					<html:text  name="category" property="name" maxlength="30"  styleClass="textfield" size="10" indexed="true"/>
 				</logic:equal>
 				<logic:notEqual value="0" property="id" name="category">
 					<bean:write name="category" property="name"/>
