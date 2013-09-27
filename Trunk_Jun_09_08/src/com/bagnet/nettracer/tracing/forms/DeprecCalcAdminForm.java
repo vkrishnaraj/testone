@@ -43,6 +43,7 @@ public final class DeprecCalcAdminForm extends ValidatorForm {
 		Depreciation_Category dc = null;
 		while (this.categories.size() <= index) {
 			dc = new Depreciation_Category();
+			dc.setMaxDeprec(100);
 			this.categories.add(dc);
 		}
 		return (Depreciation_Category) this.categories.get(index);

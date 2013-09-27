@@ -324,6 +324,42 @@ public class Depreciation_Item {
 		else 
 			return "0.00";
 	}
+	
+	@Transient
+	public void setDispAmountClaimed(String amountClaimed){
+		double ac=0;
+		try{
+			ac=Double.valueOf(amountClaimed);
+		} catch (Exception e) {
+			
+		}
+		setAmountClaimed(ac);
+	
+	}
+
+	@Transient
+	public void setDispCalcValue(String calcValue){
+		double cv=0;
+		try{
+			cv=Double.valueOf(calcValue);
+		} catch (Exception e) {
+			
+		}
+		setCalcValue(cv);
+	
+	}
+
+	@Transient
+	public void setDispClaimValue(String claimValue){
+		double cv=0;
+		try{
+			cv=Double.valueOf(claimValue);
+		} catch (Exception e) {
+			
+		}
+		setClaimValue(cv);
+	
+	}
 
 	@Transient
 	public String getCoc(){

@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.db;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -167,6 +168,27 @@ public class Claim_Depreciation {
 
 	public void setTotalApprovedPayout(double totalApprovedPayout) {
 		this.totalApprovedPayout = totalApprovedPayout;
+	}
+	
+	@Transient
+	public String getDispTotalApprovedPayout() {
+
+		DecimalFormat format = (DecimalFormat) java.text.NumberFormat
+				.getInstance();
+		format.applyPattern("##0.00");
+		format.setMinimumFractionDigits(2);
+		return format.format(totalApprovedPayout);
+	}
+
+	@Transient
+	public void setDispTotalApprovedPayout(String totalApprovedPayout) {
+		double tap=0;
+		try{
+			tap=Double.valueOf(totalApprovedPayout);
+		} catch (Exception e) {
+			
+		}
+		setTotalApprovedPayout(tap);
 	}
 	
 	@Transient

@@ -39,6 +39,13 @@
             <bean:message key="deprec.calc.rules.saved" />
           </font></center>
         </logic:present>
+        	<logic:present name="catDeleted" scope="request">
+	          <br>
+	          <center><font color=green>
+	            <bean:message key="deprec.category.deleted" />
+	          </font></center>
+        	
+        	</logic:present>
         <br>
 
 <!--  POC0 -->
@@ -99,8 +106,13 @@
 					<html:text  name="category" property="name" maxlength="30"  styleClass="textfield" size="10" indexed="true"/>
 				</logic:equal>
 				<logic:notEqual value="0" property="id" name="category">
-					<bean:write name="category" property="name"/>
-					<input type="hidden" name="category[<%=i %>].name" value="<bean:write name="category" property="name"/>" />
+					<logic:empty name="category" property="name">
+						<html:text  name="category" property="name" maxlength="30"  styleClass="textfield" size="10" indexed="true"/>
+					</logic:empty>
+					<logic:notEmpty  name="category" property="name">
+						<bean:write name="category" property="name"/>
+						<input type="hidden" name="category[<%=i %>].name" value="<bean:write name="category" property="name"/>" />
+					</logic:notEmpty>
 				</logic:notEqual>
 			</td>
 			<td>

@@ -9,6 +9,8 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Depreciation_Category" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.GeneralDepreciationRules" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.Depreciation_Item" %>
+<%@ page import="com.bagnet.nettracer.tracing.forms.ClaimDeprecCalcForm" %>
 <%@ page import="com.bagnet.nettracer.tracing.bmo.CompanyBMO" %>
 <%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
@@ -16,10 +18,172 @@
 <%@ page import="com.bagnet.nettracer.reporting.ReportingConstants" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
+  ClaimDeprecCalcForm myform=(ClaimDeprecCalcForm)session.getAttribute("claimDeprecCalcForm");
+  boolean ntUser = PropertyBMO.isTrue("nt.user");
+  boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
 %>
   
   <html:form action="claim_deprec_calc.do" method="post" enctype="multipart/form-data">
     
+            <tr>
+              <td colspan="3" id="navmenucell">
+                <div class="menu">
+                  <dl>
+                  <% if (ntUser) { %>
+                    	<logic:notEmpty name="claimDeprecCalcForm" property="claimDeprec.claim.ntIncident" >
+                    <dd>
+                      		<a href='searchIncident.do?incident=<bean:write name="claimDeprecCalcForm" property="claimDeprec.claim.ntIncident.incident_ID" />'>
+                      <span class="aa">&nbsp;
+                          <br />
+                          &nbsp;</span>
+                        <span class="bb"><bean:message key="menu.incident_info" /></span>
+                        <span class="cc">&nbsp;
+                          <br />
+                          &nbsp;</span></a>
+                    </dd>
+                        </logic:notEmpty>
+                   <% } %>
+                    <logic:present name="editinterim" scope="request">
+                      <dd>
+                        <a href="#"><span class="aab">&nbsp;
+                            <br />
+                            &nbsp;</span>
+                          <span class="bbb"><bean:message key="menu.interim_expense" /></span>
+                          <span class="ccb">&nbsp;
+                            <br />
+                            &nbsp;</span></a>
+                      </dd>
+                    </logic:present>
+                    <logic:notPresent name="editinterim" scope="request">
+
+
+                      <%
+                      if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_SETTLEMENT, a)) {
+                        if (request.getAttribute("claimSettlementExists")==null) {
+                        	String incident = (String) request.getAttribute("incident");
+                        	if (incident == null) { %>
+                        		<logic:notEmpty name="claimDeprecCalcForm" property="claimDeprec.claim.ntIncident" >
+                        			<dd>
+			                          <a href='claim_settlement.do?incident_ID=<bean:write name="claimDeprecCalcForm" property="claimDeprec.claim.ntIncident.incident_ID" />'>
+			                          	<span class="aa">&nbsp;<br />&nbsp;</span>
+				                        <span class="bb"><bean:message key="menu.claim_settlement" /></span>
+				                        <span class="cc">&nbsp;<br />&nbsp;</span>
+				                      </a>
+			                        </dd>
+                        		</logic:notEmpty>
+                        	<% } else { %>
+             
+                        <dd>
+                          <a href='claim_settlement.do?incident_ID=<bean:write name="incident" scope="request" />'><span class="aa">&nbsp;
+                              <br />
+                              &nbsp;</span>
+                            <span class="bb"><bean:message key="menu.claim_settlement" /></span>
+                            <span class="cc">&nbsp;
+                              <br />
+                              &nbsp;</span></a>
+                        </dd>
+							<% } 
+                        	} else {
+%>
+
+                    <dd>
+                       <a href='claim_settlement.do?screen=1&incident_ID=<bean:write name="incident" scope="request" />'><span class="aa">&nbsp;
+                          <br />
+                          &nbsp;</span>
+                        <span class="bb"><bean:message key="menu.claim_process" /></span>
+                        <span class="cc">&nbsp;
+                          <br />
+                          &nbsp;</span></a>
+                    </dd>
+                    
+                    <dd>
+                      <a href='claim_settlement.do?screen=2&incident_ID=<bean:write name="incident" scope="request" />'><span class="aa">&nbsp;
+                          <br />
+                          &nbsp;</span>
+                        <span class="bb"><bean:message key="menu.claim_customer" /></span>
+                        <span class="cc">&nbsp;
+                          <br />
+                          &nbsp;</span></a>
+                    </dd>
+
+                    <dd>
+                      <a href='claim_settlement.do?screen=3&incident_ID=<bean:write name="incident" scope="request" />'><span class="aa">&nbsp;
+                          <br />
+                          &nbsp;</span>
+                        <span class="bb"><bean:message key="menu.claim_baggage" /></span>
+                        <span class="cc">&nbsp;
+                          <br />
+                          &nbsp;</span></a>
+                    </dd>
+<%
+                      }
+                    }
+%>
+                      <dd>
+                        <a href="claim_resolution.do?claimId=<bean:write name="claimDeprecCalcForm" property="claimDeprec.claim.id"/>"><span class="aa">&nbsp;
+                            <br />
+                            &nbsp;</span>
+                          <span class="bb"><bean:message key="menu.claim_payout" /></span>
+                          <span class="cc">&nbsp;
+                            <br />
+                            &nbsp;</span></a>
+                      </dd>
+                      <dd>
+                      <%
+                      if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, a)) {
+                      	if ((ntUser && ntfsUser) || ntfsUser) { 
+                      		if (myform.getClaimDeprec().getClaim().getId() == 0) {
+	                      		if (myform.getClaimDeprec().getClaim().getIncident() != null && 
+	                      				myform.getClaimDeprec().getClaim().getIncident().getId() != 0) { %>
+	                      
+			                   <a href='fraud_results.do?incident=<bean:write name="claimDeprecCalcForm" property="claimDeprec.claim.ntIncident.incident_ID" />'><span class="aa">&nbsp;<br />&nbsp;</span>
+			                   	<span class="bb"><bean:message key="menu.fraud.checks" /></span>
+			                        <span class="cc">&nbsp;
+			                          <br />
+			                          &nbsp;</span></a>
+	                      		<% } 
+                      		} else { %>
+		                   	<a href='fraud_results.do?claimId=<bean:write name="claimDeprecCalcForm" property="claimDeprec.claim.id" />' ><span class="aa">&nbsp;<br />&nbsp;</span>
+		                   	<span class="bb"><bean:message key="menu.fraud.checks" /></span>
+	                        <span class="cc">&nbsp;<br />&nbsp;</span></a>
+                      	
+                      		<% } %>
+	                   </dd>
+                      <% }
+                      }
+                      if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_PRORATE, a) && ntUser) { %>
+                      <logic:notEmpty name="claimDeprecCalcForm" property="claimDeprec.claim.ntIncident" >
+                        <dd>
+                          <a href='claim_prorate.do?incident=<bean:write name="claimDeprecCalcForm" property="claimDeprec.claim.ntIncident.incident_ID" />'><span class="aa">&nbsp;
+                              <br />
+                              &nbsp;</span>
+                            <span class="bb"><bean:message key="menu.claim_prorate" /></span>
+                            <span class="cc">&nbsp;
+                              <br />
+                              &nbsp;</span></a>
+                        </dd>
+                      </logic:notEmpty>
+<%
+                      }
+                      %>
+
+                    </logic:notPresent>
+                    
+                    <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_DEPREC_CALCULATOR, a) && ntUser) { %>
+                      <dd>
+                      <a href='#'><span class="aab">&nbsp;
+                          <br />
+                          &nbsp;</span>
+                        <span class="bbb"><bean:message key="menu.claim_deprec_calc" /></span>
+                        <span class="ccb">&nbsp;
+                          <br />
+                          &nbsp;</span></a>
+                    </dd>
+                    <% } %>
+                  </dl>
+                </div>
+              </td>
+            </tr>
     <tr>
       
       <td id="middlecolumn">
@@ -251,6 +415,18 @@
 				</h1>
 				<table class='form2_ld' cellspacing="0" cellpadding="0">
 					<tr>
+						<td class="header" width="20%"><strong><bean:message key="colname.claim.id"/>:</strong></td>
+						<td><logic:notEmpty name="claimDeprecCalcForm" property="claimDeprec.claim"/>
+							<bean:write name="claimDeprecCalcForm" property="claimDeprec.claim.id"/>
+						</td>
+					</tr>
+					<tr>
+						<td class="header" width="20%"><strong><bean:message key="colname.incident.id"/>:</strong></td>
+						<td><logic:notEmpty name="claimDeprecCalcForm" property="claimDeprec.claim.incident"/>
+							<bean:write name="claimDeprecCalcForm" property="claimDeprec.claim.incident.airlineIncidentId"/>
+						</td>
+					</tr>
+					<tr>
 						<td class="header" width="20%"><strong><bean:message key="deprec.calc.claim.type"/>:</strong></td>
 						<td><html:select styleClass="dropdown" styleId="claimType" name="claimDeprecCalcForm"
 						 		property="claimDeprec.claimTypeId" onchange="hideshow('drop_hide_this');">
@@ -295,7 +471,7 @@
 							</span>
 							<logic:notEmpty name="claimDeprecCalcForm" property="claimDeprec.claim">
 							<span style="float: right">
-								<a href="#" onclick="openReportWindow('reporting?print=<%=ReportingConstants.DEPREC_SUMMARY%>&claimId=<bean:write name="claimDeprecCalcForm" property="claim_id" />&outputtype=0','LostReceipt',800,600);return false;"><img src="deployment/main/images/nettracer/icon_printrpt.gif" width="12" height="12"><bean:message key="deprec.calc.print.deprec.sum"/></a>
+								<a href="#" onclick="openReportWindow('reporting?print=<%=ReportingConstants.DEPREC_SUMMARY%>&claimId=<bean:write name="claimDeprecCalcForm" property="claimDeprec.claim.id" />&outputtype=0','LostReceipt',800,600);return false;"><img src="deployment/main/images/nettracer/icon_printrpt.gif" width="12" height="12"><bean:message key="deprec.calc.print.deprec.sum"/></a>
 								
 							</span>
 							</logic:notEmpty>
@@ -343,7 +519,7 @@
 								</a>
 							</td>
 	
-							<td><html:text size="5" maxlength="200" styleClass="textfield" name="deprecItem" property="amountClaimed"  indexed="true"
+							<td><html:text size="5" maxlength="200" styleClass="textfield" name="deprecItem" property="dispAmountClaimed"  indexed="true"
 								styleId="<%=amountClaimId %>" onblur="<%=calcThis %>" /></td>
 	
 							<td nowrap="nowrap">
@@ -374,12 +550,12 @@
 								onclick="<%=calcThis %>" onchange="<%=calcThis %>" /></td>
 	
 	
-							<td><html:text size="5" styleClass="textfield" name="deprecItem" property="calcValue" indexed="true"
+							<td><html:text size="5" styleClass="textfield" name="deprecItem" property="dispCalcValue" indexed="true"
 								styleId="<%=calcId %>" disabled="true" />
 								<input type="hidden" id="calc<%=t1 %>" name="deprecItem[<%=i %>].calcValue" value="<bean:write name="deprecItem" property="calcValue"/>" />
 								</td>
 	
-							<td><html:text size="5" styleClass="textfield" name="deprecItem" property="claimValue"  indexed="true" onchange="calculateTotalValue()"
+							<td><html:text size="5" styleClass="textfield" name="deprecItem" property="dispClaimValue"  indexed="true" onchange="calculateTotalValue()"
 								styleId="<%=valueId %>" onkeydown="<%=checkvalue %>" onkeyup="<%=checkvalue %>" />
 							</td>
 							<td>
@@ -401,7 +577,7 @@
 					</tr>
 					<tr>
 						<td colspan="7" align="right" valign="middle"><strong><bean:message key="deprec.total.approved.payout"/>:</strong></td>
-						<td><html:text  size="5" onkeydown="this.style.backgroundColor='yellow'" styleId="totalApprovedPayout" styleClass="textfield"  name="claimDeprecCalcForm" property="claimDeprec.totalApprovedPayout" /></td>
+						<td><html:text  size="5" onkeydown="this.style.backgroundColor='yellow'" styleId="totalApprovedPayout" styleClass="textfield"  name="claimDeprecCalcForm" property="claimDeprec.dispTotalApprovedPayout" /></td>
 					</tr>
 				</table>
 				<center>
@@ -420,10 +596,6 @@
 			<html:submit property="addItems" styleId="button" >
 				<bean:message key="deprec.add.items"/>
 			</html:submit>
-			<!--		&nbsp;&nbsp;&nbsp;&nbsp;
-			<html:submit property="generateSettle" styleId="button">
-				<bean:message key="deprec.generate.settlement.letter"/>
-			</html:submit>-->
 				</center></html:form>
 				
 				
@@ -436,4 +608,11 @@
 					if(totalVal!=null && approved!=null && totalVal.value!=approved.value){
 						approved.style.backgroundColor='yellow';
 					}
+					
+					<% int index=0;
+					 for(Depreciation_Item di:myform.getClaimDeprec().getItemlist()){ %>
+
+						var claimVal=document.getElementById("dep_value_"+<%=index%>);
+						checkValue(<%=index%>,claimVal);
+					<% } %>
 				</script>
