@@ -75,7 +75,8 @@ if (hasPermission) {
   <h1 class="green">
     <bean:message key="header.nettracer.currentTask" />
   </h1>
-      
+      <span class="reqfield">*</span>
+      <bean:message key="message.required" />
       <div id="netTracerGeneralTask">
         <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
 				<tr><td width ="20%"><bean:message key="generaltask.tasktype" />:</td><td><strong><bean:message name="sessionTaskContainer" property="label"/></strong></td></tr>
