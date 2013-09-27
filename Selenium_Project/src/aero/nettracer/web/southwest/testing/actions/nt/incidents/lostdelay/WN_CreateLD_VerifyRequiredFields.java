@@ -12,73 +12,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		// MJS: initial state is drivers license collection enabled
 		// 		and view/edit drivers license disabled.
 		verifyTrue(setPermissions(new String[] { "632", "633", "636", "637", "635" }, new boolean[] { true, false, true, false, true }));
-		selenium.click("//a[@id='menucol_1.1']");
-		waitForPageToLoadImproved();
-		if (checkNoErrorPage()) {
-			checkCopyrightAndQuestionMarks();
-			selenium.click("name=skip_prepopulate");
-			waitForPageToLoadImproved();
-			if (checkNoErrorPage()) {
-				checkCopyrightAndQuestionMarks();
-				selenium.type("name=passenger[0].lastname", "Test");
-				selenium.type("name=passenger[0].firstname", "Test");
-				verifyTrue(selenium.isElementPresent("name=passenger[0].decriptedDriversLicense"));
-				verifyTrue(selenium.isElementPresent("name=passenger[0].dlstate"));
-				verifyTrue(selenium.isElementPresent("name=passenger[0].driversLicenseProvince"));
-				verifyTrue(selenium.isElementPresent("name=passenger[0].driversLicenseCountry"));
-				verifyTrue(selenium.isElementPresent("name=passenger[0].decryptedPassportNumber"));
-				verifyTrue(selenium.isElementPresent("name=passenger[0].passportIssuer"));
-				selenium.type("name=passenger[0].decriptedDriversLicense", WN_SeleniumTest.DRIVERS_LICENSE);
-				selenium.select("name=passenger[0].dlstate", "label=Georgia");
-				verifyFalse(selenium.isEditable("name=passenger[0].driversLicenseProvince"));
-				verifyEquals("US", selenium.getValue("name=passenger[0].driversLicenseCountry"));
-				selenium.type("name=passenger[0].decryptedPassportNumber", WN_SeleniumTest.PASSPORT_NUMBER);
-				selenium.select("name=passenger[0].passportIssuer", "label=United States");
-				selenium.type("name=addresses[0].address1", "123 Test");
-				selenium.type("name=addresses[0].city", "Test");
-				selenium.select("name=addresses[0].state_ID", "label=Georgia");
-				selenium.type("name=addresses[0].zip", "12345");
-				selenium.type("name=theitinerary[0].legfrom", "ATL");
-				selenium.type("name=theitinerary[0].legto", "LAX");
-				selenium.type("name=theitinerary[0].flightnum", "123");
-				selenium.click("id=itcalendar0");
-				selenium.click("link=Today");
-				selenium.type("name=theitem[0].posId", "123456");
-				selenium.select("name=theitem[0].color", "label=BK - Black");
-				selenium.select("name=theitem[0].bagtype", "label=22");
-				selenium.select("name=inventorylist[0].categorytype_ID", "label=Alcohol");
-				selenium.type("name=inventorylist[0].description", "TEST");
-				selenium.select("name=inventorylist[1].categorytype_ID", "label=Alcohol");
-				selenium.select("name=inventorylist[2].categorytype_ID", "label=Alcohol");
-				selenium.type("name=inventorylist[1].description", "TEST");
-				selenium.type("name=inventorylist[2].description", "TEST");
-				selenium.type("name=recordlocator", "TESTER");
-				selenium.type("name=addresses[0].email", "email@email.com");
-				selenium.type("name=claimcheck[0].claimchecknum", "WN123456");
-				selenium.type("name=addresses[0].mobile", "(555) 555-4444");
-				selenium.click("savetracingButton");
-				waitForPageToLoadImproved();
-				if (checkNoErrorPage()) {
-					verifyTrue(selenium.isTextPresent("Lost/Delayed Bag Incident has been submitted."));
-					checkCopyrightAndQuestionMarks();
-					String incident_id = selenium.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
-					Settings.INCIDENT_ID_WN = incident_id;
-					System.out.println("WN: Lost/Delay Incident Created: " + Settings.INCIDENT_ID_WN);
-					selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
-					waitForPageToLoadImproved();
-				} else {
-					System.out.println("!!!!!!!!!!!!!!! - Create Lost/Delay Success Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-					verifyTrue(false);
-				}
-			} else {
-				System.out.println("!!!!!!!!!!!!!!! - Edit Lost/Delay Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-				verifyTrue(false);
-			}
-		} else {
-			System.out.println("!!!!!!!!!!!!!!! - Prepopulate Lost/Delay Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-			verifyTrue(false);
-		}
-		
+		createIncident(true);
 	}
 	
 	@Test
