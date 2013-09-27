@@ -1,11 +1,6 @@
 package aero.nettracer.web.southwest.testing.actions.nt.founds;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-
-import com.thoughtworks.selenium.DefaultSelenium;
-import com.thoughtworks.selenium.Selenium;
 
 import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
 
@@ -26,12 +21,12 @@ public class WN_FoundItem extends WN_SeleniumTest {
 			selenium.click("id=saveButton");
 			waitForPageToLoadImproved();
 		} else {
-			System.out.println("testCreateFoundRequiredFields failure line 29");
+			System.out.println("testCreateFoundRequiredFields failure line 24");
 		}
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Your found item was successfully saved"));
 		} else {
-			System.out.println("testCreateFoundRequiredFields failure line 34");
+			System.out.println("testCreateFoundRequiredFields failure line 29");
 		}
 	}
 
@@ -63,7 +58,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 		if(checkNoErrorPage()){
 			verifyTrue(selenium.isTextPresent("Your found item was successfully saved"));
 		} else {
-			System.out.println("testCreateFoundAllFields failure line 68");
+			System.out.println("testCreateFoundAllFields failure line 61");
 		}
 	}
 
@@ -72,25 +67,63 @@ public class WN_FoundItem extends WN_SeleniumTest {
 		selenium.click("id=menucol_5.2");
 		waitForPageToLoadImproved();
 		if(checkNoErrorPage()){
+			cycleSearch("name=lastName", "id=lastname", "Test", true, false);
+			cycleSearch("name=firstName", "id=firstname", "Test", true, false);
+			cycleSearch("id=priInterNum", "id=priInterNum", "1", true, false);
+			cycleSearch("id=priAreaNum", "id=priAreaNum", "222", true, false);
+			cycleSearch("id=priExchaNum", "id=priExchaNum", "333", true, false);
+			cycleSearch("id=priLineNum", "id=priLineNum", "4444", true, false);
+			cycleSearch("name=category", "id=category_0", "Bags", false, true);
+			cycleSearch("name=subCategory", "id=subcategories_0", "Baby Bag", false, true);
+			cycleSearch("name=brand", "id=itembrand_0", "Test", true, false);
+			cycleSearch("name=email", "id=email", "test@test.com", true, false);
+			cycleSearch("name=serialNumber", "id=itemserial_0", "123", true, false);
 			selenium.click("id=calendar");
 			selenium.click("link=Today");
 			selenium.click("id=calendar2");
 			selenium.click("link=Today");
-			selenium.type("name=lastName", "Test");
-			selenium.type("name=firstName", "Test");
-			selenium.type("id=priInterNum", "1");
-			selenium.type("id=priAreaNum", "222");
-			selenium.type("id=priExchaNum", "333");
-			selenium.type("id=priLineNum", "4444");
-			selenium.select("name=category", "label=Bags");
-			selenium.select("name=subCategory", "label=Baby Bag");
-			selenium.type("name=brand", "Test");
 			selenium.type("name=email", "test@test.com");
-			selenium.type("name=serialNumber", "123");
 			selenium.click("id=button");
 			waitForPageToLoadImproved();
 		} else {
-			System.out.println("testSearchFoundAllFields failure line 93");
+			System.out.println("testSearchFoundAllFields failure line 88");
+		}
+	}
+	
+	private void cycleSearch(String searchField, String formField, String value, boolean type, boolean select) {
+		selenium.click("id=calendar");
+		selenium.click("link=Today");
+		selenium.click("id=calendar2");
+		selenium.click("link=Today");
+		if (type) {
+			selenium.type(searchField, value);
+		}
+		if (select) {
+			selenium.select(searchField, "label=" + value);
+		}
+		selenium.click("id=button");
+		waitForPageToLoadImproved();
+		if(checkNoErrorPage()){
+			if (type) {
+				verifyEquals(value, selenium.getValue(formField));
+			}
+			if (select) {
+				verifyEquals(value, selenium.getSelectedLabel(formField));
+			}
+			selenium.click("id=menucol_5.2");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("cycleSearch failure line 115 fields: " + searchField + ", " + formField + ", " + value);
+		}
+		if(checkNoErrorPage()){
+			if (type) {
+				selenium.type(searchField, "");
+			}
+			if (select) {
+				selenium.select(searchField, "label=Please select...");
+			}
+		} else {
+			System.out.println("cycleSearch failure line 125 fields: " + searchField + ", " + formField + ", " + value);
 		}
 	}
 
@@ -106,7 +139,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 			selenium.click("link=Remove item");
 			assertEquals("Removal Reason is required.", selenium.getAlert());
 		} else {
-			System.out.println("testDeliveryRequiredFields failure line 109");
+			System.out.println("testDeliveryRequiredFields failure line 131");
 		}
 	}
 
@@ -120,13 +153,13 @@ public class WN_FoundItem extends WN_SeleniumTest {
 			selenium.click("link=Undo");
 			waitForPageToLoadImproved();
 		} else {
-			System.out.println("testPassengerPickUp failure line 123");
+			System.out.println("testPassengerPickUp failure line 145");
 		}
 		if (checkNoErrorPage()) {
 			verifyEquals("Open", selenium.getSelectedLabel("name=found.statusId"));
 			verifyEquals("None", selenium.getSelectedLabel("name=found.disposition.status_ID"));
 		} else {
-			System.out.println("testPassengerPickUp failure line 129");
+			System.out.println("testPassengerPickUp failure line 151");
 		}
 	}
 
@@ -141,13 +174,13 @@ public class WN_FoundItem extends WN_SeleniumTest {
 			selenium.click("link=Undo");
 			waitForPageToLoadImproved();
 		} else {
-			System.out.println("testDeliver failure line 144");
+			System.out.println("testDeliver failure line 166");
 		}
 		if (checkNoErrorPage()) {
 			verifyEquals("Open", selenium.getSelectedLabel("name=found.statusId"));
 			verifyEquals("None", selenium.getSelectedLabel("name=found.disposition.status_ID"));
 		} else {
-			System.out.println("testDeliver failure line 150");
+			System.out.println("testDeliver failure line 172");
 		}
 	}
 
@@ -162,13 +195,13 @@ public class WN_FoundItem extends WN_SeleniumTest {
 			selenium.click("link=Undo");
 			waitForPageToLoadImproved();
 		} else {
-			System.out.println("testSendToLFC failure line 165");
+			System.out.println("testSendToLFC failure line 187");
 		}
 		if (checkNoErrorPage()) {
 			verifyEquals("Open", selenium.getSelectedLabel("name=found.statusId"));
 			verifyEquals("None", selenium.getSelectedLabel("name=found.disposition.status_ID"));
 		} else {
-			System.out.println("testSendToLFC failure line 171");
+			System.out.println("testSendToLFC failure line 193");
 		}
 	}
 
@@ -182,7 +215,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 			verifyEquals("Removed", selenium.getSelectedLabel("name=found.disposition.status_ID"));
 			goToTaskManager();
 		} else {
-			System.out.println("testRemove failure line 185");
+			System.out.println("testRemove failure line 207");
 		}
 	}
 }
