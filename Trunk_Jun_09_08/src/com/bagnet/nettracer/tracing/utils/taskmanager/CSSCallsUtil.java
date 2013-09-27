@@ -598,13 +598,13 @@ public class CSSCallsUtil extends TaskManagerUtil {
 					finalDto.setStation1Tasks(dto1.getStation1Tasks());
 					if (temp.size() > 1) {
 						CSSStationsDTO dto2 = temp.get(1);
-						finalDto.setStation2Desc(dto2.getStation2Desc());
-						finalDto.setStation2Tasks(dto2.getStation2Tasks());
+						finalDto.setStation2Desc(dto2.getStation1Desc());
+						finalDto.setStation2Tasks(dto2.getStation1Tasks());
 					}
 					if (temp.size() > 2) {
 						CSSStationsDTO dto3 = temp.get(2);
-						finalDto.setStation3Desc(dto3.getStation3Desc());
-						finalDto.setStation3Tasks(dto3.getStation3Tasks());
+						finalDto.setStation3Desc(dto3.getStation1Desc());
+						finalDto.setStation3Tasks(dto3.getStation1Tasks());
 					}
 					toReturn.add(finalDto);
 				// This is handles all situations for more than three entries.
