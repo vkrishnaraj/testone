@@ -2,13 +2,16 @@ package com.bagnet.nettracer.tracing.actions;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -183,10 +186,18 @@ public class ForwardOnHandAction extends Action {
 
 		if (ohd_ID != null) {
 			String[] ohdArray = ohd_ID.split(",");
-			
+			Map<String, OHD> ohdMap = new HashMap<String, OHD>();
 			for (String o: ohdArray) {
-				if(OHDUtils.getOHD(o)!=null)
+				o = StringUtils.stripToNull(o);
+				if (o == null) {
+					continue;
+				}
+				
+				OHD ohd = OHDUtils.getOHD(o);
+				if(ohd != null) {
+					ohdMap.put(o, ohd);
 					oList.add(new LabelValueBean(o, ""));
+				}
 			}		
 			//reset the forward form
 			theform = new ForwardOnHandForm();
@@ -197,6 +208,7 @@ public class ForwardOnHandAction extends Action {
 			list.add(itinerary);
 			theform.setOhd_ID(ohd_ID);
 			theform.setOhdList(oList);
+			request.setAttribute("ohdMap", ohdMap);
 			if(companyCode!=null && companyCode.length()>0){
 				theform.setCompanyCode(companyCode);
 			} else {

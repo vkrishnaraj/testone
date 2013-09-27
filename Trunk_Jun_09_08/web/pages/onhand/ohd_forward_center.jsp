@@ -1,3 +1,4 @@
+<%@page import="org.apache.commons.lang.StringUtils"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="/tags/struts-bean" prefix="bean" %>
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
@@ -10,6 +11,8 @@
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 
+<%@ page import="java.util.Map,
+				com.bagnet.nettracer.tracing.db.OHD"%>
 <%
   Agent a = (Agent)session.getAttribute("user");
 
@@ -77,7 +80,37 @@
                       <bean:message key="colname.expedite_number" />
                       :
                       <input type="text" name="ohdList[<%=i %>].value" class="textfield" value="<%=ohd.getValue() %>"/>
-                      <br />
+					  <%
+						@SuppressWarnings("unchecked")
+						Map<String, OHD> ohdMap = (Map<String, OHD>)request.getAttribute("ohdMap");
+						OHD ohdObj = (ohdMap == null || ohd.getLabel() == null) ? null : ohdMap.get(ohd.getLabel());
+						if (ohdObj != null) {
+							String bagTag =  StringUtils.stripToEmpty(ohdObj.getClaimchecknum_bagnumber());
+							String color =  StringUtils.stripToEmpty(ohdObj.getColor());
+							String type =  StringUtils.stripToEmpty(ohdObj.getType());
+							String firstname =  StringUtils.stripToEmpty(ohdObj.getFirstname());
+							String middlename =  StringUtils.stripToEmpty(ohdObj.getMiddlename());
+							String lastname =  StringUtils.stripToEmpty(ohdObj.getLastname());
+		                    %>
+							<div style="float:right; width:200px;">
+								<% if (!bagTag.isEmpty()) {%>
+				        			<b>Bag Tag:</b> <span style="padding:18px;"><%=bagTag%></span><br/>
+				        		<%}%>
+				        		
+								<% if (!color.isEmpty() || !type.isEmpty()) {%>
+				        			<b>Color/Type:</b> <%=color%>/<%=type%><br/>
+				        		<%}%>
+				        		
+				        		
+								<% if (!firstname.isEmpty() || !middlename.isEmpty() || !lastname.isEmpty()) {%>
+				            		<b>Name:</b> <span style="padding:27px;"><%=firstname%> <%=middlename%> <%=lastname%></span>
+				        		<%}%>
+				           </div>
+				           
+				      		<hr style='clear:both; border:1px solid #fff;<%=(ohdMap == null || i < ohdMap.size()-1)?"":"visibility:hidden;"%>'/>
+				     	<%} else {%>
+				     		<br/>
+				     	<%}%>
                   </logic:iterate>
 
 
