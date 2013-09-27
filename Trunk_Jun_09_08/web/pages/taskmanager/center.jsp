@@ -210,11 +210,11 @@
 	            </tr>
 	            <logic:iterate id="activityDTO" name="activityList" type="com.bagnet.nettracer.tracing.dto.ActivityDTO">
 	              <logic:equal name="activityDTO" property="group" value="-1">
-	                <tr>
+	                <tr id="<%=activityDTO.getComponent_id() %>">
 	                  <td>
-	                    <a href='<bean:write name="activityDTO" property="activityloc"/>'><bean:message key='<%= activityDTO.getActivityinfo().replaceAll(" ", "_") %>' /></a>
+	                    <a  id="<%=activityDTO.getComponent_id() + "link" %>" href='<bean:write name="activityDTO" property="activityloc"/>'><bean:message key='<%= activityDTO.getActivityinfo().replaceAll(" ", "_") %>' /></a>
 	                  </td>
-	                  <td>
+	                  <td id="<%=activityDTO.getComponent_id() + "entry" %>">
 	                    <bean:write name="activityDTO" property="entries" />
 	                  </td>
 	                </tr>
@@ -236,7 +236,7 @@
             </tr>
             <logic:iterate id="activityDTO" name="activityList" type="com.bagnet.nettracer.tracing.dto.ActivityDTO">
               <logic:equal name="activityDTO" property="group" value="1">
-                <tr>
+                <tr id="<%=activityDTO.getComponent_id() %>">
                   <td>
             <%
 				String myKey = activityDTO.getActivityinfo().replaceAll(" ", "_");
@@ -258,9 +258,9 @@
 					}
 				} while (myIndex != -1);
 			%>
-                    <%=myIndent %><a href='<bean:write name="activityDTO" property="activityloc"/>'><%=myCaptionForLink %></a>
+                    <%=myIndent %><a id="<%=activityDTO.getComponent_id() + "link" %>" href='<bean:write name="activityDTO" property="activityloc"/>'><%=myCaptionForLink %></a>
                   </td>
-                  <td>
+                  <td id="<%=activityDTO.getComponent_id() + "entry" %>">
                     <bean:write name="activityDTO" property="entries" />
                   </td>
                 </tr>
@@ -281,11 +281,11 @@
             </tr>
             <logic:iterate id="activityDTO" name="activityList" type="com.bagnet.nettracer.tracing.dto.ActivityDTO">
               <logic:equal name="activityDTO" property="group" value="2">
-                <tr>
+                <tr id="<%=activityDTO.getComponent_id() %>">
                   <td>
-                    <a href='<bean:write name="activityDTO" property="activityloc"/>'><bean:message key='<%= activityDTO.getActivityinfo().replaceAll(" ", "_") %>' /></a>
+                    <a id="<%=activityDTO.getComponent_id() + "link" %>" href='<bean:write name="activityDTO" property="activityloc"/>'><bean:message key='<%= activityDTO.getActivityinfo().replaceAll(" ", "_") %>' /></a>
                   </td>
-                  <td>
+                  <td id="<%=activityDTO.getComponent_id() + "entry" %>">
                     <bean:write name="activityDTO" property="entries" />
                   </td>
                 </tr>
@@ -306,11 +306,11 @@
             </tr>
             <logic:iterate id="activityDTO" name="activityList" type="com.bagnet.nettracer.tracing.dto.ActivityDTO">
               <logic:equal name="activityDTO" property="group" value="3">
-                <tr>
+                <tr id="<%=activityDTO.getComponent_id() %>">
                   <td>
-                    <a href='<bean:write name="activityDTO" property="activityloc"/>'><bean:message key='<%= activityDTO.getActivityinfo().replaceAll(" ", "_") %>' /></a>
+                    <a id="<%=activityDTO.getComponent_id() + "link" %>" href='<bean:write name="activityDTO" property="activityloc"/>'><bean:message key='<%= activityDTO.getActivityinfo().replaceAll(" ", "_") %>' /></a>
                   </td>
-                  <td>
+                  <td id="<%=activityDTO.getComponent_id() + "entry" %>">
                     <bean:write name="activityDTO" property="entries" />
                   </td>
                 </tr>
@@ -333,12 +333,12 @@
             </tr>
             <logic:iterate id="activityDTO" name="activityList" type="com.bagnet.nettracer.tracing.dto.ActivityDTO">
               <logic:equal name="activityDTO" property="group" value="5">
-                <tr>
+                <tr id="<%=activityDTO.getComponent_id() %>">
                   <td>
-                    <a href='<bean:write name="activityDTO" property="activityloc"/>'><bean:message key='<%= activityDTO.getActivityinfo().replaceAll(" ", "_") %>' /></a>
+                    <a id="<%=activityDTO.getComponent_id() + "link" %>" href='<bean:write name="activityDTO" property="activityloc"/>'><bean:message key='<%= activityDTO.getActivityinfo().replaceAll(" ", "_") %>' /></a>
                   </td>
                   <td>
-                    <span style="float:left" ><bean:write name="activityDTO" property="entries" /></span>
+                    <span id="<%=activityDTO.getComponent_id() + "entry" %>" style="float:left" ><bean:write name="activityDTO" property="entries" /></span>
                     <logic:equal name="activityDTO" property="highPriority" value="true">
 		    			<span style="float:right" ><font color="red"><i><b><bean:message key="status.urgent" /> (<bean:write name="activityDTO" property="highPriorityNumber" />)</b></i></font>&nbsp;&nbsp;&nbsp;</span>
 		    		</logic:equal>
@@ -364,12 +364,12 @@
             </tr>
             <logic:iterate id="activityDTO" name="activityList" type="com.bagnet.nettracer.tracing.dto.ActivityDTO">
               <logic:equal name="activityDTO" property="group" value="4">
-                <tr>
+                <tr id="<%=activityDTO.getComponent_id() %>">
                   <td>
-                    <a href='<bean:write name="activityDTO" property="activityloc"/>'><bean:message key='<%= activityDTO.getActivityinfo().replaceAll(" ", "_") %>' /></a>
+                    <a id="<%=activityDTO.getComponent_id() + "link" %>" href='<bean:write name="activityDTO" property="activityloc"/>'><bean:message key='<%= activityDTO.getActivityinfo().replaceAll(" ", "_") %>' /></a>
                   </td>
                   <td>
-                    <span style="float:left" ><bean:write name="activityDTO" property="entries" /></span>
+                    <span id="<%=activityDTO.getComponent_id() + "entry" %>" style="float:left" ><bean:write name="activityDTO" property="entries" /></span>
                     <logic:equal name="activityDTO" property="highPriority" value="true">
 		    			<span style="float:right" ><font color="red"><i><b><bean:message key="status.urgent" /> (<bean:write name="activityDTO" property="highPriorityNumber" />)</b></i></font>&nbsp;&nbsp;&nbsp;</span>
 		    		</logic:equal>

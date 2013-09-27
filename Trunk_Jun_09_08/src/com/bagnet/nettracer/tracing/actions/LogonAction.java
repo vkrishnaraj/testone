@@ -318,6 +318,7 @@ public class LogonAction extends Action {
 				dto.setActivityinfomenu(key);
 				dto.setGroup(policy.getComponent().getSort_group());
 				dto.setHighPriority(false);
+				dto.setComponent_id(policy.getComponent().getComponent_ID());
 
 				long entries = 0;
 				if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_OTHER_TASKS)) {
