@@ -482,15 +482,17 @@ public class CSSCallsUtil extends TaskManagerUtil {
 							+ "'))";
 			break;
 		case FIVEDAY:
-			
+			start.add(Calendar.DATE, -5);
 			end.add(Calendar.DATE, -4);
 			sql = "((i.createdate = '" 
-				+ DateUtils.formatDate(end.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
+				+ DateUtils.formatDate(start.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
+				+ "' and i.createtime >= '" 
+				+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+							+ "') or (i.createdate = '"
+							+ DateUtils.formatDate(end.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
 					+ "' and i.createtime < '" 
 					+ DateUtils.formatDate(etime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-							+ "') or i.createdate < '"
-							+ DateUtils.formatDate(end.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
-							+ "')";
+							+ "'))";
 			break;
 		default:
 			sql = "1=1";
