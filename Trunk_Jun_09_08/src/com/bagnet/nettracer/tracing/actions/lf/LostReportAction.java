@@ -161,7 +161,7 @@ public class LostReportAction extends CheckedAction {
 				populateRemarks(lostReport);
 
 				if(lostReport.getItem() != null && lostReport.getItem().getTrackingNumber()!=null && lostReport.getItem().getTrackingNumber().length()>0){
-					if (lostReport.getItem().getFound() != null && lostReport.getItem().getFound().getItem() != null && lostReport.getItem().getFound().getItem().getFound()==null){
+					if (lostReport.getItem().getFound() != null && lostReport.getItem().getFound().getItem() != null && lostReport.getItem().getFound().getItem().getLost()==null){
 						lostReport.getItem().getFound().getItem().setLost(lostReport);
 					} else {
 						List<LFItem> itemList=serviceBean.getItemsByLostFoundId(lostReport.getId(), 1);
