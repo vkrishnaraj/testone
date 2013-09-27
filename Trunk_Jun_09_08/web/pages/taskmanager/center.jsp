@@ -115,7 +115,12 @@
 				Iterator i = list.iterator();
 				while(i.hasNext()){
 					GeneralTask task = (GeneralTask)i.next();
-					out.println(task.getAlert());
+					String alert = task.getAlert();
+					boolean isCss = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_MANAGE_CSS_DAILY_CALLS, a);
+					if (isCss) {
+						alert = alert.replaceAll("GeneralTask", "css_calls");
+					}
+					out.println(alert);
 				}
 			
 			}

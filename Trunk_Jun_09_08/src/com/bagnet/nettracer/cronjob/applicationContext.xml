@@ -108,6 +108,9 @@
 	<bean id="lf" class="aero.nettracer.lf.services.LFServiceBean">
 	</bean>
 	
+	<bean id="css" class="com.bagnet.nettracer.tracing.utils.taskmanager.CSSCallsUtil">
+	</bean>
+	
 	<bean id="fsDataRetentionBean" class="aero.nettracer.fs.utilities.DataRetentionUtil">
 	</bean>
 	
@@ -227,6 +230,18 @@
 		<property name="concurrent" value="false" />
 	</bean>
 
+	<bean id="cssExpireJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetBeanName" value="css" />
+		<property name="targetMethod" value="expireTasks" />
+		<property name="concurrent" value="false" />
+	</bean>
+
+	<bean id="cssCreateJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetBeanName" value="css" />
+		<property name="targetMethod" value="createTasks" />
+		<property name="concurrent" value="false" />
+	</bean>
+
 	<!--  The Schedule they should run on -->
 	<bean id="cronWtQueueTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="wtQueueJob" />
@@ -295,6 +310,16 @@
 	<bean id="LockCleanupTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="lockCleanupJob" />
 		<property name="cronExpression" value="${lockCleanup}" />
+	</bean>
+	
+	<bean id="cssExpireTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="cssExpireJob" />
+		<property name="cronExpression" value="${cssExpire}" />
+	</bean>
+	
+	<bean id="cssCreateTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="cssCreateJob" />
+		<property name="cronExpression" value="${cssCreate}" />
 	</bean>
 	
 	<!-- Aspects and advice -->

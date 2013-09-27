@@ -110,6 +110,7 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_MANAGE_2DAY_CALL = "Manage Two Day Call";
 	public final static String SYSTEM_COMPONENT_MANAGE_3DAY_CALL = "Manage Three Day Call";
 	public final static String SYSTEM_COMPONENT_MANAGE_4DAY_CALL = "Manage Four Day Call";
+	public final static String SYSTEM_COMPONENT_MANAGE_CSS_DAILY_CALLS = "Manage_CSS_Daily_Calls";
 	
 	public final static String SYSTEM_COMPONENT_NAME_CANCEL_BDO = "Cancel BDO";
 	public final static String SYSTEM_COMPONENT_NAME_BDOS_FOR_STATIONS = "BDOs For Stations";
@@ -547,6 +548,7 @@ public class TracingConstants {
 	public final static int TASK_MANAGER_CLOSED = 85;
 	public final static int TASK_MANAGER_PAUSED = 96;
 	public final static int TASK_MANAGER_WORKING = 97;
+	public final static int TASK_MANAGER_EXPIRED = 100;
 	
 	
 	// BagBuzz status
@@ -806,6 +808,8 @@ public class TracingConstants {
 	public final static String VIEW_INCOMING_BAG_LIST = "viewincomingbags";
 	public final static String VIEW_INCOMING_INCIDENTS = "viewincomingincidents";
 	public final static String VIEW_MORNING_DUTIES = "viewmorningduties";
+	public final static String VIEW_CSS_CALL_STATIONS = "viewcsscallstations";
+	public final static String VIEW_CSS_CALL_TASKS = "viewcsscalltasks";
 	public final static String MORNING_DUTIES_UPDATED = "morningdutiesupdated";
 	
 	// world tracer forwards

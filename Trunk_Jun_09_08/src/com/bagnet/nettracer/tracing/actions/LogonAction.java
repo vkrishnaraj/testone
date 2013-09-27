@@ -74,6 +74,7 @@ import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
+import com.bagnet.nettracer.tracing.utils.taskmanager.CSSCallsUtil;
 import com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesUtil;
 
 
@@ -586,6 +587,11 @@ public class LogonAction extends Action {
 																					lfDTO.setAgent(agent);
 																					int x = new LFServiceBean().searchFoundCount(lfDTO);
 																					if (x > 0) {
+																						entries = x;
+																					}
+																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_MANAGE_CSS_DAILY_CALLS)){
+																					int x = CSSCallsUtil.getCount(agent);
+																					if (x != -1) {
 																						entries = x;
 																					}
 																				}

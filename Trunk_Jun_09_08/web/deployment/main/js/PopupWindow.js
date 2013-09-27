@@ -161,6 +161,7 @@ function PopupWindow_showPopup(anchorname) {
 			document.getElementById(this.divName).style.left = this.x + "px";
 			document.getElementById(this.divName).style.top = this.y + "px";
 			document.getElementById(this.divName).style.visibility = "visible";
+			document.getElementById(this.divName).style.zIndex = 1500;
             
             // matt show iframe as well
 	        var DivRef = document.getElementById(this.divName);

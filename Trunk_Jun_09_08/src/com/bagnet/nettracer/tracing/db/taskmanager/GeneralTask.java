@@ -67,12 +67,12 @@ public abstract class GeneralTask {
 		assigned_agent = assignedAgent;
 	}
 	
-	public Date getDeferment_timestamp() {
-		return deferment_timestamp;
+	public Date getGeneric_timestamp() {
+		return generic_timestamp;
 	}
 
-	public void setDeferment_timestamp(Date deferment_timestamp) {
-		this.deferment_timestamp = deferment_timestamp;
+	public void setGeneric_timestamp(Date generic_timestamp) {
+		this.generic_timestamp = generic_timestamp;
 	}
 	
 	long task_id;
@@ -80,9 +80,27 @@ public abstract class GeneralTask {
 	Date closed_timestamp;
 	Status status;
 	Agent assigned_agent;
-	Date deferment_timestamp;
+	Date generic_timestamp;
 	List<TaskActivity> activities;
 	Lock lock;
+	
+	@Transient
+	public Date getDeferment_timestamp() {
+		return generic_timestamp;
+	}
+
+	public void setDeferment_timestamp(Date deferment_timestamp) {
+		this.generic_timestamp = deferment_timestamp;
+	}
+	
+	@Transient
+	public Date getExpire_timestamp() {
+		return generic_timestamp;
+	}
+
+	public void setExpire_timestamp(Date expire_timestamp) {
+		this.generic_timestamp = expire_timestamp;
+	}
 	
 	@Transient
 	public Lock getLock() {

@@ -337,6 +337,14 @@
     	<put name="center" value="/pages/taskmanager/view_morning_duties.jsp"/>
     </definition>
     
+    <definition name="view_css_call_stations" extends="user_menu">
+    	<put name="center" value="/pages/taskmanager/view_css_call_stations.jsp"/>
+    </definition>
+    
+    <definition name="view_css_call_tasks" extends="user_menu">
+    	<put name="center" value="/pages/taskmanager/view_css_call_tasks.jsp"/>
+    </definition>
+    
     <definition name="morning_duties_updated" extends="user_menu">
     	<put name="center" value="/pages/taskmanager/morning_duties_updated.jsp"/>
     </definition>

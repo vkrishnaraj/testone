@@ -249,6 +249,7 @@ function CalendarPopup() {
 	c.getCalendar = CP_getCalendar;
 	c.select = CP_select;
 	c.select2 = CP_select2;
+	c.selectTask = CP_selectTask;
 	c.setCssPrefix = CP_setCssPrefix;
 	c.showNavigationDropdowns = CP_showNavigationDropdowns;
 	c.showYearNavigationInput = CP_showYearNavigationInput;
@@ -476,6 +477,42 @@ function CP_select(inputobj, linkname, format) {
 	window.CP_dateFormat = format;
 	this.showCalendar(linkname);
 	}
+	
+function CP_selectTask(inputName, linkname, format) {
+	var selectedDate=(arguments.length>3)?arguments[3]:null;
+	var inputobj = document.getElementById(inputName);
+
+	if (!window.getDateFromFormat) {
+		alert("calendar.select: To use this method you must also include 'date.js' for date formatting");
+		return;
+		}
+	if (this.displayType!="date"&&this.displayType!="week-end") {
+		alert("calendar.select: This function can only be used with displayType 'date' or 'week-end'");
+		return;
+		}
+	if (inputobj.type!="text" && inputobj.type!="hidden" && inputobj.type!="textarea") { 
+		alert("calendar.select: Input object passed is not a valid form input object"); 
+		window.CP_targetInput=null;
+		return;
+		}
+	if (inputobj.disabled) { return; } // Can't use calendar input on disabled form input!
+	window.CP_targetInput = inputobj;
+	window.CP_calendarObject = this;
+	this.currentDate=null;
+	var time=0;
+	if (selectedDate!=null) {
+		time = getDateFromFormat(selectedDate,format)
+		}
+	else if (inputobj.value!="") {
+		time = getDateFromFormat(inputobj.value,format);
+		}
+	if (selectedDate!=null || inputobj.value!="") {
+		if (time==0) { this.currentDate=null; }
+		else { this.currentDate=new Date(time); }
+		}
+	window.CP_dateFormat = format;
+	this.showCalendar(linkname);
+}
 	
 	
 	
