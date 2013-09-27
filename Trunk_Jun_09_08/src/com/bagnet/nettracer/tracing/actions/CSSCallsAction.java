@@ -148,7 +148,8 @@ public class CSSCallsAction extends Action{
 			String expireTime = (String) request.getParameter("taskExpire");
 			String startDate = (String) request.getParameter("taskStartDate");
 			String expireDate = (String) request.getParameter("taskExpireDate");
-			CSSCallsUtil.deferTask(user, task, startDate, startTime, expireDate, expireTime);
+			String remark = (String) request.getParameter("taskRemark");
+			CSSCallsUtil.deferTask(user, task, startDate, startTime, expireDate, expireTime, remark);
 			request.setAttribute("gettaskbutton", 1);
 			session.removeAttribute("sessionTaskContainer");
 			return (mapping.findForward(TracingConstants.MORNING_DUTIES_UPDATED));

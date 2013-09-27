@@ -95,12 +95,15 @@ if (hasPermission) {
 				function closeTask(type) {
 					var taskRemark = document.getElementById("taskRemark").value.replace(/^\s+|\s+$/g, '');
 					if (taskRemark.length > 0) {
-						if ((type == 'abort' || type == 'complete') && confirm("Have you saved any changes to the incident?")) {
-							document.location.href="css_calls.do?" + type + "=1&taskRemark=" + escape(taskRemark);
-						}	
+						if (confirm("Have you saved any changes to the incident?")) {
+							if ((type == 'abort' || type == 'complete')) {
+								document.location.href="css_calls.do?" + type + "=1&taskRemark=" + escape(taskRemark);
+							} else {
+								return loadTaskDeferModal();
+							}	
+						}
 					} else {
 						alert("Call Remarks is required.");
-						taskRemark.focus();
 					}
 					return false;
 				}
@@ -110,42 +113,43 @@ if (hasPermission) {
 					var expireDate = document.getElementById("taskExpireDate").value.replace(/^\s+|\s+$/g, '');
 					var startTime = document.getElementById("taskNewStart").value.replace(/^\s+|\s+$/g, '');
 					var expireTime = document.getElementById("taskExpire").value.replace(/^\s+|\s+$/g, '');
+					var taskRemark = document.getElementById("taskRemark").value.replace(/^\s+|\s+$/g, '');
 					if (startDate.length == 0) {
 						alert("New Start Date is required.")
-						startDate.focus();
 						return false;
 					}
 					if (startTime.length == 0) {
 						alert("New Start Time (HH:mm) is required.")
-						startTime.focus();
 						return false;
 					}
 					if (!startTime.match(/^\d\d:\d\d$/g)) {
 						alert("New Start Time (HH:mm) is improperly formatted. Please input time in 24 hour format with a ':' separating hours and minutes. Ex: 21:35");
-						startTime.focus();
 						return false;
 					}
 					if (expireTime.length > 0 && !expireTime.match(/^\d\d:\d\d$/g)) {
 						alert("Expire Time (HH:mm) is improperly formatted. Please input time in 24 hour format with a ':' separating hours and minutes. Ex: 21:35");
-						expireTime.focus();
 						return false;
 					}
 					var testSTime = startTime.replace(/:/g, '');
 					if (formatDate(new Date(),"<%= a.getDateformat().getFormat() %>") == startDate && formatDate(new Date(),"HHmm") > testSTime) {
 						alert("New Start Time (HH:mm) must be a time in the future");
-						startTime.focus();
 						return false;
 					}
 					if (expireDate.length > 0 && expireTime.length > 0) {
 						var testETime = expireTime.replace(/:/g, '');
-						if (formatDate(new Date(),"<%= a.getDateformat().getFormat() %>") == expireDate && formatDate(new Date(),"HHmm") > testETime) {
-							alert("Expire Time (HH:mm) must be a time in the future");
-							startTime.focus();
+						var sDate = Date.parse(startDate);
+						var eDate = Date.parse(expireDate);
+						if (eDate < sDate) {
+							alert("Expire Date cannot be before New Start Date.");
+							return false;
+						} else if (eDate == sDate && testETime <= testSTime) {
+							alert("Expire Time (HH:mm) cannot be before New Start Time (HH:mm).");
 							return false;
 						}
 					}
 					document.location.href="css_calls.do?defer=1&taskStart=" + escape(startTime) + "&taskExpire=" + escape(expireTime) +
-											"&taskStartDate=" + escape(startDate) + "&taskExpireDate=" + escape(expireDate);
+											"&taskStartDate=" + escape(startDate) + "&taskExpireDate=" + escape(expireDate) +
+											"&taskRemark=" + escape(taskRemark);
 					return false;
 					
 				}
@@ -193,16 +197,16 @@ if (hasPermission) {
                 <bean:define id="mdt" name="sessionTaskContainer" type="com.bagnet.nettracer.tracing.db.taskmanager.MorningDutiesTask"/>
 				<tr><td width ="20%"><bean:message key="generaltask.time.to.call" />:</td><td><%=TracingConstants.getDisplayDate(mdt.getOpened_timestamp(), a) %></td></tr>
 				<tr><td width ="20%"><bean:message key="generaltask.remark" />:</td><td>
-                  <textarea name="taskRemark" id="taskRemark" cols="80" rows="5" onkeydown="textCounterTask(document.getElementById('taskRemark'), document.getElementById('taskRemark2'),1500);insertNewLineTask('taskRemark');" 
-                  	onkeyup="textCounterTask(document.getElementById('taskRemark'), document.getElementById('taskRemark2'),1500);"></textarea>
-                  <input name="taskRemark2" id="taskRemark2" type="text" value="1500" size="4" maxlength="4" disabled="true" />
+                  <textarea name="taskRemark" id="taskRemark" cols="80" rows="5" onkeydown="textCounterTask(document.getElementById('taskRemark'), document.getElementById('taskRemark2'),1000);insertNewLineTask('taskRemark');" 
+                  	onkeyup="textCounterTask(document.getElementById('taskRemark'), document.getElementById('taskRemark2'),1000);"></textarea>
+                  <input name="taskRemark2" id="taskRemark2" type="text" value="1000" size="4" maxlength="4" disabled="true" />
                 </td></tr>
 				<tr><td colspan="2">
           			<span style="float:left">
           				<input type="button" value="<bean:message key="button.task.complete" />" onclick="return closeTask('complete');" id="button">
           			</span>
           			<span style="float:right">
-          	    		<input type="button" value="<bean:message key="button.task.defer" />" onclick="return loadTaskDeferModal();" id="button">&nbsp;&nbsp;&nbsp;
+          	    		<input type="button" value="<bean:message key="button.task.defer" />" onclick="return closeTask('defer')" id="button">&nbsp;&nbsp;&nbsp;
           				<input type="button" value="<bean:message key="button.task.abort" />" onclick="return closeTask('abort');" id="button">
           			</span>
 		  		</td></tr>

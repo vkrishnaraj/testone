@@ -129,7 +129,7 @@ public class CSSCallsUtil extends TaskManagerUtil {
 		task.setClosed_timestamp(DateUtils.convertToGMTDate(new Date()));
 		TaskManagerBMO.saveTask(task);
 		unlockTaskIncident(task.getLock(), (MorningDutiesTask)task);
-		saveRemark(agent, task, remark);
+		saveRemark(agent, task, generateTopLineRemark(task, "Completed") + remark);
 	}
 	
 	/**
@@ -143,13 +143,13 @@ public class CSSCallsUtil extends TaskManagerUtil {
 		task.setClosed_timestamp(DateUtils.convertToGMTDate(new Date()));
 		TaskManagerBMO.saveTask(task);
 		unlockTaskIncident(task.getLock(),(MorningDutiesTask)task);
-		saveRemark(agent, task, remark);
+		saveRemark(agent, task, generateTopLineRemark(task, "Aborted") + remark);
 	}
 	
 	/**
 	 * Defers a task by aborting this task and creating a new one, and it adds a generated remark to the incident.
 	 */
-	public static void deferTask(Agent agent, MorningDutiesTask task, String sDate, String start, String eDate, String expire){
+	public static void deferTask(Agent agent, MorningDutiesTask task, String sDate, String start, String eDate, String expire, String remark){
 		Status s = new Status();
 		s.setStatus_ID(TracingConstants.TASK_MANAGER_CLOSED);
 		task.setStatus(s);
@@ -157,8 +157,42 @@ public class CSSCallsUtil extends TaskManagerUtil {
 		task.setClosed_timestamp(DateUtils.convertToGMTDate(new Date()));
 		TaskManagerBMO.saveTask(task);
 		unlockTaskIncident(task.getLock(),(MorningDutiesTask)task);
-		saveRemark(agent, task, "CS&S: Call defered and a new task was created.");
+		remark = generateTopLineRemark(task, "Deferred") + generateDeferTimeRemark(sDate, start, eDate, expire) + remark;
+		saveRemark(agent, task, remark);
 		createTask(agent, task.getIncident(), getDay(task), sDate, start, eDate, expire);
+	}
+	
+	/**
+	 * Creates the top line for the CS&S remark that will be added to the incident.
+	 */
+	private static String generateTopLineRemark(MorningDutiesTask task, String action) {
+		String remark = "";
+		switch(getDay(task)) {
+		case TWODAY:
+			return remark + "CS&S Two Day Call - " + action + "\n";
+		case THREEDAY:
+			return remark + "CS&S Three Day Call - " + action + "\n";
+		case FOURDAY:
+			return remark + "CS&S Four Day Call - " + action + "\n";
+		case FIVEDAY:
+			return remark + "CS&S Five Day Call - " + action + "\n";
+		default:
+			return remark;
+		}
+	}
+	
+	/**
+	 * Creates the second and third lines for the CS&S remark that will be added to the incident.
+	 * This will only be used for deferred tasks.
+	 */
+	private static String generateDeferTimeRemark(String sDate, String start, String eDate, String expire) {
+		String remark = "Start: " + sDate + " " + start + "\n";
+		if (eDate != null && eDate.length() > 0 && expire != null && expire.length() > 0) {
+			remark += "Expire: " + eDate + " " + expire + "\n";
+		} else {
+			remark += "Expire: Not Provided\n";
+		}
+		return remark;
 	}
 	
 	/**
