@@ -34,6 +34,12 @@
             <bean:message key="deprec.calc.saved" />
           </font></center>
         </logic:present>
+        <logic:present name="itemDeleted" scope="request">
+          <br>
+          <center><font color=green>
+            <bean:message key="deprec.item.deleted" />
+          </font></center>
+        </logic:present>
         <br>
           <script type="text/javascript">
 			var cal1xx = new CalendarPopup();	
@@ -93,30 +99,41 @@
 					if(fieldg.value=="<%=cat.getId()%>"){
 						<%if(cat.getCalcMethod()==TracingConstants.FLAT_RATE){ %>
 							deprecPerc=<%=cat.getFlatRate()%>*yearDiff;
+							<% if(cat.getMaxDeprec()!=0) { %>
 							if(deprecPerc><%=cat.getMaxDeprec()%>){
 								deprecPerc=<%=cat.getMaxDeprec()%>;
 							}
+							<% } else { %>
+							if(deprecPerc>100){
+								deprecPerc=100;
+							}
+							<% } %>
 							calcVal=fielda.value - (fielda.value * (deprecPerc/100));
 						<%} else if(cat.getCalcMethod()==TracingConstants.DEFINED_RATE){ %>
 							deprecPerc=0;
-							if(yearDiff>1){
+							if(yearDiff>=1 && yearDiff<2){
 								deprecPerc=<%=cat.getFirstYear()%>
 							}
-							if(yearDiff>2){
+							else if(yearDiff>=2 && yearDiff<3){
 								deprecPerc=<%=cat.getSecondYear()%>
 							} 
-							if(yearDiff>3){
+							else if(yearDiff>=3){
 								deprecPerc=<%=cat.getThirdYear()%>
 							} 
-							if(yearDiff>4){
+							if(yearDiff>=4){
 								for(var j=0; j<(yearDiff-3); j++){
 									deprecPerc+=<%=cat.getEachYear()%>
 								}
 							} 
-
+							<% if(cat.getMaxDeprec()!=0) { %>
 							if(deprecPerc><%=cat.getMaxDeprec()%>){
 								deprecPerc=<%=cat.getMaxDeprec()%>;
 							}
+							<% } else { %>
+							if(deprecPerc>100){
+								deprecPerc=100;
+							}
+							<% } %>
 							calcVal=fielda.value - (fielda.value * (deprecPerc/100));
 						<% } %>
 					}
@@ -131,9 +148,9 @@
 					var noReceiptDeprec=0;
 					if(calcVal<20){
 						noReceiptDeprec=<%=rules.getLessTwentyDeprec()%>
-					} else if (calcVal>20 && calcVal<150){
+					} else if (calcVal>=20 && calcVal<150){
 						noReceiptDeprec=<%=rules.getTwentyOnefiftyDeprec()%>
-					} else if (calcVal>150){
+					} else if (calcVal>=150){
 						noReceiptDeprec=<%=rules.getOnefiftyDeprec()%>
 					}
 					calcVal=calcVal * (1 - (noReceiptDeprec/100));
@@ -242,10 +259,8 @@
 					</tr>
 					<tr id="drop_hide_this" style="display: none">
 						<td class="header" width="10%"><strong><bean:message key="deprec.calc.total.weight"/>:</strong></td>
-						<td><html:text  size="5" styleClass="textfield" name="claimDeprecCalcForm" property="claimDeprec.totalWeight"/>
-						<html:select styleClass="dropdown" name="claimDeprecCalcForm" property="claimDeprec.weightMetric">
-								<html:option value="KG">KG</html:option>
-						</html:select></td>
+						<td><html:text  size="5" styleClass="textfield" name="claimDeprecCalcForm" property="claimDeprec.totalWeight"/> KG
+						</td>
 					</tr>
 
 					<tr>

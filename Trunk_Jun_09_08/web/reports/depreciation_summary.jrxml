@@ -2,9 +2,9 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="depreciation_summary" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
-	<property name="ireport.zoom" value="3.7974983358324375"/>
-	<property name="ireport.x" value="479"/>
-	<property name="ireport.y" value="495"/>
+	<property name="ireport.zoom" value="2.143588810000015"/>
+	<property name="ireport.x" value="13"/>
+	<property name="ireport.y" value="51"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="com.bagnet.nettracer.tracing.forms.SearchIncidentForm"/>
@@ -17,26 +17,26 @@
 	<field name="approvedTotal" class="java.lang.String"/>
 	<field name="refNum" class="java.lang.String"/>
 	<field name="description" class="java.lang.String"/>
-	<field name="amountClaimed" class="java.lang.Double"/>
+	<field name="dispAmountClaimed" class="java.lang.String"/>
 	<field name="dispDatePurchase" class="java.lang.String"/>
 	<field name="categoryName" class="java.lang.String"/>
 	<field name="proofOwn" class="java.lang.String"/>
 	<field name="coc" class="java.lang.String"/>
-	<field name="calcValue" class="java.lang.Double"/>
-	<field name="claimValue" class="java.lang.Double"/>
-	<field name="valueTotal" class="java.lang.Double"/>
-	<field name="claimTotal" class="java.lang.Double"/>
+	<field name="dispCalcValue" class="java.lang.String"/>
+	<field name="dispClaimValue" class="java.lang.String"/>
+	<field name="valueTotal" class="java.lang.String"/>
+	<field name="claimTotal" class="java.lang.String"/>
 	<background>
 		<band/>
 	</background>
 	<title>
 		<band height="161">
-			<textField>
+			<textField isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="140" y="123" width="395" height="16"/>
 				<textElement lineSpacing="Single">
 					<font fontName="Arial" size="10"/>
 				</textElement>
-				<textFieldExpression class="java.lang.Double"><![CDATA[$F{valueTotal}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{valueTotal}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement mode="Transparent" x="140" y="90" width="395" height="17"/>
@@ -71,7 +71,7 @@
 				<textElement lineSpacing="Single">
 					<font fontName="Arial" size="10"/>
 				</textElement>
-				<textFieldExpression class="java.lang.Double"><![CDATA[$F{claimTotal}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{claimTotal}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement mode="Transparent" x="3" y="74" width="137" height="16"/>
@@ -295,7 +295,7 @@
 			</textField>
 			<textField isBlankWhenNull="false">
 				<reportElement key="textField-10" x="94" y="4" width="56" height="20">
-					<printWhenExpression><![CDATA[new Boolean($F{amountClaimed} != null ? true : false)]]></printWhenExpression>
+					<printWhenExpression><![CDATA[new Boolean($F{dispAmountClaimed} != null ? true : false)]]></printWhenExpression>
 				</reportElement>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -304,7 +304,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement lineSpacing="Single"/>
-				<textFieldExpression class="java.lang.Double"><![CDATA[$F{amountClaimed}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dispAmountClaimed}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false">
 				<reportElement key="textField-11" x="153" y="4" width="55" height="20">
@@ -321,7 +321,7 @@
 			</textField>
 			<textField isBlankWhenNull="false">
 				<reportElement key="textField-17" x="470" y="4" width="65" height="20">
-					<printWhenExpression><![CDATA[new Boolean($F{claimValue} != null ? true : false)]]></printWhenExpression>
+					<printWhenExpression><![CDATA[new Boolean($F{dispClaimValue} != null ? true : false)]]></printWhenExpression>
 				</reportElement>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -330,7 +330,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement lineSpacing="Single"/>
-				<textFieldExpression class="java.lang.Double"><![CDATA[$F{claimValue}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dispClaimValue}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false">
 				<reportElement key="textField-13" x="209" y="4" width="82" height="20" isPrintWhenDetailOverflows="true">
@@ -347,7 +347,7 @@
 			</textField>
 			<textField isBlankWhenNull="false">
 				<reportElement key="textField-16" x="412" y="4" width="58" height="20">
-					<printWhenExpression><![CDATA[new Boolean($F{calcValue} != null ? true : false)]]></printWhenExpression>
+					<printWhenExpression><![CDATA[new Boolean($F{dispCalcValue} != null ? true : false)]]></printWhenExpression>
 				</reportElement>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -356,7 +356,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement lineSpacing="Single"/>
-				<textFieldExpression class="java.lang.Double"><![CDATA[$F{calcValue}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dispCalcValue}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="0" y="0" width="535" height="1"/>

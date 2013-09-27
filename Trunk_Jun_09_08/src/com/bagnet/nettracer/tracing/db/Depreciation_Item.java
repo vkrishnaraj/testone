@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.db;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -227,8 +228,13 @@ public class Depreciation_Item {
 
 	@Transient
 	public String getApprovedTotal() {
+
+		DecimalFormat format = (DecimalFormat) java.text.NumberFormat
+				.getInstance();
+		format.applyPattern("##0.00");
+		format.setMinimumFractionDigits(2);
 		if(getClaimDepreciation()!=null){
-			return String.valueOf(getClaimDepreciation().getTotalApprovedPayout());
+			return format.format(getClaimDepreciation().getTotalApprovedPayout());
 		} else {
 			return "";
 		}
@@ -265,19 +271,58 @@ public class Depreciation_Item {
 	
 
 	@Transient
-	public double getClaimTotal() {
+	public String getClaimTotal() {
+		DecimalFormat format = (DecimalFormat) java.text.NumberFormat
+				.getInstance();
+		format.applyPattern("##0.00");
+		format.setMinimumFractionDigits(2);
 		if(getClaimDepreciation()!=null)
-			return getClaimDepreciation().getTotalClaim();
+			return format.format(getClaimDepreciation().getTotalClaim());
 		else 
-			return 0;
+			return "0.00";
 	}
 	
 	@Transient
-	public double getValueTotal() {
+	public String getValueTotal() {
+		DecimalFormat format = (DecimalFormat) java.text.NumberFormat
+				.getInstance();
+		format.applyPattern("##0.00");
+		format.setMinimumFractionDigits(2);
 		if(getClaimDepreciation()!=null)
-			return getClaimDepreciation().getTotalValue();
+			return format.format(getClaimDepreciation().getTotalValue());
 		else 
-			return 0;
+			return "0.00";
+	}
+	
+	@Transient
+	public String getDispClaimValue() {
+		DecimalFormat format = (DecimalFormat) java.text.NumberFormat
+				.getInstance();
+		format.applyPattern("##0.00");
+		format.setMinimumFractionDigits(2);
+		return format.format(getClaimValue());
+	}
+	
+	@Transient
+	public String getDispCalcValue() {
+		DecimalFormat format = (DecimalFormat) java.text.NumberFormat
+				.getInstance();
+		format.applyPattern("##0.00");
+		format.setMinimumFractionDigits(2);
+		return format.format(getCalcValue());
+		
+	}
+
+	@Transient
+	public String getDispAmountClaimed() {
+		DecimalFormat format = (DecimalFormat) java.text.NumberFormat
+				.getInstance();
+		format.applyPattern("##0.00");
+		format.setMinimumFractionDigits(2);
+		if(getAmountClaimed()!=0)
+			return format.format(getAmountClaimed());
+		else 
+			return "0.00";
 	}
 
 	@Transient

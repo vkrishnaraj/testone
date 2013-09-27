@@ -161,6 +161,7 @@ public class ClaimDeprecCalcAction extends Action {
 						itemList.remove(item);
 						if(item.getId()!=0)
 							HibernateUtils.delete(item);
+						request.setAttribute("itemDeleted", 1);
 						break;
 					}
 					++i;
