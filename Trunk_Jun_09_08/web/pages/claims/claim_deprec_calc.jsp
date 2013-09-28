@@ -301,9 +301,17 @@
 							calcVal=fielda.value - (fielda.value * (deprecPerc/100));
 						<% } %>
 					}
-				} else if(fieldf.value=="" && <%=rules.getNoDates()==TracingConstants.NODATE_SAME_MAX_DEPREC %>){
-						deprecPerc=<%=cat.getMaxDeprec()%>
-						calcVal=fielda.value - (fielda.value * (deprecPerc/100));
+				} 
+				
+				if(fieldf.value=="" && <%=rules.getNoDates()==TracingConstants.NODATE_SAME_MAX_DEPREC %>){
+					if(fieldg.value=="<%=cat.getId()%>"){
+					<% if(cat.getMaxDeprec()!=0) { %>
+						deprecPerc=<%=cat.getMaxDeprec()%>;
+					<% } else { %>
+						deprecPerc=100;
+					<% } %>
+					calcVal=fielda.value - (fielda.value * (deprecPerc/100));
+					}
 				}
 				</logic:iterate>
 				/* General Rules Logic*/
@@ -344,6 +352,8 @@
 					<% Depreciation_Category cat=(Depreciation_Category)category;%>
 					if(fieldg.value==<%=cat.getId()%> && <%=cat.isNotCoveredCoc()%>){
 						document.getElementById("dep_content_" + i + "_coc").checked=true;
+					} else if (fieldg.value==<%=cat.getId()%> && !<%=cat.isNotCoveredCoc()%>){
+						document.getElementById("dep_content_" + i + "_coc").checked=false;
 					}
 				</logic:iterate>
 			}
