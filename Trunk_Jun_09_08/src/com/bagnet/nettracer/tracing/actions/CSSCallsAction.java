@@ -203,7 +203,7 @@ public class CSSCallsAction extends Action{
 		}
 		
 		if(request.getParameter("loadIncident") != null){
-			System.out.println("loading the incident");
+			logger.debug("loading the incident");
 			String incident_ID = request.getParameter("loadIncident");
 			MorningDutiesTask t = (MorningDutiesTask)session.getAttribute("sessionTaskContainer");
 			if(t != null && t.getIncident() != null && t.getIncident().getStationassigned() != null){

@@ -48,20 +48,19 @@ public class CSSCallsUtil extends TaskManagerUtil {
 	/**
 	 * Creates a new task using Strings for the sDate and eDate
 	 */
-	public static GeneralTask createTask(Agent agent, Object o, int day, String sDate, String start, String eDate, String expire) {
+	public static GeneralTask createTask(Agent agent, Incident inc, int day, String sDate, String start, String eDate, String expire) {
 		Date s = DateUtils.convertToDate(sDate, agent.getDateformat().getFormat(), null);
 		Date e = null;
 		if (eDate != null && eDate.length() > 0) {
 			e = DateUtils.convertToDate(eDate, agent.getDateformat().getFormat(), null);
 		}
-		return createTask(agent, o, day, s, start, e, expire);
+		return createTask(agent, inc, day, s, start, e, expire);
 	}
 	
 	/**
 	 * Creates a new task of type day with start datetime of sDate+start and expire datetime of eDate+expire if provided.
 	 */
-	public static GeneralTask createTask(Agent agent, Object o, int day, Date sDate, String start, Date eDate, String expire) {
-		Incident inc = (Incident) o;
+	public static GeneralTask createTask(Agent agent, Incident inc, int day, Date sDate, String start, Date eDate, String expire) {
 		MorningDutiesTask mdt = null;
 		switch(day){
 		case TWODAY:
@@ -474,64 +473,27 @@ public class CSSCallsUtil extends TaskManagerUtil {
 		Date stime = MorningDutiesUtil.time1970(start.getTime());
 		Date etime = MorningDutiesUtil.time1970(end.getTime());
 		
-		String sql = "";
-		switch (day) {
-		case TWODAY:
-			start.add(Calendar.DATE, -2);
-			end.add(Calendar.DATE, -1);
-			sql = "((i.createdate = '"
-				+ DateUtils.formatDate(start.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
-					+ "' and i.createtime >= '"
-					+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-							+ "') or (i.createdate = '"
-					+ DateUtils.formatDate(end.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
-					+ "' and i.createtime < '" 
-					+ DateUtils.formatDate(etime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-							+ "'))";
-			break;
-		case THREEDAY:
-			start.add(Calendar.DATE, -3);
-			end.add(Calendar.DATE, -2);
-			sql = "((i.createdate = '" 
-				+ DateUtils.formatDate(start.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
-				+ "' and i.createtime >= '" 
-				+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-							+ "') or (i.createdate = '"
-							+ DateUtils.formatDate(end.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
-					+ "' and i.createtime < '" 
-					+ DateUtils.formatDate(etime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-							+ "'))";
-			break;
-		case FOURDAY:
-			start.add(Calendar.DATE, -4);
-			end.add(Calendar.DATE, -3);
-			sql = "((i.createdate = '" 
-				+ DateUtils.formatDate(start.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
-				+ "' and i.createtime >= '" 
-				+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-							+ "') or (i.createdate = '"
-							+ DateUtils.formatDate(end.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
-					+ "' and i.createtime < '" 
-					+ DateUtils.formatDate(etime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-							+ "'))";
-			break;
-		case FIVEDAY:
-			start.add(Calendar.DATE, -5);
-			end.add(Calendar.DATE, -4);
-			sql = "((i.createdate = '" 
-				+ DateUtils.formatDate(start.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
-				+ "' and i.createtime >= '" 
-				+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-							+ "') or (i.createdate = '"
-							+ DateUtils.formatDate(end.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
-					+ "' and i.createtime < '" 
-					+ DateUtils.formatDate(etime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
-							+ "'))";
-			break;
-		default:
-			sql = "1=1";
+		return getDateRangeString(stime, etime, start, end, day);
+	}
+	
+	private static String getDateRangeString(Date stime, Date etime, Calendar start, Calendar end, int day) {
+		if (day != TWODAY && day != THREEDAY && day != FOURDAY && day != FIVEDAY) {
+			return "1=1";
 		}
-		return sql;
+		int sDay = -1 * day;
+		int eDay = sDay - 1;
+		start.add(Calendar.DATE, sDay);
+		end.add(Calendar.DATE, eDay);
+		String toReturn = "((i.createdate = '" 
+			+ DateUtils.formatDate(start.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
+			+ "' and i.createtime >= '" 
+			+ DateUtils.formatDate(stime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+						+ "') or (i.createdate = '"
+						+ DateUtils.formatDate(end.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null)
+				+ "' and i.createtime < '" 
+				+ DateUtils.formatDate(etime,TracingConstants.getDBTimeFormat(HibernateWrapper.getConfig().getProperties()),null,null)
+						+ "'))";
+		return toReturn;
 	}
 	
 	/**

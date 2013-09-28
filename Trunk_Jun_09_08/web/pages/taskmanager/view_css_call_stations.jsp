@@ -8,9 +8,6 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
-  int day = 0;
-  
-  request.setAttribute("", null);
 %>
   
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
