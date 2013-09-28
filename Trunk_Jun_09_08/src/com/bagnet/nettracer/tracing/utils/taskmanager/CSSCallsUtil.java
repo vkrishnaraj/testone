@@ -481,7 +481,7 @@ public class CSSCallsUtil extends TaskManagerUtil {
 			return "1=1";
 		}
 		int sDay = -1 * day;
-		int eDay = sDay - 1;
+		int eDay = sDay + 1;
 		start.add(Calendar.DATE, sDay);
 		end.add(Calendar.DATE, eDay);
 		String toReturn = "((i.createdate = '" 
