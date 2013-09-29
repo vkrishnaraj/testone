@@ -325,7 +325,10 @@
 					} else if (calcVal>=150){
 						noReceiptDeprec=<%=rules.getOnefiftyDeprec()%>
 					}
-					calcVal=calcVal * (1 - (noReceiptDeprec/100));
+					calcVal=calcVal - (fielda.value * (noReceiptDeprec/100));
+					if(calcVal<0){
+						calcVal=0;
+					}
 				}
 				
 				var domesPayValue=<%=PropertyBMO.getValueAsInt(PropertyBMO.DOMESIC_PAYOUT_VALUE)%>;

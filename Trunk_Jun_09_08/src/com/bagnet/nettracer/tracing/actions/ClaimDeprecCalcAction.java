@@ -77,7 +77,7 @@ public class ClaimDeprecCalcAction extends Action {
 		}
 		
 
-		if(request.getParameter("save")!=null){
+		if(request.getParameter("save")!=null || request.getParameter("addItems")!=null){
 			if(theform.getClaim_id()!=0){
 				ClaimBMO cBMO=new ClaimBMO();
 				if(theform.getClaimDeprec().getClaim()==null){
@@ -98,6 +98,10 @@ public class ClaimDeprecCalcAction extends Action {
 			Claim_Depreciation CD=cBMO.getClaimDeprec(claim);
 			if(CD!=null && CD.getItemlist()!=null){
 				CD.set_DATEFORMAT(user.getDateformat().getFormat());
+				if(CD.getClaim()==null){
+					Claim cl=cBMO.findClaimByID(Long.valueOf(claim));
+					CD.setClaim(cl);
+				}
 				for(Depreciation_Item di:CD.getItemlist()){
 					di.set_DATEFORMAT(user.getDateformat().getFormat());
 				}
