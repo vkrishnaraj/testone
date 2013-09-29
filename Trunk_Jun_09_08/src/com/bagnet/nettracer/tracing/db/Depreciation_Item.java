@@ -1,17 +1,12 @@
 package com.bagnet.nettracer.tracing.db;
 
-import java.text.DecimalFormat;
 import java.util.Date;
-import java.util.TimeZone;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -22,6 +17,7 @@ import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Proxy;
 
 import com.bagnet.nettracer.tracing.bmo.CategoryBMO;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 /**
  * @author Sean Fine
@@ -43,7 +39,7 @@ public class Depreciation_Item {
 	private double claimValue;
 	
 	private Claim_Depreciation claimDepreciation;
-
+			
 	private String _DATEFORMAT; // current login agent's date format
 	
 	@Id @GeneratedValue
@@ -229,12 +225,8 @@ public class Depreciation_Item {
 	@Transient
 	public String getApprovedTotal() {
 
-		DecimalFormat format = (DecimalFormat) java.text.NumberFormat
-				.getInstance();
-		format.applyPattern("##0.00");
-		format.setMinimumFractionDigits(2);
 		if(getClaimDepreciation()!=null){
-			return format.format(getClaimDepreciation().getTotalApprovedPayout());
+			return TracingConstants.DECIMALFORMAT.format(getClaimDepreciation().getTotalApprovedPayout());
 		} else {
 			return "";
 		}
@@ -272,56 +264,45 @@ public class Depreciation_Item {
 
 	@Transient
 	public String getClaimTotal() {
-		DecimalFormat format = (DecimalFormat) java.text.NumberFormat
-				.getInstance();
-		format.applyPattern("##0.00");
-		format.setMinimumFractionDigits(2);
-		if(getClaimDepreciation()!=null)
-			return format.format(getClaimDepreciation().getTotalClaim());
-		else 
+		if(getClaimDepreciation()!=null){
+			return TracingConstants.DECIMALFORMAT.format(getClaimDepreciation().getTotalClaim());
+		} else {
 			return "0.00";
+		}
 	}
 	
 	@Transient
 	public String getValueTotal() {
-		DecimalFormat format = (DecimalFormat) java.text.NumberFormat
-				.getInstance();
-		format.applyPattern("##0.00");
-		format.setMinimumFractionDigits(2);
-		if(getClaimDepreciation()!=null)
-			return format.format(getClaimDepreciation().getTotalValue());
-		else 
+
+		if(getClaimDepreciation()!=null){
+			return TracingConstants.DECIMALFORMAT.format(getClaimDepreciation().getTotalValue());
+		} else 
 			return "0.00";
 	}
 	
 	@Transient
 	public String getDispClaimValue() {
-		DecimalFormat format = (DecimalFormat) java.text.NumberFormat
-				.getInstance();
-		format.applyPattern("##0.00");
-		format.setMinimumFractionDigits(2);
-		return format.format(getClaimValue());
+		if(getClaimValue()!=0){
+			return TracingConstants.DECIMALFORMAT.format(getClaimValue());
+		} else {
+			return "0.00";
+		}
 	}
 	
 	@Transient
 	public String getDispCalcValue() {
-		DecimalFormat format = (DecimalFormat) java.text.NumberFormat
-				.getInstance();
-		format.applyPattern("##0.00");
-		format.setMinimumFractionDigits(2);
-		return format.format(getCalcValue());
+		if(getCalcValue()!=0){
+		return TracingConstants.DECIMALFORMAT.format(getCalcValue());
+		} else
+			return "0.00";
 		
 	}
 
 	@Transient
 	public String getDispAmountClaimed() {
-		DecimalFormat format = (DecimalFormat) java.text.NumberFormat
-				.getInstance();
-		format.applyPattern("##0.00");
-		format.setMinimumFractionDigits(2);
-		if(getAmountClaimed()!=0)
-			return format.format(getAmountClaimed());
-		else 
+		if(getAmountClaimed()!=0){
+			return TracingConstants.DECIMALFORMAT.format(getAmountClaimed());
+		}else 
 			return "0.00";
 	}
 	

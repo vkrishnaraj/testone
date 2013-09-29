@@ -156,19 +156,12 @@ public class ClaimBMO {
 		}
 	}
 
-	public List<Depreciation_Item> getDeprecItems(String claim) {
-		String sql = "from com.bagnet.nettracer.tracing.db.Depreciation_Item di where claim_depreciation.claim.id=:claim";
+	public List<Depreciation_Item> getDeprecItems(long claimid) {
 		Session sess = null;
 		try {
+			String sql = "from com.bagnet.nettracer.tracing.db.Depreciation_Item di where claim_depreciation.claim.id=:claim";
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(sql);
-			long claimid=0;
-			try{
-				claimid=Long.valueOf(claim);
-			} catch(Exception ex){
-
-				logger.error("Error in get Claim Types: " + ex);
-			}
 			q.setParameter("claim", claimid);
 			List<Depreciation_Item> ilist= (List<Depreciation_Item>) q.list();
 			return ilist;
@@ -186,19 +179,12 @@ public class ClaimBMO {
 		}
 	}
 	
-	public Claim_Depreciation getClaimDeprec(String claim) {
-		String sql = "from com.bagnet.nettracer.tracing.db.Claim_Depreciation cd where claim.id=:claim";
+	public Claim_Depreciation getClaimDeprec(long claimid) {
 		Session sess = null;
 		try {
+			String sql = "from com.bagnet.nettracer.tracing.db.Claim_Depreciation cd where claim.id=:claim";
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(sql);
-			long claimid=0;
-			try{
-				claimid=Long.valueOf(claim);
-			} catch(Exception ex){
-
-				logger.error("Error in get Claim Types: " + ex);
-			}
 			q.setParameter("claim", claimid);
 			List<Claim_Depreciation> ilist= (List<Claim_Depreciation>) q.list();
 			if(ilist.size()>0){
@@ -240,17 +226,30 @@ public class ClaimBMO {
 
 	public void saveClaimDepreciation(Claim_Depreciation claimDeprec) {
 		Session sess = null;
+		Transaction tx=null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Transaction tx = sess.beginTransaction();
+			tx = sess.beginTransaction();
 			sess.saveOrUpdate(claimDeprec);
 			tx.commit();
 			sess.flush();
 			sess.close();
 
 		} catch (Exception e){
-
 			logger.error("Error in get Claim Types: " + e);
+			try {
+				tx.rollback();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 

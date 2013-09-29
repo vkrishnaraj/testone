@@ -169,7 +169,7 @@
 
                     </logic:notPresent>
                     
-                    <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_DEPREC_CALCULATOR, a) && ntUser) { %>
+                    <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_DEPREC_CALCULATOR, a) && (ntUser || ntfsUser) ) { %>
                       <dd>
                       <a href='#'><span class="aab">&nbsp;
                           <br />

@@ -5,14 +5,7 @@ import java.util.List;
 
 import org.apache.struts.validator.ValidatorForm;
 
-import com.bagnet.nettracer.tracing.constant.TracingConstants;
-import com.bagnet.nettracer.tracing.db.Address;
-import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Depreciation_Category;
-import com.bagnet.nettracer.tracing.db.Item;
-import com.bagnet.nettracer.tracing.db.Passenger;
-import com.bagnet.nettracer.tracing.db.Remark;
-import com.bagnet.nettracer.tracing.utils.TracerProperties;
 
 /**
  * @author Sean Fine
@@ -41,25 +34,21 @@ public final class DeprecCalcAdminForm extends ValidatorForm {
 	public Depreciation_Category getCategory(int index) {
 		if (index < 0) index = 0;
 		Depreciation_Category dc = null;
-		while (this.categories.size() <= index) {
-			dc = new Depreciation_Category();
-			dc.setMaxDeprec(100);
-			this.categories.add(dc);
+		if (categories != null) {
+			while (this.categories.size() <= index) {
+				dc = new Depreciation_Category();
+				dc.setMaxDeprec(100);
+				this.categories.add(dc);
+			}
+			return (Depreciation_Category) this.categories.get(index);
 		}
-		return (Depreciation_Category) this.categories.get(index);
+		return null;
 	}
 
-	public Depreciation_Category getTheCategory(int index) {
-		if (index < 0) index = 0;
-		if (this.categories.size() <= index) {
-
-			this.categories.add(new Depreciation_Category());
-		}
-		return (Depreciation_Category) this.categories.get(index);
-	}
 	public void setTheCategory(int index,Depreciation_Category dc) {
 		categories.add(index,dc);
 	}
+	
 	@Override
 	public void reset(org.apache.struts.action.ActionMapping mapping, javax.servlet.http.HttpServletRequest request) {
 		super.reset(mapping, request);

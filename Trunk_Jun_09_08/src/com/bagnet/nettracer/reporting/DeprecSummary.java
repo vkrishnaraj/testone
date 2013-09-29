@@ -39,8 +39,6 @@ public class DeprecSummary {
 
 	public static String createReport(ClaimDeprecCalcForm theform, ServletContext sc, HttpServletRequest request, int outputtype, String language) {
 		try {
-			MessageResources messages = MessageResources.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
-			// If a BDO_ID is explicitly provided, populate the form with it.
 			Map parameters = new HashMap();
 			if (theform.getClaim_id()!=0 && request.getParameter("claimId")==null) {
 				parameters.put("claimId",theform.getClaim_id());

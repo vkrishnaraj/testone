@@ -111,10 +111,15 @@ public final class ManageDeprecCalc extends Action {
 		deprecCats = CategoryBMO.getDepreciationCategories(companyCode);
 		if (deprecCats != null){
 			theform.setCategories(deprecCats);
+		} else {
+
+			ActionMessage error = new ActionMessage("error.loading.cats");
+			errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+			saveMessages(request, errors);
 		}
 		
 		if (request.getParameter("addcategory") != null) {
-			Depreciation_Category dc = theform.getCategory(theform.getCategories().size());
+			theform.getCategory(theform.getCategories().size());
 			request.setAttribute("newCategory", Integer.toString(theform.getCategories().size() - 1));
 		}
 

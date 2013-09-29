@@ -17,15 +17,6 @@
   
   <html:form action="deprecCalcAdmin.do" method="post" enctype="multipart/form-data" >
     
-  <%
-  
-  if (request.getParameter("errortype") != null) {
-  %>
-  ERROR
-  <%
-  } 
-  %>
-	  
   <td id="middlecolumn">
     
 	  <div id="maincontent">

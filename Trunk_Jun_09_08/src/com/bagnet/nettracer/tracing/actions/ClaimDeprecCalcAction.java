@@ -68,12 +68,17 @@ public class ClaimDeprecCalcAction extends Action {
 		ClaimDeprecCalcForm theform = (ClaimDeprecCalcForm) form;
 		ActionMessages errors = new ActionMessages();
 
-		TracerUtils.populateLists(session);
 		theform.setAgent(user);
 		
 		String claim = request.getParameter("claim_id");
 		if (claim == null) {
 			claim = String.valueOf(theform.getClaim_id());
+		} else {
+			try{
+				theform.setClaim_id(Long.valueOf(claim));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
 
@@ -93,13 +98,14 @@ public class ClaimDeprecCalcAction extends Action {
 			}
 		}
 		
-		if (claim != null && !claim.equals("0") ) {
+		if (claim != null && !claim.equals("0")) {
 			ClaimBMO cBMO = new ClaimBMO();
-			Claim_Depreciation CD=cBMO.getClaimDeprec(claim);
+			Long claimId=Long.valueOf(claim);
+			Claim_Depreciation CD=cBMO.getClaimDeprec(claimId);
 			if(CD!=null && CD.getItemlist()!=null){
 				CD.set_DATEFORMAT(user.getDateformat().getFormat());
 				if(CD.getClaim()==null){
-					Claim cl=cBMO.findClaimByID(Long.valueOf(claim));
+					Claim cl=cBMO.findClaimByID(claimId);
 					CD.setClaim(cl);
 				}
 				for(Depreciation_Item di:CD.getItemlist()){
@@ -131,10 +137,12 @@ public class ClaimDeprecCalcAction extends Action {
 		
 		if(request.getParameter("addItems")!=null){
 			int addnum=theform.getAddNum();
-			for(int i=0;i<addnum;i++){
-				Depreciation_Item di = theform.getDeprecItem(theform.getClaimDeprec().getItemlist().size());
-				di.set_DATEFORMAT(user.getDateformat().getFormat());
-				request.setAttribute("newItem", Integer.toString(theform.getClaimDeprec().getItemlist().size() - 1));
+			if(theform.getClaimDeprec().getItemlist()!=null){
+				for(int i=0;i<addnum;i++){
+					Depreciation_Item di = theform.getDeprecItem(theform.getClaimDeprec().getItemlist().size());
+					di.set_DATEFORMAT(user.getDateformat().getFormat());
+					request.setAttribute("newItem", Integer.toString(theform.getClaimDeprec().getItemlist().size() - 1));
+				}
 			}
 		}
 		boolean deleteCategory = false;
