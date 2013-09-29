@@ -93,7 +93,7 @@ public class ClaimDeprecCalcAction extends Action {
 			}
 		}
 		
-		if (claim != null && claim!="0" ) {
+		if (claim != null && !claim.equals("0") ) {
 			ClaimBMO cBMO = new ClaimBMO();
 			Claim_Depreciation CD=cBMO.getClaimDeprec(claim);
 			if(CD!=null && CD.getItemlist()!=null){
