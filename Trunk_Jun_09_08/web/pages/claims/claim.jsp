@@ -334,7 +334,7 @@
 
                     </logic:notPresent>
                     <logic:notEqual name="claimForm" property="claim.id" value="0">
-                    <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_DEPREC_CALCULATOR, a) && ntUser) { %>
+                    <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_DEPREC_CALCULATOR, a) && (ntUser || ntfsUser)) { %>
                       <dd>
                       <a href='claim_deprec_calc.do?claim_id=<bean:write name="claimForm" property="claim.id" />'><span class="aa">&nbsp;
                           <br />

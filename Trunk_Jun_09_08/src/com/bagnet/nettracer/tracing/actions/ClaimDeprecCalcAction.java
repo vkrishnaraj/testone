@@ -11,7 +11,6 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -22,12 +21,10 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
-import org.apache.struts.util.MessageResources;
 
-import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.bmo.CategoryBMO;
 import com.bagnet.nettracer.tracing.bmo.ClaimBMO;
-import com.bagnet.nettracer.tracing.bmo.ReportBMO;
+import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Claim;
@@ -35,7 +32,7 @@ import com.bagnet.nettracer.tracing.db.Claim_Depreciation;
 import com.bagnet.nettracer.tracing.db.Claim_Type;
 import com.bagnet.nettracer.tracing.db.Depreciation_Category;
 import com.bagnet.nettracer.tracing.db.Depreciation_Item;
-import com.bagnet.nettracer.tracing.dto.StatReportDTO;
+import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.forms.ClaimDeprecCalcForm;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
@@ -69,8 +66,10 @@ public class ClaimDeprecCalcAction extends Action {
 		ActionMessages errors = new ActionMessages();
 
 		theform.setAgent(user);
-		
+
+		String incidentId = request.getParameter("incident_id");
 		String claim = request.getParameter("claim_id");
+		
 		if (claim == null) {
 			claim = String.valueOf(theform.getClaim_id());
 		} else {
@@ -81,6 +80,23 @@ public class ClaimDeprecCalcAction extends Action {
 			}
 		}
 		
+		
+		// we couldn't get the incident id from the form or the request - Can't load the depreciation calculator without a claim
+		if ((incidentId == null || incidentId.isEmpty()) && 
+				(claim==null || (claim!=null && claim.equals("0")))) {
+			response.sendRedirect("claim_resolution.do?createNew=1");
+			return null;
+		} else if(claim==null || (claim!=null && claim.equals("0"))) { //If the claim isn't in the parameters, then we'll use the i
+			Incident incident = new IncidentBMO().findIncidentByID(incidentId);
+			if(incident.getClaims()!=null && incident.getClaims().size()>0){
+				claim=String.valueOf(incident.getClaims().iterator().next().getId());
+			}
+			if(claim.equals("0")){
+				response.sendRedirect("claim_resolution.do?createNew=1&populate=1&incidentId="+incidentId);
+				return null;
+			}
+		}
+
 
 		if(request.getParameter("save")!=null || request.getParameter("addItems")!=null){
 			if(theform.getClaim_id()!=0){

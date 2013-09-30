@@ -81,7 +81,18 @@
       }
     %>
     
-
+	
+   <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_DEPREC_CALCULATOR, a) && (ntUser || ntfsUser)) { %>
+     <dd>
+     <a href='claim_deprec_calc.do?incident_id=<bean:write name="claimSettlementForm" property="incident_ID" />'><span class="aa">&nbsp;
+         <br />
+         &nbsp;</span>
+       <span class="bb"><bean:message key="menu.claim_deprec_calc" /></span>
+       <span class="cc">&nbsp;
+         <br />
+         &nbsp;</span></a>
+   </dd>
+   <% } %>
   </dl>
 
 
