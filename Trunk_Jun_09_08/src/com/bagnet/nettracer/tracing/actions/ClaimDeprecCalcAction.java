@@ -138,10 +138,20 @@ public class ClaimDeprecCalcAction extends Action {
 		if(request.getParameter("addItems")!=null){
 			int addnum=theform.getAddNum();
 			if(theform.getClaimDeprec().getItemlist()!=null){
+				boolean additem=true;
 				for(int i=0;i<addnum;i++){
 					Depreciation_Item di = theform.getDeprecItem(theform.getClaimDeprec().getItemlist().size());
-					di.set_DATEFORMAT(user.getDateformat().getFormat());
-					request.setAttribute("newItem", Integer.toString(theform.getClaimDeprec().getItemlist().size() - 1));
+					if(di!=null){
+						di.set_DATEFORMAT(user.getDateformat().getFormat());
+						request.setAttribute("newItem", Integer.toString(theform.getClaimDeprec().getItemlist().size() - 1));
+					} else {
+						additem=false;
+					}
+				}
+				if(!additem){
+					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.add.deprec.item"));
+					saveMessages(request, errors);
+					request.setAttribute("noadditem", "1");
 				}
 			}
 		}

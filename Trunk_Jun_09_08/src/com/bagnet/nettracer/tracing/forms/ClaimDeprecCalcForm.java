@@ -36,8 +36,9 @@ public final class ClaimDeprecCalcForm extends ActionForm {
 				dc.setClaimDepreciation(this.claimDeprec);
 				this.claimDeprec.getItemlist().add(dc);
 			}
+			return (Depreciation_Item) this.claimDeprec.getItemlist().get(index);
 		}
-		return (Depreciation_Item) this.claimDeprec.getItemlist().get(index);
+		return null;
 	}
 
 	public int getAddNum() {
