@@ -2405,6 +2405,7 @@
 			<exclude name="**/**/jndi.properties"/>
 			<exclude name="aero/nettracer/lf/services/Fedex*.class" />
 			<exclude name="com/bagnet/nettracer/tracing/actions/BagDelStatusInfoUtils*.class"/>
+			<exclude name="com/bagnet/nettracer/tracing/actions/CostServiceUtils*.class"/>
 			<exclude name="aero/nettracer/lf/services/LFCClientService*.class" />
 		</jar>
 	</target>
