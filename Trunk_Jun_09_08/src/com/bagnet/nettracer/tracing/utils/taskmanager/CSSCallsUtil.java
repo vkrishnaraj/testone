@@ -34,6 +34,7 @@ import com.bagnet.nettracer.tracing.dto.CSSStationsDTO;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
+import com.bagnet.nettracer.tracing.utils.TracerProperties;
 
 public class CSSCallsUtil extends TaskManagerUtil {
 	
@@ -198,7 +199,8 @@ public class CSSCallsUtil extends TaskManagerUtil {
 	 * Adds a remark to the incident attached to the task.
 	 */
 	private static void saveRemark(Agent agent, MorningDutiesTask task, String remark) {
-		Incident i = task.getIncident();
+		IncidentBMO bmo = new IncidentBMO();
+		Incident i = bmo.findIncidentByID(task.getIncident().getIncident_ID());
 		if (i != null) {
 			Remark r = new Remark();
 			r.setRemarktext(remark);
@@ -210,7 +212,6 @@ public class CSSCallsUtil extends TaskManagerUtil {
 			r.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(agent.getDefaulttimezone()).getTimezone()));
 			r.setIncident(i);
 			i.getRemarks().add(r);
-			IncidentBMO bmo = new IncidentBMO();
 			bmo.updateRemarksOnly(i.getIncident_ID(), i.getRemarks(), agent);
 		}
 	}
@@ -226,7 +227,7 @@ public class CSSCallsUtil extends TaskManagerUtil {
 		task.setClosed_timestamp(DateUtils.convertToGMTDate(new Date()));
 		TaskManagerBMO.saveTask(task);
 		unlockTaskIncident(task.getLock(),(MorningDutiesTask)task);
-		saveRemark(agent, task, "CS&S: Call reached expiration time and the task was closed.");
+		saveRemark(agent, task, generateTopLineRemark(task, "Expired"));
 	}
 	
 	/**
@@ -665,7 +666,8 @@ public class CSSCallsUtil extends TaskManagerUtil {
 	 * Used by the cron to expire any tasks passed the expiration date and any tasks associated with a closed incident.
 	 */
 	public static void expireTasks() {
-		Agent agent = AdminUtils.getAgentBasedOnUsername("ogadmin", "OW");
+		String company = TracerProperties.get("wt.company.code");
+		Agent agent = AdminUtils.getAgentBasedOnUsername("ogadmin", company);
 		List<MorningDutiesTask> list = getExpireList();
 		if (list != null) {
 			for (MorningDutiesTask mdt : list) {
@@ -703,7 +705,8 @@ public class CSSCallsUtil extends TaskManagerUtil {
 	 * Used by cron to create tasks for any incidents that meet the criteria laid out in getTaskList.
 	 */
 	public static void createTasks() {
-		Agent agent = AdminUtils.getAgentBasedOnUsername("ogadmin", "OW");
+		String company = TracerProperties.get("wt.company.code");
+		Agent agent = AdminUtils.getAgentBasedOnUsername("ntadmin", company);
 		Calendar eCal = Calendar.getInstance();
 		eCal.add(Calendar.DATE, 1);
 		createTasks(agent, getTaskList(agent, TWODAY), TWODAY, new Date(), eCal.getTime());
