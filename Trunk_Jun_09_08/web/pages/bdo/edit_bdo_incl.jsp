@@ -305,6 +305,18 @@ function toggledc(o) {
               <html:text property="dispdeliverydate" size="11" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.BDOForm.dispdeliverydate,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">
             </td>
             <td nowrap colspan="2">
+              <bean:message key="colname.pickupdatetime" />
+              (<%= a.getDateformat().getFormat() %>) &nbsp;( <%=a.getTimeformat().getFormat()%>)
+              <br />
+              <html:text property="disppickupdate" size="11" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.BDOForm.disppickupdate,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">
+              &nbsp;
+              <html:text property="disppickuptime" size="6" maxlength="10" styleClass="textfield" />
+              
+            </td>
+          </tr>
+          
+          <tr>
+            <td nowrap>
               <bean:message key="colname.bdo.cost" />
               <br>
                 <html:select property="currency" styleClass="dropdown">
@@ -316,7 +328,7 @@ function toggledc(o) {
                 
 	              <bean:message key="original.delivery.cost"/>:
 	              <bean:write name="BDOForm" property="dispOrigDelivCost" />
-            </td>
+            </td>          
           </tr>
           
           <tr>

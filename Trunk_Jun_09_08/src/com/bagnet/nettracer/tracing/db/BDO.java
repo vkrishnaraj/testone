@@ -50,6 +50,8 @@ public class BDO implements Serializable {
 	private Date createtime;
 
 	private Date deliverydate;
+	private Date pickupdate;
+	private Date pickuptime;	
 
 	private OHD ohd;
 	private Incident incident;
@@ -312,6 +314,44 @@ public class BDO implements Serializable {
 
 	public String getDispdeliverydate() {
 		return DateUtils.formatDate(getDeliverydate(), _DATEFORMAT, null, null);
+	}
+
+	/**
+	 * @return Returns the pickupdate.
+	 * 
+	 * @hibernate.property type="date"
+	 */
+	public Date getPickupdate() {
+		return pickupdate;
+	}
+
+	/**
+	 * @param pickupdate
+	 *          The pickupdate to set.
+	 */
+	public void setPickupdate(Date pickupdate) {
+		this.pickupdate = pickupdate;
+	}
+
+	/**
+	 * @return Returns the pickuptime.
+	 * 
+	 * @hibernate.property type="time"
+	 */
+	public Date getPickuptime() {
+		return pickuptime;
+	}
+
+	/**
+	 * @param pickuptime
+	 *          The pickuptime to set.
+	 */
+	public void setPickuptime(Date pickuptime) {
+		this.pickuptime = pickuptime;
+	}
+
+	public String getDisppickupdate() {
+		return DateUtils.formatDate(getPickupdate(), _DATEFORMAT, null, null);
 	}
 
 	/**

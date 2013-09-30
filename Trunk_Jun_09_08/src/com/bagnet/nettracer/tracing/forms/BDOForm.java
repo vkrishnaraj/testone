@@ -45,6 +45,8 @@ public final class BDOForm extends ValidatorForm {
 	private Date createtime;
 
 	private Date deliverydate;
+	private Date pickupdate;
+	private Date pickuptime;	
 
 	private List passengerlist = new ArrayList();
 	private List itemlist = new ArrayList();
@@ -335,6 +337,54 @@ public final class BDOForm extends ValidatorForm {
 
 	public String getDispdeliverydate() {
 		return DateUtils.formatDate(getDeliverydate(), get_DATEFORMAT(), null, null);
+	}
+	
+	/**
+	 * @return Returns the pickupdate.
+	 */
+	public Date getPickupdate() {
+		return pickupdate;
+	}
+
+	/**
+	 * @param pickupdate
+	 *          The pickupdate to set.
+	 */
+	public void setPickupdate(Date pickupdate) {
+		this.pickupdate = pickupdate;
+	}
+
+	public void setDisppickupdate(String s) {
+		setPickupdate(DateUtils.convertToDate(s, get_DATEFORMAT(), null));
+	}
+
+	public String getDisppickupdate() {
+		return DateUtils.formatDate(getPickupdate(), get_DATEFORMAT(), null, null);
+	}
+
+	/**
+	 * @return Returns the pickuptime.
+	 * 
+	 * @hibernate.property type="time"
+	 */
+	public Date getPickuptime() {
+		return pickuptime;
+	}
+
+	/**
+	 * @param pickuptime
+	 *          The pickuptime to set.
+	 */
+	public void setPickuptime(Date pickuptime) {
+		this.pickuptime = pickuptime;
+	}
+
+	public void setDisppickuptime(String s) {
+		setPickuptime(DateUtils.convertToDate(s, get_TIMEFORMAT(), null));
+	}
+
+	public String getDisppickuptime() {
+		return DateUtils.formatDate(getPickuptime(), get_TIMEFORMAT(), null, null);
 	}
 
 	/**
