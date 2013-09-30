@@ -79,6 +79,9 @@
                   <b><bean:message key="colname.bag_tag_number" /></b>
                 </td>
                 <td>
+                  <b><bean:message key="colname.location" /></b>
+                </td>
+                <td>
                   <b><bean:message key="colname.color" /></b>
                 </td>
                 <td>
@@ -134,6 +137,14 @@
                     </logic:empty>
                     <logic:notEmpty name="ohd" property="claimnum">
                       <bean:write name="ohd" property="claimnum" />
+                    </logic:notEmpty>
+                  </td>
+                  <td style="width: 20%;">
+                    <logic:empty name="ohd" property="storage_location">
+                      &nbsp;
+                    </logic:empty>
+                    <logic:notEmpty name="ohd" property="storage_location">
+                      <bean:write name="ohd" property="storage_location" />
                     </logic:notEmpty>
                   </td>
                   <td>
