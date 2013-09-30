@@ -97,6 +97,7 @@ if (hasPermission) {
 					if (taskRemark.length > 0) {
 						if (confirm("Have you saved any changes to the incident?")) {
 							if ((type == 'abort' || type == 'complete')) {
+								clearBeforeUnload();
 								document.location.href="css_calls.do?" + type + "=1&taskRemark=" + escape(taskRemark);
 							} else {
 								return loadTaskDeferModal();
@@ -147,6 +148,7 @@ if (hasPermission) {
 							return false;
 						}
 					}
+					clearBeforeUnload();
 					document.location.href="css_calls.do?defer=1&taskStart=" + escape(startTime) + "&taskExpire=" + escape(expireTime) +
 											"&taskStartDate=" + escape(startDate) + "&taskExpireDate=" + escape(expireDate) +
 											"&taskRemark=" + escape(taskRemark);
@@ -214,7 +216,7 @@ if (hasPermission) {
 				<tr><td width ="20%"><bean:message key="generaltask.timestarted" />:</td><td><bean:write name="sessionTaskContainer" property="opened_timestamp"/>&nbsp;&nbsp;<input type="button" value="<bean:message key="button.task.pause"/>" onclick='document.location.href="GeneralTask.do?pause=1";return true;' id="button"></td></tr>
 				<tr><td colspan="2">
           <span style="float:left">
-          	<input type="button" value="<bean:message key="button.task.complete" />" onclick='if(confirm("Have you saved all of your changes?")){document.location.href="GeneralTask.do?complete=1";}' id="button">
+          	<input type="button" value="<bean:message key="button.task.complete" />" onclick='if(confirm("Have you saved all of your changes?")){clearBeforeUnload();document.location.href="GeneralTask.do?complete=1";}' id="button">
           </span>
           <span style="float:right">
           	<select id="task.defer.time" name="defer_time" class="dropdown">
@@ -223,8 +225,8 @@ if (hasPermission) {
           		<option value="120"><bean:message key="generaltask.defer.2hr" /></option>
           		<option value="240"><bean:message key="generaltask.defer.4hr" /></option>
           	</select>
-          	<input type="button" value="<bean:message key="button.task.defer" />" onclick='var time=document.forms[0].defer_time.value;document.location.href="GeneralTask.do?defer=1&defer_time="+time;' id="button">&nbsp;&nbsp;
-          	<input type="button" value="<bean:message key="button.task.abort" />" onclick='document.location.href="GeneralTask.do?abort=1";return true;' id="button">
+          	<input type="button" value="<bean:message key="button.task.defer" />" onclick='var time=document.forms[0].defer_time.value;clearBeforeUnload();document.location.href="GeneralTask.do?defer=1&defer_time="+time;' id="button">&nbsp;&nbsp;
+          	<input type="button" value="<bean:message key="button.task.abort" />" onclick='clearBeforeUnload();document.location.href="GeneralTask.do?abort=1";return true;' id="button">
           </span>
 		  </td>
           </tr>
