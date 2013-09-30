@@ -667,7 +667,7 @@ public class CSSCallsUtil extends TaskManagerUtil {
 	 */
 	public static void expireTasks() {
 		String company = TracerProperties.get("wt.company.code");
-		Agent agent = AdminUtils.getAgentBasedOnUsername("ogadmin", company);
+		Agent agent = AdminUtils.getAgentBasedOnUsername("ntadmin", company);
 		List<MorningDutiesTask> list = getExpireList();
 		if (list != null) {
 			for (MorningDutiesTask mdt : list) {
