@@ -86,12 +86,12 @@ public class ClaimDeprecCalcAction extends Action {
 				(claim==null || (claim!=null && claim.equals("0")))) {
 			response.sendRedirect("claim_resolution.do?createNew=1");
 			return null;
-		} else if(claim==null || (claim!=null && claim.equals("0"))) { //If the claim isn't in the parameters, then we'll use the i
+		} else if(claim==null || (claim!=null && claim.equals("0"))) { //If the claim isn't in the parameters, then we'll use the incident to get the claim
 			Incident incident = new IncidentBMO().findIncidentByID(incidentId);
 			if(incident.getClaims()!=null && incident.getClaims().size()>0){
 				claim=String.valueOf(incident.getClaims().iterator().next().getId());
 			}
-			if(claim.equals("0")){
+			if(claim.equals("0")){ //if there is no claim, we'll begin making a new claim with the incident information
 				response.sendRedirect("claim_resolution.do?createNew=1&populate=1&incidentId="+incidentId);
 				return null;
 			}
