@@ -17,6 +17,7 @@
   String company = a.getCompanycode_ID();
   FraudResultsForm myform = (FraudResultsForm) session.getAttribute("fraudResultsForm");
   boolean ntUser = PropertyBMO.isTrue("nt.user");
+  boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
 
   String incident = "";
   incident = request.getParameter(incident);

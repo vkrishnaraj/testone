@@ -10,8 +10,12 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.OHD_Photo"%>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent"%>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
+<%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
 <%
+boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
+boolean ntUser = PropertyBMO.isTrue("nt.user");
 	Agent a = (Agent) session.getAttribute("user");
+
 %>
 
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>

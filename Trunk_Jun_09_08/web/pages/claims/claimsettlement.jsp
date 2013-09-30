@@ -9,9 +9,12 @@
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.OHD_Photo" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
+<%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
+boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
+boolean ntUser = PropertyBMO.isTrue("nt.user");
 %>
   
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
