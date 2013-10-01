@@ -215,7 +215,7 @@ public class SearchLostFoundAction extends CheckedAction {
 	
 	private boolean sendItemToLFC(Agent user, long foundId, String trackingNumber) {
 		LFFound found = LFServiceWrapper.getInstance().getFoundItem(foundId);
-		if(found.getItem() != null){
+		if(found != null && found.getItem() != null){
 			found.getItem().setTrackingNumber(trackingNumber);
 			found.getItem().setDispositionId(TracingConstants.LF_DISPOSITION_SENT_TO_LFC);
 			found.setDeliveredDate(new Date());
