@@ -74,15 +74,7 @@
                 </td>
                 <td>
                   <logic:iterate name="forwardOnHandForm"  property="ohdList" id="ohd" indexId="i" type="org.apache.struts.util.LabelValueBean">
-                    <a href="addOnHandBag.do?ohd_ID=<bean:write name="ohd" property="label" />"><bean:write name="ohd" property="label" /></a>
-                    &nbsp;
-                      <bean:message key="colname.expedite_number" />
-                      <font color=red>
-                    *
-                  </font>
-                      :
-                      <input type="text" name="ohdList[<%=i %>].value" class="textfield" value="<%=ohd.getValue() %>"/>
-					  <%
+                  <%
 						@SuppressWarnings("unchecked")
 						Map<String, OHD> ohdMap = (Map<String, OHD>)request.getAttribute("ohdMap");
 						OHD ohdObj = (ohdMap == null || ohd.getLabel() == null) ? null : ohdMap.get(ohd.getLabel());
@@ -103,19 +95,20 @@
 				        			<b>Color/Type:</b> <%=color%>/<%=type%><br/>
 				        		<%}%>
 				        		
-				        		
 								<% if (!firstname.isEmpty() || !middlename.isEmpty() || !lastname.isEmpty()) {%>
 				            		<b>Name:</b> <span style="padding:27px;"><%=firstname%> <%=middlename%> <%=lastname%></span>
 				        		<%}%>
 				           </div>
-				           
-				      		<hr style='clear:both; border:1px solid #fff;<%=(ohdMap == null || i < ohdMap.size()-1)?"":"visibility:hidden;"%>'/>
-				     	<%} else {%>
-				     		<br/>
-				     	<%}%>
+				     <%}%>                  
+                  
+                    <a href="addOnHandBag.do?ohd_ID=<bean:write name="ohd" property="label" />"><bean:write name="ohd" property="label" /></a>
+                    &nbsp;
+                      <bean:message key="colname.expedite_number" />
+                      :
+                      <input type="text" name="ohdList[<%=i %>].value" class="textfield" value="<%=ohd.getValue() %>"/>
+				     <hr style='clear:both; border:1px solid #fff;<%=(ohdMap == null || i < ohdMap.size()-1)?"":"visibility:hidden;"%>'/>
                   </logic:iterate>
-
-
+                  
                 </td>
               </tr>
               <logic:notEmpty name="forwardOnHandForm" property="bag_request_id">
