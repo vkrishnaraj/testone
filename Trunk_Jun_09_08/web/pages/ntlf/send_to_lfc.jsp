@@ -83,9 +83,8 @@
          		<logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
          		<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
 		            <tr>
-           				<td>
-			              <bean:message key="colname.scope" />
-			              <br>
+           				<td align="center">
+			              <bean:message key="colname.scope" />:&nbsp;&nbsp;
                				<html:select name="searchLostFoundForm" property="shipToLFCSearchType" styleClass="dropdown" >
                					<html:option value="0"><bean:message key="option.stlfc.two.days.old" /></html:option>
                					<html:option value="1"><bean:message key="option.stlfc.all.open" /></html:option>
@@ -192,9 +191,8 @@
 		        </h1>
          		<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
 		            <tr>
-           				<td>
-		              		<bean:message key="colname.lf.tracking.number" />
-		              		<br />
+           				<td align="center">
+		              		<bean:message key="colname.lf.tracking.number" />:&nbsp;&nbsp;
 		              		<html:text styleId="trackingNumber" name="searchLostFoundForm" property="trackingNumber" size="20" maxlength="100" styleClass="textfield" /> 
 			            </td>
 			        </tr>
