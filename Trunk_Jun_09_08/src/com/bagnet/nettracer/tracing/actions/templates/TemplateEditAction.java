@@ -30,7 +30,6 @@ import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TemplateUtils;
-import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
