@@ -16,6 +16,8 @@ function updatePaymentFields(newType) {
 		break;
 	case 'CCREF':
 		break;
+	case 'PSO':
+		break;
 	default:
 		break;
 	}
@@ -26,7 +28,10 @@ function updatePaymentFields(newType) {
 		<bean:message key="payment.type"/>
 		<br />
 		<html:select property="paymentType" onchange="updatePaymentFields(this.options[this.selectedIndex].value);" styleClass="dropdown">
-			<html:optionsCollection name="paymentTypeList"/>
+			<html:options collection="paymentTypeList" property="value" labelProperty="label" />
+			<html:option value="PSO">
+				<bean:message key="payment.type.pso" />
+			</html:option>
 		</html:select>
 	</td>
 	<td id="amountColumn">
