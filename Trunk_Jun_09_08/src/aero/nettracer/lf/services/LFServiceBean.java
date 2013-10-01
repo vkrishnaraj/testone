@@ -423,6 +423,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			} else {
 				sql += " and o.foundDate < \'" + date + "\'";
 			}
+			System.out.println(sql);
 		}
 		if(dto.getStartRentDate() != null && dto.getStartRentDate().trim().length() > 0){
 			String date = DateUtils.formatDate(dto.getStartRentDateAsDate(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null);

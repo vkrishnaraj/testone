@@ -3,6 +3,7 @@ package com.bagnet.nettracer.tracing.actions;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -581,10 +582,10 @@ public class LogonAction extends Action {
 																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_NTLF_TM_OPEN_HV_ITEMS)) {
 																					LFSearchDTO lfDTO = new LFSearchDTO();
 																					lfDTO.setType(TracingConstants.LF_TYPE_FOUND);
-																					lfDTO.setValue(TracingConstants.LFC_ITEM_HIGH_VALUE);
+																					lfDTO.setValue(TracingConstants.LF_STATUS_ALL);
 																					lfDTO.setStationId(s.getStation_ID());
 																					lfDTO.setStatusId(TracingConstants.LF_STATUS_OPEN);
-																					lfDTO.setDispositionId(-1);
+																					lfDTO.setDispositionId(TracingConstants.LF_STATUS_ALL);
 																					lfDTO.setAgent(agent);
 																					int x = new LFServiceBean().searchFoundCount(lfDTO);
 																					if (x > 0) {
@@ -593,6 +594,21 @@ public class LogonAction extends Action {
 																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_MANAGE_CSS_DAILY_CALLS)){
 																					int x = CSSCallsUtil.getCount(agent);
 																					if (x != -1) {
+																						entries = x;
+																					}
+																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_NTLF_TM_SHIP_TO_LFC)) {
+																					LFSearchDTO lfDTO = new LFSearchDTO();
+																					lfDTO.setType(TracingConstants.LF_TYPE_FOUND);
+																					lfDTO.setValue(TracingConstants.LF_STATUS_ALL);
+																					lfDTO.setStationId(s.getStation_ID());
+																					lfDTO.setStatusId(TracingConstants.LF_STATUS_OPEN);
+																					lfDTO.setDispositionId(TracingConstants.LF_STATUS_ALL);
+																					lfDTO.setAgent(agent);
+																					Calendar eDate = Calendar.getInstance();
+																					eDate.add(Calendar.DATE, -3);
+																					lfDTO.setEndDate(DateUtils.formatDate(eDate.getTime(), agent.getDateformat().getFormat(), null, null));
+																					int x = new LFServiceBean().searchFoundCount(lfDTO);
+																					if (x > 0) {
 																						entries = x;
 																					}
 																				}

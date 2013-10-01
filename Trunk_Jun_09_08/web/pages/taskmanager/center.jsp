@@ -64,6 +64,8 @@
 				boolean ntUser = PropertyBMO.isTrue("nt.user");
 				boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
 				boolean lfUser = PropertyBMO.isTrue("lf.user");
+				boolean ntlfuser = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_NTLF_TM_OPEN_HV_ITEMS, a)
+									|| UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_NTLF_TM_SHIP_TO_LFC, a);
 				
 				ResourceBundle bundle = ResourceBundle.getBundle(
 						"com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
@@ -317,7 +319,7 @@
               </logic:equal>
             </logic:iterate>
 			<% } %>
-			<% if (lfUser) { %>
+			<% if (lfUser || ntlfuser) { %>
 			<tr>
 			  <td colspan="2" class="white">&nbsp;</td>
 			</tr>

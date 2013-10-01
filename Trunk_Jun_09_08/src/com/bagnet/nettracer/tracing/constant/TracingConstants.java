@@ -325,6 +325,7 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_NTLF_ENTER_ITEM = "NTLF_Enter_Items";
 	public static final String SYSTEM_COMPONENT_NAME_NTLF_SEARCH_ITEM = "NTLF_Search_Items";
 	public static final String SYSTEM_COMPONENT_NAME_NTLF_TM_OPEN_HV_ITEMS = "NTLF_TM_Open_HV_Items";
+	public static final String SYSTEM_COMPONENT_NAME_NTLF_TM_SHIP_TO_LFC = "NTLF_TM_Ship_To_LFC";
 	
 	//Table numbers for status
 	public final static int AJAX_STATUS_INC = 1;
@@ -633,6 +634,7 @@ public class TracingConstants {
 	public static final String NTLF_CREATE_FOUND_ITEM = "ntlf_create_found_item";
 	public static final String NTLF_CREATE_FOUND_ITEM_RO = "ntlf_create_found_item_ro";
 	public static final String NTLF_SEARCH_LOST_FOUND = "ntlf_search_lost_found";
+	public static final String NTLF_SEND_TO_LFC = "ntlf_send_to_lfc";
 	
 	public final static int LF_LOCATION_SHELF = 0;
 	public final static int LF_LOCATION_VERIFICATION = 1;

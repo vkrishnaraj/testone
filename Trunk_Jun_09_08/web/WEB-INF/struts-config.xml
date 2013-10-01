@@ -606,6 +606,7 @@
 		<forward name="ntlf_enter_items" path="ntlf_enter_items" />
 		<forward name="ntlf_create_found_item" path="ntlf_create_found_item" />
 		<forward name="ntlf_search_lost_found" path="ntlf_search_lost_found" />
+		<forward name="ntlf_send_to_lfc" path="ntlf_send_to_lfc" />
 		
 		<forward name="fileNotFound" path="fileNotFound" />
 	</global-forwards>
@@ -753,19 +754,19 @@
 
 		<action path="/worldtracersearch" type="com.bagnet.nettracer.tracing.actions.WorldTracerSearchAction" name="worldtracerafForm" scope="request" validate="false"></action>
 
-		<action path="/bagbuzzeditor" type="com.bagnet.nettracer.tracing.actions.BagBuzzEditorAction" name="bagbuzzeditorForm" scope="request" validate="false"></action>"
+		<action path="/bagbuzzeditor" type="com.bagnet.nettracer.tracing.actions.BagBuzzEditorAction" name="bagbuzzeditorForm" scope="request" validate="false"></action>
 		
-		<action path="/region" type="com.bagnet.nettracer.tracing.actions.admin.RegionAction" name="regionForm" scope="session" validate="false"></action>"
+		<action path="/region" type="com.bagnet.nettracer.tracing.actions.admin.RegionAction" name="regionForm" scope="session" validate="false"></action>
 		
-		<action path="/privacypermissions" type="com.bagnet.nettracer.tracing.actions.PrivacyPermissionsAction" name="privacyPermissionsForm" scope="session" validate="false"></action>"
+		<action path="/privacypermissions" type="com.bagnet.nettracer.tracing.actions.PrivacyPermissionsAction" name="privacyPermissionsForm" scope="session" validate="false"></action>
 		
-		<action path="/links" type="com.bagnet.nettracer.tracing.actions.admin.ViewLinksAction" scope="request" validate="false"></action>"
+		<action path="/links" type="com.bagnet.nettracer.tracing.actions.admin.ViewLinksAction" scope="request" validate="false"></action>
 		
-		<action path="/GeneralTask" type="com.bagnet.nettracer.tracing.actions.GeneralTaskAction"  name="generaltaskForm" scope="request" validate="false"></action>"
+		<action path="/GeneralTask" type="com.bagnet.nettracer.tracing.actions.GeneralTaskAction"  name="generaltaskForm" scope="request" validate="false"></action>
 		
-		<action path="/css_calls" type="com.bagnet.nettracer.tracing.actions.CSSCallsAction"  name="generaltaskForm" scope="request" validate="false"></action>"
+		<action path="/css_calls" type="com.bagnet.nettracer.tracing.actions.CSSCallsAction"  name="generaltaskForm" scope="request" validate="false"></action>
 
-		<action path="/bagbuzzsearch" type="com.bagnet.nettracer.tracing.actions.BagBuzzSearchAction" name="bagbuzzsearchForm" scope="request" validate="false"></action>"
+		<action path="/bagbuzzsearch" type="com.bagnet.nettracer.tracing.actions.BagBuzzSearchAction" name="bagbuzzsearchForm" scope="request" validate="false"></action>
 
 		<action path="/actionFileCount" type="com.bagnet.nettracer.tracing.actions.wt.ActionFileCountAction" name="worldtracerafForm" scope="request" validate="false">
 			<forward name="success" path="view_actionfile_count"></forward>

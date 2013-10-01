@@ -294,7 +294,7 @@ public class LFItem implements Serializable{
 		return toReturn;
 	}
 	
-	private String getCatDesc() {
+	public String getCatDesc() {
 		String toReturn = "";
 		LFCategory cat = LFUtils.loadCategory(category);
 		if (cat != null) {

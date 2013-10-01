@@ -1,6 +1,8 @@
 package com.bagnet.nettracer.tracing.actions.ntlf;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +17,7 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import aero.nettracer.lf.services.LFServiceBean;
+import aero.nettracer.lf.services.LFServiceWrapper;
 import aero.nettracer.lf.services.LFUtils;
 
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
@@ -25,6 +28,7 @@ import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.dto.LFSearchDTO;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
@@ -44,6 +48,17 @@ public class SearchLostFoundAction extends CheckedAction {
 		}
 
 		LFSearchDTO searchDto = (LFSearchDTO) form;
+
+		if (request.getParameter("ship") != null) {
+			if (searchDto.getFoundResults() != null) {
+				for (LFFound fnd : searchDto.getFoundResults()) {
+					if (fnd.isSelected()) {
+						sendItemToLFC(user, fnd.getId(), searchDto.getTrackingNumber());
+					}
+				}
+			}
+			searchDto.setTrackingNumber(null);
+		}
 
 		if (session.getAttribute("stationList") == null) {
 			session.setAttribute("stationList", AdminUtils.getStations(null, user.getCompanycode_ID(), 0, 0));
@@ -66,10 +81,24 @@ public class SearchLostFoundAction extends CheckedAction {
 		}
 		
 		if (request.getParameter("tmhvSearch") != null) {
-			searchDto.setValue(TracingConstants.LFC_ITEM_HIGH_VALUE);
+			searchDto.setValue(TracingConstants.LF_STATUS_ALL);
 			searchDto.setStationId(user.getStation().getStation_ID());
 			searchDto.setStatusId(TracingConstants.LF_STATUS_OPEN);
-			searchDto.setDispositionId(-1);
+			searchDto.setDispositionId(TracingConstants.LF_STATUS_ALL);
+		}
+		
+		boolean shipToLFC = false;
+		if (request.getParameter("stLFCSearch") != null) {			
+			searchDto.setValue(TracingConstants.LF_STATUS_ALL);
+			searchDto.setStationId(user.getStation().getStation_ID());
+			searchDto.setStatusId(TracingConstants.LF_STATUS_OPEN);
+			searchDto.setDispositionId(TracingConstants.LF_STATUS_ALL);
+			if (searchDto.getShipToLFCSearchType() != 1) {
+				Calendar eDate = Calendar.getInstance();
+				eDate.add(Calendar.DATE, -3);
+				searchDto.setEndDate(DateUtils.formatDate(eDate.getTime(), user.getDateformat().getFormat(), null, null));
+			}
+			shipToLFC = true;
 		}
 
 		if (request.getParameter("generateReport") != null && 
@@ -176,8 +205,28 @@ public class SearchLostFoundAction extends CheckedAction {
 			request.setAttribute("selectStation",searchDto.getStationId());
 		}
 		
+		if (shipToLFC) {
+			searchDto.setFoundResults(resultSet);
+			return mapping.findForward(TracingConstants.NTLF_SEND_TO_LFC);
+		}
 		return mapping.findForward(TracingConstants.NTLF_SEARCH_LOST_FOUND);
 		
+	}
+	
+	private boolean sendItemToLFC(Agent user, long foundId, String trackingNumber) {
+		LFFound found = LFServiceWrapper.getInstance().getFoundItem(foundId);
+		if(found.getItem() != null){
+			found.getItem().setTrackingNumber(trackingNumber);
+			found.getItem().setDispositionId(TracingConstants.LF_DISPOSITION_SENT_TO_LFC);
+			found.setDeliveredDate(new Date());
+			found.setStatusId(TracingConstants.LF_STATUS_CLOSED);
+			try {
+				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
+			} catch (Exception e) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 }

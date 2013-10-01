@@ -1,8 +1,13 @@
 package com.bagnet.nettracer.tracing.dto;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import aero.nettracer.lf.services.LFUtils;
@@ -13,6 +18,7 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 public class LFSearchDTO extends ActionForm  {
@@ -58,6 +64,8 @@ public class LFSearchDTO extends ActionForm  {
 	private int stationId;
 	private String trackingNumber;
 	private int value = -1;
+	private int shipToLFCSearchType;
+	private List<LFFound> foundResults;
 	
 	public String getFirstName() {
 		return firstName;
@@ -425,5 +433,40 @@ public class LFSearchDTO extends ActionForm  {
 		}
 		return "";
 	}
-		
+
+	public int getShipToLFCSearchType() {
+		return shipToLFCSearchType;
+	}
+
+	public void setShipToLFCSearchType(int shipToLFCSearchType) {
+		this.shipToLFCSearchType = shipToLFCSearchType;
+	}
+
+	public List<LFFound> getFoundResults() {
+		return foundResults;
+	}
+
+	public void setFoundResults(List<LFFound> foundResults) {
+		this.foundResults = foundResults;
+	}
+	
+	public LFFound getFound(int index) {
+		if (this.foundResults == null) {
+			this.foundResults = new ArrayList<LFFound>();
+		}
+		while (index >= this.foundResults.size()) {
+			this.foundResults.add(new LFFound());
+		}
+		return this.foundResults.get(index);
+	}
+	 
+	@Override
+	public void reset(ActionMapping mapping, HttpServletRequest request) {
+		// reset boolean variables so that checkboxes will work right.
+		if (foundResults != null) {
+			for (LFFound found : foundResults) {
+				found.setSelected(false);
+			}
+		}
+	}
 }

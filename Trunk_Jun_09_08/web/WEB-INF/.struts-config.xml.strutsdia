@@ -54,9 +54,6 @@
  <PROCESS-ITEM ID="viewairports" NAME="forward20" PATH="view_airport"
   SHAPE="32,2257,0,0" TARGET="page20" TITLE="viewairports"
   TYPE="forward" model-entity="StrutsProcessItem"/>
- <PROCESS-ITEM ID="activetracing" NAME="forward21" PATH="active_tracing"
-  SHAPE="32,2369,0,0" TARGET="page21" TITLE="activetracing"
-  TYPE="forward" model-entity="StrutsProcessItem"/>
  <PROCESS-ITEM ID="damagedmain" NAME="forward22" PATH="damagedbag"
   SHAPE="32,2481,0,0" TARGET="page22" TITLE="damagedmain" TYPE="forward" model-entity="StrutsProcessItem"/>
  <PROCESS-ITEM ID="damagedclose" NAME="forward23" PATH="damaged_close"
@@ -506,8 +503,6 @@
   SHAPE="32,13441,0,0" TITLE="airportForm" TYPE="action" model-entity="StrutsProcessItem"/>
  <PROCESS-ITEM ID="#audit_agent" NAME="action22" PATH="/audit_agent"
   SHAPE="32,13441,0,0" TITLE="auditAgentForm" TYPE="action" model-entity="StrutsProcessItem"/>
- <PROCESS-ITEM ID="#activeTracing" NAME="action23" PATH="/activeTracing"
-  SHAPE="32,13441,0,0" TITLE="activeTracingForm" TYPE="action" model-entity="StrutsProcessItem"/>
  <PROCESS-ITEM ID="#worldtracerlog" NAME="action24"
   PATH="/worldtracerlog" SHAPE="32,13233,0,0" TITLE="searchWtLogsForm"
   TYPE="action" model-entity="StrutsProcessItem">
@@ -588,10 +583,10 @@
    PATH="create_expense" TARGET="page163" TITLE="create_success"
    TYPE="forward" model-entity="StrutsProcessItemOutput"/>
   <PROCESS-ITEM-OUTPUT ID="save_success" NAME="forward1"
-   PATH="claim_resolution.do" TARGET="page164" TITLE="save_success"
+   PATH="EditExpense.do" TARGET="page178" TITLE="save_success"
    TYPE="forward" model-entity="StrutsProcessItemOutput"/>
   <PROCESS-ITEM-OUTPUT ID="update_success" NAME="forward2"
-   PATH="claim_resolution.do" TARGET="page164" TITLE="update_success"
+   PATH="EditExpense.do" TARGET="page178" TITLE="update_success"
    TYPE="forward" model-entity="StrutsProcessItemOutput"/>
   <PROCESS-ITEM-OUTPUT ID="edit_success" NAME="forward3"
    PATH="edit_expense" TARGET="page165" TITLE="edit_success"
@@ -724,8 +719,6 @@
   SUBTYPE="tile" TITLE="homepage" TYPE="page" model-entity="StrutsProcessItem"/>
  <PROCESS-ITEM NAME="page20" PATH="view_airport" SHAPE="240,2274,0,0"
   SUBTYPE="tile" TITLE="view_airport" TYPE="page" model-entity="StrutsProcessItem"/>
- <PROCESS-ITEM NAME="page21" PATH="active_tracing" SHAPE="240,2386,0,0"
-  SUBTYPE="tile" TITLE="active_tracing" TYPE="page" model-entity="StrutsProcessItem"/>
  <PROCESS-ITEM NAME="page22" PATH="damagedbag" SHAPE="240,2498,0,0"
   SUBTYPE="tile" TITLE="damagedbag" TYPE="page" model-entity="StrutsProcessItem"/>
  <PROCESS-ITEM NAME="page23" PATH="damaged_close" SHAPE="240,2610,0,0"
@@ -1090,9 +1083,6 @@
  <PROCESS-ITEM NAME="page163" PATH="create_expense"
   SHAPE="288,13250,0,0" SUBTYPE="tile" TITLE="create_expense"
   TYPE="page" model-entity="StrutsProcessItem"/>
- <PROCESS-ITEM NAME="page164" PATH="claim_resolution.do"
-  SHAPE="288,13250,0,0" SUBTYPE="tile" TITLE="claim_resolution.do"
-  TYPE="page" model-entity="StrutsProcessItem"/>
  <PROCESS-ITEM NAME="page165" PATH="edit_expense" SHAPE="288,13250,0,0"
   SUBTYPE="tile" TITLE="edit_expense" TYPE="page" model-entity="StrutsProcessItem"/>
  <PROCESS-ITEM ID="#actionFileCount" NAME="action83"
@@ -1203,8 +1193,695 @@
   SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="view_worldtracerpxf"
   TYPE="page" model-entity="StrutsProcessItem"/>
  <PROCESS-ITEM ID="#quickSearch" NAME="action94" PATH="/quickSearch"
-  SHAPE="32,13441,0,0" TITLE="quickSearchForm" TYPE="action" model-entity="StrutsProcessItem"/>
+  SHAPE="32,13441,0,0" TITLE="quickSearchForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward0"
+   PATH="ajax_quickSearchResponse" TARGET="page179" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
  <PROCESS-ITEM NAME="page179" PATH="ajax_quickSearchResponse"
   SHAPE="656,13553,0,0" SUBTYPE="tile" TITLE="ajax_quickSearchResponse"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="viewbagbuzzeditor" NAME="forward21"
+  PATH="view_bagbuzzeditor" SHAPE="32,13233,0,0" TARGET="page180"
+  TITLE="viewbagbuzzeditor" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="enter_items" NAME="forward169" PATH="enter_items"
+  SHAPE="32,13233,0,0" TARGET="page181" TITLE="enter_items"
+  TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="viewbagbuzzsearch" NAME="forward170"
+  PATH="view_bagbuzzsearch" SHAPE="32,13233,0,0" TARGET="page182"
+  TITLE="viewbagbuzzsearch" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="viewcsscallstations" NAME="forward171"
+  PATH="view_css_call_stations" SHAPE="32,13233,0,0" TARGET="page183"
+  TITLE="viewcsscallstations" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="closesuccess" NAME="forward172"
+  PATH="close_file_success" SHAPE="32,13233,0,0" TARGET="page184"
+  TITLE="closesuccess" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="create_found_item_ro" NAME="forward173"
+  PATH="create_found_item_ro" SHAPE="32,13233,0,0" TARGET="page185"
+  TITLE="create_found_item_ro" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="viewlinks" NAME="forward174" PATH="view_links"
+  SHAPE="32,13233,0,0" TARGET="page186" TITLE="viewlinks" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="create_claim" NAME="forward175" PATH="create_claim"
+  SHAPE="32,13233,0,0" TARGET="page187" TITLE="create_claim"
+  TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="request_info" NAME="forward176" PATH="request_info"
+  SHAPE="32,13233,0,0" TARGET="page188" TITLE="request_info"
+  TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="dispute_resolution" NAME="forward177"
+  PATH="dispute_resolution" SHAPE="32,13233,0,0" TARGET="page189"
+  TITLE="dispute_resolution" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="view_open_lost" NAME="forward178"
+  PATH="view_open_lost" SHAPE="32,13233,0,0" TARGET="page190"
+  TITLE="view_open_lost" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="ntlf_enter_items" NAME="forward179"
+  PATH="ntlf_enter_items" SHAPE="32,13233,0,0" TARGET="page191"
+  TITLE="ntlf_enter_items" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="viewprivacypermissions" NAME="forward180"
+  PATH="view_privacypermissions" SHAPE="32,13233,0,0" TARGET="page192"
+  TITLE="viewprivacypermissions" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="create_lost_report_ro" NAME="forward181"
+  PATH="create_lost_report_ro" SHAPE="32,13233,0,0" TARGET="page193"
+  TITLE="create_lost_report_ro" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="salvageitems" NAME="forward182"
+  PATH="ajax_salvageitems" SHAPE="32,13233,0,0" TARGET="page194"
+  TITLE="salvageitems" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="lf_blank" NAME="forward183" PATH="ajax_blank"
+  SHAPE="32,13233,0,0" TARGET="page195" TITLE="lf_blank" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="view_disputes" NAME="forward184" PATH="view_disputes"
+  SHAPE="32,13233,0,0" TARGET="page196" TITLE="view_disputes"
+  TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="editIssuanceCategory" NAME="forward185"
+  PATH="editIssuanceCategory" SHAPE="32,13233,0,0" TARGET="page197"
+  TITLE="editIssuanceCategory" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="view_trace_results" NAME="forward186"
+  PATH="view_trace_results" SHAPE="32,13233,0,0" TARGET="page198"
+  TITLE="view_trace_results" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="create_claim_prorate" NAME="forward187"
+  PATH="create_claim_prorate" SHAPE="32,13233,0,0" TARGET="page199"
+  TITLE="create_claim_prorate" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="subcategory" NAME="forward188"
+  PATH="ajax_subcategory" SHAPE="32,13233,0,0" TARGET="page200"
+  TITLE="subcategory" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="match_details" NAME="forward189" PATH="match_details"
+  SHAPE="32,13233,0,0" TARGET="page201" TITLE="match_details"
+  TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="editregionsuccess" NAME="forward190"
+  PATH="edit_region_success" SHAPE="32,13233,0,0" TARGET="page202"
+  TITLE="editregionsuccess" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="manage_dispute" NAME="forward191"
+  PATH="manage_dispute" SHAPE="32,13233,0,0" TARGET="page203"
+  TITLE="manage_dispute" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="morningdutiesupdated" NAME="forward192"
+  PATH="morning_duties_updated" SHAPE="32,13233,0,0" TARGET="page204"
+  TITLE="morningdutiesupdated" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="fraud_forum_search" NAME="forward193"
+  PATH="fraud_forum_search" SHAPE="32,13233,0,0" TARGET="page205"
+  TITLE="fraud_forum_search" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="fraud_forum_create" NAME="forward194"
+  PATH="fraud_forum_create" SHAPE="32,13233,0,0" TARGET="page206"
+  TITLE="fraud_forum_create" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="view_open_found" NAME="forward195"
+  PATH="view_open_found" SHAPE="32,13233,0,0" TARGET="page207"
+  TITLE="view_open_found" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="viewbagbuzzview" NAME="forward196"
+  PATH="view_bagbuzzview" SHAPE="32,13233,0,0" TARGET="page208"
+  TITLE="viewbagbuzzview" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="ntlf_create_found_item" NAME="forward197"
+  PATH="ntlf_create_found_item" SHAPE="32,13233,0,0" TARGET="page209"
+  TITLE="ntlf_create_found_item" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="searchTemplate" NAME="forward198"
+  PATH="searchTemplate" SHAPE="32,13233,0,0" TARGET="page210"
+  TITLE="searchTemplate" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="shelved_trace_results" NAME="forward199"
+  PATH="shelved_trace_results" SHAPE="32,13233,0,0" TARGET="page211"
+  TITLE="shelved_trace_results" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="lf_boxcount" NAME="forward200" PATH="lf_boxcount"
+  SHAPE="32,13233,0,0" TARGET="page212" TITLE="lf_boxcount"
+  TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="create_found_item" NAME="forward201"
+  PATH="create_found_item" SHAPE="32,13233,0,0" TARGET="page213"
+  TITLE="create_found_item" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="viewmorningduties" NAME="forward202"
+  PATH="view_morning_duties" SHAPE="32,13233,0,0" TARGET="page214"
+  TITLE="viewmorningduties" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="editstationsubcompany" NAME="forward203"
+  PATH="edit_station_subcompany" SHAPE="32,13233,0,0" TARGET="page215"
+  TITLE="editstationsubcompany" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="auditIssuanceItemAdmin" NAME="forward204"
+  PATH="auditIssuanceItemAdmin" SHAPE="32,13233,0,0" TARGET="page216"
+  TITLE="auditIssuanceItemAdmin" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="claim_deprec_calc" NAME="forward205"
+  PATH="claim_deprec_calc" SHAPE="32,13233,0,0" TARGET="page217"
+  TITLE="claim_deprec_calc" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="lf_search_salvage" NAME="forward206"
+  PATH="lf_search_salvage" SHAPE="32,13233,0,0" TARGET="page218"
+  TITLE="lf_search_salvage" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="viewfraudrequests" NAME="forward207"
+  PATH="view_fraud_requests" SHAPE="32,13233,0,0" TARGET="page219"
+  TITLE="viewfraudrequests" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="editregion" NAME="forward208" PATH="edit_region"
+  SHAPE="32,13233,0,0" TARGET="page220" TITLE="editregion"
+  TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="salvage_search" NAME="forward209"
+  PATH="salvage_search" SHAPE="32,13233,0,0" TARGET="page221"
+  TITLE="salvage_search" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="lf_delivered_found" NAME="forward210"
+  PATH="lf_delivered_found" SHAPE="32,13233,0,0" TARGET="page222"
+  TITLE="lf_delivered_found" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="viewregion" NAME="forward211" PATH="view_region"
+  SHAPE="32,13233,0,0" TARGET="page223" TITLE="viewregion"
+  TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="view_items_salvage" NAME="forward212"
+  PATH="view_items_salvage" SHAPE="32,13233,0,0" TARGET="page224"
+  TITLE="view_items_salvage" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="confirmcloseonhandsuccess" NAME="forward213"
+  PATH="confirm_close_onhand_success" SHAPE="32,13233,0,0"
+  TARGET="page225" TITLE="confirmcloseonhandsuccess" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="viewsubcompanies" NAME="forward214"
+  PATH="view_subcompany" SHAPE="32,13233,0,0" TARGET="page226"
+  TITLE="viewsubcompanies" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="viewworldtracerahl" NAME="forward215"
+  PATH="view_worldtracerahl" SHAPE="32,13233,0,0" TARGET="page227"
+  TITLE="viewworldtracerahl" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="ajax_push_to_crm" NAME="forward216"
+  PATH="ajax_push_to_crm" SHAPE="32,13233,0,0" TARGET="page228"
+  TITLE="ajax_push_to_crm" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="updateonhandsuccess" NAME="forward217"
+  PATH="update_onhand_success" SHAPE="32,13233,0,0" TARGET="page229"
+  TITLE="updateonhandsuccess" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="view_to_be_shipped" NAME="forward218"
+  PATH="view_to_be_shipped" SHAPE="32,13233,0,0" TARGET="page230"
+  TITLE="view_to_be_shipped" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="select_claim" NAME="forward219" PATH="select_claim"
+  SHAPE="32,13233,0,0" TARGET="page231" TITLE="select_claim"
+  TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="update_dispute_success" NAME="forward220"
+  PATH="update_dispute_success" SHAPE="32,13233,0,0" TARGET="page232"
+  TITLE="update_dispute_success" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="newstation" NAME="forward221" PATH="ajax_newstation"
+  SHAPE="32,13233,0,0" TARGET="page233" TITLE="newstation"
+  TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="fraud_forum_claim" NAME="forward222"
+  PATH="fraud_forum_claim" SHAPE="32,13233,0,0" TARGET="page234"
+  TITLE="fraud_forum_claim" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="viewcsscalltasks" NAME="forward223"
+  PATH="view_css_call_tasks" SHAPE="32,13233,0,0" TARGET="page235"
+  TITLE="viewcsscalltasks" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="ajax_faultstationall" NAME="forward224"
+  PATH="ajax_faultstationall" SHAPE="32,13233,0,0" TARGET="page236"
+  TITLE="ajax_faultstationall" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="editTemplate" NAME="forward225" PATH="editTemplate"
+  SHAPE="32,13233,0,0" TARGET="page237" TITLE="editTemplate"
+  TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="subCompAdmin" NAME="forward226" PATH="subCompAdmin"
+  SHAPE="32,13233,0,0" TARGET="page238" TITLE="subCompAdmin"
+  TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="lf_salvage" NAME="forward227" PATH="lf_salvage"
+  SHAPE="32,13233,0,0" TARGET="page239" TITLE="lf_salvage"
+  TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="update_lostfound_success" NAME="forward228"
+  PATH="update_lost_found_success" SHAPE="32,13233,0,0" TARGET="page240"
+  TITLE="update_lostfound_success" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="issuanceItemAdmin" NAME="forward229"
+  PATH="issuanceItemAdmin" SHAPE="32,13233,0,0" TARGET="page241"
+  TITLE="issuanceItemAdmin" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="ntlf_search_lost_found" NAME="forward230"
+  PATH="ntlf_search_lost_found" SHAPE="32,13233,0,0" TARGET="page242"
+  TITLE="ntlf_search_lost_found" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="viewworldtracerohd" NAME="forward231"
+  PATH="view_worldtracerohd" SHAPE="32,13233,0,0" TARGET="page243"
+  TITLE="viewworldtracerohd" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="view_items_deliver" NAME="forward232"
+  PATH="view_items_deliver" SHAPE="32,13233,0,0" TARGET="page244"
+  TITLE="view_items_deliver" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="search_claim" NAME="forward233" PATH="search_claim"
+  SHAPE="32,13233,0,0" TARGET="page245" TITLE="search_claim"
+  TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="dispute_resolution_ro" NAME="forward234"
+  PATH="dispute_resolution_ro" SHAPE="32,13233,0,0" TARGET="page246"
+  TITLE="dispute_resolution_ro" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="setRxDate" NAME="forward235" PATH="setRxDate"
+  SHAPE="32,13233,0,0" TARGET="page247" TITLE="setRxDate" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="fraud_forum_view" NAME="forward236"
+  PATH="fraud_forum_view" SHAPE="32,13233,0,0" TARGET="page248"
+  TITLE="fraud_forum_view" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="fileNotFound" NAME="forward237" PATH="fileNotFound"
+  SHAPE="32,13233,0,0" TARGET="page249" TITLE="fileNotFound"
+  TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="deliveredfounds" NAME="forward238"
+  PATH="ajax_deliveredfounds" SHAPE="32,13233,0,0" TARGET="page250"
+  TITLE="deliveredfounds" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="fraud_results" NAME="forward239" PATH="fraud_results"
+  SHAPE="32,13233,0,0" TARGET="page251" TITLE="fraud_results"
+  TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="salvage_edit" NAME="forward240" PATH="salvage_edit"
+  SHAPE="32,13233,0,0" TARGET="page252" TITLE="salvage_edit"
+  TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="depreccalcadmin" NAME="forward241"
+  PATH="deprec_calc_admin" SHAPE="32,13233,0,0" TARGET="page253"
+  TITLE="depreccalcadmin" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="insert_dispute_success" NAME="forward242"
+  PATH="insert_dispute_success" SHAPE="32,13233,0,0" TARGET="page254"
+  TITLE="insert_dispute_success" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="search_lost_found" NAME="forward243"
+  PATH="search_lost_found" SHAPE="32,13233,0,0" TARGET="page255"
+  TITLE="search_lost_found" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="create_delivery" NAME="forward244"
+  PATH="create_delivery" SHAPE="32,13233,0,0" TARGET="page256"
+  TITLE="create_delivery" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="viewworldtracersearch" NAME="forward245"
+  PATH="view_worldtracersearch" SHAPE="32,13233,0,0" TARGET="page257"
+  TITLE="viewworldtracersearch" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="itemsummary" NAME="forward246"
+  PATH="ajax_itemsummary" SHAPE="32,13233,0,0" TARGET="page258"
+  TITLE="itemsummary" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="view_trace_details" NAME="forward247"
+  PATH="view_trace_details" SHAPE="32,13233,0,0" TARGET="page259"
+  TITLE="view_trace_details" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="editsubcompany" NAME="forward248"
+  PATH="edit_subcompany" SHAPE="32,13233,0,0" TARGET="page260"
+  TITLE="editsubcompany" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="denyfraudrequest" NAME="forward249"
+  PATH="deny_fraud_request" SHAPE="32,13233,0,0" TARGET="page261"
+  TITLE="denyfraudrequest" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="updatesuccess" NAME="forward250"
+  PATH="update_file_success" SHAPE="32,13233,0,0" TARGET="page262"
+  TITLE="updatesuccess" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="create_lost_report" NAME="forward251"
+  PATH="create_lost_report" SHAPE="32,13233,0,0" TARGET="page263"
+  TITLE="create_lost_report" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="view_only_dispute" NAME="forward252"
+  PATH="view_only_dispute" SHAPE="32,13233,0,0" TARGET="page264"
+  TITLE="view_only_dispute" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#links" NAME="action23" PATH="/links"
+  SHAPE="32,13441,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#displayClaimsList" NAME="action95"
+  PATH="/displayClaimsList" SHAPE="32,13233,0,0"
+  TITLE="displayClaimsListForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="forwardOcList" NAME="forward0"
+   PATH="forwardOcList" TARGET="page265" TITLE="forwardOcList"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#editTemplate" NAME="action96" PATH="/editTemplate"
+  SHAPE="32,13441,0,0" TITLE="templateEditForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#fraud_forum_view" NAME="action97"
+  PATH="/fraud_forum_view" SHAPE="32,13441,0,0" TITLE="forumViewForm"
+  TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#lf_boxcount" NAME="action98" PATH="/lf_boxcount"
+  SHAPE="32,13441,0,0" TITLE="lfBoxCountForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#fraudRequests" NAME="action99" PATH="/fraudRequests"
+  SHAPE="32,13441,0,0" TITLE="viewFraudRequestForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#fraud_forum_create" NAME="action100"
+  PATH="/fraud_forum_create" SHAPE="32,13441,0,0" TITLE="forumViewForm"
+  TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#lf_delivered_found" NAME="action101"
+  PATH="/lf_delivered_found" SHAPE="32,13441,0,0"
+  TITLE="lfDeliveredFoundForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#pushToCrm" NAME="action102" PATH="/pushToCrm"
+  SHAPE="32,13441,0,0" TITLE="toggleForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#fraud_results" NAME="action103"
+  PATH="/fraud_results" SHAPE="32,13441,0,0" TITLE="fraudResultsForm"
+  TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#claim_deprec_calc" NAME="action104"
+  PATH="/claim_deprec_calc" SHAPE="32,13441,0,0"
+  TITLE="claimDeprecCalcForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#quickHistory" NAME="action105" PATH="/quickHistory"
+  SHAPE="32,13233,0,0" TITLE="quickSearchForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward0"
+   PATH="ajax_quickHistoryResponse" TARGET="page266" TITLE="success"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#view_trace_results" NAME="action106"
+  PATH="/view_trace_results" SHAPE="32,13441,0,0"
+  TITLE="traceResultsForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#displayClaim" NAME="action107" PATH="/displayClaim"
+  SHAPE="32,13233,0,0" TITLE="displayClaimForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="forwardDisplayOcAjax" NAME="forward0"
+   PATH="forwardDisplayOcAjax" TARGET="page267"
+   TITLE="forwardDisplayOcAjax" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+  <PROCESS-ITEM-OUTPUT ID="forwardDisplayOc" NAME="forward1"
+   PATH="forwardDisplayOc" TARGET="page268" TITLE="forwardDisplayOc"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#bagbuzzeditor" NAME="action108"
+  PATH="/bagbuzzeditor" SHAPE="32,13441,0,0" TITLE="bagbuzzeditorForm"
+  TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#view_items_salvage" NAME="action109"
+  PATH="/view_items_salvage" SHAPE="32,13441,0,0"
+  TITLE="handleItemsForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#lost_found_manager" NAME="action110"
+  PATH="/lost_found_manager" SHAPE="32,13441,0,0"
+  TITLE="lostFoundManagerForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#bagbuzzsearch" NAME="action111"
+  PATH="/bagbuzzsearch" SHAPE="32,13441,0,0" TITLE="bagbuzzsearchForm"
+  TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#fraud_forum_claim" NAME="action112"
+  PATH="/fraud_forum_claim" SHAPE="32,13441,0,0" TITLE="forumClaimForm"
+  TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#salvageEdit" NAME="action113" PATH="/salvageEdit"
+  SHAPE="32,13441,0,0" TITLE="salvageEditForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#enter_items" NAME="action114" PATH="/enter_items"
+  SHAPE="32,13441,0,0" TITLE="enterItemsForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#cancelBdo" NAME="action115" PATH="/cancelBdo"
+  SHAPE="32,13441,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#request_info" NAME="action116" PATH="/request_info"
+  SHAPE="32,13441,0,0" TITLE="requestInfoForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#view_to_be_shipped" NAME="action117"
+  PATH="/view_to_be_shipped" SHAPE="32,13441,0,0"
+  TITLE="toBeShippedForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#search_claim" NAME="action118" PATH="/search_claim"
+  SHAPE="32,13441,0,0" TITLE="searchClaimForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#create_lost_report" NAME="action119"
+  PATH="/create_lost_report" SHAPE="32,13441,0,0" TITLE="lostReportForm"
+  TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#toggle" NAME="action120" PATH="/toggle"
+  SHAPE="32,13233,0,0" TITLE="toggleForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="success" NAME="forward0" PATH="ajax_toggle"
+   TARGET="page269" TITLE="success" TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#lf_search_salvage" NAME="action121"
+  PATH="/lf_search_salvage" SHAPE="32,13441,0,0"
+  TITLE="lfSalvageSearchForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#privacypermissions" NAME="action122"
+  PATH="/privacypermissions" SHAPE="32,13441,0,0"
+  TITLE="privacyPermissionsForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#create_found_item" NAME="action123"
+  PATH="/create_found_item" SHAPE="32,13441,0,0" TITLE="foundItemForm"
+  TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#changeClaimStatus" NAME="action124"
+  PATH="/changeClaimStatus" SHAPE="32,13233,0,0"
+  TITLE="changeStatusForm" TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT ID="forwardOcList" NAME="forward0"
+   PATH="forwardOcList" TARGET="page265" TITLE="forwardOcList"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#searchDispute" NAME="action125"
+  PATH="/searchDispute" SHAPE="32,13441,0,0" TITLE="searchDisputeForm"
+  TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#auditIssuanceItemAdmin" NAME="action126"
+  PATH="/auditIssuanceItemAdmin" SHAPE="32,13441,0,0"
+  TITLE="auditIssuanceItemAdminForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#disputeResolution" NAME="action127"
+  PATH="/disputeResolution" SHAPE="32,13441,0,0" TITLE="incidentForm"
+  TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#issuanceItemAdmin" NAME="action128"
+  PATH="/issuanceItemAdmin" SHAPE="32,13441,0,0"
+  TITLE="issuanceItemAdminForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#create_claim" NAME="action129" PATH="/create_claim"
+  SHAPE="32,13441,0,0" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#css_calls" NAME="action130" PATH="/css_calls"
+  SHAPE="32,13441,0,0" TITLE="generaltaskForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#deprecCalcAdmin" NAME="action131"
+  PATH="/deprecCalcAdmin" SHAPE="32,13441,0,0"
+  TITLE="deprecCalcAdminForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#create_found_item_ro" NAME="action132"
+  PATH="/create_found_item_ro" SHAPE="32,13441,0,0"
+  TITLE="foundItemForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#lf_salvage" NAME="action133" PATH="/lf_salvage"
+  SHAPE="32,13441,0,0" TITLE="lfSalvageForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#ntlf_enter_items" NAME="action134"
+  PATH="/ntlf_enter_items" SHAPE="32,13441,0,0" TITLE="enterItemsForm"
+  TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#select_claim" NAME="action135" PATH="/select_claim"
+  SHAPE="32,13441,0,0" TITLE="selectClaimForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#worldtracersearch" NAME="action136"
+  PATH="/worldtracersearch" SHAPE="32,13441,0,0"
+  TITLE="worldtracerafForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#shelved_trace_results" NAME="action137"
+  PATH="/shelved_trace_results" SHAPE="32,13441,0,0"
+  TITLE="shelvedTraceResultsForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#ntlf_search_lost_found" NAME="action138"
+  PATH="/ntlf_search_lost_found" SHAPE="32,13441,0,0"
+  TITLE="searchLostFoundForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#ntlf_create_found_item" NAME="action139"
+  PATH="/ntlf_create_found_item" SHAPE="32,13441,0,0"
+  TITLE="foundItemForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#editIssuanceCategory" NAME="action140"
+  PATH="/editIssuanceCategory" SHAPE="32,13441,0,0"
+  TITLE="editIssuanceCategoryForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#search_lost_found" NAME="action141"
+  PATH="/search_lost_found" SHAPE="32,13441,0,0"
+  TITLE="searchLostFoundForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#GeneralTask" NAME="action142" PATH="/GeneralTask"
+  SHAPE="32,13441,0,0" TITLE="generaltaskForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#create_delivery" NAME="action143"
+  PATH="/create_delivery" SHAPE="32,13441,0,0"
+  TITLE="createDeliveryForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#view_items_deliver" NAME="action144"
+  PATH="/view_items_deliver" SHAPE="32,13441,0,0"
+  TITLE="handleItemsForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#salvageSearch" NAME="action145"
+  PATH="/salvageSearch" SHAPE="32,13441,0,0" TITLE="salvageSearchForm"
+  TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#subCompAdmin" NAME="action146" PATH="/subCompAdmin"
+  SHAPE="32,13441,0,0" TITLE="subCompanyForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#create_lost_report_ro" NAME="action147"
+  PATH="/create_lost_report_ro" SHAPE="32,13441,0,0"
+  TITLE="lostReportForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#searchTemplate" NAME="action148"
+  PATH="/searchTemplate" SHAPE="32,13441,0,0" TITLE="templateSearchForm"
+  TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#region" NAME="action149" PATH="/region"
+  SHAPE="32,13441,0,0" TITLE="regionForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="#fraud_forum_search" NAME="action150"
+  PATH="/fraud_forum_search" SHAPE="32,13441,0,0"
+  TITLE="forumSearchForm" TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page178" PATH="EditExpense.do"
+  SHAPE="240,13345,0,0" SUBTYPE="tile" TITLE="EditExpense.do"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page180" PATH="view_bagbuzzeditor"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="view_bagbuzzeditor"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page181" PATH="enter_items" SHAPE="240,13250,0,0"
+  SUBTYPE="tile" TITLE="enter_items" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page182" PATH="view_bagbuzzsearch"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="view_bagbuzzsearch"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page183" PATH="view_css_call_stations"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="view_css_call_stations"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page184" PATH="close_file_success"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="close_file_success"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page185" PATH="create_found_item_ro"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="create_found_item_ro"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page186" PATH="view_links" SHAPE="240,13250,0,0"
+  SUBTYPE="tile" TITLE="view_links" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page187" PATH="create_claim" SHAPE="240,13250,0,0"
+  SUBTYPE="tile" TITLE="create_claim" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page188" PATH="request_info" SHAPE="240,13250,0,0"
+  SUBTYPE="tile" TITLE="request_info" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page189" PATH="dispute_resolution"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="dispute_resolution"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page190" PATH="view_open_lost"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="view_open_lost"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page191" PATH="ntlf_enter_items"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="ntlf_enter_items"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page192" PATH="view_privacypermissions"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="view_privacypermissions"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page193" PATH="create_lost_report_ro"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="create_lost_report_ro"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page194" PATH="ajax_salvageitems"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="ajax_salvageitems"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page195" PATH="ajax_blank" SHAPE="240,13250,0,0"
+  SUBTYPE="tile" TITLE="ajax_blank" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page196" PATH="view_disputes" SHAPE="240,13250,0,0"
+  SUBTYPE="tile" TITLE="view_disputes" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page197" PATH="editIssuanceCategory"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="editIssuanceCategory"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page198" PATH="view_trace_results"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="view_trace_results"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page199" PATH="create_claim_prorate"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="create_claim_prorate"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page200" PATH="ajax_subcategory"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="ajax_subcategory"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page201" PATH="match_details" SHAPE="240,13250,0,0"
+  SUBTYPE="tile" TITLE="match_details" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page202" PATH="edit_region_success"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="edit_region_success"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page203" PATH="manage_dispute"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="manage_dispute"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page204" PATH="morning_duties_updated"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="morning_duties_updated"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page205" PATH="fraud_forum_search"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="fraud_forum_search"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page206" PATH="fraud_forum_create"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="fraud_forum_create"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page207" PATH="view_open_found"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="view_open_found"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page208" PATH="view_bagbuzzview"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="view_bagbuzzview"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page209" PATH="ntlf_create_found_item"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="ntlf_create_found_item"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page210" PATH="searchTemplate"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="searchTemplate"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page211" PATH="shelved_trace_results"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="shelved_trace_results"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page212" PATH="lf_boxcount" SHAPE="240,13250,0,0"
+  SUBTYPE="tile" TITLE="lf_boxcount" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page213" PATH="create_found_item"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="create_found_item"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page214" PATH="view_morning_duties"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="view_morning_duties"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page215" PATH="edit_station_subcompany"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="edit_station_subcompany"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page216" PATH="auditIssuanceItemAdmin"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="auditIssuanceItemAdmin"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page217" PATH="claim_deprec_calc"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="claim_deprec_calc"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page218" PATH="lf_search_salvage"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="lf_search_salvage"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page219" PATH="view_fraud_requests"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="view_fraud_requests"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page220" PATH="edit_region" SHAPE="240,13250,0,0"
+  SUBTYPE="tile" TITLE="edit_region" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page221" PATH="salvage_search"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="salvage_search"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page222" PATH="lf_delivered_found"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="lf_delivered_found"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page223" PATH="view_region" SHAPE="240,13250,0,0"
+  SUBTYPE="tile" TITLE="view_region" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page224" PATH="view_items_salvage"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="view_items_salvage"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page225" PATH="confirm_close_onhand_success"
+  SHAPE="240,13250,0,0" SUBTYPE="tile"
+  TITLE="confirm_close_onhand_success" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page226" PATH="view_subcompany"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="view_subcompany"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page227" PATH="view_worldtracerahl"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="view_worldtracerahl"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page228" PATH="ajax_push_to_crm"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="ajax_push_to_crm"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page229" PATH="update_onhand_success"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="update_onhand_success"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page230" PATH="view_to_be_shipped"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="view_to_be_shipped"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page231" PATH="select_claim" SHAPE="240,13250,0,0"
+  SUBTYPE="tile" TITLE="select_claim" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page232" PATH="update_dispute_success"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="update_dispute_success"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page233" PATH="ajax_newstation"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="ajax_newstation"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page234" PATH="fraud_forum_claim"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="fraud_forum_claim"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page235" PATH="view_css_call_tasks"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="view_css_call_tasks"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page236" PATH="ajax_faultstationall"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="ajax_faultstationall"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page237" PATH="editTemplate" SHAPE="240,13250,0,0"
+  SUBTYPE="tile" TITLE="editTemplate" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page238" PATH="subCompAdmin" SHAPE="240,13250,0,0"
+  SUBTYPE="tile" TITLE="subCompAdmin" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page239" PATH="lf_salvage" SHAPE="240,13250,0,0"
+  SUBTYPE="tile" TITLE="lf_salvage" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page240" PATH="update_lost_found_success"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="update_lost_found_success"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page241" PATH="issuanceItemAdmin"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="issuanceItemAdmin"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page242" PATH="ntlf_search_lost_found"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="ntlf_search_lost_found"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page243" PATH="view_worldtracerohd"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="view_worldtracerohd"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page244" PATH="view_items_deliver"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="view_items_deliver"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page245" PATH="search_claim" SHAPE="240,13250,0,0"
+  SUBTYPE="tile" TITLE="search_claim" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page246" PATH="dispute_resolution_ro"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="dispute_resolution_ro"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page247" PATH="setRxDate" SHAPE="240,13250,0,0"
+  SUBTYPE="tile" TITLE="setRxDate" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page248" PATH="fraud_forum_view"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="fraud_forum_view"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page249" PATH="fileNotFound" SHAPE="240,13250,0,0"
+  SUBTYPE="tile" TITLE="fileNotFound" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page250" PATH="ajax_deliveredfounds"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="ajax_deliveredfounds"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page251" PATH="fraud_results" SHAPE="240,13250,0,0"
+  SUBTYPE="tile" TITLE="fraud_results" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page252" PATH="salvage_edit" SHAPE="240,13250,0,0"
+  SUBTYPE="tile" TITLE="salvage_edit" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page253" PATH="deprec_calc_admin"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="deprec_calc_admin"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page254" PATH="insert_dispute_success"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="insert_dispute_success"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page255" PATH="search_lost_found"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="search_lost_found"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page256" PATH="create_delivery"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="create_delivery"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page257" PATH="view_worldtracersearch"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="view_worldtracersearch"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page258" PATH="ajax_itemsummary"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="ajax_itemsummary"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page259" PATH="view_trace_details"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="view_trace_details"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page260" PATH="edit_subcompany"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="edit_subcompany"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page261" PATH="deny_fraud_request"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="deny_fraud_request"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page262" PATH="update_file_success"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="update_file_success"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page263" PATH="create_lost_report"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="create_lost_report"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page264" PATH="view_only_dispute"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="view_only_dispute"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page265" PATH="forwardOcList" SHAPE="256,13250,0,0"
+  SUBTYPE="tile" TITLE="forwardOcList" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page266" PATH="ajax_quickHistoryResponse"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="ajax_quickHistoryResponse"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page267" PATH="forwardDisplayOcAjax"
+  SHAPE="256,13250,0,0" SUBTYPE="tile" TITLE="forwardDisplayOcAjax"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page268" PATH="forwardDisplayOc"
+  SHAPE="256,13250,0,0" SUBTYPE="tile" TITLE="forwardDisplayOc"
+  TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page269" PATH="ajax_toggle" SHAPE="240,13250,0,0"
+  SUBTYPE="tile" TITLE="ajax_toggle" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM ID="ntlf_send_to_lfc" NAME="forward253"
+  PATH="ntlf_send_to_lfc" SHAPE="32,13233,0,0" TARGET="page21"
+  TITLE="ntlf_send_to_lfc" TYPE="forward" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page21" PATH="ntlf_send_to_lfc"
+  SHAPE="240,13250,0,0" SUBTYPE="tile" TITLE="ntlf_send_to_lfc"
   TYPE="page" model-entity="StrutsProcessItem"/>
 </PROCESS>

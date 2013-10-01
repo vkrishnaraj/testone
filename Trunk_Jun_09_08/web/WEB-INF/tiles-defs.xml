@@ -1039,6 +1039,9 @@
     <definition name="ntlf_search_lost_found" extends="user_menu">
         <put name="center"   value="/pages/ntlf/search_lost_found.jsp"/>
     </definition>
+    <definition name="ntlf_send_to_lfc" extends="user_menu">
+        <put name="center"   value="/pages/ntlf/send_to_lfc.jsp"/>
+    </definition>
 
 	<definition name="fileNotFound" path="/pages/includes/file_not_found.jsp"></definition>
 	

@@ -97,6 +97,9 @@ public class LFFound implements LFObject, Serializable {
 	@Transient
 	private long lastLoaded;
 	
+	@Transient
+	private boolean selected;
+	
 	public long getId() {
 		return id;
 	}
@@ -401,6 +404,14 @@ public class LFFound implements LFObject, Serializable {
 
 	public void setReceiptFileName(String receiptFileName) {
 		this.receiptFileName = receiptFileName;
+	}
+
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
 	}
 	
 }
