@@ -218,4 +218,53 @@ public class WN_FoundItem extends WN_SeleniumTest {
 			System.out.println("testRemove failure line 207");
 		}
 	}
+
+	@Test
+	public void testTaskManagerShipping() throws Exception {
+		String ship_item_nbr = selenium.getText("id=660entry"); // Stores the number of items ready to ship
+		int ship_item_int = Integer.parseInt(ship_item_nbr);
+		if (ship_item_int > 1) { // Runs the rest of the test if the number is high enough
+			String shipped_found_id = "";
+			String trackingNumber = "";
+			selenium.click("id=660link");
+			waitForPageToLoadImproved();
+			if(checkNoErrorPage()){
+				shipped_found_id = selenium.getText("id=link0"); // Store the id of the found we will be shipping
+				selenium.click("name=found[0].selected");
+				selenium.click("name=ship");
+				assertEquals("Tracking Number is required.", selenium.getAlert()); // Check validation
+				trackingNumber = "111222333";
+				selenium.type("id=trackingNumber", trackingNumber);
+				selenium.click("name=ship");
+				waitForPageToLoadImproved();
+			} else {
+				System.out.println("testRemove failure line 207");
+			}
+
+			if(checkNoErrorPage()){
+				verifyNotEquals(shipped_found_id, selenium.getText("id=link0")); // Check that found is no longer in the list
+				selenium.click("id=menucol_5.2");
+				waitForPageToLoadImproved();
+			} else {
+				System.out.println("testRemove failure line 207");
+			}
+
+			if(checkNoErrorPage()){
+				selenium.type("name=id", shipped_found_id); // Load the shipped found item
+				selenium.click("id=button");
+				waitForPageToLoadImproved();
+			} else {
+				System.out.println("testRemove failure line 207");
+			}
+
+			if(checkNoErrorPage()){
+				verifyEquals("Closed", selenium.getSelectedLabel("name=found.statusId")); // Check statuses and tracking number for match
+				verifyEquals("Sent to LFC", selenium.getSelectedLabel("name=found.disposition.status_ID"));
+				verifyEquals("Tracking Number:  " + trackingNumber, selenium.getText("//div[@id='maincontent']/table[4]/tbody/tr[2]/td"));
+				goToTaskManager();
+			} else {
+				System.out.println("testRemove failure line 207");
+			}
+		}
+	}
 }
