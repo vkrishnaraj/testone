@@ -114,37 +114,37 @@
 	            </h1>
               	<table class="<%=cssFormClass %>" cellpadding="0" cellspacing="0" >
               		<tr>
-              			<td class="header">
+              			<td class="header" style="width:5%;">
               				<bean:message key="colname.lfc.ship" />
               			</td>
-              			<td class="header">
+              			<td class="header" style="width:3%;">
               				<bean:message key="colname.lf.id" />
               			</td>
-              			<td class="header">
-              				<bean:message key="colname.lf.date" />
+              			<td class="header" style="width:10%;">
+              				<bean:message key="colname.lfc.found.date" />
               			</td>
-              			<td class="header">
+              			<td class="header" style="width:22%;">
               				<bean:message key="colname.lfc.category" />
               			</td>
-              			<td class="header">
+              			<td class="header" style="width:25%;">
               				<bean:message key="colname.lf.item.description" />
               			</td>
-              			<td class="header">
+              			<td class="header" style="width:5%;">
               				<bean:message key="colname.lfc.brand" />
               			</td>
-              			<td class="header">
+              			<td class="header" style="width:5%;">
               				<bean:message key="colname.lfc.model" />
               			</td>
-              			<td class="header">
+              			<td class="header" style="width:5%;">
               				<bean:message key="colname.lfc.serial.number" />
               			</td>
-              			<td class="header">
+              			<td class="header" style="width:5%;">
               				<bean:message key="colname.lfc.color" />
               			</td>
-              			<td class="header">
+              			<td class="header" style="width:10%;">
               				<bean:message key="colname.lfc.case.color" />
               			</td>
-              			<td class="header">
+              			<td class="header" style="width:5%;">
               				<bean:message key="colname.lf.status" />
               			</td>
               		</tr>
