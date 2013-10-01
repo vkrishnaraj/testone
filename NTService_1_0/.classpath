@@ -125,5 +125,6 @@
 	<classpathentry kind="lib" path="lib/NavitaireBookingManager-client.jar"/>
 	<classpathentry kind="lib" path="lib/WSNetTracer-client.jar"/>
 	<classpathentry kind="lib" path="lib/Radixx-Reservation-client.jar"/>
+	<classpathentry kind="lib" path="lib/SWA-BTWS-client.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

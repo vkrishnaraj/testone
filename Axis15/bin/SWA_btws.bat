@@ -1,0 +1,1 @@
+wsdl2java -uri SWA_btws.wsdl -ss -sd -g -d xmlbeans -o service
