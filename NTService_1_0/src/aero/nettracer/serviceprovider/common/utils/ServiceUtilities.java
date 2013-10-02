@@ -81,6 +81,9 @@ public class ServiceUtilities {
 			} else if (value.equals(ReservationSystemType.NAVITAIRE.name())) {
 				// TODO: Change to singleton? Use spring?
 				return new aero.nettracer.serviceprovider.ws_1_0.res.navitaire.Reservation();
+			} else if (value.equals(ReservationSystemType.CEBS.name())) {
+				// TODO: Change to singleton? Use spring?
+				return new aero.nettracer.serviceprovider.ws_1_0.res.cebs.Reservation();
 			}
 		}
 
