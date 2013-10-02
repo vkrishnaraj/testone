@@ -3,6 +3,7 @@ package aero.nettracer.serviceprovider.ws_1_0.res.cebs;
 import java.io.File;
 import java.net.URL;
 
+import org.apache.axis2.AxisFault;
 import org.apache.axis2.transport.http.HTTPConstants;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
@@ -38,6 +39,47 @@ public class Reservation implements ReservationInterface {
 	private static final String PHONE_TYPE_HOME = "P_HOME";
 	private static final String PHONE_TYPE_WORK = "P_WORK";
 	private static final String PHONE_TYPE_MOBILE = "P_MOBILE";
+	
+	// For unit testing purposes
+	BTWSStub btwsStub = null;
+	GetPNRRequestDocument pnrDoc = null;
+	
+	// For unit testing purposes
+	private BTWSStub getStub(User user) throws AxisFault {
+		if (btwsStub == null) {
+			// Grabbing all the user profile parameters needed for this call.
+			String endpoint = user.getProfile().getParameters().get(ParameterType.RESERVATION_ENDPOINT);
+			String truststore = user.getProfile().getParameters().get(ParameterType.TRUSTSTORE);
+			String keystore = user.getProfile().getParameters().get(ParameterType.KEYSTORE);
+			String trustpass = user.getProfile().getParameters().get(ParameterType.TRUSTPASS);
+			String keypass = user.getProfile().getParameters().get(ParameterType.KEYPASS);
+			
+			// STUB & 2 WAY SSL
+			btwsStub = new BTWSStub(endpoint);
+			prepareTwoWaySSL(btwsStub, truststore, keystore, trustpass, keypass);
+		}
+		return btwsStub;
+	}
+	
+	// For unit testing purposes
+	public void setStub(BTWSStub btwsStub) {
+		this.btwsStub = btwsStub;
+	}
+	
+	// For unit testing purposes
+	private GetPNRRequestDocument getDoc(String pnr) {
+		if (pnrDoc == null) {
+			pnrDoc = GetPNRRequestDocument.Factory.newInstance();
+			GetPNRRequest bi2 = pnrDoc.addNewGetPNRRequest();
+			bi2.setPNR(pnr);
+		}
+		return pnrDoc;
+	}
+	
+	// For unit testing purposes
+	public void setDoc(GetPNRRequestDocument pnrDoc) {
+		this.pnrDoc = pnrDoc;
+	}
 	
 	@Override
 	public EnplanementResponse getEnplanements(User user) throws UnexpectedException {
@@ -84,21 +126,11 @@ public class Reservation implements ReservationInterface {
 		try {
 			logger.debug("CEBS Request generating");
 			
-			// Grabbing all the user profile parameters needed for this call.
-			String endpoint = user.getProfile().getParameters().get(ParameterType.RESERVATION_ENDPOINT);
-			String truststore = user.getProfile().getParameters().get(ParameterType.TRUSTSTORE);
-			String keystore = user.getProfile().getParameters().get(ParameterType.KEYSTORE);
-			String trustpass = user.getProfile().getParameters().get(ParameterType.TRUSTPASS);
-			String keypass = user.getProfile().getParameters().get(ParameterType.KEYPASS);
-			
-			// STUB & 2 WAY SSL
-			BTWSStub stub = new BTWSStub(endpoint);
-			prepareTwoWaySSL(stub, truststore, keystore, trustpass, keypass);
+			// GETTING STUB (Abstracted out for unit testing purposes)
+			BTWSStub stub = getStub(user);
 
-			// CREATE OUTGOING DOCUMENT
-			GetPNRRequestDocument bi = GetPNRRequestDocument.Factory.newInstance();
-			GetPNRRequest bi2 = bi.addNewGetPNRRequest();
-			bi2.setPNR(pnr);
+			// CREATE OUTGOING DOCUMENT (Abstracted out for unit testing purposes)
+			GetPNRRequestDocument bi = getDoc(pnr);
 			
 			// MAKE REQUEST WITH STUB
 			GetPNRResponseDocument bookingRes = stub.getPNR(bi);
