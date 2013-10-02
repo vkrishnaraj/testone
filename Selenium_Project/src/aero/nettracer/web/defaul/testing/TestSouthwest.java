@@ -24,9 +24,8 @@ import aero.nettracer.web.utility.Settings;
 
 @RunWith(Suite.class)
 @SuiteClasses({
-	WN_Login.class, WN_CreateLD_VerifyRequiredFields.class, WN_CreateOhd.class, WN_OHD_Sort_Search.class, WN_ViewStationOhds.class,
-	WN_CreateDamaged.class, WN_CreateMissing.class, WN_EditTemplates.class, WN_SearchTemplates.class, WN_CreateClaim.class, WN_FoundItem.class,
-	WN_CSSCallSystem.class
+	WN_Login.class, WN_CSSCallSystem.class, WN_CreateLD_VerifyRequiredFields.class, WN_CreateOhd.class, WN_OHD_Sort_Search.class, WN_ViewStationOhds.class,
+	WN_CreateDamaged.class, WN_CreateMissing.class, WN_EditTemplates.class, WN_SearchTemplates.class, WN_CreateClaim.class, WN_FoundItem.class
 	})
 public class TestSouthwest { 
 	
