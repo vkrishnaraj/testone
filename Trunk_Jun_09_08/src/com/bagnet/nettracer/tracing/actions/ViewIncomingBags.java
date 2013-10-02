@@ -417,6 +417,9 @@ public class ViewIncomingBags extends CheckedAction {
 					map1.put("type", myOhd.getType());
 					map1.put("expediteNumber", ohdBag.getExpeditenum());
 					map1.put("claimNumber", ohdBag.getOhd().getClaimnum());
+					map1.put("airline", ohdBag.getDispDestinationAirline());
+					map1.put("flightnum", ohdBag.getDispDestinationFlightnum());
+					map1.put("forwardtime", ohdBag.getDispForwardTime());
 					djBagsList.add(map1);
 				}
 				

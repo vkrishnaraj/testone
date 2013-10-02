@@ -288,4 +288,18 @@ public class OHD_Log implements Serializable {
 	public void setPcn(ProactiveNotification pcn) {
 		this.pcn = pcn;
 	}	
+	public String getDispDestinationAirline() {
+		if (itinerary == null || itinerary.isEmpty()) return "";
+		Object[] items = itinerary.toArray();
+		OHD_Log_Itinerary itinerary = (OHD_Log_Itinerary) items[items.length - 1];
+		return itinerary.getAirline() != null ? itinerary.getAirline() : "";
+	}
+	
+	public String getDispDestinationFlightnum() {
+		if (itinerary == null || itinerary.isEmpty()) return "";
+		Object[] items = itinerary.toArray();
+		OHD_Log_Itinerary itinerary = (OHD_Log_Itinerary) items[items.length - 1];
+		return itinerary.getFlightnum() != null ? itinerary.getFlightnum() : "";
+	}
+		
 }

@@ -219,6 +219,9 @@ public class InboundExpediteBagsReportBMO {
 		String reportHeadingType = "Type";
 		String reportHeadingExpediteTagNumber = "Expedite Tag Number";
 		String reportHeadingBagTagNumber = "Baggage Tag Number";
+		String reportHeadingDestAirline = "Destination Airline";
+		String reportHeadingDestFlightNum = "Destination Flight Number";
+		String reportHeadingForwardDateTime = "Forward Date Time";		
 		
 		String myOhdBaggageFromResource = resourceBundle.getString("header.ohd");
 		if (!( myOhdBaggageFromResource == null || myOhdBaggageFromResource.equalsIgnoreCase("") )) {
@@ -249,7 +252,21 @@ public class InboundExpediteBagsReportBMO {
 		if (!( myBagTagNumber == null || myBagTagNumber.equalsIgnoreCase("") )) {
 			reportHeadingBagTagNumber = myBagTagNumber;
 		}
-				
+		
+		String myDestAirline = resourceBundle.getString("colname.airline");
+		if (!( myDestAirline == null || myDestAirline.equalsIgnoreCase("") )) {
+			reportHeadingDestAirline = myDestAirline;
+		}		
+		
+		String myDestFlightNum = resourceBundle.getString("colname.flight.num");
+		if (!( myDestFlightNum == null || myDestFlightNum.equalsIgnoreCase("") )) {
+			reportHeadingDestFlightNum = myDestFlightNum;
+		}		
+		
+		String myForwardDateTime = resourceBundle.getString("colname.forward.datetime");
+		if (!( myForwardDateTime == null || myForwardDateTime.equalsIgnoreCase("") )) {
+			reportHeadingForwardDateTime = myForwardDateTime;
+		}		
 		
 		Style detailStyle = new Style("detail");
 		detailStyle.setVerticalAlign(VerticalAlign.TOP);
@@ -332,6 +349,21 @@ public class InboundExpediteBagsReportBMO {
 				reportHeadingBagTagNumber).setWidth(new Integer(50)).setStyle(detailStyle)
 				.setHeaderStyle(headerStyle).build();
 		
+		AbstractColumn columnDestAirline = ColumnBuilder.getNew()
+				.setColumnProperty("airline", String.class.getName()).setTitle(
+				reportHeadingDestAirline).setWidth(new Integer(24)).setStyle(detailStyle)
+				.setHeaderStyle(headerStyle).build();
+		
+		AbstractColumn columnDestFlightNum = ColumnBuilder.getNew()
+				.setColumnProperty("flightnum", String.class.getName()).setTitle(
+				reportHeadingDestFlightNum).setWidth(new Integer(24)).setStyle(detailStyle)
+				.setHeaderStyle(headerStyle).build();
+		
+		AbstractColumn columnForwardDateTime = ColumnBuilder.getNew()
+				.setColumnProperty("forwardtime", String.class.getName()).setTitle(
+				reportHeadingForwardDateTime).setWidth(new Integer(50)).setStyle(detailStyle)
+				.setHeaderStyle(headerStyle).build();
+								
 		
 		Map<String, AbstractColumn> reportColumns = new HashMap<String, AbstractColumn>();
 
@@ -341,6 +373,9 @@ public class InboundExpediteBagsReportBMO {
 		reportColumns.put("columnType", columnType);
 		reportColumns.put("columnExpediteTagNumber", columnExpediteTagNumber);
 		reportColumns.put("columnBagTagNumber", columnBagTagNumber);
+		reportColumns.put("columnDestAirline", columnDestAirline);
+		reportColumns.put("columnDestFlightNum", columnDestFlightNum);
+		reportColumns.put("columnForwardDateTime", columnForwardDateTime);		
 		
 		drb = reportStyleSelector(drb, reportColumns);
 
@@ -544,7 +579,9 @@ public class InboundExpediteBagsReportBMO {
 			AbstractColumn columnType = reportColumns.get("columnType");
 			AbstractColumn columnExpediteTagNumber = reportColumns.get("columnExpediteTagNumber");
 			AbstractColumn columnBagTagNumber = reportColumns.get("columnBagTagNumber");
-			
+			AbstractColumn columnDestAirline = reportColumns.get("columnDestAirline");
+			AbstractColumn columnDestFlightNum = reportColumns.get("columnDestFlightNum");
+			AbstractColumn columnForwardDateTime = reportColumns.get("columnForwardDateTime");			
 			
 			drb.addColumn(columnOhdBaggage);
 			drb.addColumn(columnIncidentNumber);
@@ -552,6 +589,9 @@ public class InboundExpediteBagsReportBMO {
 			drb.addColumn(columnType);
 			drb.addColumn(columnExpediteTagNumber);
 			drb.addColumn(columnBagTagNumber);
+			drb.addColumn(columnDestAirline);
+			drb.addColumn(columnDestFlightNum);
+			drb.addColumn(columnForwardDateTime);
 		
 		}
 		

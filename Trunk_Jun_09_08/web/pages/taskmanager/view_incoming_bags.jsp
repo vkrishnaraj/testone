@@ -240,6 +240,15 @@ function sortIncomingBags(sortOrder) {
               <td>
                 <b><a href="#" onclick="sortIncomingBags('bagtag');"><bean:message key="colname.bag_tag_number" /></a></b>
               </td>
+             <td>
+                <b><bean:message key="colname.airline" /></b>
+              </td>
+              <td>
+                <b><bean:message key="colname.flight.num" /></b>
+              </td> 
+              <td>
+                <b><bean:message key="colname.forward.datetime" /></b>
+              </td>                            
               <td>
                 <b><bean:message key="header.forward_details" /></b>
               </td>
@@ -308,6 +317,24 @@ function sortIncomingBags(sortOrder) {
                     </logic:empty>
                     <bean:write name="forwardLog" property="ohd.claimnum" />
                   </td>
+                  <td>
+                    <logic:empty name="forwardLog" property="dispDestinationAirline">
+                      &nbsp;
+                    </logic:empty>
+                    <bean:write name="forwardLog" property="dispDestinationAirline" />
+                  </td>
+                  <td>
+                    <logic:empty name="forwardLog" property="dispDestinationFlightnum">
+                      &nbsp;
+                    </logic:empty>
+                    <bean:write name="forwardLog" property="dispDestinationFlightnum" />
+                  </td> 
+                  <td>
+                    <logic:empty name="forwardLog" property="forward_time">
+                      &nbsp;
+                    </logic:empty>
+                    <bean:write name="forwardLog" property="forward_time" />
+                  </td>                                       
                   <td>
                     <A HREF="forward_on_hand.do?showForward=1&forward_id=<bean:write name="forwardLog" property="OHDLog_ID"/>"><bean:message key="details" /></a>
                   </td>
