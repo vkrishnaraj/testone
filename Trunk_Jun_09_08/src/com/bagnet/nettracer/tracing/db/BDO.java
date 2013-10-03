@@ -257,6 +257,13 @@ public class BDO implements Serializable {
 		return DateUtils.formatDate(tempdate, _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
 	}
 
+	public String getDisppickuptime() {
+//		Date tempdate = DateUtils.convertToDate( DateUtils.formatDate(getPickupdate(), TracingConstants.DB_DATEFORMAT, null, null) + " "
+//				+ DateUtils.formatDate(getPickuptime(), TracingConstants.DB_TIMEFORMAT, null, null),TracingConstants.DB_DATETIMEFORMAT,null);
+		Date tempdate = DateUtils.convertDatetimeToDate(getPickupdate(), getPickuptime());
+		return DateUtils.formatDate(tempdate, _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
+	}
+
 	/**
 	 * @return Returns the delivercompany.
 	 * 
