@@ -79,7 +79,7 @@ if (hasPermission) {
       <bean:message key="message.required" />
       <div id="netTracerGeneralTask">
         <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
-				<tr><td width ="20%"><bean:message key="generaltask.tasktype" />:</td><td><strong><bean:message name="sessionTaskContainer" property="label"/></strong></td></tr>
+				<tr><td width ="20%"><bean:message key="generaltask.tasktype" />:</td><td><strong id="taskType"><bean:message name="sessionTaskContainer" property="label"/></strong></td></tr>
 				<tr><td width ="20%"><bean:message key="colname.agentassigned_nobr" />:</td><td><bean:write name="sessionTaskContainer" property="assigned_agent.username"/></td></tr>
 		<% if (isCss) { %>
 		        <SCRIPT LANGUAGE="JavaScript">
@@ -179,7 +179,7 @@ if (hasPermission) {
 					'		</tr>' +
 					'	</table><br /><br />' +
 					'	<div style="width:100%;" align="center">' +
-					'		<input type="button" value="<bean:message key="button.task.defer" />" onclick="return deferTask();" id="button">' +
+					'		<input type="button" value="<bean:message key="button.task.defer" />" onclick="return deferTask();" name="deferTaskPopup" id="button">' +
 					'	</div>' +
 					'	<br /><br />' +
 					'</div></form>';
@@ -205,11 +205,11 @@ if (hasPermission) {
                 </td></tr>
 				<tr><td colspan="2">
           			<span style="float:left">
-          				<input type="button" value="<bean:message key="button.task.complete" />" onclick="return closeTask('complete');" id="button">
+          				<input type="button" value="<bean:message key="button.task.complete" />" onclick="return closeTask('complete');" name="completeTask" id="button">
           			</span>
           			<span style="float:right">
-          	    		<input type="button" value="<bean:message key="button.task.defer" />" onclick="return closeTask('defer')" id="button">&nbsp;&nbsp;&nbsp;
-          				<input type="button" value="<bean:message key="button.task.abort" />" onclick="return closeTask('abort');" id="button">
+          	    		<input type="button" value="<bean:message key="button.task.defer" />" onclick="return closeTask('defer')" name="deferTask" id="button">&nbsp;&nbsp;&nbsp;
+          				<input type="button" value="<bean:message key="button.task.abort" />" onclick="return closeTask('abort');" name="abortTask" id="button">
           			</span>
 		  		</td></tr>
 		<% } else { %>

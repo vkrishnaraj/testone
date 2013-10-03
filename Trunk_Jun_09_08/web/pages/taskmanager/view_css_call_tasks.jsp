@@ -115,7 +115,7 @@ function updatePagination() {
                       <bean:message key="colname.css.working.agent" />
                   </td>
                 </tr>
-                <logic:iterate id="results" name="resultlist" type="com.bagnet.nettracer.tracing.db.taskmanager.MorningDutiesTask">
+                <logic:iterate indexId="i" id="results" name="resultlist" type="com.bagnet.nettracer.tracing.db.taskmanager.MorningDutiesTask">
                   <bean:define id="incident" name="results" property="incident" />
                   <bean:define id="passengers" name="incident" property="passenger_list" />
                   <tr>
@@ -129,7 +129,7 @@ function updatePagination() {
                       <% if (TracingConstants.TASK_MANAGER_WORKING == results.getStatus().getStatus_ID()) { %>
                       	<bean:write name="incident" property="incident_ID" />
                       <% } else { %>
-                      	<a href='css_calls.do?gettask=1&incident=<bean:write name="incident" property="incident_ID"/>'><bean:write name="incident" property="incident_ID" /></a>
+                      	<a id="<%="link" + i %>" href='css_calls.do?gettask=1&incident=<bean:write name="incident" property="incident_ID"/>'><bean:write name="incident" property="incident_ID" /></a>
                       <% } %>
                     </td>
                     <td>

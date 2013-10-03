@@ -84,7 +84,9 @@
                 <logic:iterate id="cssStation" name="generaltaskForm" property="stationList" type="com.bagnet.nettracer.tracing.dto.CSSStationsDTO">
                   <tr>
                     <td style="width:8%;" align="center">
-                    	<html:checkbox name="cssStation" property="station1Checked" indexed="true" />
+                    	<% if (cssStation.getStation2Desc() != null) { %>
+                    	<html:checkbox name="cssStation" property="station1Checked" indexed="true" styleId="<%="check" + cssStation.getStation1Desc() %>" />
+                    	<% } %>
                     </td>
                     <td style="width:10%;">
                         <html:hidden name="cssStation" property="station1Desc" indexed="true" />
@@ -96,7 +98,7 @@
                     </td>
                     <td style="width:8%;" align="center">
                     	<% if (cssStation.getStation2Desc() != null) { %>
-                    	<html:checkbox name="cssStation" property="station2Checked" indexed="true" />
+                    	<html:checkbox name="cssStation" property="station2Checked" indexed="true" styleId="<%="check" + cssStation.getStation2Desc() %>" />
                     	<% } %>
                     	&nbsp;
                     </td>
@@ -110,7 +112,7 @@
                     </td>
                     <td style="width:8%;" align="center">
                     	<% if (cssStation.getStation3Desc() != null) { %>
-                    	<html:checkbox name="cssStation" property="station3Checked" indexed="true" />
+                    	<html:checkbox name="cssStation" property="station3Checked" indexed="true" styleId="<%="check" + cssStation.getStation3Desc() %>" />
                     	<% } %>
                     	&nbsp;
                     </td>
