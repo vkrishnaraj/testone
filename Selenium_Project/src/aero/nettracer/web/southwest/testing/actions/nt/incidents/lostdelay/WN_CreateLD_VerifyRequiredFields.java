@@ -283,7 +283,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 			System.out.println("CLDVRF: ERROR SEARCHING FOR THE INCIDENT BY CLAIMCHECK NUMBER.");
 			return;
 		}
-
+		System.out.println("UTB Test Checkin.");
 		if (checkNoErrorPage()) {
 			selenium.controlKeyDown();
 			selenium.keyDown("id=header", "\\83");

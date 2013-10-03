@@ -136,22 +136,27 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 	
 	protected boolean navigateToIncident(String incidentType) {
 		boolean success = false;
-		selenium.click("//a[contains(@href, 'searchIncident.do?ld=1')]");
-		waitForPageToLoadImproved();
-		if (checkNoErrorPage()) {
-			checkCopyrightAndQuestionMarks();
-			selenium.type("name=incident_ID", Settings.INCIDENT_ID_WN);
-			selenium.select("id=itemType_ID", "label=" + incidentType);
-			selenium.click("id=button");
+		try {
+			selenium.click("//a[contains(@href, 'searchIncident.do?ld=1')]");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
-				success = true;
+				selenium.type("name=incident_ID", Settings.INCIDENT_ID_WN);
+				selenium.select("id=itemType_ID", "label=" + incidentType);
+				selenium.click("id=button");
+				waitForPageToLoadImproved();
+				if (checkNoErrorPage()) {
+					checkCopyrightAndQuestionMarks();
+					success = true;
+				} else {
+					System.out.println("!!!!!!!!!!!!!!! - Failed to Load Incident: " + Settings.INCIDENT_ID_WN + ". Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+				}
 			} else {
-				System.out.println("!!!!!!!!!!!!!!! - Failed to Load Incident: " + Settings.INCIDENT_ID_WN + ". Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+				System.out.println("!!!!!!!!!!!!!!! - Failed to Load Incident Search Page. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 			}
-		} else {
-			System.out.println("!!!!!!!!!!!!!!! - Failed to Load Incident Search Page. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+		} catch (Exception e) {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to navigate to Incident: " + Settings.INCIDENT_ID_WN + " - !!!!!!!!!!!!!!!!!!");
+			e.printStackTrace();
 		}
 		return success;
 	}
