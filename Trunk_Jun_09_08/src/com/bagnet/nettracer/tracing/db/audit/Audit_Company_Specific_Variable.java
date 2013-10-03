@@ -83,6 +83,8 @@ public class Audit_Company_Specific_Variable implements Serializable {
 	private int auto_close_ld_station;
 	private int auto_close_dam_station;
 	private int auto_close_pil_station;
+	private String status_message;	
+	
 
 	//incident locking
 	private int incident_lock_mins;
@@ -1028,5 +1030,20 @@ public class Audit_Company_Specific_Variable implements Serializable {
 		this.issuance_edit_last_x_days = issuance_edit_last_x_days;
 	}
 	
+	/**
+	 * @return Returns the status_message.
+	 * @hibernate.property type="string"
+	 */
+	public String getStatus_message() {
+		if (status_message == null) return "";
+		return status_message;
+	}
+	/**
+	 * @param status_message The status_message to set.
+	 */
+	public void setStatus_message(String status_message) {
+		this.status_message = status_message;
+	}
+		
 	
 }
