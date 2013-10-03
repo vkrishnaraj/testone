@@ -127,9 +127,12 @@ public class SERV implements BDOIntegration {
 			bdo.set_TIMEZONE(TimeZone.getTimeZone("GMT")); //agent.getCurrenttimezone()
 			Calendar createCal = Calendar.getInstance();
 			createCal.setTime(DateUtils.convertToDate(bdo.getDispcreatetime(), bdo.get_DATEFORMAT() + " " + bdo.get_TIMEFORMAT(), null,null));
-			
 			ws.setCreatedDate(fixTimeZone(createCal,"GMT"));
-			ws.setPickUpDate(fixTimeZone(createCal,"GMT"));
+			
+			Calendar pickupCal = Calendar.getInstance();
+			pickupCal.setTime(DateUtils.convertToDate(bdo.getDisppickuptime(),bdo.get_DATEFORMAT() + " " + bdo.get_TIMEFORMAT(), null,null));
+			ws.setPickUpDate(pickupCal);
+//			ws.setPickUpDate(fixTimeZone(pickupCal,"GMT"));
 			
 			ArrayOfItemData array = ws.addNewItemsData();
 
