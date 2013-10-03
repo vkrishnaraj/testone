@@ -162,20 +162,20 @@ if (hasPermission) {
 					'	<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" width="100%" >' +
 					'		<tr>' +
 					'   		<td width="50%"><strong><bean:message key="generaltask.new.start.date" /></strong><br/>' +
-					'			<input type="text" name="taskNewStartDate" class="textfield" value="" readonly="true" />' +
+					'			<input type="text" id="taskNewStartDate" class="textfield" value="" readonly="true" />' +
 					'			<img src="deployment/main/images/calendar/calendar_icon.gif" id="taskNewStartCal" name="taskExpireCal" height="15"' +
 					'				width="20" border="0" onmouseover="this.style.cursor=\'hand\'"' +
 					'				onClick="calTask.selectTask(\'taskNewStartDate\',\'taskNewStartCal\',\'<%= a.getDateformat().getFormat() %>\'); return false;"></td>' +
 					'   		<td width="50%"><strong><bean:message key="generaltask.new.start" /></strong><br/>' +
-					'			<input type="text" name="taskNewStart" class="textfield" value="" maxlength="5" /></td>' +
+					'			<input type="text" id="taskNewStart" class="textfield" value="" maxlength="5" /></td>' +
 					'		</tr><tr>' +
 					'			<td><strong><bean:message key="generaltask.expire.date" /></strong><br/>' +
-					'			<input type="text" name="taskExpireDate" class="textfield" value="" readonly="true" />' +
+					'			<input type="text" id="taskExpireDate" class="textfield" value="" readonly="true" />' +
 					'			<img src="deployment/main/images/calendar/calendar_icon.gif" id="taskExpireCal" name="taskExpireCal" height="15"' +
 					'				width="20" border="0" onmouseover="this.style.cursor=\'hand\'"' +
 					'				onClick="calTask.selectTask(\'taskExpireDate\',\'taskExpireCal\',\'<%= a.getDateformat().getFormat() %>\'); return false;"></td>' +
 					'			<td><strong><bean:message key="generaltask.expire" /></strong><br/>' +
-					'			<input type="text" name="taskExpire" class="textfield" value="" maxlength="5" /></td>' +
+					'			<input type="text" id="taskExpire" class="textfield" value="" maxlength="5" /></td>' +
 					'		</tr>' +
 					'	</table><br /><br />' +
 					'	<div style="width:100%;" align="center">' +
