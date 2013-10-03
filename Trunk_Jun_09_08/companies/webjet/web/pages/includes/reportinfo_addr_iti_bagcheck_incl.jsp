@@ -621,9 +621,11 @@
 	      <bean:message key="message.required" />
 	      <%
 	      int t = 0;
+		  boolean hasPassItin = false;
 	      %>
               <logic:iterate id="theitinerary" indexId="k" name="incidentForm" property="itinerarylist">
 	      <logic:equal name="theitinerary" property="itinerarytype" value="0">
+			<% hasPassItin = true; %>
 
 
 
@@ -736,7 +738,14 @@
 		      </select>
 		      <html:submit property="addpassit" styleId="button">
                 <bean:message key="button.add_cust_itinerary" />
-              </html:submit></center>
+              </html:submit>
+		<% if (hasPassItin) { %>
+              <br/><br/>
+				<html:submit property="clonepassit" styleId="button">
+					<bean:message key="button.clone_cust_itinerary" />
+				</html:submit>
+		<% } %>
+			  </center>
               <p class="blue">
                 &nbsp;
               </p>

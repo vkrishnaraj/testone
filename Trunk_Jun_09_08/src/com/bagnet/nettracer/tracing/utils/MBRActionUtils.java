@@ -223,9 +223,43 @@ public class MBRActionUtils {
 				request.setAttribute("markDirty", 1);
 				return true;
 			}
+			// clones passenger itinerary into bag itinerary box
+			if (request.getParameter("clonepassit") != null) {
+				List<Itinerary> passList = theform.getPassItineraryList();
+				List<Itinerary> newList = new ArrayList<Itinerary>();
+				if (passList != null) {
+					for (Itinerary pItin : passList) {
+						if (pItin != null) {
+							newList.add(pItin);
+							Itinerary bItin = createBagItinFromPassItin(pItin);
+							if (bItin != null) {
+								newList.add(bItin);
+							}
+						}
+					}
+				}
+				if (newList.size() > 0) {
+					theform.setItinerarylist(newList);
+				}
+				request.setAttribute("passit", "1");
+				request.setAttribute("markDirty", 1);
+				return true;
+			}
 		} // end if (editIncident)
 		return false;
 		
+	}
+	
+	private static Itinerary createBagItinFromPassItin(Itinerary pItin) {
+		Itinerary bItin = new Itinerary();
+		try {
+			BeanUtils.copyProperties(bItin, pItin);
+			bItin.setItinerarytype(TracingConstants.BAGGAGE_ROUTING);
+		} catch (Exception e) {
+			logger.error("Passenger Itinerary Clone Failure: " + e); 
+			return null;
+		}
+		return bItin;
 	}
 	
 	public static boolean actionReturnItem(IncidentForm theform, HttpServletRequest request, Agent user) {
