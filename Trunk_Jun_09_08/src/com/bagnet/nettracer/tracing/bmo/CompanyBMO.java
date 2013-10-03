@@ -1,8 +1,5 @@
 package com.bagnet.nettracer.tracing.bmo;
 
-import java.util.Date;
-import java.util.List;
-
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -10,8 +7,6 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Expression;
-
-import sun.management.Agent;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.Company;
@@ -115,7 +110,13 @@ public class CompanyBMO {
 			}
 		}
 	}
-
+	
+	/**
+	 * Get status message in company_specific_variable table
+	 * 
+	 * @param companycode 
+	 * @return Returns the status message string.
+	 */
 	public static String getTaskManagerStatusMessage(String companycode){
 
 		String sql = "select status_message from company_specific_variable where companycode_ID = :companycode";

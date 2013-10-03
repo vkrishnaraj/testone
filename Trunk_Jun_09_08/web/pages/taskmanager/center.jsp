@@ -132,7 +132,7 @@
 
 		<%
 			String message = (String) request.getAttribute("taskManagerStatusMessage");
-			if (!message.equals("")) {
+			if (message!= null && !message.equals("")) {
 		%>
 		<div align="left" style="width:100%;">
 			<font color="red" size="3" ><span >
