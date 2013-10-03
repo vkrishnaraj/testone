@@ -16,7 +16,6 @@ import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.Station;
-import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 /**
@@ -33,12 +32,13 @@ public final class BDOForm extends ValidatorForm {
 	private int BDO_ID;
 	private int delivercompany_ID;
 	private int servicelevel_ID;
+	private int mbrType;
 
 	private Station station = new Station();
 	private String companycode_ID;
 	private OHD ohd = new OHD();
-	private Incident incident = new Incident();
 
+	private Incident incident = new Incident();
 	private Agent agent = new Agent();
 
 	private Date createdate;
@@ -543,5 +543,12 @@ public final class BDOForm extends ValidatorForm {
 			return dec.format(origDelivCost);
 		}
 		return "";
+	}
+
+	public int getMbrType() {
+		return mbrType;
+	}
+	public void setMbrType(int mbrType) {
+		this.mbrType=mbrType;
 	}
 }

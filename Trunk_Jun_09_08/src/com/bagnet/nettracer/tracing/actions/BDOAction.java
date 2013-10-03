@@ -30,6 +30,7 @@ import org.apache.struts.action.ActionMessages;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.integrations.delivery.DeliveryIntegrationResponse;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -155,6 +156,45 @@ public class BDOAction extends Action {
 				&& request.getParameter("changeservice").equals("1")) {
 
 			return (mapping.findForward(TracingConstants.AJAX_SERVICELEVEL));
+		}
+
+		request.setAttribute("losscodes", new ArrayList());
+		request.setAttribute("faultstationlist",  new ArrayList());
+		request.setAttribute("faultCompanyList",  new ArrayList());
+		
+		boolean checkLLC = false;
+		if(request.getAttribute("currentstatus") != null) {
+			checkLLC = Integer.parseInt((String)request.getAttribute("currentstatus")) == TracingConstants.MBR_STATUS_CLOSED;
+		}
+		if(theform.getMbrType()==0){
+			if(theform.getIncident()!=null && theform.getIncident().getItemtype()!=null){
+				theform.setMbrType(theform.getIncident().getItemtype_ID());
+				request.setAttribute("mbrtype", theform.getIncident().getItemtype_ID());
+			}
+		}
+		
+		//Default to MBR Type 1
+		int incidentType=theform.getMbrType()!=0?theform.getMbrType():1; 
+		
+		//the company specific codes..
+		List codes = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), incidentType, true, user, checkLLC);
+		//add to the loss codes
+		if(codes!=null)
+			request.setAttribute("losscodes", codes);
+		
+		
+		List faultstationlist = new ArrayList();
+		List faultCompanyList = new ArrayList();
+		
+		faultstationlist = TracerUtils.getStationList(user.getStation().getCompany().getCompanyCode_ID());
+		faultCompanyList = new ArrayList();
+		faultCompanyList.add(user.getStation().getCompany());
+
+		if(faultstationlist!=null){
+			request.setAttribute("faultstationlist", faultstationlist);
+		}
+		if(faultCompanyList!=null){
+			request.setAttribute("faultCompanyList", faultCompanyList);
 		}
 
 		List list = new ArrayList(BDOUtils.getDeliveryCompanies(theform
@@ -286,7 +326,7 @@ public class BDOAction extends Action {
 			request.setAttribute("showbdo", "1");
 			request.setAttribute("inserted", "1");
 			request.setAttribute("showprint", "1");
-			//TODO
+			//TODO Is this important?
 /*			WT_Queue wtq = new WT_Queue();
 			wtq.setAgent(user);
 
@@ -303,10 +343,17 @@ public class BDOAction extends Action {
 		}
 		// user wants to create a new bdo
 		if (request.getParameter("createnewbdo") != null) {
-			BDOUtils.createNewBDO(ohd, incident, theform, request);
-			request.setAttribute("showbdo", "1");
-
-			return (mapping.findForward(TracingConstants.BDO_MAIN));
+			boolean showBdo=BDOUtils.createNewBDO(ohd, incident, theform, request);
+			if(showBdo){
+				request.setAttribute("showbdo", "1");
+				return (mapping.findForward(TracingConstants.BDO_MAIN));
+			}
+			else{
+				ActionMessage error = new ActionMessage("error.bdo_cant_create");
+				messages.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, messages);
+				request.setAttribute("showbdolist", "1");
+			}
 		}
 
 		// user wants to update bdo

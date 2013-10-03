@@ -145,9 +145,14 @@ public class BDOUtils {
 			if (iDTO == null)
 				return false;
 			// if not lost/delayed, return false
-			if (iDTO.getItemtype_ID() != TracingConstants.LOST_DELAY)
+			if (iDTO.getItemtype_ID() != TracingConstants.LOST_DELAY && iDTO.getItemtype_ID() != TracingConstants.MISSING_ARTICLES && iDTO.getItemtype_ID() != TracingConstants.DAMAGED_BAG)
 				return false;
-
+			if((iDTO.getItemtype_ID() == TracingConstants.MISSING_ARTICLES || iDTO.getItemtype_ID() == TracingConstants.DAMAGED_BAG)){
+				OHD o=OhdBMO.getOHDByMatchIncidentID(iDTO.getIncident_ID(), null);
+				if(o!=null){
+					return false;
+				}
+			}
 			theform.setIncident(iDTO);
 			theform.setAgent(user);
 			theform.setCompanycode_ID(iDTO.getStationassigned().getCompany().getCompanyCode_ID());
@@ -331,6 +336,7 @@ public class BDOUtils {
 		request.setAttribute("BDOForm", theform);
 		theform.setOhd(ohd != null ? ohd : new OHD());
 		theform.setIncident(incident != null ? incident : new Incident());
+		theform.setMbrType((incident != null && incident.getItemtype()!=null)? incident.getItemtype_ID() : 1);
 
 		if (list != null) {
 			BDO bdo = null;

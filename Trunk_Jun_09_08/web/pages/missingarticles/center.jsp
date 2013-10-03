@@ -314,6 +314,19 @@ function disableButton(aButton) {
             <%
             	}
             %>
+            <%
+            	if (UserPermissions.hasPermission(
+            							TracingConstants.SYSTEM_COMPONENT_NAME_BDO, a)) {
+            %>
+            <dd><a
+              href='bdo.do?mbr_id=<bean:write name="incidentForm" property="incident_ID"/>&type=<%=TracingConstants.MISSING_ARTICLES%>'><span
+              class="aa">&nbsp; <br />
+            &nbsp;</span> <span class="bb"><bean:message key="menu.bdo" /></span>
+            <span class="cc">&nbsp; <br />
+            &nbsp;</span></a></dd>
+            <%
+            	}
+            %>
             <dd><a href="missing.do?close=1"><span class="aa">&nbsp;
             <br />
             &nbsp;</span> <span class="bb"><bean:message
@@ -447,7 +460,7 @@ function disableButton(aButton) {
               <td align="center" valign="top"><br>
 		<html:hidden property="save" value="" disabled="true" />
               <html:button property="saveButton" styleClass="button" styleId="saveButton"
-		      onclick="disableButtons(); if(validatereqFields(this.form, 'pilfered') != false && validateRest(this.form) != false) {this.form.save.disabled = false; clearBeforeUnload(); enableStateProvince(); this.form.submit();} else {enableButtons(); this.form.save.disabled = true; return false;}">
+		      onclick="disableButtons(); anyLossCodeChanges(); if(validatereqFields(this.form, 'pilfered') != false && validateRest(this.form) != false) {this.form.save.disabled = false; clearBeforeUnload(); enableStateProvince(); this.form.submit();} else {enableButtons(); this.form.save.disabled = true; return false;}">
                 <logic:notEqual name="incidentForm" property="incident_ID" value="">
               	  <bean:message key="button.save" />
                 </logic:notEqual>
@@ -468,14 +481,14 @@ function disableButton(aButton) {
                 <logic:notEqual name="incidentForm"
                   property="incident_ID" value="">
 		<html:hidden property="save" value="" disabled="true" />
-                  <html:button property="saveremarkButton" styleId="button" onclick="disableButtons(); this.form.save.disabled = false; clearBeforeUnload(); enableStateProvince(); this.form.submit();">
+                  <html:button property="saveremarkButton" styleId="button" onclick="disableButtons(); anyLossCodeChanges(); this.form.save.disabled = false; clearBeforeUnload(); enableStateProvince(); this.form.submit();">
                     <bean:message key="button.saveremark" />
                   </html:button>
                   <% if (!UserPermissions.hasIncidentSavePermission(a,myform.getIncident_ID()) && val2 && myform.getStatus_ID()==TracingConstants.MBR_STATUS_OPEN) { %>
 					
 					<html:hidden property="saveadditions" value="" disabled="true" />
 					<html:button property="saveadditionsbutton" styleId="button"
-						onclick="disableButtons(); if(validatereqFields(this.form, 'pilfered') != false && validateRest(this.form) != false) {this.form.saveadditions.disabled = false; clearBeforeUnload(); enableStateProvince(); this.form.submit();} else {enableButtons(); this.form.saveadditions.disabled = true; return false;}">
+						onclick="disableButtons(); anyLossCodeChanges(); if(validatereqFields(this.form, 'pilfered') != false && validateRest(this.form) != false) {this.form.saveadditions.disabled = false; clearBeforeUnload(); enableStateProvince(); this.form.submit();} else {enableButtons(); this.form.saveadditions.disabled = true; return false;}">
 						<bean:message key="button.save" />
 					</html:button>
 				<%}%>

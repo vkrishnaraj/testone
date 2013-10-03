@@ -30,7 +30,9 @@
 <%
 Agent a = (Agent)session.getAttribute("user");
 BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
+String incident_ID = myform.getIncident().getIncident_ID();
 boolean isServ=(myform.getDelivercompany_ID()!=0 && (((DeliverCompany)(BDOUtils.getDeliverCompany(myform.getDelivercompany_ID()))).getDelivery_integration_type()==DeliveryIntegrationType.SERV));
+boolean bagLossCodes=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL, a) && PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES));
 %>
 <%@page import="com.bagnet.nettracer.tracing.db.Address"%><script language="javascript">
 
@@ -88,6 +90,17 @@ function toggledc(o) {
         	window.location = 'cancelBdo.do?bdo_id=<bean:write name="BDOForm" property="BDO_ID" />&item_id=' + item;
     	}
     }
+  	
+    function samePrevious(index){
+  	  if(index>0){
+  		  var preLossCode=document.getElementById("theitem["+(index-1)+"].lossCode");
+  		  var preFaultStation=document.getElementById("theitem["+(index-1)+"].faultStation_id");
+  		  var lossCode=document.getElementById("theitem["+index+"].lossCode");
+  		  var faultStation=document.getElementById("theitem["+index+"].faultStation_id");
+  		  lossCode.selectedIndex=preLossCode.selectedIndex;
+  		  faultStation.selectedIndex=preFaultStation.selectedIndex;
+  	  }
+    }
 
 </script>
 
@@ -98,6 +111,8 @@ function toggledc(o) {
         <dl>
           <logic:notEqual name="BDOForm" property="incident_ID" value="">
             <dd>
+            <% if((request.getAttribute("mbrtype")!=null && request.getAttribute("mbrtype").equals(TracingConstants.LOST_DELAY+"")) ||
+            	(myform.getIncident()!=null && myform.getIncident().getItemtype()!=null && myform.getIncident().getItemtype_ID()==TracingConstants.LOST_DELAY)) {%>
               <a href='lostDelay.do?incident_ID=<bean:write name="BDOForm" property="incident_ID"/>'><span class="aa">&nbsp;
                   <br />
                   &nbsp;</span>
@@ -105,6 +120,27 @@ function toggledc(o) {
                 <span class="cc">&nbsp;
                   <br />
                   &nbsp;</span></a>
+             <% } %>
+            <% if((request.getAttribute("mbrtype")!=null && request.getAttribute("mbrtype").equals(TracingConstants.MISSING_ARTICLES+"")) ||
+            		(myform.getIncident()!=null && myform.getIncident().getItemtype()!=null && myform.getIncident().getItemtype_ID()==TracingConstants.MISSING_ARTICLES)) { %>
+              <a href='missing.do?incident_ID=<bean:write name="BDOForm" property="incident_ID"/>'><span class="aa">&nbsp;
+                  <br />
+                  &nbsp;</span>
+                <span class="bb"><bean:message key="menu.incident_info" /></span>
+                <span class="cc">&nbsp;
+                  <br />
+                  &nbsp;</span></a>
+             <% } %>
+            <% if((request.getAttribute("mbrtype")!=null && request.getAttribute("mbrtype").equals(TracingConstants.DAMAGED_BAG+"")) ||
+            		(myform.getIncident()!=null && myform.getIncident().getItemtype()!=null && myform.getIncident().getItemtype_ID()==TracingConstants.DAMAGED_BAG)) {%>
+              <a href='damaged.do?incident_ID=<bean:write name="BDOForm" property="incident_ID"/>'><span class="aa">&nbsp;
+                  <br />
+                  &nbsp;</span>
+                <span class="bb"><bean:message key="menu.incident_info" /></span>
+                <span class="cc">&nbsp;
+                  <br />
+                  &nbsp;</span></a>
+             <% } %>
             </dd>
           </logic:notEqual>
           <logic:notEqual name="BDOForm" property="OHD_ID" value="">
@@ -925,6 +961,49 @@ if (i.intValue() == 0) {
 				</html:select>
               </td>
             </tr>
+            
+            <% if(bagLossCodes){
+              boolean editLossCode=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_NON_CLOSED_DELIVERED_BAGS,a) && myform.getIncident().getStatus().getStatus_ID()!=TracingConstants.MBR_STATUS_CLOSED && theitem.getStatus().getStatus_ID()!=TracingConstants.ITEM_STATUS_TOBEDELIVERED && a.getStation().getStation_ID()==myform.getIncident().getStationcreated().getStation_ID())
+        				|| (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_DELIVERED_BAGS_SAME_STATION,a) && a.getStation().getStation_ID()==myform.getIncident().getStationcreated().getStation_ID() && theitem.getStatus().getStatus_ID()==TracingConstants.ITEM_STATUS_TOBEDELIVERED )
+        				|| (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_CLOSED_INCIDENT,a) && a.getStation().getStation_ID()==myform.getIncident().getStationcreated().getStation_ID() && myform.getIncident().getStatus().getStatus_ID()==TracingConstants.MBR_STATUS_CLOSED )
+        				|| (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_ANY_CLOSED_DELIVERED,a) && myform.getIncident().getStatus().getStatus_ID()==TracingConstants.MBR_STATUS_CLOSED && theitem.getStatus().getStatus_ID()==TracingConstants.ITEM_STATUS_TOBEDELIVERED && a.getStation().getStation_ID()==myform.getIncident().getStationcreated().getStation_ID()); %>
+	          <% if(!editLossCode){ %> 
+	          
+		        <html:hidden property="lossCode" value="<%=String.valueOf(theitem.getLossCode()) %>"  name="theitem" indexed="true"/>
+		        
+		        <html:hidden property="faultStation_id" value="<%=String.valueOf(theitem.getFaultStation_id()) %>" name="theitem"  indexed="true"/>
+	          <%} %>
+              <tr>
+              	<td colspan="2">
+            		<bean:message key="colname.loss.code" />
+	            	<br>
+	            	<html:select name="theitem" property="lossCode" styleClass="dropdown" indexed="true"  disabled="<%=!editLossCode %>" >      
+			          <html:option value="0">
+			            <bean:message key="select.please_select" />
+			          </html:option>
+			           <html:options collection="losscodes" property="loss_code" labelProperty="codeDescription" />
+		            </html:select>
+	          	</td>
+	          	<td>
+	            	<bean:message key="colname.fault.station" />
+	            	<br>
+			        <html:select name="theitem" property="faultStation_id" styleClass="dropdown" indexed="true" disabled="<%=!editLossCode %>">  
+			          <html:option value="">
+			            <bean:message key="select.please_select" />
+			          </html:option>
+			          <html:options collection="faultstationlist" property="station_ID" labelProperty="stationcode" />
+			        </html:select>
+	          	</td>
+              </tr>
+              <tr>
+              	<td align="center" style="vertical-align:middle;">&nbsp;<br>
+	          		<% if(i!=0){ %>
+	            		<input type="button" name="sameAsPrevious_<%=i%>" value="<bean:message key="button.same_previous"/>" onclick="samePrevious(<%=i %>);" id="button">
+	            	<% } %>
+	          	</td>
+	          	<td colspan="2" style="vertical-align:middle;">&nbsp;<br></td>
+              </tr>
+              <% } %>
         </table>
       </logic:iterate>
     </logic:notEqual>

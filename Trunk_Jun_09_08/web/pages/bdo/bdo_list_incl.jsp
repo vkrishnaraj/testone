@@ -31,6 +31,8 @@
           </logic:notEqual>
           <logic:notEqual name="BDOForm" property="incident_ID" value="">
             <dd>
+            <% if((request.getParameter("type")!=null && request.getParameter("type").equals(TracingConstants.LOST_DELAY+"")) || 
+            	(((BDOForm)request.getAttribute("BDOForm")).getMbrType()==TracingConstants.LOST_DELAY)) {%>
               <a href='lostDelay.do?incident_ID=<bean:write name="BDOForm" property="incident_ID"/>'><span class="aa">&nbsp;
                   <br />
                   &nbsp;</span>
@@ -38,6 +40,27 @@
                 <span class="cc">&nbsp;
                   <br />
                   &nbsp;</span></a>
+             <% } %>
+            <% if((request.getParameter("type")!=null && request.getParameter("type").equals(TracingConstants.MISSING_ARTICLES+"")) || 
+            	(((BDOForm)request.getAttribute("BDOForm")).getMbrType()==TracingConstants.MISSING_ARTICLES)) { %>
+              <a href='missing.do?incident_ID=<bean:write name="BDOForm" property="incident_ID"/>'><span class="aa">&nbsp;
+                  <br />
+                  &nbsp;</span>
+                <span class="bb"><bean:message key="menu.incident_info" /></span>
+                <span class="cc">&nbsp;
+                  <br />
+                  &nbsp;</span></a>
+             <% } %>
+            <% if((request.getParameter("type")!=null && request.getParameter("type").equals(TracingConstants.DAMAGED_BAG+"")) || 
+            	(((BDOForm)request.getAttribute("BDOForm")).getMbrType()==TracingConstants.DAMAGED_BAG)) {%>
+              <a href='damaged.do?incident_ID=<bean:write name="BDOForm" property="incident_ID"/>'><span class="aa">&nbsp;
+                  <br />
+                  &nbsp;</span>
+                <span class="bb"><bean:message key="menu.incident_info" /></span>
+                <span class="cc">&nbsp;
+                  <br />
+                  &nbsp;</span></a>
+             <% } %>
             </dd>
           </logic:notEqual>
           <dd>
