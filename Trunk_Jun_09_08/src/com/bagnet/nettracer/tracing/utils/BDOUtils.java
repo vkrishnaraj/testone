@@ -144,9 +144,6 @@ public class BDOUtils {
 			Incident iDTO = iBMO.findIncidentByID(incident_ID);
 			if (iDTO == null)
 				return false;
-			// if not lost/delayed, return false
-			if (iDTO.getItemtype_ID() != TracingConstants.LOST_DELAY && iDTO.getItemtype_ID() != TracingConstants.MISSING_ARTICLES && iDTO.getItemtype_ID() != TracingConstants.DAMAGED_BAG)
-				return false;
 			if((iDTO.getItemtype_ID() == TracingConstants.MISSING_ARTICLES || iDTO.getItemtype_ID() == TracingConstants.DAMAGED_BAG)){
 				OHD o=OhdBMO.getOHDByMatchIncidentID(iDTO.getIncident_ID(), null);
 				if(o!=null){
@@ -336,7 +333,7 @@ public class BDOUtils {
 		request.setAttribute("BDOForm", theform);
 		theform.setOhd(ohd != null ? ohd : new OHD());
 		theform.setIncident(incident != null ? incident : new Incident());
-		theform.setMbrType((incident != null && incident.getItemtype()!=null)? incident.getItemtype_ID() : 1);
+		theform.setMbrType((incident != null && incident.getItemtype()!=null)? incident.getItemtype_ID() : TracingConstants.LOST_DELAY);
 
 		if (list != null) {
 			BDO bdo = null;

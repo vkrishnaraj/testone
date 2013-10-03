@@ -160,6 +160,11 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_CLONE_OHD="Clone OHDs";
 	public final static String SYSTEM_COMPONENT_NAME_EXTERNAL_LINKS="External Links";
 	public final static String SYSTEM_COMPONENT_NAME_CREATE_WT_OTHER_CARRIER = "Create WT Files for other Carriers";
+	public final static String SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL = "Loss Codes at Per Bag Level";
+	public final static String SYSTEM_COMPONENT_NAME_EDIT_NON_CLOSED_DELIVERED_BAGS = "Edit Non Closed and Non Delivered Bags";
+	public final static String SYSTEM_COMPONENT_NAME_EDIT_DELIVERED_BAGS_SAME_STATION = "Edit Delivered Bags in Same Station";
+	public final static String SYSTEM_COMPONENT_NAME_EDIT_CLOSED_INCIDENT = "Edit Closed Incident Bags in Same Station";
+	public final static String SYSTEM_COMPONENT_NAME_EDIT_ANY_CLOSED_DELIVERED= "Edit Any Closed or Delivered Bags";
 	
 	//TODO: adding three sub items under last one to get the itemized view for WS
 	public final static String SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS_TYPE_DELAYED = "Incoming Incidents Type Delayed";
@@ -397,6 +402,7 @@ public class TracingConstants {
 	public final static DecimalFormat DECIMALFORMAT = new DecimalFormat("#0.00");
 	public final static int INCIDENT_LEN = 13;
 	// types
+	public final static int NO_TYPE = 0;
 	public final static int LOST_DELAY = 1;
 	public final static int MISSING_ARTICLES = 2;
 	public final static int DAMAGED_BAG = 3;
@@ -1121,6 +1127,8 @@ public class TracingConstants {
 	public static final String JSP_DELETE_INVENTORY = "inventory";
 	public static final String JSP_DELETE_PAX = "pax";
 	public static final String JSP_DELETE_ARTICLE = "article";
+	public static final String JSP_PAX_ITIN = "pax_itin";
+	public static final String JSP_BAG_ITIN = "bag_itin";
 	public static final String WEB_SERVICE_DTO = "web.service.dto";
 	public static final String SYSTEM_COMPONENT_NAME_CLERICAL_CLAIMS_FEATURES = "Clerical Claims Features";
 	public static final String SYSTEM_COMPONENT_NAME_CENTRAL_BAGGAGE_CLAIMS_FEATURES = "Central Baggage Claims Features";

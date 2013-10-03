@@ -961,49 +961,6 @@ if (i.intValue() == 0) {
 				</html:select>
               </td>
             </tr>
-            
-            <% if(bagLossCodes){
-              boolean editLossCode=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_NON_CLOSED_DELIVERED_BAGS,a) && myform.getIncident().getStatus().getStatus_ID()!=TracingConstants.MBR_STATUS_CLOSED && theitem.getStatus().getStatus_ID()!=TracingConstants.ITEM_STATUS_TOBEDELIVERED && a.getStation().getStation_ID()==myform.getIncident().getStationcreated().getStation_ID())
-        				|| (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_DELIVERED_BAGS_SAME_STATION,a) && a.getStation().getStation_ID()==myform.getIncident().getStationcreated().getStation_ID() && theitem.getStatus().getStatus_ID()==TracingConstants.ITEM_STATUS_TOBEDELIVERED )
-        				|| (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_CLOSED_INCIDENT,a) && a.getStation().getStation_ID()==myform.getIncident().getStationcreated().getStation_ID() && myform.getIncident().getStatus().getStatus_ID()==TracingConstants.MBR_STATUS_CLOSED )
-        				|| (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_ANY_CLOSED_DELIVERED,a) && myform.getIncident().getStatus().getStatus_ID()==TracingConstants.MBR_STATUS_CLOSED && theitem.getStatus().getStatus_ID()==TracingConstants.ITEM_STATUS_TOBEDELIVERED && a.getStation().getStation_ID()==myform.getIncident().getStationcreated().getStation_ID()); %>
-	          <% if(!editLossCode){ %> 
-	          
-		        <html:hidden property="lossCode" value="<%=String.valueOf(theitem.getLossCode()) %>"  name="theitem" indexed="true"/>
-		        
-		        <html:hidden property="faultStation_id" value="<%=String.valueOf(theitem.getFaultStation_id()) %>" name="theitem"  indexed="true"/>
-	          <%} %>
-              <tr>
-              	<td colspan="2">
-            		<bean:message key="colname.loss.code" />
-	            	<br>
-	            	<html:select name="theitem" property="lossCode" styleClass="dropdown" indexed="true"  disabled="<%=!editLossCode %>" >      
-			          <html:option value="0">
-			            <bean:message key="select.please_select" />
-			          </html:option>
-			           <html:options collection="losscodes" property="loss_code" labelProperty="codeDescription" />
-		            </html:select>
-	          	</td>
-	          	<td>
-	            	<bean:message key="colname.fault.station" />
-	            	<br>
-			        <html:select name="theitem" property="faultStation_id" styleClass="dropdown" indexed="true" disabled="<%=!editLossCode %>">  
-			          <html:option value="">
-			            <bean:message key="select.please_select" />
-			          </html:option>
-			          <html:options collection="faultstationlist" property="station_ID" labelProperty="stationcode" />
-			        </html:select>
-	          	</td>
-              </tr>
-              <tr>
-              	<td align="center" style="vertical-align:middle;">&nbsp;<br>
-	          		<% if(i!=0){ %>
-	            		<input type="button" name="sameAsPrevious_<%=i%>" value="<bean:message key="button.same_previous"/>" onclick="samePrevious(<%=i %>);" id="button">
-	            	<% } %>
-	          	</td>
-	          	<td colspan="2" style="vertical-align:middle;">&nbsp;<br></td>
-              </tr>
-              <% } %>
         </table>
       </logic:iterate>
     </logic:notEqual>

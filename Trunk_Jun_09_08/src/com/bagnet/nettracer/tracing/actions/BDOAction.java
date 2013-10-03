@@ -163,10 +163,14 @@ public class BDOAction extends Action {
 		request.setAttribute("faultCompanyList",  new ArrayList());
 		
 		boolean checkLLC = false;
-		if(request.getAttribute("currentstatus") != null) {
-			checkLLC = Integer.parseInt((String)request.getAttribute("currentstatus")) == TracingConstants.MBR_STATUS_CLOSED;
+		try{
+			if(request.getAttribute("currentstatus") != null) {
+				checkLLC = Integer.parseInt((String)request.getAttribute("currentstatus")) == TracingConstants.MBR_STATUS_CLOSED;
+			}
+		} catch (NumberFormatException nfe){
+			nfe.printStackTrace();
 		}
-		if(theform.getMbrType()==0){
+		if(theform.getMbrType()==TracingConstants.NO_TYPE){
 			if(theform.getIncident()!=null && theform.getIncident().getItemtype()!=null){
 				theform.setMbrType(theform.getIncident().getItemtype_ID());
 				request.setAttribute("mbrtype", theform.getIncident().getItemtype_ID());
@@ -174,7 +178,7 @@ public class BDOAction extends Action {
 		}
 		
 		//Default to MBR Type 1
-		int incidentType=theform.getMbrType()!=0?theform.getMbrType():1; 
+		int incidentType=theform.getMbrType()!=0?theform.getMbrType():TracingConstants.LOST_DELAY; 
 		
 		//the company specific codes..
 		List codes = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), incidentType, true, user, checkLLC);
