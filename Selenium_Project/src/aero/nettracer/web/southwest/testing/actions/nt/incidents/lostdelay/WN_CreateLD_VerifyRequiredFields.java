@@ -504,6 +504,38 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		goToTaskManager();
 	}
 	
+	@Test
+	public void testCreateBDO(){
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
+		selenium.click("xpath=(//a[contains(@href, 'bdo.do?mbr_id=')])[1]");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			selenium.click("name=createnewbdo");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Failed to load BDO List for incident");
+		}
+
+		if (checkNoErrorPage()) {
+			selenium.select("name=delivercompany_ID", "label=Dynamex");
+			selenium.select("name=servicelevel_ID", "label=Regular");
+			selenium.click("id=calendar");
+			selenium.click("link=Today");
+			selenium.type("name=cost","150");
+			selenium.click("id=button");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Failed to create BDO for incident");
+		}
+		
+		if (checkNoErrorPage()) {
+			verifyTrue(selenium.isTextPresent("The Baggage Delivery Order has been successfully saved"));
+			goToTaskManager();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Failed to save BDO for incident");
+		}
+	}
+	
 	
 	private void typeString(String locator, String string) {
 		char[] chars = string.toCharArray();
