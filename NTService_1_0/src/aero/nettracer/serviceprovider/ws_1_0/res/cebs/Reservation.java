@@ -21,6 +21,8 @@ import aero.nettracer.serviceprovider.ws_1_0.response.xsd.RemarkResponse;
 import aero.nettracer.serviceprovider.ws_1_0.response.xsd.ReservationResponse;
 import aero.nettracer.utilities.ssl.AuthSSLProtocolSocketFactory;
 
+import com.swacorp.services.btws.v1.GetPNRFaultDocument;
+import com.swacorp.services.btws.v1.GetPNRFaultDocument.GetPNRFault;
 import com.swacorp.services.btws.v1.GetPNRRequestDocument;
 import com.swacorp.services.btws.v1.GetPNRRequestDocument.GetPNRRequest;
 import com.swacorp.services.btws.v1.GetPNRResponseDocument;
@@ -31,6 +33,7 @@ import com.swacorp.services.btws.v1.GetPNRResponseDocument.GetPNRResponse.Passen
 import com.swacorp.services.btws.v1.GetPNRResponseDocument.GetPNRResponse.Passenger.NameList.Name;
 import com.swacorp.services.btws.v1.GetPNRResponseDocument.GetPNRResponse.Passenger.PhoneList.Phone;
 import com.swacorp.services.btws.wsdl.v1.BTWSStub;
+import com.swacorp.services.btws.wsdl.v1.GetPNRError;
 
 public class Reservation implements ReservationInterface {
 
@@ -39,6 +42,7 @@ public class Reservation implements ReservationInterface {
 	private static final String PHONE_TYPE_HOME = "P_HOME";
 	private static final String PHONE_TYPE_WORK = "P_WORK";
 	private static final String PHONE_TYPE_MOBILE = "P_MOBILE";
+	private static final String PNR_NOT_FOUND = "UNBL TO RTRV PNR";
 	
 	// For unit testing purposes
 	BTWSStub btwsStub = null;
@@ -239,6 +243,15 @@ public class Reservation implements ReservationInterface {
 				
 				res.setNumberChecked(bagsChecked);
 				res.setPaxAffected(paxAffected);
+			}
+		} catch (GetPNRError ge) {
+			GetPNRFaultDocument doc = ge.getFaultMessage();
+			GetPNRFault fault = doc.getGetPNRFault();
+			logger.info(fault.getCode());
+			if (PNR_NOT_FOUND.equals(fault.getCode())) {
+				response.addNewError().setDescription(ServiceConstants.PNR_NOT_VALID);
+			} else {
+				response.addNewError().setDescription(ServiceConstants.UNEXPECTED_EXCEPTION);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
