@@ -260,7 +260,7 @@ public class CSSCallsUtil extends TaskManagerUtil {
 		String sql = "from com.bagnet.nettracer.tracing.db.taskmanager.MorningDutiesTask mdt " +
 				"where (mdt.status.status_ID = :openStatus" + workSql + ") and " +
 				"mdt.incident.stationassigned.stationcode in :codeList " +
-				"order by mdt.opened_timestamp, mdt.incident.stationassigned.stationcode, mdt.class desc";
+				"order by mdt.opened_timestamp, mdt.incident.stationassigned.stationcode, mdt.class desc, mdt.incident.incident_ID";
 		return sql;
 	}
 	
