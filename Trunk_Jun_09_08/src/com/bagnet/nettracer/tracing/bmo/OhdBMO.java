@@ -515,6 +515,46 @@ public class OhdBMO {
 			}
 		}
 	}
+	
+	/**
+	 * Find on hand based on the matched incident id.
+	 * 
+	 * @param incident_ID
+	 *          the incident id
+	 * @return incident_ID based on id, null otherwise.
+	 */
+	public static OHD getOHDByMatchIncidentID(String incident_ID, Session sess) {
+		boolean sessionNull = (sess == null);
+		try {
+			String query = "select ohd from com.bagnet.nettracer.tracing.db.OHD ohd "
+					+ "where ohd.matched_incident=:incident_ID";
+			if (sessionNull) {
+				sess = HibernateWrapper.getSession().openSession();
+			}
+			Query q = sess.createQuery(query);
+			q.setString("incident_ID", incident_ID);
+			List list = q.list();
+			if (list.size() == 0) {
+				logger.debug("unable to find ohd with matched incident: " + incident_ID);
+				return null;
+			}
+			OHD iDTO = (OHD) list.get(0);
+			return iDTO;
+		} catch (Exception e) {
+			logger.error("unable to retrieve incident: " + e);
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					if (sessionNull) {
+						sess.close();
+					}
+				} catch (Exception e) {
+					logger.error("unable to close connection: " + e);
+				}
+			}
+		}
+	}
 
 
 	/**
