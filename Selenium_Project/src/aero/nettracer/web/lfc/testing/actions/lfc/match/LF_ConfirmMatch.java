@@ -11,7 +11,7 @@ public class LF_ConfirmMatch extends DefaultSeleneseTestCase {
 	public void testAB_Login() throws Exception {
 		Thread.sleep(5000);
 		goToTaskManager();
-		selenium.click("//div[@id='maincontent']/form/table[2]/tbody/tr[8]/td/a");
+		selenium.click("id=608link");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
