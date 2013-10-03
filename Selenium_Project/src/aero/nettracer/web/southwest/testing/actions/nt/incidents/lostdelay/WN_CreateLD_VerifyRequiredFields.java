@@ -243,7 +243,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		selenium.type("name=claimcheck[0].claimchecknum", "UTB");
 		selenium.click("name=saveButton");
-		assertEquals("Claim Check Number is not a valid claim check number.[10 digits or 8 character AN]", selenium.getAlert());
+		assertEquals("Claim Check Number is not a valid claim check number.[10 digits or 8 character AN or marked UTB]", selenium.getAlert());
 		selenium.type("name=claimcheck[0].claimchecknum", "UTB12345678");
 		selenium.click("name=saveButton");
 		waitForPageToLoadImproved();
