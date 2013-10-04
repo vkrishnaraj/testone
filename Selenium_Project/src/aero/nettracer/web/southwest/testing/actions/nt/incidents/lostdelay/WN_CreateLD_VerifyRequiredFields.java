@@ -536,6 +536,35 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		}
 	}
 	
+	@Test
+	public void testClonePassItin(){
+		createIncident(false);
+		selenium.type("name=theitinerary[0].legfrom", "LAX");
+		selenium.type("name=theitinerary[0].legto", "ATL");
+		selenium.type("name=theitinerary[0].flightnum", "123");
+		selenium.type("name=theitinerary[0].disdepartdate", "01/01/2013");
+		selenium.type("name=theitinerary[0].disarrivedate", "01/01/2013");
+		selenium.type("name=theitinerary[0].disschdeparttime", "12:00");
+		selenium.type("name=theitinerary[0].disscharrivetime", "12:00");
+		selenium.type("name=theitinerary[0].disactdeparttime", "12:00");
+		selenium.type("name=theitinerary[0].disactarrivetime", "12:00");
+		selenium.click("name=clonepassit");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			verifyEquals("LAX", selenium.getValue("name=theitinerary[1].legfrom"));
+			verifyEquals("ATL", selenium.getValue("name=theitinerary[1].legto"));
+			verifyEquals("WN", selenium.getSelectedLabel("name=theitinerary[1].airline"));
+			verifyEquals("01/01/2013", selenium.getValue("name=theitinerary[1].disdepartdate"));
+			verifyEquals("01/01/2013", selenium.getValue("name=theitinerary[1].disarrivedate"));
+			verifyEquals("12:00", selenium.getValue("name=theitinerary[1].disschdeparttime"));
+			verifyEquals("12:00", selenium.getValue("name=theitinerary[1].disscharrivetime"));
+			verifyEquals("12:00", selenium.getValue("name=theitinerary[1].disactdeparttime"));
+			verifyEquals("12:00", selenium.getValue("name=theitinerary[1].disactarrivetime"));
+			goToTaskManager();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Failed to verify clone itinerary for incident");
+		}
+	}
 	
 	private void typeString(String locator, String string) {
 		char[] chars = string.toCharArray();
