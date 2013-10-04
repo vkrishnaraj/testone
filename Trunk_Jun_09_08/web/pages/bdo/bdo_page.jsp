@@ -127,7 +127,7 @@
           <table class="form2" cellspacing="0" cellpadding="0">
             <tr>
               <td align=center>
-                <bean:message key="colname.ld_report_num" />
+                <bean:message key="colname.report_num" />
                 <br>
                 <html:text property="mbr_id" size="13" maxlength="13" styleClass="textfield" value="" onblur="fillzero(this,13);" />
               </td>
