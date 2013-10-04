@@ -540,7 +540,7 @@ function toggledc(o) {
     });
 </script>
 
-<select style="margin-right: 10px" onChange="mapSimpleData(this.options.selectedIndex, passengers, passengerArr); ">
+<select style="margin-right: 10px" onChange="mapSimpleData(this.options.selectedIndex, passengers, passengerArr); "  class="dropdown">
 	<option value=""><bean:message key="pick.a.passenger" /></option>
 	<logic:iterate id="passenger" name="BDOForm" property="passengerlist" indexId="i" type="com.bagnet.nettracer.tracing.db.BDO_Passenger">
 	<%
@@ -551,7 +551,7 @@ function toggledc(o) {
 		<option value="<%=i%>"><%=paxNames%></option>
 	</logic:iterate>
 </select>
-<select style="margin-right: 10px" onChange="mapSimpleData(this.options.selectedIndex, addresses, addressArr); ">
+<select style="margin-right: 10px" onChange="mapSimpleData(this.options.selectedIndex, addresses, addressArr); "  class="dropdown">
 	<option value=""><bean:message key="pick.a.address" /></option>
 	<logic:iterate id="passenger" name="BDOForm" property="passengerlist" indexId="i" type="com.bagnet.nettracer.tracing.db.BDO_Passenger">
 	<%
@@ -562,7 +562,7 @@ function toggledc(o) {
 		<option value="<%=i%>"><%=addLong%></option>
 	</logic:iterate>
 </select>
-<select style="margin-right: 10px" onChange="mapSimpleData(this.options.selectedIndex, phonenumbers, phoneArr); ">
+<select style="margin-right: 10px" onChange="mapSimpleData(this.options.selectedIndex, phonenumbers, phoneArr); "  class="dropdown">
 	<option value=""><bean:message key="pick.a.phonenumber" /></option>
 	<logic:iterate id="passenger" name="BDOForm" property="passengerlist" indexId="i" type="com.bagnet.nettracer.tracing.db.BDO_Passenger">
 	<%
@@ -893,7 +893,7 @@ if (i.intValue() == 0) {
               <bean:message key="colname.claimnum" />
               <br>
               <html:text name="theitem" property="claimchecknum" size="25" styleId="<%="bagtagId"+i %>" styleClass="textfield" indexed="true"/>
-              <select styleClass="dropdown" id="bagtagSelect<%=i %>" onchange="populateClaimNum(bagtagId<%=i %>,bagtagSelect<%=i %>); mapSimpleData(this.options.selectedIndex, items, itemArr); ">
+              <select class="dropdown" id="bagtagSelect<%=i %>" onchange="populateClaimNum(bagtagId<%=i %>,bagtagSelect<%=i %>); mapSimpleData(this.options.selectedIndex, items, itemArr); ">
 				<option value=""><bean:message key="pick.a.bag" /></option>
 				<logic:iterate id="item" name="BDOForm"  property="incident.claimchecks" indexId="i" type="com.bagnet.nettracer.tracing.db.Incident_Claimcheck">
 					<%

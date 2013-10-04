@@ -5,6 +5,7 @@
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
+<%@ page import="com.bagnet.nettracer.tracing.forms.BDOForm" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.OHD_Photo" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
@@ -37,6 +38,7 @@
 
 <%
   Agent a = (Agent)session.getAttribute("user");
+	BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
 %>
   
   <html:form styleId="dirtyCheck-form" action="bdo.do" method="post" onsubmit="return validateReqBDO(this);">
@@ -64,7 +66,18 @@
               <bean:message key="header.bdo_for" />
               (
               <logic:notEqual name="BDOForm" property="incident_ID" value="">
-                <bean:message key="header.bdo_report" />
+              	<% if((request.getAttribute("mbrtype")!=null && request.getAttribute("mbrtype").equals(TracingConstants.LOST_DELAY+"")) ||
+            	(myform.getIncident()!=null && myform.getIncident().getItemtype()!=null && myform.getIncident().getItemtype_ID()==TracingConstants.LOST_DELAY)) {%>
+                	<bean:message key="header.bdo_report_LD" />
+                <% } %>
+                <% if((request.getAttribute("mbrtype")!=null && request.getAttribute("mbrtype").equals(TracingConstants.MISSING_ARTICLES+"")) ||
+            	(myform.getIncident()!=null && myform.getIncident().getItemtype()!=null && myform.getIncident().getItemtype_ID()==TracingConstants.MISSING_ARTICLES)) {%>
+                	<bean:message key="header.bdo_report_MS" />
+                <% } %>
+                <% if((request.getAttribute("mbrtype")!=null && request.getAttribute("mbrtype").equals(TracingConstants.DAMAGED_BAG+"")) ||
+            	(myform.getIncident()!=null && myform.getIncident().getItemtype()!=null && myform.getIncident().getItemtype_ID()==TracingConstants.DAMAGED_BAG)) {%>
+                	<bean:message key="header.bdo_report_DM" />
+                <% } %>
                 <bean:write name="BDOForm" property="incident_ID" />
               </logic:notEqual>
               <logic:notEqual name="BDOForm" property="OHD_ID" value="">
