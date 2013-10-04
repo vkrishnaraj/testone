@@ -88,18 +88,7 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 					waitForPageToLoadImproved();
 					if (checkNoErrorPage()) {
 						checkCopyrightAndQuestionMarks();
-						int highestAuditItemIndex = 0;
-						for (int i = 1;;++i) {
-							if (selenium.isElementPresent("xpath=(//input[@name='audit_id'])[" + i + "]")) {
-								continue;
-							} else {
-								highestAuditItemIndex = i - 1;
-								break;
-							}
-						}
-						selenium.check(highestAuditItemIndex == 0 ? "xpath=(//input[@name='audit_id'])" : "xpath=(//input[@name='audit_id'])[" + highestAuditItemIndex + "]");
-						selenium.click("xpath=(//input[@id='button'])[3]");
-						waitForPageToLoadImproved();
+						navigateAuditPagination("audit_id");
 						if (checkNoErrorPage()) {
 							checkCopyrightAndQuestionMarks();
 							success = true;
@@ -119,6 +108,31 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 			System.out.println("!!!!!!!!!!!!!!! - Failed to Load Audit Trail. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 		}
 		return success;
+	}
+	
+	protected void navigateAuditPagination(String id) {
+		if (id == null || id.isEmpty()) {
+			return;
+		}
+		
+		while (selenium.isElementPresent("//a[contains(text(),'Next >')]")) {
+			selenium.click("//a[contains(text(),'Next >')]");
+			waitForPageToLoadImproved();
+		}
+		
+		String element = "xpath=(//input[@name='" + id + "'])";
+		int highestAuditItemIndex = 0;
+		for (int i = 1;;++i) {
+			if (selenium.isElementPresent(element + "[" + i + "]")) {
+				continue;
+			} else {
+				highestAuditItemIndex = i - 1;
+				break;
+			}
+		}
+		selenium.check(highestAuditItemIndex == 0 ? element : element + "[" + highestAuditItemIndex + "]");
+		selenium.click("xpath=(//input[@id='button'])[3]");
+		waitForPageToLoadImproved();
 	}
 	
 	protected boolean savePermissions() {
