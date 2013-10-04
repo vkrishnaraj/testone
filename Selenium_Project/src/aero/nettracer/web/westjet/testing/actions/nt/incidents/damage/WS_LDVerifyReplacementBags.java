@@ -72,7 +72,7 @@ public class WS_LDVerifyReplacementBags extends LoginUtil {
 		
 		if (checkNoErrorPage()) {
 			selenium.check("name=627");
-			selenium.click("//div[@id='maincontent']/table/tbody/tr[32]/td/input[2]");
+			selenium.click("name=save");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LDVRK: Failed to load the permissions page.");
@@ -138,10 +138,10 @@ public class WS_LDVerifyReplacementBags extends LoginUtil {
 			selenium.select("name=theitem[0].color", "label=WT - White/clear");
 			selenium.type("//div[@id='item_0']/table/tbody/tr/td[2]/input", "3333333333");
 			selenium.type("//div[@id='item_0']/table/tbody/tr[7]/td/input", "test");
-			selenium.click("//div[@id='maincontent']/table[5]/tbody/tr/td/input[2]");
+			selenium.click("id=saveButton");
 			assertEquals("Please select a value for  Tradeout Issued", selenium.getAlert());
-			selenium.select("//select[@id='replacementBagIssued']", "label=yes");
-			selenium.click("//div[@id='maincontent']/table[5]/tbody/tr/td/input[2]");
+			selenium.select("id=replacementBagIssued", "label=yes");
+			selenium.click("id=saveButton");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LDVRK: Failed on load the damaged incident page after pressing skip prepopulation.");
@@ -207,7 +207,7 @@ public class WS_LDVerifyReplacementBags extends LoginUtil {
 		
 		if (checkNoErrorPage()) {
 			selenium.uncheck("name=627");
-			selenium.click("//div[@id='maincontent']/table/tbody/tr[32]/td/input[2]");
+			selenium.click("name=save");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LDVRK: An error occurred while attempting to load the permissions page.");

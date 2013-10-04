@@ -137,10 +137,10 @@ public class WS_LDVerifyRonKits extends LoginUtil {
 			selenium.select("name=theitem[0].bagtype", "label=50");
 			selenium.select("name=theitem[0].color", "label=WT - White/clear");
 			selenium.type("name=claimcheck[0].claimchecknum", "3333333333");
-			selenium.click("//input[@id='saveButton']");
+			selenium.click("id=saveButton");
 			assertEquals("Please select a value for  # Toiletry Kits issued", selenium.getAlert());
 			selenium.select("//select[@id='numRonKitsIssued']", "label=1");
-			selenium.click("//input[@id='saveButton']");
+			selenium.click("id=saveButton");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LDVRK: Failed on load the damaged incident page after pressing skip prepopulation.");
