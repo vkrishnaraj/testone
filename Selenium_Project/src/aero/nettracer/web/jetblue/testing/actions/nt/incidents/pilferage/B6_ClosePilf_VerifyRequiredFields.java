@@ -12,7 +12,7 @@ public class B6_ClosePilf_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
 			verifyTrue(selenium.isTextPresent("Pawob Information"));
-			selenium.click("//td[@id='navmenucell']/div/dl/dd[9]/a/span[2]");
+			selenium.click("//td[@id='navmenucell']/div/dl/dd[10]/a/span[2]");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();

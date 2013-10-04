@@ -12,7 +12,7 @@ public class NK_CloseDam_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
 			verifyTrue(selenium.isTextPresent("Incident Information"));
-			selenium.click("//td[@id='navmenucell']/div/dl/dd[8]/a/span[2]");
+			selenium.click("//td[@id='navmenucell']/div/dl/dd[9]/a/span[2]");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();

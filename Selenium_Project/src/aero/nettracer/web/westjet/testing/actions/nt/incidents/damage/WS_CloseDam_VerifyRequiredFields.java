@@ -12,7 +12,7 @@ public class WS_CloseDam_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
 			verifyTrue(selenium.isTextPresent("DPR Details"));
-			selenium.click("//td[@id='navmenucell']/div/dl/dd[10]/a/span[2]");
+			selenium.click("//td[@id='navmenucell']/div/dl/dd[11]/a/span[2]");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
