@@ -271,9 +271,9 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 					String incident_id = selenium.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
 					Settings.INCIDENT_ID_WN = incident_id;
 					System.out.println("WN: Lost/Delay Incident Created: " + Settings.INCIDENT_ID_WN);
-					selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
-					waitForPageToLoadImproved();
 				}
+				selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
+				waitForPageToLoadImproved();
 			} else {
 				System.out.println("!!!!!!!!!!!!!!! - Create Lost/Delay Success Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 				verifyTrue(false);
