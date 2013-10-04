@@ -8,11 +8,10 @@ import org.junit.Test;
 import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
 
 public class WN_StatusMessageTest extends WN_SeleniumTest{
+	String message = "Test status message " + System.currentTimeMillis();
 	@Test
-	public void test756() throws Exception {
-
-		String message = "Test status message " + System.currentTimeMillis();
-		//selenium.open("/ntsouthwest/logon.do");
+	public void testStatusMessage() throws Exception {
+	
 		selenium.click("id=menucol_9.2");
 		waitForPageToLoadImproved();
 		
@@ -40,11 +39,16 @@ public class WN_StatusMessageTest extends WN_SeleniumTest{
 		}
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent(message));
-			selenium.click("id=menucol_9.13");			
-			waitForPageToLoadImproved();
 		} else {
 			System.out.println("!!!!!!!!!!!!!!!! Status Message 4");
 		}
+	}
+	
+	@Test
+	public void testStatusMessageAudit() throws Exception {
+
+		selenium.click("id=menucol_9.13");			
+		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			selenium.click("//td[@id='navmenucell']/div/dl/dd[10]/a/span[2]");			
 			waitForPageToLoadImproved();
