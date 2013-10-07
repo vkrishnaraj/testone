@@ -1275,6 +1275,7 @@ public class TracingConstants {
 	public static final int REPORT_METHOD_CBRO_CLAIM = 5;
 	public static final int REPORT_METHOD_CBRO_PHONE = 6;
 	public static final int REPORT_METHOD_IN_WRITING = 7;	
+	public static final int REPORT_METHOD_PHONE = 8;	
 	
 	public static final String REPORT_METHOD_NAME_IN_PERSON = "In Person";
 	public static final String REPORT_METHOD_NAME_BSO_PHONE = "BSO Phone";
@@ -1285,6 +1286,7 @@ public class TracingConstants {
 	public static final String REPORT_METHOD_NAME_CBRO_CLAIM = "CBRO Claim";
 	public static final String REPORT_METHOD_NAME_CBRO_PHONE = "CBRO Phone";
 	public static final String REPORT_METHOD_NAME_IN_WRITING = "In Writing";	
+	public static final String REPORT_METHOD_NAME_PHONE = "Phone";	
 	
 	public static final String COMPANY_CODE_US = "US";
 	public static final String COMPANY_CODE_FL = "FL";
