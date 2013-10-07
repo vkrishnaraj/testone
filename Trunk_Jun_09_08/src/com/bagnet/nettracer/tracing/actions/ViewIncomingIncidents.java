@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -22,6 +23,7 @@ import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.constant.TracingConstants.SortParam;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Station;
@@ -65,6 +67,12 @@ public class ViewIncomingIncidents extends Action {
 		BagService bs = new BagService();
 
 		SearchIncidentForm daform = (SearchIncidentForm) form;
+		
+		String sort = StringUtils.stripToNull(request.getParameter("sort"));
+		if (SortParam.isValid(sort)) {
+			request.setAttribute("sort", sort);
+		}		 
+		
 		daform.setStationassigned_ID(agent_station.getStation_ID());
 		int[] statuses = new int[3];
 		statuses[0] = TracingConstants.MBR_STATUS_OPEN;
@@ -121,7 +129,7 @@ public class ViewIncomingIncidents extends Action {
 		}
 		
 		// get number of records found
-		if ((resultlist = bs.findIncident(daform, user, 0, 0, true, true)) == null || resultlist.size() <= 0) {
+		if ((resultlist = bs.findIncident(daform, user, 0, 0, true, true, sort)) == null || resultlist.size() <= 0) {
 			ActionMessages errors = new ActionMessages();
 			ActionMessage error = new ActionMessage("error.nosearchresult");
 			errors.add(ActionMessages.GLOBAL_MESSAGE, error);
@@ -154,7 +162,7 @@ public class ViewIncomingIncidents extends Action {
 				request.setAttribute("currpage", "0");
 			}
 
-			resultlist = bs.findIncident(daform, user, rowsperpage, currpage, false, true);
+			resultlist = bs.findIncident(daform, user, rowsperpage, currpage, false, true, sort);
 
 			if (currpage + 1 == totalpages)
 				request.setAttribute("end", "1");

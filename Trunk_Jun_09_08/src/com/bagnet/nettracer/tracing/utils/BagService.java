@@ -1712,6 +1712,10 @@ public class BagService {
 	public ArrayList findIncident(SearchIncidentForm daform, Agent user, int rowsperpage, int currpage, boolean iscount) {
 		return findIncident(daform, user, rowsperpage, currpage, iscount, false);
 	}
+	
+	public ArrayList findIncident(SearchIncidentForm daform, Agent user, int rowsperpage, int currpage, boolean iscount, boolean dirtyRead) { 
+		return findIncident(daform, user, rowsperpage, currpage, iscount, false, null);
+	}
 	/**
 	 * 
 	 * @param daform
@@ -1719,13 +1723,13 @@ public class BagService {
 	 *            used to search incident by different criterias
 	 * @return
 	 */
-	public ArrayList findIncident(SearchIncidentForm daform, Agent user, int rowsperpage, int currpage, boolean iscount, boolean dirtyRead) {
+	public ArrayList findIncident(SearchIncidentForm daform, Agent user, int rowsperpage, int currpage, boolean iscount, boolean dirtyRead, String sort) {
 		try {
 			IncidentBMO iBMO = new IncidentBMO();
 			SearchIncident_DTO siDTO = new SearchIncident_DTO();
 			BeanUtils.copyProperties(siDTO, daform);
 			siDTO.setIntelligentTagSearch(true);
-			return (ArrayList) iBMO.findIncident(siDTO, user, rowsperpage, currpage, iscount, dirtyRead);
+			return (ArrayList) iBMO.findIncident(siDTO, user, rowsperpage, currpage, iscount, dirtyRead, sort);
 		}
 		catch (Exception e) {
 			logger.error("unable to find incident due to bean copyproperties error: " + e);
@@ -1827,7 +1831,7 @@ public class BagService {
 				oo.setLostandfoundincident(lost);
 			}
 
-			LostFoundBMO lBMO = new LostFoundBMO();
+			LostFoundBMO lBMO = new LostFoundBMO(); 
 
 			boolean result = lBMO.insertLostFound(lost, user);
 			if(result)

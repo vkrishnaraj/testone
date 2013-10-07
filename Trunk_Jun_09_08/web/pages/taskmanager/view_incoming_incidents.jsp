@@ -6,8 +6,12 @@
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
+<%@ page import="org.apache.commons.lang.StringUtils" %>
+<%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
+<%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %> 
 <%
   Agent a = (Agent)session.getAttribute("user");
+  boolean collectPosId = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_COLLECT_POS_ID, a);
 %>
   
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
@@ -48,6 +52,11 @@ function updatePagination() {
     return true;
 }
 
+function sortIncident(sortIncident) {
+	o = document.searchIncidentForm;
+	o.sort.value = sortIncident;
+	o.submit();
+}
   </script>
   
   <jsp:include page="/pages/includes/validation_search.jsp" />
@@ -55,7 +64,15 @@ function updatePagination() {
   
   <jsp:include page="/pages/includes/taskmanager_header.jsp" />
   
-    
+  	<%
+	    String sort = StringUtils.trimToNull((String)request.getAttribute("sort"));	
+	    if (sort != null) {
+	%>
+	    <input type="text" name="sort" value="<%= sort %>"/>
+	<%} else {%>
+	      <input type="text" name="sort" value="<%=TracingConstants.SortParam.OHD_POSITION.getParamString()%>">
+	<%}%>
+	 
     <tr>
       
       <td id="middlecolumn">
@@ -223,6 +240,22 @@ function updatePagination() {
                       </b>
                     </td>
                   </logic:notEmpty>
+                  
+                  <logic:equal name="searchIncidentForm" property="itemType_ID" value="1">
+	                  <% if (collectPosId) { %> 
+	                  	<td>
+	                    	<strong>
+	                      		<logic:notEqual name="sort" value="<%=TracingConstants.SortParam.OHD_POSITION.getParamString()%>" scope="request">
+			               			<a href="#" onclick="sortIncident('<%=TracingConstants.SortParam.OHD_POSITION.getParamString()%>');"><bean:message key="colname.posId" /></a>
+			                  </logic:notEqual>
+			                  <logic:equal name="sort" value="<%=TracingConstants.SortParam.OHD_POSITION.getParamString()%>" scope="request">
+			              			<a href="#" onclick="sortIncident('<%=TracingConstants.SortParam.OHD_POSITIONREV.getParamString()%>');"><bean:message key="colname.posId" /></a>
+			              	   </logic:equal>
+			               </strong>
+	                  	</td>
+	           		  <% } %>
+	           	  </logic:equal>
+	           	  	  
                   <td >
                     <b>
                       <bean:message key="colname.claimnum" />
@@ -306,6 +339,17 @@ function updatePagination() {
                         <bean:write name="searchIncidentForm" property="flightnum" />
                       </td>
                     </logic:notEmpty>
+                  
+                  	<logic:equal name="searchIncidentForm" property="itemType_ID" value="1">
+	            	  	<% if (collectPosId) { %>
+							<td>
+	                   		   <logic:iterate id="item_list" name="items" type="com.bagnet.nettracer.tracing.db.Item">
+		                     		<bean:write name="item_list" property="posId" />
+		                     	</logic:iterate>                   
+	                  		</td>
+	            		<% } %>
+	            	</logic:equal>
+	            
                     <td>
                       <logic:iterate id="item_list" name="items" type="com.bagnet.nettracer.tracing.db.Item">
                         <logic:present name="item_list" property="claimchecknum">

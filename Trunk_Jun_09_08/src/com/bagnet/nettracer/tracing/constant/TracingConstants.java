@@ -35,6 +35,13 @@ public class TracingConstants {
 		STATUS ("status"),
 		PRIORITY ("priority"),
 		ASSIGNED_TO ("assigned_to"), 
+
+		/*
+		 * Incident Sort colums
+		 */
+		OHD_POSITION ("incident_position"),
+		OHD_POSITIONREV("incident_positionRev"),
+		
 		/*
 		 * OHD Sort columns
 		 */

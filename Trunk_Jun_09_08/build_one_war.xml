@@ -3935,6 +3935,7 @@
 		<copy todir="${basedir}/web/reports" file="companies/tracer/LostDelayReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/DamageReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/MissingReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/southwest/ma_bag_info.jrxml" overwrite="true" />
 			
 		<antcall target="jasper_compile" />
 

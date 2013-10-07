@@ -36,6 +36,7 @@ import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.exception.StaleStateException;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.constant.TracingConstants.SortParam;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Claim;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -1167,6 +1168,11 @@ public class IncidentBMO {
 
 	public List findIncident(SearchIncident_DTO siDTO, Agent user, int rowsperpage, int currpage, boolean iscount,
 			boolean dirtyRead) throws HibernateException {
+		return findIncident(siDTO, user, rowsperpage, currpage, iscount, false, null);
+	}
+
+	public List findIncident(SearchIncident_DTO siDTO, Agent user, int rowsperpage, int currpage, boolean iscount,
+			boolean dirtyRead, String sort) throws HibernateException {
 		Session sess = null;
 
 		if (dirtyRead) {
@@ -1186,7 +1192,8 @@ public class IncidentBMO {
 				s.append("select distinct incident from com.bagnet.nettracer.tracing.db.Incident incident ");
 
 			boolean tagPresent = false;
-			if (!siDTO.getClaimchecknum().isEmpty() || siDTO.getExpediteTagNum() != null && !siDTO.getExpediteTagNum().isEmpty()) {
+			if (!siDTO.getClaimchecknum().isEmpty() || siDTO.getExpediteTagNum() != null && !siDTO.getExpediteTagNum().isEmpty() 
+					||  SortParam.OHD_POSITION.getParamString().equalsIgnoreCase(sort) || SortParam.OHD_POSITIONREV.getParamString().equalsIgnoreCase(sort)) {
 				s.append(" left outer join incident.itemlist item ");
 				tagPresent = true;
 			}
@@ -1353,10 +1360,19 @@ public class IncidentBMO {
 				s.append(" and incident.agentassigned is null");
 			}
 
-			if (!iscount && siDTO.getRecordlocator() != null && siDTO.getRecordlocator().trim().length() > 0)
-				s.append(" order by incident.createdate desc, incident.createtime desc");
-			else if (!iscount)
-				s.append(" order by incident.incident_ID");
+			//order by
+			if (!iscount) {
+				s.append(" order by ");
+				if (SortParam.OHD_POSITION.getParamString().equalsIgnoreCase(sort)) {
+					s.append("item.posId desc");
+				} else if (SortParam.OHD_POSITIONREV.getParamString().equalsIgnoreCase(sort)) {
+					s.append("item.posId asc");
+				} else if (siDTO.getRecordlocator() != null && siDTO.getRecordlocator().trim().length() > 0) {
+					s.append("incident.createdate desc, incident.createtime desc");
+				} else {
+					s.append("incident.incident_ID");
+				}
+			}
 
 			q = sess.createQuery(s.toString());
 			q.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
