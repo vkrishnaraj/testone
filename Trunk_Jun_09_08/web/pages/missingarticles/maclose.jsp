@@ -14,11 +14,12 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.dr.Dispute" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.dr.DisputeUtils" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.DisputeResolutionUtils" %>
+<%@ page import="com.bagnet.nettracer.tracing.forms.IncidentForm" %>
 <%
   	Agent a = (Agent)session.getAttribute("user");
   	String cssFormClass = "form2_pil";
-  
-	String incident_ID = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getIncident_ID();
+  	IncidentForm myform=(com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm");
+	String incident_ID = myform.getIncident_ID();
   	Dispute myDispute = DisputeUtils.getDisputeByIncidentId(incident_ID);
 	String disputeProcess = "false";
 	if (myDispute != null) {
@@ -32,6 +33,8 @@
 			  && myDispute.getStatus().getStatus_ID() == TracingConstants.DISPUTE_RESOLUTION_STATUS_OPEN) { 
 			disputeActionType = "viewToResolve"; 
 	  }
+
+	boolean bagLossCodes=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL, a) && PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES));
 %>
 
   <script language="javascript">
@@ -119,14 +122,22 @@
           <font color=red>
             <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
           </font>
+          <% if(bagLossCodes){  %>
+            <jsp:include page="/pages/includes/closebagloss_incl.jsp" />
+          <% } %>
+          
           <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
           <input type="hidden" name="close" value="1">
           <html:hidden name="close" property="close" value="1"/>
-           	<% if (DisputeResolutionUtils.isIncidentLocked(request.getAttribute("incident").toString())) { %>
+           	
+           	<% if(!bagLossCodes){
+           		if (DisputeResolutionUtils.isIncidentLocked(request.getAttribute("incident").toString())) { %>
             <jsp:include page="/pages/includes/closereport_no_lock_ro_incl.jsp" />
             <% } else { %>
             <jsp:include page="/pages/includes/closereport_incl.jsp" />
-            <% } %>
+            <% }
+          	}%>
+            
           </table>
           <jsp:include page="/pages/includes/remarkclose_incl.jsp" />
         </div>
@@ -167,7 +178,7 @@
                     <% } %>
   
                     &nbsp;
-                    <html:submit property="doclose" styleId="button" onclick="doCheck=1;">
+                    <html:submit property="doclose" styleId="button" onclick="anyLossCodeChanges(); doCheck=1;">
                       <bean:message key="button.closereport" />
                     </html:submit>
                   </logic:notEqual>

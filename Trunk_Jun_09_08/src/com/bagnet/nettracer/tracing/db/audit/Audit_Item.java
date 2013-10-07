@@ -16,6 +16,7 @@ import java.util.Set;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Manufacturer;
 import com.bagnet.nettracer.tracing.db.Resolution;
+import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.XDescElement;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
@@ -76,7 +77,9 @@ public class Audit_Item implements Serializable {
 
 	private String assistDeviceType;
 	private String assistDeviceCheck;
-	
+
+	private int lossCode;
+	private Station faultStation=new Station();
 	
 	/**
 	 * @return Returns the bag_weight.
@@ -862,13 +865,55 @@ public class Audit_Item implements Serializable {
 		return assistDeviceCheck;
 	}
 
-
 	/**
 	 * @param assistDeviceTypeCheck
 	 *          The assistDeviceTypeCheck to set.
 	 */
 	public void setAssistDeviceCheck(String assistDeviceCheck) {
 		this.assistDeviceCheck = assistDeviceCheck;
+	}
+
+	/**
+	 * @return Returns the lossCode
+	 * 
+	 * @hibernate.property type="int"
+	 */
+	public int getLossCode() {
+		return lossCode;
+	}
+	
+	/**
+	 * @param lossCode
+	 *          The lossCode to set.
+	 */
+	public void setLossCode(int lossCode) {
+		this.lossCode = lossCode;
+	}
+
+	/**
+	 * @return Returns the faultStation.
+	 * 
+	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.Station" column="faultStation_id" not-found="ignore"
+	 */
+	public Station getFaultStation() {
+		return faultStation;
+	}
+	
+	/**
+	 * @param faultStation
+	 *          The faultStation to set.
+	 */
+
+	public void setFaultStation(Station faultStation) {
+		this.faultStation = faultStation;
+	}
+	
+	public String getFaultStationCode(){
+		if(getFaultStation()!=null){
+			return getFaultStation().getStationcode();
+		} else {
+			return "";
+		}
 	}
 	
 }

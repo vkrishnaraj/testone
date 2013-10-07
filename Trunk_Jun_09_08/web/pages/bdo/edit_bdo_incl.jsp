@@ -23,8 +23,11 @@
 <%@page import="java.util.List"%>
 
 <%@page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
+<%@page import="com.bagnet.nettracer.tracing.bmo.IncidentBMO"%>
 
 <%@page import="com.bagnet.nettracer.tracing.db.Passenger"%>
+<%@page import="com.bagnet.nettracer.tracing.db.Incident"%>
+<%@page import="com.bagnet.nettracer.tracing.db.Item"%>
 <%@page import="com.bagnet.nettracer.tracing.db.Incident_Claimcheck"%>
 
 <%
@@ -35,7 +38,22 @@ boolean isServ=(myform.getDelivercompany_ID()!=0 && (((DeliverCompany)(BDOUtils.
 boolean bagLossCodes=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL, a) && PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES));
 %>
 <%@page import="com.bagnet.nettracer.tracing.db.Address"%><script language="javascript">
-
+<%
+boolean lossCodeChange=false;
+	Incident inc=null;
+if(myform.getIncident_ID()!=null && myform.getIncident_ID().length()>0){
+	inc=IncidentBMO.getIncidentByID(myform.getIncident_ID(), null);
+	List<Item> ilist=myform.getItemlist();
+	int i=0;
+	for(Item it:ilist){
+		Item incI=inc.getItemlist().get(i);
+		if(it.getItem_ID()==incI.getItem_ID() && it.getLossCode()!=0 && it.getLossCode()!=incI.getLossCode()){
+			lossCodeChange=true;
+		}
+		i++;	
+	}
+}
+%>
 
 function toggledc(o) {
 	o.changeservice.value = "1";
@@ -100,6 +118,10 @@ function toggledc(o) {
   		  lossCode.selectedIndex=preLossCode.selectedIndex;
   		  faultStation.selectedIndex=preFaultStation.selectedIndex;
   	  }
+    }
+    
+    function showBDORemark(){
+    	document.getElementById("bdoRemark").style.display="block";
     }
 
 </script>
@@ -961,8 +983,105 @@ if (i.intValue() == 0) {
 				</html:select>
               </td>
             </tr>
+            
+            <% if(bagLossCodes){
+            	boolean notClosed=myform.getIncident().getStatus().getStatus_ID()!=TracingConstants.MBR_STATUS_CLOSED;
+            	boolean closed=myform.getIncident().getStatus().getStatus_ID()!=TracingConstants.MBR_STATUS_CLOSED;
+            	boolean notDelivered=theitem.getStatus().getStatus_ID()!=TracingConstants.ITEM_STATUS_TOBEDELIVERED;
+            	boolean delivered=theitem.getStatus().getStatus_ID()==TracingConstants.ITEM_STATUS_TOBEDELIVERED;
+            	boolean sameStation=a.getStation().getStation_ID()==myform.getIncident().getStationcreated().getStation_ID();
+            	boolean diffStation=a.getStation().getStation_ID()!=myform.getIncident().getStationcreated().getStation_ID();
+                boolean editLossCode=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_NON_CLOSED_DELIVERED_BAGS,a) && notClosed && notDelivered && sameStation)
+        				|| (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_DELIVERED_BAGS_SAME_STATION,a) && sameStation && delivered )
+        				|| (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_CLOSED_INCIDENT,a) && sameStation && closed )
+        				|| (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_ANY_CLOSED_DELIVERED,a) && (closed || delivered));%>
+	          <% if(!editLossCode){ %> 
+	          
+		        <html:hidden property="lossCode" value="<%=String.valueOf(theitem.getLossCode()) %>"  name="theitem" indexed="true"/>
+		        
+		        <html:hidden property="faultStation_id" value="<%=String.valueOf(theitem.getFaultStation_id()) %>" name="theitem"  indexed="true"/>
+	          <%} %>
+              <tr>
+              	<td colspan="2">
+            		<bean:message key="colname.loss.code" />
+	            	<br>
+	            	<html:select name="theitem" property="lossCode" styleClass="dropdown" indexed="true" onchange="showBDORemark();" disabled="<%=!editLossCode %>" >      
+			          <html:option value="0">
+			            <bean:message key="select.please_select" />
+			          </html:option>
+			           <html:options collection="losscodes" property="loss_code" labelProperty="codeDescription" />
+		            </html:select>
+	          	</td>
+	          	<td>
+	            	<bean:message key="colname.fault.station" />
+	            	<br>
+			        <html:select name="theitem" property="faultStation_id" styleClass="dropdown" indexed="true" disabled="<%=!editLossCode %>">  
+			          <html:option value="">
+			            <bean:message key="select.please_select" />
+			          </html:option>
+			          <html:options collection="faultstationlist" property="station_ID" labelProperty="stationcode" />
+			        </html:select>
+	          	</td>
+              </tr>
+              <tr>
+              	<td align="center" style="vertical-align:middle;">&nbsp;<br>
+	          		<% if(i!=0){ %>
+	            		<input type="button" name="sameAsPrevious_<%=i%>" value="<bean:message key="button.same_previous"/>" onclick="samePrevious(<%=i %>);" id="button">
+	            	<% } %>
+	          	</td>
+	          	<td colspan="2" style="vertical-align:middle;">&nbsp;<br></td>
+              </tr>
+              
+              <% } %>
         </table>
       </logic:iterate>
+      <% if(bagLossCodes){ %>
+      <div id="bdoremark" style="display:none">
+	  <h1 class="green">
+	    <bean:message key="header.bdo.remarks" />
+	      </h1>
+		<table  class="form2" cellspacing="0" cellpadding="0">
+        	<tr >
+              <td>
+                <bean:message key="colname.station" />
+                :
+                <logic:present name="BDOForm" property="agent">
+   
+	                <bean:write name="BDOForm" property="agent.companycode_ID" />
+	                &nbsp;
+	                <bean:write name="BDOForm" property="agent.station.stationcode" />
+	              </logic:present>
+              </td>
+              <td>
+                <bean:message key="colname.agent" />
+                :
+                <logic:present name="BDOForm" property="agent">
+                	<bean:write name="BDOForm" property="agent.username" />
+                </logic:present>
+              </td>
+              <% boolean securePermission=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SECURE_REMARKS, a);  
+              if (securePermission) { %>
+              <td>
+                <bean:message key="colname.secure" />
+                :
+                <input type="checkbox" name="secure" 
+                      <logic:equal name="BDOForm" property="secure" value="true">
+                        checked="checked"
+                      </logic:equal> />
+              </td><% } %>
+            </tr>
+            <tr >
+            <td valign="top" colspan="<%=securePermission?3:2%>">
+
+				<!-- onkeydown="textCounter2(<= remarkText %>, <= remarkText2 %>,1500);insertNewLine('<=remarkId %>');" onkeyup="textCounter2(<= remarkText %>, <= remarkText2 %>,1500);" -->
+                  <html:textarea name="BDOForm" property="remark" cols="80" rows="10" />
+                  <!-- <input name="<= remarkDescription + "2" %>" id="<=remarkId + ".counter" %>" type="text" value="1500" size="4" maxlength="4" disabled="true" />-->
+                  <br>
+            	</td>
+            </tr>
+         </table>
+         </div>
+      <% } %>
     </logic:notEqual>
     <br>
     <br>
@@ -995,8 +1114,10 @@ if (i.intValue() == 0) {
       </td>
     </tr>
   </table>
-  
 	<script>
+	<% if(lossCodeChange){ %>
+		showBDORemark();
+	<% }%>
 		isServ();
 	</script>
 

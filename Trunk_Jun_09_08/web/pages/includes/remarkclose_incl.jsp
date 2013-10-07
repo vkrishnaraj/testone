@@ -79,7 +79,7 @@
 		</logic:equal>
 	</logic:iterate>
 </table>
-<center><html:submit property="addcloseremark" styleId="button">
+<center><html:submit property="addcloseremark" styleId="button" onclick="lossCodeChange=false; return true;">
 	<bean:message key="button.add_remark" />
 </html:submit></center>
 

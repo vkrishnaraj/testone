@@ -76,7 +76,6 @@ import com.bagnet.nettracer.tracing.db.wtq.WtqSuspendAhl;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.history.IncidentHistoryObject;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
-import com.bagnet.nettracer.tracing.utils.BDOUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.ClientUtils;
 import com.bagnet.nettracer.tracing.utils.DisputeResolutionUtils;
@@ -346,36 +345,37 @@ public class LostDelayAction extends CheckedAction {
 			}
 			return (mapping.findForward(TracingConstants.LD_MAIN));
 		}
-
-		if (request.getParameter("lock_fault") != null){
-			DisputeResolutionUtils.lockIncident(theform.getIncident_ID(),theform);
-			theform.setLocked(true);
-			request.removeAttribute("lock_fault");
-		}
-		if (request.getParameter("unlock_fault") != null){
-			DisputeResolutionUtils.unlockIncident(theform.getIncident_ID());
-			theform.setLocked(false);
-			request.removeAttribute("unlock_fault");
-		}
-		if (request.getParameter("lock_faultcode") != null){
-			DisputeResolutionUtils.lockIncidentCode(theform.getIncident_ID(),theform.getLoss_code());
-			theform.setCodeLocked(true);
-			request.removeAttribute("lock_fault");
-		}
-		if (request.getParameter("unlock_faultcode") != null){
-			DisputeResolutionUtils.unlockIncidentCode(theform.getIncident_ID());
-			theform.setCodeLocked(false);
-			request.removeAttribute("unlock_fault");
-		}
-		if (request.getParameter("lock_faultstation") != null){
-			DisputeResolutionUtils.lockIncidentStation(theform.getIncident_ID(),theform.getFaultstation().getStation_ID());
-			theform.setStationLocked(true);
-			request.removeAttribute("lock_faultstation");
-		}
-		if (request.getParameter("unlock_faultstation") != null){
-			DisputeResolutionUtils.unlockIncidentStation(theform.getIncident_ID());
-			theform.setStationLocked(false);
-			request.removeAttribute("unlock_fault");
+		if(!(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL, user) && PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES))){
+			if (request.getParameter("lock_fault") != null){
+				DisputeResolutionUtils.lockIncident(theform.getIncident_ID(),theform);
+				theform.setLocked(true);
+				request.removeAttribute("lock_fault");
+			}
+			if (request.getParameter("unlock_fault") != null){
+				DisputeResolutionUtils.unlockIncident(theform.getIncident_ID());
+				theform.setLocked(false);
+				request.removeAttribute("unlock_fault");
+			}
+			if (request.getParameter("lock_faultcode") != null){
+				DisputeResolutionUtils.lockIncidentCode(theform.getIncident_ID(),theform.getLoss_code());
+				theform.setCodeLocked(true);
+				request.removeAttribute("lock_fault");
+			}
+			if (request.getParameter("unlock_faultcode") != null){
+				DisputeResolutionUtils.unlockIncidentCode(theform.getIncident_ID());
+				theform.setCodeLocked(false);
+				request.removeAttribute("unlock_fault");
+			}
+			if (request.getParameter("lock_faultstation") != null){
+				DisputeResolutionUtils.lockIncidentStation(theform.getIncident_ID(),theform.getFaultstation().getStation_ID());
+				theform.setStationLocked(true);
+				request.removeAttribute("lock_faultstation");
+			}
+			if (request.getParameter("unlock_faultstation") != null){
+				DisputeResolutionUtils.unlockIncidentStation(theform.getIncident_ID());
+				theform.setStationLocked(false);
+				request.removeAttribute("unlock_fault");
+			}
 		}
 		
 		// close report

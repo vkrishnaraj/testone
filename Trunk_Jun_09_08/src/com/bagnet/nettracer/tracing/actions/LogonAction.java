@@ -309,11 +309,12 @@ public class LogonAction extends Action {
 			} else {
 				s = agent.getStation();
 			}
+			boolean lossBagLevel=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL, agent) && PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES);
 			for (int i = 0; i < taskList.size(); ++i) {
 				GroupComponentPolicy policy = (GroupComponentPolicy) taskList.get(i);
 				ActivityDTO dto = new ActivityDTO();
-
 				String key = policy.getComponent().getComponent_Name();
+				if(key!=null && !(lossBagLevel && key.equals(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE))){
 				dto.setActivityinfo(key);
 				dto.setActivityloc(policy.getComponent().getComponent_action_link());
 				dto.setActivityinfomenu(key);
@@ -501,7 +502,7 @@ public class LogonAction extends Action {
 																					if (x != -1) {
 																						entries = x;
 																					} 																					
-																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE)) {														
+																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE) && !lossBagLevel) {
 																					int x = OHDUtils.getDisputeCount(true, agent.getStation().getLz_ID(), agent.getStation().getStation_ID());
 																					if (x != -1) {
 																						entries = x;
@@ -630,6 +631,7 @@ public class LogonAction extends Action {
 				}
 				dto.setEntries("" + entries);
 				list.add(dto);
+				}
 			}
 			session.setAttribute("activityList", list);
 		}

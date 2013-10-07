@@ -737,6 +737,10 @@ function updatePagination() {
                     <bean:write name="theitem" property="fnameonbag" />
                     <bean:write name="theitem" property="mnameonbag" />
                     <br>
+                    <% if((UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL, a) && PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES))){ %>
+                     	<bean:message key="colname.loss.code"/>: <bean:write name="theitem" property="lossCode" /><br>
+                     	<bean:message key="colname.fault.station"/>: <bean:write name="theitem" property="faultStationCode" /><br>
+                    <% } %>
                     <bean:message key="colname.color" />
                     :
                     <bean:write name="theitem" property="color" />

@@ -7,14 +7,15 @@
 package com.bagnet.nettracer.tracing.actions;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Currency;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.TimeZone;
 
-import javax.jms.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -26,8 +27,6 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
-
-import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.integrations.delivery.DeliveryIntegrationResponse;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
@@ -39,16 +38,19 @@ import com.bagnet.nettracer.tracing.db.DeliveryInstructions;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.ExpenseType;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Item;
+import com.bagnet.nettracer.tracing.db.Itinerary;
+import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.forms.BDOForm;
 import com.bagnet.nettracer.tracing.history.BDOHistoryObject;
-import com.bagnet.nettracer.tracing.history.HistoryContainer;
-import com.bagnet.nettracer.tracing.actions.BagDelStatusInfoUtils;
+import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BDOUtils;
 import com.bagnet.nettracer.tracing.utils.DeliveryIntegrationTypeUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.HistoryUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.tracing.web.StatusListDisp;
@@ -229,6 +231,7 @@ public class BDOAction extends Action {
 			request.setAttribute("showprint", "1");
 			return (mapping.findForward(TracingConstants.BDO_MAIN));
 		}
+		
 		// save bdo
 		if (request.getParameter("save") != null) {
 
@@ -241,8 +244,35 @@ public class BDOAction extends Action {
 				messages.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, messages);
 				return (mapping.findForward(TracingConstants.BDO_MAIN));
+			} else if(theform.getIncident()!=null && theform.getIncident().getItinerary_list()!=null && theform.getIncident().getItinerary_list().size()>0){
+				HashMap<String,String> paxItinMap=new HashMap<String,String>();
+				for(Itinerary itin:theform.getIncident().getItinerary_list()){
+					if(itin.getItinerarytype()==TracingConstants.PASSENGER_ROUTING){
+						if(paxItinMap.get(itin.getLegfrom())==null){
+							paxItinMap.put(itin.getLegfrom(), "1");
+						}
+						if(paxItinMap.get(itin.getLegto())==null){
+							paxItinMap.put(itin.getLegto(), "1");
+						}
+					}
+				}
+				boolean inPaxItin=false;
+				for(Object item:theform.getItemlist()){
+					Item it=(Item)item;
+					if(it.getFaultStation()!=null && it.getFaultStation().getStationcode()!=null && it.getFaultStation().getStationcode().length()>0){
+						if(paxItinMap.get(it.getFaultStation().getStationcode())!=null){
+							inPaxItin=true;
+						}
+					}
+				}
+				if(!inPaxItin){
+					ActionMessage error = new ActionMessage("error.fault.pax.itin");
+					messages.add(ActionMessages.GLOBAL_MESSAGE, error);
+					saveMessages(request, messages);
+					return (mapping.findForward(TracingConstants.BDO_MAIN));
+				}
 			}
-
+			
 			String[] bagchosen = null;
 
 			// make sure user checked item to be inserted if choosebags is 1

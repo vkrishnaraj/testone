@@ -13,13 +13,14 @@
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.DisputeResolutionUtils" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.dr.Dispute" %>
+<%@ page import="com.bagnet.nettracer.tracing.forms.IncidentForm" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.dr.DisputeUtils" %>
 
 <%
 	  Agent a = (Agent)session.getAttribute("user");
 	  String cssFormClass = "form2_ld";
-	  
-	  String incident_ID = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getIncident_ID();
+	  IncidentForm myform=(com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm");
+	  String incident_ID = myform.getIncident_ID();
 	  
 	  	Dispute myDispute = DisputeUtils.getDisputeByIncidentId(incident_ID);
 		String disputeProcess = "false";
@@ -34,6 +35,7 @@
 			  && myDispute.getStatus().getStatus_ID() == TracingConstants.DISPUTE_RESOLUTION_STATUS_OPEN) { 
 			disputeActionType = "viewToResolve"; 
 	  }
+	  boolean bagLossCodes=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL, a) && PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES));  
 %>
   
   <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
@@ -128,60 +130,18 @@
           <font color=red>
             <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
           </font>
-          <logic:iterate id="theitem" indexId="i" name="incidentForm" property="itemlist" type="com.bagnet.nettracer.tracing.db.Item">
-            <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
-              <tr>
-                <td colspan=4>
-                  <a name='additem<%= i %>'></a>
-                  <b><bean:message key="colname.bag_number" />
-                  :
-                  <%= theitem.getBagnumber() + 1 %>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <bean:message key="colname.ldclose.arr_airline_id" />
-                  <br>
-                  
-                  <logic:empty name="theitem" property="arrivedonairline_ID">
-                    <jsp:setProperty name="theitem" property="arrivedonairline_ID" value="<%= a.getCompanycode_ID() %>"/>
-                  </logic:empty>
-                  <html:select name="theitem" property="arrivedonairline_ID" styleClass="dropdown" indexed="true">
-                    <html:option value="">
-                      <bean:message key="select.please_select" />
-                    </html:option>
-                    <html:options collection="companylistByName" property="companyCode_ID" labelProperty="companydesc" />
-                  </html:select>
-                </td>
-                <td>
-                  <bean:message key="colname.ldclose.arr_flight_num" />
-                  <br>
-                  <html:text name="theitem" property="arrivedonflightnum" size="10" maxlength="5" styleClass="textfield" indexed="true" />
-                </td>
-                <td>
-                  <bean:message key="colname.ldclose.arr_date" />
-                  (
-                  <%= a.getDateformat().getFormat() %>)
-                  <br>
-                  <html:text name="theitem" property="disarrivedondate" size="13" maxlength="13" styleClass="textfield" indexed="true" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2<%= i %>" name="calendar2<%= i %>" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select2(document.incidentForm, '<%= "theitem[" + i + "].disarrivedondate" %>','calendar2<%= i %>','<%= a.getDateformat().getFormat() %>'); return false;"></td>
-                  <% if (i == 0) { %>
-                  <td><br>
-                  	<center>
-                  		<input type="button" id="button" onclick="populateBagInfo(this);" value="<bean:message key="apply.to.all"/>" />
-                  	</center>
-                  </td>
-                  <% } %>
-              </tr>
-            </table>
-          </logic:iterate>
+          
+            <jsp:include page="/pages/includes/closebagloss_incl.jsp" />
           <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
           <input type="hidden" name="close" value="1">
            <html:hidden name="close" property="close" value="1"/>
-           	<% if (DisputeResolutionUtils.isIncidentLocked(request.getAttribute("incident").toString())) { %>
+           	<% if(!bagLossCodes){
+           		if (DisputeResolutionUtils.isIncidentLocked(request.getAttribute("incident").toString())) { %>
             <jsp:include page="/pages/includes/closereport_no_lock_ro_incl.jsp" />
             <% } else { %>
             <jsp:include page="/pages/includes/closereport_incl.jsp" />
-            <% } %>
+            <% }
+          	}%>
             
           </table>
           <jsp:include page="/pages/includes/remarkclose_incl.jsp" />
@@ -192,7 +152,7 @@
                   <br>
                   <logic:equal name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
                       <logic:equal name="disputeProcess" scope="request" value="false">
-		                  <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE, a)){ 
+		                  <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE, a) && (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL, a))){ 
 		                   		String incidentId = "" + request.getAttribute("incident");
     		  					if (! DisputeResolutionUtils.isIncidentLocked(incidentId)) { %>
 		                    <input type="submit" id="button" value='<bean:message key="button.dispute.fault" />' onclick='document.location.href="disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=start";return false;'>
@@ -207,7 +167,7 @@
                   
                   	<% if (PropertyBMO.isTrue(PropertyBMO.PROPERTY_ALLOW_OPEN_INCIDENT_DISPUTE)) { %>
                       <logic:equal name="disputeProcess" scope="request" value="false">
-		                  <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE, a)){ 
+		                  <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE, a) && (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL, a))){ 
 		                   		String incidentId = "" + request.getAttribute("incident");
     		  					if (! DisputeResolutionUtils.isIncidentLocked(incidentId)) { %>
 		                    <input type="submit" id="button" value='<bean:message key="button.dispute.fault" />' onclick='document.location.href="disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=start";return false;'>
@@ -227,7 +187,7 @@
                     <bean:message key="button.closereport" />
                   </html:submit>
                   <% } else { %>
-                  <html:submit property="doclose" styleId="button" onclick="doCheck = 1;" >
+                  <html:submit property="doclose" styleId="button" onclick="anyLossCodeChanges(); doCheck = 1;" >
                     <bean:message key="button.closereport" />
                   </html:submit>
                   <% } %>

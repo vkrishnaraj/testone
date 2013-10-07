@@ -91,8 +91,9 @@ public class DisputeResolutionAction extends CheckedAction {
 			if (actionType.equalsIgnoreCase("start")) {
 				forwardTarget = TracingConstants.DISPUTE_RESOLUTION;
 			} else if (actionType.equalsIgnoreCase("reopen")){ 
-				if(!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
-						&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE, user)) {
+				boolean bagLossCodes=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL, user) && PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES);
+				if(bagLossCodes || (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
+						&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE, user))) {
 					forwardTarget = TracingConstants.NO_PERMISSION;
 				} else {
 					forwardTarget = viewToResolveDispute(incident, request);	
@@ -100,8 +101,9 @@ public class DisputeResolutionAction extends CheckedAction {
 			} else if (actionType.equalsIgnoreCase("new")) {
 				forwardTarget = createNew(incident, theform, user);
 			} else if (actionType.equalsIgnoreCase("viewToResolve")) {		//only authorized agent can update existing dispute
-				if(!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
-						&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE, user)) {
+				boolean bagLossCodes=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL, user) && PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES);
+				if(bagLossCodes || (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
+						&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE, user))) {
 					forwardTarget = TracingConstants.NO_PERMISSION;
 				} else {
 					forwardTarget = viewToResolveDispute(incident, request);	

@@ -2694,4 +2694,36 @@ public class IncidentBMO {
 			return true;
 		}
 	}
+	
+	/**
+	 * Get Remarks by Incident
+	 *
+	 * Method used to get and return a list of remarks that belong to an Incident
+	 *
+	 * @param  incident_id 	String of incident_id to compare against remark incident_ids
+	 * @return List of Remarks with incident_id.
+	 * -Sean Fine
+	 */
+	public static List<Remark> getRemarksByIncidentId(String incident_id){
+		String sql = "from com.bagnet.nettracer.tracing.db.Remark where incident.id = :incidentId";
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			q.setParameter("incidentId", incident_id);
+			List<Remark> ilist= (List<Remark>) q.list();
+			return ilist;
+		} catch (Exception e) {
+			logger.error("Error in checking Remarks for Incidents: " + e);
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.error("unable to close hibernate session: " + e);
+				}
+			}
+		}
+	}
 }

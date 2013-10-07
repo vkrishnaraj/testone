@@ -171,4 +171,8 @@ public class Company_specific_irregularity_code implements Serializable {
 	public String getControllableDisp() {
 		return controllable ? "Yes" : "No";
 	}
+	
+	public String getCodeDescription(){
+		return getLoss_code()+" - "+getDescription();
+	}
 }

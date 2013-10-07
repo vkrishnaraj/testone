@@ -333,7 +333,13 @@ public class BDOUtils {
 		request.setAttribute("BDOForm", theform);
 		theform.setOhd(ohd != null ? ohd : new OHD());
 		theform.setIncident(incident != null ? incident : new Incident());
-		theform.setMbrType((incident != null && incident.getItemtype()!=null)? incident.getItemtype_ID() : TracingConstants.LOST_DELAY);
+		if(incident != null && incident.getItemtype()!=null){
+			theform.setMbrType(incident.getItemtype_ID());
+			request.setAttribute("mbrtype", incident.getItemtype_ID());
+		} else{
+			theform.setMbrType(TracingConstants.LOST_DELAY);
+			request.setAttribute("mbrtype", TracingConstants.LOST_DELAY);
+		}
 
 		if (list != null) {
 			BDO bdo = null;
@@ -413,8 +419,33 @@ public class BDOUtils {
 					}
 				}
 
-				// bdo.setItems(new LinkedHashSet(theform.getItemlist()));
-
+				//Remarks
+				Remark re = null;
+				if(bdo.getIncident()!=null && theform.getRemark() != null) {
+					re = new Remark();
+					re.setAgent(theform.getAgent());
+					re.setRemarktype(TracingConstants.REMARK_REGULAR);
+					re.setIncident(bdo.getIncident());
+					re.setRemarktext(theform.getRemark());
+					re.setCreatetime(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(TracerDateTime.getGMTDate()));
+					re.setSecure(theform.isSecure());
+					// If agent_ID = 0, agent is transient. To prevent exception
+					// from being thrown, we get the non-transient version.
+					// Was unable to determine what causes object to become
+					// transient.
+					if(re.getAgent() != null && re.getAgent().getAgent_ID() == 0) {
+						try {
+							Agent tmpAgent = TracerUtils.getAgent(re.getAgent().getUsername(), re.getAgent()
+									.getCompanycode_ID());
+							re.setAgent(tmpAgent);
+						}
+						catch (Exception e) {
+							logger.error("Could not correct transient agent: " + e.getMessage());
+							e.printStackTrace();
+						}
+					}
+					bdo.getIncident().getRemarks().add(re);
+				}
 			} else if (theform.getOhd().getOHD_ID() != null) {
 				// first check to see if this ohd is matched to a l/d item
 				Item item = findOHDfromMatchedLD(theform.getOhd().getOHD_ID());
@@ -853,6 +884,12 @@ public class BDOUtils {
 					}				
 				} catch (Exception e) {
 					e.printStackTrace();
+				}
+			} 
+			if(bdo.getIncident().getRemarks()!=null && bdo.getIncident().getRemarks().size()>0){
+				for(Remark r:bdo.getIncident().getRemarks()){
+					if(r.getRemark_ID()==0)
+						sess.saveOrUpdate(r);
 				}
 			}
 

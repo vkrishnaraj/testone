@@ -653,6 +653,7 @@
 	      int t = 0;
 		  boolean hasPassItin = false;
 	      %>
+	<div id="<%=TracingConstants.JSP_PAX_ITIN %>">
 	<logic:iterate id="theitinerary" indexId="k" name="incidentForm"
 		property="itinerarylist">
 		<logic:equal name="theitinerary" property="itinerarytype" value="0">
@@ -749,6 +750,7 @@
 		</logic:equal>
 		<% ++t; %>
 	</logic:iterate>
+	</div>
 	<center>
 		<select name="addpassitNum">
 			<option value="1">1</option>
@@ -793,6 +795,7 @@
 	<bean:message key="message.required" />
 	<a name="bagit"></a>
 	<% t = 0; %>
+	<div id="<%=TracingConstants.JSP_BAG_ITIN %>">
 	<logic:iterate id="theitinerary" indexId="k" name="incidentForm"
 		property="itinerarylist">
 		<logic:equal name="theitinerary" property="itinerarytype" value="1">
@@ -890,6 +893,8 @@
 		</logic:equal>
 		<% ++t; %>
 	</logic:iterate>
+	
+	</div>
 	<center>
 		<select name="addbagitNum">
 			<option value="1">1</option>

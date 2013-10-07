@@ -17,6 +17,7 @@ import java.util.Set;
 
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.utils.CurrencyUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
@@ -95,6 +96,9 @@ public class Item implements Serializable {
 
 	private int assistDeviceType;
 	private String assistDeviceCheck;
+	
+	private int lossCode;
+	private Station faultStation;
 	
 	/**
 	 * @return Returns the bag_weight;
@@ -1236,6 +1240,59 @@ public class Item implements Serializable {
 	 */
 	public void setAssistDeviceCheck(String assistDeviceCheck) {
 		this.assistDeviceCheck = assistDeviceCheck;
+	}
+
+	/**
+	 * @return Returns the lossCode
+	 * 
+	 * @hibernate.property type="int"
+	 */
+	public int getLossCode() {
+		return lossCode;
+	}
+	
+	/**
+	 * @param lossCode
+	 *          The lossCode to set.
+	 */
+	public void setLossCode(int lossCode) {
+		this.lossCode = lossCode;
+	}
+
+	/**
+	 * @return Returns the faultStation.
+	 * 
+	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.Station" column="faultStation_id" not-found="ignore"
+	 */
+	public Station getFaultStation() {
+		return faultStation;
+	}
+	/**
+	 * @param faultStation
+	 *          The faultStation to set.
+	 */
+	public void setFaultStation(Station faultStation) {
+		this.faultStation=faultStation;
+	}
+	
+
+	public int getFaultStation_id() {
+		if(getFaultStation()==null)
+			setFaultStation(new Station());
+		return getFaultStation().getStation_ID();
+
+	}
+
+	public void setFaultStation_id(int station_id) {
+		if(station_id!=0){
+			Station s=StationBMO.getStation(station_id);
+			if(s!=null)
+				setFaultStation(s);
+			else 
+				setFaultStation(null);
+		} else {
+			setFaultStation(null);
+		}
 	}
 	
 }

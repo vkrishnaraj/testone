@@ -217,54 +217,57 @@ public class DamagedAction extends CheckedAction {
 		
 		//new code for dispute resolution
 		String form_incident_id = null;
-		Dispute myDispute = null;
-		boolean isIncidentLocked = false;
-		
+		boolean disputeProcess = false;
 		if(theform.getIncident_ID() != null) {
 			form_incident_id = theform.getIncident_ID();
 			request.setAttribute("incident", form_incident_id);
-			myDispute = DisputeUtils.getDisputeByIncidentId(form_incident_id);
-			isIncidentLocked = DisputeResolutionUtils.isIncidentLocked(form_incident_id);
 		}
-		
-		boolean disputeProcess = false;
-		if (myDispute != null) {
-			disputeProcess = true;
-		} 
-		
-		if (theform.getIncident_ID() != null) request.setAttribute("incident",theform.getIncident_ID());
-		
-		if (request.getParameter("lock_fault") != null){
-			DisputeResolutionUtils.lockIncident(theform.getIncident_ID(),theform);
-			theform.setLocked(true);
-			request.removeAttribute("lock_fault");
+		if (!(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL, user) && PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES))){
+
+			Dispute myDispute = null;
+			boolean isIncidentLocked = false;
+			if(theform.getIncident_ID() != null) {
+				myDispute = DisputeUtils.getDisputeByIncidentId(form_incident_id);
+				isIncidentLocked = DisputeResolutionUtils.isIncidentLocked(form_incident_id);
+			}
+			
+			if (myDispute != null) {
+				disputeProcess = true;
+			} 
+			
+			if (theform.getIncident_ID() != null) request.setAttribute("incident",theform.getIncident_ID());
+			
+			if (request.getParameter("lock_fault") != null){
+				DisputeResolutionUtils.lockIncident(theform.getIncident_ID(),theform);
+				theform.setLocked(true);
+				request.removeAttribute("lock_fault");
+			}
+			if (request.getParameter("unlock_fault") != null){
+				DisputeResolutionUtils.unlockIncident(theform.getIncident_ID());
+				theform.setLocked(false);
+				request.removeAttribute("unlock_fault");
+			}
+			if (request.getParameter("lock_faultcode") != null){
+				DisputeResolutionUtils.lockIncidentCode(theform.getIncident_ID(),theform.getLoss_code());
+				theform.setCodeLocked(true);
+				request.removeAttribute("lock_fault");
+			}
+			if (request.getParameter("unlock_faultcode") != null){
+				DisputeResolutionUtils.unlockIncidentCode(theform.getIncident_ID());
+				theform.setCodeLocked(false);
+				request.removeAttribute("unlock_fault");
+			}
+			if (request.getParameter("lock_faultstation") != null){
+				DisputeResolutionUtils.lockIncidentStation(theform.getIncident_ID(),theform.getFaultstation().getStation_ID());
+				theform.setStationLocked(true);
+				request.removeAttribute("lock_faultstation");
+			}
+			if (request.getParameter("unlock_faultstation") != null){
+				DisputeResolutionUtils.unlockIncidentStation(theform.getIncident_ID());
+				theform.setStationLocked(false);
+				request.removeAttribute("unlock_fault");
+			}
 		}
-		if (request.getParameter("unlock_fault") != null){
-			DisputeResolutionUtils.unlockIncident(theform.getIncident_ID());
-			theform.setLocked(false);
-			request.removeAttribute("unlock_fault");
-		}
-		if (request.getParameter("lock_faultcode") != null){
-			DisputeResolutionUtils.lockIncidentCode(theform.getIncident_ID(),theform.getLoss_code());
-			theform.setCodeLocked(true);
-			request.removeAttribute("lock_fault");
-		}
-		if (request.getParameter("unlock_faultcode") != null){
-			DisputeResolutionUtils.unlockIncidentCode(theform.getIncident_ID());
-			theform.setCodeLocked(false);
-			request.removeAttribute("unlock_fault");
-		}
-		if (request.getParameter("lock_faultstation") != null){
-			DisputeResolutionUtils.lockIncidentStation(theform.getIncident_ID(),theform.getFaultstation().getStation_ID());
-			theform.setStationLocked(true);
-			request.removeAttribute("lock_faultstation");
-		}
-		if (request.getParameter("unlock_faultstation") != null){
-			DisputeResolutionUtils.unlockIncidentStation(theform.getIncident_ID());
-			theform.setStationLocked(false);
-			request.removeAttribute("unlock_fault");
-		}
-		
 		if(MBRActionUtils.actionClose(theform, request, user, errors)) {
 			saveMessages(request, errors);
 				//		 AJAX CALL

@@ -14,10 +14,13 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.dr.Dispute" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.dr.DisputeUtils" %>
 <%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
+<%@ page import="com.bagnet.nettracer.tracing.forms.IncidentForm" %>
 <%
   	Agent a = (Agent)session.getAttribute("user");
 
-	String incident_ID = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getIncident_ID();
+	String cssFormClass = "form2_dam";
+	IncidentForm myform=(com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm");
+	String incident_ID = myform.getIncident_ID();
 	
   	Dispute myDispute = DisputeUtils.getDisputeByIncidentId(incident_ID);
 	String disputeProcess = "false";
@@ -32,6 +35,7 @@
 			  && myDispute.getStatus().getStatus_ID() == TracingConstants.DISPUTE_RESOLUTION_STATUS_OPEN) { 
 			disputeActionType = "viewToResolve"; 
 	  }
+	 boolean bagLossCodes=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL, a) && PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES));
 %>
 
   <script language="javascript">
@@ -119,14 +123,21 @@
           <font color=red>
             <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
           </font>
+          
+          <% if(bagLossCodes){  %>
+            <jsp:include page="/pages/includes/closebagloss_incl.jsp" />
+          <% } %>
           <table class="form2" cellspacing="0" cellpadding="0">
           <input type="hidden" name="close" value="1">
           <html:hidden name="close" property="close" value="1"/>
-           	<% if (DisputeResolutionUtils.isIncidentLocked(request.getAttribute("incident").toString())) { %>
+           	<% if(!bagLossCodes){
+           		if (DisputeResolutionUtils.isIncidentLocked(request.getAttribute("incident").toString())) { %>
             <jsp:include page="/pages/includes/closereport_no_lock_ro_incl.jsp" />
             <% } else { %>
             <jsp:include page="/pages/includes/closereport_incl.jsp" />
-            <% } %>
+            <% }
+          	}%>
+            
           </table>
           <jsp:include page="/pages/includes/remarkclose_incl.jsp" />
         </div>
@@ -136,7 +147,7 @@
                   <br>
                   <logic:equal name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
                       <logic:equal name="disputeProcess" scope="request" value="false">
-		                  <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE, a)){ 
+		                  <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE, a) && (!bagLossCodes)){ 
 		                   		String incidentId = "" + request.getAttribute("incident");
     		  					if (! DisputeResolutionUtils.isIncidentLocked(incidentId)) { %>
 		                    <input type="submit" id="button" value='<bean:message key="button.dispute.fault" />' onclick='document.location.href="disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=start";return false;'>
@@ -150,7 +161,7 @@
                   <logic:notEqual name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
                   	<% if (PropertyBMO.isTrue(PropertyBMO.PROPERTY_ALLOW_OPEN_INCIDENT_DISPUTE)) { %>
                       <logic:equal name="disputeProcess" scope="request" value="false">
-		                  <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE, a)){ 
+		                  <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE, a) && (bagLossCodes)){ 
 		                   		String incidentId = "" + request.getAttribute("incident");
     		  					if (! DisputeResolutionUtils.isIncidentLocked(incidentId)) { %>
 		                    <input type="submit" id="button" value='<bean:message key="button.dispute.fault" />' onclick='document.location.href="disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=start";return false;'>

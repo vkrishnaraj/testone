@@ -21,6 +21,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.dr.DisputeUtils" %>
 <%
   	Agent a = (Agent)session.getAttribute("user");
+	String cssFormClass = "form2_dam";
 	int lossCodeInt = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getLoss_code();
 	String incident_ID = ((com.bagnet.nettracer.tracing.forms.IncidentForm)session.getAttribute("incidentForm")).getIncident_ID();
 	Incident inc = IncidentBMO.getIncidentByID(incident_ID, null);
@@ -56,7 +57,7 @@
 	  }
 	  
 	  boolean stationLock=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LIMITED_LOSS_CODES, a) && inc.getStatus().getStatus_ID()==13 && a.getStation().getStationcode().equals(inc.getFaultstationcode()) );
-      
+      boolean bagLossCodes=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL, a) && PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES));
 %>
   <html:form action="damaged.do" method="post" enctype="multipart/form-data">
     <tr>
@@ -134,6 +135,46 @@
           <font color=red>
             <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
           </font>
+          <% java.util.List lossCodes=LossCodeBMO.getCompanyCodes(a.getStation().getCompany().getCompanyCode_ID(), TracingConstants.DAMAGED_BAG, true, a); %>
+          <logic:iterate name="incidentForm" property="itemlist" id="theitem" type="com.bagnet.nettracer.tracing.db.Item">
+            <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
+				  <tr>
+					<td colspan=3>
+				<a name="additem${status.index}"></a>
+					  <b><bean:message key="colname.bag_number" />
+					  :
+					  <c:out value="${theitem.bagnumber + 1}"/></b>
+					</td>
+				  </tr>
+          		<% if(bagLossCodes){ %>
+				  <tr>
+					<td colspan="2">
+						<b><bean:message key="colname.loss.code" /></b>
+			  <br>
+			  <%  	for (java.util.Iterator i = lossCodes.iterator(); i.hasNext(); ) {
+			            com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code code = (
+			                                                                                      com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code)i.next();
+			            
+		            if(code.getLoss_code()==theitem.getLossCode())
+		            { %>
+		         
+			  			<%=code.getLoss_code() %>-<%=code.getDescription()%> 
+		            <% break;
+		            }
+		            }%>
+					</td>
+					<td>
+						<b><bean:message key="colname.fault.station" /></b>
+					  <br>
+			  <bean:write name="theitem" property="faultStation.stationcode"/>
+					</td>
+				  </tr>
+				  <% } %>
+			  </table>
+		  
+          </logic:iterate>
+          
+          <% if(!bagLossCodes){ %>
           <table class="form2" cellspacing="0" cellpadding="0">
            <tr>
            
@@ -203,6 +244,7 @@
               <% } %>
             </tr>
           </table>
+          <% } %>
 	<table class="form2" cellspacing="0" cellpadding="0">
 		<c:if test="${!empty incidentForm.remarklist}">
 			<tr>
@@ -255,7 +297,8 @@
                   <br>
                        <% if (PropertyBMO.isTrue(PropertyBMO.PROPERTY_ALLOW_OPEN_INCIDENT_DISPUTE)) { %>
                       <logic:equal name="disputeProcess" scope="request" value="false">
-		                  <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE, a)){ 
+		                  <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE, a) 
+		                		  && (!bagLossCodes)){ 
 		                   		String incidentId = "" + request.getAttribute("incident");
     		  					if (! DisputeResolutionUtils.isIncidentLocked(incidentId)) { %>
 		                    <input type="submit" id="button" value='<bean:message key="button.dispute.fault" />' onclick='document.location.href="disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=start";return false;'>
@@ -265,7 +308,7 @@
                        <% } else { %>
                                  <logic:equal name="currentstatus" scope="request" value='<%= "" + TracingConstants.MBR_STATUS_CLOSED %>'>
                       <logic:equal name="disputeProcess" scope="request" value="false">
-		                  <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE, a)){ 
+		                  <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_DISPUTE_FAULT_CODE, a) && (!bagLossCodes)){ 
 		                   		String incidentId = "" + request.getAttribute("incident");
     		  					if (! DisputeResolutionUtils.isIncidentLocked(incidentId)) { %>
 		                    <input type="submit" id="button" value='<bean:message key="button.dispute.fault" />' onclick='document.location.href="disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=start";return false;'>

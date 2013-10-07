@@ -62,6 +62,9 @@ public final class BDOForm extends ValidatorForm {
 	private Date lastDeliveryUpdate;
 	private DeliveryStatusType deliveryStatus;
 	
+	private String remark;
+	private boolean secure;
+	
 
 
 	private double origDelivCost;
@@ -550,5 +553,28 @@ public final class BDOForm extends ValidatorForm {
 	}
 	public void setMbrType(int mbrType) {
 		this.mbrType=mbrType;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+	
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public boolean isSecure() {
+		return secure;
+	}
+
+	public void setSecure(boolean secure) {
+		this.secure = secure;
+	}
+	
+	@Override
+	public void reset(org.apache.struts.action.ActionMapping mapping, javax.servlet.http.HttpServletRequest request) {
+		super.reset(mapping, request);
+		secure=false;
+		
 	}
 }

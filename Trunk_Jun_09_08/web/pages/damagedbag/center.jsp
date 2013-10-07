@@ -355,7 +355,7 @@ function disableButton(aButton) {
               <td align="center" valign="top"><br>
 		<html:hidden property="save" value="" disabled="true" />
               <html:button property="saveButton" styleId="button"
-		      onclick="disableButtons(); if(validatereqFields(this.form, 'damaged') != false && validateRest(this.form) != false) {this.form.save.disabled = false; clearBeforeUnload(); enableStateProvince(); this.form.submit();} else {enableButtons(); this.form.save.disabled = true; return false;}">
+		      onclick="disableButtons(); anyLossCodeChanges(); if(validatereqFields(this.form, 'damaged') != false && validateRest(this.form) != false) {this.form.save.disabled = false; clearBeforeUnload(); enableStateProvince(); this.form.submit();} else {enableButtons(); this.form.save.disabled = true; return false;}">
                 <logic:notEqual name="incidentForm" property="incident_ID" value="">
               	  <bean:message key="button.save" />
                 </logic:notEqual>
@@ -375,7 +375,7 @@ function disableButton(aButton) {
                 <logic:notEqual name="incidentForm"
                   property="incident_ID" value="">
 		<html:hidden property="save" value="" disabled="true" />
-                  <html:button property="saveremarkButton" styleId="button" onclick="disableButtons(); this.form.save.disabled = false; clearBeforeUnload(); enableStateProvince(); this.form.submit();">
+                  <html:button property="saveremarkButton" styleId="button" onclick="disableButtons(); anyLossCodeChanges(); this.form.save.disabled = false; clearBeforeUnload(); enableStateProvince(); this.form.submit();">
                     <bean:message key="button.saveremark" />
                   </html:button>
                   
@@ -383,7 +383,7 @@ function disableButton(aButton) {
 					
 					<html:hidden property="saveadditions" value="" disabled="true" />
 					<html:button property="saveadditionsbutton" styleId="button"
-						onclick="disableButtons(); if(validatereqFields(this.form, 'damaged') != false && validateRest(this.form) != false) {this.form.saveadditions.disabled = false; clearBeforeUnload(); enableStateProvince(); this.form.submit();} else {enableButtons(); this.form.saveadditions.disabled = true; return false;}">
+						onclick="disableButtons(); anyLossCodeChanges(); if(validatereqFields(this.form, 'damaged') != false && validateRest(this.form) != false) {this.form.saveadditions.disabled = false; clearBeforeUnload(); enableStateProvince(); this.form.submit();} else {enableButtons(); this.form.saveadditions.disabled = true; return false;}">
 						<bean:message key="button.save" />
 					</html:button>
 				<%}%>

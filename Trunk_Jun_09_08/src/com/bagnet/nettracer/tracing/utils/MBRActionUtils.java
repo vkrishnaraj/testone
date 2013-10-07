@@ -697,24 +697,59 @@ public class MBRActionUtils {
 
 		if (request.getParameter("close") != null && (request.getParameter("doclose") != null || request.getParameter("doclosewt") != null)) {
 			ActionMessage error = null;
-			if (theform.getFaultstation_id() == 0 || Integer.toString(theform.getFaultstation_id()) == "") {
-				error = new ActionMessage("error.choose_faultcompany");
-				if (error != null) {
-					if (error.getKey().length() > 0) {
-						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+			/**
+			 * Checking for the losscode per bag permission. If the permission is not set, then the incident will close on a per incident basis. 
+			 * If it is set, then the fault station is checked against the passenger itinerary to confirm it's valid.
+			 */
+			if(!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL, user)){
+				if (theform.getFaultstation_id() == 0 || Integer.toString(theform.getFaultstation_id()) == "") {
+					error = new ActionMessage("error.choose_faultcompany");
+					if (error != null) {
+						if (error.getKey().length() > 0) {
+							errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+						}
+					}
+		
+					return true;
+				}
+				if (theform.getLoss_code() == 0) {
+					error = new ActionMessage("error.choose_lossreason");
+					if (error != null) {
+						if (error.getKey().length() > 0) {
+							errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+						}
+					}
+					return true;
+				}
+			} else {
+				HashMap<String,String> paxItinMap=new HashMap<String,String>();
+				for(Itinerary itin:theform.getItinerarylist()){
+					if(itin.getItinerarytype()==TracingConstants.PASSENGER_ROUTING){
+						if(paxItinMap.get(itin.getLegfrom())==null){
+							paxItinMap.put(itin.getLegfrom(), "1");
+						}
+						if(paxItinMap.get(itin.getLegto())==null){
+							paxItinMap.put(itin.getLegto(), "1");
+						}
 					}
 				}
-
-				return true;
-			}
-			if (theform.getLoss_code() == 0) {
-				error = new ActionMessage("error.choose_lossreason");
-				if (error != null) {
-					if (error.getKey().length() > 0) {
-						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				boolean inPaxItin=false;
+				for(Item it:theform.getItemlist()){
+					if(it.getFaultStation()!=null && it.getFaultStation().getStationcode()!=null && it.getFaultStation().getStationcode().length()>0){
+						if(paxItinMap.get(it.getFaultStation().getStationcode())!=null){
+							inPaxItin=true;
+						}
 					}
 				}
-				return true;
+				if(!inPaxItin){
+					error = new ActionMessage("error.fault.pax.itin");
+					if (error != null) {
+						if (error.getKey().length() > 0) {
+							errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+						}
+					}
+					return true;
+				}
 			}
 			theform.getStatus().setStatus_ID(TracingConstants.MBR_STATUS_CLOSED);
 
