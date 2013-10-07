@@ -3,8 +3,8 @@
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
 	<property name="ireport.zoom" value="2.143588810000015"/>
-	<property name="ireport.x" value="13"/>
-	<property name="ireport.y" value="51"/>
+	<property name="ireport.x" value="2"/>
+	<property name="ireport.y" value="54"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="com.bagnet.nettracer.tracing.forms.SearchIncidentForm"/>
@@ -26,11 +26,12 @@
 	<field name="dispClaimValue" class="java.lang.String"/>
 	<field name="valueTotal" class="java.lang.String"/>
 	<field name="claimTotal" class="java.lang.String"/>
+	<field name="currency" class="java.lang.String"/>
 	<background>
 		<band/>
 	</background>
 	<title>
-		<band height="161">
+		<band height="180">
 			<textField isBlankWhenNull="false">
 				<reportElement mode="Transparent" x="140" y="123" width="395" height="16"/>
 				<textElement lineSpacing="Single">
@@ -135,6 +136,20 @@
 					<font fontName="Arial" size="10"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{approvedTotal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="3" y="155" width="137" height="16"/>
+				<textElement textAlignment="Left" lineSpacing="Single">
+					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{deprec.report.currency}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Transparent" x="140" y="155" width="395" height="16"/>
+				<textElement lineSpacing="Single">
+					<font fontName="Arial" size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{currency}]]></textFieldExpression>
 			</textField>
 		</band>
 	</title>

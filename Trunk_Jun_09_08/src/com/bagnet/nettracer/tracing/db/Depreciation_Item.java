@@ -221,6 +221,16 @@ public class Depreciation_Item {
 			return "";
 		}
 	}
+	
+	@Transient
+	public String getCurrency() {
+
+		if(getClaimDepreciation()!=null && getClaimDepreciation().getCurrency()!=null && getClaimDepreciation().getCurrency().length()>0){
+			return getClaimDepreciation().getCurrency();
+		} else {
+			return "";
+		}
+	}
 
 	@Transient
 	public String getApprovedTotal() {
