@@ -263,7 +263,7 @@ public class InboundExpediteBagsReportBMO {
 			reportHeadingDestFlightNum = myDestFlightNum;
 		}		
 		
-		String myForwardDateTime = resourceBundle.getString("colname.forward.datetime");
+		String myForwardDateTime = resourceBundle.getString("colname.forwarddate");
 		if (!( myForwardDateTime == null || myForwardDateTime.equalsIgnoreCase("") )) {
 			reportHeadingForwardDateTime = myForwardDateTime;
 		}		

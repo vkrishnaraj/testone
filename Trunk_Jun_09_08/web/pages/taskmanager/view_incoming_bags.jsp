@@ -247,7 +247,7 @@ function sortIncomingBags(sortOrder) {
                 <b><bean:message key="colname.flight.num" /></b>
               </td> 
               <td>
-                <b><bean:message key="colname.forward.datetime" /></b>
+                <b><bean:message key="colname.forwarddate" /></b>
               </td>                            
               <td>
                 <b><bean:message key="header.forward_details" /></b>
@@ -330,10 +330,10 @@ function sortIncomingBags(sortOrder) {
                     <bean:write name="forwardLog" property="dispDestinationFlightnum" />
                   </td> 
                   <td>
-                    <logic:empty name="forwardLog" property="forward_time">
+                    <logic:empty name="forwardLog" property="dispForwardTime">
                       &nbsp;
                     </logic:empty>
-                    <bean:write name="forwardLog" property="forward_time" />
+                    <bean:write name="forwardLog" property="dispForwardTime" />
                   </td>                                       
                   <td>
                     <A HREF="forward_on_hand.do?showForward=1&forward_id=<bean:write name="forwardLog" property="OHDLog_ID"/>"><bean:message key="details" /></a>
