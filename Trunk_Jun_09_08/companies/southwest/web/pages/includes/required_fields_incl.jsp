@@ -88,7 +88,55 @@
         var left = currentElementName.indexOf("[");
         var right = currentElementName.indexOf("]");
         firstAddressIndex = currentElementName.substring(left+1, right);
-      }
+      } else if (currentElementName.indexOf("].lossCode") != -1) {
+      		if(lossCodeChange!=false){
+  				alert("<%=(String) bundle
+					.getString( "loss.code.remark")%>" + " <%=(String) bundle.getString(
+					"error.validation.isRequired")%>");
+     		
+  				return false;
+  			}
+      	} else if (currentElementName.indexOf("].faultStation_id") != -1) {
+      		if(currentElement.value!=null && currentElement.value.length>0){
+	      		hasPaxItin=false;
+	      		faultStationCode=null;
+	      		if(typeof currentElement.options!="undefined"){
+	      			faultStationCode=currentElement.options[currentElement.selectedIndex].text;
+	      		
+		      		var paxItinList=document.getElementById("pax_itin");
+		      		for(var m=0; m<paxItinList.childNodes.length; m++){
+		      			if(m%2!=0){
+		      				var paxItin=paxItinList.children[m];
+				      		for (var k=0; k < paxItin.children[1].children[0].children[0].children[0].childNodes.length; k++) {
+						      itinElement = paxItin.children[1].children[0].children[0].children[0].children[k];
+						      itinElementName=null;
+						      if(typeof itinElement != "undefined")
+						      	itinElementName=itinElement.name;
+						      	
+				      			if(typeof itinElementName != "undefined" && itinElementName != null && itinElementName.indexOf("].legfrom") != -1){
+				      				if(itinElement.value==faultStationCode){
+				      					hasPaxItin=true;
+				      				}
+				      			}
+				      			if(typeof itinElementName != "undefined" && itinElementName != null && itinElementName.indexOf("].legto") != -1){
+				      				if(itinElement.value==faultStationCode){
+				      					hasPaxItin=true;
+				      				}
+				      			}
+				      		}
+			      		}
+		      		}
+		      		
+		      		if(!hasPaxItin){
+		  				alert("<%=(String) bundle
+							.getString( "colname.fault.station")%>" + " <%=(String) bundle.getString(
+							"error.match.pax.itin")%>");
+		     		
+		  				return false;
+		  			}
+	  			}
+  			}
+      	}
     }
     
     returnValue = validatereqWtIncFields(form, formType, false, firstPaxIndex, firstAddressIndex, firstItemIndex, firstClaimcheckIndex);
@@ -136,7 +184,36 @@
   
   function validateReqBDO(form) {
     returnValue = true;
-    
+    for (var j=0;j < form.length;j++) {
+      currentElement = form.elements[j];
+      currentElementName=currentElement.name;
+      if (currentElementName.indexOf("].lossCode") != -1){
+        if (currentElement!=null && currentElement.value=="0"){
+          alert("<%= (String)bundle.getString("colname.loss.code") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+          currentElement.focus();
+          return false;
+        }
+      }
+      else if (currentElementName.indexOf("].faultStation_id") != -1)
+      {
+        if (currentElement.value.length < 1)
+        {
+          alert("<%= (String)bundle.getString("colname.fault.station") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>"); 
+          currentElement.focus();
+          return false;
+        }
+      }
+      else if (currentElementName.indexOf("remark") != -1)
+      {
+      	trimValue=currentElement.value.replace(/\s*/g, "");
+        if (trimValue.length < 1)
+        {
+		  alert("<%=(String) bundle.getString( "loss.code.remark")%>" + " <%=(String) bundle.getString("error.validation.isRequired")%>");
+          currentElement.focus();
+          return false;
+        }
+      }
+    }
     returnValue = validateBDO(form);
     if (returnValue == false) { return returnValue; }
 
