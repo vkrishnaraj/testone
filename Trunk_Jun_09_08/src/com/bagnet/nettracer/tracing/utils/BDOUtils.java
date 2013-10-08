@@ -333,13 +333,6 @@ public class BDOUtils {
 		request.setAttribute("BDOForm", theform);
 		theform.setOhd(ohd != null ? ohd : new OHD());
 		theform.setIncident(incident != null ? incident : new Incident());
-		if(incident != null && incident.getItemtype()!=null){
-			theform.setMbrType(incident.getItemtype_ID());
-			request.setAttribute("mbrtype", incident.getItemtype_ID());
-		} else{
-			theform.setMbrType(TracingConstants.LOST_DELAY);
-			request.setAttribute("mbrtype", TracingConstants.LOST_DELAY);
-		}
 
 		if (list != null) {
 			BDO bdo = null;

@@ -66,14 +66,11 @@
               <bean:message key="header.bdo_for" />
               (
               <logic:notEqual name="BDOForm" property="incident_ID" value="">
-              	<% if((request.getAttribute("mbrtype")!=null && request.getAttribute("mbrtype").equals(TracingConstants.LOST_DELAY+"")) ||
-            	(myform.getIncident()!=null && myform.getIncident().getItemtype()!=null && myform.getIncident().getItemtype_ID()==TracingConstants.LOST_DELAY)) {%>
+              	<% if(myform.getIncident()!=null && myform.getIncident().getItemtype()!=null && myform.getIncident().getItemtype_ID()==TracingConstants.LOST_DELAY) {%>
                 	<bean:message key="header.bdo_report_LD" />
-                <% } else if((request.getAttribute("mbrtype")!=null && request.getAttribute("mbrtype").equals(TracingConstants.MISSING_ARTICLES+"")) ||
-            	(myform.getIncident()!=null && myform.getIncident().getItemtype()!=null && myform.getIncident().getItemtype_ID()==TracingConstants.MISSING_ARTICLES)) {%>
+                <% } else if (myform.getIncident()!=null && myform.getIncident().getItemtype()!=null && myform.getIncident().getItemtype_ID()==TracingConstants.MISSING_ARTICLES) {%>
                 	<bean:message key="header.bdo_report_MS" />
-                <% } else if((request.getAttribute("mbrtype")!=null && request.getAttribute("mbrtype").equals(TracingConstants.DAMAGED_BAG+"")) ||
-            	(myform.getIncident()!=null && myform.getIncident().getItemtype()!=null && myform.getIncident().getItemtype_ID()==TracingConstants.DAMAGED_BAG)) {%>
+                <% } else if (myform.getIncident()!=null && myform.getIncident().getItemtype()!=null && myform.getIncident().getItemtype_ID()==TracingConstants.DAMAGED_BAG) {%>
                 	<bean:message key="header.bdo_report_DM" />
                 <% } %>
                 <bean:write name="BDOForm" property="incident_ID" />

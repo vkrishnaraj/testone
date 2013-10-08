@@ -441,7 +441,11 @@ public class BDOAction extends Action {
 		} else if (incident != null) {
 			// user came in for mbr bdo
 			incident = incident.toUpperCase().trim();
-
+			Incident inc=IncidentBMO.getIncidentByID(incident, null);
+			if(inc!=null){
+				theform.setIncident(inc);
+				theform.setMbrType(inc.getItemtype_ID());
+			}
 			// retrieve all bdos in a list for this incident
 			if (!BDOUtils.findBDOList(null, incident, theform, request)) {
 				ActionMessage error = new ActionMessage("error.noincident");
