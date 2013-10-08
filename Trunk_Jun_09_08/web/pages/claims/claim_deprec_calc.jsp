@@ -468,7 +468,6 @@
 						<td class="header" width="10%"><strong><bean:message key="deprec.calc.currency"/>: </strong></td>
 						<td>
 							<html:select name="claimDeprecCalcForm" property="claimDeprec.currency" styleClass="dropdown">
-			                  <html:option value=""><bean:message key="select.please_select" /></html:option>
 			                  <html:options collection="currencylist" property="currency_ID" labelProperty="id_desc" />
 			                </html:select>
 						</td>

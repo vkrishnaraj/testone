@@ -130,6 +130,9 @@ public class ClaimDeprecCalcAction extends Action {
 				if(CD.getDateCalculate()==null){
 					CD.setDateCalculate(new Date());
 				}
+				if(CD.getCurrency()==null){
+					CD.setCurrency(user.getDefaultcurrency());
+				}
 				theform.setClaimDeprec(CD);
 			} else if (CD == null) {
 				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.load.claim.deprec"));
