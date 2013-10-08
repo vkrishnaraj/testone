@@ -58,7 +58,7 @@ public class TemplateDTO {
 	}
 	
 	public String getDescription() {
-		return description;
+		return description != null && !description.isEmpty() ? description : "&nbsp;";
 	}
 
 	public void setDescription(String description) {
