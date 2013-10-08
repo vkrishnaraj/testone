@@ -6,6 +6,8 @@
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.Item" %>
 <%@ page import="org.apache.commons.lang.StringUtils" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %> 
@@ -341,13 +343,26 @@ function sortIncident(sortIncident) {
                     </logic:notEmpty>
                   
                   	<logic:equal name="searchIncidentForm" property="itemType_ID" value="1">
-	            	  	<% if (collectPosId) { %>
-							<td>
-	                   		   <logic:iterate id="item_list" name="items" type="com.bagnet.nettracer.tracing.db.Item">
-		                     		<bean:write name="item_list" property="posId" />
-		                     	</logic:iterate>                   
-	                  		</td>
-	            		<% } %>
+	            	  	<% if (collectPosId) {
+	            	  		out.print("<td>");
+	            	  		
+	            	  		@SuppressWarnings("unchecked")
+	            	  		List<Item> item_list = (List<Item>)items;
+	            	  		if (item_list == null || item_list.isEmpty()) {
+            	  				out.print("<br/>");
+	            	  		} else {	            	  		
+	            	  			for (Item item : item_list) {
+	            	  				if (item == null || item.getPosId() == null) {
+		            	  				out.print("<br/>");
+	            	  					continue;
+	            	  				}
+	            	  			
+	            	  				out.print(item.getPosId());
+	            	  			}
+	            	  		}
+
+	            	  		out.print("</td>");
+	            	  	} %>
 	            	</logic:equal>
 	            
                     <td>
