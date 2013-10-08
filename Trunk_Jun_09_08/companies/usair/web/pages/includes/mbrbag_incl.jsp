@@ -8,12 +8,21 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested"%>
-<%@ page import="com.bagnet.nettracer.tracing.db.Agent"%>
-<%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
-<%@ page import="com.bagnet.nettracer.tracing.db.OHD_Photo"%>
-<%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
+<%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.Item" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.Incident" %>
+<%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.OHD_Photo" %>
+<%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
+<%@ page import="com.bagnet.nettracer.tracing.bmo.IncidentBMO" %>
+<%@ page import="com.bagnet.nettracer.tracing.forms.IncidentForm" %>
+<%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.Item_Inventory"%>
+<%@ page import="java.util.List" %>
 <%
 	Agent a = (Agent) session.getAttribute("user");
+    IncidentForm myform = (IncidentForm) session.getAttribute("incidentForm");
+  
 	boolean collectPosId = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_COLLECT_POS_ID, a);
 	boolean collectExpTagNum = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EXPEDITE_TAG_NUM_COLLECT, a);
 	boolean collectAddItemInfo = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADDITIONAL_ITEM_INFORMATION_COLLECT, a);
@@ -54,10 +63,71 @@
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
 <SCRIPT LANGUAGE="JavaScript">
+<%
+	boolean lossCodeChange=false;
+  	Incident inc=null;
+	if(myform.getIncident_ID()!=null && myform.getIncident_ID().length()>0){
+		inc=IncidentBMO.getIncidentByID(myform.getIncident_ID(), null);
+		List<Item> ilist=myform.getItemlist();
+		int i=0;
+		for(Item it:ilist){
+			if(it.getLossCode()!=0 && it.getLossCode()!=inc.getItemlist().get(i).getLossCode()){
+				if(myform.getRemarklist()!=null && myform.getRemarklist().size()<=inc.getRemarks().size()){
+					lossCodeChange=true;
+					break;
+				}
+			}
+			i++;
+			
+		}
+		
+	}
+	%>
+	var lossCodeChange=<%=lossCodeChange%>;
   function textCounter3(field, maxlimit) {
     if (field.value.length > maxlimit) {
       field.value = field.value.substring(0, maxlimit);
     } 
+  }
+  
+  function lossCodeChanged(index){
+	  lossCodeChange=false;
+	  <% if(PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES)){ %>
+	  var disValue=document.getElementById("theitem["+index+"].lossCode");
+	  if(disValue!=null){
+		  var lastCode=0;
+			  <% if(inc!=null) {
+			  		if(inc.getItemlist() !=null){
+			  			int i=0;
+			  			for(Item it:inc.getItemlist()){ 
+			  				%>
+			  				if(index==<%=i%>){
+			  					lastCode=<%=it.getLossCode()%>
+			  				}
+			  		<%	i++;} } %>
+	
+					var remText=document.getElementById("remark["+(<%=myform.getRemarklist().size()-1%>)+"].remarktext");
+			  		if(disValue.value!=lastCode && (<%= myform.getRemarklist().size()<=inc.getRemarks().size() %> 
+			  			|| (remText!=null && remText.value!=null && remText.value.replace(/\s*/g, "").length==0 )))
+			  			lossCodeChange=true;
+			  <% } else { %>
+				    var remText=document.getElementById("remark[0].remarktext");
+				  	if(remText!=null && remText.value!=null && remText.value.replace(/\s*/g, "").length==0){
+				  		lossCodeChange=true;
+				  	}
+	 		 <% } %>	
+	  }
+	  <% } %>
+	  
+  }
+  
+  function anyLossCodeChanges(){
+	  
+	  <% if(PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES)){
+	  	for(int i=0;i<myform.getItemlist().size();i++){ %>
+	  	lossCodeChanged(<%=i%>);
+	  <% }
+	  }%>
   }
   
   function checkBagType(pos) {
@@ -225,6 +295,52 @@
 	            </td>
             <% } %>
 			</tr>
+			 <% if((UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL, a) && PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES))){ 
+        	boolean notClosed=myform.getStatus().getStatus_ID()!=TracingConstants.MBR_STATUS_CLOSED;
+          	boolean closed=myform.getStatus().getStatus_ID()!=TracingConstants.MBR_STATUS_CLOSED;
+          	boolean notDelivered=theitem.getStatus().getStatus_ID()!=TracingConstants.ITEM_STATUS_TOBEDELIVERED;
+          	boolean delivered=theitem.getStatus().getStatus_ID()==TracingConstants.ITEM_STATUS_TOBEDELIVERED;
+          	boolean sameStation=a.getStation().getStation_ID()==myform.getStationcreated().getStation_ID();
+          	boolean diffStation=a.getStation().getStation_ID()!=myform.getStationcreated().getStation_ID();
+            boolean editLossCode=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_NON_CLOSED_DELIVERED_BAGS,a) && notClosed && notDelivered && sameStation)
+      				|| (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_DELIVERED_BAGS_SAME_STATION,a) && sameStation && delivered )
+      				|| (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_CLOSED_INCIDENT,a) && sameStation && closed )
+      				|| (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_ANY_CLOSED_DELIVERED,a) && (closed || delivered)); %>
+          <% if(!editLossCode){ %> 
+          
+        <html:hidden property="lossCode" value="<%=String.valueOf(theitem.getLossCode()) %>"  name="theitem" indexed="true"/>
+        
+        <html:hidden property="faultStation_id" value="<%=String.valueOf(theitem.getFaultStation_id()) %>" name="theitem"  indexed="true"/>
+          <%} %>
+          <tr>
+          	<td >
+	            	<bean:message key="colname.loss.code" />
+	            	<br>
+	            	<% String isLossCodeString="lossCodeChanged("+i+")"; %>
+	            	<html:select name="theitem" property="lossCode" styleClass="dropdown" indexed="true"  disabled="<%=!editLossCode %>" onchange="<%=isLossCodeString %>" >      
+			          <html:option value="0">
+			            <bean:message key="select.please_select" />
+			          </html:option>
+			           <html:options collection="losscodes" property="loss_code" labelProperty="codeDescription" />
+		            </html:select>
+          	</td>
+          	<td>
+            	<bean:message key="colname.fault.station" />
+            	<br>
+		        <html:select name="theitem" property="faultStation_id" styleClass="dropdown" indexed="true" disabled="<%=!editLossCode %>">  
+		          <html:option value="">
+		            <bean:message key="select.please_select" />
+		          </html:option>
+		          <html:options collection="faultstationlist" property="station_ID" labelProperty="stationcode" />
+		        </html:select>
+          	</td>
+          	<td align="center" style="vertical-align:middle;">&nbsp;<br>
+          		<% if(i!=0){ %>
+            		<input type="button" name="sameAsPrevious_<%=i%>" value="<bean:message key="button.same_previous"/>" onclick="samePrevious(<%=i %>);" id="button">
+            	<% } %>
+          	</td>
+          </tr>
+          <% } %>
 			<tr>
 				<td><bean:message key="colname.last_name_onbag" /> <br> <html:text
 						name="theitem" property="lnameonbag" size="30" maxlength="50"

@@ -97,6 +97,8 @@
   
   function lossCodeChanged(index){
 	  lossCodeChange=false;
+
+	  <% if(PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES)){ %>
 	  var disValue=document.getElementById("theitem["+index+"].lossCode");
 	  if(disValue!=null){
 		  var lastCode=0;
@@ -121,7 +123,7 @@
 				  	}
 	 		 <% } %>	
 	  }
-	  
+	  <% } %>
   }
   
   function anyLossCodeChanges(){
