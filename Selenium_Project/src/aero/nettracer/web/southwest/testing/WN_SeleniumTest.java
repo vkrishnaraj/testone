@@ -194,7 +194,7 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 					success = true;
 					
 				} else {
-					System.out.println("!!!!!!!!!!!!!!! - Failed to Load OHD" + Settings.INCIDENT_ID_WN + ". Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+					System.out.println("!!!!!!!!!!!!!!! - Failed to Load OHD" + Settings.ONHAND_ID_WN + ". Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 				}
 			} else {
 			System.out.println("!!!!!!!!!!!!!!! - Failed to Load OHD Results. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");

@@ -30,11 +30,10 @@ public class WN_CSSCallSystem extends WN_SeleniumTest {
 		createIncident(false);
 		createIncident(false);
 		createIncident(false);
-		createIncident(false);
-		createIncident(false);
 		goToTaskManager();
 		verifyTrue(selenium.isTextPresent("Customer Contact Station List"));
 		String cssSizeStr = selenium.getText("id=658entry");
+		System.out.println("CSS Task Number: " + cssSizeStr);
 		int cssSize = 0;
 		if (cssSizeStr != null && cssSizeStr.matches("^\\d+$")) {
 			cssSize = Integer.parseInt(cssSizeStr);

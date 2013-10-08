@@ -1,5 +1,8 @@
 package aero.nettracer.web.southwest.testing.actions.nt.incidents.lostdelay;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.junit.Test;
 
 import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
@@ -244,7 +247,9 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		selenium.type("name=claimcheck[0].claimchecknum", "UTB");
 		selenium.click("name=saveButton");
 		assertEquals("Claim Check Number is not a valid claim check number.[10 digits or 8 character AN or marked UTB]", selenium.getAlert());
-		selenium.type("name=claimcheck[0].claimchecknum", "UTB12345678");
+		SimpleDateFormat df = new SimpleDateFormat("MMddyyyy");
+		String utbNum = "UTB" + df.format(new Date());
+		selenium.type("name=claimcheck[0].claimchecknum", utbNum);
 		selenium.click("name=saveButton");
 		waitForPageToLoadImproved();
 
@@ -266,14 +271,13 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		
 
 		if (checkNoErrorPage()) {
-			selenium.type("name=claimchecknum", "UTB12345678");
+			selenium.type("name=claimchecknum", utbNum);
 			selenium.click("id=button");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("CLDVRF: ERROR NAVIGATING TO THE LOST DELAY SEARCH PAGE.");
 			return;
 		}
-		
 
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent(Settings.INCIDENT_ID_WN));
@@ -283,14 +287,14 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 			System.out.println("CLDVRF: ERROR SEARCHING FOR THE INCIDENT BY CLAIMCHECK NUMBER.");
 			return;
 		}
-		System.out.println("UTB Test Checkin.");
+		
 		if (checkNoErrorPage()) {
 			selenium.controlKeyDown();
 			selenium.keyDown("id=header", "\\83");
 			selenium.keyUp("id=header", "\\83");
 			selenium.controlKeyUp();
 			waitForPageToLoadImproved(3000,false);
-			selenium.type("id=quickSearchQuery3", "UTB12345678");
+			selenium.type("id=quickSearchQuery3", utbNum);
 			selenium.click("id=button");
 			waitForPageToLoadImproved(10000,false);
 			verifyTrue(selenium.isTextPresent(Settings.INCIDENT_ID_WN));
