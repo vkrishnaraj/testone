@@ -11,7 +11,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	public void testVerifyText() throws Exception {
 		// MJS: initial state is drivers license collection enabled
 		// 		and view/edit drivers license disabled.
-		verifyTrue(setPermissions(new String[] { "632", "633", "636", "637", "635" }, new boolean[] { true, false, true, false, true }));
+		verifyTrue(setPermissions(new String[] { "632", "633", "636", "637", "635", "661", "662", "663", "664", "665"}, new boolean[] { true, false, true, false, true, false, false, false, false, false }));
 		createIncident(true);
 	}
 	
@@ -473,7 +473,13 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		verifyFalse(selenium.isTextPresent("Remark is Secure"));
 		selenium.type("id=remark[1]", "General Test");
 		selenium.click("name=saveButton");
-		goToTaskManager();
+		waitForPageToLoadImproved();
+
+		if (checkNoErrorPage()) {
+			goToTaskManager();
+		} else {
+			System.out.println("Failed to save general remark");
+		}
 	}
 	
 	@Test
@@ -505,6 +511,39 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	}
 	
 	@Test
+	public void testBagLossCode(){
+		verifyTrue(setPermissions(new String[] { "661", "662"}, new boolean[] { true, true}));
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
+		verifyTrue(selenium.isTextPresent("Chargeback Code"));
+		verifyTrue(selenium.isTextPresent("Chargeback Station"));
+		selenium.select("name=theitem[0].lossCode", "value=11");
+		selenium.select("name=theitem[0].faultStation_id", "label=LZ");
+		selenium.click("name=saveButton");
+		assertEquals("Remark for Loss Code Change is required.", selenium.getAlert());
+		selenium.click("name=addremark");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			selenium.click("name=saveButton");
+			assertEquals("Remark for Loss Code Change is required.", selenium.getAlert());
+			selenium.type("id=remark[3]", "Loss Code Change Remark");
+			selenium.click("name=saveButton");
+			assertEquals("Chargeback Station must be in Passenger Itinerary", selenium.getAlert());
+			selenium.select("name=theitem[0].faultStation_id", "label=ATL");
+			selenium.click("name=saveButton");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Failed to add Remark for loss code change");
+		}
+
+		if (checkNoErrorPage()) {
+			verifyTrue(selenium.isTextPresent("Lost/Delayed Bag Incident has been modified"));
+			goToTaskManager();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Failed to save incident for loss code change");
+		}
+	}
+	
+	@Test
 	public void testCreateBDO(){
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		selenium.click("xpath=(//a[contains(@href, 'bdo.do?mbr_id=')])[1]");
@@ -522,6 +561,17 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 			selenium.click("id=calendar");
 			selenium.click("link=Today");
 			selenium.type("name=cost","150");
+			selenium.select("name=theitem[0].lossCode", "label=Please Select");
+			selenium.select("name=theitem[0].faultStation_id", "label=Please Select");
+			selenium.click("id=button");
+			assertEquals("Chargeback Code is required.", selenium.getAlert());
+			selenium.select("name=theitem[0].lossCode", "value=11");
+			selenium.click("id=button");
+			assertEquals("Chargeback Station is required.", selenium.getAlert());
+			selenium.select("name=theitem[0].faultStation_id", "label=ATL");
+			selenium.click("id=button");
+			assertEquals("Remark for Loss Code Change is required.", selenium.getAlert());
+			selenium.type("name=remark", "BDO Loss Code Change Remark");
 			selenium.click("id=button");
 			waitForPageToLoadImproved();
 		} else {
@@ -565,6 +615,43 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 			System.out.println("!!!!!!!!!!!!!!!! Failed to verify clone itinerary for incident");
 		}
 	}
+	
+	@Test
+	public void testCloseLD() throws Exception {
+
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
+		selenium.click("xpath=(//a[contains(@href, 'lostDelay.do?close=1')])[1]");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			checkCopyrightAndQuestionMarks();
+			selenium.select("name=theitem[0].lossCode", "label=Please Select");
+			selenium.select("name=theitem[0].faultStation_id", "label=Please Select");
+			selenium.click("name=doclose");
+			assertEquals("Chargeback Code is required.", selenium.getAlert());
+			selenium.select("name=theitem[0].lossCode", "value=11");
+			selenium.click("name=doclose");
+			assertEquals("Remark for Loss Code Change is required.", selenium.getAlert());
+			selenium.type("name=remark[6].remarktext", "Loss Code Change Remark3");
+			selenium.click("name=doclose");
+			assertEquals("Chargeback Station is required.", selenium.getAlert());
+			selenium.select("name=theitem[0].faultStation_id", "label=ATL");
+			selenium.click("name=doclose");waitForPageToLoadImproved();
+			if (checkNoErrorPage()) {
+				checkCopyrightAndQuestionMarks();
+				verifyTrue(selenium.isTextPresent("Lost/Delayed Bag Incident has been closed."));
+				selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
+				waitForPageToLoadImproved();
+			} else {
+				System.out.println("!!!!!!!!!!!!!!! - Close Lost/Delay Success Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+				verifyTrue(false);
+			}
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Close Lost/Delay Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+			verifyTrue(false);
+		}
+		 
+	}
+	
 	
 	private void typeString(String locator, String string) {
 		char[] chars = string.toCharArray();
