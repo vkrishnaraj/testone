@@ -150,40 +150,6 @@ public class DateUtils {
 		return convertToDate(str, instyle, inloc, null);
 	}
 	
-	/**
-	 * Extract date from first param, and time from second param 
-	 * and combine into new date
-	 * 
-	 * @param Date
-	 * @param Date
-	 * @return
-	 */
-	public static Date convertDatetimeToDate(Date date1, Date date2) {
-		try {
-			Calendar date1cal=Calendar.getInstance();
-			Calendar date2cal=Calendar.getInstance();
-			Date tempdate = null;
-			if (date1 != null ) {
-				date1cal.setTime(date1);
-				date1cal.clear(Calendar.HOUR);
-				date1cal.clear(Calendar.MINUTE);
-				date1cal.clear(Calendar.SECOND);
-				if (date2 != null) {
-					date2cal.setTime(date2);
-					date1cal.set(Calendar.HOUR,(date2.getHours() == 0 ? 0 : date2.getHours()));
-					date1cal.set(Calendar.MINUTE,(date2.getMinutes() == 0 ? 0 : date2.getMinutes()));
-					date1cal.set(Calendar.SECOND,(date2.getSeconds() == 0 ? 0:date2.getSeconds()));
-				}
-			tempdate = date1cal.getTime();			
-			} 
-			return tempdate;		
-		} catch (Exception e) {
-			logger.warn("no date entered ");
-		}
-		return null;
-	}
-	
-	
 	public static Date convertToDate(String str, String instyle, String inloc, TimeZone startTZ) {
 		try {
 			Locale locale = null;

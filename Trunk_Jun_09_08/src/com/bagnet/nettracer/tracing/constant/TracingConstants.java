@@ -395,6 +395,7 @@ public class TracingConstants {
 	public final static String DB_DATETIMEFORMAT = "yyyy-MM-dd HH:mm:ss";
 	public final static String DB_DATEFORMAT = "yyyy-MM-dd";
 	public final static String DB_TIMEFORMAT = "HH:mm:ss";
+	public final static String DB_DATETIMEFORMAT2 = "yyyy-MM-dd HH:mm";
 	
 	public final static String DB_DATETIMEFORMAT_MSSQL = "MM/dd/yyyy hh:mm:ss a";
 	public final static String DB_DATEFORMAT_MSSQL = "MM/dd/yyyy";

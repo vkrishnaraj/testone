@@ -9,6 +9,7 @@ package com.bagnet.nettracer.tracing.db;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -258,9 +259,9 @@ public class BDO implements Serializable {
 	}
 
 	public String getDisppickuptime() {
-//		Date tempdate = DateUtils.convertToDate( DateUtils.formatDate(getPickupdate(), TracingConstants.DB_DATEFORMAT, null, null) + " "
-//				+ DateUtils.formatDate(getPickuptime(), TracingConstants.DB_TIMEFORMAT, null, null),TracingConstants.DB_DATETIMEFORMAT,null);
-		Date tempdate = DateUtils.convertDatetimeToDate(getPickupdate(), getPickuptime());
+		Date tempdate = DateUtils.convertToDate( DateUtils.formatDate(getPickupdate(), TracingConstants.DB_DATEFORMAT, null, null) + " "
+				+ DateUtils.formatDate(getPickuptime(), TracingConstants.DB_TIMEFORMAT, null, null),TracingConstants.DB_DATETIMEFORMAT,null);
+
 		return DateUtils.formatDate(tempdate, _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
 	}
 
@@ -346,7 +347,7 @@ public class BDO implements Serializable {
 	 * @hibernate.property type="time"
 	 */
 	public Date getPickuptime() {
-		return pickuptime;
+		return pickuptime;		
 	}
 
 	/**

@@ -358,7 +358,10 @@ public final class BDOForm extends ValidatorForm {
 	}
 
 	public void setDisppickupdate(String s) {
-		setPickupdate(DateUtils.convertToDate(s, get_DATEFORMAT(), null));
+		if(s!=null && !s.isEmpty())
+			setPickupdate(DateUtils.convertToDate(s, get_DATEFORMAT(), null));
+		else
+			setPickuptime(null);
 	}
 
 	public String getDisppickupdate() {
@@ -383,11 +386,21 @@ public final class BDOForm extends ValidatorForm {
 	}
 
 	public void setDisppickuptime(String s) {
-		setPickuptime(DateUtils.convertToDate(s, get_TIMEFORMAT(), null));
+		if(s!=null && !s.isEmpty())
+			setPickuptime(DateUtils.convertToDate(s, get_TIMEFORMAT(), null));
+		else
+			setPickuptime(null);
 	}
 
+	/**
+	 * 
+	 * @return the pickuptime for display only
+	 */
 	public String getDisppickuptime() {
-		return DateUtils.formatDate(getPickuptime(), get_TIMEFORMAT(), null, null);
+		Date tempdate = DateUtils.convertToDate( DateUtils.formatDate(getPickupdate(), TracingConstants.DB_DATEFORMAT, null, null) + " "
+				+ DateUtils.formatDate(getPickuptime(), TracingConstants.DB_TIMEFORMAT, null, null),TracingConstants.DB_DATETIMEFORMAT,null);
+		
+		return DateUtils.formatDate(tempdate, _TIMEFORMAT, null, _TIMEZONE);		
 	}
 
 	/**
