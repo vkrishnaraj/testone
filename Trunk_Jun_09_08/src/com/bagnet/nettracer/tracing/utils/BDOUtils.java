@@ -879,7 +879,7 @@ public class BDOUtils {
 					e.printStackTrace();
 				}
 			} 
-			if(bdo.getIncident().getRemarks()!=null && bdo.getIncident().getRemarks().size()>0){
+			if(bdo.getIncident()!=null && bdo.getIncident().getRemarks()!=null && bdo.getIncident().getRemarks().size()>0){
 				for(Remark r:bdo.getIncident().getRemarks()){
 					if(r.getRemark_ID()==0)
 						sess.saveOrUpdate(r);
@@ -1474,5 +1474,35 @@ public class BDOUtils {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Find BDO By Item Count - Searching for a number of non-cancelled BDOs associated to a item. 
+	 * @param item_ID - the id of the item to look for BDOs
+	 * @return Number of non-cancelled BDOs associated with an Item
+	 */
+	public static long findBDOByItemCount(int item_ID) {
+		String sql = "select count(distinct ibdo.bdo.BDO_ID) from com.bagnet.nettracer.tracing.db.Item_BDO ibdo where ibdo.item.item_ID=:itemid and ibdo.bdo.canceled=0";
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			q.setParameter("itemid", item_ID);
+			List ibdocount=  q.list();
+			if(ibdocount!=null)
+				return (Long)ibdocount.get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 0;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return -1;
 	}
 }
