@@ -199,7 +199,7 @@ public class WN_CreateClaim extends WN_SeleniumTest {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyEquals("id=totalApprovedPayout", "30.00");
+			verifyEquals("30.00", selenium.getValue("id=totalApprovedPayout"));
 			goToTaskManager();
 		} else {
 			System.out.println("Failed to manually update the Total Approved Payout");
