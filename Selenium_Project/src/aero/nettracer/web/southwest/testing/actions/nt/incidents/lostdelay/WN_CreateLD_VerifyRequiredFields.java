@@ -261,7 +261,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyEquals(selenium.getValue("name=claimcheck[0].claimchecknum"),"UTB12345678");
+			verifyEquals(selenium.getValue("name=claimcheck[0].claimchecknum"), utbNum);
 			selenium.click("id=menucol_1.4");
 			waitForPageToLoadImproved();
 		} else {
