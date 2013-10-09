@@ -64,7 +64,7 @@
 
 		  <% if(PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES)){ %>
 		  var disValue=document.getElementById("theitem["+index+"].lossCode");
-		  if(disValue!=null){
+		  if(disValue!=null && disValue.value!="0"){
 			  var lastCode=0;
 				  <% if(inc!=null ) {
 				  		if(inc.getItemlist() !=null && inc.getStatus()!=null && inc.getStatus().getStatus_ID()==TracingConstants.MBR_STATUS_CLOSED){

@@ -80,7 +80,7 @@
 	  lossCodeChange=false;
 	  <% if(PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES)){ %>
 	  var disValue=document.getElementById("theitem["+index+"].lossCode");
-	  if(disValue!=null){
+	  if(disValue!=null && disValue.value!="0"){
 		  var lastCode=0;
 			  <% if(inc!=null) {
 			  		if(inc.getItemlist() !=null){
