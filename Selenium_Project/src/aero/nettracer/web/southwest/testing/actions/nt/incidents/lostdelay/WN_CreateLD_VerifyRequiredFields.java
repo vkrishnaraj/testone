@@ -471,14 +471,13 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	public void testSecureRemarksDisabled() {
 		verifyTrue(setPermissions(new String[] { "335" }, new boolean[] { false }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-		selenium.click("name=addremark");
 		verifyFalse(selenium.isTextPresent("Secure Remark"));
 		verifyFalse(selenium.isTextPresent("General Remark"));
 		verifyFalse(selenium.isTextPresent("Remark is Secure"));
-		selenium.type("id=remark[1]", "General Test");
+		selenium.type("id=remark[0]", "General Test");
 		selenium.click("name=saveButton");
 		waitForPageToLoadImproved();
-
+		
 		if (checkNoErrorPage()) {
 			goToTaskManager();
 		} else {
@@ -496,8 +495,8 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 
 		if (checkNoErrorPage()) {
 		verifyTrue(selenium.isTextPresent("Secure Remark"));
-		selenium.click("name=remark[2].secure");
-		selenium.type("id=remark[2]", "Secure Test");
+		selenium.check("name=remark[1].secure");
+		selenium.type("id=remark[1]", "Secure Test");
 		selenium.click("name=saveButton");
 		waitForPageToLoadImproved();
 		} else {
@@ -529,7 +528,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		if (checkNoErrorPage()) {
 			selenium.click("name=saveButton");
 			assertEquals("Remark for Loss Code Change is required.", selenium.getAlert());
-			selenium.type("id=remark[3]", "Loss Code Change Remark");
+			selenium.type("id=remark[2]", "Loss Code Change Remark");
 			selenium.click("name=saveButton");
 			assertEquals("Chargeback Station must be in Passenger Itinerary", selenium.getAlert());
 			selenium.select("name=theitem[0].faultStation_id", "label=ATL");
@@ -635,7 +634,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 			selenium.select("name=theitem[0].lossCode", "value=11");
 			selenium.click("name=doclose");
 			assertEquals("Remark for Loss Code Change is required.", selenium.getAlert());
-			selenium.type("name=remark[6].remarktext", "Loss Code Change Remark3");
+			selenium.type("name=remark[5].remarktext", "Loss Code Change Remark3");
 			selenium.click("name=doclose");
 			assertEquals("Chargeback Station is required.", selenium.getAlert());
 			selenium.select("name=theitem[0].faultStation_id", "label=ATL");
