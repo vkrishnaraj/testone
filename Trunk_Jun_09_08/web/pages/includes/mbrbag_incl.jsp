@@ -315,16 +315,6 @@
               	(<bean:message key="bdo.canceled"/>)
               <% } %>
               </logic:present>
-              <br/>
-              <% long bdocount=theitem.countBdos(); 
-              	if(bdocount==0){ %>
-              <input type="submit" name="passengerpickedup<%= i %>" value="<bean:message key="passenger.picked.up"/>" id="button"> 
-              <% } else if(bdocount>0) {%>
-              <bean:message key="cannot.passenger.picked.up"/>
-              <% } else if(bdocount==-1) {%>
-              <bean:message key="bdo.count.error"/>
-              <% } %>
-						 
             </td>
             <% if (collectPosId) { %>
 	            <td colspan=2>
