@@ -19,6 +19,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+//import com.bagnet.nettracer.tracing.utils.BDOUtils;
 import com.bagnet.nettracer.tracing.utils.CurrencyUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
@@ -1278,7 +1279,7 @@ public class Item implements Serializable {
 
 	public int getFaultStation_id() {
 		if(getFaultStation()==null)
-			setFaultStation(new Station());
+			return 0;
 		return getFaultStation().getStation_ID();
 
 	}
@@ -1295,4 +1296,7 @@ public class Item implements Serializable {
 		}
 	}
 	
+//	public long countBdos(){
+//		return BDOUtils.findBDOByItemCount(getItem_ID());
+//	}
 }
