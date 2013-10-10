@@ -68,6 +68,7 @@
     var firstAddressIndex = -1;
     var firstItemIndex = -1;
     var firstClaimcheckIndex = -1;
+    var i = -1;
     
     for (var j=0;j < form.length; j++) {
       currentElement = form.elements[j];
@@ -88,6 +89,8 @@
         var left = currentElementName.indexOf("[");
         var right = currentElementName.indexOf("]");
         firstAddressIndex = currentElementName.substring(left+1, right);
+      } else if (currentElementName.indexOf("].status.description") != -1) {
+        i++;
       } else if (currentElementName.indexOf("].lossCode") != -1) {
       		if(lossCodeChange!=false){
   				alert("<%=(String) bundle
@@ -96,7 +99,12 @@
      		
   				return false;
   			}
-      	} else if (currentElementName.indexOf("].faultStation_id") != -1) {
+  			if (currentElement!=null && currentElement.value=="0" && ppucheck==i){
+	          alert("<%= (String)bundle.getString("colname.loss.code") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+	          currentElement.focus();
+	          return false;
+        	}
+        } else if (currentElementName.indexOf("].faultStation_id") != -1) {
       		if(currentElement.value!=null && currentElement.value.length>0){
 	      		hasPaxItin=false;
 	      		faultStationCode=null;
@@ -135,6 +143,12 @@
 		  				return false;
 		  			}
 	  			}
+  			} else {
+  				if (currentElement!=null && currentElement.value.length<1 && ppucheck==i){
+		          alert("<%= (String)bundle.getString("colname.fault.station") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+		          currentElement.focus();
+		          return false;
+	        	}
   			}
       	}
     }
