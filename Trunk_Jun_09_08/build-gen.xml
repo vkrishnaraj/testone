@@ -92,6 +92,9 @@
 			<include name="spring*.jar"/>
 			<include name="wrapper.jar"/>
 		</fileset>
+		<fileset dir="${basedir}/lib/provided" id="cronjar4">
+			<include name="commons-lang-2.6.jar" />
+		</fileset>
 	</path>
 
 
