@@ -409,6 +409,10 @@ public class LostDelayAction extends CheckedAction {
 				}
 		}
 
+		if(MBRActionUtils.passengerPickedUp(theform, request,errors)) {
+			saveMessages(request, errors);
+			return (mapping.findForward(TracingConstants.LD_MAIN));
+		}
 		if (MBRActionUtils.actionDelete(theform, request)) {
 			return (mapping.findForward(TracingConstants.LD_MAIN));
 		}

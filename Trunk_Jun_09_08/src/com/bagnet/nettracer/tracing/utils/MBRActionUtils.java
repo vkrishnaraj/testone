@@ -1343,6 +1343,54 @@ public class MBRActionUtils {
 		return false;
 	}
 
+	/**
+	 * Passenger Picked Up - Marks the selected Item as Passenger Picked Up
+	 * @param theform - the incident form to be updated
+	 * @param request - the Request used toget parameters and update messages
+	 * @param errors - The ActionMessage list to update special information such as if the status couldn't be updated, or if the incident needs to be saved 
+	 * @return boolean if the status change happened
+	 * @throws Exception
+	 */
+	public static boolean passengerPickedUp(IncidentForm theform, HttpServletRequest request, ActionMessages errors) throws Exception {
+
+		Item item = null;
+		ActionMessage error = null;
+		
+		// Passenger Picked Up is clicked
+		try{
+			for (int i = 0; i < theform.getItemlist().size(); i++) {
+				if (request.getParameter("passengerpickedup" + i) != null) {
+					item = (Item) theform.getItem(i, 0);
+					Status s=null;
+					if(item.getStatus().getStatus_ID()!=TracingConstants.ITEM_STATUS_PASSENGER_PICKED_UP){
+						s=StatusBMO.getStatus(TracingConstants.ITEM_STATUS_PASSENGER_PICKED_UP);
+					} else {
+						if(item.getOHD_ID()!=null && !item.getOHD_ID().isEmpty()){
+							OHD o=OhdBMO.getOHDByID(item.getOHD_ID(),null);
+							if(o!=null){
+								if(o.getHoldingStation()!=null && item.getIncident()!=null && item.getIncident().getStationassigned()!=null &&
+										o.getHoldingStation().getStation_ID()==item.getIncident().getStationassigned().getStation_ID()){
+									s=StatusBMO.getStatus(TracingConstants.ITEM_STATUS_TOBEDELIVERED);
+								} else {
+									s=StatusBMO.getStatus(TracingConstants.ITEM_STATUS_MATCHED);
+								}
+							}
+						} else {
+							s=StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN);
+						}
+					}
+					item.setStatus(s);
+					error=new ActionMessage("save.reminder");
+					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+					return true;
+				}
+			}
+		} catch (Exception e) {
+			error = new ActionMessage("error.cannot.passenger.pick.up");
+			errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+		}
+		return false;
+	}
 	
 	public static ActionMessage checkOHDEntered(IncidentForm theform, HttpServletRequest request, Agent user, String realpath) throws Exception {
 

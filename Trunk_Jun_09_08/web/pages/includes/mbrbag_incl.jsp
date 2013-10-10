@@ -88,6 +88,7 @@
 	%>
 	var lossCodeChange=<%=lossCodeChange%>;
   var cal1xx = new CalendarPopup();	
+  var ppucheck=-1;
   
   function textCounter3(field, maxlimit) {
     if (field.value.length > maxlimit) {
@@ -315,6 +316,25 @@
               	(<bean:message key="bdo.canceled"/>)
               <% } %>
               </logic:present>
+              
+			  <% if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP, a)) { %>
+	              <logic:notEqual name="theitem" property="status.status_ID" value="<%=String.valueOf(TracingConstants.ITEM_STATUS_PASSENGER_PICKED_UP) %>">
+		              <br/>
+		              <% long bdocount=theitem.countBdos(); 
+		              	if(bdocount==0){ %>
+		              <input type="submit" name="passengerpickedup<%= i %>" value="<bean:message key="passenger.picked.up"/>" id="button" onclick="ppucheck=<%=i %>; if(validatereqFields(this.form, 'lostdelay') != false){ window.alert('<bean:message key="info.check.claimcheck.pos.id"/>'); return true;} else { return false;}"> 
+		              <% } else if(bdocount>0) {%>
+		              <bean:message key="cannot.passenger.picked.up"/>
+		              <% } else if(bdocount==-1) {%>
+		              <bean:message key="bdo.count.error"/>
+		              <% } %>
+	              </logic:notEqual>
+	              <logic:equal name="theitem" property="status.status_ID" value="<%=String.valueOf(TracingConstants.ITEM_STATUS_PASSENGER_PICKED_UP) %>">
+	              	  <br/>
+		              <input type="submit" name="passengerpickedup<%= i %>" value="<bean:message key="ppu.reopen"/>" id="button"> 
+	              </logic:equal>
+              <% } %>
+              		 
             </td>
             <% if (collectPosId) { %>
 	            <td colspan=2>

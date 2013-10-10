@@ -20,6 +20,9 @@
 
 <%@page import="java.util.List"%>
 <%@page import="com.bagnet.nettracer.tracing.db.OHD_Itinerary"%>
+<%@page import="com.bagnet.nettracer.tracing.db.Incident"%>
+<%@page import="com.bagnet.nettracer.tracing.db.Item"%>
+<%@page import="com.bagnet.nettracer.tracing.bmo.IncidentBMO"%>
 <%
   org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources)
                                                                request.getAttribute("org.apache.struts.action.MESSAGE");
@@ -136,6 +139,37 @@
 	}%>
 	var disposeLocal=<%=isDisposeLocal%>;
 
+
+		<%String Initial_OHD_DisStatusVal=(String)session.getAttribute("Initial_OHD_DisStatusVal");%>
+		  
+  function ppuCheck(){
+	  <% if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP, a)) { %>
+	    var initialVal = <%=Initial_OHD_DisStatusVal%>;
+		var passPickUpVal = <%=TracingConstants.OHD_STATUS_OWNER_PICKED_UP%>;
+		var x = document.getElementById("disposal_status.status_ID");
+		var selectedVal = x.value;
+		if(selectedVal==passPickUpVal){
+			<% if(onHandForm.getMatched_incident()!=null && !onHandForm.getMatched_incident().isEmpty() ){
+			  Incident inc=IncidentBMO.getIncidentByID(onHandForm.getMatched_incident(), null);
+			  if(inc.getItemlist()!=null){
+				  for(Item item:inc.getItemlist()){
+					  if(item.getOHD_ID()!=null && item.getOHD_ID().equals(onHandForm.getOhd_id())){ 
+						  if(item.getStatus().getStatus_ID()!=TracingConstants.ITEM_STATUS_PASSENGER_PICKED_UP){%>
+						  	alert('<%= (String) myMessages.getMessage(myLocale, "error.update.incident.ppu")%>');
+						  	x.value=initialVal;
+						  	return false;
+						  <% 
+						  }
+					  }
+				  }  
+				}
+			}%>
+			alert('<%= (String) myMessages.getMessage(myLocale, "info.check.claimcheck.pos.id")%>');
+		  
+	  	}
+	<%}%>
+  }
+  
   function validateStatus(form)
   {	
 	<%String Intial_OHD_StatusVal =  (String)session.getAttribute("Intial_OHD_StatusVal");%>
@@ -603,7 +637,7 @@ function gotoHistoricalReport() {
         <td><bean:message key="colname.disposal_status" /> <br>
 
         <html:select name="OnHandForm"
-          property="disposal_status.status_ID" styleClass="dropdown" onchange="isDisposedCheck()">
+          property="disposal_status.status_ID" styleClass="dropdown" onchange="ppuCheck(); isDisposedCheck();">
           <OPTION VALUE=""><bean:message key="select.none" /></option>
           <html:options collection="dStatusList" property="status_ID"
             labelProperty="description"/>

@@ -172,6 +172,7 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_EDIT_DELIVERED_BAGS_SAME_STATION = "Edit Delivered Bags in Same Station";
 	public final static String SYSTEM_COMPONENT_NAME_EDIT_CLOSED_INCIDENT = "Edit Closed Incident Bags in Same Station";
 	public final static String SYSTEM_COMPONENT_NAME_EDIT_ANY_CLOSED_DELIVERED= "Edit Any Closed or Delivered Bags";
+	public final static String SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP= "Passenger Pick Up";
 	
 	//TODO: adding three sub items under last one to get the itemized view for WS
 	public final static String SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS_TYPE_DELAYED = "Incoming Incidents Type Delayed";
@@ -511,6 +512,7 @@ public class TracingConstants {
 	public final static int OHD_STATUS_EARLY_BAG = 57;
 	public final static int OHD_STATUS_OWNER_PICKED_UP = 42;
 	public final static int OHD_STATUS_TBI = 58;
+	public final static int OHD_STATUS_PASSENGER_PICKED_UP = 60;
 
 	public final static int OHD_REQUEST_STATUS_DENIED = 8;
 	public final static int OHD_REQUEST_STATUS_FORWARDED = 9;
@@ -556,6 +558,7 @@ public class TracingConstants {
 	public final static int ITEM_STATUS_TOBEDELIVERED = 49;
 	public final static int ITEM_STATUS_PROCESSFORDELIVERY = 50;
 	public final static int ITEM_STATUS_IN_TRANSIT = 56;
+	public final static int ITEM_STATUS_PASSENGER_PICKED_UP = 59;
 	
 	// Task Manager status
 	public final static int TASK_MANAGER_OPEN = 83;

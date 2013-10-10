@@ -557,6 +557,10 @@ public class BagService {
 		try {
 			boolean setToClosedStatus = false;
 			IncidentBMO iBMO = new IncidentBMO(); // init lostdelay pojo or ejb
+			Incident oldInc=null;
+			if(theform.getIncident_ID()!=null && !theform.getIncident_ID().isEmpty())
+				oldInc=IncidentBMO.getIncidentByID(theform.getIncident_ID(), null);
+				
 			// copy into incident bean
 			BeanUtils.copyProperties(iDTO, theform);
 			
@@ -626,13 +630,17 @@ public class BagService {
 			// nothing
 			// is entered
 			Item item = null;
+			Item oldItem=null;
 			Status itemstatus = null;
 			Item_Inventory ii = null;
-			
 			if(iDTO.getItemlist() != null) {
 				for(int i = iDTO.getItemlist().size() - 1; i >= 0; i--) {
 					item = (Item) iDTO.getItemlist().get(i);
 					item.setIncident(iDTO);
+
+					if(oldInc!=null && oldInc.getItemlist()!=null && i<oldInc.getItemlist().size() && oldInc.getItemlist().get(i)!=null){
+						oldItem=(Item) oldInc.getItemlist().get(i);
+					}
 
 					// remove the item from list if nothing is entered for lost
 					// delay only
@@ -647,7 +655,9 @@ public class BagService {
 							&& item.getXdescelement_ID_1() == TracingConstants.XDESC_TYPE_X
 							&& item.getXdescelement_ID_2() == TracingConstants.XDESC_TYPE_X
 							&& item.getXdescelement_ID_3() == TracingConstants.XDESC_TYPE_X
-							&& item.getBag_weight() == 0) {
+							&& item.getBag_weight() == 0
+							&& item.getLossCode() == 0
+							&& item.getFaultStation_id() == 0) {
 						boolean t_rem = true;
 						for(int j = item.getInventory().size() - 1; j >= 0; j--) {
 							ii = (Item_Inventory) item.getInventorylist().get(j);
@@ -665,6 +675,49 @@ public class BagService {
 					else {
 						if(item.getClaimchecknum() != null && item.getClaimchecknum().length() > 0) {
 							item.setClaimchecknum(TracerUtils.removeSpaces(item.getClaimchecknum().toUpperCase()));
+						}
+						if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP, mod_agent)) {
+							if(item.getStatus().getStatus_ID()!=TracingConstants.ITEM_STATUS_PASSENGER_PICKED_UP
+									&& (oldItem==null || (oldItem!=null && oldItem.getStatus().getStatus_ID()==TracingConstants.ITEM_STATUS_PASSENGER_PICKED_UP))){
+								if(item.getOHD_ID()!=null && !item.getOHD_ID().isEmpty()){
+									OhdBMO obmo=new OhdBMO();
+									OHD o=obmo.getOHDByID(item.getOHD_ID(), null);
+									if(o!=null){
+										Remark rem=new Remark();
+										rem.setRemarktype(TracingConstants.REMARK_REGULAR);
+										rem.setOhd(o);
+										rem.setAgent(mod_agent);
+										rem.setCreatetime(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(TracerDateTime.getGMTDate()));
+										rem.setRemarktext(messages.getMessage(new Locale(mod_agent.getCurrentlocale()), "ohd.ppu.not.returned"));
+										o.getRemarks().add(rem);
+										obmo.simpleSaveAndAuditOhd(o, mod_agent, o.getFoundAtStation(), null);
+									}
+								}
+	
+								Remark rem=new Remark();
+								rem.setRemarktype(TracingConstants.REMARK_REGULAR);
+								rem.setIncident(iDTO);
+								rem.setAgent(mod_agent);
+								rem.setCreatetime(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(TracerDateTime.getGMTDate()));
+								rem.setRemarktext(messages.getMessage(new Locale(mod_agent.getCurrentlocale()), "ppu.item")+" "+(i+1)+" "+messages.getMessage(new Locale(mod_agent.getCurrentlocale()), "inc.ppu.not.returned"));
+								theform.getRemarklist().add(rem);
+								
+							} else if(item.getStatus().getStatus_ID()==TracingConstants.ITEM_STATUS_PASSENGER_PICKED_UP
+									&& (oldItem==null || (oldItem!=null && oldItem.getStatus().getStatus_ID()!=TracingConstants.ITEM_STATUS_PASSENGER_PICKED_UP))){
+								if(item.getOHD_ID()!=null && !item.getOHD_ID().isEmpty()){
+									OhdBMO obmo=new OhdBMO();
+									OHD o=obmo.getOHDByID(item.getOHD_ID(), null);
+									if(o!=null){
+										Status s=StatusBMO.getStatus(TracingConstants.OHD_STATUS_OWNER_PICKED_UP);
+										Status s2=StatusBMO.getStatus(TracingConstants.OHD_STATUS_CLOSED);
+										o.setStatus(s2);
+										o.setDisposal_status(s);
+										obmo.simpleSaveAndAuditOhd(o, mod_agent, o.getFoundAtStation(), null);
+										
+									}
+									
+								}
+							}
 						}
 					}
 				}
@@ -2002,8 +2055,49 @@ public class BagService {
 					oDTO.setXdescelement_ID_2(theform.getXDesc2());
 					oDTO.setXdescelement_ID_3(theform.getXDesc3());
 				}
-
+				
 				OhdBMO oBMO = new OhdBMO();
+				
+				if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP, mod_agent)) {
+					OHD oldohd=null;
+					if(theform.getOhd_id()!=null && !theform.getOhd_id().isEmpty())
+						oldohd=oBMO.getOHDByID(theform.getOhd_id(), null);
+
+					if(oDTO.getDisposal_status().getStatus_ID()!=TracingConstants.OHD_STATUS_OWNER_PICKED_UP &&
+						(oldohd==null || (oldohd!=null && oldohd.getDisposal_status().getStatus_ID()==TracingConstants.OHD_STATUS_OWNER_PICKED_UP))){
+	
+						Remark rem=new Remark();
+						rem.setRemarktype(TracingConstants.REMARK_REGULAR);
+						rem.setOhd(oDTO);
+						rem.setAgent(mod_agent);
+						rem.setCreatetime(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(TracerDateTime.getGMTDate()));
+						rem.setRemarktext(messages.getMessage(new Locale(mod_agent.getCurrentlocale()), "ohd.ppu.not.returned"));
+						oDTO.getRemarks().add(rem);
+						
+						if(oDTO.getMatched_incident()!=null && !oDTO.getMatched_incident().isEmpty()){
+							IncidentBMO iBMO=new IncidentBMO();
+							Incident inc=iBMO.getIncidentByID(oDTO.getMatched_incident(), null);
+							if(inc!=null && inc.getItemlist()!=null){
+								Remark rem2=null;
+								int i=1;
+								for(Item item:inc.getItemlist()){
+									if(item.getOHD_ID()!=null && item.getOHD_ID().equals(oDTO.getOHD_ID())){
+										rem2=new Remark();
+										rem2.setRemarktype(TracingConstants.REMARK_REGULAR);
+										rem2.setIncident(inc);
+										rem2.setAgent(mod_agent);
+										rem2.setCreatetime(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(TracerDateTime.getGMTDate()));
+										rem2.setRemarktext(messages.getMessage(new Locale(mod_agent.getCurrentlocale()), "ppu.item")+" "+i+" "+messages.getMessage(new Locale(mod_agent.getCurrentlocale()), "inc.ppu.not.returned"));
+										inc.getRemarks().add(rem2);
+									}
+									i++;
+								}
+								iBMO.updateRemarksOnly(oDTO.getMatched_incident(), inc.getRemarks(), mod_agent);
+							}
+						}
+					}
+				}
+
 
 				boolean result = false;
 				// if it is readonly and update remark then only update remark
@@ -2218,6 +2312,8 @@ public class BagService {
 		
 		String Intial_OHD_StatusVal = Integer.toString(iDTO.getStatus().getStatus_ID());
 		session.setAttribute("Intial_OHD_StatusVal", Intial_OHD_StatusVal);
+		String Initial_OHD_DisStatusVal = Integer.toString(iDTO.getDisposal_status().getStatus_ID());
+		session.setAttribute("Initial_OHD_DisStatusVal", Initial_OHD_DisStatusVal);
 		theform.setDisposal_status((iDTO.getDisposal_status() == null ? (new Status()) : iDTO.getDisposal_status()));
 		theform.setPassengerList(new ArrayList(iDTO.getPassengers()));
 
