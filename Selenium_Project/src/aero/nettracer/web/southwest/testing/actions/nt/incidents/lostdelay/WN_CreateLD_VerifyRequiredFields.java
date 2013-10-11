@@ -14,7 +14,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	public void testVerifyText() throws Exception {
 		// MJS: initial state is drivers license collection enabled
 		// 		and view/edit drivers license disabled.
-		verifyTrue(setPermissions(new String[] { "632", "633", "636", "637", "635", "661", "662", "663", "664", "665"}, new boolean[] { true, false, true, false, true, false, false, false, false, false }));
+		verifyTrue(setPermissions(new String[] { "632", "633", "636", "637", "635", "661", "662", "663", "664", "665", "666"}, new boolean[] { true, false, true, false, true, false, false, false, false, false, true }));
 		createIncident(true);
 	}
 	
@@ -549,6 +549,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	@Test
 	public void testCreateBDO(){
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
+		verifyEquals("Passenger Pick Up",selenium.getValue("name=passengerpickedup0"));
 		selenium.click("xpath=(//a[contains(@href, 'bdo.do?mbr_id=')])[1]");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
@@ -582,7 +583,10 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		}
 		
 		if (checkNoErrorPage()) {
+			Settings.BDO_ID_WN=selenium.getText("//td[@id='middlecolumn']/div/table/tbody/tr[2]/td");
 			verifyTrue(selenium.isTextPresent("The Baggage Delivery Order has been successfully saved"));
+			verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
+			verifyTrue(selenium.isTextPresent("Cannot Passenger Pick Up - There is a Non-Cancelled BDO for this Item"));
 			goToTaskManager();
 		} else {
 			System.out.println("!!!!!!!!!!!!!!!! Failed to save BDO for incident");
@@ -617,42 +621,6 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		} else {
 			System.out.println("!!!!!!!!!!!!!!!! Failed to verify clone itinerary for incident");
 		}
-	}
-	
-	@Test
-	public void testCloseLD() throws Exception {
-
-		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-		selenium.click("xpath=(//a[contains(@href, 'lostDelay.do?close=1')])[1]");
-		waitForPageToLoadImproved();
-		if (checkNoErrorPage()) {
-			checkCopyrightAndQuestionMarks();
-			selenium.select("name=theitem[0].lossCode", "label=Please Select");
-			selenium.select("name=theitem[0].faultStation_id", "label=Please Select");
-			selenium.click("name=doclose");
-			assertEquals("Chargeback Code is required.", selenium.getAlert());
-			selenium.select("name=theitem[0].lossCode", "value=11");
-			selenium.click("name=doclose");
-			assertEquals("Remark for Loss Code Change is required.", selenium.getAlert());
-			selenium.type("name=remark[5].remarktext", "Loss Code Change Remark3");
-			selenium.click("name=doclose");
-			assertEquals("Chargeback Station is required.", selenium.getAlert());
-			selenium.select("name=theitem[0].faultStation_id", "label=ATL");
-			selenium.click("name=doclose");waitForPageToLoadImproved();
-			if (checkNoErrorPage()) {
-				checkCopyrightAndQuestionMarks();
-				verifyTrue(selenium.isTextPresent("Lost/Delayed Bag Incident has been closed."));
-				selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
-				waitForPageToLoadImproved();
-			} else {
-				System.out.println("!!!!!!!!!!!!!!! - Close Lost/Delay Success Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-				verifyTrue(false);
-			}
-		} else {
-			System.out.println("!!!!!!!!!!!!!!! - Close Lost/Delay Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-			verifyTrue(false);
-		}
-		 
 	}
 	
 	

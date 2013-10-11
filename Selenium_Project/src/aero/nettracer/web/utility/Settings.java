@@ -210,5 +210,6 @@ public class Settings {
 	public static String ONHAND_ID_WN = "";
 	public static String FOUND_ID_WN = "";
 	public static String TEMPLATE_ID_WN = "";
+	public static String BDO_ID_WN = "";
 	
 }
