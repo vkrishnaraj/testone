@@ -678,7 +678,7 @@ public class BagService {
 						}
 						if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP, mod_agent)) {
 							if(item.getStatus().getStatus_ID()!=TracingConstants.ITEM_STATUS_PASSENGER_PICKED_UP
-									&& (oldItem==null || (oldItem!=null && oldItem.getStatus().getStatus_ID()==TracingConstants.ITEM_STATUS_PASSENGER_PICKED_UP))){
+									&& oldItem!=null && oldItem.getStatus().getStatus_ID()==TracingConstants.ITEM_STATUS_PASSENGER_PICKED_UP){
 								if(item.getOHD_ID()!=null && !item.getOHD_ID().isEmpty()){
 									OhdBMO obmo=new OhdBMO();
 									OHD o=obmo.getOHDByID(item.getOHD_ID(), null);
@@ -2064,7 +2064,7 @@ public class BagService {
 						oldohd=oBMO.getOHDByID(theform.getOhd_id(), null);
 
 					if(oDTO.getDisposal_status().getStatus_ID()!=TracingConstants.OHD_STATUS_OWNER_PICKED_UP &&
-						(oldohd==null || (oldohd!=null && oldohd.getDisposal_status().getStatus_ID()==TracingConstants.OHD_STATUS_OWNER_PICKED_UP))){
+						oldohd!=null && oldohd.getDisposal_status().getStatus_ID()==TracingConstants.OHD_STATUS_OWNER_PICKED_UP){
 	
 						Remark rem=new Remark();
 						rem.setRemarktype(TracingConstants.REMARK_REGULAR);
