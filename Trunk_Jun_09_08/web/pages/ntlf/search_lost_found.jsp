@@ -288,15 +288,10 @@
               				<bean:message key="colname.lf.client.name" />
               			</td>
               		</tr>
-              		<logic:iterate id="result" name="resultList" type="com.bagnet.nettracer.tracing.db.lf.LFObject">
+              		<logic:iterate indexId="i" id="result" name="resultList" type="com.bagnet.nettracer.tracing.db.lf.LFObject">
               			<tr>
               				<td>
-              					<logic:equal name="searchLostFoundForm" property="type" value="<%=String.valueOf(TracingConstants.LF_TYPE_LOST) %>" >
-              						<a href="ntlf_create_lost_report.do?lostId=<%=result.getId() %>"><bean:write name="result" property="id" /></a>
-              					</logic:equal>
-              					<logic:equal name="searchLostFoundForm" property="type" value="<%=String.valueOf(TracingConstants.LF_TYPE_FOUND) %>" >
-              						<a href="ntlf_create_found_item.do?foundId=<%=result.getId() %>"><bean:write name="result" property="id" /></a>
-              					</logic:equal>
+              					<a id="<%="resultLink" + i %>" href="ntlf_create_found_item.do?foundId=<%=result.getId() %>"><bean:write name="result" property="id" /></a>
               				</td>
               				<td>
               					<bean:write name="result" property="statusDescription" />
