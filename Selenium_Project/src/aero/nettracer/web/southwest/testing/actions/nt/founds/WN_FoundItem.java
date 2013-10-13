@@ -85,6 +85,10 @@ public class WN_FoundItem extends WN_SeleniumTest {
 			selenium.type("name=email", "test@test.com");
 			selenium.click("id=button");
 			waitForPageToLoadImproved();
+			if (selenium.isElementPresent("id=resultLink0")) {
+				selenium.click("id=resultLink0");
+				waitForPageToLoadImproved();
+			}
 		} else {
 			System.out.println("testSearchFoundAllFields failure line 88");
 		}
@@ -104,6 +108,10 @@ public class WN_FoundItem extends WN_SeleniumTest {
 		selenium.click("id=button");
 		waitForPageToLoadImproved();
 		if(checkNoErrorPage()){
+			if (selenium.isElementPresent("id=resultLink0")) {
+				selenium.click("id=resultLink0");
+				waitForPageToLoadImproved();
+			}
 			if (type) {
 				verifyEquals(value, selenium.getValue(formField));
 			}
