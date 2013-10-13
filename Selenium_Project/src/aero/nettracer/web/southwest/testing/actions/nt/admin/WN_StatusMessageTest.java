@@ -47,7 +47,7 @@ public class WN_StatusMessageTest extends WN_SeleniumTest{
 	@Test
 	public void testStatusMessageAudit() throws Exception {
 
-		selenium.click("id=menucol_9.13");			
+		selenium.click("id=menucol_9.12");			
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			selenium.click("//td[@id='navmenucell']/div/dl/dd[10]/a/span[2]");			
