@@ -63,6 +63,7 @@
   	<target name="compile-test" >
     	<javac srcdir="${srcdir}" destdir="${builddir}" includeantruntime="yes"  >
       		<classpath refid="classpath.test"/>
+    		<include name="aero/**/*.java"/>
     	</javac>
   	</target>
 	
