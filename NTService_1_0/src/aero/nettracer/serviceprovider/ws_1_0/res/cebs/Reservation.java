@@ -49,23 +49,6 @@ public class Reservation implements ReservationInterface {
 	GetPNRRequestDocument pnrDoc = null;
 	
 	// For unit testing purposes
-	private BTWSStub getStub(User user) throws AxisFault {
-		if (btwsStub == null) {
-			// Grabbing all the user profile parameters needed for this call.
-			String endpoint = user.getProfile().getParameters().get(ParameterType.RESERVATION_ENDPOINT);
-			String truststore = user.getProfile().getParameters().get(ParameterType.TRUSTSTORE);
-			String keystore = user.getProfile().getParameters().get(ParameterType.KEYSTORE);
-			String trustpass = user.getProfile().getParameters().get(ParameterType.TRUSTPASS);
-			String keypass = user.getProfile().getParameters().get(ParameterType.KEYPASS);
-			
-			// STUB & 2 WAY SSL
-			btwsStub = new BTWSStub(endpoint);
-			prepareTwoWaySSL(btwsStub, truststore, keystore, trustpass, keypass);
-		}
-		return btwsStub;
-	}
-	
-	// For unit testing purposes
 	public void setStub(BTWSStub btwsStub) {
 		this.btwsStub = btwsStub;
 	}
@@ -99,27 +82,6 @@ public class Reservation implements ReservationInterface {
 	public RemarkResponse writeRemark(User user, String pnr, String remark) throws UnexpectedException {
 		return null;
 	}
-	
-	/**
-	 * This method creates a custom ProtocolSocketFactory using the truststore and keystore locations passed in. It will then
-	 * set this custom protocol on the stubs service client for use by just this stub. This is needed for 2 way SSL.
-	 */
-	private void prepareTwoWaySSL(BTWSStub stub, String truststoreLoc, String keystoreLoc, String trustpass, String keypass) {
-		try {
-			// Preparing the stores
-			URL truststoreUrl = new File(truststoreLoc).toURI().toURL();
-			URL keystoreUrl = new File(keystoreLoc).toURI().toURL();
-			// Creating the custom factory
-			ProtocolSocketFactory socketFactory = new AuthSSLProtocolSocketFactory(keystoreUrl, keypass, truststoreUrl, trustpass);
-			// Creating a custom https protocol with the factory
-			Protocol twoWaySSLProtocolHandler = new Protocol("https", socketFactory, 443);
-			// Setting the protocol on the stub
-			stub._getServiceClient().getOptions().setProperty(HTTPConstants.CUSTOM_PROTOCOL_HANDLER, twoWaySSLProtocolHandler);
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-		}
-		
-	}
 
 	@Override
 	public ReservationResponse getReservationData(User user, String pnr, String bagTag) throws UnexpectedException {
@@ -131,7 +93,7 @@ public class Reservation implements ReservationInterface {
 			logger.debug("CEBS Request generating");
 			
 			// GETTING STUB (Abstracted out for unit testing purposes)
-			BTWSStub stub = getStub(user);
+			BTWSStub stub = ConnectionUtil.getStub(btwsStub, user);
 
 			// CREATE OUTGOING DOCUMENT (Abstracted out for unit testing purposes)
 			GetPNRRequestDocument bi = getDoc(pnr);
