@@ -25,9 +25,29 @@
 		</fileset>
 	</path>	
 	
+	<path id="classpath.wd.test">
+		<pathelement location="${builddir}" />
+		<fileset dir="lib_wd">
+			<patternset refid="jar.files" />
+		</fileset>
+	</path>	
+	
 	<path id="junitpath.test">
 		<pathelement location="${builddir}" />
 		<fileset dir="lib">
+			<patternset refid="jar.files" />
+		</fileset>
+		<fileset dir="build">
+			<patternset refid="class.files" />
+		</fileset>
+		<fileset dir="src">
+			<patternset refid="java.files" />
+		</fileset>
+	</path>	
+	
+	<path id="junitpath.wd.test">
+		<pathelement location="${builddir}" />
+		<fileset dir="lib_wd">
 			<patternset refid="jar.files" />
 		</fileset>
 		<fileset dir="build">
@@ -43,6 +63,12 @@
   	<target name="compile-test" >
     	<javac srcdir="${srcdir}" destdir="${builddir}" includeantruntime="yes"  >
       		<classpath refid="classpath.test"/>
+    	</javac>
+  	</target>
+	
+  	<target name="compile-wd-test" >
+    	<javac srcdir="${srcdir}" destdir="${builddir}" includeantruntime="yes"  >
+      		<classpath refid="classpath.wd.test"/>
     	</javac>
   	</target>
   	
@@ -63,7 +89,7 @@
   	<target name="testNew" depends="compile-test">
 
   		<parallel>
- <!-- 			<junit printsummary="yes"  showoutput="true" fork="true">
+  			<junit printsummary="yes"  showoutput="true" fork="true">
 	      		<classpath refid="junitpath.test" />
 	      		<formatter type="xml" usefile="true" />
 	      		<test name="aero.nettracer.web.defaul.testing.TestWestJet" />
@@ -98,7 +124,7 @@
 	      		<formatter type="xml" usefile="true" />
 	      		<test name="aero.nettracer.web.defaul.testing.TestLfc" />
 	    		<jvmarg value="-Dselenium.port=1234"/>
-	    	</junit> -->
+	    	</junit>
   			<junit printsummary="yes"  showoutput="true" fork="true">
 	      		<classpath refid="junitpath.test" />
 	      		<formatter type="xml" usefile="true" />
@@ -197,6 +223,28 @@
         <waitfor maxwait="2" maxwaitunit="minute" checkevery="100">
             <http url="http://localhost:4449/selenium-server/driver/?cmd=shutDownSeleniumServer"/>
         </waitfor> 
+  </target>
+  	
+    	
+  	<target name="testWD" depends="compile-wd-test">
+
+  		<parallel>
+  		<!--	<junit printsummary="yes"  showoutput="true" fork="true">
+	      		<classpath refid="junitpath.wd.test" />
+	      		<formatter type="xml" usefile="true" />
+	      		<test name="aero.nettracer.web.defaul.testing.TestAvis" />
+	    	</junit>
+  			<junit printsummary="yes"  showoutput="true" fork="true">
+	      		<classpath refid="junitpath.wd.test" />
+	      		<formatter type="xml" usefile="true" />
+	      		<test name="aero.nettracer.web.defaul.testing.TestLfc" />
+	    	</junit> -->
+  			<junit printsummary="yes"  showoutput="true" fork="true">
+	      		<classpath refid="junitpath.wd.test" />
+	      		<formatter type="xml" usefile="true" />
+	      		<test name="aero.nettracer.web.defaul.testing.TestSpirit" />
+	    	</junit>
+  		</parallel>
   </target>
 	
 </project>

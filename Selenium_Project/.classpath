@@ -1,9 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/CDC-1.0%Foundation-1.0"/>
-	<classpathentry exported="true" kind="lib" path="lib/junit-4.10.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/selenium-java-client-driver.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/selenium-server.jar"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
+	<classpathentry kind="lib" path="lib_wd/bcpkix-jdk15on-1.48.jar"/>
+	<classpathentry kind="lib" path="lib_wd/bcprov-jdk15on-1.48.jar"/>
+	<classpathentry kind="lib" path="lib_wd/cglib-nodep-2.1_3.jar"/>
+	<classpathentry kind="lib" path="lib_wd/commons-codec-1.6.jar"/>
+	<classpathentry kind="lib" path="lib_wd/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="lib_wd/commons-exec-1.1.jar"/>
+	<classpathentry kind="lib" path="lib_wd/commons-io-2.2.jar"/>
+	<classpathentry kind="lib" path="lib_wd/commons-lang3-3.1.jar"/>
+	<classpathentry kind="lib" path="lib_wd/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib_wd/cssparser-0.9.9.jar"/>
+	<classpathentry kind="lib" path="lib_wd/guava-14.0.jar"/>
+	<classpathentry kind="lib" path="lib_wd/htmlunit-2.12.jar"/>
+	<classpathentry kind="lib" path="lib_wd/htmlunit-core-js-2.12.jar"/>
+	<classpathentry kind="lib" path="lib_wd/httpclient-4.2.1.jar"/>
+	<classpathentry kind="lib" path="lib_wd/httpcore-4.2.1.jar"/>
+	<classpathentry kind="lib" path="lib_wd/httpmime-4.2.3.jar"/>
+	<classpathentry kind="lib" path="lib_wd/jcip-annotations-1.0.jar"/>
+	<classpathentry kind="lib" path="lib_wd/jetty-http-8.1.9.v20130131.jar"/>
+	<classpathentry kind="lib" path="lib_wd/jetty-io-8.1.9.v20130131.jar"/>
+	<classpathentry kind="lib" path="lib_wd/jetty-repacked-7.6.1.jar"/>
+	<classpathentry kind="lib" path="lib_wd/jetty-util-8.1.9.v20130131.jar"/>
+	<classpathentry kind="lib" path="lib_wd/jetty-websocket-8.1.9.v20130131.jar"/>
+	<classpathentry kind="lib" path="lib_wd/jna-3.4.0.jar"/>
+	<classpathentry kind="lib" path="lib_wd/json-20080701.jar"/>
+	<classpathentry kind="lib" path="lib_wd/junit-4.10.jar"/>
+	<classpathentry kind="lib" path="lib_wd/mx4j-tools-3.0.1.jar"/>
+	<classpathentry kind="lib" path="lib_wd/nekohtml-1.9.18.jar"/>
+	<classpathentry kind="lib" path="lib_wd/netty-3.5.2.Final.jar"/>
+	<classpathentry kind="lib" path="lib_wd/platform-3.4.0.jar"/>
+	<classpathentry kind="lib" path="lib_wd/sac-1.3.jar"/>
+	<classpathentry kind="lib" path="lib_wd/selenium-android-driver-2.35.0.jar"/>
+	<classpathentry kind="lib" path="lib_wd/selenium-api-2.35.0.jar"/>
+	<classpathentry kind="lib" path="lib_wd/selenium-chrome-driver-2.35.0.jar"/>
+	<classpathentry kind="lib" path="lib_wd/selenium-firefox-driver-2.35.0.jar"/>
+	<classpathentry kind="lib" path="lib_wd/selenium-htmlunit-driver-2.35.0.jar"/>
+	<classpathentry kind="lib" path="lib_wd/selenium-ie-driver-2.35.0.jar"/>
+	<classpathentry kind="lib" path="lib_wd/selenium-iphone-driver-2.35.0.jar"/>
+	<classpathentry kind="lib" path="lib_wd/selenium-java-2.35.0.jar"/>
+	<classpathentry kind="lib" path="lib_wd/selenium-remote-driver-2.35.0.jar"/>
+	<classpathentry kind="lib" path="lib_wd/selenium-safari-driver-2.35.0.jar"/>
+	<classpathentry kind="lib" path="lib_wd/selenium-server-2.35.0.jar"/>
+	<classpathentry kind="lib" path="lib_wd/selenium-support-2.35.0.jar"/>
+	<classpathentry kind="lib" path="lib_wd/serializer-2.7.1.jar"/>
+	<classpathentry kind="lib" path="lib_wd/servlet-api-2.5-6.1.9.jar"/>
+	<classpathentry kind="lib" path="lib_wd/snakeyaml-1.8.jar"/>
+	<classpathentry kind="lib" path="lib_wd/webbit-0.4.14.jar"/>
+	<classpathentry kind="lib" path="lib_wd/xalan-2.7.1.jar"/>
+	<classpathentry kind="lib" path="lib_wd/xercesImpl-2.10.0.jar"/>
+	<classpathentry kind="lib" path="lib_wd/xml-apis-1.4.01.jar"/>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>
