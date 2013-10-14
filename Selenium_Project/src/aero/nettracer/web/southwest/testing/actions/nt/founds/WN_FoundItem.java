@@ -82,6 +82,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 			selenium.click("link=Today");
 			selenium.click("id=calendar2");
 			selenium.click("link=Today");
+			selenium.select("name=statusId", "label=Open");
 			selenium.type("name=email", "test@test.com");
 			selenium.click("id=button");
 			waitForPageToLoadImproved();
@@ -99,6 +100,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 		selenium.click("link=Today");
 		selenium.click("id=calendar2");
 		selenium.click("link=Today");
+		selenium.select("name=statusId", "label=Open");
 		if (type) {
 			selenium.type(searchField, value);
 		}
