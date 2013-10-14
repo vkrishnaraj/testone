@@ -2312,8 +2312,11 @@ public class BagService {
 		
 		String Intial_OHD_StatusVal = Integer.toString(iDTO.getStatus().getStatus_ID());
 		session.setAttribute("Intial_OHD_StatusVal", Intial_OHD_StatusVal);
-		String Initial_OHD_DisStatusVal = Integer.toString(iDTO.getDisposal_status().getStatus_ID());
-		session.setAttribute("Initial_OHD_DisStatusVal", Initial_OHD_DisStatusVal);
+		session.setAttribute("Initial_OHD_DisStatusVal","0");
+		if(iDTO.getDisposal_status()!=null){
+			String Initial_OHD_DisStatusVal = Integer.toString(iDTO.getDisposal_status().getStatus_ID());
+			session.setAttribute("Initial_OHD_DisStatusVal", Initial_OHD_DisStatusVal);
+		}
 		theform.setDisposal_status((iDTO.getDisposal_status() == null ? (new Status()) : iDTO.getDisposal_status()));
 		theform.setPassengerList(new ArrayList(iDTO.getPassengers()));
 
