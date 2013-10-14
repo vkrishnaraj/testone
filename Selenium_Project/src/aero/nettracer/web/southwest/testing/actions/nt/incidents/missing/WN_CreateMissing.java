@@ -159,6 +159,15 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 			selenium.click("link=Today");
 			selenium.type("name=cost","150");
 			selenium.click("id=button");
+			assertEquals("Chargeback Code is required.", selenium.getAlert());
+			selenium.select("name=theitem[0].lossCode", "value=11");
+			selenium.click("id=button");
+			assertEquals("Chargeback Station is required.", selenium.getAlert());
+			selenium.select("name=theitem[0].faultStation_id", "label=ATL");
+			selenium.click("id=button");
+			assertEquals("Remark for Loss Code Change is required.", selenium.getAlert());
+			selenium.type("name=remark", "BDO Loss Code Change Remark");
+			selenium.click("id=button");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("!!!!!!!!!!!!!!!! Failed to create BDO for incident");

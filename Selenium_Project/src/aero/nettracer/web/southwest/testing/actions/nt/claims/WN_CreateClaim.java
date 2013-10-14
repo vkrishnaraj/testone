@@ -73,13 +73,10 @@ public class WN_CreateClaim extends WN_SeleniumTest {
 	 */
 	@Test
 	public void testUpdate_Depreciation_Categories() throws Exception {
-//		if (checkNoErrorPage()) {
-			verifyTrue(setPermissions(new String[] { CLAIM_DEPREC_CALC,DEPREC_CALC_ADMIN }, new boolean[] { true, true }));
-			selenium.click("id=menucol_9.18");
-			waitForPageToLoadImproved();
-//		} else {
-//			
-//		}
+		verifyTrue(setPermissions(new String[] { CLAIM_DEPREC_CALC,DEPREC_CALC_ADMIN }, new boolean[] { true, true }));
+		selenium.click("id=menucol_9.18");
+		waitForPageToLoadImproved();
+			
 		if(checkNoErrorPage()){
 			selenium.click("name=deleteCategory[0]");
 			waitForPageToLoadImproved();
