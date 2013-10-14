@@ -156,7 +156,7 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 
 	@Test
 	public void testSecureRemarksDisabled() {
-		verifyTrue(setSecureRemarksPermission(false));
+		verifyTrue(setPermissions(new String[] { "335"}, new boolean[] { false}));
 		verifyTrue(navigateToOnhand());
 		selenium.click("name=addremark");
 		waitForPageToLoadImproved();
@@ -182,7 +182,7 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 	
 	@Test
 	public void testSecureRemarksEnabled() {
-		verifyTrue(setSecureRemarksPermission(true));
+		verifyTrue(setPermissions(new String[] { "335"}, new boolean[] { true}));
 		verifyTrue(navigateToOnhand());
 		selenium.click("name=addremark");
 		waitForPageToLoadImproved();
