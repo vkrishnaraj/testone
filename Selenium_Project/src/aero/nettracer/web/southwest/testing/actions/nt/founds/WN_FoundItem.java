@@ -139,7 +139,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 	public void testDeliveryRequiredFields() throws Exception {
 		if(checkNoErrorPage()){
 			verifyEquals("Open", selenium.getSelectedLabel("name=found.statusId"));
-			verifyEquals("None", selenium.getSelectedLabel("name=found.disposition.status_ID"));
+			verifyEquals("None", selenium.getSelectedLabel("name=foundItem.disposition.status_ID"));
 			selenium.click("link=Deliver to customer");
 			assertEquals("Tracking Number is required.", selenium.getAlert());
 			selenium.click("link=Send to LFC");
@@ -157,7 +157,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 		waitForPageToLoadImproved();
 		if(checkNoErrorPage()){
 			verifyEquals("Closed", selenium.getSelectedLabel("name=found.statusId"));
-			verifyEquals("Picked Up", selenium.getSelectedLabel("name=found.disposition.status_ID"));
+			verifyEquals("Picked Up", selenium.getSelectedLabel("name=foundItem.disposition.status_ID"));
 			selenium.click("link=Undo");
 			waitForPageToLoadImproved();
 		} else {
@@ -165,7 +165,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 		}
 		if (checkNoErrorPage()) {
 			verifyEquals("Open", selenium.getSelectedLabel("name=found.statusId"));
-			verifyEquals("None", selenium.getSelectedLabel("name=found.disposition.status_ID"));
+			verifyEquals("None", selenium.getSelectedLabel("name=foundItem.disposition.status_ID"));
 		} else {
 			System.out.println("testPassengerPickUp failure line 151");
 		}
@@ -178,7 +178,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 		waitForPageToLoadImproved();
 		if(checkNoErrorPage()){
 			verifyEquals("Closed", selenium.getSelectedLabel("name=found.statusId"));
-			verifyEquals("Delivered", selenium.getSelectedLabel("name=found.disposition.status_ID"));
+			verifyEquals("Delivered", selenium.getSelectedLabel("name=foundItem.disposition.status_ID"));
 			selenium.click("link=Undo");
 			waitForPageToLoadImproved();
 		} else {
@@ -186,7 +186,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 		}
 		if (checkNoErrorPage()) {
 			verifyEquals("Open", selenium.getSelectedLabel("name=found.statusId"));
-			verifyEquals("None", selenium.getSelectedLabel("name=found.disposition.status_ID"));
+			verifyEquals("None", selenium.getSelectedLabel("name=foundItem.disposition.status_ID"));
 		} else {
 			System.out.println("testDeliver failure line 172");
 		}
@@ -199,7 +199,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 		waitForPageToLoadImproved();
 		if(checkNoErrorPage()){
 			verifyEquals("Closed", selenium.getSelectedLabel("name=found.statusId"));
-			verifyEquals("Sent to LFC", selenium.getSelectedLabel("name=found.disposition.status_ID"));
+			verifyEquals("Sent to LFC", selenium.getSelectedLabel("name=foundItem.disposition.status_ID"));
 			selenium.click("link=Undo");
 			waitForPageToLoadImproved();
 		} else {
@@ -207,7 +207,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 		}
 		if (checkNoErrorPage()) {
 			verifyEquals("Open", selenium.getSelectedLabel("name=found.statusId"));
-			verifyEquals("None", selenium.getSelectedLabel("name=found.disposition.status_ID"));
+			verifyEquals("None", selenium.getSelectedLabel("name=foundItem.disposition.status_ID"));
 		} else {
 			System.out.println("testSendToLFC failure line 193");
 		}
@@ -220,7 +220,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 		waitForPageToLoadImproved();
 		if(checkNoErrorPage()){
 			verifyEquals("Closed", selenium.getSelectedLabel("name=found.statusId"));
-			verifyEquals("Removed", selenium.getSelectedLabel("name=found.disposition.status_ID"));
+			verifyEquals("Removed", selenium.getSelectedLabel("name=foundItem.disposition.status_ID"));
 			goToTaskManager();
 		} else {
 			System.out.println("testRemove failure line 207");
@@ -267,7 +267,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 
 			if(checkNoErrorPage()){
 				verifyEquals("Closed", selenium.getSelectedLabel("name=found.statusId")); // Check statuses and tracking number for match
-				verifyEquals("Sent to LFC", selenium.getSelectedLabel("name=found.disposition.status_ID"));
+				verifyEquals("Sent to LFC", selenium.getSelectedLabel("name=foundItem.disposition.status_ID"));
 				verifyEquals("Tracking Number:  " + trackingNumber, selenium.getText("//div[@id='maincontent']/table[4]/tbody/tr[2]/td"));
 				goToTaskManager();
 			} else {
