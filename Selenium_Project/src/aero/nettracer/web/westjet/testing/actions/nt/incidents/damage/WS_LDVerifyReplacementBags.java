@@ -138,10 +138,10 @@ public class WS_LDVerifyReplacementBags extends LoginUtil {
 			selenium.select("name=theitem[0].color", "label=WT - White/clear");
 			selenium.type("//div[@id='item_0']/table/tbody/tr/td[2]/input", "3333333333");
 			selenium.type("//div[@id='item_0']/table/tbody/tr[7]/td/input", "test");
-			selenium.click("id=saveButton");
+			selenium.click("name=saveButton");
 			assertEquals("Please select a value for  Tradeout Issued", selenium.getAlert());
 			selenium.select("id=replacementBagIssued", "label=yes");
-			selenium.click("id=saveButton");
+			selenium.click("name=saveButton");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LDVRK: Failed on load the damaged incident page after pressing skip prepopulation.");
