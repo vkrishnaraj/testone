@@ -219,12 +219,14 @@
       }
       else if (currentElementName.indexOf("remark") != -1)
       {
-      	trimValue=currentElement.value.replace(/\s*/g, "");
-        if (trimValue.length < 1)
-        {
-		  alert("<%=(String) bundle.getString( "loss.code.remark")%>" + " <%=(String) bundle.getString("error.validation.isRequired")%>");
-          currentElement.focus();
-          return false;
+      	if(lossCodeChange!=false){
+	      	trimValue=currentElement.value.replace(/\s*/g, "");
+	        if (trimValue.length < 1)
+	        {
+			  alert("<%=(String) bundle.getString( "loss.code.remark")%>" + " <%=(String) bundle.getString("error.validation.isRequired")%>");
+	          currentElement.focus();
+	          return false;
+	        }
         }
       }
     }

@@ -54,6 +54,7 @@ if(myform.getIncident_ID()!=null && myform.getIncident_ID().length()>0){
 	}
 }
 %>
+var lossCodeChange=<%=lossCodeChange%>;
 
 function toggledc(o) {
 	o.changeservice.value = "1";
@@ -121,6 +122,7 @@ function toggledc(o) {
     }
     
     function showBDORemark(){
+    	lossCodeChange=true;
     	document.getElementById("bdoRemark").style.display="block";
     }
 
