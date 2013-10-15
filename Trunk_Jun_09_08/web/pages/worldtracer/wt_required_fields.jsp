@@ -151,15 +151,6 @@ ResourceBundle bundle = ResourceBundle.getBundle(
           currentElement.focus();
           return false;
         }
-      } else if (currentElementName.indexOf("].damage") != -1) {
-        if (currentElement.value.length == 0)
-        {
-          alert("<%=(String) bundle.getString(
-              "colname.damagedesc")%>" + " <%=(String) bundle.getString(
-              "error.validation.isRequired")%>");
-          currentElement.focus();
-          return false;
-        }
       } else if (currentElementName.indexOf("itinerarytype") != -1) {  
         if (currentElement.value == 0 || currentElement.value == 1) theindex = currentElementName.substring(13,14);
       } else if (currentElementName.indexOf("[" + theindex + "].legfrom") != -1) {  

@@ -182,7 +182,7 @@
            	<% } %>
             </td>
             <td colspan="3">
-              <bean:message key="colname.job_title" />
+              <bean:message key="colname.job_title.req" />
               <br>
               <html:text name="passenger" indexed="true" property="jobtitle" size="30" maxlength="25" styleClass="textfield" />
             </td>
@@ -196,7 +196,7 @@
             		<html:text name="passenger" property="decriptedDriversLicense" indexed="true" size="20" maxlength="20" styleClass="textfield" />
 	            </td>
                 <td>
-                  <bean:message key="colname.state.req" />
+                  <bean:message key="colname.drivers.state" />
                   <br />
                   <logic:equal name="passenger" property="driversLicenseCountry" value="US">
                     <html:select property='<%= "passenger[" + i + "].dlstate" %>' styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'driversLicenseCountry', 'driversLicenseProvince');" >
@@ -226,7 +226,7 @@
                   </logic:notEqual>
                 </td>
                 <td>
-                  <bean:message key="colname.province" />
+                  <bean:message key="colname.drivers.province" />
                   <br />
                       <logic:equal name="passenger" property="driversLicenseCountry" value="US">
                   <html:text property='<%= "passenger[" + i + "].driversLicenseProvince" %>' size="15" maxlength="100" styleClass="disabledtextfield" disabled="true" />
@@ -241,7 +241,7 @@
                       </logic:notEqual>
                 </td>
                 <td colspan=2>
-                  <bean:message key="colname.country" />
+                  <bean:message key="colname.drivers.country" />
                   <br>
                   <html:select property='<%= "passenger[" + i + "].driversLicenseCountry" %>' styleClass="dropdown" onchange="checkstate(this,this.form,'dlstate', 'driversLicenseProvince');">
                     <html:option value="">
@@ -257,7 +257,7 @@
                 	<html:text name="passenger" property="redactedDriversLicense" indexed="true" size="20" disabled="true" maxlength="20" styleClass="textfield" />
                 </td>
                 <td>
-                	<bean:message key="colname.state.req" />
+                	<bean:message key="colname.drivers.state" />
                   	<br />
                     <html:select property='<%= "passenger[" + i + "].dlstate" %>' styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'driversLicenseCountry', 'driversLicenseProvince');" disabled="true" >
                       <html:option value="">
@@ -267,12 +267,12 @@
                     </html:select>
                 </td>
                 <td>
-                	<bean:message key="colname.province" />
+                	<bean:message key="colname.drivers.province" />
                   	<br />
                   	<html:text property='<%= "passenger[" + i + "].driversLicenseProvince" %>' size="15" maxlength="100" styleClass="disabledtextfield" disabled="true" />
                 </td>                          
                 <td colspan=2>
-                	<bean:message key="colname.country" />
+                	<bean:message key="colname.drivers.country" />
 	                <br>
 	                <html:select property='<%= "passenger[" + i + "].driversLicenseCountry" %>' styleClass="dropdown" onchange="checkstate(this,this.form,'dlstate', 'driversLicenseProvince');" disabled="true">
 	                  <html:option value="">

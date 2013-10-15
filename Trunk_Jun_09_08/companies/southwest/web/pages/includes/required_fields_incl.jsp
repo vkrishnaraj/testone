@@ -63,6 +63,9 @@
   function validatereqFields(form, formType)
   {
     returnValue = true;
+
+	var baggageItinerary = false;
+    var hasPassengerItinerary = false;
     
     var firstPaxIndex = -1;
     var firstAddressIndex = -1;
@@ -112,7 +115,7 @@
 	      			faultStationCode=currentElement.options[currentElement.selectedIndex].text;
 	      		
 		      		var paxItinList=document.getElementById("pax_itin");
-		      		for(var m=0; m<paxItinList.childNodes.length; m++){
+		      		for(var m=0; m < paxItinList.childNodes.length; m++){
 		      			if(m%2!=0){
 		      				var paxItin=paxItinList.children[m];
 				      		for (var k=0; k < paxItin.children[1].children[0].children[0].children[0].childNodes.length; k++) {
@@ -150,11 +153,114 @@
 		          return false;
 	        	}
   			}
-      	}
+      	} else if (currentElementName.indexOf("].itinerarytype") != -1) {
+	      	if (currentElement.value == '0') { //Passenger Itinerary --> value=0
+	      		if (!hasPassengerItinerary) {
+	      			hasPassengerItinerary = true;
+	      		}
+	      	} else if (currentElement.value == '1') { //Baggage Itinerary --> value=1
+	      		if (!baggageItinerary) {
+	      			baggageItinerary = true;
+	      		}
+	      	}
+	   }
+    }
+    
+    if (!hasPassengerItinerary) {
+		alert("<%= (String)bundle.getString( "header.itinerary") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+		currentElement = document.getElementById('addpassitNum');
+		if (currentElement) {
+			currentElement.focus();
+		} 
+		return false;
+    } else if (!baggageItinerary) {
+		alert("<%= (String)bundle.getString( "header.bag_itinerary") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+		currentElement = document.getElementById('addbagitNum');
+		if (currentElement) {
+			currentElement.focus();
+		} 
+		return false;
     }
     
     returnValue = validatereqWtIncFields(form, formType, false, firstPaxIndex, firstAddressIndex, firstItemIndex, firstClaimcheckIndex);
     if (returnValue == false) { return returnValue; }
+    
+    for (var j=0;j < form.length; j++) {
+	  	currentElement = form.elements[j];
+	  	currentElementName=currentElement.name;
+
+		///theitinerary
+		if (currentElementName.indexOf("theitinerary") != -1) {
+			if (currentElementName.indexOf("legfrom") != -1) {
+				var test = 'test';
+				//"theitinerary="+currentElement.value+'\r\ncurrentElementName='+currentElementName;
+				var x=test;
+			}  
+		}
+		
+		//incident validation
+		if (currentElementName.indexOf("recordlocator") != -1) {  
+		      if (currentElement.value.length == 0) {
+		        alert("<%= (String)bundle.getString( "colname.recordlocator") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+			    currentElement.focus();
+			    return false;
+		      }
+		} 
+		
+		//passenger validation
+		else if (currentElementName.indexOf("jobtitle") != -1) {  
+		      if (currentElement.value.length == 0) {
+		        alert("<%= (String)bundle.getString( "colname.job_title") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+			    currentElement.focus();
+			    return false;
+		      }
+		} else if (currentElementName.indexOf("zip") != -1) {  
+		      if (currentElement.value.length == 0) {
+		        alert("<%= (String)bundle.getString( "colname.zip") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+			    currentElement.focus();
+			    return false;
+		      }
+		} else if (currentElementName.indexOf("mobile") != -1) {  
+		      if (currentElement.value.length == 0) {
+		        alert("<%= (String)bundle.getString( "colname.mobile_ph") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+			    currentElement.focus();
+			    return false;
+		      }
+		}
+		
+		//baggage validation
+		else if (currentElementName.indexOf("claimchecknum") != -1) {  
+		      if (currentElement.value.length == 0) {
+		        alert("<%= (String)bundle.getString( "colname.claimnum") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+			    currentElement.focus();
+			    return false;
+		      }
+		} else if (currentElementName.indexOf("manufacturer_ID") != -1) {  
+		      if (currentElement.value.length == 0) {
+		        alert("<%= (String)bundle.getString( "colname.manufacturer") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+			    currentElement.focus();
+			    return false;
+		      }
+		}
+		
+		//remark validation
+		else if (currentElementName.indexOf("remarktext") != -1) {  
+		      if (currentElement.value.length == 0) {
+		        alert("<%= (String)bundle.getString( "colname.remark") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+			    currentElement.focus();
+			    return false;
+		      }
+		}
+		
+		//remark validation
+		else if (currentElementName.indexOf("remarktext") != -1) {  
+		      if (currentElement.value.length == 0) {
+		        alert("<%= (String)bundle.getString( "colname.remark") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+			    currentElement.focus();
+			    return false;
+		      }
+		}
+	}
     
     return true;
   }

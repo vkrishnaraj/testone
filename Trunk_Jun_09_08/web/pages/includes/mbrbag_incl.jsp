@@ -489,7 +489,7 @@
               <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=4&xdescelement=theitem[<%= i %>].xdescelement_ID_3&type=xdescelement_ID_3',800,30,230);return false;"><bean:message key="chart4" /></a>
             </td>
             <td valign="top">
-              <bean:message key="colname.manufacturer" />
+              <bean:message key="colname.manufacturer.req" />
               <br>
               <html:select name="theitem" property="manufacturer_ID" styleClass="dropdown" indexed="true" onchange='showmanu(this);return true;'>
                 <html:option value="">

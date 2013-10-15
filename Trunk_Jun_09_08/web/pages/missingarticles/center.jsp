@@ -400,7 +400,7 @@ function disableButton(aButton) {
 	              	  </td>
 	              	  <% if (collectAddMissItemInfo) { %>
 	              	  <td>
-		              	<bean:message key="colname.item.status" />
+		              	<bean:message key="colname.item.status.req" />
 		              	<br>
 		              	<html:select name="article" property="statusId" styleClass="dropdown" indexed="true" >
 		              		<html:option value="0">
@@ -417,7 +417,7 @@ function disableButton(aButton) {
 		              	<br>
 		              	<html:text name="article" property="article" size="30" maxlength="50" styleClass="textfield" indexed="true" />
 		              </td>
-		              <td <% if (collectAddMissItemInfo) { %>colspan=4<% } else { %>colspan=3<% } %>><bean:message key="colname.desc" /> <br>
+		              <td <% if (collectAddMissItemInfo) { %>colspan=4<% } else { %>colspan=3<% } %>><bean:message key="colname.desc.req" /> <br>
 			<%
 			            String remarkDescription = "article[" + i + "].description";
 			            String remarkText        = "this.form.elements['" + remarkDescription + "']";

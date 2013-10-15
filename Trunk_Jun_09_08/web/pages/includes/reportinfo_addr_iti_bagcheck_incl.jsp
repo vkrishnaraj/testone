@@ -752,7 +752,7 @@
 	</logic:iterate>
 	</div>
 	<center>
-		<select name="addpassitNum">
+		<select name="addpassitNum" id="addpassitNum">
 			<option value="1">1</option>
 			<option value="2">2</option>
 			<option value="3">3</option>
@@ -896,7 +896,7 @@
 	
 	</div>
 	<center>
-		<select name="addbagitNum">
+		<select name="addbagitNum" id="addbagitNum">
 			<option value="1">1</option>
 			<option value="2">2</option>
 			<option value="3">3</option>
