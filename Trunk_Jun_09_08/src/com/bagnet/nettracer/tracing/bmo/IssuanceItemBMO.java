@@ -22,6 +22,7 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
+import com.bagnet.nettracer.tracing.db.documents.templates.Template;
 import com.bagnet.nettracer.tracing.db.issuance.AuditIssuanceItemInventory;
 import com.bagnet.nettracer.tracing.db.issuance.AuditIssuanceItemQuantity;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceCategory;
@@ -217,6 +218,31 @@ public class IssuanceItemBMO {
 		}
 	}
 	
+	/**
+	 * Get all templates 
+	 *
+	 * @return
+	 */
+	public static List<Template> getTemplate() {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Query query = sess.createQuery("from Template ");
+			return  query.list();
+		} catch (Exception e) {
+			logger.fatal(e.getMessage());
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.fatal(e.getMessage());
+				}
+			}
+		}
+	}
+		
 	/**
 	 * Returns a date that is X days in the past. X is determined by a company variable.
 	 * @param station
@@ -509,7 +535,7 @@ public class IssuanceItemBMO {
 				}
 			}
 	}
-	
+
 	/**
 	 * Saves or updates a category, all items associated with that category, and all station items associated with those items.
 	 * @param cat

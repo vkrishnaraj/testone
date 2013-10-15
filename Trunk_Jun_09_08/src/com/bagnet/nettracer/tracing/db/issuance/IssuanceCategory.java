@@ -18,6 +18,7 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
 import com.bagnet.nettracer.tracing.db.Company;
+import com.bagnet.nettracer.tracing.db.documents.templates.Template;
 
 @Entity
 @Proxy(lazy = false)
@@ -34,10 +35,11 @@ public class IssuanceCategory {
 	private boolean lostdelay;
 	private boolean missing;
 	private boolean damage;
-	
-	@Column(name = "document_id")
-	private long documentId;
-	
+
+	@ManyToOne
+	@JoinColumn(name="document_id" )	
+	private Template template;
+
 	private boolean inventory;
 	
 	private boolean active;
@@ -107,12 +109,12 @@ public class IssuanceCategory {
 		this.damage = damage;
 	}
 
-	public long getDocumentId() {
-		return documentId;
+	public Template getTemplate() {
+		return template;
 	}
 
-	public void setDocumentId(long documentId) {
-		this.documentId = documentId;
+	public void setTemplate(Template template) {
+		this.template = template;
 	}
 
 	public boolean isInventory() {

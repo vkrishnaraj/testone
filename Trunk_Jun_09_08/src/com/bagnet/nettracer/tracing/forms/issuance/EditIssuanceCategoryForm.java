@@ -9,15 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 
+import com.bagnet.nettracer.tracing.db.documents.templates.Template;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceCategory;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItem;
-import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemInventory;
-import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemQuantity;
-import com.bagnet.nettracer.tracing.utils.DateUtils;
-
-import aero.nettracer.fs.model.forum.FsForumSearch;
-import aero.nettracer.fs.model.forum.FsForumTag;
-import aero.nettracer.fs.model.forum.FsForumThreadInfo;
 
 /**
  * 
@@ -34,7 +28,41 @@ public final class EditIssuanceCategoryForm extends ActionForm {
 	
 	private IssuanceCategory category = new IssuanceCategory();
 	private List<IssuanceCategory> itemCategories = new ArrayList<IssuanceCategory>();
+	private long templateId;
+	private List<Template> documentList = new ArrayList<Template>();	
+
 	
+	public long getTemplateId() {
+		if (getCategory() != null && getCategory().getTemplate() != null)
+			return getCategory().getTemplate().getId();
+		else 
+			return 0;
+	}
+
+	public void setTemplateId(long templateId) {
+		if (templateId != 0 && getCategory() != null && getDocumentList() != null) {
+			List<Template> templates = getDocumentList();
+			for (Template item : templates){
+				if (item.getId() == templateId) {
+					getCategory().setTemplate(item);
+					break;
+				}
+			}
+		}
+		else {
+			getCategory().setTemplate(null);
+		}
+			
+	}		
+
+	public List<Template> getDocumentList() {
+		return documentList;
+	}
+
+	public void setDocumentList(List<Template> documentList) {
+		this.documentList = documentList;
+	}
+
 	public String get_DATEFORMAT() {
 		return _DATEFORMAT;
 	}

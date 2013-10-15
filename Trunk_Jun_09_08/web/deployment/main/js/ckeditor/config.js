@@ -23,4 +23,6 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'styles', items : [ 'Format','Font','FontSize' ] }
 	];
 	
+	config.allowedContent = true;
+	
 };

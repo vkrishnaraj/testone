@@ -75,6 +75,9 @@
 	                     <bean:message key="issuance.item.inventoried" />
 	                  </td>
 	                  <td class="header">
+	                     <bean:message key="issuance.item.document" />
+	                  </td>	                  
+	                  <td class="header">
 	                     <bean:message key="issuance.item.active" />
 	                  </td>
 	                  <td class="header">
@@ -98,6 +101,10 @@
                       <td>
               			 <% if (c_item.isInventory()) { %><bean:message key="issuance.item.yes" /><% } else { %><bean:message key="issuance.item.no" /><% } %>
                       </td>
+                      <td>
+              			 <% if (c_item.getTemplate() != null) { %><bean:write name="c_item" property="template.name" /><% } else { %><bean:message key="issuance.item.none" /><% } %>
+                      </td>
+                      
                       <td>
               			 <% if (c_item.isActive()) { %><bean:message key="issuance.item.yes" /><% } else { %><bean:message key="issuance.item.no" /><% } %>
                       </td>
@@ -141,6 +148,15 @@
                       	<td>
                       		<bean:message key="edit.issuance.category.damage" /> <br/>
                 			<html:checkbox name="editIssuanceCategoryForm" property="category.damage" />
+                      	</td>
+						<td>
+                      		<bean:message key="edit.issuance.category.document" /> <br/>
+                              <html:select name="editIssuanceCategoryForm" property="templateId" styleClass="dropdown">
+                                <html:option value="0">
+                                  <bean:message key="select.none" /> 
+                                </html:option>
+                                <html:optionsCollection name="editIssuanceCategoryForm" property="documentList" label="name" value="id" />
+                              </html:select>
                       	</td>
                       	<td>
                       		<bean:message key="edit.issuance.category.active" /> <br/>

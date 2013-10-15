@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionMessages;
 import com.bagnet.nettracer.tracing.bmo.IssuanceItemBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.documents.templates.Template;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceCategory;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItem;
 import com.bagnet.nettracer.tracing.forms.issuance.EditIssuanceCategoryForm;
@@ -81,6 +82,15 @@ public class EditIssuanceCategoryAction extends Action {
 			fform.getCategory().getItems().add(newItem);
 			return (mapping.findForward(TracingConstants.EDIT_ISSUANCE_CATEGORY));
 		}
+		//Get template from Database and set documentlist bean
+		List<Template> templateResults = IssuanceItemBMO.getTemplate();
+		
+		if (templateResults != null) {
+			fform.setDocumentList(templateResults);;
+			request.setAttribute("documentList", fform.getDocumentList());
+		} else {
+			request.setAttribute("documentList", new ArrayList<Template>());
+		}	
 		
 		if (request.getParameter("save_category") != null) {
 			IssuanceItemBMO.saveCategory(fform.getCategory(), user);
