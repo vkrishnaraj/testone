@@ -47,7 +47,7 @@
 		List<Item> ilist=myform.getItemlist();
 		int i=0;
 		for(Item it:ilist){
-			if(it.getLossCode()!=0 && it.getLossCode()!=inc.getItemlist().get(i).getLossCode()){
+			if(it.getLossCode()!=0 && inc.getItemlist().size()>=(i+1) && it.getLossCode()!=inc.getItemlist().get(i).getLossCode()){
 				if(myform.getRemarklist()!=null && (myform.getRemarklist().size()<=inc.getRemarks().size())){
 					lossCodeChange=true;
 					break;

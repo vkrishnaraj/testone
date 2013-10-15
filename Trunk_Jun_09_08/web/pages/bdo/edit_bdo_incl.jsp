@@ -46,9 +46,11 @@ if(myform.getIncident_ID()!=null && myform.getIncident_ID().length()>0){
 	List<Item> ilist=myform.getItemlist();
 	int i=0;
 	for(Item it:ilist){
-		Item incI=inc.getItemlist().get(i);
-		if(it.getItem_ID()==incI.getItem_ID() && it.getLossCode()!=0 && it.getLossCode()!=incI.getLossCode()){
-			lossCodeChange=true;
+		if(inc.getItemlist().size()>=(i+1)){
+			Item incI=inc.getItemlist().get(i);
+			if(it.getItem_ID()==incI.getItem_ID() && it.getLossCode()!=0 && it.getLossCode()!=incI.getLossCode()){
+				lossCodeChange=true;
+			}
 		}
 		i++;	
 	}
