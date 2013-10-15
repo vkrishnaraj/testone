@@ -85,13 +85,9 @@ public class EditIssuanceCategoryAction extends Action {
 		//Get template from Database and set documentlist bean
 		List<Template> templateResults = IssuanceItemBMO.getTemplate();
 		
-		if (templateResults != null) {
-			fform.setDocumentList(templateResults);;
-			request.setAttribute("documentList", fform.getDocumentList());
-		} else {
-			request.setAttribute("documentList", new ArrayList<Template>());
-		}	
-		
+		if (templateResults != null) 
+			fform.setDocumentList(templateResults);
+
 		if (request.getParameter("save_category") != null) {
 			IssuanceItemBMO.saveCategory(fform.getCategory(), user);
 			return (mapping.findForward(TracingConstants.EDIT_ISSUANCE_CATEGORY));
