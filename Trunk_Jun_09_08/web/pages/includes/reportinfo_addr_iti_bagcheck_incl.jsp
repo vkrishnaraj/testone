@@ -651,13 +651,15 @@
 	<bean:message key="message.required" />
 	<%
 	      int t = 0;
+	      int pCount = 0;
 		  boolean hasPassItin = false;
 	      %>
 	<div id="<%=TracingConstants.JSP_PAX_ITIN %>">
 	<logic:iterate id="theitinerary" indexId="k" name="incidentForm"
 		property="itinerarylist">
 		<logic:equal name="theitinerary" property="itinerarytype" value="0">
-			<% hasPassItin = true; %>
+			<% hasPassItin = true; 
+			   pCount++; %>
 
 
 			<span id="placeHolder<%=t%>" style="float: right"> <%
@@ -742,7 +744,7 @@
 					<tr>
 						<td colspan="4"><input type="button"
 							value="<bean:message key="button.delete_pass_itinerary" />"
-							onclick="pItinIndexes = hideThisItinerary(<%=k%>, pItinIndexes); hideThisDiv('<%=TracingConstants.JSP_DELETE_ITINERARY %>_<%=k%>', '<bean:message key="colname.itinerary" />')"
+							onclick="pItinIndexes = hideThisItinerary(<%=k%>, pItinIndexes); hideThisDiv('<%=TracingConstants.JSP_DELETE_ITINERARY %>_<%=k%>', '<bean:message key="colname.itinerary" />'); hideCloneButton()"
 							id="button"></td>
 					</tr>
 				</table>
@@ -751,6 +753,18 @@
 		<% ++t; %>
 	</logic:iterate>
 	</div>
+	<input type="hidden" id="passItinTotal" name="passItinTotal" value="<%=pCount %>" />
+	<script language="javascript" >
+
+		function hideCloneButton() {
+			var pNum = document.getElementById('passItinTotal');
+			pNum.value = pNum.value - 1;
+			if (pNum.value < 1) {
+				document.getElementById('cloneButtonLoc').style.display = 'none';
+			}
+		}
+	
+	</script>
 	<center>
 		<select name="addpassitNum" id="addpassitNum">
 			<option value="1">1</option>
@@ -762,14 +776,9 @@
 		<html:submit property="addpassit" styleId="button">
 			<bean:message key="button.add_cust_itinerary" />
 		</html:submit>
-		<% if (hasPassItin) { %>
-		<br/><br/>
-		<html:submit property="clonepassit" styleId="button">
-			<bean:message key="button.clone_cust_itinerary" />
-		</html:submit>
-		<% } %>
 	</center>
 	<p class="blue">&nbsp;</p>
+	<table style="width:100%;"><tr><td>
 	<h1 class="green">
 		<bean:message key="header.bag_itinerary" />
 		<%
@@ -793,6 +802,15 @@
 	</h1>
 	<span class="reqfield">*</span>
 	<bean:message key="message.required" />
+		<% if (hasPassItin) { %>
+	</td><td id="cloneButtonLoc" style="padding-top: 12px;">
+		<span style="float:right;" >
+		<html:submit property="clonepassit" styleId="button">
+			<bean:message key="button.clone_cust_itinerary" />
+		</html:submit>
+		</span>
+		<% } %>
+	</td></tr></table>
 	<a name="bagit"></a>
 	<% t = 0; %>
 	<div id="<%=TracingConstants.JSP_BAG_ITIN %>">
