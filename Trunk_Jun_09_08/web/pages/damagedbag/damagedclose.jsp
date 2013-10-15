@@ -123,10 +123,7 @@
           <font color=red>
             <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
           </font>
-          
-          <% if(bagLossCodes){  %>
-            <jsp:include page="/pages/includes/closebagloss_incl.jsp" />
-          <% } %>
+          <jsp:include page="/pages/includes/closebagloss_incl.jsp" />
           <table class="form2" cellspacing="0" cellpadding="0">
           <input type="hidden" name="close" value="1">
           <html:hidden name="close" property="close" value="1"/>

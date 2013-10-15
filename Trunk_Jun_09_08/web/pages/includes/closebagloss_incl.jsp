@@ -109,6 +109,8 @@
   </SCRIPT>
 		<logic:iterate id="theitem" indexId="i" name="incidentForm" property="itemlist" type="com.bagnet.nettracer.tracing.db.Item">
             <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
+            
+              <% if (request.getAttribute("lostdelay") != null || bagLossCodes) { %>
               <tr>
                 <td colspan=4>
                   <a name='additem<%= i %>'></a>
@@ -117,7 +119,8 @@
                   <%= theitem.getBagnumber() + 1 %>
                 </td>
               </tr>
-              <% if (request.getAttribute("lostdelay") != null) { %>
+              <% }
+              if (request.getAttribute("lostdelay") != null) { %>
               <tr>
                 <td>
                   <bean:message key="colname.ldclose.arr_airline_id" />
