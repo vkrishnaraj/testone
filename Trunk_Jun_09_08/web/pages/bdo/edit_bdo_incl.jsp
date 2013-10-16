@@ -866,7 +866,6 @@ if (i.intValue() == 0) {
       </logic:equal>
       <logic:notEqual name="BDOForm" property="incident_ID" value="">
       
-		<!-- < Incident_Claimcheck[] checkList=(Incident_Claimcheck[])myform.getIncident().getClaimchecks().toArray(); %>-->
 		<logic:iterate id="theitem" indexId="i" name="BDOForm" property="itemlist" type="com.bagnet.nettracer.tracing.db.Item">
           <table class="form2" cellspacing="0" cellpadding="0">
             <logic:notEqual name="theitem" property="OHD_ID" value="">
