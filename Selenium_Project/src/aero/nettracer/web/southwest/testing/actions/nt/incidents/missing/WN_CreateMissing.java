@@ -53,7 +53,7 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 					selenium.select("name=addresses[0].state_ID", "label=Georgia");
 					selenium.click("id=saveButton");
 					verifyEquals("From/To is required.", selenium.getAlert());
-					selenium.type("name=theitinerary[0].legfrom", "ADK");
+					selenium.type("name=theitinerary[0].legfrom", "ATL");
 					selenium.click("id=saveButton");
 					verifyEquals("From/To is required.", selenium.getAlert());
 					selenium.type("name=theitinerary[0].legto", "AEX");
@@ -113,21 +113,10 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 					selenium.type("id=remark[0]", "Remarks noted");	
 	
 					//optional fields last	
-					//selenium.type("name=passenger[0].lastname", "Test1");
-					//selenium.type("name=passenger[0].firstname", "Test1");
 					selenium.select("name=passenger[0].dlstate", "label=Georgia");
-					//selenium.type("name=addresses[0].address1", "123 Test1");
-					//selenium.type("name=addresses[0].city", "Test1");
-					//selenium.select("name=addresses[0].state_ID", "label=Georgia");
-					//selenium.type("name=addresses[0].zip", "12345");
-					//selenium.type("name=addresses[0].mobile", "(555) 555-4444");
 					selenium.type("name=addresses[0].email", "email@email.com");
-					//selenium.type("name=theitinerary[0].legfrom", "ATL");
-					//selenium.type("name=theitinerary[0].legto", "LAX");
-					//selenium.type("name=theitinerary[0].flightnum", "1233");
 					selenium.click("id=itcalendar0");
 					selenium.click("link=Today");
-					//selenium.select("name=theitem[0].color", "label=BK - Black");
 					selenium.select("name=theitem[0].bagtype", "label=22");
 					selenium.select("name=inventorylist[0].categorytype_ID", "label=Alcohol");
 					selenium.type("name=inventorylist[0].description", "TEST");

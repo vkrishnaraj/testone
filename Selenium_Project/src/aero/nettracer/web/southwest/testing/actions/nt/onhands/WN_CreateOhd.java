@@ -77,6 +77,11 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 			selenium.click("name=lateCheckValue");
 			selenium.select("name=bagColor", "label=BK - Black");
 			selenium.select("name=bagType", "label=22");
+			selenium.type("name=itinerarylist[0].legfrom","ATL");
+			selenium.type("name=itinerarylist[0].legto","LAS");
+			selenium.type("name=itinerarylist[0].flightnum", "123");
+			selenium.click("id=calendar20");
+			selenium.click("link=Today");
 			selenium.select("name=disposal_status.status_ID", "label=Disposed of Locally");
 			selenium.click("name=savetracing");
 			assertEquals("Remark for Local Disposal is required.", selenium.getAlert());
