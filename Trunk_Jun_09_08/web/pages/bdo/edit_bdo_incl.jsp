@@ -370,11 +370,10 @@ function toggledc(o) {
               <bean:message key="colname.pickupdatetime" />
               (<%= a.getDateformat().getFormat() %>) &nbsp;( <%=a.getTimeformat().getFormat()%>)
               <br />
-              <html:text property="disppickupdate" size="11" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.BDOForm.disppickupdate,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">
+              <html:text property="disppickupdate" size="11" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.BDOForm.disppickupdate,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;">
               &nbsp;
               <html:text property="disppickuptime" size="6" maxlength="10" styleClass="textfield" />
-              
-            </td>
+             </td>
           </tr>
           
           <tr>

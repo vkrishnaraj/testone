@@ -387,12 +387,12 @@ public final class BDOForm extends ValidatorForm {
 
 	public void setDisppickuptime(String s) {
 		if(s!=null && !s.isEmpty())
-			setPickuptime(DateUtils.convertToDate(s, get_TIMEFORMAT(), null));
+			setPickuptime(DateUtils.convertToDate(s, get_TIMEFORMAT(), null,get_TIMEZONE()));
 		else
 			setPickuptime(null);
 	}
 
-	/**
+	/**Get date and time then format to yyyy-MM-dd HH:mm:ss format for return
 	 * 
 	 * @return the pickuptime for display only
 	 */

@@ -7,13 +7,10 @@
 package com.bagnet.nettracer.tracing.db;
 
 import java.io.Serializable;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -258,6 +255,10 @@ public class BDO implements Serializable {
 		return DateUtils.formatDate(tempdate, _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
 	}
 
+	/**Get date and time then format to yyyy-MM-dd HH:mm:ss format for return
+	 * 
+	 * @return the pickuptime for display only
+	 */
 	public String getDisppickuptime() {
 		Date tempdate = DateUtils.convertToDate( DateUtils.formatDate(getPickupdate(), TracingConstants.DB_DATEFORMAT, null, null) + " "
 				+ DateUtils.formatDate(getPickuptime(), TracingConstants.DB_TIMEFORMAT, null, null),TracingConstants.DB_DATETIMEFORMAT,null);
