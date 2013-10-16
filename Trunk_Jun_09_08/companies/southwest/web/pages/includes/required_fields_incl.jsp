@@ -189,7 +189,7 @@
 	  	currentElement = form.elements[j];
 	  	currentElementName=currentElement.name;
 
-		///theitinerary
+		//theitinerary
 		if (currentElementName.indexOf("theitinerary") != -1) {
 			if (currentElementName.indexOf("legfrom") != -1) {
 				var test = 'test';
@@ -252,12 +252,26 @@
 		      }
 		}
 		
-		//remark validation
-		else if (currentElementName.indexOf("remarktext") != -1) {  
-		      if (currentElement.value.length == 0) {
-		        alert("<%= (String)bundle.getString( "colname.remark") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
-			    currentElement.focus();
-			    return false;
+		//missing articles validation
+		else if (currentElementName.indexOf("article[") != -1) {
+			  if (currentElementName.indexOf("].statusId") != -1) {   
+			      if (currentElement.value.length == 0 || currentElement.value == '0') {
+			        alert("<%= (String)bundle.getString( "colname.item.status") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+				    currentElement.focus();
+				    return false;
+			      }
+		      } else if (currentElementName.indexOf("].article") != -1) {   
+			      if (currentElement.value.length == 0) {
+			        alert("<%= (String)bundle.getString( "colname.article") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+				    currentElement.focus();
+				    return false;
+			      }
+		      } else if (currentElementName.indexOf("].description") != -1) {   
+			      if (currentElement.value.length == 0) {
+			        alert("<%= (String)bundle.getString( "colname.desc") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+				    currentElement.focus();
+				    return false;
+			      }
 		      }
 		}
 	}
