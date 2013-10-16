@@ -163,6 +163,8 @@
             <xs:complexType name="ClaimCheck">
                 <xs:sequence>
                     <xs:element minOccurs="0" name="airline" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="overweight" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="posId" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="tagNumber" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="timeChecked" nillable="true" type="xs:dateTime"/>
                 </xs:sequence>

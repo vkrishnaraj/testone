@@ -1,26 +1,25 @@
 package aero.nettracer.serviceprovider.ws_1_0.res.cebs;
 
-import java.io.File;
-import java.net.URL;
+import java.util.Calendar;
 
-import org.apache.axis2.AxisFault;
-import org.apache.axis2.transport.http.HTTPConstants;
-import org.apache.commons.httpclient.protocol.Protocol;
-import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 import org.apache.log4j.Logger;
 
 import aero.nettracer.serviceprovider.common.ServiceConstants;
-import aero.nettracer.serviceprovider.common.db.ParameterType;
 import aero.nettracer.serviceprovider.common.db.User;
 import aero.nettracer.serviceprovider.common.exceptions.UnexpectedException;
+import aero.nettracer.serviceprovider.ws_1_0.common.xsd.ClaimCheck;
 import aero.nettracer.serviceprovider.ws_1_0.common.xsd.Itinerary;
 import aero.nettracer.serviceprovider.ws_1_0.res.ReservationInterface;
 import aero.nettracer.serviceprovider.ws_1_0.response.xsd.EnplanementResponse;
 import aero.nettracer.serviceprovider.ws_1_0.response.xsd.OsiResponse;
 import aero.nettracer.serviceprovider.ws_1_0.response.xsd.RemarkResponse;
 import aero.nettracer.serviceprovider.ws_1_0.response.xsd.ReservationResponse;
-import aero.nettracer.utilities.ssl.AuthSSLProtocolSocketFactory;
 
+import com.swacorp.services.btws.v1.GetBagsRequestDocument;
+import com.swacorp.services.btws.v1.GetBagsRequestDocument.GetBagsRequest;
+import com.swacorp.services.btws.v1.GetBagsResponseDocument;
+import com.swacorp.services.btws.v1.GetBagsResponseDocument.GetBagsResponse;
+import com.swacorp.services.btws.v1.GetBagsResponseDocument.GetBagsResponse.Bag;
 import com.swacorp.services.btws.v1.GetPNRFaultDocument;
 import com.swacorp.services.btws.v1.GetPNRFaultDocument.GetPNRFault;
 import com.swacorp.services.btws.v1.GetPNRRequestDocument;
@@ -33,6 +32,7 @@ import com.swacorp.services.btws.v1.GetPNRResponseDocument.GetPNRResponse.Passen
 import com.swacorp.services.btws.v1.GetPNRResponseDocument.GetPNRResponse.Passenger.NameList.Name;
 import com.swacorp.services.btws.v1.GetPNRResponseDocument.GetPNRResponse.Passenger.PhoneList.Phone;
 import com.swacorp.services.btws.wsdl.v1.BTWSStub;
+import com.swacorp.services.btws.wsdl.v1.GetBagsError;
 import com.swacorp.services.btws.wsdl.v1.GetPNRError;
 
 public class Reservation implements ReservationInterface {
@@ -40,13 +40,15 @@ public class Reservation implements ReservationInterface {
 	private static Logger logger = Logger.getLogger(Reservation.class);
 	
 	private static final String PHONE_TYPE_HOME = "P_HOME";
-	private static final String PHONE_TYPE_WORK = "P_WORK";
+	private static final String PHONE_TYPE_WORK = "P_BUSINESS";
 	private static final String PHONE_TYPE_MOBILE = "P_MOBILE";
+	private static final String PHONE_TYPE_PAGER = "P_PAGER";
 	private static final String PNR_NOT_FOUND = "UNBL TO RTRV PNR";
 	
 	// For unit testing purposes
 	BTWSStub btwsStub = null;
 	GetPNRRequestDocument pnrDoc = null;
+	GetBagsRequestDocument bagsDoc = null;
 	
 	// For unit testing purposes
 	public void setStub(BTWSStub btwsStub) {
@@ -54,7 +56,7 @@ public class Reservation implements ReservationInterface {
 	}
 	
 	// For unit testing purposes
-	private GetPNRRequestDocument getDoc(String pnr) {
+	private GetPNRRequestDocument getPnrDoc(String pnr) {
 		if (pnrDoc == null) {
 			pnrDoc = GetPNRRequestDocument.Factory.newInstance();
 			GetPNRRequest bi2 = pnrDoc.addNewGetPNRRequest();
@@ -64,8 +66,23 @@ public class Reservation implements ReservationInterface {
 	}
 	
 	// For unit testing purposes
-	public void setDoc(GetPNRRequestDocument pnrDoc) {
+	public void setPnrDoc(GetPNRRequestDocument pnrDoc) {
 		this.pnrDoc = pnrDoc;
+	}
+	
+	// For unit testing purposes
+	private GetBagsRequestDocument getBagsDoc(String pnr) {
+		if (bagsDoc == null) {
+			bagsDoc = GetBagsRequestDocument.Factory.newInstance();
+			GetBagsRequest bi2 = bagsDoc.addNewGetBagsRequest();
+			bi2.setPNR(pnr);
+		}
+		return bagsDoc;
+	}
+	
+	// For unit testing purposes
+	public void setBagsDoc(GetBagsRequestDocument bagsDoc) {
+		this.bagsDoc = bagsDoc;
 	}
 	
 	@Override
@@ -95,14 +112,24 @@ public class Reservation implements ReservationInterface {
 			// GETTING STUB (Abstracted out for unit testing purposes)
 			BTWSStub stub = ConnectionUtil.getStub(btwsStub, user);
 
-			// CREATE OUTGOING DOCUMENT (Abstracted out for unit testing purposes)
-			GetPNRRequestDocument bi = getDoc(pnr);
+			// CREATE OUTGOING PNR DOCUMENT (Abstracted out for unit testing purposes)
+			GetPNRRequestDocument bi = getPnrDoc(pnr);
 			
-			// MAKE REQUEST WITH STUB
+			// CREATE OUTGOING BAGS DOCUMENT (Abstracted out for unit testing purposes)
+			GetBagsRequestDocument bd = getBagsDoc(pnr);
+			
+			// MAKE REQUESTS WITH STUB
 			GetPNRResponseDocument bookingRes = stub.getPNR(bi);
+			GetBagsResponseDocument bagsRes = null;
+			try {
+				bagsRes = stub.getBags(bd);
+			} catch (GetBagsError e) {
+				// Ignore this error, just means this pnr has no bags.
+			}
 			
 			// OUTPUT RESPONSE
-			logger.info("CEBS Response: " + bookingRes);
+			logger.info("CEBS PNR Response: " + bookingRes);
+			logger.info("CEBS Bags Response: " + bagsRes);
 			
 			// CHECK FOR VALID RESPONSE
 			if (bookingRes!= null && bookingRes.getGetPNRResponse() != null) {
@@ -132,8 +159,6 @@ public class Reservation implements ReservationInterface {
 					
 					// PROCESS NAME LIST
 					if (pass.getNameList() != null && pass.getNameList().getNameArray() != null) {
-						int addrIndex = 0;
-						int phoneIndex = 0;
 						for (Name name : pass.getNameList().getNameArray()) {
 
 							aero.nettracer.serviceprovider.ws_1_0.common.xsd.Passenger p = res.addNewPassengers();
@@ -149,8 +174,8 @@ public class Reservation implements ReservationInterface {
 							}
 							aero.nettracer.serviceprovider.ws_1_0.common.xsd.Address a = p.addNewAddresses();
 							
-							if (addresses != null && addresses.length > addrIndex) {
-								Address address = addresses[addrIndex];
+							if (addresses != null && addresses.length > 0) {
+								Address address = addresses[0];
 								
 								if (address.getAddressLine1() != null) {
 									a.setAddress1(address.getAddressLine1());
@@ -176,13 +201,12 @@ public class Reservation implements ReservationInterface {
 								if (address.getEmail() != null) {
 									a.setEmailAddress(address.getEmail());
 								}
-								addrIndex++;
 							}
 							
-							if (phones != null && phones.length > phoneIndex) {
-								Phone phone = phones[phoneIndex];
-								translatePhone(phone, a);
-								phoneIndex++;	
+							if (phones != null && phones.length > 0) {
+								for (Phone phone : phones) {
+									translatePhone(phone, a);
+								}
 							}
 							paxAffected++;
 						}
@@ -201,6 +225,26 @@ public class Reservation implements ReservationInterface {
 				
 				if (booking.getPNR() != null && booking.getPNR().length() > 0) {
 					res.setPnr(booking.getPNR());
+				}
+				
+				if (bagsRes!= null && bagsRes.getGetBagsResponse() != null) {
+					GetBagsResponse bagsR = bagsRes.getGetBagsResponse();
+					
+					if (bagsR.getBagArray() != null && bagsR.getBagArray().length > 0) {
+						for (Bag bag : bagsR.getBagArray()) {
+							ClaimCheck cc = res.addNewClaimChecks();
+							if (bag.getBagtag() != null) {
+								cc.setTagNumber(bag.getBagtag());
+							}
+							if (bag.getPositionId() != null) {
+								cc.setPosId(bag.getPositionId());
+							}
+							cc.setOverweight(bag.getOverweight());
+							cc.setTimeChecked(Calendar.getInstance());
+							bagsChecked++;
+						}
+					}
+					
 				}
 				
 				res.setNumberChecked(bagsChecked);
@@ -227,13 +271,15 @@ public class Reservation implements ReservationInterface {
 	 */
 	private void translatePhone(Phone phone, aero.nettracer.serviceprovider.ws_1_0.common.xsd.Address a) {
 		String phoneStr = combineNumber(phone);
-		if (PHONE_TYPE_HOME.equals(phone.getPhoneType())) {
+		if (PHONE_TYPE_HOME.equals(phone.getPhoneType()) && a.getHomePhone() == null) {
 			a.setHomePhone(phoneStr);
-		} else if (PHONE_TYPE_WORK.equals(phone.getPhoneType())) {
+		} else if (PHONE_TYPE_WORK.equals(phone.getPhoneType()) && a.getWorkPhone() == null) {
 			a.setWorkPhone(phoneStr);
-		} else if (PHONE_TYPE_MOBILE.equals(phone.getPhoneType())) {
+		} else if (PHONE_TYPE_MOBILE.equals(phone.getPhoneType()) && a.getMobilePhone() == null) {
 			a.setMobilePhone(phoneStr);
-		} else {
+		} else if (PHONE_TYPE_PAGER.equals(phone.getPhoneType()) && a.getPagerNumber() == null) {
+			a.setPagerNumber(phoneStr);
+		} else if (a.getAltPhone() == null){
 			a.setAltPhone(phoneStr);
 		}
 	}

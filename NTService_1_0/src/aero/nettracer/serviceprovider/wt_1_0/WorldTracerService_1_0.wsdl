@@ -138,6 +138,7 @@
                     <xs:element minOccurs="0" name="faultReason" type="xs:int"/>
                     <xs:element minOccurs="0" name="faultReasonDescription" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="faultStation" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="furtherInfo" nillable="true" type="xs:string"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="item" nillable="true" type="ax23:Item"/>
                     <xs:element minOccurs="0" name="numberBagsChecked" type="xs:int"/>
                     <xs:element minOccurs="0" name="numberPaxAffected" type="xs:int"/>

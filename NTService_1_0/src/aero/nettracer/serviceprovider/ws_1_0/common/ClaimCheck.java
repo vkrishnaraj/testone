@@ -7,6 +7,8 @@ public class ClaimCheck {
 	private Calendar timeChecked;
 	private String tagNumber;
 	private String airline;
+	private boolean overweight;
+	private String posId;
 
 	public Calendar getTimeChecked() {
 		return timeChecked;
@@ -31,4 +33,21 @@ public class ClaimCheck {
 	public void setAirline(String airline) {
 		this.airline = airline;
 	}
+
+	public boolean isOverweight() {
+		return overweight;
+	}
+
+	public void setOverweight(boolean overweight) {
+		this.overweight = overweight;
+	}
+
+	public String getPosId() {
+		return posId;
+	}
+
+	public void setPosId(String posId) {
+		this.posId = posId;
+	}
+	
 }

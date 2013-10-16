@@ -204,7 +204,7 @@ public class ReservationTest {
 	private aero.nettracer.serviceprovider.ws_1_0.common.xsd.Reservation getNtReservation(GetPNRRequestDocument doc, String pnr) {
 		Reservation res = new Reservation();
 		res.setStub(stub);
-		res.setDoc(doc);
+		res.setPnrDoc(doc);
 		User user = new User();
 		ReservationResponse resp = null;
 		try {
