@@ -100,6 +100,15 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 					verifyEquals("Manufacturer is required.", selenium.getAlert());
 					selenium.select("name=theitem[0].manufacturer_ID", "label=Bag Boy");
 					selenium.click("id=saveButton");
+					verifyEquals("Status is required.", selenium.getAlert());
+					selenium.select("name=article[0].statusId", "label=Missing");
+					selenium.click("id=saveButton");
+					verifyEquals("Article is required.", selenium.getAlert());
+					selenium.type("name=article[0].article", "Article Test1");
+					selenium.click("id=saveButton");
+					verifyEquals("Description is required.", selenium.getAlert());
+					selenium.type("name=article[0].description", "Article Description Test 1");
+					selenium.click("id=saveButton");
 					verifyEquals("Remark is required.", selenium.getAlert());
 					selenium.type("id=remark[0]", "Remarks noted");	
 	
