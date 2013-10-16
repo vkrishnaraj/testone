@@ -395,17 +395,17 @@
             <td>
               <bean:message key="colname.last_name_onbag" />
               <br>
-              <html:text name="theitem" property="lnameonbag" size="30" maxlength="50" styleClass="textfield" indexed="true" />
+              <html:text name="theitem" property="lnameonbag" styleId="<%="theitem["+i+"].lnameonbag"%>" size="30" maxlength="50" styleClass="textfield" indexed="true" />
             </td>
             <td>
               <bean:message key="colname.first_name_onbag" />
               <br>
-              <html:text name="theitem" property="fnameonbag" size="30" maxlength="50" styleClass="textfield" indexed="true" />
+              <html:text name="theitem" property="fnameonbag" styleId="<%="theitem["+i+"].fnameonbag"%>" size="30" maxlength="50" styleClass="textfield" indexed="true" />
             </td>
             <td>
               <bean:message key="colname.mid_initial_onbag" />
               <br>
-              <html:text name="theitem" property="mnameonbag" size="1" maxlength="1" styleClass="textfield" indexed="true" />
+              <html:text name="theitem" property="mnameonbag" styleId="<%="theitem["+i+"].mnameonbag"%>" size="1" maxlength="1" styleClass="textfield" indexed="true" />
             </td>
           </tr>
           <tr>
