@@ -387,20 +387,19 @@ public class NTReservationIntegrationImpl extends
 			form.setOtherSystemInformation(booking.getOsi());
 		}
 
-		
+		form.setItemlist(new ArrayList());
 		
 		if (booking.getClaimChecksArray() != null) {
 			boolean claimCheckAdded = false;
+			int itemIndex = 0;
 			for (ClaimCheck cc : booking.getClaimChecksArray()) {
-
 				if (cc.getTimeChecked() != null) {
-
 					Long checkedTime = (cc.getTimeChecked().getTime().getTime()) / 3600000;
 					Long nowtime = ((new Date()).getTime()) / 3600000;
 					Long timeDifference = nowtime - checkedTime;
-					if (timeDifference <= HOURS_BACK_ITINERARY
-							&& timeDifference >= -HOURS_FORWARD_ITINERARY) {
-						// form.setBagTagNumber(cc.getTagNumber());
+					if (timeDifference <= HOURS_BACK_ITINERARY && timeDifference >= -HOURS_FORWARD_ITINERARY) {
+						
+						// Add ClaimCheck
 						if (!claimCheckAdded) {
 							form.setClaimchecklist(new ArrayList());
 							claimCheckAdded = true;
@@ -408,6 +407,22 @@ public class NTReservationIntegrationImpl extends
 						Incident_Claimcheck ic = form.getClaimcheck(form
 								.getClaimchecklist().size());
 						ic.setClaimchecknum(cc.getTagNumber());
+						
+						// Add Item
+						Item theitem = form.getItem(itemIndex, itemtype);
+						theitem.set_DATEFORMAT(user.getDateformat().getFormat());
+						theitem.setCurrency_ID(user.getDefaultcurrency());
+						theitem.setXdescelement_ID_1(TracingConstants.XDESC_TYPE_X);
+						theitem.setXdescelement_ID_2(TracingConstants.XDESC_TYPE_X);
+						theitem.setXdescelement_ID_3(TracingConstants.XDESC_TYPE_X);
+						theitem.setBagnumber(itemIndex);
+						theitem.setStatus(StatusBMO.getStatus(
+								TracingConstants.ITEM_STATUS_OPEN));
+						if (itemtype != TracingConstants.LOST_DELAY && cc.getTagNumber() != null) {
+							theitem.setClaimchecknum(cc.getTagNumber());
+						}
+						theitem.setPosId(cc.getPosId());
+						itemIndex++;
 					}
 				}
 			}
@@ -489,26 +504,6 @@ public class NTReservationIntegrationImpl extends
 		aero.nettracer.serviceprovider.ws_1_0.common.xsd.Itinerary[] bagItinArr = booking.getBagItineraryArray();
 		routingType = TracingConstants.BAGGAGE_ROUTING;
 		processIncItinerary(form, bagItinArr, routingType);
-		
-		
-		form.setItemlist(new ArrayList());
-		
-		for (int i = 0; i < form.getClaimchecklist().size(); ++i) {
-			Item theitem = form.getItem(i, itemtype);
-			theitem.set_DATEFORMAT(user.getDateformat().getFormat());
-			theitem.setCurrency_ID(user.getDefaultcurrency());
-			theitem.setXdescelement_ID_1(TracingConstants.XDESC_TYPE_X);
-			theitem.setXdescelement_ID_2(TracingConstants.XDESC_TYPE_X);
-			theitem.setXdescelement_ID_3(TracingConstants.XDESC_TYPE_X);
-			theitem.setBagnumber(i);
-			theitem.setStatus(StatusBMO.getStatus(
-					TracingConstants.ITEM_STATUS_OPEN));
-			if (itemtype != TracingConstants.LOST_DELAY && form.getClaimcheck(i) != null
-					&& form.getClaimcheck(i).getClaimchecknum() != null) {
-				theitem.setClaimchecknum(form.getClaimcheck(i).getClaimchecknum());
-			}
-
-		}
 		
 	}
 }
