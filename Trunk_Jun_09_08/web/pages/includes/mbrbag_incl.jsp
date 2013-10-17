@@ -596,7 +596,7 @@
 		                <td>
 			              	<bean:message key="colname.item.status" />
 			              	<br>
-			              	<html:select name="theitem" property='<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].itemStatusId"%>' styleClass="dropdown" >
+			              	<html:select property='<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].itemStatusId"%>' styleClass="dropdown" >
 			              		<html:option value="0">
 									<bean:message key="select.please_select" />
 								</html:option>
