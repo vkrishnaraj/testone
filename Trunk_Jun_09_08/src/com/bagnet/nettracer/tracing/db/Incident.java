@@ -1330,7 +1330,7 @@ public class Incident implements Serializable {
 		this.custCommId = custCommId;
 	}
 
-	@OneToMany(fetch=FetchType.EAGER, cascade = CascadeType.REMOVE, mappedBy = "incident")
+	@OneToMany(fetch=FetchType.EAGER, mappedBy = "incident")
 	@org.hibernate.annotations.OrderBy(clause = "createDate")
 	@Fetch(FetchMode.SELECT)
 	public Set<IncidentActivity> getActivities() {
