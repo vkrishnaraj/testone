@@ -361,30 +361,50 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 			selenium.click("name=skip_prepopulate");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
+				selenium.click("name=addbagit");
+				waitForPageToLoadImproved();
+			} else {
+				System.out.println("!!!!!!!!!!!!!!!! failed to 'Add Passenger Itinerary'.");
+			}
+
+			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
-				selenium.type("name=passenger[0].lastname", "Test");
-				selenium.type("name=passenger[0].firstname", "Test");
-				selenium.type("name=addresses[0].address1", "123 Test");
-				selenium.type("name=addresses[0].city", "Test");
-				selenium.select("name=addresses[0].state_ID", "label=Georgia");
-				selenium.type("name=addresses[0].zip", "12345");
-				selenium.type("name=theitinerary[0].legfrom", "ATL");
-				selenium.type("name=theitinerary[0].legto", "LAX");
-				selenium.type("name=theitinerary[0].flightnum", "123");
+				
+
+				selenium.type("name=passenger[0].lastname", "Test1");
+				selenium.type("name=passenger[0].firstname", "Test1");
+				selenium.type("name=addresses[0].address1", "123 circle round drive");
+				selenium.type("name=addresses[0].city", "atlanta");
+				selenium.select("name=addresses[0].state_ID", "label=Georgia");			
+				selenium.type("name=theitinerary[0].legfrom", "ATL");	
+				selenium.type("name=theitinerary[0].legto", "AEX");						
+				selenium.type("name=theitinerary[0].flightnum", "1234");			
 				selenium.click("id=itcalendar0");
+				selenium.click("link=Today");					
+				selenium.type("name=theitinerary[1].legfrom", "ALS");
+				selenium.type("name=theitinerary[1].legto", "ATL");
+				selenium.type("name=theitinerary[1].flightnum", "3456");
+				selenium.click("id=calendar31");
 				selenium.click("link=Today");
-				selenium.select("name=theitem[0].color", "label=BK - Black");
-				selenium.select("name=theitem[0].bagtype", "label=22");
+				selenium.select("name=theitem[0].color", "label=BN - Brown");
+				selenium.select("id=bagtype0", "label=25");			
+				selenium.type("name=recordlocator", "TESTER");			
+				selenium.type("name=passenger[0].jobtitle", "agent");		
+				selenium.type("name=addresses[0].zip", "33213");
+				selenium.type("name=addresses[0].mobile", "4040213465");		
+				selenium.select("name=theitem[0].manufacturer_ID", "label=Andiamo");
+				selenium.type("id=remark[0]", "remark noted");
 				selenium.select("name=inventorylist[0].categorytype_ID", "label=Alcohol");
 				selenium.type("name=inventorylist[0].description", "TEST");
 				selenium.select("name=inventorylist[1].categorytype_ID", "label=Alcohol");
 				selenium.select("name=inventorylist[2].categorytype_ID", "label=Alcohol");
 				selenium.type("name=inventorylist[1].description", "TEST");
 				selenium.type("name=inventorylist[2].description", "TEST");
-				selenium.type("name=recordlocator", "TESTER");
+				
+				selenium.select("name=theitem[0].color", "label=BK - Black");
+				selenium.select("name=theitem[0].bagtype", "label=22");
 				selenium.type("name=addresses[0].email", "email@email.com");
 				selenium.type("name=claimcheck[0].claimchecknum", "WN123456");
-				selenium.type("name=addresses[0].mobile", "(555) 555-4444");
 				selenium.click("savetracingButton");
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {

@@ -363,18 +363,6 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 			verifyEquals("Type is required.", selenium.getAlert());
 			selenium.select("id=bagtype0", "label=25");						
 			selenium.click("name=savetracingButton");
-			verifyEquals("Record Locator is required.", selenium.getAlert());
-			selenium.type("name=recordlocator", "12345");						
-			selenium.click("name=savetracingButton");
-			verifyEquals("Job Title is required.", selenium.getAlert());
-			selenium.type("name=passenger[0].jobtitle", "agent");						
-			selenium.click("name=savetracingButton");
-			verifyEquals("Zip is required.", selenium.getAlert());
-			selenium.type("name=addresses[0].zip", "33213");						
-			selenium.click("name=savetracingButton");
-			verifyEquals("Mobile Phone is required.", selenium.getAlert());
-			selenium.type("name=addresses[0].mobile", "4040213465");						
-			selenium.click("name=savetracingButton");
 			verifyEquals("Content Category is required.", selenium.getAlert());
 			selenium.select("name=inventorylist[0].categorytype_ID", "label=Alcohol");
 			selenium.click("name=savetracingButton");
@@ -385,6 +373,18 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 			selenium.select("name=inventorylist[2].categorytype_ID", "label=Alcohol");
 			selenium.type("name=inventorylist[1].description", "TEST");
 			selenium.type("name=inventorylist[2].description", "TEST");
+			selenium.click("name=savetracingButton");
+			verifyEquals("Record Locator is required.", selenium.getAlert());
+			selenium.type("name=recordlocator", "TESTER");						
+			selenium.click("name=savetracingButton");
+			verifyEquals("Job Title is required.", selenium.getAlert());
+			selenium.type("name=passenger[0].jobtitle", "agent");						
+			selenium.click("name=savetracingButton");
+			verifyEquals("Zip is required.", selenium.getAlert());
+			selenium.type("name=addresses[0].zip", "33213");						
+			selenium.click("name=savetracingButton");
+			verifyEquals("Mobile Phone is required.", selenium.getAlert());
+			selenium.type("name=addresses[0].mobile", "4040213465");						
 			selenium.click("name=savetracingButton");
 			verifyEquals("Claim Check Number is required.", selenium.getAlert());
 			selenium.type("name=claimcheck[0].claimchecknum", "1234567890");
@@ -412,28 +412,8 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 		verifyEquals("US", selenium.getValue("name=passenger[0].driversLicenseCountry"));
 		selenium.type("name=passenger[0].decryptedPassportNumber", WN_SeleniumTest.PASSPORT_NUMBER);
 		selenium.select("name=passenger[0].passportIssuer", "label=United States");
-		selenium.type("name=addresses[0].address1", "123 Test");
-		selenium.type("name=addresses[0].city", "Test");
-		selenium.select("name=addresses[0].state_ID", "label=Georgia");
-		selenium.type("name=addresses[0].zip", "12345");
-		selenium.type("name=theitinerary[0].legfrom", "ATL");
-		selenium.type("name=theitinerary[0].legto", "LAX");
-		selenium.type("name=theitinerary[0].flightnum", "123");
-		selenium.click("id=itcalendar0");
-		selenium.click("link=Today");
 		selenium.type("name=theitem[0].posId", "123456");
-		selenium.select("name=theitem[0].color", "label=BK - Black");
-		selenium.select("name=theitem[0].bagtype", "label=22");
-		selenium.select("name=inventorylist[0].categorytype_ID", "label=Alcohol");
-		selenium.type("name=inventorylist[0].description", "TEST");
-		selenium.select("name=inventorylist[1].categorytype_ID", "label=Alcohol");
-		selenium.select("name=inventorylist[2].categorytype_ID", "label=Alcohol");
-		selenium.type("name=inventorylist[1].description", "TEST");
-		selenium.type("name=inventorylist[2].description", "TEST");
-		selenium.type("name=recordlocator", "TESTER");
 		selenium.type("name=addresses[0].email", "email@email.com");
-		selenium.type("name=claimcheck[0].claimchecknum", "WN123456");
-		selenium.type("name=addresses[0].mobile", "(555) 555-4444");
 	}
 	
 }
