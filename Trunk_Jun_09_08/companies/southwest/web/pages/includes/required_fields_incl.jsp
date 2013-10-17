@@ -188,15 +188,6 @@
     for (var j=0;j < form.length; j++) {
 	  	currentElement = form.elements[j];
 	  	currentElementName=currentElement.name;
-
-		//theitinerary
-		if (currentElementName.indexOf("theitinerary") != -1) {
-			if (currentElementName.indexOf("legfrom") != -1) {
-				var test = 'test';
-				//"theitinerary="+currentElement.value+'\r\ncurrentElementName='+currentElementName;
-				var x=test;
-			}  
-		}
 		
 		//incident validation
 		if (currentElementName.indexOf("recordlocator") != -1) {  
