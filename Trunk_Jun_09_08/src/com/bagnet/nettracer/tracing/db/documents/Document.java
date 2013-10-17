@@ -3,6 +3,7 @@ package com.bagnet.nettracer.tracing.db.documents;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -17,10 +18,15 @@ public class Document {
 	@GeneratedValue
 	private long id;
 	
+	private String title;
+	
 	@ManyToOne
+	@JoinColumn(name = "templateId")
 	private Template template;
 	
 	private String content;
+	
+	private String fileName;
 	
 	public Document() { }
 	
@@ -34,6 +40,14 @@ public class Document {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
 	public Template getTemplate() {
@@ -52,6 +66,14 @@ public class Document {
 		this.content = content;
 	}
 	
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
 	public String getName() throws InsufficientInformationException {
 		if (template == null) {
 			throw new InsufficientInformationException(Template.class);

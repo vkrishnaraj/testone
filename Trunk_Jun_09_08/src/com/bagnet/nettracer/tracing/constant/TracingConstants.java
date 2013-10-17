@@ -340,6 +340,12 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_NTLF_TM_OPEN_HV_ITEMS = "NTLF_TM_Open_HV_Items";
 	public static final String SYSTEM_COMPONENT_NAME_NTLF_TM_SHIP_TO_LFC = "NTLF_TM_Ship_To_LFC";
 	
+	public static final String SYSTEM_COMPONENT_NAME_CUST_COMM_CREATE = "Customer_Communications_Create";
+	public static final String SYSTEM_COMPONENT_NAME_CUST_COMM_EDIT = "Customer_Communications_Edit";
+	public static final String SYSTEM_COMPONENT_NAME_CUST_COMM_DELETE = "Customer_Communications_Delete";
+	public static final String SYSTEM_COMPONENT_NAME_CUST_COMM_VIEW_PUBLISHED = "Customer_Communications_View_Published";
+	public static final String SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL = "Customer_Communications_Approval";
+	
 	//Table numbers for status
 	public final static int AJAX_STATUS_INC = 1;
 	public final static int AJAX_STATUS_OHD = 2;
@@ -364,6 +370,8 @@ public class TracingConstants {
 	public final static int TABLE_COURTESY_REASON_DAMAGED = 22;
 	public final static int TABLE_COURTESY_REASON_LOST_DELAYED = 23;
 	public final static int TABLE_TEMPLATE_STATUS = 24;
+	public final static int TABLE_COMMUNICATIONS_METHOD = 25;
+	public final static int TABLE_COMMUNICATIONS_STATUS = 26;
 	
 	public final static int PRIORITY_LOW = 1;
 	public final static int PRIORITY_MEDIUM = 2;
@@ -1338,6 +1346,7 @@ public class TracingConstants {
 	public static final String COMMAND_CREATE = "create";
 	public static final String COMMAND_UPDATE = "update";
 	public static final String COMMAND_DELETE = "delete";
+	public static final String COMMAND_EDIT = "edit";
 	public static final String COMMAND_CLEAR = "clear";
 	public static final String COMMAND_SEARCH = "search";
 	
@@ -1351,6 +1360,7 @@ public class TracingConstants {
 	public static final String SORT_DESCENDING = "2";
 	
 	public static final String DOCUMENT_SERVICE_BEAN = "documentService";
+	public static final String INCIDENT_ACTIVITY_SERVICE_BEAN = "incidentActivityService";
 	public static final String TEMPLATE_SERVICE_BEAN = "templateService";
 	
 	public static final int ACTUAL_CASH_VALUE=1;
@@ -1374,7 +1384,20 @@ public class TracingConstants {
 	public static final int WARSAW_CONVENTION=3;
 	public static final int MONTREAL_CONVENTION=2;
 	
+	public static final int CUST_COMM_POSTAL_MAIL = 1301;
+	public static final int CUST_COMM_WEB_PORTAL = 1302;
+	
+	public static final int STATUS_CUSTOMER_COMM_PENDING = 1400;
+	public static final int STATUS_CUSTOMER_COMM_APPROVED = 1401;
+	public static final int STATUS_CUSTOMER_COMM_DENIED = 1402;
+	public static final int STATUS_CUSTOMER_COMM_PUBLISHED = 1403;
+	
+	public static final int ACTIVITY_CUSTOMER_COMMUNICATION = 1500;
+	
 	public static final String FILE_NOT_FOUND = "fileNotFound";
+	
+	public static final String CUSTOMER_COMMUNICATIONS = "customerCommunications";
+	public static final String EDIT_COMMUNICATIONS = "editCommunications";
 	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {

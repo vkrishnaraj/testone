@@ -322,3 +322,6 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.documents.templates.TemplateVar" />		
 		<mapping class="com.bagnet.nettracer.tracing.db.documents.templates.TemplateVarDependency" />		
 		<mapping class="com.bagnet.nettracer.tracing.db.documents.Document" />		
+
+		<mapping class="com.bagnet.nettracer.tracing.db.communications.Activity" />		
+		<mapping class="com.bagnet.nettracer.tracing.db.communications.IncidentActivity" />		

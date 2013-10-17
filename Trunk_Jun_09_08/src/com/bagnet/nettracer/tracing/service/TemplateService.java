@@ -8,7 +8,9 @@ import com.bagnet.nettracer.tracing.actions.templates.DocumentTemplateResult;
 import com.bagnet.nettracer.tracing.db.documents.templates.Template;
 import com.bagnet.nettracer.tracing.db.documents.templates.TemplateTypeMapping;
 import com.bagnet.nettracer.tracing.dto.TemplateDTO;
+import com.bagnet.nettracer.tracing.dto.TemplateOptionDTO;
 import com.bagnet.nettracer.tracing.dto.TemplateSearchDTO;
+import com.bagnet.nettracer.tracing.enums.TemplateType;
 
 /**
  * The TemplateService interface defines methods which provide database and maintenance operations 
@@ -81,4 +83,13 @@ public interface TemplateService {
 	 * @return the TemplateTypeMappings for the given template
 	 */
 	public Set<TemplateTypeMapping> determineRequiredTemplateTypes(Template template);
+	
+	/**
+	 * Retrieives the list of template names that can be used for a specific object type
+	 * (ie: Incidents, Claims, etc...)
+	 * @param type the TemplateType for which to get the available templates
+	 * @return a List of TemplateOptionDTOs containing the available list of template 
+	 * names for the given type
+	 */
+	public List<TemplateOptionDTO> getTemplateOptionsByType(TemplateType type);
 }

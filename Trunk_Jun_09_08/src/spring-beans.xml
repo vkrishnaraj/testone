@@ -126,6 +126,7 @@
 	
 	<!-- DAO definitions -->
 	<bean id="templateDao" class="com.bagnet.nettracer.tracing.dao.impl.TemplateDAOImpl" />
+	<bean id="incidentActivityDao" class="com.bagnet.nettracer.tracing.dao.impl.IncidentActivityDAOImpl" />
 	<bean id="documentDao" class="com.bagnet.nettracer.tracing.dao.impl.DocumentDAOImpl" />
 	
 	<!-- Service definitions -->
@@ -135,6 +136,12 @@
 	
 	<bean id="documentService" class="com.bagnet.nettracer.tracing.service.impl.DocumentServiceImpl" >
 		<property name="dao" ref="documentDao" />
+	</bean>
+	
+	<bean id="incidentActivityService" class="com.bagnet.nettracer.tracing.service.impl.IncidentActivityServiceImpl" >
+		<property name="documentDao" ref="documentDao" />
+		<property name="incidentActivityDao" ref="incidentActivityDao" />
+		<property name="templateDao" ref="templateDao" />
 	</bean>
 	
 </beans>

@@ -18,11 +18,18 @@ import com.bagnet.nettracer.tracing.db.i8n.LocaleBasedObject;
  */
 public class Status extends LocaleBasedObject implements Serializable {
 	
+	private static final long serialVersionUID = -5115842004692528313L;
+	
 	private static String MSG_KEY = "STATUS_KEY_";
 	private int Status_ID;
 	private int table_ID;
 
+	public Status() { }
 
+	public Status(int statusId) {
+		this.Status_ID = statusId;
+	}
+	
 	/**
 	 * @return Returns the status_ID.
 	 * 

@@ -688,6 +688,9 @@
           <bean:message key="button.add_claimcheck" />
         </html:submit></center>
         <jsp:include page="/pages/includes/mbrbag_incl.jsp" />
+        <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_CREATE, a)) { %>
+        	<jsp:include page="/pages/communications/customer_communications.jsp" />
+        <% } %>
         <jsp:include page="/pages/includes/remark_incl.jsp" />
         </div>
         <logic:notEqual name="incidentForm" property="readonly"

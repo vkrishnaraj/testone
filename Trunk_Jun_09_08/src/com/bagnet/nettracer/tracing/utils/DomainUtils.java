@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import org.springframework.beans.BeanUtils;
@@ -19,6 +21,10 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.Passenger;
+import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.communications.Activity;
+import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
+import com.bagnet.nettracer.tracing.db.documents.Document;
 import com.bagnet.nettracer.tracing.db.documents.templates.Template;
 import com.bagnet.nettracer.tracing.db.documents.templates.TemplateTypeMapping;
 import com.bagnet.nettracer.tracing.db.lf.LFAddress;
@@ -29,6 +35,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFPhone;
 import com.bagnet.nettracer.tracing.dto.TemplateAdapterDTO;
 import com.bagnet.nettracer.tracing.dto.TemplateSearchDTO;
 import com.bagnet.nettracer.tracing.enums.TemplateType;
+import com.bagnet.nettracer.tracing.forms.communications.CustomerCommunicationsForm;
 import com.bagnet.nettracer.tracing.forms.templates.TemplateEditForm;
 import com.bagnet.nettracer.tracing.forms.templates.TemplateSearchForm;
 /**
@@ -38,7 +45,7 @@ import com.bagnet.nettracer.tracing.forms.templates.TemplateSearchForm;
  * @author Mike
  *
  */
-public class TemplateUtils {
+public class DomainUtils {
 	
 	public static void toForm(Template template, TemplateEditForm form) {
 		if (template != null) {
@@ -53,8 +60,33 @@ public class TemplateUtils {
 			form.setName("");
 			form.setDescription("");
 			form.setData("");
+			form.setTypeAvailableFor(TemplateType.INCIDENT.ordinal());
 			form.setCommand(TracingConstants.COMMAND_CREATE);
 		}
+	}
+	
+	public static void toForm(Document document, CustomerCommunicationsForm ccf) {
+		ccf.setDocumentId(document.getId());
+		ccf.setDocumentTitle(document.getTemplate().getName());
+		ccf.setData(document.getContent());
+	}
+	
+	public static void toForm(IncidentActivity ia, CustomerCommunicationsForm ccf) {
+		ccf.setCommand(TracingConstants.COMMAND_UPDATE);
+		ccf.setId(ia.getId());
+
+		if (ia.getIncident() != null) {
+			ccf.setIncidentId(ia.getIncident().getIncident_ID());
+			ccf.setCustCommId(ia.getCustCommId());
+		}
+
+		if (ia.getDocument() != null) {
+			ccf.setDocumentId(ia.getDocument().getId());
+			ccf.setDocumentTitle(ia.getDocument().getTitle());
+			ccf.setData(ia.getDocument().getContent());
+			ccf.setTemplateId(ia.getDocument().getTemplate().getId());
+		}
+		
 	}
 	
 	public static Template fromForm(TemplateEditForm form) {
@@ -64,6 +96,7 @@ public class TemplateUtils {
 		template.setName(form.getName());
 		template.setDescription(form.getDescription());
 		template.setData(form.getData());
+		template.setTypeAvailableFor(form.getTypeAvailableFor());
 		return template;
 	}
 	
@@ -83,6 +116,35 @@ public class TemplateUtils {
 		}
 		
 		return dto;
+	}
+	
+	public static IncidentActivity fromForm(CustomerCommunicationsForm ccf, Agent user) {
+		IncidentActivity ia = new IncidentActivity();
+		
+		Incident incident = new Incident();
+		incident.setIncident_ID(ccf.getIncidentId());
+		
+		Template template = new Template();
+		template.setId(ccf.getTemplateId());
+		
+		Document document = new Document();
+		document.setId(ccf.getDocumentId());
+		document.setTitle(ccf.getDocumentTitle());
+		document.setContent(ccf.getData());
+		document.setFileName(ccf.getFileName());
+		document.setTemplate(template);
+		
+		ia.setId(ccf.getId());
+		ia.setCustCommId(ccf.getCustCommId());
+		ia.setIncident(incident);
+		ia.setDocument(document);
+		ia.setStatus(new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING));
+		ia.setActivity(new Activity(TracingConstants.ACTIVITY_CUSTOMER_COMMUNICATION));	
+		
+		ResourceBundle bundle = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
+		ia.setDescription(bundle.getString("customer.communication.outgoing") + ": " + ia.getDocument().getTitle());
+		
+		return ia;
 	}
 	
 	public static void resetSearchForm(TemplateSearchForm form) {
@@ -124,7 +186,7 @@ public class TemplateUtils {
 		
 		return dto;
 	}
-
+	
 	private static LFFound getDummyFoundItem() {
 		// dummy found item
 		LFAddress lfAddress = new LFAddress();

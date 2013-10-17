@@ -24,7 +24,7 @@ import com.bagnet.nettracer.tracing.forms.templates.TemplateSearchForm;
 import com.bagnet.nettracer.tracing.service.TemplateService;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
-import com.bagnet.nettracer.tracing.utils.TemplateUtils;
+import com.bagnet.nettracer.tracing.utils.DomainUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
@@ -54,7 +54,7 @@ public class TemplateSearchAction extends CheckedAction {
 		}
 
 		List<TemplateDTO> results = new ArrayList<TemplateDTO>();
-		TemplateSearchDTO dto = TemplateUtils.fromForm(dtsf);
+		TemplateSearchDTO dto = DomainUtils.fromForm(dtsf);
 		setUserInfoOnDto(user, dto);
 		getSortCriteria(dto, request);
 		
@@ -105,7 +105,7 @@ public class TemplateSearchAction extends CheckedAction {
 			
 			request.setAttribute("results", results);
 		} else {
-			TemplateUtils.resetSearchForm(dtsf);
+			DomainUtils.resetSearchForm(dtsf);
 		}
 		
 		if (session.getAttribute("templateStatusList") == null) {

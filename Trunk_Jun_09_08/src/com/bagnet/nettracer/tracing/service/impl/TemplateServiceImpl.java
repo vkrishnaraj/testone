@@ -16,6 +16,7 @@ import com.bagnet.nettracer.tracing.db.documents.templates.TemplateTypeMapping;
 import com.bagnet.nettracer.tracing.db.documents.templates.TemplateVar;
 import com.bagnet.nettracer.tracing.db.documents.templates.TemplateVarDependency;
 import com.bagnet.nettracer.tracing.dto.TemplateDTO;
+import com.bagnet.nettracer.tracing.dto.TemplateOptionDTO;
 import com.bagnet.nettracer.tracing.dto.TemplateSearchDTO;
 import com.bagnet.nettracer.tracing.enums.TemplateType;
 import com.bagnet.nettracer.tracing.service.TemplateService;
@@ -195,6 +196,21 @@ public class TemplateServiceImpl implements TemplateService {
 		}
 		
 		return types;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.bagnet.nettracer.tracing.service.TemplateService#getTemplatesByType(java.util.List)
+	 */
+	@Override
+	public List<TemplateOptionDTO> getTemplateOptionsByType(TemplateType type) {
+		List<Template> fromDb = dao.getActiveTemplatesByType(type);
+		List<TemplateOptionDTO> options = new ArrayList<TemplateOptionDTO>();
+		if (!fromDb.isEmpty()) {
+			for (Template template: fromDb) {
+				options.add(new TemplateOptionDTO(template.getId(), template.getName()));
+			}
+		}
+		return options;
 	}
 	
 	public TemplateDAO getDao() {

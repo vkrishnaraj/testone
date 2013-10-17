@@ -59,6 +59,7 @@ import com.bagnet.nettracer.tracing.db.issuance.IssuanceItem;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemIncident;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemInventory;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemQuantity;
+import com.bagnet.nettracer.tracing.dto.IncidentActivityDTO;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 
 /**
@@ -986,6 +987,8 @@ public class MBRActionUtils {
 				}
 			}
 			theform.setPassengerlist(al);
+			
+			theform.setActivityDtos(new ArrayList<IncidentActivityDTO>());
 
 			// clear itinerary ids for new insert
 			al = new ArrayList();

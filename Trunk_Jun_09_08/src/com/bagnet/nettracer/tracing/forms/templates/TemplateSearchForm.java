@@ -1,8 +1,7 @@
 package com.bagnet.nettracer.tracing.forms.templates;
 
-import org.apache.struts.validator.ValidatorForm;
 
-public class TemplateSearchForm extends ValidatorForm {
+public class TemplateSearchForm extends CommandForm {
 
 	private static final long serialVersionUID = -1493188726906374136L;
 	
@@ -11,7 +10,6 @@ public class TemplateSearchForm extends ValidatorForm {
 	private String prevpage;
 	private String pagination;
 	private String _DATEFORMAT;
-	private String command;
 	
 	private long id;
 	
@@ -62,14 +60,6 @@ public class TemplateSearchForm extends ValidatorForm {
 
 	public void set_DATEFORMAT(String _DATEFORMAT) {
 		this._DATEFORMAT = _DATEFORMAT;
-	}
-
-	public String getCommand() {
-		return command;
-	}
-
-	public void setCommand(String command) {
-		this.command = command;
 	}
 
 	public long getId() {

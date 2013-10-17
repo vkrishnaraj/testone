@@ -296,6 +296,8 @@
 		<form-bean name="templateEditForm" type="com.bagnet.nettracer.tracing.forms.templates.TemplateEditForm" />	
 		<form-bean name="templateSearchForm" type="com.bagnet.nettracer.tracing.forms.templates.TemplateSearchForm" />	
 
+		<form-bean name="customerCommunicationsForm" type="com.bagnet.nettracer.tracing.forms.communications.CustomerCommunicationsForm" />	
+
 	</form-beans>
 	<!-- global exception -->
 	<global-exceptions>
@@ -609,6 +611,9 @@
 		<forward name="ntlf_send_to_lfc" path="ntlf_send_to_lfc" />
 		
 		<forward name="fileNotFound" path="fileNotFound" />
+		
+		<forward name="customerCommunications" path="customerCommunications" />
+		<forward name="editCommunications" path="editCommunications" />
 	</global-forwards>
 
 	<!-- ========== Action Mapping Definitions ============================== -->
@@ -985,6 +990,8 @@
 		<action path="/ntlf_create_found_item" type="com.bagnet.nettracer.tracing.actions.ntlf.FoundItemAction" name="foundItemForm" scope="session" validate="false"></action>			
 		<action path="/ntlf_search_lost_found" type="com.bagnet.nettracer.tracing.actions.ntlf.SearchLostFoundAction" name="searchLostFoundForm" scope="request" validate="false"></action>	
 		
+		<action path="/customerCommunications" type="com.bagnet.nettracer.tracing.actions.communications.CustomerCommunicationsAction" name="customerCommunicationsForm" scope="request" validate="false" ></action>
+
 	</action-mappings>
 
 	<!-- ========== Controller Configuration ================================ -->

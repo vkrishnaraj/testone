@@ -38,6 +38,7 @@ import org.hibernate.annotations.Proxy;
 
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
 import com.bagnet.nettracer.tracing.db.dr.Dispute;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemIncident;
 import com.bagnet.nettracer.tracing.utils.ClientUtils;
@@ -135,10 +136,12 @@ public class Incident implements Serializable {
 	private Date rxTimestamp;
 	private int courtesyReasonId;
 	private String courtesyDescription;
-	
+	private int custCommId;
 
 	
 	private List<IssuanceItemIncident> issuanceItemIncidents;
+	
+	private Set<IncidentActivity> activities;
 
 	@Column(name="tracing_status_id")
 	public int getTracingStatus() {
@@ -1316,6 +1319,26 @@ public class Incident implements Serializable {
 
 	public void setCourtesyDescription(String courtesyDescription) {
 		this.courtesyDescription = courtesyDescription;
+	}
+
+	@Column(columnDefinition="int(11) default 1301")
+	public int getCustCommId() {
+		return custCommId;
+	}
+
+	public void setCustCommId(int custCommId) {
+		this.custCommId = custCommId;
+	}
+
+	@OneToMany(fetch=FetchType.EAGER, cascade = CascadeType.REMOVE, mappedBy = "incident")
+	@org.hibernate.annotations.OrderBy(clause = "createDate")
+	@Fetch(FetchMode.SELECT)
+	public Set<IncidentActivity> getActivities() {
+		return activities;
+	}
+
+	public void setActivities(Set<IncidentActivity> activities) {
+		this.activities = activities;
 	}
 	
 }

@@ -20,6 +20,7 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.documents.Document;
 import com.bagnet.nettracer.tracing.db.documents.templates.Template;
+import com.bagnet.nettracer.tracing.enums.TemplateType;
 import com.bagnet.nettracer.tracing.exceptions.InsufficientInformationException;
 import com.bagnet.nettracer.tracing.exceptions.InvalidDocumentTypeException;
 import com.bagnet.nettracer.tracing.factory.TemplateAdapterFactory;
@@ -29,7 +30,7 @@ import com.bagnet.nettracer.tracing.service.TemplateService;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
-import com.bagnet.nettracer.tracing.utils.TemplateUtils;
+import com.bagnet.nettracer.tracing.utils.DomainUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
@@ -68,6 +69,7 @@ public class TemplateEditAction extends CheckedAction {
 		}
 		
 		TemplateEditForm dtf = (TemplateEditForm) form;
+		dtf.setTypesList(TemplateType.getDependencyTemplateTypes());
 		setUserDataOnForm(dtf, user);
 
 		Template template = null;
@@ -83,7 +85,7 @@ public class TemplateEditAction extends CheckedAction {
 					logger.error("Invalid id: " + request.getParameter("template_id") + " provided.", nfe);
 				}
 			}
-			TemplateUtils.toForm(template, dtf);
+			DomainUtils.toForm(template, dtf);
 		} else if (TracingConstants.COMMAND_CREATE.equals(dtf.getCommand())) {
 			success = saveTemplate(dtf, messages);
 		} else if (TracingConstants.COMMAND_UPDATE.equals(dtf.getCommand())) {
@@ -166,7 +168,7 @@ public class TemplateEditAction extends CheckedAction {
 		Document document = new Document(template);
 		try {
 			// 2. create the document using a dummy template adapter
-			TemplateAdapter adapter = TemplateAdapterFactory.getTemplateAdapter(TemplateUtils.getDummyAdapterDTO(user));
+			TemplateAdapter adapter = TemplateAdapterFactory.getTemplateAdapter(DomainUtils.getDummyAdapterDTO(user));
 			result = documentService.merge(document, adapter);
 			if (!result.isSuccess()) {
 				return result;
@@ -197,7 +199,7 @@ public class TemplateEditAction extends CheckedAction {
 	}
 	
 	private Template getTemplateAndSetType(TemplateEditForm tef) {
-		Template template = TemplateUtils.fromForm(tef);
+		Template template = DomainUtils.fromForm(tef);
 		template.setTypes(templateService.determineRequiredTemplateTypes(template));
 		return template;
 	}

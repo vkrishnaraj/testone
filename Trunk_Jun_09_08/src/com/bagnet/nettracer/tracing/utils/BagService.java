@@ -38,7 +38,6 @@ import com.bagnet.nettracer.reporting.LostDelayReceipt;
 import com.bagnet.nettracer.tracing.bmo.ClaimBMO;
 import com.bagnet.nettracer.tracing.bmo.ForwardNoticeBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
-import com.bagnet.nettracer.tracing.bmo.IssuanceItemBMO;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.bmo.LostFoundBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
@@ -89,9 +88,11 @@ import com.bagnet.nettracer.tracing.db.audit.Audit_Claim;
 import com.bagnet.nettracer.tracing.db.audit.Audit_ClaimProrate;
 import com.bagnet.nettracer.tracing.db.audit.Audit_ExpensePayout;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Prorate_Itinerary;
+import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemIncident;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCloseOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqOhdAction;
+import com.bagnet.nettracer.tracing.dto.IncidentActivityDTO;
 import com.bagnet.nettracer.tracing.dto.Ohd_DTO;
 import com.bagnet.nettracer.tracing.dto.SearchIncident_DTO;
 import com.bagnet.nettracer.tracing.forms.ClaimForm;
@@ -1545,6 +1546,26 @@ public class BagService {
 			iti.set_DATEFORMAT(user.getDateformat().getFormat());
 			iti.set_TIMEFORMAT(user.getTimeformat().getFormat());
 		}
+		
+		List<IncidentActivityDTO> activities = new ArrayList<IncidentActivityDTO>();
+		for (IncidentActivity activity: iDTO.getActivities()) {
+			IncidentActivityDTO dto = new IncidentActivityDTO();
+			dto.set_DATEFORMAT(user.getDateformat().getFormat());
+			dto.set_TIMEFORMAT(user.getTimeformat().getFormat());
+			dto.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+			dto.setId(activity.getId());
+			dto.setCreateDate(activity.getCreateDate());
+			dto.setPublishedDate(activity.getPublishedDate());
+			dto.setStatusId(activity.getStatus().getStatus_ID());
+			dto.setAgent(activity.getAgent().getUsername());
+			dto.setDescription(activity.getDescription());
+			dto.setCustCommId(activity.getCustCommId());
+			if (activity.getDocument() != null) {
+				dto.setFileName(activity.getDocument().getFileName());
+			}
+			activities.add(dto);
+		}
+		theform.setActivityDtos(activities);
 
 		theform.set_DATEFORMAT(user.getDateformat().getFormat());
 		theform.set_TIMEFORMAT(user.getTimeformat().getFormat());
@@ -1677,6 +1698,26 @@ public class BagService {
 			theform.setClaimchecklist(new ArrayList(iDTO.getClaimchecks()));
 
 			theform.setPassengerlist(new ArrayList(iDTO.getPassengers()));
+			
+			List<IncidentActivityDTO> activities = new ArrayList<IncidentActivityDTO>();
+			for (IncidentActivity activity: iDTO.getActivities()) {
+				IncidentActivityDTO dto = new IncidentActivityDTO();
+				dto.set_DATEFORMAT(user.getDateformat().getFormat());
+				dto.set_TIMEFORMAT(user.getTimeformat().getFormat());
+				dto.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
+				dto.setId(activity.getId());
+				dto.setCreateDate(activity.getCreateDate());
+				dto.setPublishedDate(activity.getPublishedDate());
+				dto.setStatusId(activity.getStatus().getStatus_ID());
+				dto.setAgent(activity.getAgent().getUsername());
+				dto.setDescription(activity.getDescription());
+				dto.setCustCommId(activity.getCustCommId());
+				if (activity.getDocument() != null) {
+					dto.setFileName(activity.getDocument().getFileName());
+				}
+				activities.add(dto);
+			}
+			theform.setActivityDtos(activities);
 
 			Passenger p = null;
 			AirlineMembership am = null;

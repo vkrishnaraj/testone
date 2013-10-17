@@ -42,7 +42,7 @@ import com.bagnet.nettracer.tracing.service.TemplateService;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.HistoryUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
-import com.bagnet.nettracer.tracing.utils.TemplateUtils;
+import com.bagnet.nettracer.tracing.utils.DomainUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
@@ -337,7 +337,7 @@ public class FoundItemAction extends CheckedAction {
 		}
 		
 		// 2. get the template adapter
-		TemplateAdapterDTO dto = TemplateUtils.getTemplateAdapterDTO(user, template);
+		TemplateAdapterDTO dto = DomainUtils.getTemplateAdapterDTO(user, template);
 		dto.setFound(found);
 		
 		try {

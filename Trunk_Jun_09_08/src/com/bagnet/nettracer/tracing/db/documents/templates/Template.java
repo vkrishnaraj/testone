@@ -55,6 +55,8 @@ public class Template {
 			   joinColumns = {@JoinColumn(name = "templateId")},
 			   inverseJoinColumns = {@JoinColumn(name = "templateVarId")})
 	private Set<TemplateVar> variables;
+	
+	private int typeAvailableFor;
 
 	public long getId() {
 		return id;
@@ -128,6 +130,14 @@ public class Template {
 		this.variables = variables;
 	}
 	
+	public int getTypeAvailableFor() {
+		return typeAvailableFor;
+	}
+
+	public void setTypeAvailableFor(int typeAvailableFor) {
+		this.typeAvailableFor = typeAvailableFor;
+	}
+
 	public boolean isValid() {
 		for (TemplateTypeMapping mapping: types) {
 			if (TemplateType.INVALID == TemplateType.fromOrdinal(mapping.getOrdinal())) {

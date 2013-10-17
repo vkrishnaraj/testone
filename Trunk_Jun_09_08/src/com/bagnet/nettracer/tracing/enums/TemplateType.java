@@ -1,21 +1,34 @@
 package com.bagnet.nettracer.tracing.enums;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public enum TemplateType {
 
-	INCIDENT("Incident"),
-	CLAIM("Claim"),
-	FOUND_ITEM("FoundItem"),
-	STATIC("Static"),
-	INVALID("Invalid");
+	INCIDENT("Incident", "Incidents"),
+	CLAIM("Claim", "Claims"),
+	FOUND_ITEM("FoundItem", "Found Items"),
+	STATIC("Static", "All"),
+	INVALID("Invalid", "None");
 	
 	private String defaultName;
+	private String displayName;
 	
-	private TemplateType(String defaultName) {
+	private TemplateType(String defaultName, String displayName) {
 		this.defaultName = defaultName;
+		this.displayName = displayName;
 	}
 	
 	public String getDefaultName() {
 		return this.defaultName;
+	}
+	
+	public String getDisplayName() {
+		return this.displayName;
+	}
+	
+	public int getOrdinal() {
+		return this.ordinal();
 	}
 	
 	public static TemplateType fromOrdinal(int ordinal) {
@@ -32,8 +45,21 @@ public enum TemplateType {
 	 * defined in Template data.
 	 * @return an array of dependency TemplateTypes
 	 */
-	public static TemplateType[] getDependencyTemplateTypes() {
-		return new TemplateType[] { INCIDENT, CLAIM, FOUND_ITEM };
+	public static List<TemplateType> getDependencyTemplateTypes() {
+		ArrayList<TemplateType> types = new ArrayList<TemplateType>();
+		types.add(INCIDENT);
+		types.add(CLAIM);
+		types.add(FOUND_ITEM);
+		return types;
+	}
+	
+	public static Integer[] getOrdinals(List<TemplateType> types) {
+		if (types == null || types.isEmpty()) return null;
+		Integer[] ordinals = new Integer[types.size()];
+		for (int i = 0; i < ordinals.length; ++i) {
+			ordinals[i] = types.get(i).ordinal();
+		}
+		return ordinals;
 	}
 	
 }

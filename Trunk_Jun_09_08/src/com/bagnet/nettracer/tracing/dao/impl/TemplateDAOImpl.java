@@ -10,6 +10,8 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Conjunction;
@@ -17,6 +19,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.beans.BeanUtils;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
@@ -263,6 +266,7 @@ public class TemplateDAOImpl implements TemplateDAO {
 	/* (non-Javadoc)
 	 * @see com.bagnet.nettracer.tracing.dao.TemplateDAO#getTemplateTypeMapping(com.bagnet.nettracer.tracing.enums.TemplateType)
 	 */
+	@Override
 	public TemplateTypeMapping getTemplateTypeMapping(TemplateType type) {
 		TemplateTypeMapping mapping = null;
 		Session session = null;
@@ -282,6 +286,37 @@ public class TemplateDAOImpl implements TemplateDAO {
 			}
 		}
 		return mapping;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.bagnet.nettracer.tracing.dao.TemplateDAO#getTemplatesByType(java.util.List)
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public List<Template> getActiveTemplatesByType(TemplateType type) {
+		List<Template> templates = new ArrayList<Template>();
+		Session session = null;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			String sql = "select id from template where typeAvailableFor = :ordinal and active = 1";
+			SQLQuery query = session.createSQLQuery(sql);
+			query.setInteger("ordinal", type.getOrdinal());
+			query.addScalar("id", StandardBasicTypes.LONG);
+			List ids = query.list();
+			
+			if (ids != null && !ids.isEmpty()) {
+				Query hql = session.createQuery("from Template t where t.id in :ids");
+				hql.setParameterList("ids", ids);
+				templates = hql.list();
+			}
+		} catch (Exception e) {
+			logger.error("Failed to load templates from the given types", e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return templates;
 	}
 	
 	private Criteria getCriteriaFromDto(Session session, TemplateSearchDTO dto) {
@@ -377,6 +412,9 @@ public class TemplateDAOImpl implements TemplateDAO {
 		return fromDb;
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.bagnet.nettracer.tracing.dao.TemplateDAO#getVarDependencies(java.util.List)
+	 */
 	@SuppressWarnings("unchecked")
 	public List<TemplateVarDependency> getVarDependencies(List<String> classNames) {
 		List<TemplateVarDependency> results = new ArrayList<TemplateVarDependency>();

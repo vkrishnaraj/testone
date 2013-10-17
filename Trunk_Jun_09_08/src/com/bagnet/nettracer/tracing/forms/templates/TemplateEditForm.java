@@ -1,20 +1,19 @@
 package com.bagnet.nettracer.tracing.forms.templates;
 
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.validator.ValidatorForm;
 
+import com.bagnet.nettracer.tracing.enums.TemplateType;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
-public class TemplateEditForm extends ValidatorForm {
+public class TemplateEditForm extends CommandForm {
 
 	private static final long serialVersionUID = 2248013898627441965L;
-	
-	private String command;
 	
 	private boolean preview;
 	
@@ -37,14 +36,10 @@ public class TemplateEditForm extends ValidatorForm {
 	private String _TIMEFORMAT;
 	
 	private TimeZone _TIMEZONE;
-
-	public String getCommand() {
-		return command;
-	}
-
-	public void setCommand(String command) {
-		this.command = command;
-	}
+	
+	private int typeAvailableFor;
+	
+	private List<TemplateType> typesList;
 
 	public boolean isPreview() {
 		return preview;
@@ -132,6 +127,22 @@ public class TemplateEditForm extends ValidatorForm {
 
 	public void set_TIMEZONE(TimeZone _TIMEZONE) {
 		this._TIMEZONE = _TIMEZONE;
+	}
+
+	public int getTypeAvailableFor() {
+		return typeAvailableFor;
+	}
+
+	public void setTypeAvailableFor(int typeAvailableFor) {
+		this.typeAvailableFor = typeAvailableFor;
+	}
+
+	public List<TemplateType> getTypesList() {
+		return typesList;
+	}
+
+	public void setTypesList(List<TemplateType> typesList) {
+		this.typesList = typesList;
 	}
 
 	public String getDisCreateDate() {

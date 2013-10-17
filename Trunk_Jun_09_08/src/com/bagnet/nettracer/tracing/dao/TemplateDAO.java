@@ -66,4 +66,10 @@ public interface TemplateDAO {
 	 */
 	public TemplateTypeMapping getTemplateTypeMapping(TemplateType type);
 	
+	/**
+	 * @param type for which to load the available Templates
+	 * @return a List containing the Templates available for the given type
+	 */
+	public List<Template> getActiveTemplatesByType(TemplateType type);
+	
 }

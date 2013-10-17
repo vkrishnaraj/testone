@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
-import javax.persistence.Column;
-
 import org.apache.struts.validator.ValidatorForm;
 
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
@@ -33,8 +31,10 @@ import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile;
+import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemIncident;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim;
+import com.bagnet.nettracer.tracing.dto.IncidentActivityDTO;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
@@ -46,6 +46,8 @@ import com.bagnet.nettracer.tracing.utils.TracerProperties;
  * inserting reports (Lost/Delayed, Damaged, On-hand)
  */
 public final class IncidentForm extends ValidatorForm {
+
+	private static final long serialVersionUID = -4458535454797410537L;
 
 	private String Incident_ID;
 
@@ -112,6 +114,10 @@ public final class IncidentForm extends ValidatorForm {
 	
 	private int courtesyReasonId;
 	private String courtesyDescription;
+	
+	private int custCommId;
+	private Set<IncidentActivity> activities;
+	private List<IncidentActivityDTO> activityDtos;
 
 	public int getTracingStatus() {
 		return tracingStatus;
@@ -1421,5 +1427,30 @@ public final class IncidentForm extends ValidatorForm {
 	public void setCourtesyDescription(String courtesyDescription) {
 		this.courtesyDescription = courtesyDescription;
 	}
-	
+
+	public int getCustCommId() {
+		return custCommId;
+	}
+
+	public void setCustCommId(int custCommId) {
+		this.custCommId = custCommId;
+	}
+
+	public Set<IncidentActivity> getActivities() {
+		return activities;
+	}
+
+	public void setActivities(Set<IncidentActivity> activities) {
+		this.activities = activities;
+	}
+
+	public List<IncidentActivityDTO> getActivityDtos() {
+		return activityDtos;
+	}
+
+	public void setActivityDtos(List<IncidentActivityDTO> activityDtos) {
+		this.activityDtos = activityDtos;
+	}
+
+
 }

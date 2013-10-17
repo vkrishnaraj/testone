@@ -22,7 +22,7 @@ public class DocumentDAOImpl implements DocumentDAO {
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			Criteria criteria = session.createCriteria(Document.class, "d");
-			criteria.add(Restrictions.eq("t.id", documentId));
+			criteria.add(Restrictions.eq("d.id", documentId));
 			document = (Document) criteria.uniqueResult();
 		} catch (Exception e) {
 			logger.error("Failed to load document with id: " + documentId, e);

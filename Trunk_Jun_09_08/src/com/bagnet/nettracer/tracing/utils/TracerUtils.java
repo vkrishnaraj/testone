@@ -568,6 +568,10 @@ public class TracerUtils {
 							getStatusList(TracingConstants.TABLE_COURTESY_REASON, user.getCurrentlocale()));
 		((ArrayList<?>) session.getAttribute("lostDelayedCourtesyReasonList")).addAll(getStatusList(TracingConstants.TABLE_COURTESY_REASON_LOST_DELAYED, user.getCurrentlocale()));
 
+		session.setAttribute("customerCommunicationsList",
+				session.getAttribute("customerCommunicationsList") != null ?
+						session.getAttribute("customerCommunicationsList") :
+							getStatusList(TracingConstants.TABLE_COMMUNICATIONS_METHOD, user.getCurrentlocale()));
 	}
 
 	private static List<LabelValueBean> getSpokenLanguageList(String locale){

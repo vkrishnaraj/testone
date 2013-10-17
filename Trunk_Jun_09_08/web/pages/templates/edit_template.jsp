@@ -3,7 +3,6 @@
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
 <%@ taglib uri="/tags/struts-logic" prefix="logic" %>
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
-<%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
@@ -136,20 +135,27 @@
 							<html:text property="name" size="60" styleId="name" styleClass="textfield" />
 						</td>
 						<td>
+							<bean:message key="colname.template.template.type" />
+							<br>
+							<html:select property="typeAvailableFor" styleId="typeAvailableFor" styleClass="dropdown" >
+								<html:optionsCollection name="templateEditForm" property="typesList" value="ordinal" label="displayName" />
+							</html:select>
+						</td>
+						<td>
 							<bean:message key="colname.template.active" />
 							<br>
 							<html:checkbox property="active" />
 						</td>
 					</tr>
 					<tr>
-						<td colspan="2">
+						<td colspan="3">
 							<bean:message key="colname.template.description" />
 							<br>
 							<html:textarea property="description" styleId="description" cols="80" rows="3" />
 						</td>
 					</tr>
 					<tr>
-						<td>
+						<td colspan="2">
 							<bean:message key="colname.template.data" />
 							<br>
 							<textarea id="data" name="data"><bean:write name="templateEditForm" property="data" /></textarea>
