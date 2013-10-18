@@ -40,6 +40,7 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.DomainUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
+import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class CustomerCommunicationsAction extends CheckedAction {
@@ -60,6 +61,10 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		if (user == null || form == null) {
 			response.sendRedirect("logoff.do");
 			return null;
+		}
+		
+		if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_CREATE, user)) {
+			return (mapping.findForward(TracingConstants.NO_PERMISSION));
 		}
 		
 		// handles ajax call for the list of available templates
@@ -97,7 +102,8 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		
 		if (request.getParameter("templateId") != null && request.getParameter("incident") != null) {
 			success = populateCustomerCommunicationsForm(request.getParameter("incident"), request.getParameter("templateId"), ccf, user, messages);			
-		} else if (request.getParameter("command") != null && TracingConstants.COMMAND_EDIT.equals(request.getParameter("command"))) {
+		} else if (request.getParameter("command") != null && TracingConstants.COMMAND_EDIT.equals(request.getParameter("command"))
+				&& UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_EDIT, user)) {
 			try {
 				long id = Long.valueOf(request.getParameter("communicationsId"));
 				IncidentActivity ia = incidentActivityService.load(id);
@@ -109,7 +115,8 @@ public class CustomerCommunicationsAction extends CheckedAction {
 				logger.error("Failed to load customer communication with id: " + request.getParameter("communicationsId"), nfe);
 				success = false;
 			}
-		} else if (request.getParameter("command") != null && TracingConstants.COMMAND_DELETE.equals(request.getParameter("command"))) {
+		} else if (request.getParameter("command") != null && TracingConstants.COMMAND_DELETE.equals(request.getParameter("command"))
+				&& UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_EDIT, user)) {
 			try {
 				long id = Long.valueOf(request.getParameter("communicationsId"));
 				success = incidentActivityService.delete(id);
@@ -121,7 +128,8 @@ public class CustomerCommunicationsAction extends CheckedAction {
 			return null;
 		} else if (TracingConstants.COMMAND_CREATE.equals(ccf.getCommand())) {
 			success = saveCustomerCommunications(ccf, user, messages);
-		} else if (TracingConstants.COMMAND_UPDATE.equals(ccf.getCommand())) {
+		} else if (TracingConstants.COMMAND_UPDATE.equals(ccf.getCommand()) 
+				&& UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_EDIT, user)) {
 			success = updateCustomerCommunications(ccf, user, messages);
 		}
 		
