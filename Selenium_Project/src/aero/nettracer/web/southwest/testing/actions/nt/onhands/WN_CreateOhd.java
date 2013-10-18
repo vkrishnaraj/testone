@@ -93,7 +93,7 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 			selenium.type("name=remark[0].remarktext", "Test Remark Text");
 			selenium.type("name=dispBagArriveDate","a");
 			selenium.click("name=savetracing");
-			verifyEquals("Bag Arrival Date is not a valid Date.[Refer to your date format]", selenium.getAlert());
+			verifyEquals("Bag Arrival Date is not a valid date.[Refer to your date format]", selenium.getAlert());
 			
 			Calendar cal=Calendar.getInstance();
 			cal.add(Calendar.DATE, 1);
