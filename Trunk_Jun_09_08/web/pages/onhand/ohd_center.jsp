@@ -1484,7 +1484,7 @@ function gotoHistoricalReport() {
            if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_TEMP_INCIDENTS, a)) {
         %>
         <input type="button" name="s" value="Save as Temporary"
-        	onclick="isDisposedCheck();  if (validatereqOHDForm(this.form)){ saveOHDTemporary(this.form)};" id="button">
+        	onclick="isDisposedCheck();  if (validatereqOHDForm(this.form) && validateRest(this.form)){ saveOHDTemporary(this.form)};" id="button">
         &nbsp;&nbsp;&nbsp;
         <% } %>
         <html:submit styleId="button" property="savetracing" onclick="isDisposedCheck();  return validatereqOHDForm(this.form);">

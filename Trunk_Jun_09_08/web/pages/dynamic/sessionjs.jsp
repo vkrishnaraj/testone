@@ -6,6 +6,7 @@
 <%@page import="java.util.Date"%>
 <%@page import="java.util.Iterator,java.util.LinkedHashMap" %>
 <%@page import="com.bagnet.nettracer.tracing.db.Agent" %>
+<%@page import="com.bagnet.nettracer.tracing.utils.DateUtils" %>
 <%@page import="java.util.ResourceBundle" %>
 <%@page import="java.util.Locale" %>
 
@@ -499,18 +500,25 @@
         currentElement.focus();
         return false;
       }
-    }
-    else if (currentElementName.indexOf("dispBagArriveDate") != -1)
-    {
-      if (currentElement.value.length > 0 && !checkDate(currentElement.value))
-      {
-        alert("<%= (String)bundle.getString("colname.bag_arrived_date") %>" + " <%= (String)bundle.getString("error.validation.date") %>");
-        currentElement.focus();
-        return false;
-      }
-    }
-    else if (currentElementName.indexOf("disdepartdate") != -1)
-    {
+    }  else if (currentElementName.indexOf("dispBagArriveDate") != -1) {
+		if (currentElement.value.length > 0) {
+		      if (!checkDate(currentElement.value)) {
+			        alert("<%= (String)bundle.getString("colname.bag_arrived_date") %>" + " <%= (String)bundle.getString("error.validation.date") %>");
+			        currentElement.focus();
+			        return false;
+		      }
+
+			  //bag arrival date validation
+		      var now = '<%= DateUtils.formatDate(new Date(), a.getDateformat().getFormat(), a.getDefaultlocale(), null) %>'
+   			  var format = '<%= a.getDateformat().getFormat() %>';
+   			  var datesDifference = compareDates(currentElement.value, format, now, format);		      
+		      if (datesDifference == 1) {		
+			        alert("<%= (String)bundle.getString("colname.bag_arrived_date") %>" + " <%= (String)bundle.getString("error.validation.date.future") %>");
+			        currentElement.focus();
+			        return false;
+		      }
+	    }
+    } else if (currentElementName.indexOf("disdepartdate") != -1) {
       if (currentElement.value.length > 0 && !checkDate(currentElement.value))
       {
         alert("<%= (String)bundle.getString("colname.departdate") %>" + " <%= (String)bundle.getString("error.validation.date") %>");

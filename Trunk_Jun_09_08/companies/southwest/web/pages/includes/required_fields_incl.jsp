@@ -287,6 +287,27 @@
 			      }
 		      }
 		}
+		
+		//baggage check information validation
+		else if (currentElementName.indexOf("numpassengers") != -1) {  
+		      if (currentElement.value.length == 0) {
+		        alert("<%= (String)bundle.getString( "colname.num_pass") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+			    currentElement.focus();
+			    return false;
+		      }
+		} else if (currentElementName.indexOf("numbagchecked") != -1) {  
+		      if (currentElement.value.length == 0) {
+		        alert("<%= (String)bundle.getString( "colname.num_bag_checked") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+			    currentElement.focus();
+			    return false;
+		      }
+		} else if (currentElementName.indexOf("numbagreceived") != -1) {  
+		      if (currentElement.value.length == 0) {
+		        alert("<%= (String)bundle.getString( "colname.bags_rec") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+			    currentElement.focus();
+			    return false;
+		      }
+		}
 	}
     
     return true;

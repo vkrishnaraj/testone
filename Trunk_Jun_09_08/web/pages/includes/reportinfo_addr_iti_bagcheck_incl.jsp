@@ -952,13 +952,13 @@
 	<bean:message key="message.required" />
 	<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
 		<tr>
-			<td><bean:message key="colname.num_pass" /> <br> <html:text
+			<td><bean:message key="colname.num_pass.req" /> <br> <html:text
 					property="numpassengers" size="8" maxlength="4"
 					styleClass="textfield" /></td>
-			<td><bean:message key="colname.num_bag_checked" /> <br> <html:text
+			<td><bean:message key="colname.num_bag_checked.req" /> <br> <html:text
 					property="numbagchecked" size="8" maxlength="4"
 					styleClass="textfield" /></td>
-			<td><bean:message key="colname.bags_rec" /> <br> <html:text
+			<td><bean:message key="colname.bags_rec.req" /> <br> <html:text
 					property="numbagreceived" size="8" maxlength="4"
 					styleClass="textfield" /></td>
 		</tr>
