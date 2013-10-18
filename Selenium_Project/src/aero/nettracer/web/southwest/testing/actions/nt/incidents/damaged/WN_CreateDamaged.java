@@ -43,12 +43,24 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 				checkCopyrightAndQuestionMarks();
 				
 				verifyFalse(selenium.isElementPresent("id=rxButton"));
-				
-				selenium.click("xpath=(//input[@id='button'])[3]");
+				selenium.click("id=button");
 				selenium.click("name=saveButton");
-				assertEquals("Passenger Itinerary is required.", selenium.getAlert());
-				selenium.click("name=addpassit");
+				verifyEquals("Permanent Address is required.", selenium.getAlert());
+				selenium.click("name=addPassenger");
 				waitForPageToLoadImproved();
+
+				if (checkNoErrorPage()) {
+					selenium.click("name=saveButton");
+					verifyEquals("Permanent Address check is required.", selenium.getAlert());
+					selenium.click("id=addresses[0].permanent");
+					selenium.click("xpath=(//input[@id='button'])[3]");
+					selenium.click("name=saveButton");
+					verifyEquals("Passenger Itinerary is required.", selenium.getAlert());
+					selenium.click("name=addpassit");
+					waitForPageToLoadImproved();
+				} else {
+					System.out.println("!!!!!!!!!!!!!!!! failed to 'Add Passenger'.");
+				}
 				if (checkNoErrorPage()) {
 					selenium.click("name=saveButton");
 					assertEquals("Baggage Itinerary is required.", selenium.getAlert());
