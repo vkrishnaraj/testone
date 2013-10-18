@@ -18,14 +18,17 @@
 	boolean canViewPublished = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_VIEW_PUBLISHED, a);
 
 	ResourceBundle bundle = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
- 
+	
 	String cssFormClass = "";
-
+	String formType = "";
 	if (request.getAttribute("lostdelay") != null) {
+		formType = "lostdelay";
     	cssFormClass = "form2_ld";
   	} else if (request.getAttribute("missing") != null) {
+		formType = "missing";
      	cssFormClass = "form2_pil";
    	} else {
+		formType = "damaged";
    		cssFormClass = "form2_dam";   		
   	}
 %>
@@ -50,14 +53,7 @@
 		}
 	}
 
-	function validateAndSubmit() {
-		var templateSelect = document.getElementById("templateIdSelect");
-		if (templateSelect.options[templateSelect.selectedIndex].value == 0) {
-			alert('<%=(String) bundle.getString( "communications.type") + " " + (String) bundle.getString("error.validation.isRequired")%>');
-			templateSelect.focus();
-			return;
-		}
-
+	function goToCustomerCommunicationsPage() {
 		var incidentId = document.getElementById("incident_ID").value;
 		var templateId = templateSelect.options[templateSelect.selectedIndex].value;
 		window.location.href='customerCommunications.do?incident='+incidentId+'&templateId='+templateId;
@@ -91,7 +87,7 @@
 					<html:options collection="customerCommunicationsList" property="status_ID" labelProperty="description" />
 				</html:select>
 				&nbsp;&nbsp;
-				<input type="submit" id="setCommMethodButton" class="button" name="save" value="<bean:message key="button.save.preference" />" />
+				<input type="submit" id="setCommMethodButton" class="button" name="saveCustCommId" value="<bean:message key="button.save.preference" />" onclick="return validatereqFields(this.form, '<%=formType %>')" />
 			</td>
 		</tr>
 	</table>
@@ -168,7 +164,7 @@
 			<option value="0"><bean:message key="select.please_select" /></option>
 		</select>
 		&nbsp;&nbsp;
-		<input type="button" id="addCommButton" class="button" value="<bean:message key="button.add.action.communication" />" onclick="validateAndSubmit();" />
+		<input type="button" id="addCommButton" class="button" value="<bean:message key="button.add.action.communication" />" onclick="if (validatereqFields(this.form, '<%=formType %>') == true) { goToCustomerCommunicationsPage(); }" />
 	</center>
 <br>
 <br>

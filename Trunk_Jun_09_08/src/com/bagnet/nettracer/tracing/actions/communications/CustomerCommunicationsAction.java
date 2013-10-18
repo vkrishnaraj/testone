@@ -84,7 +84,6 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		
 		// handles the case in which the user wants to preview the document
 		if (request.getParameter("view_sample_printout") != null) {
-			session.setAttribute("goto_customer_communications", true);
 			String incidentId = (String) request.getParameter("view_sample_printout");
 			DocumentTemplateResult result = viewSamplePrintout(incidentId, user, response, messages);
 			if (!result.isSuccess()) {
@@ -127,7 +126,7 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		}
 		
 		if (ccf.isPreview()) {
-			DocumentTemplateResult result = generateTemplatePreview(ccf, user);
+			DocumentTemplateResult result = generatePreview(ccf, user);
 			if (result.isSuccess()) {
 				request.setAttribute("previewLink", result.getPayload());
 			}
@@ -258,7 +257,7 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		return result;
 	}
 	
-	private DocumentTemplateResult generateTemplatePreview(CustomerCommunicationsForm ccf, Agent user) {
+	private DocumentTemplateResult generatePreview(CustomerCommunicationsForm ccf, Agent user) {
 		ccf.setPreview(false);
 		DocumentTemplateResult result = new DocumentTemplateResult();
 		Document document = documentService.load(ccf.getDocumentId());
@@ -281,16 +280,16 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		return result;
 	}
 	
-	private DocumentTemplateResult viewSamplePrintout(String incidentId, Agent user, HttpServletResponse response, ActionMessages messages) {
+	private DocumentTemplateResult viewSamplePrintout(String incidentActivityId, Agent user, HttpServletResponse response, ActionMessages messages) {
 		DocumentTemplateResult result = new DocumentTemplateResult();
 		try {
-			long id = Long.valueOf(incidentId);
+			long id = Long.valueOf(incidentActivityId);
 			IncidentActivity ia = incidentActivityService.load(id);
 			
 			if (ia == null) {
-				logger.error("Failed to load incident activity with id: " + incidentId);
+				logger.error("Failed to load incident activity with id: " + incidentActivityId);
 			} else if (ia.getDocument() == null) {
-				logger.error("No document found for incident activity with id: " + incidentId);
+				logger.error("No document found for incident activity with id: " + incidentActivityId);
 			}
 
 			if (ia != null && ia.getDocument() != null) {
@@ -306,9 +305,9 @@ public class CustomerCommunicationsAction extends CheckedAction {
 				return result;
 			}
 		} catch (NumberFormatException nfe) {
-			logger.error("Could not load incident activity with id: " + incidentId, nfe);
+			logger.error("Could not load incident activity with id: " + incidentActivityId, nfe);
 		} catch (Exception e) {
-			logger.error("Failed to generate preview for incident activity: " + incidentId, e);
+			logger.error("Failed to generate preview for incident activity: " + incidentActivityId, e);
 		}
 		result.setSuccess(false);
 		result.setPayload(TracingConstants.FILE_NOT_FOUND);

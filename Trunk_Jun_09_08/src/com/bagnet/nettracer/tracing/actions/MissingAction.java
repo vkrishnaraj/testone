@@ -418,7 +418,8 @@ public class MissingAction extends CheckedAction {
 
 
 		// save incident
-		if (request.getParameter("save") != null || request.getParameter("doclose") != null || request.getParameter("saveadditions") != null) {
+		if (request.getParameter("save") != null || request.getParameter("doclose") != null 
+				|| request.getParameter("saveadditions") != null || request.getParameter("saveCustCommId") != null) {
 			Incident iDTO = new Incident();
 			
 			//key to determine whether the action is add new, close, or update

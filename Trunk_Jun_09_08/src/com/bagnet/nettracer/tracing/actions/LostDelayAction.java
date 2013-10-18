@@ -527,13 +527,23 @@ public class LostDelayAction extends CheckedAction {
 			handleDisputeFault(mapping, theform, request, response);
 		}
 		
+		String save = (String) request.getParameter("save");
+		String close = (String) request.getParameter("close");
+		String doclose = (String) request.getParameter("doclose");
+		String doclosewt = (String) request.getParameter("doclosewt");
+		String savetemp = (String) request.getParameter("savetemp");
+		String savetracing = (String) request.getParameter("savetracing");
+		String savetowt = (String) request.getParameter("savetowt");
+		String amendWT = (String) request.getParameter("amendWT");
+		String saveadditions = (String) request.getParameter("saveadditions");
 
 
 		// save incident
 		if(request.getParameter("save") != null || request.getParameter("close") != null
 				|| request.getParameter("doclose") != null || request.getParameter("doclosewt") != null
 				|| request.getParameter("savetemp") != null || request.getParameter("savetracing") != null
-				|| request.getParameter("savetowt") != null || request.getParameter("amendWT") != null || request.getParameter("saveadditions")!=null) {
+				|| request.getParameter("savetowt") != null || request.getParameter("amendWT") != null || request.getParameter("saveadditions")!=null
+				|| request.getParameter("saveCustCommId") != null) {
 
 			Incident iDTO = new Incident();
 			
