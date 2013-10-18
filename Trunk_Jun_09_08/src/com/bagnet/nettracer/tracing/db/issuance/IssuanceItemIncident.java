@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -23,6 +24,7 @@ import org.hibernate.annotations.Proxy;
 
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.documents.Document;
 
 @Entity
 @Proxy(lazy = false)
@@ -60,6 +62,18 @@ public class IssuanceItemIncident {
 	@ManyToOne
 	@JoinColumn(name = "issueagent_id")
 	private Agent issueAgent;
+
+	@OneToOne
+	@JoinColumn(name = "document_id")
+	private Document document;
+	
+	public Document getDocument() {
+		return document;
+	}
+
+	public void setDocument(Document document) {
+		this.document = document;
+	}
 	
 	@Transient
 	boolean updated = false;

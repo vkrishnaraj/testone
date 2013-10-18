@@ -316,10 +316,11 @@ public class MBRActionUtils {
 					adjustIssuanceLists(request, qItem, null, null);
 					//generate tempalte receipt
 					Incident incident = IncidentBMO.getIncidentByID(theform.getIncident_ID(), HibernateWrapper.getSession().openSession());				
-					DocumentTemplateResult result = generateTemplateReceipt(user, qItem, incident);
+					DocumentTemplateResult result = generateTemplateReceipt(user, qItem.getIssuanceItem(), incident);
 					if (result.isSuccess()) {
-						request.setAttribute("receiptName", result.getPayload());
-						request.setAttribute("previewLink", result.getPayload());
+						Document d = (Document) result.getPayload();
+						iss_inc.setDocument(d);	 					
+						request.setAttribute("receiptName", d.getFileName());
 					} else {
 						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(result.getMessageKey()));
 					}										
@@ -332,6 +333,16 @@ public class MBRActionUtils {
 					}
 					iss_inc.setIssuanceItemInventory(iItem);
 					adjustIssuanceLists(request, null, iItem, null);
+					//generate tempalte receipt					
+					Incident incident = IncidentBMO.getIncidentByID(theform.getIncident_ID(), HibernateWrapper.getSession().openSession());									
+					DocumentTemplateResult result = generateTemplateReceipt(user, iItem.getIssuanceItem(), incident);
+					if (result.isSuccess()) {
+						Document d = (Document) result.getPayload();
+						iss_inc.setDocument(d);						
+						request.setAttribute("receiptName", d.getFileName());
+					} else {
+						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(result.getMessageKey()));
+					}							
 				} else { // issueQ but quantity is null or not a number
 					return false;
 				}
@@ -1518,27 +1529,18 @@ public class MBRActionUtils {
 		}
 	}
 
-	private static DocumentTemplateResult generateTemplateReceipt(Agent user, IssuanceItemQuantity qitem, Incident incident) {
+	private static DocumentTemplateResult generateTemplateReceipt(Agent user, IssuanceItem qitem, Incident incident) {
 		DocumentTemplateResult result = new DocumentTemplateResult();
 		// 1. load the template
 		long templateId = 0;
-		if (qitem.getIssuanceItem().getCategory().getTemplate() != null) {
-			templateId = qitem.getIssuanceItem().getCategory().getTemplate().getId();
+		if (qitem.getCategory().getTemplate() != null) {
+			templateId = qitem.getCategory().getTemplate().getId();
 		} else {
 			logger.error("No template defined " );
 			result.setMessageKey("no.template.receipt.defined");
 			return result;			
 		}
 
-/*		String templateIdStr = String.valueOf(qitem.getIssuanceItem().getCategory().getTemplate().getId());
-		try {
-			templateId = Long.valueOf(templateIdStr);
-		} catch (NumberFormatException nfe) {
-			logger.error("Invalid value for template receipt template id: " + templateIdStr , nfe);
-			result.setMessageKey("no.template.receipt.defined");
-			return result;
-		}*/
-		
 		Template template = templateService.load(templateId);
 		if (template == null) {
 			result.setMessageKey("no.template.receipt.defined");
@@ -1557,9 +1559,13 @@ public class MBRActionUtils {
 			if (!result.isSuccess()) return result;
 			
 			// 4. create the pdf
-			result = documentService.generatePdf(user, document);		
+			result = documentService.generatePdf(user, document);
+			if (result.isSuccess()) {
+				document.setFileName((String)result.getPayload());
+				result.setPayload(document);
+			}
 		} catch (Exception e) {
-			logger.error("Failed to generate the template receipt for Incident with id: " + qitem.getIssuanceItem().getCategory().getTemplate().getId(), e);
+			logger.error("Failed to generate the template receipt for Incident with id: " + qitem.getCategory().getTemplate().getId(), e);
 		}
 		
 		return result;

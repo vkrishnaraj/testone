@@ -973,18 +973,13 @@
 					</input></td>
 				<% } %>
 						<td style="text-align:right;">
-							<logic:present name="previewLink" scope="request" >
-								<% System.out.println("issuance size "+myform.getIssuanceItemIncidents().size());
-								System.out.println("iiindex "+iiIndex);
-								if(iiIndex==(myform.getIssuanceItemIncidents().size()-1)) { %>
-								<a href="#" onclick="openPreviewWindow('<%=(String) request.getAttribute("previewLink") %>');">
-									<bean:message key="link.preview" />
-								</a>
-								<% } %>
-							</logic:present>
-							<logic:notPresent name="previewLink" scope="request" >
-								&nbsp;
-							</logic:notPresent>
+							<logic:notEmpty name="issuanceitem" property="document">
+							<a hef="#" onclick="openPreviewWindow('<bean:write name="issuanceitem" property="document.fileName" />')">
+																<bean:message key="link.preview" />
+							</logic:notEmpty>
+							<logic:empty name="issuanceitem" property="document">
+							&nbsp;
+							</logic:empty>
 						</td>				
           </tr>
           </logic:iterate>
