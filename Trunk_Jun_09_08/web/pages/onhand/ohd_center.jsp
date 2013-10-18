@@ -156,7 +156,10 @@
 					  if(item.getOHD_ID()!=null && item.getOHD_ID().equals(onHandForm.getOhd_id())){ 
 						  if(item.getStatus().getStatus_ID()!=TracingConstants.ITEM_STATUS_PASSENGER_PICKED_UP){%>
 						  	alert('<%= (String) myMessages.getMessage(myLocale, "error.update.incident.ppu")%>');
-						  	x.value=initialVal;
+						  	if(initialVal!=0)
+						  		x.value=initialVal;
+						  	else
+						  		x.value="";
 						  	return false;
 						  <% 
 						  }
