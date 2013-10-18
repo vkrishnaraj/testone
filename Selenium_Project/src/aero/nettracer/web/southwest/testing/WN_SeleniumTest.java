@@ -300,7 +300,7 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 	
 	private void fillRequiredFields() {
 
-		
+		selenium.check("id=addresses[0].permanent");
 		selenium.click("name=addbagit");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
