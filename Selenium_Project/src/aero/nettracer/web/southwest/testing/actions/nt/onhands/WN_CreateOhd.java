@@ -1,5 +1,10 @@
 package aero.nettracer.web.southwest.testing.actions.nt.onhands;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import org.junit.Test;
 
 import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
@@ -84,8 +89,22 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 			selenium.click("link=Today");
 			selenium.select("name=disposal_status.status_ID", "label=Disposed of Locally");
 			selenium.click("name=savetracing");
-			assertEquals("Remark for Local Disposal is required.", selenium.getAlert());
+			verifyEquals("Remark for Local Disposal is required.", selenium.getAlert());
 			selenium.type("name=remark[0].remarktext", "Test Remark Text");
+			selenium.type("name=dispBagArriveDate","a");
+			selenium.click("name=savetracing");
+			verifyEquals("Bag Arrival Date is not a valid Date.[Refer to your date format]", selenium.getAlert());
+			
+			Calendar cal=Calendar.getInstance();
+			cal.add(Calendar.DATE, 1);
+			Date d=cal.getTime();
+			DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+			String nowdate = dateFormat.format(d);
+			selenium.type("name=dispBagArriveDate",nowdate);
+			selenium.click("name=savetracing");
+			verifyEquals("Bag Arrival Date may not be a future date", selenium.getAlert());
+			selenium.click("id=calendar");
+			selenium.click("link=Today");
 			selenium.click("name=savetracing");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
