@@ -300,102 +300,39 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 	
 	private void fillRequiredFields() {
 
-		selenium.click("name=savetracingButton");
-		verifyEquals("Permanent Address check is required.", selenium.getAlert());
-		selenium.click("id=addresses[0].permanent");
-		selenium.click("xpath=(//input[@id='button'])[3]");
-		selenium.click("name=savetracingButton");
-		assertEquals("Passenger Itinerary is required.", selenium.getAlert());
-		selenium.click("name=addpassit");
+		
+		selenium.click("name=addbagit");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
-			selenium.click("name=savetracingButton");
-			assertEquals("Baggage Itinerary is required.", selenium.getAlert());
-			selenium.click("name=addbagit");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("!!!!!!!!!!!!!!!! failed to 'Add Passenger Itinerary'.");
-		}
-		
-		if (checkNoErrorPage()) {
-			selenium.click("name=savetracingButton");
-			verifyEquals("Last Name is required.", selenium.getAlert());
 			selenium.type("name=passenger[0].lastname", "Test1");
-			selenium.click("name=savetracingButton");
-			verifyEquals("First Name is required.", selenium.getAlert());
 			selenium.type("name=passenger[0].firstname", "Test1");
-			selenium.click("name=savetracingButton");
-			verifyEquals("Street Address is required.", selenium.getAlert());
 			selenium.type("name=addresses[0].address1", "123 circle round drive");
-			selenium.click("name=savetracingButton");
-			verifyEquals("City is required.", selenium.getAlert());
 			selenium.type("name=addresses[0].city", "atlanta");
-			selenium.click("name=savetracingButton");
-			verifyEquals("State is required if country is set to 'United States'", selenium.getAlert());
 			selenium.select("name=addresses[0].state_ID", "label=Georgia");						
-			selenium.click("name=savetracingButton");
-			verifyEquals("From/To is required.", selenium.getAlert());
 			selenium.type("name=theitinerary[0].legfrom", "ATL");						
-			selenium.click("name=savetracingButton");
-			verifyEquals("From/To is required.", selenium.getAlert());
 			selenium.type("name=theitinerary[0].legto", "AEX");						
-			selenium.click("name=savetracingButton");
-			verifyEquals("Airline/Flight Number is required.", selenium.getAlert());
 			selenium.type("name=theitinerary[0].flightnum", "1234");						
-			selenium.click("name=savetracingButton");
-			verifyEquals("Depart Date is required.", selenium.getAlert());
 			selenium.click("id=itcalendar0");
 			selenium.click("link=Today");					
-			selenium.click("name=savetracingButton");
-			verifyEquals("From/To is required.", selenium.getAlert());
 			selenium.type("name=theitinerary[1].legfrom", "ALS");
-			selenium.click("name=savetracingButton");
-			verifyEquals("From/To is required.", selenium.getAlert());
 			selenium.type("name=theitinerary[1].legto", "ATL");
-			selenium.click("name=savetracingButton");
-			verifyEquals("Airline/Flight Number is required.", selenium.getAlert());
 			selenium.type("name=theitinerary[1].flightnum", "3456");
-			selenium.click("name=savetracingButton");
-			verifyEquals("Depart Date is required.", selenium.getAlert());
 			selenium.click("id=calendar31");
 			selenium.click("link=Today");					
-			selenium.click("name=savetracingButton");
-			verifyEquals("Color is required.", selenium.getAlert());
 			selenium.select("name=theitem[0].color", "label=BN - Brown");						
-			selenium.click("name=savetracingButton");
-			verifyEquals("Type is required.", selenium.getAlert());
 			selenium.select("id=bagtype0", "label=25");						
-			selenium.click("name=savetracingButton");
-			verifyEquals("Content Category is required.", selenium.getAlert());
 			selenium.select("name=inventorylist[0].categorytype_ID", "label=Alcohol");
-			selenium.click("name=savetracingButton");
-			verifyEquals("Content Description is required.", selenium.getAlert());
 			selenium.type("name=inventorylist[0].description", "TEST");
-
 			selenium.select("name=inventorylist[1].categorytype_ID", "label=Alcohol");
 			selenium.select("name=inventorylist[2].categorytype_ID", "label=Alcohol");
 			selenium.type("name=inventorylist[1].description", "TEST");
 			selenium.type("name=inventorylist[2].description", "TEST");
-			selenium.click("name=savetracingButton");
-			verifyEquals("Record Locator is required.", selenium.getAlert());
-			selenium.type("name=recordlocator", "TESTER");						
-			selenium.click("name=savetracingButton");
-			verifyEquals("Job Title is required.", selenium.getAlert());
-			selenium.type("name=passenger[0].jobtitle", "agent");						
-			selenium.click("name=savetracingButton");
-			verifyEquals("Zip is required.", selenium.getAlert());
-			selenium.type("name=addresses[0].zip", "33213");						
-			selenium.click("name=savetracingButton");
-			verifyEquals("Mobile Phone is required.", selenium.getAlert());
-			selenium.type("name=addresses[0].mobile", "4040213465");						
-			selenium.click("name=savetracingButton");
-			verifyEquals("Claim Check Number is required.", selenium.getAlert());
+			selenium.type("name=recordlocator", "TESTER");					
+			selenium.type("name=passenger[0].jobtitle", "agent");			
+			selenium.type("name=addresses[0].zip", "33213");					
+			selenium.type("name=addresses[0].mobile", "4040213465");				
 			selenium.type("name=claimcheck[0].claimchecknum", "1234567890");
-			selenium.click("name=savetracingButton");
-			verifyEquals("Manufacturer is required.", selenium.getAlert());
 			selenium.select("name=theitem[0].manufacturer_ID", "label=Andiamo");
-			selenium.click("name=savetracingButton");
-			verifyEquals("Remark is required.", selenium.getAlert());
 			selenium.type("id=remark[0]", "remark noted");
 		} else {
 			System.out.println("!!!!!!!!!!!!!!!! failed to 'Add Bag Itinerary'.");

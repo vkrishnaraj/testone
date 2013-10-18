@@ -107,6 +107,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 		if (select) {
 			selenium.select(searchField, "label=" + value);
 		}
+		waitForPageToLoadImproved(3000,false);
 		selenium.click("id=button");
 		waitForPageToLoadImproved();
 		if(checkNoErrorPage()){
