@@ -226,6 +226,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	@Test
 	public void testPressEnterInRemarksField() {
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
+		selenium.type("id=remark[0]", "");
 		String locator = "//textarea[@id='remark[0]']";
 		verifyEquals("1500", selenium.getValue("//input[@id='remark[0].counter']"));
 		typeString(locator, "Test line");

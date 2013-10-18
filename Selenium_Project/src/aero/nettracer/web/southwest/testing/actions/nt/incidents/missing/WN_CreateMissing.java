@@ -124,7 +124,6 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 					selenium.select("name=inventorylist[2].categorytype_ID", "label=Alcohol");
 					selenium.type("name=inventorylist[1].description", "TEST");
 					selenium.type("name=inventorylist[2].description", "TEST");
-					//selenium.type("name=recordlocator", "TESTER");
 					selenium.click("id=saveButton");
 					waitForPageToLoadImproved();
 					if (checkNoErrorPage()) {

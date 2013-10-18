@@ -205,7 +205,7 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 
 			verifyTrue(navigateToOnhand());
 			verifyTrue(selenium.isTextPresent("Remark is Secure"));
-			verifyTrue(setSecureRemarksPermission(false));
+			verifyTrue(setPermissions(new String[] { "335"}, new boolean[] { false}));
 			goToTaskManager();
 		} else {
 			System.out.println("Failed to save OHD");
