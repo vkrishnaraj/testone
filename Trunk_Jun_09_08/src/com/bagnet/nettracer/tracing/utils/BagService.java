@@ -678,8 +678,8 @@ public class BagService {
 							item.setClaimchecknum(TracerUtils.removeSpaces(item.getClaimchecknum().toUpperCase()));
 						}
 						if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP, mod_agent)) {
-							if(item.getStatus().getStatus_ID()!=TracingConstants.ITEM_STATUS_PASSENGER_PICKED_UP
-									&& oldItem!=null && oldItem.getStatus().getStatus_ID()==TracingConstants.ITEM_STATUS_PASSENGER_PICKED_UP){
+							if(item.getStatus()!=null && item.getStatus().getStatus_ID()!=TracingConstants.ITEM_STATUS_PASSENGER_PICKED_UP
+									&& oldItem!=null && oldItem.getStatus()!=null && oldItem.getStatus().getStatus_ID()==TracingConstants.ITEM_STATUS_PASSENGER_PICKED_UP){
 								if(item.getOHD_ID()!=null && !item.getOHD_ID().isEmpty()){
 									OhdBMO obmo=new OhdBMO();
 									OHD o=obmo.getOHDByID(item.getOHD_ID(), null);
