@@ -370,8 +370,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
-				
-
+				selenium.click("id=addresses[0].permanent");
 				selenium.type("name=passenger[0].lastname", "Test1");
 				selenium.type("name=passenger[0].firstname", "Test1");
 				selenium.type("name=addresses[0].address1", "123 circle round drive");
