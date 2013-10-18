@@ -2104,8 +2104,8 @@ public class BagService {
 					if(theform.getOhd_id()!=null && !theform.getOhd_id().isEmpty())
 						oldohd=oBMO.getOHDByID(theform.getOhd_id(), null);
 
-					if(oDTO.getDisposal_status().getStatus_ID()!=TracingConstants.OHD_STATUS_OWNER_PICKED_UP &&
-						oldohd!=null && oldohd.getDisposal_status().getStatus_ID()==TracingConstants.OHD_STATUS_OWNER_PICKED_UP){
+					if(oDTO.getDisposal_status()!=null && oDTO.getDisposal_status().getStatus_ID()!=TracingConstants.OHD_STATUS_OWNER_PICKED_UP &&
+						oldohd!=null && oldohd.getDisposal_status()!=null && oldohd.getDisposal_status().getStatus_ID()==TracingConstants.OHD_STATUS_OWNER_PICKED_UP){
 	
 						Remark rem=new Remark();
 						rem.setRemarktype(TracingConstants.REMARK_REGULAR);
