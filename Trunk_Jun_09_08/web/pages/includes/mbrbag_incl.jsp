@@ -171,7 +171,11 @@
 		}
 		
 	}
-
+  
+  function openPreviewWindow(fileName) {
+	  window.open("customerCommunications.do?preview_document="+fileName, '', 'width=600,height=800,resizable=yes');
+	}
+	
 </SCRIPT>
 
   <SCRIPT LANGUAGE="JavaScript">
@@ -943,6 +947,7 @@
           	<td><b><bean:message key="issuance.item.edit.agent" /></b></td>
           	<td><b><bean:message key="issuance.item.edit.date" /></b></td>
           	<td><b><bean:message key="issuance.item.button.return" /></b></td>
+          	<td><b><bean:message key="colname.action" /></b></td>          	
           </tr>
       	<logic:iterate id="issuanceitem" indexId="iiIndex" name="incidentForm" property="issuanceItemIncidents" type="com.bagnet.nettracer.tracing.db.issuance.IssuanceItemIncident">
       	<% boolean quantified = issuanceitem.getIssuanceItemQuantity() != null; %>
@@ -967,6 +972,20 @@
 						value="<bean:message key="issuance.item.button.return" />" >
 					</input></td>
 				<% } %>
+						<td style="text-align:right;">
+							<logic:present name="previewLink" scope="request" >
+								<% System.out.println("issuance size "+myform.getIssuanceItemIncidents().size());
+								System.out.println("iiindex "+iiIndex);
+								if(iiIndex==(myform.getIssuanceItemIncidents().size()-1)) { %>
+								<a href="#" onclick="openPreviewWindow('<%=(String) request.getAttribute("previewLink") %>');">
+									<bean:message key="link.preview" />
+								</a>
+								<% } %>
+							</logic:present>
+							<logic:notPresent name="previewLink" scope="request" >
+								&nbsp;
+							</logic:notPresent>
+						</td>				
           </tr>
           </logic:iterate>
           <tr>
@@ -1033,3 +1052,9 @@
 <script> <logic:iterate id="theitem" indexId="i" name="incidentForm" property="itemlist" type="com.bagnet.nettracer.tracing.db.Item">
      		checkBagType(<%=i%>);
 		</logic:iterate></script>
+	<logic:present name="receiptName" scope="request">
+	    <script language=javascript>
+	    	var fileName = '<%=(String) request.getAttribute("receiptName") %>';
+   			openPreviewWindow(fileName);
+	    </script>
+    </logic:present>		

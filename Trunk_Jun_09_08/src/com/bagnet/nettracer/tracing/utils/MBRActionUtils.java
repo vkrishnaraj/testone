@@ -27,6 +27,8 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Expression;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.actions.templates.DocumentTemplateResult;
+import com.bagnet.nettracer.tracing.adapter.TemplateAdapter;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.IssuanceItemBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
@@ -54,13 +56,19 @@ import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.documents.Document;
+import com.bagnet.nettracer.tracing.db.documents.templates.Template;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceCategory;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItem;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemIncident;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemInventory;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemQuantity;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityDTO;
+import com.bagnet.nettracer.tracing.dto.TemplateAdapterDTO;
+import com.bagnet.nettracer.tracing.factory.TemplateAdapterFactory;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
+import com.bagnet.nettracer.tracing.service.DocumentService;
+import com.bagnet.nettracer.tracing.service.TemplateService;
 
 /**
  * @author Administrator
@@ -70,7 +78,9 @@ import com.bagnet.nettracer.tracing.forms.IncidentForm;
 public class MBRActionUtils {
 	
 	static Logger logger = Logger.getLogger(MBRActionUtils.class);
-	
+	static DocumentService documentService = (DocumentService) SpringUtils.getBean(TracingConstants.DOCUMENT_SERVICE_BEAN);
+	static TemplateService templateService = (TemplateService) SpringUtils.getBean(TracingConstants.TEMPLATE_SERVICE_BEAN);	
+	static ActionMessages errors = new ActionMessages();
 	/**
 	 * This method is responsible for processing the Add buttons on the Incident pages.
 	 * 
@@ -304,6 +314,15 @@ public class MBRActionUtils {
 					qItem.setQuantity(qItem.getQuantity() - iss_inc.getQuantity());
 					iss_inc.setIssuanceItemQuantity(qItem);
 					adjustIssuanceLists(request, qItem, null, null);
+					//generate tempalte receipt
+					Incident incident = IncidentBMO.getIncidentByID(theform.getIncident_ID(), HibernateWrapper.getSession().openSession());				
+					DocumentTemplateResult result = generateTemplateReceipt(user, qItem, incident);
+					if (result.isSuccess()) {
+						request.setAttribute("receiptName", result.getPayload());
+						request.setAttribute("previewLink", result.getPayload());
+					} else {
+						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(result.getMessageKey()));
+					}										
 				} else if (issueL || issueT) {
 					IssuanceItemInventory iItem = IssuanceItemBMO.getInventoriedItem(type);
 					if (issueL) {
@@ -1497,5 +1516,52 @@ public class MBRActionUtils {
 				}
 			}
 		}
+	}
+
+	private static DocumentTemplateResult generateTemplateReceipt(Agent user, IssuanceItemQuantity qitem, Incident incident) {
+		DocumentTemplateResult result = new DocumentTemplateResult();
+		// 1. load the template
+		long templateId = 0;
+		if (qitem.getIssuanceItem().getCategory().getTemplate() != null) {
+			templateId = qitem.getIssuanceItem().getCategory().getTemplate().getId();
+		} else {
+			logger.error("No template defined " );
+			result.setMessageKey("no.template.receipt.defined");
+			return result;			
+		}
+
+/*		String templateIdStr = String.valueOf(qitem.getIssuanceItem().getCategory().getTemplate().getId());
+		try {
+			templateId = Long.valueOf(templateIdStr);
+		} catch (NumberFormatException nfe) {
+			logger.error("Invalid value for template receipt template id: " + templateIdStr , nfe);
+			result.setMessageKey("no.template.receipt.defined");
+			return result;
+		}*/
+		
+		Template template = templateService.load(templateId);
+		if (template == null) {
+			result.setMessageKey("no.template.receipt.defined");
+			return result;
+		}
+		// 2. get the template adapter
+		TemplateAdapterDTO dto = DomainUtils.getTemplateAdapterDTO(user, template);
+		dto.setIncident(incident);
+		
+		try {
+			TemplateAdapter adapter = TemplateAdapterFactory.getTemplateAdapter(dto);
+			Document document = new Document(template);
+			
+			// 3. merge the template and adapter
+			result = documentService.merge(document, adapter);
+			if (!result.isSuccess()) return result;
+			
+			// 4. create the pdf
+			result = documentService.generatePdf(user, document);		
+		} catch (Exception e) {
+			logger.error("Failed to generate the template receipt for Incident with id: " + qitem.getIssuanceItem().getCategory().getTemplate().getId(), e);
+		}
+		
+		return result;
 	}
 }
