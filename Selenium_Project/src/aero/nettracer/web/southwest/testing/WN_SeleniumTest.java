@@ -300,6 +300,9 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 	
 	private void fillRequiredFields() {
 
+		selenium.click("name=savetracingButton");
+		verifyEquals("Permanent Address check is required.", selenium.getAlert());
+		selenium.click("id=addresses[0].permanent");
 		selenium.click("xpath=(//input[@id='button'])[3]");
 		selenium.click("name=savetracingButton");
 		assertEquals("Passenger Itinerary is required.", selenium.getAlert());
