@@ -66,6 +66,8 @@
 
 	var baggageItinerary = false;
     var hasPassengerItinerary = false;
+    var hasPermanentAddressChecked =  false;
+    var firstPermanentAddressCheckboxId = -1;
     
     var firstPaxIndex = -1;
     var firstAddressIndex = -1;
@@ -153,7 +155,15 @@
 		          return false;
 	        	}
   			}
-      	} else if (currentElementName.indexOf("].itinerarytype") != -1) {
+      	} else if (currentElementName.indexOf("addresses[") != -1 && currentElementName.indexOf("addresses[") < currentElementName.indexOf("].permanent")) {
+	      	if (!hasPermanentAddressChecked) {
+	      		if (currentElement.checked) {
+	      			hasPermanentAddressChecked = currentElement.checked;
+	      		} else if (firstPermanentAddressCheckboxId == -1) {
+	      			firstPermanentAddressCheckboxId = currentElement.id; //save the first checkbox
+	      		}
+	      	}
+	   } else if (currentElementName.indexOf("].itinerarytype") != -1) {
 	      	if (currentElement.value == '0') { //Passenger Itinerary --> value=0
 	      		if (!hasPassengerItinerary) {
 	      			hasPassengerItinerary = true;
@@ -166,7 +176,19 @@
 	   }
     }
     
-    if (!hasPassengerItinerary) {
+    if (!hasPermanentAddressChecked) {
+		if (firstPermanentAddressCheckboxId == -1) {
+			alert("<%= (String)bundle.getString( "colname.is_permanent") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+			currentElement = document.getElementById('addPassengerNum');
+		} else {
+			alert("<%= (String)bundle.getString( "colname.is_permanent") %>" + " <%= (String)bundle.getString( "button.check") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+			currentElement = document.getElementById(firstPermanentAddressCheckboxId);
+		}
+		if (currentElement) {
+			currentElement.focus();
+		} 
+		return false;
+    } else if (!hasPassengerItinerary) {
 		alert("<%= (String)bundle.getString( "header.itinerary") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
 		currentElement = document.getElementById('addpassitNum');
 		if (currentElement) {
