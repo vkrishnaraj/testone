@@ -54,8 +54,9 @@
 	}
 
 	function goToCustomerCommunicationsPage() {
-		var incidentId = document.getElementById("incident_ID").value;
+		var templateSelect = document.getElementById("templateIdSelect");
 		var templateId = templateSelect.options[templateSelect.selectedIndex].value;
+		var incidentId = document.getElementById("incident_ID").value;
 		window.location.href='customerCommunications.do?incident='+incidentId+'&templateId='+templateId;
 	}
 
@@ -83,7 +84,7 @@
 			</td>
 			<td>
 				&nbsp;&nbsp;
-				<html:select name="incidentForm" property="custCommId" styleClass="dropdown" >
+				<html:select name="incidentForm" property="custCommId" styleId="custCommId" styleClass="dropdown" >
 					<html:options collection="customerCommunicationsList" property="status_ID" labelProperty="description" />
 				</html:select>
 				&nbsp;&nbsp;
