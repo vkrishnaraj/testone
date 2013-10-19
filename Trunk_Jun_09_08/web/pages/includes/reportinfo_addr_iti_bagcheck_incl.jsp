@@ -7,8 +7,7 @@
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested"%>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent"%>
-<%@ page
-	import="com.bagnet.nettracer.tracing.db.taskmanager.GeneralTask"%>
+<%@ page import="com.bagnet.nettracer.tracing.db.taskmanager.GeneralTask"%>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>

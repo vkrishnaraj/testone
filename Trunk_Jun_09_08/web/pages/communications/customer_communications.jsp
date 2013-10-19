@@ -53,6 +53,16 @@
 		}
 	}
 
+	function validateCustomerCommunications() {
+		var templateSelect = document.getElementById("templateIdSelect");
+		if (templateSelect.options[templateSelect.selectedIndex].value == 0) {
+			alert('<%=(String) bundle.getString( "communications.type") + " " + (String) bundle.getString("error.validation.isRequired")%>');
+			templateSelect.focus();
+			return false;
+		}
+		return true;
+	}
+
 	function goToCustomerCommunicationsPage() {
 		var templateSelect = document.getElementById("templateIdSelect");
 		var templateId = templateSelect.options[templateSelect.selectedIndex].value;
@@ -165,7 +175,7 @@
 			<option value="0"><bean:message key="select.please_select" /></option>
 		</select>
 		&nbsp;&nbsp;
-		<input type="button" id="addCommButton" class="button" value="<bean:message key="button.add.action.communication" />" onclick="if (validatereqFields(this.form, '<%=formType %>') == true) { goToCustomerCommunicationsPage(); }" />
+		<input type="button" id="addCommButton" class="button" value="<bean:message key="button.add.action.communication" />" onclick="if (validateCustomerCommunications() && validatereqFields(this.form, '<%=formType %>')) { goToCustomerCommunicationsPage(); }" />
 	</center>
 <br>
 <br>
