@@ -172,7 +172,7 @@
 		
 	}
   
-  function openPreviewWindow(fileName) {
+  function openPreviewWindow1(fileName) {
 	  window.open("customerCommunications.do?preview_document="+fileName, '', 'width=600,height=800,resizable=yes');
 	}
 	
@@ -974,7 +974,7 @@
 				<% } %>
 						<td style="text-align:right;">
 							<logic:notEmpty name="issuanceitem" property="document">
-							<a hef="#" onclick="openPreviewWindow('<bean:write name="issuanceitem" property="document.fileName" />')">
+							<a hef="#" onclick="openPreviewWindow1('<bean:write name="issuanceitem" property="document.fileName" />')">
 																<bean:message key="link.preview" />
 							</logic:notEmpty>
 							<logic:empty name="issuanceitem" property="document">
@@ -1050,6 +1050,6 @@
 	<logic:present name="receiptName" scope="request">
 	    <script language=javascript>
 	    	var fileName = '<%=(String) request.getAttribute("receiptName") %>';
-   			openPreviewWindow(fileName);
+   			openPreviewWindow1(fileName);
 	    </script>
     </logic:present>		
