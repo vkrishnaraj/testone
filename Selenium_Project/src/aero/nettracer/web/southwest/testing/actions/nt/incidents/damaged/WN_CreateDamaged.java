@@ -508,7 +508,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	}
 	
 	@Test
-	public void testCreateBDO(){
+	public void testCreateBDODamaged(){
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
 		waitForPageToLoadImproved(3000,false);
 		selenium.click("xpath=(//a[contains(@href, 'bdo.do?mbr_id=')])[1]");

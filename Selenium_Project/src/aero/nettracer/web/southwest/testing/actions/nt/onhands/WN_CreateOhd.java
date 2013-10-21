@@ -179,7 +179,7 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 	
 
 	@Test
-	public void testSecureRemarksDisabled() {
+	public void testSecureRemarksDisabledOHD() {
 		verifyTrue(setPermissions(new String[] { "335"}, new boolean[] { false}));
 		verifyTrue(navigateToOnhand());
 		selenium.click("name=addremark");
@@ -205,7 +205,7 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 	}
 	
 	@Test
-	public void testSecureRemarksEnabled() {
+	public void testSecureRemarksEnabledOHD() {
 		verifyTrue(setPermissions(new String[] { "335"}, new boolean[] { true}));
 		verifyTrue(navigateToOnhand());
 		selenium.click("name=addremark");
@@ -254,12 +254,19 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 			selenium.click("name=savetracing");
 			assertEquals("Remark for Local Disposal is required.", selenium.getAlert());
 			selenium.click("name=addremark");
-			selenium.type("name=remark[1].remarktext", "General Test");
-			selenium.click("name=savetracing");
 			waitForPageToLoadImproved();
 
 		} else {
 			System.out.println("Failed to add content item to OHD");
+		}
+
+		if (checkNoErrorPage()) {
+			selenium.type("name=remark[3].remarktext", "General Test");
+			selenium.click("name=savetracing");
+			waitForPageToLoadImproved();
+
+		} else {
+			System.out.println("Failed to add remark to OHD");
 		}
 		
 		if (checkNoErrorPage()) {

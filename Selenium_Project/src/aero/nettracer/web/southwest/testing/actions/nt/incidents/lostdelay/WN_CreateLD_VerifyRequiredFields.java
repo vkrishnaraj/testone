@@ -631,7 +631,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	}
 
 	@Test
-	public void testCourtesyReasonDropdownValues() {
+	public void testCourtesyReasonDropdownValuesLD() {
 		verifyTrue(setPermissions(new String[] { WN_SeleniumTest.COURTESY_REASON_COLLECT }, new boolean[] { true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		verifyEquals("Please Select Other Outside 4-Hour Claim Check on Another Carrier No Claim Check Voluntary Separation Late Check", selenium.getText("id=courtesyReasonId"));
@@ -639,7 +639,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	}
 
 	@Test
-	public void testSecureRemarksDisabled() {
+	public void testSecureRemarksDisabledLD() {
 		verifyTrue(setPermissions(new String[] { "335" }, new boolean[] { false }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		verifyFalse(selenium.isTextPresent("Secure Remark"));
@@ -657,7 +657,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	}
 	
 	@Test
-	public void testSecureRemarksEnabled() {
+	public void testSecureRemarksEnabledLD() {
 		verifyTrue(setPermissions(new String[] { "335" }, new boolean[] { true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		selenium.click("name=addremark");
@@ -718,7 +718,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	}
 	
 	@Test
-	public void testCreateBDO(){
+	public void testCreateBDOLD(){
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		verifyEquals("Passenger Pick Up",selenium.getValue("name=passengerpickedup0"));
 		selenium.click("xpath=(//a[contains(@href, 'bdo.do?mbr_id=')])[1]");

@@ -166,7 +166,7 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 	}
 	
 	@Test
-	public void testCourtesyReasonDropdownValues() {
+	public void testCourtesyReasonDropdownValuesMissing() {
 		verifyTrue(setPermissions(new String[] { WN_SeleniumTest.COURTESY_REASON_COLLECT }, new boolean[] { true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_MISSING));
 		verifyEquals("Please Select Other Outside 4-Hour Claim Check on Another Carrier No Claim Check", selenium.getText("id=courtesyReasonId"));
@@ -239,7 +239,7 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 	}
 	
 	@Test
-	public void testCreateBDO(){
+	public void testCreateBDOMissing(){
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_MISSING));
 		waitForPageToLoadImproved(3000,false);
 		selenium.click("xpath=(//a[contains(@href, 'bdo.do?mbr_id=')])[1]");

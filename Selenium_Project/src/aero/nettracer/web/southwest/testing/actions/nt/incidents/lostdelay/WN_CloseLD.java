@@ -38,7 +38,7 @@ public class WN_CloseLD extends WN_SeleniumTest {
 	}
 	
 	@Test
-	public void testPassengerPickUp(){
+	public void testPassengerPickUpLD(){
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		selenium.select("name=theitem[0].lossCode", "label=Please Select");
 		selenium.select("name=theitem[0].faultStation_id", "label=Please Select");

@@ -155,7 +155,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 	}
 
 	@Test
-	public void testPassengerPickUp() throws Exception {
+	public void testPassengerPickUpFound() throws Exception {
 		selenium.click("link=Picked up by customer");
 		waitForPageToLoadImproved();
 		if(checkNoErrorPage()){
