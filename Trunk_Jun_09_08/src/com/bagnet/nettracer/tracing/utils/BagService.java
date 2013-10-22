@@ -691,6 +691,15 @@ public class BagService {
 										rem.setCreatetime(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(TracerDateTime.getGMTDate()));
 										rem.setRemarktext(messages.getMessage(new Locale(mod_agent.getCurrentlocale()), "ohd.ppu.not.returned"));
 										o.getRemarks().add(rem);
+										Status s=null;
+										if(o.getHoldingStation()!=null && item.getIncident()!=null && item.getIncident().getStationassigned()!=null &&
+												o.getHoldingStation().getStation_ID()==item.getIncident().getStationassigned().getStation_ID()){
+											s=StatusBMO.getStatus(TracingConstants.OHD_STATUS_TO_BE_DELIVERED);
+										} else {
+											s=StatusBMO.getStatus(TracingConstants.OHD_STATUS_OPEN);
+										}
+										o.setStatus(s);
+										o.setDisposal_status(null);
 										obmo.simpleSaveAndAuditOhd(o, mod_agent, o.getFoundAtStation(), null);
 									}
 								}
