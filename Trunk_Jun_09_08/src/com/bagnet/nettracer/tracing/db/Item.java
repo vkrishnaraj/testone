@@ -1302,4 +1302,14 @@ public class Item implements Serializable {
 	public long countBdos(){
 		return BDOUtils.findBDOByItemCount(getItem_ID());
 	}
+	
+	/**
+	 * Method to check status of item to see if it's delivered.
+	 * If status is unavailable, it is assumed the item is not delivered
+	 */
+	public boolean isNotDelivered(){
+		if(getStatus()!=null)
+			return getStatus().getStatus_ID()!=TracingConstants.ITEM_STATUS_TOBEDELIVERED;;
+		return true;
+	}
 }

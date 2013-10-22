@@ -769,6 +769,7 @@ public class MBRActionUtils {
 					if(it.getFaultStation()!=null && it.getFaultStation().getStationcode()!=null && it.getFaultStation().getStationcode().length()>0){
 						if(paxItinMap.get(it.getFaultStation().getStationcode())!=null){
 							inPaxItin=true;
+							break;
 						}
 					}
 				}

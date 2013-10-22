@@ -114,6 +114,8 @@ public final class IncidentForm extends ValidatorForm {
 	
 	private int courtesyReasonId;
 	private String courtesyDescription;
+
+	private Status existIncStatus;
 	
 	private int custCommId;
 	private Set<IncidentActivity> activities;
@@ -253,6 +255,8 @@ public final class IncidentForm extends ValidatorForm {
 	private List<Remark> remarklist = new ArrayList<Remark>();
 	//item table
 	private List<Item> itemlist = new ArrayList<Item>();
+	//existing item table
+	private List<Item> existItemlist = new ArrayList<Item>();
 	// articles table
 	private List<Articles> articlelist = new ArrayList<Articles>();
 	//itinerary table
@@ -271,6 +275,8 @@ public final class IncidentForm extends ValidatorForm {
 	private TimeZone _TIMEZONE;
 
 	private int email_customer;
+	//size of current Incident Remark List
+	private int existRemarkSize;
 	
 	private List<IssuanceItemIncident> issuanceItemIncidents = new ArrayList<IssuanceItemIncident>();
 
@@ -1452,5 +1458,28 @@ public final class IncidentForm extends ValidatorForm {
 		this.activityDtos = activityDtos;
 	}
 
+	public List<Item> getExistItemlist() {
+		return existItemlist;
+	}
+
+	public void setExistItemlist(List<Item> existItemlist) {
+		this.existItemlist = existItemlist;
+	}
+
+	public int getExistRemarkSize() {
+		return existRemarkSize;
+	}
+
+	public void setExistRemarkSize(int existRemarkSize) {
+		this.existRemarkSize = existRemarkSize;
+	}
+
+	public Status getExistIncStatus() {
+		return existIncStatus;
+	}
+
+	public void setExistIncStatus(Status existIncStatus) {
+		this.existIncStatus = existIncStatus;
+	}
 
 }

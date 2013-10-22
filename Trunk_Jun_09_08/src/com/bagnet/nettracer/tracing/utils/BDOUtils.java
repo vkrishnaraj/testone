@@ -243,6 +243,9 @@ public class BDOUtils {
 
 			theform.setPassengerlist(new ArrayList(bdo.getPassengers()));
 			theform.setItemlist(new ArrayList(bdo.getItems()));
+			
+			populateFormWithExistingData(bdo.getIncident(),theform);
+
 			if (bdo.getExpensePayout() != null) {
 
 				theform.setCost(TracingConstants.DECIMALFORMAT.format(bdo.getExpensePayout().getCheckamt()));
@@ -299,6 +302,34 @@ public class BDOUtils {
 			return false;
 		}
 
+	}
+
+	/**
+	 * Method to fill the form with existing data from the database for the purposes of determining if remarks are required
+	 * 
+	 * @param incident_id - id to look up incident to get the item list from
+	 * @param theform - form to populate
+	 */
+	public static void populateFormWithExistingData(String incident_ID,
+			BDOForm theform) {
+		Incident inc=IncidentBMO.getIncidentByID(incident_ID, null);
+		populateFormWithExistingData(inc,theform);
+		
+	}
+	
+	/**
+	 * Method to fill the form with existing data from the database for the purposes of determining if remarks are required
+	 * 
+	 * @param incident_id - id to look up incident to get the item list from
+	 * @param theform - form to populate
+	 */
+	public static void populateFormWithExistingData(Incident inc,
+			BDOForm theform) {
+		if(inc!=null && inc.getItemlist()!=null){
+			theform.setExistItemList(new ArrayList(inc.getItemlist()));
+		} else {
+			theform.setExistItemList(new ArrayList());
+		}
 	}
 
 	public static boolean findBDOList(String ohd_ID, String incident_ID, BDOForm theform, HttpServletRequest request) throws Exception {

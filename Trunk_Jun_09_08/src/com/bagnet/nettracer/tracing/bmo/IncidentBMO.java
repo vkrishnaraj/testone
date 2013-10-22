@@ -10,9 +10,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
@@ -22,8 +21,6 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
 import org.hibernate.Criteria;
-import org.hibernate.Hibernate;
-import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
@@ -31,13 +28,13 @@ import org.hibernate.Session;
 import org.hibernate.StaleObjectStateException;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Example;
+import org.hibernate.type.StandardBasicTypes;
 
 import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.exception.StaleStateException;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.constant.TracingConstants.SortParam;
-import com.bagnet.nettracer.tracing.db.audit.Audit_Claim;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Articles;
@@ -59,11 +56,13 @@ import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.TraceIncident;
+import com.bagnet.nettracer.tracing.db.audit.Audit_Claim;
 import com.bagnet.nettracer.tracing.db.audit.Audit_ExpensePayout;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Incident;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemIncident;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue.WtqStatus;
 import com.bagnet.nettracer.tracing.dto.SearchIncident_DTO;
+import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
@@ -2725,5 +2724,51 @@ public class IncidentBMO {
 				}
 			}
 		}
+	}
+
+
+	/**
+	 * Method to populate the form with existing data from the database for the
+	 * purposes of checking if remarks are required.
+	 * Currently used for getting existing Item data and the size of the remarks
+	 * 
+	 * @param form_incident_id
+	 *            - id of incident to fill the existing information
+	 * @param theform
+	 *            - incidentForm to be populated
+	 */
+	public static void fillFormWithExistingData(String form_incident_id, IncidentForm theform) {
+
+			Incident inc=IncidentBMO.getIncidentByID(form_incident_id, null);
+			fillFormWithExistingData(inc,theform);
+	}
+	
+	/**
+	 * Method to populate the form with existing data from the database for the
+	 * purposes of checking if remarks are required.
+	 * Currently used for getting existing Item data and the size of the remarks
+	 * 
+	 * @param inc
+	 *            - incident to fill the existing information
+	 * @param theform
+	 *            - incidentForm to be populated
+	 */
+	public static void fillFormWithExistingData(Incident inc, IncidentForm theform) {
+
+			if(inc.getItemlist()!=null){
+				theform.setExistItemlist(inc.getItemlist());
+			} else {
+				theform.setExistItemlist(new ArrayList<Item>());
+			}
+			if(inc.getRemarks()!=null){
+				theform.setExistRemarkSize(inc.getRemarks().size());
+			} else {
+				theform.setExistRemarkSize(0);
+			}
+
+			if(inc.getStatus()!=null){
+				theform.setExistIncStatus(inc.getStatus());
+			} 
+		
 	}
 }

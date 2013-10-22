@@ -11,7 +11,6 @@
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Item" %>
-<%@ page import="com.bagnet.nettracer.tracing.db.Incident" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.OHD_Photo" %>
 <%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
@@ -27,6 +26,13 @@
   boolean collectPosId = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_COLLECT_POS_ID, a);
   boolean collectExpTagNum = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EXPEDITE_TAG_NUM_COLLECT, a);
   boolean collectAddItemInfo = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADDITIONAL_ITEM_INFORMATION_COLLECT, a);
+  
+  boolean editNonClosedDeliveredBags=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_NON_CLOSED_DELIVERED_BAGS,a);
+  boolean editDeliveredSameStationBags=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_DELIVERED_BAGS_SAME_STATION,a);
+  boolean editClosedSameStationBags=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_CLOSED_INCIDENT,a);
+  boolean editAnyClosedDeliveredBags=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_ANY_CLOSED_DELIVERED,a); 
+  boolean notClosed=myform.getStatus().getStatus_ID()!=TracingConstants.MBR_STATUS_CLOSED;
+  boolean sameStation=a.getStation().getStation_ID()==myform.getStationcreated().getStation_ID();
   String cssFormClass;
  
   cssFormClass = "form2_dam";
@@ -68,23 +74,25 @@
   <SCRIPT LANGUAGE="JavaScript">
   <%
 	boolean lossCodeChange=false;
-  	Incident inc=null;
+    List<Item> eIList;
 	if(myform.getIncident_ID()!=null && myform.getIncident_ID().length()>0){
-		inc=IncidentBMO.getIncidentByID(myform.getIncident_ID(), null);
+		eIList=myform.getExistItemlist();
 		List<Item> ilist=myform.getItemlist();
 		int i=0;
-		
+		Item eItem=null;
 		for(Item it:ilist){
-			if(it.getLossCode()!=0 && inc.getItemlist().size()>=(i+1) && it.getLossCode()!=inc.getItemlist().get(i).getLossCode()){
-				if(myform.getRemarklist()!=null && myform.getRemarklist().size()<=inc.getRemarks().size()){
+			eItem=null;
+			if(eIList.size()>=(i+1)){
+				eItem=eIList.get(i);
+			}
+			if(it.getLossCode()!=0 && eItem!=null && it.getLossCode()!=eItem.getLossCode()){
+				if(myform.getRemarklist()!=null && myform.getRemarklist().size()<=myform.getExistRemarkSize()){
 					lossCodeChange=true;
 					break;
 				}
 			}
 			i++;
-			
 		}
-		
 	}
 	%>
 	var lossCodeChange=<%=lossCodeChange%>;
@@ -98,38 +106,36 @@
   }
   
   function lossCodeChanged(index){
-	  lossCodeChange=false;
-
 	  <% if(PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES)){ %>
 	  var disValue=document.getElementById("theitem["+index+"].lossCode");
 	  if(disValue!=null && disValue.value!="0"){
 		  var lastCode=0;
-			  <% if(inc!=null) {
-			  		if(inc.getItemlist() !=null){
-			  			int i=0;
-			  			for(Item it:inc.getItemlist()){ 
-			  				%>
-			  				if(index==<%=i%>){
-			  					lastCode=<%=it.getLossCode()%>
-			  				}
-			  		<%	i++;} } %>
-	
-					var remText=document.getElementById("remark["+(<%=myform.getRemarklist().size()-1%>)+"].remarktext");
-			  		if(disValue.value!=lastCode && (<%= myform.getRemarklist().size()<=inc.getRemarks().size() %> 
-			  			|| (remText!=null && remText.value!=null && remText.value.replace(/\s*/g, "").length==0 )))
-			  			lossCodeChange=true;
-			  <% } else { %>
-				    var remText=document.getElementById("remark[0].remarktext");
-				  	if(remText!=null && remText.value!=null && remText.value.replace(/\s*/g, "").length==0){
-				  		lossCodeChange=true;
-				  	}
-	 		 <% } %>	
+		  <%if(myform.getExistItemlist() !=null){
+  			int i=0;
+  			for(Item it:myform.getExistItemlist()){%>
+  				if(index==<%=i%>){
+  					lastCode=<%=it.getLossCode()%>
+  				}
+	  		<%i++;
+			}
+		  }%>
+
+		  var remText=document.getElementById("remark["+(<%=myform.getRemarklist().size()-1%>)+"].remarktext");
+  		  if(disValue.value!=lastCode && (<%=myform.getRemarklist().size()<=myform.getExistRemarkSize()%> 
+  			|| (remText!=null && remText.value!=null && remText.value.replace(/\s*/g, "").length==0 )))
+  				lossCodeChange=true;
+		  <%} else {%>
+			    var remText=document.getElementById("remark[0].remarktext");
+			  	if(remText!=null && remText.value!=null && remText.value.replace(/\s*/g, "").length==0){
+			  		lossCodeChange=true;
+			  	}
+ 		  <%}%>	
 	  }
-	  <% } %>
   }
   
   function anyLossCodeChanges(){
-	  
+
+	  lossCodeChange=false;
 	  <% if(PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES)){
 	  	for(int i=0;i<myform.getItemlist().size();i++){ %>
 	  	lossCodeChanged(<%=i%>);
@@ -356,21 +362,16 @@
             <% } %>
           </tr>
           <% if((UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL, a) && PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES))){ 
-        	boolean notClosed=myform.getStatus().getStatus_ID()!=TracingConstants.MBR_STATUS_CLOSED;
-          	boolean closed=myform.getStatus().getStatus_ID()!=TracingConstants.MBR_STATUS_CLOSED;
-          	boolean notDelivered=theitem.getStatus().getStatus_ID()!=TracingConstants.ITEM_STATUS_TOBEDELIVERED;
-          	boolean delivered=theitem.getStatus().getStatus_ID()==TracingConstants.ITEM_STATUS_TOBEDELIVERED;
-          	boolean sameStation=a.getStation().getStation_ID()==myform.getStationcreated().getStation_ID();
-          	boolean diffStation=a.getStation().getStation_ID()!=myform.getStationcreated().getStation_ID();
-            boolean editLossCode=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_NON_CLOSED_DELIVERED_BAGS,a) && notClosed && notDelivered && sameStation)
-      				|| (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_DELIVERED_BAGS_SAME_STATION,a) && sameStation && delivered )
-      				|| (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_CLOSED_INCIDENT,a) && sameStation && closed )
-      				|| (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_ANY_CLOSED_DELIVERED,a) && (closed || delivered)); %>
+        	
+          	boolean editLossCode=(editNonClosedDeliveredBags && notClosed && theitem.isNotDelivered() && sameStation)
+    				|| (editDeliveredSameStationBags && sameStation && !theitem.isNotDelivered() )
+    				|| (editClosedSameStationBags && sameStation && !notClosed )
+    				|| (editAnyClosedDeliveredBags && (!notClosed || !theitem.isNotDelivered()));%>
           <% if(!editLossCode){ %> 
           
-        <html:hidden property="lossCode" value="<%=String.valueOf(theitem.getLossCode()) %>"  name="theitem" indexed="true"/>
-        
-        <html:hidden property="faultStation_id" value="<%=String.valueOf(theitem.getFaultStation_id()) %>" name="theitem"  indexed="true"/>
+	        <html:hidden property="lossCode" value="<%=String.valueOf(theitem.getLossCode()) %>"  name="theitem" indexed="true"/>
+	        
+	        <html:hidden property="faultStation_id" value="<%=String.valueOf(theitem.getFaultStation_id()) %>" name="theitem"  indexed="true"/>
           <%} %>
           <tr>
           	<td >

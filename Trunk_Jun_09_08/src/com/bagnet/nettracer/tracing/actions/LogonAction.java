@@ -314,7 +314,6 @@ public class LogonAction extends Action {
 				GroupComponentPolicy policy = (GroupComponentPolicy) taskList.get(i);
 				ActivityDTO dto = new ActivityDTO();
 				String key = policy.getComponent().getComponent_Name();
-				if(key!=null && !(lossBagLevel && key.equals(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE))){
 				dto.setActivityinfo(key);
 				dto.setActivityloc(policy.getComponent().getComponent_action_link());
 				dto.setActivityinfomenu(key);
@@ -630,7 +629,8 @@ public class LogonAction extends Action {
 					}
 				}
 				dto.setEntries("" + entries);
-				list.add(dto);
+				if(key!=null && !(lossBagLevel && key.equals(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE))){
+					list.add(dto);
 				}
 			}
 			session.setAttribute("activityList", list);

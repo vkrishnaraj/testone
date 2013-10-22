@@ -228,6 +228,10 @@ public class BDOAction extends Action {
 		if (request.getParameter("save") != null) {
 
 			request.setAttribute("showbdo", "1");
+			//If the form
+			if (theform.getIncident_ID()!=null){
+				BDOUtils.populateFormWithExistingData(theform.getIncident_ID(),theform);
+			}
 
 			// if there are no bags, then don't deliver, unless it is ohd
 			if (theform.getItemlist().size() == 0
@@ -254,6 +258,7 @@ public class BDOAction extends Action {
 					if(it.getFaultStation()!=null && it.getFaultStation().getStationcode()!=null && it.getFaultStation().getStationcode().length()>0){
 						if(paxItinMap.get(it.getFaultStation().getStationcode())!=null){
 							inPaxItin=true;
+							break;
 						}
 					}
 				}
@@ -401,6 +406,9 @@ public class BDOAction extends Action {
 				HistoryUtils.AddToHistoryContainer(session, BHO,  String.valueOf(bdo.getBDO_ID()));
 				request.setAttribute("showbdo", "1");
 				request.setAttribute("showprint", "1");
+				if(bdo.getIncident()!=null){
+					BDOUtils.populateFormWithExistingData(bdo.getIncident(),theform);
+				}	
 				if(bdo.getDelivery_integration_type()==bdo.getDelivery_integration_type().SERV && bdo.getDelivery_integration_id()!=null && !bdo.getDelivery_integration_id().isEmpty() && PropertyBMO.getValue(PropertyBMO.BDSI_ADDRESS_ENDPOINT)!=null){
 					DecimalFormat myFormatter=new DecimalFormat("0000000000");
 					String bdoNum=myFormatter.format(bdo.getBDO_ID());

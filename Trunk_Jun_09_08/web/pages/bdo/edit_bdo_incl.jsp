@@ -23,10 +23,7 @@
 <%@page import="java.util.List"%>
 
 <%@page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
-<%@page import="com.bagnet.nettracer.tracing.bmo.IncidentBMO"%>
-
 <%@page import="com.bagnet.nettracer.tracing.db.Passenger"%>
-<%@page import="com.bagnet.nettracer.tracing.db.Incident"%>
 <%@page import="com.bagnet.nettracer.tracing.db.Item"%>
 <%@page import="com.bagnet.nettracer.tracing.db.Incident_Claimcheck"%>
 
@@ -36,23 +33,29 @@ BDOForm myform = (BDOForm) session.getAttribute("BDOForm");
 String incident_ID = myform.getIncident().getIncident_ID();
 boolean isServ=(myform.getDelivercompany_ID()!=0 && (((DeliverCompany)(BDOUtils.getDeliverCompany(myform.getDelivercompany_ID()))).getDelivery_integration_type()==DeliveryIntegrationType.SERV));
 boolean bagLossCodes=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL, a) && PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES));
+
+boolean editNonClosedDeliveredBags=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_NON_CLOSED_DELIVERED_BAGS,a);
+boolean editDeliveredSameStationBags=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_DELIVERED_BAGS_SAME_STATION,a);
+boolean editClosedSameStationBags=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_CLOSED_INCIDENT,a);
+boolean editAnyClosedDeliveredBags=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_ANY_CLOSED_DELIVERED,a); 
+boolean notClosed=(myform.getIncident_ID()!=null && !myform.getIncident_ID().isEmpty() && myform.getIncident()!=null && myform.getIncident().getStatus().getStatus_ID()!=TracingConstants.MBR_STATUS_CLOSED);
+boolean sameStation=(myform.getIncident_ID()!=null && !myform.getIncident_ID().isEmpty() && myform.getIncident()!=null && a.getStation().getStation_ID()==myform.getIncident().getStationcreated().getStation_ID());
 %>
 <%@page import="com.bagnet.nettracer.tracing.db.Address"%><script language="javascript">
 <%
 boolean lossCodeChange=false;
-	Incident inc=null;
 if(myform.getIncident_ID()!=null && myform.getIncident_ID().length()>0){
-	inc=IncidentBMO.getIncidentByID(myform.getIncident_ID(), null);
+	List<Item> eIlist=myform.getExistItemList();
 	List<Item> ilist=myform.getItemlist();
 	int i=0;
 	for(Item it:ilist){
-		if(inc.getItemlist().size()>=(i+1)){
-			Item incI=inc.getItemlist().get(i);
+		if(eIlist.size()>=(i+1)){
+			Item incI=eIlist.get(i);
 			if(it.getItem_ID()==incI.getItem_ID() && it.getLossCode()!=0 && it.getLossCode()!=incI.getLossCode()){
 				lossCodeChange=true;
 			}
 		}
-		i++;	
+		i++;
 	}
 }
 %>
@@ -987,17 +990,11 @@ if (i.intValue() == 0) {
             </tr>
             
             <% if(bagLossCodes){
-            	boolean notClosed=myform.getIncident().getStatus().getStatus_ID()!=TracingConstants.MBR_STATUS_CLOSED;
-            	boolean closed=myform.getIncident().getStatus().getStatus_ID()!=TracingConstants.MBR_STATUS_CLOSED;
-            	boolean notDelivered=theitem.getStatus().getStatus_ID()!=TracingConstants.ITEM_STATUS_TOBEDELIVERED;
-            	boolean delivered=theitem.getStatus().getStatus_ID()==TracingConstants.ITEM_STATUS_TOBEDELIVERED;
-            	boolean sameStation=a.getStation().getStation_ID()==myform.getIncident().getStationcreated().getStation_ID();
-            	boolean diffStation=a.getStation().getStation_ID()!=myform.getIncident().getStationcreated().getStation_ID();
-                boolean editLossCode=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_NON_CLOSED_DELIVERED_BAGS,a) && notClosed && notDelivered && sameStation)
-        				|| (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_DELIVERED_BAGS_SAME_STATION,a) && sameStation && delivered )
-        				|| (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_CLOSED_INCIDENT,a) && sameStation && closed )
-        				|| (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_ANY_CLOSED_DELIVERED,a) && (closed || delivered));%>
-	          <% if(!editLossCode){ %> 
+            	boolean editLossCode=(editNonClosedDeliveredBags && notClosed && theitem.isNotDelivered() && sameStation)
+    				|| (editDeliveredSameStationBags && sameStation && !theitem.isNotDelivered() )
+    				|| (editClosedSameStationBags && sameStation && !notClosed )
+    				|| (editAnyClosedDeliveredBags && (!notClosed || !theitem.isNotDelivered()));%>
+          <% if(!editLossCode){ %> 
 	          
 		        <html:hidden property="lossCode" value="<%=String.valueOf(theitem.getLossCode()) %>"  name="theitem" indexed="true"/>
 		        

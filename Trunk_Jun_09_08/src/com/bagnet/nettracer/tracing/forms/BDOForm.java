@@ -50,6 +50,7 @@ public final class BDOForm extends ValidatorForm {
 
 	private List passengerlist = new ArrayList();
 	private List itemlist = new ArrayList();
+	private List existItemList = new ArrayList();
 
 	private String _DATEFORMAT; // current login agent's date format
 	private String _TIMEFORMAT; // current login agent's time format
@@ -590,4 +591,13 @@ public final class BDOForm extends ValidatorForm {
 		secure=false;
 		
 	}
+
+	public List getExistItemList() {
+		return existItemList;
+	}
+
+	public void setExistItemList(List existItemList) {
+		this.existItemList = existItemList;
+	}
+
 }

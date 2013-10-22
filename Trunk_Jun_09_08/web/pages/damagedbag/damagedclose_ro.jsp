@@ -135,7 +135,7 @@
           <font color=red>
             <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
           </font>
-          <% java.util.List lossCodes=LossCodeBMO.getCompanyCodes(a.getStation().getCompany().getCompanyCode_ID(), TracingConstants.DAMAGED_BAG, true, a); %>
+          <% java.util.List lossCodes=(java.util.List)request.getAttribute("losscodes"); %>
           <logic:iterate name="incidentForm" property="itemlist" id="theitem" type="com.bagnet.nettracer.tracing.db.Item">
             <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
 				  <tr>
