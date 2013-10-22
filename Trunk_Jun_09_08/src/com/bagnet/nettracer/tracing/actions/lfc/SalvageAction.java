@@ -214,6 +214,7 @@ public class SalvageAction extends CheckedAction {
 					salvage = serviceBean.loadSalvage(salvage.getId());
 					salvageItems = serviceBean.loadSalvageFound(salvage.getId());
 					request.setAttribute("lastBoxId",salvageItems.get(salvageItems.size()-1).getSalvageBoxId());
+					request.setAttribute("found", found);
 				}
 				
 			} catch (NumberFormatException nfe) {
@@ -242,6 +243,7 @@ public class SalvageAction extends CheckedAction {
 					salvageItems = serviceBean.loadSalvageFound(salvage.getId());
 					request.setAttribute("salvagefounds", salvageItems);
 					request.setAttribute("lastBoxId",salvageItems.get(salvageItems.size()-1).getSalvageBoxId());
+					request.setAttribute("found", found);
 				}
 				
 			} catch (NumberFormatException nfe) {

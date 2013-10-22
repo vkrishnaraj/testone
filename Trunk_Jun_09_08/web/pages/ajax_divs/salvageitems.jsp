@@ -18,7 +18,7 @@
 <table class="<%=cssFormClass %>" style="margin:0;padding:0;" cellspacing=0 cellpadding=0 >
 	<tr>
 		<td style="width:15%;">
-			<input type="text" name='<%="prevBoxId"+divId %>' id='<%="prevBoxId"+divId %>' class="textfield" value="<bean:write name="found" property="salvageBoxId" />" onkeyup="boxIdUpdate(event,this,'<bean:write name="found" property="barcode" />')" />
+			<input type="text" name='<%="prevBoxId"+divId %>' id='<%="prevBoxId"+divId %>' class="textfield" value="<bean:write name="found" property="salvageBoxId" />" onkeyup="if (event.keyCode==13) {event.keyCode=9; boxIdUpdate(event,this,'<bean:write name="found" property="barcode" />')}" />
 		</td>
 		<td style="width:15%;">
 			<a href='create_found_item.do?foundId=<bean:write name="found" property="id" />' ><bean:write name="found" property="barcode" /></a>
