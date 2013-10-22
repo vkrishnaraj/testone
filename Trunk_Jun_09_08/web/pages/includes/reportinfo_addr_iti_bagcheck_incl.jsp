@@ -272,7 +272,7 @@
           } else if (report_type == 2) {
 %> <bean:message key="colname.pilferage.createagent" /> <%
             }
-%> <br> <html:text property="agentinit" size="4"
+%> <br> <html:text property="agentinit" size="10"
 					styleClass="textfield" disabled="true" />
 			</td>
 			<td nowrap="nowrap"><bean:message

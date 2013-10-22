@@ -521,7 +521,7 @@ function gotoHistoricalReport() {
         <html:text property="dispFoundTime" size="14"
           styleClass="textfield" /></td>
         <td><bean:message key="colname.ohd_create_agent" /> <br>
-        <html:text property="agent_initials" size="4"
+        <html:text property="agent_initials" size="10"
           styleClass="textfield" disabled="true" /></td>
         <td><bean:message key="colname.found_station_nobr" /> <br>
         <input type="text" size="10" class="textfield"

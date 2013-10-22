@@ -252,7 +252,7 @@
 %>
               
               <br>
-              <html:text property="agentinit" size="4" styleClass="textfield" disabled="true" />
+              <html:text property="agentinit" size="10" styleClass="textfield" disabled="true" />
             </td>
             <td nowrap="nowrap">
               <bean:message key="colname.stationcreated_nobr" />
