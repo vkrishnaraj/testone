@@ -116,7 +116,7 @@ public class CustomerCommunicationsAction extends CheckedAction {
 				success = false;
 			}
 		} else if (request.getParameter("command") != null && TracingConstants.COMMAND_DELETE.equals(request.getParameter("command"))
-				&& UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_EDIT, user)) {
+				&& UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_DELETE, user)) {
 			try {
 				long id = Long.valueOf(request.getParameter("communicationsId"));
 				success = incidentActivityService.delete(id);

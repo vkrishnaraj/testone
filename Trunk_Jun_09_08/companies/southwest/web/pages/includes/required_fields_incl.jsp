@@ -308,14 +308,7 @@
 			    return false;
 		      }
 		}
-		
-		else if (currentElementName.indexOf("templateIdSelect") != -1) {
-			if (currentElement.options[currentElement.selectedIndex].value == 0) {
-				alert('<%=(String) bundle.getString( "communications.type") + " " + (String) bundle.getString("error.validation.isRequired")%>');
-				currentElement.focus();
-				return false;
-			}
-		}
+
 	}
     
     return true;
