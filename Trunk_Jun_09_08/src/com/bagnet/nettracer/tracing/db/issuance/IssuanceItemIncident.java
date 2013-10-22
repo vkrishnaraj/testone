@@ -63,7 +63,7 @@ public class IssuanceItemIncident {
 	@JoinColumn(name = "issueagent_id")
 	private Agent issueAgent;
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "document_id")
 	private Document document;
 	
