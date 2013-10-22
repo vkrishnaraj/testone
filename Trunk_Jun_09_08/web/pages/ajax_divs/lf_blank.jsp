@@ -10,7 +10,7 @@
 <logic:empty name="found" scope="request" >
 	<table class="<%=cssFormClass %>" style="margin:0;padding:0;" cellspacing=0 cellpadding=0 >
 		<tr>
-			<td colspan=4 class="summaryActionItem">
+			<td colspan=5 class="summaryActionItem">
 				<%=(String) request.getAttribute("message") %>
 			</td>
 		</tr>
