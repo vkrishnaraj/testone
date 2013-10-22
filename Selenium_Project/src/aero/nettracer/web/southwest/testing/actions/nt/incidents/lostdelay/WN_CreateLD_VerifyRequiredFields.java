@@ -794,7 +794,52 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		}
 	}
 	
-	
+	@Test
+	public void testIssuanceDocument(){
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
+		selenium.open("/ntsouthwest/lostDelay.do?incident_ID=LZWN000000006");
+		selenium.select("id=issuance_category", "label=Assistive Device");
+		selenium.click("name=issueItem");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			verifyTrue(selenium.isElementPresent("link=Preview"));
+			selenium.select("id=issuance_category", "label=Test");
+			selenium.select("id=issuance_type", "label=item1 - A test (33454)");
+			selenium.click("name=loanItem");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Failed to create document for incident");
+		}		
+		if (checkNoErrorPage()) {
+			verifyTrue(selenium.isElementPresent("link=Preview"));
+			selenium.select("id=issuance_category", "label=Test");
+			selenium.select("id=issuance_type", "label=item1 - ze test (445566)");
+			selenium.click("name=tradeItem");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Failed to create document for incident");
+		}				
+		if (checkNoErrorPage()) {
+			verifyTrue(selenium.isElementPresent("link=Preview"));
+			selenium.click("name=issuance_edit_0");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Failed to create document for incident");
+		}	
+		if (checkNoErrorPage()) {
+			selenium.click("name=issuance_edit_0");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Failed to create document for incident");
+		}	
+		if (checkNoErrorPage()) {
+			selenium.click("name=issuance_edit_0");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Failed to create document for incident");
+		}	
+	}
+			
 	private void typeString(String locator, String string) {
 		char[] chars = string.toCharArray();
 		StringBuffer sb = new StringBuffer(selenium.getText(locator));
