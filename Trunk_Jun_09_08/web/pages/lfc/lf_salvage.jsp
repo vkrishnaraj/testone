@@ -74,7 +74,7 @@
  			o.previousBoxId.value = boxID.value;
  			o.boxUpdateFound.value=foundId;
  			postForm("lfSalvageForm", true, function (req) {
- 				o.prevBoxId.value = "";
+ 				o.previousBoxId.value = "";
  	 			o.boxUpdateFound.value="";
  	 			jQuery('#barcodeDiv').before(req.responseText);
  	 			
@@ -224,7 +224,7 @@
      				<tr>
 	    				<logic:equal name="lfSalvageForm" property="salvage.status.status_ID" value="<%=String.valueOf(TracingConstants.LF_STATUS_OPEN) %>" >
     	 					<td style="width:20%;">
-	    						<input type="text" name="prevBoxId" id="prevBoxId" class="textfield" value="<bean:write name="found" property="salvageBoxId" />" onkeydown="if (event.keyCode==13) {event.keyCode=9; boxIdUpdate(event.keyCode,this,'<bean:write name="found" property="foundBarcode" />')}"/> <!-- onkeyup="boxIdUpdate(this,'<bean:write name="found" property="foundBarcode" />')" -->
+	    						<input type="text" name='<%="prevBoxId"+divId %>' id='<%="prevBoxId"+divId %>' class="textfield" value="<bean:write name="found" property="salvageBoxId" />" onkeydown="if (event.keyCode==13) {event.keyCode=9; boxIdUpdate(event.keyCode,this,'<bean:write name="found" property="foundBarcode" />')}"/>
      						</td>
 	    				</logic:equal>
 	    				<logic:equal name="lfSalvageForm" property="salvage.status.status_ID" value="<%=String.valueOf(TracingConstants.LF_STATUS_CLOSED) %>" >
