@@ -279,9 +279,7 @@ public class LostDelayAction extends CheckedAction {
 			request.setAttribute("incident", form_incident_id);
 			myDispute = DisputeUtils.getDisputeByIncidentId(form_incident_id);
 			isIncidentLocked = DisputeResolutionUtils.isIncidentLocked(form_incident_id);
-			if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL, user)){
-				IncidentBMO.fillFormWithExistingData(form_incident_id, theform);
-			}
+			IncidentBMO.fillFormWithExistingData(form_incident_id, theform);
 		}
 		
 		boolean disputeProcess = false;

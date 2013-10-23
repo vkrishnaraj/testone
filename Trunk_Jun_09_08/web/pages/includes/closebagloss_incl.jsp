@@ -38,28 +38,8 @@
    %>
 	
   <SCRIPT LANGUAGE="JavaScript">
-  <%
-	boolean lossCodeChange=false;
-  	List<Item> eIlist=null;
-	if(myform.getExistItemlist()!=null){
-		eIlist=myform.getExistItemlist();
-		List<Item> ilist=myform.getItemlist();
-		int i=0;
-		for(Item it:ilist){
-			if(eIlist.size()>=(i+1)){
-				Item eItem=eIlist.get(i);
-				if(it.getLossCode()!=0 && it.getLossCode()!=eItem.getLossCode()){
-					if(myform.getRemarklist()!=null && (myform.getRemarklist().size()<=myform.getExistRemarkSize())){
-						lossCodeChange=true;
-						break;
-					}
-				}
-			}
-			i++;
-		}
-	}
-	%>
-	var lossCodeChange=<%=lossCodeChange%>;
+  
+	var lossCodeChange=false;
 	
 	function lossCodeChanged(index){
 		  <% if(PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES)){ %>
@@ -67,9 +47,9 @@
 			  if(disValue!=null && disValue.value!="0"){
 				  var lastCode=0;
 				  <% com.bagnet.nettracer.tracing.db.Status existStatus=myform.getExistIncStatus();
-			  		if(eIlist !=null && existStatus!=null && existStatus.getStatus_ID()!=TracingConstants.MBR_STATUS_CLOSED){
+			  		if(myform.getExistItemlist() !=null && existStatus!=null && existStatus.getStatus_ID()!=TracingConstants.MBR_STATUS_CLOSED){
 			  			int i=0;
-			  			for(Item it:eIlist){%>
+			  			for(Item it:myform.getExistItemlist()){%>
 			  				if(index==<%=i%>){
 			  					lastCode=<%=it.getLossCode()%>
 			  				}
@@ -206,3 +186,6 @@
               <% } %>
             </table>
           </logic:iterate>
+          <script>
+          	anyLossCodeChanges();
+          </script>

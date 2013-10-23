@@ -85,30 +85,7 @@
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
   <SCRIPT LANGUAGE="JavaScript">
-  <%
-	boolean lossCodeChange=false;
-    List<Item> eIList;
-	if(myform.getExistItemlist()!=null){
-		eIList=myform.getExistItemlist();
-		List<Item> ilist=myform.getItemlist();
-		int i=0;
-		Item eItem=null;
-		for(Item it:ilist){
-			eItem=null;
-			if(eIList.size()>=(i+1)){
-				eItem=eIList.get(i);
-			}
-			if(it.getLossCode()!=0 && eItem!=null && it.getLossCode()!=eItem.getLossCode()){
-				if(myform.getRemarklist()!=null && myform.getRemarklist().size()<=myform.getExistRemarkSize()){
-					lossCodeChange=true;
-					break;
-				}
-			}
-			i++;
-		}
-	}
-	%>
-	var lossCodeChange=<%=lossCodeChange%>;
+  var lossCodeChange=false;
   var cal1xx = new CalendarPopup();	
   var ppucheck=-1;
   
@@ -1072,5 +1049,6 @@
 	    <script language=javascript>
 	    	var fileName = '<%=(String) request.getAttribute("receiptName") %>';
    			openPreviewWindow1(fileName);
+   			anyLossCodeChanges();
 	    </script>
     </logic:present>		

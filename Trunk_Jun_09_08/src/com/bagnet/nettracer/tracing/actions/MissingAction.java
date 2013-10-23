@@ -201,9 +201,7 @@ public class MissingAction extends CheckedAction {
 			form_incident_id = theform.getIncident_ID();
 			request.setAttribute("incident", form_incident_id);
 			
-			if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL, user)){
-				IncidentBMO.fillFormWithExistingData(form_incident_id, theform);
-			}
+			IncidentBMO.fillFormWithExistingData(form_incident_id, theform);
 		}
 		if(!(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL, user) && PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES))){
 			

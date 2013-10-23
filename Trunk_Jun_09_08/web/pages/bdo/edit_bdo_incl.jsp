@@ -44,18 +44,20 @@ boolean sameStation=(myform.getIncident_ID()!=null && !myform.getIncident_ID().i
 <%@page import="com.bagnet.nettracer.tracing.db.Address"%><script language="javascript">
 <%
 boolean lossCodeChange=false;
-if(myform.getExistItemList()!=null){
-	List<Item> eIlist=myform.getExistItemList();
-	List<Item> ilist=myform.getItemlist();
-	int i=0;
-	for(Item it:ilist){
-		if(eIlist.size()>=(i+1)){
-			Item incI=eIlist.get(i);
-			if(it.getItem_ID()==incI.getItem_ID() && it.getLossCode()!=0 && it.getLossCode()!=incI.getLossCode()){
-				lossCodeChange=true;
+if(bagLossCodes){
+	if(myform.getExistItemList()!=null){
+		List<Item> eIlist=myform.getExistItemList();
+		List<Item> ilist=myform.getItemlist();
+		int i=0;
+		for(Item it:ilist){
+			if(eIlist.size()>=(i+1)){
+				Item incI=eIlist.get(i);
+				if(it.getItem_ID()==incI.getItem_ID() && it.getLossCode()!=0 && it.getLossCode()!=incI.getLossCode()){
+					lossCodeChange=true;
+				}
 			}
+			i++;
 		}
-		i++;
 	}
 }
 %>
@@ -127,8 +129,10 @@ function toggledc(o) {
     }
     
     function showBDORemark(){
-    	lossCodeChange=true;
-    	document.getElementById("bdoRemark").style.display="block";
+    	if(<%=bagLossCodes%>){
+	    	lossCodeChange=true;
+	    	document.getElementById("bdoRemark").style.display="block";
+    	}
     }
 
 </script>

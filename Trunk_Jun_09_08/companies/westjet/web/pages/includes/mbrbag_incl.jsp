@@ -81,31 +81,8 @@
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
 <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
 <SCRIPT LANGUAGE="JavaScript">
-<%
-	boolean lossCodeChange=false;
-	List<Item> eIList;
-	if(myform.getExistItemlist()!=null){
-		eIList=myform.getExistItemlist();
-		List<Item> ilist=myform.getItemlist();
-		int i=0;
 
-		Item eItem=null;
-		for(Item it:ilist){
-			eItem=null;
-			if(eIList.size()>=(i+1)){
-				eItem=eIList.get(i);
-			}
-			if(it.getLossCode()!=0 && eItem!=null && it.getLossCode()!=eItem.getLossCode()){
-				if(myform.getRemarklist()!=null && myform.getRemarklist().size()<=myform.getExistRemarkSize()){
-					lossCodeChange=true;
-					break;
-				}
-			}
-			i++;
-		}
-	}
-	%>
-	var lossCodeChange=<%=lossCodeChange%>;
+	var lossCodeChange=false;
 	  var ppucheck=-1;
   function textCounter3(field, maxlimit) {
     if (field.value.length > maxlimit) {
@@ -1019,4 +996,6 @@
 </logic:notEqual>
 <script> <logic:iterate id="theitem" indexId="i" name="incidentForm" property="itemlist" type="com.bagnet.nettracer.tracing.db.Item">
       		checkBagType(<%=i%>);
-     	</logic:iterate></script>
+     	</logic:iterate>
+     		anyLossCodeChanges();
+</script>
