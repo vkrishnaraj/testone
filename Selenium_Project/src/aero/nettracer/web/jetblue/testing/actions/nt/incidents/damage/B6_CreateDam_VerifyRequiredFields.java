@@ -34,7 +34,7 @@ public class B6_CreateDam_VerifyRequiredFields extends DefaultSeleneseTestCase {
 				assertEquals("City is required.", selenium.getAlert());
 				selenium.type("name=addresses[0].city", "Test");
 				selenium.click("name=saveButton");
-				assertEquals("State/Province is required if country is set to 'United States'", selenium.getAlert());
+				assertEquals("State is required if country is set to 'United States'", selenium.getAlert());
 				selenium.select("name=addresses[0].state_ID", "label=Georgia");
 				selenium.click("name=saveButton");
 				assertEquals("Zip is required.", selenium.getAlert());

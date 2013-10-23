@@ -34,7 +34,7 @@ public class B6_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 				assertEquals("City is required.", selenium.getAlert());
 				selenium.type("name=addresses[0].city", "Test");
 				selenium.click("name=savetracingButton");
-				assertEquals("State/Province is required if country is set to 'United States'", selenium.getAlert());
+				assertEquals("State is required if country is set to 'United States'", selenium.getAlert());
 				selenium.select("name=addresses[0].state_ID", "label=Georgia");
 				selenium.click("name=savetracingButton");
 				assertEquals("Zip is required.", selenium.getAlert());
