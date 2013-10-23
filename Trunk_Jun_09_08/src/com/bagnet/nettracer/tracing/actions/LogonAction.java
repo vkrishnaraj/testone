@@ -629,6 +629,11 @@ public class LogonAction extends Action {
 					}
 				}
 				dto.setEntries("" + entries);
+				/**
+				 * If the current key is Manage Fault Disputes and the
+				 * LossBagLevel property is set to true, do not add the Manage
+				 * Fault Disputes line to the Task Manager page
+				 */
 				if(key!=null && !(lossBagLevel && key.equals(TracingConstants.SYSTEM_COMPONENT_NAME_MANAGE_FAULT_DISPUTE))){
 					list.add(dto);
 				}

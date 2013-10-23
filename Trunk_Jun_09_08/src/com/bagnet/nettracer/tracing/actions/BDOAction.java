@@ -228,8 +228,10 @@ public class BDOAction extends Action {
 		if (request.getParameter("save") != null) {
 
 			request.setAttribute("showbdo", "1");
-			//If the form
-			if (theform.getIncident_ID()!=null){
+			/**If the form contains an incident id, then
+			*get the incident information for purposes of checking for remark requirements
+			*/
+			if (theform.getIncident_ID()!=null && !theform.getIncident_ID().isEmpty()){
 				BDOUtils.populateFormWithExistingData(theform.getIncident_ID(),theform);
 			}
 

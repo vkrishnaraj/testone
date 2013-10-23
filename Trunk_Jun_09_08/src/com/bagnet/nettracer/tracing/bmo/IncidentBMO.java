@@ -2754,21 +2754,29 @@ public class IncidentBMO {
 	 *            - incidentForm to be populated
 	 */
 	public static void fillFormWithExistingData(Incident inc, IncidentForm theform) {
-
+		if(inc!=null){
 			if(inc.getItemlist()!=null){
 				theform.setExistItemlist(inc.getItemlist());
 			} else {
 				theform.setExistItemlist(new ArrayList<Item>());
 			}
+			
 			if(inc.getRemarks()!=null){
 				theform.setExistRemarkSize(inc.getRemarks().size());
 			} else {
-				theform.setExistRemarkSize(0);
+				/* Assumed Remark size to be 1*/
+				theform.setExistRemarkSize(1);
 			}
 
 			if(inc.getStatus()!=null){
 				theform.setExistIncStatus(inc.getStatus());
-			} 
+			}
+		} else {
+			theform.setExistItemlist(new ArrayList<Item>());
+			/* Assumed Remark size to be 1*/
+			theform.setExistRemarkSize(1);
+			
+		}
 		
 	}
 }

@@ -58,7 +58,7 @@
 <%
 	boolean lossCodeChange=false;
 	List<Item> eIList;
-	if(myform.getIncident_ID()!=null && myform.getIncident_ID().length()>0){
+	if(myform.getExistItemlist()!=null){
 		eIList=myform.getExistItemlist();
 		List<Item> ilist=myform.getItemlist();
 		int i=0;
@@ -87,33 +87,33 @@
     } 
   }
   
-
   function lossCodeChanged(index){
 	  <% if(PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES)){ %>
-	  var disValue=document.getElementById("theitem["+index+"].lossCode");
-	  if(disValue!=null && disValue.value!="0"){
-		  var lastCode=0;
-		  <%if(myform.getExistItemlist() !=null){
-  			int i=0;
-  			for(Item it:myform.getExistItemlist()){%>
-  				if(index==<%=i%>){
-  					lastCode=<%=it.getLossCode()%>
-  				}
-	  		<%i++;
-			}
-		  }%>
-
-		  var remText=document.getElementById("remark["+(<%=myform.getRemarklist().size()-1%>)+"].remarktext");
-  		  if(disValue.value!=lastCode && (<%=myform.getRemarklist().size()<=myform.getExistRemarkSize()%> 
-  			|| (remText!=null && remText.value!=null && remText.value.replace(/\s*/g, "").length==0 )))
-  				lossCodeChange=true;
-		  <%} else {%>
-			    var remText=document.getElementById("remark[0].remarktext");
-			  	if(remText!=null && remText.value!=null && remText.value.replace(/\s*/g, "").length==0){
-			  		lossCodeChange=true;
-			  	}
- 		  <%}%>	
-	  }
+		  var disValue=document.getElementById("theitem["+index+"].lossCode");
+		  if(disValue!=null && disValue.value!="0"){
+			  var lastCode=0;
+			  <%if(myform.getExistItemlist() !=null){
+	  			int i=0;
+	  			for(Item it:myform.getExistItemlist()){%>
+	  				if(index==<%=i%>){
+	  					lastCode=<%=it.getLossCode()%>
+	  				}
+		  		<%i++;
+				}
+			  %>
+	
+			  var remText=document.getElementById("remark["+(<%=myform.getRemarklist().size()-1%>)+"].remarktext");
+	  		  if(disValue.value!=lastCode && (<%=myform.getRemarklist().size()<=myform.getExistRemarkSize()%> 
+	  			|| (remText!=null && remText.value!=null && remText.value.replace(/\s*/g, "").length==0 )))
+	  				lossCodeChange=true;
+			  <%} else {%>
+				    var remText=document.getElementById("remark[0].remarktext");
+				  	if(remText!=null && remText.value!=null && remText.value.replace(/\s*/g, "").length==0){
+				  		lossCodeChange=true;
+				  	}
+	 		  <%}%>	
+		  }
+	 <%}%>
   }
   
   function anyLossCodeChanges(){

@@ -44,7 +44,7 @@ boolean sameStation=(myform.getIncident_ID()!=null && !myform.getIncident_ID().i
 <%@page import="com.bagnet.nettracer.tracing.db.Address"%><script language="javascript">
 <%
 boolean lossCodeChange=false;
-if(myform.getIncident_ID()!=null && myform.getIncident_ID().length()>0){
+if(myform.getExistItemList()!=null){
 	List<Item> eIlist=myform.getExistItemList();
 	List<Item> ilist=myform.getItemlist();
 	int i=0;

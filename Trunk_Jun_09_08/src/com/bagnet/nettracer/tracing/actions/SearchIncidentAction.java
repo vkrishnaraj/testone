@@ -325,6 +325,11 @@ public class SearchIncidentAction extends Action {
 				List faultstationlist = null;
 				List faultCompanyList = null;
 
+				//Populate incident form with existing information
+				if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL, user)){
+					IncidentBMO.fillFormWithExistingData(inc, theform);
+				}
+				
 				// find out what kind of incident this is
 				IncidentHistoryObject IHO=new IncidentHistoryObject();
 				IHO.setIncident(inc);

@@ -325,10 +325,12 @@ public class BDOUtils {
 	 */
 	public static void populateFormWithExistingData(Incident inc,
 			BDOForm theform) {
-		if(inc!=null && inc.getItemlist()!=null){
-			theform.setExistItemList(new ArrayList(inc.getItemlist()));
-		} else {
-			theform.setExistItemList(new ArrayList());
+		if(inc!=null){
+			if(inc.getItemlist()!=null){
+				theform.setExistItemList(new ArrayList(inc.getItemlist()));
+			} else {
+				theform.setExistItemList(new ArrayList());
+			}
 		}
 	}
 
