@@ -172,7 +172,9 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_EDIT_DELIVERED_BAGS_SAME_STATION = "Edit Delivered Bags in Same Station";
 	public final static String SYSTEM_COMPONENT_NAME_EDIT_CLOSED_INCIDENT = "Edit Closed Incident Bags in Same Station";
 	public final static String SYSTEM_COMPONENT_NAME_EDIT_ANY_CLOSED_DELIVERED= "Edit Any Closed or Delivered Bags";
-	public final static String SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP= "Passenger Pick Up";
+	public final static String SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP_LOSTDELAY= "Passenger Pick Up for Lost/Delay Incidents";
+	public final static String SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP_MISSING= "Passenger Pick Up for Missing Incidents";
+	public final static String SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP_DAMAGE= "Passenger Pick Up for Damaged Incidents";
 	
 	//TODO: adding three sub items under last one to get the itemized view for WS
 	public final static String SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS_TYPE_DELAYED = "Incoming Incidents Type Delayed";
@@ -709,6 +711,10 @@ public class TracingConstants {
 	
 	public final static int LINK_TYPE_CLAIM_PAGE = 1;
 	public final static int LINK_TYPE_FRAUD_RESULTS_PAGE = 2;
+
+	public final static String LD_REQ="lostdelay";
+	public final static String MA_REQ="pilfered";
+	public final static String DM_REQ="damaged";
 	
 	/** ********* forwards *********** */
 	// no permission

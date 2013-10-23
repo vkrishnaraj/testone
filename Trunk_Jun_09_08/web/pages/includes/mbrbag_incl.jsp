@@ -32,6 +32,21 @@
   boolean editAnyClosedDeliveredBags=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_ANY_CLOSED_DELIVERED,a); 
   boolean closed=myform.getExistIncStatus()!=null && myform.getExistIncStatus().getStatus_ID()==TracingConstants.MBR_STATUS_CLOSED;
   boolean sameStation=a.getStation().getStation_ID()==myform.getStationcreated().getStation_ID();
+  
+  boolean passengerPickUp=false;
+  String inctype="";
+
+	if(request.getAttribute("lostdelay")!=null){
+		passengerPickUp=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP_LOSTDELAY, a);
+		inctype=TracingConstants.LD_REQ;
+	} else if (request.getAttribute("missing")!=null){
+		passengerPickUp=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP_MISSING, a);
+		inctype=TracingConstants.MA_REQ;
+	} else {
+		passengerPickUp=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP_DAMAGE, a);
+		inctype=TracingConstants.DM_REQ;
+	}
+  
   String cssFormClass;
  
   cssFormClass = "form2_dam";
@@ -328,7 +343,7 @@
               <% } %>
               </logic:present>
               
-			  <% if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP, a) && (request.getAttribute("lostdelay") != null)) { %>
+			  <% if(passengerPickUp) { %>
 			      
 			  	  <logic:present name="incidentForm" property="incident_ID"> 
 			  	  	<logic:notEqual name="incidentForm" property="status.status_ID" value="<%=String.valueOf(TracingConstants.MBR_STATUS_CLOSED) %>">
@@ -337,7 +352,7 @@
 			              <br/>
 			              <% long bdocount=theitem.countBdos(); 
 			              	if(bdocount==0){ %>
-			              <input type="submit" name="passengerpickedup<%= i %>" value="<bean:message key="passenger.picked.up"/>" id="button" onclick="ppucheck=<%=i %>; if(validatereqFields(this.form, 'lostdelay') != false){ window.alert('<bean:message key="info.check.claimcheck.pos.id"/>'); return true;} else { return false;}"> 
+			              <input type="submit" name="passengerpickedup<%= i %>" value="<bean:message key="passenger.picked.up"/>" id="button" onclick="ppucheck=<%=i %>; if(validatereqFields(this.form, '<%=inctype %>') != false){ window.alert('<bean:message key="info.check.claimcheck.pos.id"/>'); return true;} else { return false;}"> 
 			              <% } else if(bdocount>0) {%>
 			              <bean:message key="cannot.passenger.picked.up"/>
 			              <% } else if(bdocount==-1) {%>

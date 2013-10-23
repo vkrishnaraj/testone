@@ -12,17 +12,13 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%@ page import="com.bagnet.nettracer.tracing.forms.OnHandForm"%>
 <%@page import="com.bagnet.nettracer.tracing.db.Station"%>
-<%@page import="com.bagnet.nettracer.tracing.db.OHD"%>
-<%@page import="com.bagnet.nettracer.tracing.db.Remark"%>
 <%@page import="com.bagnet.nettracer.tracing.utils.OHDUtils"%>
 <%@page import="com.bagnet.nettracer.tracing.bmo.StationBMO"%>
 <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
 
 <%@page import="java.util.List"%>
 <%@page import="com.bagnet.nettracer.tracing.db.OHD_Itinerary"%>
-<%@page import="com.bagnet.nettracer.tracing.db.Incident"%>
 <%@page import="com.bagnet.nettracer.tracing.db.Item"%>
-<%@page import="com.bagnet.nettracer.tracing.bmo.IncidentBMO"%>
 <%
   org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources)
                                                                request.getAttribute("org.apache.struts.action.MESSAGE");
@@ -36,6 +32,10 @@
 	   holdingStation = StationBMO.getStationByCode(onHandForm.getHolding_station(), onHandForm.getHolding_company());
    }
    String cssFormClass = "form2_ohd";
+   
+   boolean ppuLD=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP_LOSTDELAY, a);
+   boolean ppuMA=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP_MISSING, a);
+   boolean ppuDM=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP_DAMAGE, a);
 %>
 
 
@@ -130,11 +130,9 @@
 <script language="javascript">
 	<%
 	boolean isDisposeLocal=false;
-	OHD o=null;
 	if(onHandForm.getOhd_id()!=null && onHandForm.getOhd_id().length()>0 && onHandForm.getDisposal_status()!=null){
-		o=OHDUtils.getOHD(onHandForm.getOhd_id());
-		isDisposeLocal=(o.getDisposal_status()!=null && onHandForm.getRemarklist().size()<=o.getRemarks().size() 
-				&& onHandForm.getDisposal_status().getStatus_ID()!=o.getDisposal_status().getStatus_ID()
+		isDisposeLocal=(onHandForm.getExistDisposalStatus()!=null && onHandForm.getRemarklist().size()<=onHandForm.getExistRemarkSize() 
+				&& onHandForm.getDisposal_status().getStatus_ID()!=onHandForm.getExistDisposalStatus().getStatus_ID()
 				&& onHandForm.getDisposal_status().getStatus_ID()==TracingConstants.ITEM_STATUS_DISPOSED_LOCALLY);
 	}%>
 	var disposeLocal=<%=isDisposeLocal%>;
@@ -143,18 +141,20 @@
 		<%String Initial_OHD_DisStatusVal=(String)session.getAttribute("Initial_OHD_DisStatusVal");%>
 		  
   function ppuCheck(){
-	  <% if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP, a)) { %>
+	  <% if(ppuLD || ppuMA || ppuDM) { %>
 	    var initialVal = <%=Initial_OHD_DisStatusVal%>;
 		var passPickUpVal = <%=TracingConstants.OHD_STATUS_OWNER_PICKED_UP%>;
 		var x = document.getElementById("disposal_status.status_ID");
 		var selectedVal = x.value;
 		if(selectedVal==passPickUpVal){
-			<% if(onHandForm.getMatched_incident()!=null && !onHandForm.getMatched_incident().isEmpty() ){
-			  Incident inc=IncidentBMO.getIncidentByID(onHandForm.getMatched_incident(), null);
-			  if(inc.getItemlist()!=null){
-				  for(Item item:inc.getItemlist()){
+			<%if(onHandForm.getExistMatchedItemlist()!=null){
+				  for(Object obj:onHandForm.getExistMatchedItemlist()){
+					  Item item=(Item)obj;
 					  if(item.getOHD_ID()!=null && item.getOHD_ID().equals(onHandForm.getOhd_id())){ 
-						  if(item.getStatus().getStatus_ID()!=TracingConstants.ITEM_STATUS_PASSENGER_PICKED_UP){%>
+						  if(((item.getItemtype_ID()==TracingConstants.LOST_DELAY && ppuLD) || 
+								  (item.getItemtype_ID()==TracingConstants.MISSING_ARTICLES && ppuMA) || 
+								  (item.getItemtype_ID()==TracingConstants.DAMAGED_BAG && ppuDM)) &&
+								  item.getStatus().getStatus_ID()!=TracingConstants.ITEM_STATUS_PASSENGER_PICKED_UP){%>
 						  	alert('<%= (String) myMessages.getMessage(myLocale, "error.update.incident.ppu")%>');
 						  	if(initialVal!=0)
 						  		x.value=initialVal;
@@ -166,7 +166,7 @@
 					  }
 				  }  
 				}
-			}%>
+			%>
 			alert('<%= (String) myMessages.getMessage(myLocale, "info.check.claimcheck.pos.id")%>');
 		  
 	  	}
@@ -239,13 +239,13 @@ function gotoHistoricalReport() {
 	  disposeLocal=false;
 	  var disValue=document.getElementById("disposal_status.status_ID");
 	  if(disValue.value==<%=TracingConstants.ITEM_STATUS_DISPOSED_LOCALLY%>){
-		  <% if(o!=null) {
+		  <% if(onHandForm.getExistDisposalStatus()!=null) {
 		  		int lastStatus=0;
-		  		if(o.getDisposal_status()!=null)
-		  			lastStatus=o.getDisposal_status().getStatus_ID();%>
+		  		if(onHandForm.getExistDisposalStatus()!=null)
+		  			lastStatus=onHandForm.getExistDisposalStatus().getStatus_ID();%>
 
 				    var remText=document.getElementById("remark["+(<%=onHandForm.getRemarklist().size()-1%>)+"].remarktext");
-		  		if(disValue.value!=<%=lastStatus%> && (<%= onHandForm.getRemarklist().size()<=o.getRemarks().size() %> 
+		  		if(disValue.value!=<%=lastStatus%> && (<%= onHandForm.getRemarklist().size()<=onHandForm.getExistRemarkSize() %> 
 		  			|| (remText!=null && remText.value!=null && remText.value.replace(/\s*/g, "").length==0 )))
 		  			disposeLocal=true;
 		  <% } else { %>

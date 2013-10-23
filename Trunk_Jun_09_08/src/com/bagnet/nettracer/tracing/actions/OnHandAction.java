@@ -608,7 +608,7 @@ public class OnHandAction extends CheckedAction {
 					OHO.setObjectType(TracingConstants.HIST_DESCRIPTION_ONHAND);
 					OHO.setStatusDesc(TracingConstants.HIST_DESCRIPTION_LOAD+" "+TracingConstants.HIST_DESCRIPTION_ONHAND);
 					HistoryUtils.AddToHistoryContainer(session, OHO, null);
-					
+					OHDUtils.populateFormWithExistingData(ohd,theform);
 					if(request.getParameter("wtq_reinstate") != null && request.getParameter("wtq_reinstate").trim().length() > 0) {
 						WtqReinstateOhd wtq = new WtqReinstateOhd();
 						wtq.setAgent(user);

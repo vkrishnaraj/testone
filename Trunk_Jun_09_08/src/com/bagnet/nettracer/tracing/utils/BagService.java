@@ -677,7 +677,10 @@ public class BagService {
 						if(item.getClaimchecknum() != null && item.getClaimchecknum().length() > 0) {
 							item.setClaimchecknum(TracerUtils.removeSpaces(item.getClaimchecknum().toUpperCase()));
 						}
-						if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP, mod_agent)) {
+						boolean hasPPU=(((UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP_LOSTDELAY, mod_agent) && item.getItemtype_ID()==TracingConstants.LOST_DELAY))
+								|| ((UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP_MISSING, mod_agent) && item.getItemtype_ID()==TracingConstants.MISSING_ARTICLES))
+								|| ((UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP_DAMAGE, mod_agent) && item.getItemtype_ID()==TracingConstants.DAMAGED_BAG)));
+						if(hasPPU) {
 							if(item.getStatus()!=null && item.getStatus().getStatus_ID()!=TracingConstants.ITEM_STATUS_PASSENGER_PICKED_UP
 									&& oldItem!=null && oldItem.getStatus()!=null && oldItem.getStatus().getStatus_ID()==TracingConstants.ITEM_STATUS_PASSENGER_PICKED_UP){
 								if(item.getOHD_ID()!=null && !item.getOHD_ID().isEmpty()){
@@ -2107,8 +2110,11 @@ public class BagService {
 				}
 				
 				OhdBMO oBMO = new OhdBMO();
+				boolean hasPPULD=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP_LOSTDELAY, mod_agent);
+				boolean hasPPUMA=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP_MISSING, mod_agent);
+				boolean hasPPUDM=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP_DAMAGE, mod_agent);
 				
-				if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP, mod_agent)) {
+				if(hasPPULD || hasPPUMA || hasPPUDM) {
 					OHD oldohd=null;
 					if(theform.getOhd_id()!=null && !theform.getOhd_id().isEmpty())
 						oldohd=oBMO.getOHDByID(theform.getOhd_id(), null);
@@ -2131,7 +2137,10 @@ public class BagService {
 								Remark rem2=null;
 								int i=1;
 								for(Item item:inc.getItemlist()){
-									if(item.getOHD_ID()!=null && item.getOHD_ID().equals(oDTO.getOHD_ID())){
+									if(item.getOHD_ID()!=null && item.getOHD_ID().equals(oDTO.getOHD_ID())
+											&& ((item.getItemtype_ID()==TracingConstants.LOST_DELAY && hasPPULD)
+											|| (item.getItemtype_ID()==TracingConstants.MISSING_ARTICLES && hasPPUMA)
+											|| (item.getItemtype_ID()==TracingConstants.DAMAGED_BAG && hasPPUDM))){
 										rem2=new Remark();
 										rem2.setRemarktype(TracingConstants.REMARK_REGULAR);
 										rem2.setIncident(inc);
@@ -2498,12 +2507,8 @@ public class BagService {
 
 			acDTO.setModify_time(TracerDateTime.getGMTDate());
 			acDTO.setModify_agent(user);
-			// TODO: FIX THE LINE BELOW TO RESTORE AUDIT_CLAIM FUNCTIONALITY
-//			acDTO.setModify_reason(cform.getMod_claim_reason());
-
 			boolean result = cBMO.insertClaim(cDTO, acDTO, incident_ID);
 			cform.setClaim(cDTO);
-//			cform.setClaim_ID(cDTO.getId());
 			if(!result)
 				return false;
 			else
@@ -2516,35 +2521,14 @@ public class BagService {
 		}
 	}
 
-//	public boolean findClaimByID(long claim_ID, ClaimForm cform, IncidentForm theform) {
-//		try {
-//			
-//			ClaimBMO cBMO = new ClaimBMO();
-//			Claim cDTO = cBMO.findClaimByID(claim_ID);
-//			if(cDTO == null)
-//				return false;
-//			theform.setClaim(cDTO);
-//			return true;
-//		}
-//		catch (Exception e) {
-//			logger.error("unable to find claim due to bean copyproperties error: " + e);
-//			return false;
-//		}
-//	}
-
 	public boolean insertClaimProrate(Set<Claim> cDTO, ClaimProrateForm cpform, HttpSession session, String incident_ID) {
 		try {
 			Agent user = (Agent) session.getAttribute("user");
-			ClaimBMO cBMO = new ClaimBMO(); // init claim pojo or ejb
+			ClaimBMO cBMO = new ClaimBMO();
 			IncidentForm theform = (IncidentForm) session.getAttribute("incidentForm");
 			ClaimProrate cp = new ClaimProrate();
 			BeanUtils.copyProperties(cp, cpform);
 			cp.setProrate_itineraries(new LinkedHashSet(cpform.getItinerarylist()));
-//			if(theform.getClaims() != null) {
-//				// has claim object already, attach prorate to it
-//				Claim tempC = (Claim) theform.getClaim();
-//				BeanUtils.copyProperties(cDTO, tempC);
-//			}
 			
 			if (cDTO != null) {
 				for (Claim c: cDTO) {
@@ -2552,41 +2536,14 @@ public class BagService {
 				}
 			}
 			
-			// TODO: re-enable the claim audit functionality here!! 
-			// AUDIT: copy into audit claim bean
-			
-//			Audit_Claim acDTO = new Audit_Claim();
-//			BeanUtils.copyProperties(acDTO, cDTO);
-
-//			Audit_ClaimProrate a_cp = new Audit_ClaimProrate();
-//			BeanUtils.copyProperties(a_cp, cp);
 			Prorate_Itinerary pi = null;
-//			Audit_Prorate_Itinerary a_pi = null;
 			ArrayList pilist = new ArrayList();
 			if(cp.getProrate_itineraries() != null) {
 				for(int i = 0; i < cp.getPi_list().size(); i++) {
 					pi = (Prorate_Itinerary) cp.getPi_list().get(i);
 					pi.setClaimprorate(cp);
-//					a_pi = new Audit_Prorate_Itinerary();
-//					BeanUtils.copyProperties(a_pi, pi);
-//					a_pi.setAudit_claimprorate(a_cp);
-//					pilist.add(a_pi);
 				}
-//				a_cp.setProrate_itineraries(new LinkedHashSet(pilist));
-			}
-
-//			acDTO.setAudit_claimprorate(a_cp);
-//
-//			acDTO.setModify_time(TracerDateTime.getGMTDate());
-//			acDTO.setModify_agent(user);
-
-//			boolean result = cBMO.insertClaim(cDTO, acDTO, incident_ID);
-//			if(!result)
-//				return false;
-//			else
-//				return true;
-//				
-			
+			}	
 			return FileDAO.saveFile(cDTO.iterator().next().getFile(), false);
 		}
 		catch (Exception e) {

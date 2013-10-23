@@ -70,6 +70,7 @@ public final class OnHandForm extends ValidatorForm {
 	private List taskList = new ArrayList();
 	private List controlList = new ArrayList();
 	private List itinerarylist = new ArrayList();
+	private List existMatchedItemlist = new ArrayList();
 	private String _DATEFORMAT; // current login agent's date format
 	private String _TIMEFORMAT; // current login agent's time format
 	private TimeZone _TIMEZONE; // current login agent's time zone
@@ -80,6 +81,9 @@ public final class OnHandForm extends ValidatorForm {
 	private Boolean earlyBag;
 	private String matched_incident;
 	private String externaldesc;
+	private int existMatchedItemType =0;
+	private Status existDisposalStatus;
+	private int existRemarkSize;
 	
 	// forward log
 	private String forwarded_station;
@@ -1099,4 +1103,29 @@ public final class OnHandForm extends ValidatorForm {
 
 	// NOOP to keep struts happy
 	public void setLateCheckValue(String lateCheckValue) { }
+	
+	public List getExistMatchedItemlist() {
+		return existMatchedItemlist;
+	}
+	public void setExistMatchedItemlist(List existMatchedItemlist) {
+		this.existMatchedItemlist = existMatchedItemlist;
+	}
+	public int getExistMatchedItemType() {
+		return existMatchedItemType;
+	}
+	public void setExistMatchedItemType(int existMatchedItemType) {
+		this.existMatchedItemType = existMatchedItemType;
+	}
+	public Status getExistDisposalStatus() {
+		return existDisposalStatus;
+	}
+	public void setExistDisposalStatus(Status existDisposalStatus) {
+		this.existDisposalStatus = existDisposalStatus;
+	}
+	public int getExistRemarkSize() {
+		return existRemarkSize;
+	}
+	public void setExistRemarkSize(int existRemarkSize) {
+		this.existRemarkSize = existRemarkSize;
+	}
 }

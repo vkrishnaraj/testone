@@ -5,8 +5,6 @@
  */
 package com.bagnet.nettracer.tracing.utils;
 
-import java.sql.Connection;
-import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,12 +25,14 @@ import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.ProactiveNotificationBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHDRequest;
 import com.bagnet.nettracer.tracing.db.OHD_Address;
@@ -1816,5 +1816,54 @@ public class OHDUtils {
 		
 		
 		return null;
+	}
+
+	/**
+	 * Method to fill the form with existing data from the database for the
+	 * purposes of checking for corresponding status and remark requirements
+	 * 
+	 * @param ohd_id - id of ohd to pull to get currently existing information from
+	 * @param theform - the form to be populated
+	 */
+	public static void populateFormWithExistingData(String ohd_id, OnHandForm theform) {
+		OHD ohd=OHDUtils.getOHD(ohd_id);
+		populateFormWithExistingData(ohd,theform);
+	}
+
+	/**
+	 * Method to fill the form with existing data from the database for the
+	 * purposes of checking for corresponding status and remark requirements
+	 * 
+	 * @param ohd - ohd to get currently existing information from
+	 * @param theform - the form to be populated
+	 */
+	public static void populateFormWithExistingData(OHD ohd, OnHandForm theform) {
+		if(ohd!=null){
+			if(ohd.getMatched_incident()!=null && !ohd.getMatched_incident().isEmpty()){
+				Incident inc=IncidentBMO.getIncidentByID(ohd.getMatched_incident(), null);
+				if(inc!=null){
+					if(inc.getItemlist()!=null){
+						theform.setExistMatchedItemlist(new ArrayList(inc.getItemlist()));
+					}
+					
+					if(inc.getItemtype()!=null){
+						theform.setExistMatchedItemType(inc.getItemtype().getItemType_ID());
+					}
+				}
+			}
+			if(ohd.getDisposal_status()!=null){
+				theform.setExistDisposalStatus(ohd.getDisposal_status());
+			} else {
+				theform.setExistDisposalStatus(new Status());
+			}
+
+			if(ohd.getRemarks()!=null){
+				theform.setExistRemarkSize(ohd.getRemarks().size());
+			} else {
+				theform.setExistRemarkSize(1);
+			}
+			
+		}
+		
 	}
 }
