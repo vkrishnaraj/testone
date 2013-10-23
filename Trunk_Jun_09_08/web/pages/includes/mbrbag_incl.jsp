@@ -12,7 +12,6 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Item" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
-<%@ page import="com.bagnet.nettracer.tracing.db.OHD_Photo" %>
 <%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%@ page import="com.bagnet.nettracer.tracing.forms.IncidentForm" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>

@@ -6,15 +6,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested"%>
-<%@ page import="com.bagnet.nettracer.tracing.db.OHD_Photo"%>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent"%>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%@ page import="com.bagnet.nettracer.tracing.forms.OnHandForm"%>
 <%@page import="com.bagnet.nettracer.tracing.db.Station"%>
-<%@page import="com.bagnet.nettracer.tracing.utils.OHDUtils"%>
 <%@page import="com.bagnet.nettracer.tracing.bmo.StationBMO"%>
-<%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
 
 <%@page import="java.util.List"%>
 <%@page import="com.bagnet.nettracer.tracing.db.OHD_Itinerary"%>
