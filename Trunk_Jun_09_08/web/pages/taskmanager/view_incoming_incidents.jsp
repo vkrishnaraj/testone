@@ -352,12 +352,11 @@ function sortIncident(sortIncident) {
             	  				out.print("<br/>");
 	            	  		} else {	            	  		
 	            	  			for (Item item : item_list) {
-	            	  				if (item == null || item.getPosId() == null) {
-		            	  				out.print("<br/>");
-	            	  					continue;
+	            	  				if (item != null && item.getPosId() != null) {
+	            	  					out.print(item.getPosId());
 	            	  				}
-	            	  			
-	            	  				out.print(item.getPosId());
+	            	  				
+	            	  				out.print("<br/>");
 	            	  			}
 	            	  		}
 
