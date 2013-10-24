@@ -28,7 +28,6 @@ public final class EditIssuanceCategoryForm extends ActionForm {
 	
 	private IssuanceCategory category = new IssuanceCategory();
 	private List<IssuanceCategory> itemCategories = new ArrayList<IssuanceCategory>();
-	private long templateId;
 	private List<Template> documentList = new ArrayList<Template>();	
 
 	

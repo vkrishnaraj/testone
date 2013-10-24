@@ -160,7 +160,12 @@
 			document.getElementById("manu_other" + pos).style.visibility = "hidden";
 		}
 	}
-	
+
+	  
+	  function openPreviewWindow3(fileName) {
+		  window.open("customerCommunications.do?preview_document="+fileName, '', 'width=600,height=800,resizable=yes');
+		}
+			
 
   </SCRIPT>
 
@@ -966,6 +971,15 @@
 						value="<bean:message key="issuance.item.button.return" />" >
 					</input></td>
 				<% } %>
+						<td style="text-align:right;">
+							<logic:notEmpty name="issuanceitem" property="document">
+							<a hef="#" onclick="openPreviewWindow3('<bean:write name="issuanceitem" property="document.fileName" />')">
+																<bean:message key="link.preview" />
+							</logic:notEmpty>
+							<logic:empty name="issuanceitem" property="document">
+							&nbsp;
+							</logic:empty>
+						</td>				
           </tr>
           </logic:iterate>
           <tr>
@@ -1040,3 +1054,9 @@
 		
 		anyLossCodeChanges();
 </script>
+	<logic:present name="receiptName" scope="request">
+	    <script language=javascript>
+	    	var fileName = '<%=(String) request.getAttribute("receiptName") %>';
+   			openPreviewWindow3(fileName);
+	    </script>
+    </logic:present>

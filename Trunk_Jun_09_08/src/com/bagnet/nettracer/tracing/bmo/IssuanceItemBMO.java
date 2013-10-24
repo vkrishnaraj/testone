@@ -72,6 +72,7 @@ public class IssuanceItemBMO {
 	 * @param station
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public static List<IssuanceItemQuantity> getQuantifiedItems(Station station) {
 		Session sess = null;
 		try {
@@ -126,6 +127,7 @@ public class IssuanceItemBMO {
 	 * @param status
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public static List<IssuanceItemInventory> getInventoriedItems(Station station, int status) {
 		String queryString = "from IssuanceItemInventory i where i.station.stationcode = :code";
 		boolean hasStatus = (status > 0);
@@ -197,6 +199,7 @@ public class IssuanceItemBMO {
 	 * @param companyCode
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public static List<IssuanceCategory> getItemCategories(String companyCode) {
 		Session sess = null;
 		try {
@@ -223,6 +226,7 @@ public class IssuanceItemBMO {
 	 *
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public static List<Template> getTemplate() {
 		Session sess = null;
 		try {
@@ -275,6 +279,7 @@ public class IssuanceItemBMO {
 	 * @param id
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public static List<AuditIssuanceItemQuantity> getAuditQuantifiedItems(Station station, long id) {
 		String queryString = "from AuditIssuanceItemQuantity q where q.station.stationcode = :code";
 		if (id > 0) {
@@ -312,6 +317,7 @@ public class IssuanceItemBMO {
 	 * @param id
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public static List<AuditIssuanceItemInventory> getAuditInventoriedItems(Station station, long id) {
 		String queryString = "from AuditIssuanceItemInventory i where i.station.stationcode = :code";
 		if (id > 0) {
@@ -541,6 +547,7 @@ public class IssuanceItemBMO {
 	 * @param cat
 	 * @param user
 	 */
+	@SuppressWarnings("unchecked")
 	public static void saveCategory(IssuanceCategory cat, Agent user) {
 		if (cat.getId() == 0) {
 			cat.setCompany(CompanyBMO.getCompany(user.getCompanycode_ID()));

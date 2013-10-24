@@ -300,6 +300,14 @@ public class MBRActionUtils {
 		boolean issueQ = (request.getParameter("issueItem") != null);
 		boolean issueL = (request.getParameter("loanItem") != null);
 		boolean issueT = (request.getParameter("tradeItem") != null);
+		Incident incident = new Incident();//The incident will be coming from the IncidentForm not the database
+		try {
+			// copy into incident bean
+			BeanUtils.copyProperties(incident, theform);			
+		} catch (Exception e) {
+			logger.error("unable to insert incident due to bean copyproperties error: " + e);
+			e.printStackTrace();
+		}
 		if (issueQ || issueL || issueT) {
 			String type = request.getParameter("issuance_type");
 			String quantity = request.getParameter("issuance_quantity");
@@ -315,7 +323,6 @@ public class MBRActionUtils {
 					iss_inc.setIssuanceItemQuantity(qItem);
 					adjustIssuanceLists(request, qItem, null, null);
 					//generate tempalte receipt
-					Incident incident = IncidentBMO.getIncidentByID(theform.getIncident_ID(), HibernateWrapper.getSession().openSession());				
 					DocumentTemplateResult result = generateTemplateReceipt(user, qItem.getIssuanceItem(), incident);
 					if (result.isSuccess()) {
 						Document d = (Document) result.getPayload();
@@ -334,7 +341,6 @@ public class MBRActionUtils {
 					iss_inc.setIssuanceItemInventory(iItem);
 					adjustIssuanceLists(request, null, iItem, null);
 					//generate tempalte receipt					
-					Incident incident = IncidentBMO.getIncidentByID(theform.getIncident_ID(), HibernateWrapper.getSession().openSession());									
 					DocumentTemplateResult result = generateTemplateReceipt(user, iItem.getIssuanceItem(), incident);
 					if (result.isSuccess()) {
 						Document d = (Document) result.getPayload();

@@ -8,12 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.tracing.bmo.IssuanceItemBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -32,7 +30,6 @@ import com.bagnet.nettracer.tracing.utils.UserPermissions;
  */
 public class EditIssuanceCategoryAction extends Action {
 	
-	private static final Logger logger = Logger.getLogger(EditIssuanceCategoryAction.class);
 	
 	/**
 	 * This action runs before loading editIssuanceCategory.do. JSP located at pages/issuance/edit_issuance_category.jsp
@@ -58,8 +55,6 @@ public class EditIssuanceCategoryAction extends Action {
 		if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_GLOBAL_ADMIN, user))
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
 		
-		ActionMessages errors = new ActionMessages();
-
 		EditIssuanceCategoryForm fform = (EditIssuanceCategoryForm) form;
 		
 		// HANDLE ANY PARAMETERS FIRST IN CASE THIS IS AN ACTION ON THE PAGE.
