@@ -74,23 +74,36 @@ public class TemplateAdapterFactory {
 	private void getIncidentInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) throws InsufficientInformationException {
 		if (dto.getIncident() == null) throw new InsufficientInformationException(Incident.class);
 		Incident incident = dto.getIncident();
-		adapter.setIncidentId(incident.getIncident_ID());
-		adapter.setIncidentType(incident.getItemtype().getDescription());
-		
-		Passenger p = incident.getPassenger_list().get(0);
-		adapter.setIncidentFirstName(p.getFirstname());
-		adapter.setIncidentLastName(p.getLastname());
-		
-		Address a = p.getAddress(0);
-		adapter.setIncidentAddress1(a.getAddress1());
-		adapter.setIncidentAddress2(a.getAddress2());
-		adapter.setIncidentCity(a.getCity());
-		adapter.setIncidentState(a.getState());
-		adapter.setIncidentZip(a.getZip());
-		
-		adapter.setIncidentHomePhone(a.getHomephone());
-		adapter.setIncidentBusinessPhone(a.getWorkphone());
-		adapter.setIncidentMobilePhone(a.getMobile());
+		if (incident.getIncident_ID() != null)
+			adapter.setIncidentId(incident.getIncident_ID());			
+		if (incident.getItemtype() != null )
+			adapter.setIncidentType(incident.getItemtype().getDescription());			
+		if (incident.getPassenger_list().size() != 0 ){
+			Passenger p = incident.getPassenger_list().get(0);
+			if (p.getFirstname() != null)
+				adapter.setIncidentFirstName(p.getFirstname());				
+			if (p.getLastname() != null)
+				adapter.setIncidentLastName(p.getLastname());				
+			if (p.getAddress(0) != null){
+				Address a = p.getAddress(0);
+				if (a.getAddress1() != null)
+					adapter.setIncidentAddress1(a.getAddress1());				
+				if (a.getAddress2() != null)
+					adapter.setIncidentAddress2(a.getAddress2());				
+				if (a.getCity() != null)
+					adapter.setIncidentCity(a.getCity());				
+				if (a.getState() != null)
+					adapter.setIncidentState(a.getState());				
+				if (a.getZip() != null)
+					adapter.setIncidentZip(a.getZip());				
+				if (a.getHomephone() != null)
+					adapter.setIncidentHomePhone(a.getHomephone());				
+				if (a.getWorkphone() != null)
+					adapter.setIncidentBusinessPhone(a.getWorkphone());				
+				if (a.getMobile() != null)
+					adapter.setIncidentMobilePhone(a.getMobile());				
+			}			
+		}
 	}
 	
 	private void getClaimInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) throws InsufficientInformationException {
