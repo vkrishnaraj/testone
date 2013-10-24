@@ -63,6 +63,7 @@ public class PropertyBMO {
 	public static final String PROPERTY_NT_CENTRAL_PASSWORD = "nt.central.password";
 
 	public static final String PROPERTY_BAG_LEVEL_LOSS_CODES = "bag.level.loss.codes";
+	public static final String PROPERTY_BAG_LEVEL_LOSS_CODES_ITIN_CHECK = "bag.level.loss.codes.itin.check";
 	
 	public static final String PROPERTY_NT_COMPANY_WEIGHT_UNIT_DEFAULT = "nt.company.weight.unit.default";
 
