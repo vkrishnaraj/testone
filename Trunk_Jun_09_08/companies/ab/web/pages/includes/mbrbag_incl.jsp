@@ -81,7 +81,7 @@
 		  var disValue=document.getElementById("theitem["+index+"].lossCode");
 		  if(disValue!=null && disValue.value!="0"){
 			  var lastCode=0;
-			  <%if(myform.getExistItemlist() !=null){
+			  <%if(myform.getExistItemlist() !=null && myform.getExistItemlist().size()>0){
 	  			int i=0;
 	  			for(Item it:myform.getExistItemlist()){%>
 	  				if(index==<%=i%>){
