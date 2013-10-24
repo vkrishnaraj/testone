@@ -47,7 +47,7 @@
 			  if(disValue!=null && disValue.value!="0"){
 				  var lastCode=0;
 				  <% com.bagnet.nettracer.tracing.db.Status existStatus=myform.getExistIncStatus();
-			  		if(myform.getExistItemlist() !=null && existStatus!=null && existStatus.getStatus_ID()!=TracingConstants.MBR_STATUS_CLOSED){
+			  		if(myform.getExistItemlist() !=null  && myform.getExistItemlist().size()>0  && existStatus!=null && existStatus.getStatus_ID()!=TracingConstants.MBR_STATUS_CLOSED){
 			  			int i=0;
 			  			for(Item it:myform.getExistItemlist()){%>
 			  				if(index==<%=i%>){

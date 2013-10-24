@@ -45,7 +45,7 @@ boolean sameStation=(myform.getIncident_ID()!=null && !myform.getIncident_ID().i
 <%
 boolean lossCodeChange=false;
 if(bagLossCodes){
-	if(myform.getExistItemList()!=null){
+	if(myform.getExistItemList()!=null  && myform.getExistItemList().size()>0 ){
 		List<Item> eIlist=myform.getExistItemList();
 		List<Item> ilist=myform.getItemlist();
 		int i=0;
