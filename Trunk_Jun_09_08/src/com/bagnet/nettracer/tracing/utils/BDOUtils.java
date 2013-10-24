@@ -8,6 +8,7 @@ package com.bagnet.nettracer.tracing.utils;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -33,6 +34,7 @@ import org.hibernate.criterion.Order;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.bmo.exception.StaleStateException;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -49,6 +51,7 @@ import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.Item_BDO;
+import com.bagnet.nettracer.tracing.db.Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHD_Address;
 import com.bagnet.nettracer.tracing.db.OHD_Passenger;
@@ -1549,5 +1552,50 @@ public class BDOUtils {
 			}
 		}
 		return -1;
+	}
+
+	/**
+	 * Method to check the selected fault station against the incident passenger
+	 * itinerary to confirm the selected fault station is in the passenger
+	 * itinerary
+	 * 
+	 * @param theform - theform the collect the necessary information  to determine the fault station is in the passenger Itinerary
+	 */
+	public static boolean checkFaultStationForPaxItin(BDOForm theform) {
+		HashMap<String,String> paxItinMap=new HashMap<String,String>();
+		/**
+		 * Check the properties table to see if the company wants to
+		 * check against Pax Itinerary (0) or Baggage Itinerary (1) or
+		 * neither (-1)
+		 */
+		int itinType=PropertyBMO.getValueAsInt(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES_ITIN_CHECK);
+		boolean inPaxItin=true;
+		if(itinType!=-1){
+			if(theform.getIncident()!=null){
+				for(Itinerary itin:theform.getIncident().getItinerary_list()){
+					if(itin.getItinerarytype()==TracingConstants.PASSENGER_ROUTING){
+						if(paxItinMap.get(itin.getLegfrom())==null){
+							paxItinMap.put(itin.getLegfrom(), "1");
+						}
+						if(paxItinMap.get(itin.getLegto())==null){
+							paxItinMap.put(itin.getLegto(), "1");
+						}
+					}
+				}
+			}
+			Item item=null;
+			for(Object obj:theform.getItemlist()){
+				item=(Item) obj;
+				if(item.getFaultStation()!=null && item.getFaultStation().getStationcode()!=null
+						&& item.getFaultStation().getStationcode().length()>0){
+					if(paxItinMap.get(item.getFaultStation().getStationcode())==null){
+						inPaxItin=false;
+						break;
+					}
+				}
+			}
+		}
+		return inPaxItin;
+		
 	}
 }

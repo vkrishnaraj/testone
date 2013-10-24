@@ -760,33 +760,41 @@ public class MBRActionUtils {
 				}
 			} else {
 				HashMap<String,String> paxItinMap=new HashMap<String,String>();
-				for(Itinerary itin:theform.getItinerarylist()){
-					if(itin.getItinerarytype()==TracingConstants.PASSENGER_ROUTING){
-						if(paxItinMap.get(itin.getLegfrom())==null){
-							paxItinMap.put(itin.getLegfrom(), "1");
-						}
-						if(paxItinMap.get(itin.getLegto())==null){
-							paxItinMap.put(itin.getLegto(), "1");
-						}
-					}
-				}
-				boolean inPaxItin=false;
-				for(Item it:theform.getItemlist()){
-					if(it.getFaultStation()!=null && it.getFaultStation().getStationcode()!=null && it.getFaultStation().getStationcode().length()>0){
-						if(paxItinMap.get(it.getFaultStation().getStationcode())!=null){
-							inPaxItin=true;
-							break;
-						}
-					}
-				}
-				if(!inPaxItin){
-					error = new ActionMessage("error.fault.pax.itin");
-					if (error != null) {
-						if (error.getKey().length() > 0) {
-							errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				/**
+				 * Check the properties table to see if the company wants to
+				 * check against Pax Itinerary (0) or Baggage Itinerary (1) or
+				 * neither (-1)
+				 */
+				int itinType=PropertyBMO.getValueAsInt(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES_ITIN_CHECK);
+				if(itinType!=-1){
+					for(Itinerary itin:theform.getItinerarylist()){
+						if(itin.getItinerarytype()==itinType){
+							if(paxItinMap.get(itin.getLegfrom())==null){
+								paxItinMap.put(itin.getLegfrom(), "1");
+							}
+							if(paxItinMap.get(itin.getLegto())==null){
+								paxItinMap.put(itin.getLegto(), "1");
+							}
 						}
 					}
-					return true;
+					boolean inPaxItin=true;
+					for(Item it:theform.getItemlist()){
+						if(it.getFaultStation()!=null && it.getFaultStation().getStationcode()!=null && it.getFaultStation().getStationcode().length()>0){
+							if(paxItinMap.get(it.getFaultStation().getStationcode())==null){
+								inPaxItin=false;
+								break;
+							}
+						}
+					}
+					if(!inPaxItin){
+						error = new ActionMessage("error.fault.pax.itin");
+						if (error != null) {
+							if (error.getKey().length() > 0) {
+								errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+							}
+						}
+						return true;
+					}
 				}
 			}
 			theform.getStatus().setStatus_ID(TracingConstants.MBR_STATUS_CLOSED);

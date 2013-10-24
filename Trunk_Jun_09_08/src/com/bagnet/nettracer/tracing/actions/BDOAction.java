@@ -286,6 +286,19 @@ public class BDOAction extends Action {
 					return (mapping.findForward(TracingConstants.BDO_MAIN));
 				}
 			}
+			
+			boolean lossCodesBagLevel=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL, user);
+			if(lossCodesBagLevel){
+				if(!BDOUtils.checkFaultStationForPaxItin(theform)){
+					ActionMessage error = new ActionMessage(
+							"error.fault.pax.itin");
+					messages.add(ActionMessages.GLOBAL_MESSAGE, error);
+					saveMessages(request, messages);
+					return (mapping.findForward(TracingConstants.BDO_MAIN));
+				}
+			}
+
+			
 
 			// do insert
 			BDO bdo = null;
