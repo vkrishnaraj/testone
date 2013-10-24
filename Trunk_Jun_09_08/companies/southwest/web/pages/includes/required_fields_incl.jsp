@@ -127,12 +127,12 @@
 						      	itinElementName=itinElement.name;
 						      	
 				      			if(typeof itinElementName != "undefined" && itinElementName != null && itinElementName.indexOf("].legfrom") != -1){
-				      				if(itinElement.value==faultStationCode){
+				      				if(itinElement.value.toUpperCase()==faultStationCode){
 				      					hasPaxItin=true;
 				      				}
 				      			}
 				      			if(typeof itinElementName != "undefined" && itinElementName != null && itinElementName.indexOf("].legto") != -1){
-				      				if(itinElement.value==faultStationCode){
+				      				if(itinElement.value.toUpperCase()==faultStationCode){
 				      					hasPaxItin=true;
 				      				}
 				      			}
