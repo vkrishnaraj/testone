@@ -28,13 +28,23 @@ import aero.nettracer.web.utility.SeleniumTestBrowserDefault;
 @RunWith(Suite.class)
 @SuiteClasses({
 	// AZUL
-	AD_Login.class,Def_Logout.class, AD_LoginFailure.class, 
-	AD_Login.class, AD_VerifyText_TaskManager.class,
-	AD_CreateLD_VerifyRequiredFields.class, AD_CloseLD_VerifyRequiredFields.class, AD_InboxMessage.class,
-	AD_CreateDam_VerifyRequiredFields.class, AD_CloseDam_VerifyRequiredFields.class,
-	AD_CreatePilf_VerifyRequiredFields.class, AD_ClosePilf_VerifyRequiredFields.class,
-	AD_CreateOHD_VerifyRequiredFields.class, AD_ForwardOHD.class, AD_ReceiveOHD.class,
-	AD_Security.class,AD_Audit.class	
+	AD_Login.class
+	, Def_Logout.class
+	, AD_LoginFailure.class
+	, AD_Login.class
+	, AD_VerifyText_TaskManager.class
+	, AD_CreateLD_VerifyRequiredFields.class
+	, AD_CloseLD_VerifyRequiredFields.class
+	, AD_InboxMessage.class
+	, AD_CreateDam_VerifyRequiredFields.class
+	, AD_CloseDam_VerifyRequiredFields.class
+	, AD_CreatePilf_VerifyRequiredFields.class
+	, AD_ClosePilf_VerifyRequiredFields.class
+	, AD_CreateOHD_VerifyRequiredFields.class
+	, AD_ForwardOHD.class
+	, AD_ReceiveOHD.class
+	, AD_Security.class
+	, AD_Audit.class	
 	})
 public class TestAzul { 
 	
@@ -42,12 +52,12 @@ public class TestAzul {
 	
 	@BeforeClass
 	public static void oneTimeSetUp() {
-		SeleniumTestBrowserDefault.initBrowser();
+		SeleniumTestBrowserDefault.initBrowser(true);
 	}
 	
 	@AfterClass
 	public static void oneTimeTearDown() {
-		SeleniumTestBrowserDefault.stopBrowser("AZUL");
+		SeleniumTestBrowserDefault.stopBrowser("AZUL", true);
 	}
 
 	

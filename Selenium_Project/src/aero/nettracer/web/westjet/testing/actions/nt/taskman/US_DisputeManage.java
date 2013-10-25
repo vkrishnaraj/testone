@@ -23,7 +23,7 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{ 
-			selenium.click("id=menucol_9.2");
+			clickMenu("menucol_9.2");
 			waitForPageToLoadImproved();
 		}
 		else
@@ -101,10 +101,10 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.click("id=menucol_2.1");
-		waitForPageToLoadImproved();
-		selenium.click("name=skip_prepopulate");
-		waitForPageToLoadImproved();
+			clickMenu("menucol_2.1");
+			waitForPageToLoadImproved();
+			selenium.click("name=skip_prepopulate");
+			waitForPageToLoadImproved();
 		}
 		else
 		{
@@ -158,7 +158,7 @@ public class US_DisputeManage extends LoginUtil {
 		{
 			String incident_id = selenium.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
 			Settings.DAMAGE_ID_WS = incident_id;
-			selenium.click("id=menucol_2.3");
+			clickMenu("menucol_2.3");
 			waitForPageToLoadImproved();
 		}
 		else
@@ -201,7 +201,6 @@ public class US_DisputeManage extends LoginUtil {
 		selenium.select("name=loss_code", "label=80- Damage");
 		selenium.chooseOkOnNextConfirmation();
 		selenium.click("name=doclose");
-		System.out.println(selenium.getConfirmation());
 		waitForPageToLoadImproved();
 		}
 		else
@@ -212,8 +211,8 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.click("id=menucol_2.3");
-		waitForPageToLoadImproved();
+			clickMenu("menucol_2.3");
+			waitForPageToLoadImproved();
 		}
 		else
 		{
@@ -318,7 +317,7 @@ public class US_DisputeManage extends LoginUtil {
 		//Manage Disputes?
 		if(checkNoErrorPage())
 		{
-			selenium.click("id=menucol_0.25");
+			clickMenu("menucol_0.25");
 			waitForPageToLoadImproved();
 		}
 		else
@@ -326,17 +325,6 @@ public class US_DisputeManage extends LoginUtil {
 			System.out.println("DisputeManageError: Failed Attempting to save Fault");
 			return;
 		}
-		
-		/*if(checkNoErrorPage())
-		{
-		selenium.click("xpath=(//a[contains(text(),'Manage Fault Dispute')])[2]");
-		waitForPageToLoadImproved();
-		}
-		else
-		{
-			System.out.println("DisputeManageError: Failed after logging in");
-			return;
-		}*/
 		
 		if(checkNoErrorPage())
 		{
@@ -353,9 +341,9 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.select("name=dispute_type", "label=Station Only Disputes");
-		selenium.click("name=search");
-		waitForPageToLoadImproved();
+			selenium.select("name=dispute_type", "label=Station Only Disputes");
+			selenium.click("name=search");
+			waitForPageToLoadImproved();
 		}
 		else
 		{
@@ -365,9 +353,9 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.select("name=dispute_type", "label=Code and Station Disputes");
-		selenium.click("name=search");
-		waitForPageToLoadImproved();
+			selenium.select("name=dispute_type", "label=Code and Station Disputes");
+			selenium.click("name=search");
+			waitForPageToLoadImproved();
 		}
 		else
 		{
@@ -375,44 +363,10 @@ public class US_DisputeManage extends LoginUtil {
 			return;
 		}
 		
-//		if(checkNoErrorPage()) //COMMENTED FOR ERROR PURPOSES. MAY NEED LATER
-//		{
-//		selenium.type("name=incident_ID", Settings.INCIDENT_ID_WS);
-//		selenium.click("name=getnext");
-//		waitForPageToLoadImproved();
-//		}
-//		else
-//		{
-//			System.out.println("DisputeManageError: Failed after searching for Code and Station Disputes");
-//			return;
-//		}
-//		
-//		if(checkNoErrorPage())
-//		{
-//		selenium.click("xpath=(//input[@id='button'])[3]");
-//		waitForPageToLoadImproved();
-//		}
-//		else
-//		{
-//			System.out.println("DisputeManageError: Failed after getting the next");
-//			return;
-//		}
-//		
-//		if(checkNoErrorPage())
-//		{
-//		selenium.click("id=button");
-//		waitForPageToLoadImproved();
-//		}
-//		else
-//		{
-//			System.out.println("DisputeManageError: Failed after Modifying the Dispute");
-//			return;
-//		}
-		
 		if(checkNoErrorPage())
 		{
-		selenium.click("link=[ Logout ]");
-		waitForPageToLoadImproved();
+			selenium.click("link=[ Logout ]");
+			waitForPageToLoadImproved();
 		}
 		else
 		{
@@ -432,8 +386,8 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.click("id=menucol_9.2");
-		waitForPageToLoadImproved();
+			clickMenu("menucol_9.2");
+			waitForPageToLoadImproved();
 		}
 		else
 		{
@@ -443,8 +397,8 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.click("link=3");
-		waitForPageToLoadImproved();
+			selenium.click("link=3");
+			waitForPageToLoadImproved();
 		}
 		else
 		{
@@ -454,8 +408,8 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.click("//a[contains(@href, 'createGroup.do?companyCode=WS')]");
-		waitForPageToLoadImproved();
+			selenium.click("//a[contains(@href, 'createGroup.do?companyCode=WS')]");
+			waitForPageToLoadImproved();
 		}
 		else
 		{
@@ -465,8 +419,8 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.click("//a[contains(@href, 'componentAdmin.do?groupId=151')]");
-		waitForPageToLoadImproved();
+			selenium.click("//a[contains(@href, 'componentAdmin.do?groupId=151')]");
+			waitForPageToLoadImproved();
 		}
 		else
 		{
@@ -476,10 +430,10 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.uncheck("name=700");
-		selenium.uncheck("name=701");
-		selenium.click("name=save");
-		waitForPageToLoadImproved();
+			selenium.uncheck("name=700");
+			selenium.uncheck("name=701");
+			selenium.click("name=save");
+			waitForPageToLoadImproved();
 		}
 		else
 		{
@@ -489,8 +443,8 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.click("link=[ Logout ]");
-		waitForPageToLoadImproved();
+			selenium.click("link=[ Logout ]");
+			waitForPageToLoadImproved();
 		}
 		else
 		{

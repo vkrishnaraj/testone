@@ -10,7 +10,7 @@ public class LF_BoxCount extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testBoxCount() {
-		selenium.click("id=menucol_2.5");
+		clickMenu("menucol_2.5");
 		waitForPageToLoadImproved();
 		
 		if(checkNoErrorPage())

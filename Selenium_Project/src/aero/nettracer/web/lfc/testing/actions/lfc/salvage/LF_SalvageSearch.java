@@ -11,8 +11,8 @@ public class LF_SalvageSearch extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testCreateSalvages() {
-		
-		selenium.click("//a[contains(@href, 'lf_salvage.do?createNew=1')]");
+
+		clickMenu("menucol_4.1");
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
@@ -26,7 +26,7 @@ public class LF_SalvageSearch extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("The salvage was successfully saved."));
 			LF_SalvageSearch.OPEN_SALVAGE_ID = selenium.getValue("//input[@id='salvageId']");
-			selenium.click("//a[contains(@href, 'lf_salvage.do?createNew=1')]");
+			clickMenu("menucol_4.1");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LFSS: Failed to save the open salvage.");
@@ -49,7 +49,7 @@ public class LF_SalvageSearch extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testSalvageSearchPage() {
-		selenium.click("//a[contains(@href, 'lf_search_salvage.do?clear=1')]");
+		clickMenu("menucol_4.2");
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
@@ -73,7 +73,7 @@ public class LF_SalvageSearch extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isElementPresent("//a[contains(@href, 'lf_salvage.do?id=" + LF_SalvageSearch.OPEN_SALVAGE_ID + "')]"));
+			verifyTrue(isElementPresent("//a[contains(@href, 'lf_salvage.do?id=" + LF_SalvageSearch.OPEN_SALVAGE_ID + "')]"));
 			selenium.select("//select[@id='salvageStatus']", "label=Open");
 			selenium.click("//input[@id='button']");
 			waitForPageToLoadImproved();
@@ -83,7 +83,7 @@ public class LF_SalvageSearch extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isElementPresent("//a[contains(@href, 'lf_salvage.do?id=" + LF_SalvageSearch.OPEN_SALVAGE_ID + "')]"));
+			verifyTrue(isElementPresent("//a[contains(@href, 'lf_salvage.do?id=" + LF_SalvageSearch.OPEN_SALVAGE_ID + "')]"));
 			selenium.click("//img[@id='calendar']");
 			selenium.click("//div[@id='maincontent']/table/tbody/tr[2]/td/input[2]");
 			selenium.click("//div[@id='calstyle']/table/tbody/tr/td/center/table[2]/tbody/tr[8]/td/a");
@@ -96,7 +96,7 @@ public class LF_SalvageSearch extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isElementPresent("//a[contains(@href, 'lf_salvage.do?id=" + LF_SalvageSearch.OPEN_SALVAGE_ID + "')]"));
+			verifyTrue(isElementPresent("//a[contains(@href, 'lf_salvage.do?id=" + LF_SalvageSearch.OPEN_SALVAGE_ID + "')]"));
 			selenium.type("//input[@id='startTime']", "");
 			selenium.select("//select[@id='salvageStatus']", "label=Closed");
 			selenium.click("//input[@id='button']");
@@ -107,7 +107,7 @@ public class LF_SalvageSearch extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isElementPresent("//a[contains(@href, 'lf_salvage.do?id=" + LF_SalvageSearch.CLOSED_SALVAGE_ID + "')]"));
+			verifyTrue(isElementPresent("//a[contains(@href, 'lf_salvage.do?id=" + LF_SalvageSearch.CLOSED_SALVAGE_ID + "')]"));
 		} else {
 			System.out.println("LFSS: an error occurred when trying to search for closed salvages.");
 			return;

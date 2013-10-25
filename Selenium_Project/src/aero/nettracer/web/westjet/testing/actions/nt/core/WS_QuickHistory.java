@@ -9,8 +9,8 @@ public class WS_QuickHistory extends LoginUtil {
 	
 	@Test
 	public void testLogin() throws Exception {
-		
-		selenium.click("id=menucol_1.4");
+
+		clickMenu("menucol_1.4");
 		waitForPageToLoadImproved();
 		
 		if(checkNoErrorPage())
@@ -29,7 +29,7 @@ public class WS_QuickHistory extends LoginUtil {
 		{
 			selenium.click("name=saveButton");
 			waitForPageToLoadImproved();
-			selenium.click("id=menucol_2.3");
+			clickMenu("menucol_2.3");
 			waitForPageToLoadImproved();
 		}
 		else
@@ -50,22 +50,11 @@ public class WS_QuickHistory extends LoginUtil {
 			return;
 		}
 		
-//		if(checkNoErrorPage())
-//		{
-//			selenium.click("name=saveButton");
-//			waitForPageToLoadImproved();
-//		}
-//		else
-//		{
-//			System.out.println("QuickHistoryError: Failed after saving a delayed item and/or view Damaged items");
-//			return;
-//		}
-		
 		if(checkNoErrorPage())
 		{
 			selenium.click("name=saveButton");
 			waitForPageToLoadImproved();
-			selenium.click("id=menucol_3.3");
+			clickMenu("menucol_3.3");
 			waitForPageToLoadImproved();
 		}
 		else
@@ -86,22 +75,11 @@ public class WS_QuickHistory extends LoginUtil {
 			return;
 		}
 		
-//		if(checkNoErrorPage())
-//		{
-//			selenium.click("xpath=(//a[contains(@href, 'searchIncident.do?incident=')])[1]");
-//			waitForPageToLoadImproved();
-//		}
-//		else
-//		{
-//			System.out.println("QuickHistoryError: Failed after saving a delayed item and/or view Damaged items");
-//			return;
-//		}
-		
 		if(checkNoErrorPage())
 		{
 			selenium.click("name=saveButton");
 			waitForPageToLoadImproved();
-			selenium.click("id=menucol_4.4");
+			clickMenu("menucol_4.4");
 			waitForPageToLoadImproved();
 		}
 		else
@@ -155,7 +133,7 @@ public class WS_QuickHistory extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-			selenium.click("id=menucol_5.3");
+			clickMenu("menucol_5.3");
 			waitForPageToLoadImproved();
 		}
 		else
@@ -199,7 +177,7 @@ public class WS_QuickHistory extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-			selenium.click("id=menucol_5.3");
+			clickMenu("menucol_5.3");
 			waitForPageToLoadImproved();
 		}
 		else
@@ -208,43 +186,9 @@ public class WS_QuickHistory extends LoginUtil {
 			return;
 		}
 		
-//		if(checkNoErrorPage())
-//		{	
-//			selenium.select("name=report_type", "label=Lost");
-//			selenium.click("id=button");
-//			waitForPageToLoadImproved();
-//		}
-//		else
-//		{
-//			System.out.println("QuickHistoryError: Failed after viewing found/lost items - 2");
-//			return;
-//		}
-//		
-//		if(checkNoErrorPage())
-//		{
-//			selenium.click("xpath=(//a[contains(@href, 'addFound.do?file_ref_number=')])[1]");
-//			waitForPageToLoadImproved();
-//		}
-//		else
-//		{
-//			System.out.println("QuickHistoryError: Failed after searching found/lost items - 2");
-//			return;
-//		}
-//		
-//		if(checkNoErrorPage())
-//		{
-//			selenium.click("name=save");
-//			waitForPageToLoadImproved();	
-//		}
-//		else
-//		{
-//			System.out.println("QuickHistoryError: Failed after loading a lost item");
-//			return;
-//		}
-		
 		if(checkNoErrorPage())
 		{
-			selenium.click("id=menucol_8.2");
+			clickMenu("menucol_8.2");
 			waitForPageToLoadImproved();
 		}
 		else
@@ -266,10 +210,8 @@ public class WS_QuickHistory extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-//			System.out.println("*** WE ARE STOPPED ***");
-			Thread.sleep(200000);
+			Thread.sleep(5000);
 			selenium.click("//div[@id='maincontent']/table/tbody/tr[2]/td[1]/a");
-//			selenium.click("link=29");
 			waitForPageToLoadImproved();
 		}
 		else

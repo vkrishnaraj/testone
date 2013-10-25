@@ -12,10 +12,12 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 	protected static final String PASSPORT_NUMBER = "1234567890";
 	protected static final String EXPEDITE_TAG_NUM = "012345678912";
 	protected static String TODAY;
+	protected static String TODAY_SIX_DIGIT;
 	
 	// set up the current date for use throughout the tests
 	static {
 		TODAY = new SimpleDateFormat("MM/dd/yyyy").format(new Date(System.currentTimeMillis()));
+		TODAY_SIX_DIGIT = new SimpleDateFormat("MMddyy").format(new Date(System.currentTimeMillis()));
 	}
 	
 	protected static final String INCIDENT_TYPE_LOSTDELAY = "Lost/Delayed";
@@ -28,7 +30,7 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 	protected boolean navigateToPermissionsPage() {
 		boolean success = false;
 		selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
-		waitForPageToLoadImproved();
+		waitForPageToLoadImproved(1500, false);
 		
 		selenium.select("//select[@name='companyCode']", "label=Owens Group");
 		selenium.type("//div[@id='mainlogin']/form/table/tbody/tr[4]/td[2]/input", Settings.USERNAME_OGADMIN);
@@ -37,7 +39,7 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 		waitForPageToLoadImproved();		
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
-			selenium.click("//a[contains(text(),'Maintain Companies')]");
+			clickMenu("menucol_9.2");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				selenium.type("//input[@name='companySearchName']", "wn");
@@ -71,7 +73,7 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 	
 	protected boolean navigateToIncidentAuditTrail() {
 		boolean success = false;
-		selenium.click("//a[contains(@href, 'audit.do')]");
+		clickMenu("menucol_9.12");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
@@ -115,7 +117,7 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 			return;
 		}
 		
-		while (selenium.isElementPresent("//a[contains(text(),'Next >')]")) {
+		while (isElementPresent("//a[contains(text(),'Next >')]")) {
 			selenium.click("//a[contains(text(),'Next >')]");
 			waitForPageToLoadImproved();
 		}
@@ -123,7 +125,7 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 		String element = "xpath=(//input[@name='" + id + "'])";
 		int highestAuditItemIndex = 0;
 		for (int i = 1;;++i) {
-			if (selenium.isElementPresent(element + "[" + i + "]")) {
+			if (isElementPresent(element + "[" + i + "]")) {
 				continue;
 			} else {
 				highestAuditItemIndex = i - 1;
@@ -151,7 +153,7 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 	protected boolean navigateToIncident(String incidentType) {
 		boolean success = false;
 		try {
-			selenium.click("//a[contains(@href, 'searchIncident.do?ld=1')]");
+			clickMenu("menucol_1.4");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
@@ -177,7 +179,7 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 	
 	protected boolean navigateToOnhand() {
 		boolean success = false;
-		selenium.click("//a[contains(@href, 'searchOnHand.do')]");
+		clickMenu("menucol_4.4");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
@@ -259,7 +261,7 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 	}
 	
 	protected void createIncident(boolean forTest) {
-		selenium.click("//a[@id='menucol_1.1']");
+		clickMenu("menucol_1.1");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
@@ -340,12 +342,12 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 	}
 	
 	private void fillOptionalFields() {
-		verifyTrue(selenium.isElementPresent("name=passenger[0].decriptedDriversLicense"));
-		verifyTrue(selenium.isElementPresent("name=passenger[0].dlstate"));
-		verifyTrue(selenium.isElementPresent("name=passenger[0].driversLicenseProvince"));
-		verifyTrue(selenium.isElementPresent("name=passenger[0].driversLicenseCountry"));
-		verifyTrue(selenium.isElementPresent("name=passenger[0].decryptedPassportNumber"));
-		verifyTrue(selenium.isElementPresent("name=passenger[0].passportIssuer"));
+		verifyTrue(isElementPresent("name=passenger[0].decriptedDriversLicense"));
+		verifyTrue(isElementPresent("name=passenger[0].dlstate"));
+		verifyTrue(isElementPresent("name=passenger[0].driversLicenseProvince"));
+		verifyTrue(isElementPresent("name=passenger[0].driversLicenseCountry"));
+		verifyTrue(isElementPresent("name=passenger[0].decryptedPassportNumber"));
+		verifyTrue(isElementPresent("name=passenger[0].passportIssuer"));
 		selenium.type("name=passenger[0].decriptedDriversLicense", WN_SeleniumTest.DRIVERS_LICENSE);
 		selenium.select("name=passenger[0].dlstate", "label=Georgia");
 		verifyFalse(selenium.isEditable("name=passenger[0].driversLicenseProvince"));

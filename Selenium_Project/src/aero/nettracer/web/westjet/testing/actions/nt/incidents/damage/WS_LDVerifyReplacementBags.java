@@ -9,8 +9,7 @@ public class WS_LDVerifyReplacementBags extends LoginUtil {
 
 	@Test
 	public void testRonKits() throws Exception {
-		selenium.click("//ul[@id='menubuilder2']/li/a");
-//		selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
+		clickMenu("menucol_2.1");
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
@@ -23,7 +22,7 @@ public class WS_LDVerifyReplacementBags extends LoginUtil {
 		
 		if (checkNoErrorPage()) {
 			verifyFalse(selenium.isTextPresent("Tradeout Issued"));
-			verifyFalse(selenium.isElementPresent("//select[@id='replacementBagIssued']"));
+			verifyFalse(isElementPresent("//select[@id='replacementBagIssued']"));
 			selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
 			waitForPageToLoadImproved();
 		} else {
@@ -39,7 +38,7 @@ public class WS_LDVerifyReplacementBags extends LoginUtil {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.click("//ul[@id='menubuilder9']/li[2]/a");
+			clickMenu("menucol_9.2");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LDVRK: Failed to log in as ogadmin.");
@@ -95,7 +94,7 @@ public class WS_LDVerifyReplacementBags extends LoginUtil {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.click("//ul[@id='menubuilder2']/li/a");
+			clickMenu("menucol_2.1");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LDVRK: Failed on log back in after setting the issue replacement bag permission.");
@@ -112,7 +111,7 @@ public class WS_LDVerifyReplacementBags extends LoginUtil {
 	
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Tradeout Issued"));
-			verifyTrue(selenium.isElementPresent("//select[@id='replacementBagIssued']"));
+			verifyTrue(isElementPresent("//select[@id='replacementBagIssued']"));
 			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr/td[4]/input", "444444");
 
 			selenium.type("name=passenger[0].lastname", "Test");
@@ -149,7 +148,7 @@ public class WS_LDVerifyReplacementBags extends LoginUtil {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isElementPresent("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a"));
+			verifyTrue(isElementPresent("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a"));
 		    selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
 	    	waitForPageToLoadImproved();
 		} else {
@@ -174,7 +173,7 @@ public class WS_LDVerifyReplacementBags extends LoginUtil {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.click("//ul[@id='menubuilder9']/li[2]/a");
+			clickMenu("menucol_9.2");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LDVRK: An error occurred while attempting to load back in as ogadmin.");

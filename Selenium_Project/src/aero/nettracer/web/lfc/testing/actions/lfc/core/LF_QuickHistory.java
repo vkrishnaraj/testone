@@ -11,7 +11,7 @@ public class LF_QuickHistory extends DefaultSeleneseTestCase {
 	@Test
 	public void testQuickHistory() {
 
-		selenium.click("id=menucol_2.2");
+		clickMenu("menucol_2.2");
 		waitForPageToLoadImproved();
 		
 		if(checkNoErrorPage())
@@ -40,7 +40,7 @@ public class LF_QuickHistory extends DefaultSeleneseTestCase {
 		
 		if(checkNoErrorPage())
 		{
-			selenium.click("id=menucol_2.4");
+			clickMenu("menucol_2.4");
 			waitForPageToLoadImproved();
 		}
 		else

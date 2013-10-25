@@ -9,8 +9,7 @@ public class WS_TestWarehouse extends LoginUtil {
 
 	@Test
 	public void testWarehouseDates() throws Exception {
-		goToTaskManager();
-		selenium.click("id=menucol_4.1");
+		clickMenu("menucol_4.1");
 		waitForPageToLoadImproved();
 		selenium.click("name=skip_prepopulate");
 		waitForPageToLoadImproved();
@@ -29,7 +28,7 @@ public class WS_TestWarehouse extends LoginUtil {
 			selenium.click("link=[ Logout ]");
 			waitForPageToLoadImproved();
 			loginOGAdminProcedure();
-			selenium.click("id=menucol_9.2");
+			clickMenu("menucol_9.2");
 			waitForPageToLoadImproved();
 			selenium.type("name=companySearchName", "WS");
 			selenium.click("id=button");
@@ -38,9 +37,7 @@ public class WS_TestWarehouse extends LoginUtil {
 			waitForPageToLoadImproved();
 			selenium.click("xpath=(//a[contains(text(),'Maintain')])[20]");
 			waitForPageToLoadImproved();
-//			if(selenium.getValue("name=704").toString().equals("off")){
-				selenium.click("name=704");
-//			}
+			selenium.click("name=704");
 			selenium.click("name=save");
 			waitForPageToLoadImproved();
 		}
@@ -56,7 +53,7 @@ public class WS_TestWarehouse extends LoginUtil {
 			selenium.click("link=[ Logout ]");
 			waitForPageToLoadImproved();
 			loginAdminProcedure();
-			selenium.click("id=menucol_4.1");
+			clickMenu("menucol_4.1");
 			waitForPageToLoadImproved();
 			selenium.click("name=skip_prepopulate");
 			waitForPageToLoadImproved();
@@ -108,7 +105,7 @@ public class WS_TestWarehouse extends LoginUtil {
 			selenium.click("link=[ Logout ]");
 			waitForPageToLoadImproved();
 			loginOGAdminProcedure();
-			selenium.click("id=menucol_9.2");
+			clickMenu("menucol_9.2");
 			waitForPageToLoadImproved();
 			selenium.type("name=companySearchName", "WS");
 			selenium.click("id=button");

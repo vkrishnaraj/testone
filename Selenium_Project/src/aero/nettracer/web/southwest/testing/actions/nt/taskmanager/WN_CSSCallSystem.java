@@ -198,7 +198,7 @@ public class WN_CSSCallSystem extends WN_SeleniumTest {
 		
 		if (checkNoErrorPage()) {
 			next_incident = selenium.getText("name=incident_ID");
-			selenium.click("id=menucol_1.4");
+			clickMenu("menucol_1.4");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("!!!!!!!!!!!!!!!! CSSRemark 1");
@@ -214,7 +214,7 @@ public class WN_CSSCallSystem extends WN_SeleniumTest {
 		
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent(remark));
-			selenium.click("id=menucol_1.4");
+			clickMenu("menucol_1.4");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("!!!!!!!!!!!!!!!! CSSRemark 4");

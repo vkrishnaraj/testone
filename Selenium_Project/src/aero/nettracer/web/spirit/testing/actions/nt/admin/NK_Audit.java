@@ -8,7 +8,7 @@ import aero.nettracer.web.utility.Settings;
 public class NK_Audit extends DefaultSeleneseTestCase{
 	@Test
 	public void testBasicAuditLoad(){
-		selenium.click("id=menucol_9.12");
+		clickMenu("menucol_9.12");
 		waitForPageToLoadImproved();
 		selenium.click("//td[@id='navmenucell']/div/dl/dd[3]/a/span[2]");
 		waitForPageToLoadImproved();

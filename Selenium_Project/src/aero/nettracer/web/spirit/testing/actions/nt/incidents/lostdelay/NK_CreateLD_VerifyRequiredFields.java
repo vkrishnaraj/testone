@@ -1,6 +1,8 @@
 package aero.nettracer.web.spirit.testing.actions.nt.incidents.lostdelay;
 
 import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 
 import aero.nettracer.web.utility.DefaultSeleneseTestCase;
 import aero.nettracer.web.utility.Settings;
@@ -9,8 +11,7 @@ public class NK_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 
 	@Test
 	public void testVerifyText() throws Exception {
-		goToTaskManager();
-		selenium.click("id=menucol_1.1");
+		clickMenu("menucol_1.1");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
@@ -102,13 +103,14 @@ public class NK_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	public void testPressEnterInRemarksField() {
 		String locator = "//textarea[@id='remark[0]']";
 		verifyEquals("1500", selenium.getValue("//input[@id='remark[0].counter']"));
-		typeString(locator, "Test line");
-		selenium.focus(locator);
-		selenium.setCursorPosition(locator, String.valueOf(selenium.getValue(locator).length()));
-		selenium.keyDown(locator, "\\13");
-		selenium.keyDown(locator, "\\13");
-		selenium.keyDown(locator, "\\13");
-		verifyEquals("1487", selenium.getValue("//input[@id='remark[0].counter']"));
+		driver.findElement(By.id("remark[0]")).sendKeys("Test line" + Keys.ENTER + Keys.ENTER + Keys.ENTER);
+//		typeString(locator, "Test line");
+//		selenium.focus(locator);
+//		selenium.setCursorPosition(locator, String.valueOf(selenium.getValue(locator).length()));
+//		selenium.keyDown(locator, "\\13");
+//		selenium.keyDown(locator, "\\13");
+//		selenium.keyDown(locator, "\\13");
+		verifyEquals("1485", selenium.getValue("//input[@id='remark[0].counter']"));
 		selenium.click("name=saveButton");
 		waitForPageToLoadImproved();
 		selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
@@ -116,19 +118,19 @@ public class NK_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 
 	}
 	
-	private void typeString(String locator, String string) {
-		char[] chars = string.toCharArray();
-		StringBuffer sb = new StringBuffer(selenium.getText(locator));
-		selenium.setCursorPosition(locator, String.valueOf(selenium.getValue(locator).length()));
-		for (int i = 0; i < chars.length; i++) {
-			char aChar = chars[i];
-			String key = Character.toString(aChar);
-			sb.append(aChar);
-			selenium.keyDown(locator, key);
-			selenium.type(locator, sb.toString());
-			selenium.keyPress(locator, key);
-			selenium.keyUp(locator, key);
-		}
-	}
+//	private void typeString(String locator, String string) {
+//		char[] chars = string.toCharArray();
+//		StringBuffer sb = new StringBuffer(selenium.getText(locator));
+//		selenium.setCursorPosition(locator, String.valueOf(selenium.getValue(locator).length()));
+//		for (int i = 0; i < chars.length; i++) {
+//			char aChar = chars[i];
+//			String key = Character.toString(aChar);
+//			sb.append(aChar);
+//			selenium.keyDown(locator, key);
+//			selenium.type(locator, sb.toString());
+//			selenium.keyPress(locator, key);
+//			selenium.keyUp(locator, key);
+//		}
+//	}
 
 }

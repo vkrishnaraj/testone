@@ -1,6 +1,8 @@
 package aero.nettracer.web.avis.testing.actions.lf.match;
 
 import org.junit.Test;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.interactions.Actions;
 
 import aero.nettracer.web.utility.DefaultSeleneseTestCase;
 import aero.nettracer.web.utility.Settings;
@@ -10,7 +12,7 @@ public class AB_CreateDelivery extends DefaultSeleneseTestCase {
 	@Test
 	public void testAB_Login() throws Exception {
 		goToTaskManager();
-		selenium.click("//div[@id='maincontent']/form/table/tbody/tr[6]/td/a");
+		selenium.click("id=612link");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
@@ -24,8 +26,7 @@ public class AB_CreateDelivery extends DefaultSeleneseTestCase {
 				checkCopyrightAndQuestionMarks();
 				selenium.type("name=item.trackingNumber", "123123123123");
 				selenium.click("name=save");
-				waitForPageToLoadImproved();
-				selenium.click("id=menucol_1.3");
+				clickMenu("menucol_1.3");
 				waitForPageToLoadImproved();
 				selenium.type("name=id", Settings.LOST_ID_AB);
 				selenium.select("name=type", "label=Lost");

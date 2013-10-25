@@ -10,20 +10,20 @@ public class WN_EditTemplates extends WN_SeleniumTest {
 	@Test
 	public void testVerifyMaintainTemplatesPermissionDisabled() {
 		verifyTrue(setPermissions(new String[] { WN_SeleniumTest.MAINTAIN_TEMPLATES_PERMISSION }, new boolean[] { false }));
-		verifyFalse(selenium.isElementPresent("//a[contains(@href, 'searchTemplate.do')]"));
+		verifyFalse(isElementPresent("//a[contains(@href, 'searchTemplate.do')]"));
 		goToTaskManager();
 	}
 	
 	@Test
 	public void testVarifyMaintainTemplatesPermissionEnabled() {
 		verifyTrue(super.setPermissions(new String[] { WN_SeleniumTest.MAINTAIN_TEMPLATES_PERMISSION }, new boolean[] { true }));
-		verifyTrue(selenium.isElementPresent("//a[contains(@href, 'searchTemplate.do')]"));
+		verifyTrue(isElementPresent("//a[contains(@href, 'searchTemplate.do')]"));
 		goToTaskManager();
 	}
 	
 	@Test
 	public void testCreateTemplate() {
-		selenium.click("//a[contains(@href, 'searchTemplate.do')]");
+		clickMenu("menucol_9.17");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
@@ -84,7 +84,7 @@ public class WN_EditTemplates extends WN_SeleniumTest {
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
 				verifyEquals("Successfully updated template: Test Template\nDocument successfully generated", selenium.getText("//div[@id='maincontent']/span/font"));
-				verifyTrue(selenium.isElementPresent("link=Preview Document"));
+				verifyTrue(isElementPresent("link=Preview Document"));
 			} else {
 				System.out.println("!!!!!!!!!!!!!!! - Failed to save & preview on the edit template page. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 				verifyTrue(false);
@@ -97,11 +97,7 @@ public class WN_EditTemplates extends WN_SeleniumTest {
 	
 	@Test
 	public void testDelete() {
-		selenium.chooseCancelOnNextConfirmation();
 		selenium.click("id=deleteButton");
-		assertTrue(selenium.getConfirmation().matches("^Are you sure you want to delete this template[\\s\\S]$"));
-		selenium.click("id=deleteButton");
-		assertTrue(selenium.getConfirmation().matches("^Are you sure you want to delete this template[\\s\\S]$"));
 		verifyEquals("Successfully deleted template: Test Template", selenium.getText("//div[@id='maincontent']/span/font"));
 		verifyEquals("Criteria", selenium.getText("//div[@id='maincontent']/h1"));
 	}

@@ -9,7 +9,7 @@ public class WS_ForwardMessage extends DefaultSeleneseTestCase {
 
 	@Test
 	public void testForwardMassage() throws Exception {
-		selenium.click("id=menucol_4.5");
+		clickMenu("menucol_4.5");
 		waitForPageToLoadImproved();
 		selenium.select("name=addBagNum", "label=3");
 		selenium.click("name=addBags");

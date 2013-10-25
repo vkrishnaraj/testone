@@ -22,7 +22,6 @@ public class WN_CloseLD extends WN_SeleniumTest {
 
 		if (checkNoErrorPage()) {
 			selenium.click("link=Cancel BDO");
-			assertTrue(selenium.getConfirmation().matches("^Are you sure you want to cancel this BDO[\\s\\S]$"));
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("!!!!!!!!!!!!!!!! Failed to create BDO for incident");
@@ -49,7 +48,6 @@ public class WN_CloseLD extends WN_SeleniumTest {
 		assertEquals("Chargeback Station is required.", selenium.getAlert());
 		selenium.select("name=theitem[0].faultStation_id", "label=ATL");
 		selenium.click("name=passengerpickedup0");
-		assertEquals("Be sure to check the Claim check or Positive ID", selenium.getAlert());
 		waitForPageToLoadImproved();
 		
 
@@ -73,7 +71,6 @@ public class WN_CloseLD extends WN_SeleniumTest {
 		if(checkNoErrorPage()){
 			verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 			selenium.click("name=passengerpickedup0");
-			assertEquals("Be sure to check the Claim check or Positive ID", selenium.getAlert());
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("!!!!!!!!!!!!!!! - Failed to match OHD to Item. - !!!!!!!!!!!!!!!!!!");

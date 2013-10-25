@@ -10,7 +10,7 @@ public class AB_CreateLost_VerifyRequiredFields extends DefaultSeleneseTestCase 
 	@Test
 	public void testAB_Login() throws Exception {
 		goToTaskManager();
-		selenium.click("id=menucol_1.1");
+		clickMenu("menucol_1.1");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();

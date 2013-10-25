@@ -18,7 +18,7 @@ public class LF_CreateLostAndFoundReadOnly extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			selenium.open("/lostandfound/logon.do?companyCode=OW&username=ogadmin&password=Ladendead51!");
 			waitForPageToLoadImproved();
-			selenium.click("//a[contains(@href, 'companyAdmin.do')]");
+			clickMenu("menucol_9.2");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("CLAFRO: An error occurred when attempting to logout.");
@@ -76,7 +76,7 @@ public class LF_CreateLostAndFoundReadOnly extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testBCreateLost() throws Exception {
-		selenium.click("//a[contains(@href, 'create_lost_report.do?createNew=1')]");
+		clickMenu("menucol_2.3");
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
@@ -121,7 +121,7 @@ public class LF_CreateLostAndFoundReadOnly extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testCCreateFoundItem() {
-		selenium.click("//a[contains(@href, 'create_found_item.do?createNew=1')]");
+		clickMenu("menucol_2.1");
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
@@ -172,10 +172,6 @@ public class LF_CreateLostAndFoundReadOnly extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
 			verifyTrue(selenium.isTextPresent("[Undo Confirmation]"));
-//			verifyFalse(selenium.isElementPresent("xpath=(//a[contains(text(),'Undo Confirmation')])[2]"));
-//			verifyFalse(selenium.isEditable("//div[@id='maincontent']/table[5]/tbody/tr[2]/td/input"));
-//			verifyFalse(selenium.isEditable("//div[@id='maincontent']/table[5]/tbody/tr[3]/td/input"));
-//			verifyFalse(selenium.isEditable("//div[@id='maincontent']/table[5]/tbody/tr[3]/td[2]/input"));
 			selenium.click("//div[@id='maincontent']/table[4]/tbody/tr/td/a");
 			waitForPageToLoadImproved();
 		} else {
@@ -184,7 +180,7 @@ public class LF_CreateLostAndFoundReadOnly extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyFalse(selenium.isElementPresent("xpath=(//a[contains(text(),'Undo Confirmation')])[2]"));
+			verifyFalse(isElementPresent("xpath=(//a[contains(text(),'Undo Confirmation')])[2]"));
 		} else {
 			System.out.println("CLAFRO: An error occurred while attempting to open the Lost Report from the Found Item.");
 			return;
@@ -199,7 +195,7 @@ public class LF_CreateLostAndFoundReadOnly extends DefaultSeleneseTestCase {
 		
 		if (checkNoErrorPage()) {
 			selenium.open("/lostandfound/logon.do?companyCode=OW&username=ogadmin&password=Ladendead51!");
-			selenium.click("//a[@id='menucol_9.2']");
+			clickMenu("menucol_9.2");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("CLAFRO: An error occurred while attempting to log out.");

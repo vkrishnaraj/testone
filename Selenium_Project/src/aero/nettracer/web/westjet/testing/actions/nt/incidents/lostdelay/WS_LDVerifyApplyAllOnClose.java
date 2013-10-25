@@ -9,7 +9,7 @@ public class WS_LDVerifyApplyAllOnClose extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testApplyToAllOnClose() {
-		selenium.click("id=menucol_1.1");
+		clickMenu("menucol_1.1");
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
@@ -74,7 +74,7 @@ public class WS_LDVerifyApplyAllOnClose extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isElementPresent("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a"));
+			verifyTrue(isElementPresent("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a"));
  		    selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
 			waitForPageToLoadImproved();
 		} else {

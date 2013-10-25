@@ -34,7 +34,7 @@ public class WN_ViewStationOhds extends WN_SeleniumTest {
 	
 	private boolean setCollectPosIdPermission(boolean check) {
 		if (!navigateToPermissionsPage()) return false;
-		if (!selenium.isElementPresent("name=635")) return false;
+		if (!isElementPresent("name=635")) return false;
 		
 		if (check) {
 			selenium.check("name=635");			

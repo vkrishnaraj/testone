@@ -11,7 +11,7 @@ public class WS_InboxMessage extends DefaultSeleneseTestCase {
 	@Test
 	public void testVerifyText() throws Exception {
 		goToTaskManager();
-		selenium.click("//div[@id='maincontent']/form/table/tbody/tr[28]/td/a");
+		selenium.click("id=16link");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
@@ -39,16 +39,16 @@ public class WS_InboxMessage extends DefaultSeleneseTestCase {
 				selenium.click("name=send2");
 				waitForPageToLoadImproved();
 				verifyTrue(selenium.isTextPresent("Message has been sent."));
-				selenium.click("id=menucol_0.0");
+				clickMenu("menucol_0.0");
 				waitForPageToLoadImproved();
 				selenium.select("name=cbroStation", "label=BGI");
 				waitForPageToLoadImproved();
-				selenium.click("//div[@id='maincontent']/form/table/tbody/tr[28]/td/a");
+				selenium.click("id=16link");
 				waitForPageToLoadImproved();
 				selenium.click("link=Test Message: " + inc_id);
 				waitForPageToLoadImproved();
 				verifyTrue(selenium.isTextPresent("Test Message that references PIR: " + inc_id));
-				selenium.click("id=menucol_0.0");
+				clickMenu("menucol_0.0");
 				waitForPageToLoadImproved();
 				selenium.select("name=cbroStation", "label=YYC");
 				waitForPageToLoadImproved();

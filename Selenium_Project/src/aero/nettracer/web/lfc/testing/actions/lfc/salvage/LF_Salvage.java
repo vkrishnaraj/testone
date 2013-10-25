@@ -5,6 +5,9 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
 
 import aero.nettracer.web.utility.DefaultSeleneseTestCase;
 
@@ -23,12 +26,12 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 
 	@Test
 	public void testCreateSalvage() {
-		selenium.click("//a[contains(@href, 'lf_salvage.do?createNew=1')]");
+		clickMenu("menucol_4.1");
 		waitForPageToLoadImproved();
 
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Please save the salvage to begin adding items."));
-			verifyFalse(selenium.isElementPresent("//input[@id='addBarcode']"));
+			verifyFalse(isElementPresent("//input[@id='addBarcode']"));
 			selenium.click("//input[@id='saveButton']");
 			waitForPageToLoadImproved();
 		} else {
@@ -38,10 +41,10 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("The salvage was successfully saved."));
-			verifyTrue(selenium.isElementPresent("//input[@id='addBarcode']"));
+			verifyTrue(isElementPresent("//input[@id='addBarcode']"));
 			LF_Salvage.SALVAGE_ID = selenium.getValue("//input[@id='salvageId']");
 			System.out.println("LFS: Created salvage: " + LF_Salvage.SALVAGE_ID);
-			selenium.click("//a[contains(@href, 'lf_search_salvage.do?clear=1')]");
+			clickMenu("menucol_4.2");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LFS: An error occurred when trying to save salvage: " + LF_Salvage.SALVAGE_ID);
@@ -58,7 +61,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isElementPresent("//a[contains(@href, 'lf_salvage.do?id=" + LF_Salvage.SALVAGE_ID + "')]"));
+			verifyTrue(isElementPresent("//a[contains(@href, 'lf_salvage.do?id=" + LF_Salvage.SALVAGE_ID + "')]"));
 			selenium.click("//a[contains(@href, 'lf_salvage.do?id=" + LF_Salvage.SALVAGE_ID + "')]");
 			waitForPageToLoadImproved();
 		} else {
@@ -67,7 +70,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isElementPresent("//input[@id='salvageId']"));
+			verifyTrue(isElementPresent("//input[@id='salvageId']"));
 			verifyEquals(LF_Salvage.SALVAGE_ID, selenium.getValue("//input[@id='salvageId']"));
 		} else {
 			System.out.println("LFS: An error occurred when attempting to navigate back to the salvage page from the salvage search page.");
@@ -81,7 +84,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 		String lvCutoff = "";
 		String hvCutoff = "";
-		selenium.click("//a[contains(@href, 'create_found_item.do?createNew=1')]");
+		clickMenu("menucol_2.1");
 		waitForPageToLoadImproved();
 
 		// Low value, < 30 days
@@ -111,7 +114,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
 			System.out.println("LFS: Created Low value, < 30 Found Item: " + LF_Salvage.LOW_LT_30);
-			selenium.click("//a[contains(@href, 'create_found_item.do?createNew=1')]");
+			clickMenu("menucol_2.1");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LFS: Failed to save found item: LOW_LT_30.");
@@ -150,7 +153,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
 			System.out.println("LFS: Created Low value, > 30 Found Item: " + LF_Salvage.LOW_GT_30 + " with date: " + lvCutoff);
-			selenium.click("//a[contains(@href, 'create_found_item.do?createNew=1')]");
+			clickMenu("menucol_2.1");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LFS: Failed to save found item: LOW_GT_30.");
@@ -186,7 +189,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
 			System.out.println("LFS: Created High value, < 60 Found Item: " + LF_Salvage.HIGH_LT_60);
-			selenium.click("//a[contains(@href, 'create_found_item.do?createNew=1')]");
+			clickMenu("menucol_2.1");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LFS: Failed to save found item: HIGH_LT_60.");
@@ -235,7 +238,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 
 	@Test
 	public void testAddItemsToSalvage() {
-		selenium.click("//a[contains(@href, 'lf_search_salvage.do?clear=1')]");
+		clickMenu("menucol_4.2");
 		waitForPageToLoadImproved();
 
 		if (checkNoErrorPage()) {
@@ -256,7 +259,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isElementPresent("//input[@id='salvageId']"));
+			verifyTrue(isElementPresent("//input[@id='salvageId']"));
 			verifyEquals(LF_Salvage.SALVAGE_ID, selenium.getValue("//input[@id='salvageId']"));
 		} else {
 			System.out.println("LFS: failed to load salvage: " + LF_Salvage.SALVAGE_ID + " from the salvage search page.");
@@ -265,12 +268,8 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 
 		// try to enter LOW_LT_30
 
-		selenium.type("//input[@id='addBoxId']", "BOX1");
-		selenium.focus("//input[@id='addBoxId']");
-		selenium.keyDown("//input[@id='addBoxId']", "\\13");
-		selenium.type("//input[@id='addBarcode']", LF_Salvage.LOW_LT_30);
-		selenium.focus("//input[@id='addBarcode']");
-		selenium.keyDown("//input[@id='addBarcode']", "\\13");
+		driver.findElement(By.id("addBoxId")).sendKeys("BOX1" + Keys.ENTER);
+		driver.findElement(By.id("addBarcode")).sendKeys(LF_Salvage.LOW_LT_30 + Keys.ENTER);
 		waitForPageToLoadImproved(3000, false);
 
 		if (checkNoErrorPage()) {
@@ -281,8 +280,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		// try to enter LOW_GT_30
-		selenium.type("//input[@id='addBarcode']", LF_Salvage.LOW_GT_30);
-		selenium.keyDown("//input[@id='addBarcode']", "\\13");
+		driver.findElement(By.id("addBarcode")).sendKeys(LF_Salvage.LOW_GT_30 + Keys.ENTER);
 		waitForPageToLoadImproved(3000, false);
 		try {
 			synchronized (selenium) {
@@ -301,9 +299,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		// try to enter HIGH_LT_60
-		selenium.type("//input[@id='addBarcode']", LF_Salvage.HIGH_LT_60);
-		selenium.focus("//input[@id='addBarcode']");
-		selenium.keyDown("//input[@id='addBarcode']", "\\13");
+		driver.findElement(By.id("addBarcode")).sendKeys(LF_Salvage.HIGH_LT_60 + Keys.ENTER);
 		waitForPageToLoadImproved(3000, false);
 		try {
 			synchronized (selenium) {
@@ -321,9 +317,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		// try to enter HIGH_GT_60
-		selenium.type("//input[@id='addBarcode']", LF_Salvage.HIGH_GT_60);
-		selenium.focus("//input[@id='addBarcode']");
-		selenium.keyDown("//input[@id='addBarcode']", "\\13");
+		driver.findElement(By.id("addBarcode")).sendKeys(LF_Salvage.HIGH_GT_60 + Keys.ENTER);
 		waitForPageToLoadImproved(3000, false);
 		try {
 			synchronized (selenium) {
@@ -334,9 +328,9 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 		
 		if(checkNoErrorPage()) {
-			selenium.type("xpath=(//input[@id='prevBoxId'])[2]","BOX2");
-			selenium.focus("xpath=(//input[@id='prevBoxId'])[2]");
-			selenium.keyDown("xpath=(//input[@id='prevBoxId'])[2]", "\\13");
+			WebElement element = driver.findElement(By.id("prevBoxId3"));
+			element.clear();
+			element.sendKeys("BOX2" + Keys.ENTER);
 			waitForPageToLoadImproved(3000, false);
 			try {
 				synchronized (selenium) {
@@ -350,7 +344,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent(LF_Salvage.HIGH_GT_60));
 			verifyTrue(selenium.isTextPresent("Cellphone Accessories, Cordless Ear Plug, Plantronics,"));
-			selenium.click("//a[@id='menucol_0.0']/u");
+			clickMenu("menucol_0.0");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LFS: failed to enter HIGH_GT_60: " + LF_Salvage.HIGH_GT_60);
@@ -369,7 +363,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			verifyEquals("601", selenium.getValue("name=found.statusId"));
 			verifyEquals("4", selenium.getValue("name=found.itemLocation"));
-			selenium.click("//a[contains(@href, 'lf_search_salvage.do?clear=1')]");
+			clickMenu("menucol_4.2");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LFS: failed to navigate back to Found Item HIGH_GT_60: " + LF_Salvage.HIGH_GT_60);
@@ -394,7 +388,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isElementPresent("//input[@id='salvageId']"));
+			verifyTrue(isElementPresent("//input[@id='salvageId']"));
 			verifyEquals(LF_Salvage.SALVAGE_ID, selenium.getValue("//input[@id='salvageId']"));
 			selenium.click("//input[@id='saveButton']");
 			waitForPageToLoadImproved();
@@ -414,9 +408,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 			return;
 		}
 
-		selenium.type("//input[@id='addBarcode']", LF_Salvage.LOW_GT_30);
-		selenium.focus("//input[@id='addBarcode']");
-		selenium.keyDown("//input[@id='addBarcode']", "\\13");
+		driver.findElement(By.id("addBarcode")).sendKeys(LF_Salvage.LOW_GT_30 + Keys.ENTER);
 		waitForPageToLoadImproved(3000, false);
 
 		try {
@@ -433,7 +425,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 
 	@Test
 	public void testAddToAnotherSalvage() {
-		selenium.click("//a[contains(@href, 'lf_salvage.do?createNew=1')]");
+		clickMenu("menucol_4.1");
 		waitForPageToLoadImproved();
 
 		if (checkNoErrorPage()) {
@@ -446,9 +438,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("The salvage was successfully saved."));
-			selenium.type("//input[@id='addBarcode']", LF_Salvage.LOW_GT_30);
-			selenium.focus("//input[@id='addBarcode']");
-			selenium.keyDown("//input[@id='addBarcode']", "\\13");
+			driver.findElement(By.id("addBarcode")).sendKeys(LF_Salvage.LOW_GT_30 + Keys.ENTER);
 			waitForPageToLoadImproved(3000, false);
 		} else {
 			System.out.println("LFS: failed to save the new salvage for adding duplicate items.");
@@ -484,7 +474,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 
 	@Test
 	public void testCloseSalvage() {
-		selenium.click("//a[contains(@href, 'lf_search_salvage.do?clear=1')]");
+		clickMenu("menucol_4.2");
 		waitForPageToLoadImproved();
 
 		if (checkNoErrorPage()) {
@@ -505,7 +495,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isElementPresent("//input[@id='salvageId']"));
+			verifyTrue(isElementPresent("//input[@id='salvageId']"));
 			verifyEquals(LF_Salvage.SALVAGE_ID, selenium.getValue("//input[@id='salvageId']"));
 		} else {
 			System.out.println("LFS: failed to load salvage: " + LF_Salvage.SALVAGE_ID + " from the salvage search page.");

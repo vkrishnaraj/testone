@@ -9,7 +9,7 @@ public class LF_FoundReportSummary extends DefaultSeleneseTestCase {
 
 	@Test
 	public void testContactInfoNotification() {
-		selenium.click("id=menucol_2.2");
+		clickMenu("menucol_2.2");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			selenium.type("name=barcode", Settings.FOUND_ID_LF);
@@ -59,15 +59,15 @@ public class LF_FoundReportSummary extends DefaultSeleneseTestCase {
 	public void testTraceResults() throws Exception {
 		verifyTrue(selenium.isTextPresent("Found Item:  " + Settings.FOUND_ID_LF));
 		verifyTrue(selenium.isTextPresent("Lost Report:  " + Settings.LOST_ID_LF));
-		verifyTrue(selenium.isElementPresent("link=Confirm Match"));
-		verifyTrue(selenium.isElementPresent("link=Reject"));
+		verifyTrue(isElementPresent("link=Confirm Match"));
+		verifyTrue(isElementPresent("link=Reject"));
 		
 		selenium.click("link=Confirm Match");
 
 		waitForPageToLoadImproved(3000);
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isElementPresent("link=Undo Confirmation"));
+			verifyTrue(isElementPresent("link=Undo Confirmation"));
 			selenium.click("link=Undo Confirmation");
 			waitForPageToLoadImproved();
 		} else {
@@ -77,8 +77,8 @@ public class LF_FoundReportSummary extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isElementPresent("link=Confirm Match"));
-			verifyTrue(selenium.isElementPresent("link=Reject"));
+			verifyTrue(isElementPresent("link=Confirm Match"));
+			verifyTrue(isElementPresent("link=Reject"));
 			selenium.click("link=Reject");
 			
 			waitForPageToLoadImproved();
@@ -91,9 +91,9 @@ public class LF_FoundReportSummary extends DefaultSeleneseTestCase {
 		
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Rejected Matches"));
-			verifyTrue(selenium.isElementPresent("link=Expand"));
+			verifyTrue(isElementPresent("link=Expand"));
 			selenium.click("link=Expand");
-			verifyTrue(selenium.isElementPresent("//div[@id='rejectedMatches']/table/tbody/tr[2]/td[4]/a"));
+			verifyTrue(isElementPresent("//div[@id='rejectedMatches']/table/tbody/tr[2]/td[4]/a"));
 			selenium.click("//div[@id='rejectedMatches']/table/tbody/tr[2]/td[4]/a");
 			waitForPageToLoadImproved();
 		} else {
@@ -104,8 +104,8 @@ public class LF_FoundReportSummary extends DefaultSeleneseTestCase {
 		
 		if (checkNoErrorPage()) {
 			verifyFalse(selenium.isTextPresent("Rejected Matches"));
-			verifyTrue(selenium.isElementPresent("link=Confirm Match"));
-			verifyTrue(selenium.isElementPresent("link=Reject"));
+			verifyTrue(isElementPresent("link=Confirm Match"));
+			verifyTrue(isElementPresent("link=Reject"));
 		} else {
 			System.out.println("Failed in test found item trace results summary.");
 			verifyTrue(false);
@@ -116,7 +116,7 @@ public class LF_FoundReportSummary extends DefaultSeleneseTestCase {
 	@Test
 	public void testLocationField() {
 		verifyTrue(selenium.isTextPresent("Item Location"));
-		verifyTrue(selenium.isElementPresent("name=found.itemLocation"));
+		verifyTrue(isElementPresent("name=found.itemLocation"));
 		selenium.select("name=found.itemLocation", "label=Verification Bin");
 		selenium.click("name=saveButton");
 		waitForPageToLoadImproved();

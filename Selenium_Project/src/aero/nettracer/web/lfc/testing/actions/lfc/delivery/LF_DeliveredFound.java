@@ -11,7 +11,7 @@ public class LF_DeliveredFound extends DefaultSeleneseTestCase {
 
 	@Test
 	public void testDeliverFound() throws Exception {
-		selenium.click("id=menucol_2.6");
+		clickMenu("menucol_2.6");
 		waitForPageToLoadImproved();
 		
 		selenium.type("id=newRemark", "Delivered for DMV");

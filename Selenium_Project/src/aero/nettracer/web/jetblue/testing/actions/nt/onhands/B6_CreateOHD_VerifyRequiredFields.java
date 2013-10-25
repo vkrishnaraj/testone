@@ -1,6 +1,8 @@
 package aero.nettracer.web.jetblue.testing.actions.nt.onhands;
 
 import org.junit.Test;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.interactions.Actions;
 
 import aero.nettracer.web.utility.DefaultSeleneseTestCase;
 import aero.nettracer.web.utility.Settings;
@@ -10,7 +12,7 @@ public class B6_CreateOHD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	@Test
 	public void testAD_CreateOHD_VerifyRequiredFields() throws Exception {
 		goToTaskManager();
-		selenium.click("id=menucol_4.1");
+		clickMenu("menucol_4.1");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
@@ -44,13 +46,6 @@ public class B6_CreateOHD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testAD_CreateOHD_VerifyBagHop() throws Exception {
-//		goToTaskManager();
-//		selenium.click("id=menucol_4.4");
-//		waitForPageToLoadImproved();
-//		if (checkNoErrorPage()) {
-//			selenium.type("name=incident_ID", Settings.ONHAND_ID_B6);
-//			selenium.click("id=button");
-//			waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			selenium.select("name=disposal_status.status_ID", "label=BagHop Pickup");
 			selenium.click("name=savetracing");

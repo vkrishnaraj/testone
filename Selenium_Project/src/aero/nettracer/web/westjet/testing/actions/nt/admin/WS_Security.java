@@ -7,8 +7,7 @@ import aero.nettracer.web.utility.DefaultSeleneseTestCase;
 public class WS_Security extends DefaultSeleneseTestCase{
 	@Test
 	public void testMinPasswordLength(){
-//		goToTaskManager();
-		selenium.click("id=menucol_10.2");
+		clickMenu("menucol_10.2");
 		waitForPageToLoadImproved();
 		selenium.click("//td[@id='navmenucell']/div/dl/dd[4]/a/span[2]");
 		waitForPageToLoadImproved();
@@ -17,9 +16,8 @@ public class WS_Security extends DefaultSeleneseTestCase{
 		waitForPageToLoadImproved();
 		verifyEquals("8", selenium.getValue("min_pass_size"));
 		verifyTrue(selenium.isTextPresent("Company Information Saved."));
-		
-//		goToTaskManager();
-		selenium.click("id=menucol_10.2");
+
+		clickMenu("menucol_10.2");
 		waitForPageToLoadImproved();
 		selenium.click("//td[@id='navmenucell']/div/dl/dd[4]/a/span[2]");
 		waitForPageToLoadImproved();
@@ -28,9 +26,8 @@ public class WS_Security extends DefaultSeleneseTestCase{
 		assertEquals("Minimum password length must be at least eigth(8) characters", selenium.getAlert());
 		verifyEquals("7", selenium.getValue("min_pass_size"));
 		verifyTrue(!selenium.isTextPresent("Company Information Saved."));
-		
-//		goToTaskManager();
-		selenium.click("id=menucol_10.2");
+
+		clickMenu("menucol_10.2");
 		waitForPageToLoadImproved();
 		selenium.click("//td[@id='navmenucell']/div/dl/dd[4]/a/span[2]");
 		waitForPageToLoadImproved();

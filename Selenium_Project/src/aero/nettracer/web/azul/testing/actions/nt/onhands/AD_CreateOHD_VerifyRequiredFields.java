@@ -10,7 +10,7 @@ public class AD_CreateOHD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	@Test
 	public void testAD_CreateOHD_VerifyRequiredFields() throws Exception {
 		goToTaskManager();
-		selenium.click("id=menucol_4.1");
+		clickMenu("menucol_4.1");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();

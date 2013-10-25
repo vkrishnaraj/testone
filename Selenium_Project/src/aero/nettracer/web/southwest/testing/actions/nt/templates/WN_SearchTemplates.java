@@ -10,7 +10,7 @@ public class WN_SearchTemplates extends WN_SeleniumTest {
 	public void testTemplateSearchResults() {
 		verifyTrue(setPermissions(new String[] { WN_SeleniumTest.MAINTAIN_TEMPLATES_PERMISSION }, new boolean[] { true }));
 		for (int i = 0; i < 2; ++i) {
-			selenium.click("//a[contains(@href, 'searchTemplate.do')]");
+			clickMenu("menucol_9.17");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
@@ -45,19 +45,19 @@ public class WN_SearchTemplates extends WN_SeleniumTest {
 				verifyTrue(false);
 			}
 		}
-		
-		selenium.click("//a[contains(@href, 'searchTemplate.do')]");
+
+		clickMenu("menucol_9.17");
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
 			selenium.click("id=searchButton");
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
 				verifyEquals("Results", selenium.getText("//div[@id='maincontent']/h1[2]"));
-				verifyTrue(selenium.isElementPresent("link=Template Id"));
-				verifyTrue(selenium.isElementPresent("link=Template Name"));
+				verifyTrue(isElementPresent("link=Template Id"));
+				verifyTrue(isElementPresent("link=Template Name"));
 				verifyEquals("Template Description", selenium.getText("//table[@id='templates']/thead/tr/th[3]"));
-				verifyTrue(selenium.isElementPresent("link=Template Created Date/Time"));
-				verifyTrue(selenium.isElementPresent("link=Active"));
+				verifyTrue(isElementPresent("link=Template Created Date/Time"));
+				verifyTrue(isElementPresent("link=Active"));
 			} else {
 				System.out.println("!!!!!!!!!!!!!!! - Failed to load the template search page. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 				verifyTrue(false);

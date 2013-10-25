@@ -11,7 +11,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 	
 	@Test
 	public void testCreateLostReport() throws Exception {
-		selenium.click("//a[contains(@href, 'create_lost_report.do?createNew=1')]");
+		clickMenu("menucol_2.3");
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
@@ -56,7 +56,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 	
 	@Test
 	public void testCreateFoundItem() throws Exception {
-		selenium.click("//a[contains(@href, 'create_found_item.do?createNew=1')]");
+		clickMenu("menucol_2.1");
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
@@ -94,7 +94,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 	
 	@Test
 	public void testProcessTraceResult() throws Exception {
-		selenium.click("//a[contains(@href, 'shelved_trace_results.do')]");
+		clickMenu("menucol_0.1");
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
@@ -107,7 +107,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 		
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent(LF_ProcessTraceResults.foundId));
-			verifyTrue(selenium.isElementPresent("//div[@id='maincontent']/table[2]/tbody/tr[2]/td/a"));
+			verifyTrue(isElementPresent("//div[@id='maincontent']/table[2]/tbody/tr[2]/td/a"));
 			verifyTrue(selenium.isTextPresent("Cellphone, Apple, iPhone 4S, AP1234"));
 			selenium.click("//div[@id='maincontent']/table/tbody/tr/td/center/input");
 			waitForPageToLoadImproved();
@@ -147,36 +147,17 @@ public class LF_ProcessTraceResults extends LoginUtil {
 		
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Your lost report was successfully saved."));
-			selenium.click("//a[contains(@href, 'shelved_trace_results.do')]");
+			clickMenu("menucol_0.1");
 			waitForPageToLoadImproved();
-//			selenium.click("link="+LF_ProcessTraceResults.foundId);
-//			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LFPTR: Failed to save Lost Report: " + LF_ProcessTraceResults.lostId);
 			return;		
 		}
 		System.out.println("LFPTR: 4");
 		
-//		if (checkNoErrorPage()) {
-//			selenium.click("saveButton");
-//			waitForPageToLoadImproved();
-//		} else {
-//			System.out.println("LFPTR: Failed to navigate to Found Item: " + LF_ProcessTraceResults.foundId + " from the Lost Report page.");
-//			return;		
-//		}
-//		System.out.println("LFPTR: 5");
-//		
-//		if (checkNoErrorPage()) {
-//			selenium.click("//a[contains(@href, 'shelved_trace_results.do')]");
-//			waitForPageToLoadImproved();
-//		} else {
-//			System.out.println("LFPTR: Failed to save the Found Item.");
-//			return;
-//		}
-		
 		if (checkNoErrorPage()) {
 			verifyFalse(selenium.isTextPresent(LF_ProcessTraceResults.foundId));
-			verifyFalse(selenium.isElementPresent("//div[@id='maincontent']/table[2]/tbody/tr[2]/td/a"));
+			verifyFalse(isElementPresent("//div[@id='maincontent']/table[2]/tbody/tr[2]/td/a"));
 			selenium.click("//a[contains(@href, 'logon.do?taskmanager=1')]");
 			waitForPageToLoadImproved();
 		} else {

@@ -1,6 +1,8 @@
 package aero.nettracer.web.avis.testing.actions.lf.match;
 
 import org.junit.Test;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.interactions.Actions;
 
 import aero.nettracer.web.utility.DefaultSeleneseTestCase;
 import aero.nettracer.web.utility.Settings;
@@ -11,7 +13,7 @@ public class AB_ConfirmMatch extends DefaultSeleneseTestCase {
 	public void testAB_Login() throws Exception {
 		Thread.sleep(5000);
 		goToTaskManager();
-		selenium.click("//div[@id='maincontent']/form/table/tbody/tr[7]/td/a");
+		selenium.click("id=608link");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
@@ -27,13 +29,14 @@ public class AB_ConfirmMatch extends DefaultSeleneseTestCase {
 				verifyTrue(selenium.isTextPresent("Match Details"));
 				verifyEquals(Settings.LOST_ID_AB, selenium.getText("//div[@id='maincontent']/table/tbody/tr[2]/td/a"));
 				verifyEquals(Settings.FOUND_ID_AB, selenium.getText("//div[@id='maincontent']/table/tbody/tr[2]/td[2]/a"));
-//				verifyEquals("55.0", selenium.getText("//div[@id='maincontent']/table/tbody/tr[2]/td[3]"));
-				selenium.click("id=menucol_0.5");
+				clickMenu("menucol_0.0");
+				waitForPageToLoadImproved();
+				selenium.click("id=608link");
 				waitForPageToLoadImproved();
 				selenium.click("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[7]/a[2]");
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
-					selenium.click("id=menucol_1.3");
+					clickMenu("menucol_1.3");
 					waitForPageToLoadImproved();
 					selenium.select("name=type", "label=Lost");
 					selenium.type("name=id", Settings.LOST_ID_AB);

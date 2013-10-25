@@ -36,28 +36,47 @@ import aero.nettracer.web.westjet.testing.actions.nt.taskman.WS_VerifyText_TaskM
 @RunWith(Suite.class)
 @SuiteClasses({
 //	 WESTJET
-	WS_Login.class, 
-	Def_Logout.class, WS_LoginFailure.class, 
-	WS_Login.class, WS_VerifyText_TaskManager.class,
-	WS_CreateLD_VerifyRequiredFields.class, WS_CloseLD_VerifyRequiredFields.class, 
-	WS_InboxMessage.class,
-	WS_CreateDam_VerifyRequiredFields.class, WS_CloseDam_VerifyRequiredFields.class,
-	WS_CreatePilf_VerifyRequiredFields.class, WS_ClosePilf_VerifyRequiredFields.class,  WS_LostfoundTest.class,
-	WS_CreateOHD_VerifyRequiredFields.class, WS_ForwardOHD.class, WS_ForwardMessage.class, WS_ReceiveOHD.class, WS_QuickHistory.class, WS_TestWarehouse.class,
-	WS_Security.class, WS_LDVerifyApplyAllOnClose.class, US_DisputeManage.class,
-	WS_LDVerifyRonKits.class, WS_LDVerifyReplacementBags.class, 
-	WS_Audit.class
+	WS_Login.class
+	, Def_Logout.class
+	, WS_LoginFailure.class
+	, WS_Login.class
+	, WS_VerifyText_TaskManager.class
+	, WS_CreateLD_VerifyRequiredFields.class
+	, WS_CloseLD_VerifyRequiredFields.class
+	, WS_InboxMessage.class
+	, WS_CreateDam_VerifyRequiredFields.class
+	, WS_CloseDam_VerifyRequiredFields.class
+	, WS_CreatePilf_VerifyRequiredFields.class
+	, WS_ClosePilf_VerifyRequiredFields.class
+	, WS_LostfoundTest.class
+	, WS_CreateOHD_VerifyRequiredFields.class
+	, WS_ForwardOHD.class
+	, WS_ForwardMessage.class
+	, WS_ReceiveOHD.class
+	, WS_QuickHistory.class
+	, WS_TestWarehouse.class
+	, WS_Security.class
+	, WS_LDVerifyApplyAllOnClose.class
+	, US_DisputeManage.class
+	, WS_LDVerifyRonKits.class
+	, WS_LDVerifyReplacementBags.class
+	, WS_Audit.class
 	})
 public class TestWestJet { 
 	
 	@BeforeClass
 	public static void oneTimeSetUp() {
-		SeleniumTestBrowserDefault.initBrowser();
+		SeleniumTestBrowserDefault.initBrowser(true);
 	}
 	
 	@AfterClass
 	public static void oneTimeTearDown() {
-		SeleniumTestBrowserDefault.stopBrowser("WESTJET");
+		try {
+			//Thread.sleep(240000);
+		} catch (Exception e) {
+			
+		}
+		SeleniumTestBrowserDefault.stopBrowser("WESTJET", true);
 	}
 	
 }

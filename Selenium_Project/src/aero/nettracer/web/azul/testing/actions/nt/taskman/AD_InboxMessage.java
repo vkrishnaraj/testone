@@ -39,7 +39,7 @@ public class AD_InboxMessage extends DefaultSeleneseTestCase {
 				selenium.click("name=send2");
 				waitForPageToLoadImproved();
 				verifyTrue(selenium.isTextPresent("Message has been sent."));
-				selenium.click("id=menucol_0.0");
+				clickMenu("menucol_0.0");
 				waitForPageToLoadImproved();
 				selenium.select("name=cbroStation", "label=BEL");
 				waitForPageToLoadImproved();
@@ -48,7 +48,7 @@ public class AD_InboxMessage extends DefaultSeleneseTestCase {
 				selenium.click("link=Test Message: " + inc_id);
 				waitForPageToLoadImproved();
 				verifyTrue(selenium.isTextPresent("Test Message that references Incident: " + inc_id));
-				selenium.click("id=menucol_0.0");
+				clickMenu("menucol_0.0");
 				waitForPageToLoadImproved();
 				selenium.select("name=cbroStation", "label=CSB");
 				waitForPageToLoadImproved();

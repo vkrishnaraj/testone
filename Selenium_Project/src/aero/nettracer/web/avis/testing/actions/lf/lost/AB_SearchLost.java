@@ -9,7 +9,7 @@ public class AB_SearchLost extends DefaultSeleneseTestCase {
 
 	@Test
 	public void testAB_Login() throws Exception {
-		selenium.click("id=menucol_1.3");
+		clickMenu("menucol_1.3");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();

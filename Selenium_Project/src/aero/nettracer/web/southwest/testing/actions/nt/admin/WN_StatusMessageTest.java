@@ -11,8 +11,8 @@ public class WN_StatusMessageTest extends WN_SeleniumTest{
 	String message = "Test status message " + System.currentTimeMillis();
 	@Test
 	public void testStatusMessage() throws Exception {
-	
-		selenium.click("id=menucol_9.2");
+
+		clickMenu("menucol_9.2");
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
@@ -32,7 +32,7 @@ public class WN_StatusMessageTest extends WN_SeleniumTest{
 
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Company Information Saved."));
-			selenium.click("id=menucol_0.0");			
+			clickMenu("menucol_0.0");			
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("!!!!!!!!!!!!!!!! Status Message 3");
@@ -47,7 +47,7 @@ public class WN_StatusMessageTest extends WN_SeleniumTest{
 	@Test
 	public void testStatusMessageAudit() throws Exception {
 
-		selenium.click("id=menucol_9.12");			
+		clickMenu("menucol_9.12");			
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			selenium.click("//td[@id='navmenucell']/div/dl/dd[10]/a/span[2]");			

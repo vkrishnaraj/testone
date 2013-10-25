@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 
 import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
 import aero.nettracer.web.utility.Settings;
@@ -16,7 +18,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		// 		and view/edit drivers license disabled.
 		verifyTrue(setPermissions(new String[] { "632", "633", "636", "637", "635", "661", "662", "663", "664", "665", "666"}, new boolean[] { true, false, true, false, true, false, false, false, false, false, true }));
 		
-		selenium.click("//a[@id='menucol_1.1']");
+		clickMenu("menucol_1.1");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
@@ -109,7 +111,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 				selenium.type("name=inventorylist[2].description", "TEST");
 				selenium.click("name=savetracingButton");
 				verifyEquals("Record Locator is required.", selenium.getAlert());
-				selenium.type("name=recordlocator", "TESTER");
+				selenium.type("name=recordlocator", TODAY_SIX_DIGIT);
 				selenium.click("name=savetracingButton");
 				verifyEquals("Job Title is required.", selenium.getAlert());
 				selenium.type("name=passenger[0].jobtitle", "agent");
@@ -133,12 +135,12 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 						.println("!!!!!!!!!!!!!!!! failed to 'Add Bag Itinerary'.");
 			}
 
-			verifyTrue(selenium.isElementPresent("name=passenger[0].decriptedDriversLicense"));
-			verifyTrue(selenium.isElementPresent("name=passenger[0].dlstate"));
-			verifyTrue(selenium.isElementPresent("name=passenger[0].driversLicenseProvince"));
-			verifyTrue(selenium.isElementPresent("name=passenger[0].driversLicenseCountry"));
-			verifyTrue(selenium.isElementPresent("name=passenger[0].decryptedPassportNumber"));
-			verifyTrue(selenium.isElementPresent("name=passenger[0].passportIssuer"));
+			verifyTrue(isElementPresent("name=passenger[0].decriptedDriversLicense"));
+			verifyTrue(isElementPresent("name=passenger[0].dlstate"));
+			verifyTrue(isElementPresent("name=passenger[0].driversLicenseProvince"));
+			verifyTrue(isElementPresent("name=passenger[0].driversLicenseCountry"));
+			verifyTrue(isElementPresent("name=passenger[0].decryptedPassportNumber"));
+			verifyTrue(isElementPresent("name=passenger[0].passportIssuer"));
 			selenium.type("name=passenger[0].decriptedDriversLicense",WN_SeleniumTest.DRIVERS_LICENSE);
 			selenium.select("name=passenger[0].dlstate", "label=Georgia");
 			verifyFalse(selenium.isEditable("name=passenger[0].driversLicenseProvince"));
@@ -273,7 +275,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
-			verifyTrue(selenium.isElementPresent("//a[contains(text(),'" + Settings.INCIDENT_ID_WN + "')]"));
+			verifyTrue(isElementPresent("//a[contains(text(),'" + Settings.INCIDENT_ID_WN + "')]"));
 			selenium.click("link=" + Settings.INCIDENT_ID_WN);
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
@@ -293,7 +295,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
 					checkCopyrightAndQuestionMarks();
-					verifyTrue(selenium.isElementPresent("//a[contains(text(),'" + Settings.INCIDENT_ID_WN + "')]"));
+					verifyTrue(isElementPresent("//a[contains(text(),'" + Settings.INCIDENT_ID_WN + "')]"));
 					selenium.click("link=" + Settings.INCIDENT_ID_WN);
 					waitForPageToLoadImproved();
 					if (checkNoErrorPage()) {
@@ -347,7 +349,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	public void testCollectPosIdFields() {
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		verifyTrue(selenium.isTextPresent("Position ID"));
-		verifyTrue(selenium.isElementPresent("name=theitem[0].posId"));
+		verifyTrue(isElementPresent("name=theitem[0].posId"));
 		goToTaskManager();
 	}
 	
@@ -363,7 +365,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		verifyTrue(setPermissions(new String[] { "635" }, new boolean[] { false }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		verifyFalse(selenium.isTextPresent("Position ID"));
-		verifyFalse(selenium.isElementPresent("name=theitem[0].posId"));
+		verifyFalse(isElementPresent("name=theitem[0].posId"));
 		goToTaskManager();
 	}
 	
@@ -378,15 +380,9 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	public void testPressEnterInRemarksField() {
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		selenium.type("id=remark[0]", "");
-		String locator = "//textarea[@id='remark[0]']";
 		verifyEquals("1500", selenium.getValue("//input[@id='remark[0].counter']"));
-		typeString(locator, "Test line");
-		selenium.focus(locator);
-		selenium.setCursorPosition(locator, String.valueOf(selenium.getValue(locator).length()));
-		selenium.keyDown(locator, "\\13");
-		selenium.keyDown(locator, "\\13");
-		selenium.keyDown(locator, "\\13");
-		verifyEquals("1487", selenium.getValue("//input[@id='remark[0].counter']"));
+		driver.findElement(By.id("remark[0]")).sendKeys("Test line" + Keys.ENTER + Keys.ENTER + Keys.ENTER);
+		verifyEquals("1485", selenium.getValue("//input[@id='remark[0].counter']"));
 		selenium.click("name=saveButton");
 		waitForPageToLoadImproved();
 		goToTaskManager();
@@ -414,7 +410,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 
 		if (checkNoErrorPage()) {
 			verifyEquals(selenium.getValue("name=claimcheck[0].claimchecknum"), utbNum);
-			selenium.click("id=menucol_1.4");
+			clickMenu("menucol_1.4");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("CLDVRF: ERROR NAVIGATING TO INCIDENT.");
@@ -461,9 +457,9 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	@Test
 	public void testPopulateQSCheck() {
 		if (checkNoErrorPage()) {
-			selenium.click("id=menucol_1.1");
+			clickMenu("menucol_1.1");
 			waitForPageToLoadImproved();
-			selenium.type("name=recordlocator", "TESTER");
+			selenium.type("name=recordlocator", TODAY_SIX_DIGIT);
 			selenium.click("id=button");
 			waitForPageToLoadImproved();
 		} else {
@@ -472,7 +468,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		}
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent(Settings.INCIDENT_ID_WN));
-			selenium.click("menucol_0.0");
+			clickMenu("menucol_0.0");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("CLDVRF: Failed to load Quick Search and search on PNR.");
@@ -485,7 +481,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 			selenium.keyUp("id=header", "\\83");
 			selenium.controlKeyUp();
 			waitForPageToLoadImproved(3000,false);
-			selenium.type("id=quickSearchQuery3", "TESTER");
+			selenium.type("id=quickSearchQuery3", TODAY_SIX_DIGIT);
 			selenium.click("id=button");
 			waitForPageToLoadImproved(10000,false);
 		} else {
@@ -506,7 +502,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	@Test
 	public void testCreateIncidentWithEmptyDriversLicense() throws Exception {
 		verifyTrue(setPermissions(new String[] { "632", "633", "636", "637" }, new boolean[] { true, false, true, false }));
-		selenium.click("//a[@id='menucol_1.1']");
+		clickMenu("menucol_1.1");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
@@ -797,7 +793,6 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	@Test
 	public void testIssuanceDocument(){
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-		selenium.open("/ntsouthwest/lostDelay.do?incident_ID=LZWN000000006");
 		selenium.select("id=issuance_category", "label=Assistive Device");
 		selenium.click("name=issueItem");
 		waitForPageToLoadImproved();
@@ -838,21 +833,6 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		} else {
 			System.out.println("!!!!!!!!!!!!!!!! Failed to create document for incident");
 		}	
-	}
-			
-	private void typeString(String locator, String string) {
-		char[] chars = string.toCharArray();
-		StringBuffer sb = new StringBuffer(selenium.getText(locator));
-		selenium.setCursorPosition(locator, String.valueOf(selenium.getValue(locator).length()));
-		for (int i = 0; i < chars.length; i++) {
-			char aChar = chars[i];
-			String key = Character.toString(aChar);
-			sb.append(aChar);
-			selenium.keyDown(locator, key);
-			selenium.type(locator, sb.toString());
-			selenium.keyPress(locator, key);
-			selenium.keyUp(locator, key);
-		}
 	}
 	
 }

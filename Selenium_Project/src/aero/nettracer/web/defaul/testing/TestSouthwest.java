@@ -26,19 +26,31 @@ import aero.nettracer.web.utility.Settings;
 
 @RunWith(Suite.class)
 @SuiteClasses({
-	WN_Login.class, WN_CSSCallSystem.class,WN_CreateLD_VerifyRequiredFields.class, WN_CreateOhd.class, WN_OHD_Sort_Search.class, WN_ViewStationOhds.class, WN_CloseLD.class,
-	WN_CreateDamaged.class, WN_CreateMissing.class, WN_EditTemplates.class, WN_SearchTemplates.class, WN_CreateClaim.class, WN_FoundItem.class,WN_StatusMessageTest.class
+	WN_Login.class
+	, WN_CSSCallSystem.class
+	, WN_CreateLD_VerifyRequiredFields.class
+	, WN_CreateOhd.class
+	, WN_OHD_Sort_Search.class
+	, WN_ViewStationOhds.class
+	, WN_CloseLD.class
+	, WN_CreateDamaged.class
+	, WN_CreateMissing.class
+	, WN_EditTemplates.class
+	, WN_SearchTemplates.class
+	, WN_CreateClaim.class
+	, WN_FoundItem.class
+	, WN_StatusMessageTest.class
 	})
 public class TestSouthwest { 
 	
 	@BeforeClass
 	public static void oneTimeSetUp() {
-		SeleniumTestBrowserDefault.initBrowser(Settings.PORT3);
+		SeleniumTestBrowserDefault.initBrowser(Settings.PORT3, true);
 	}
 	
 	@AfterClass
 	public static void oneTimeTearDown() {
-		SeleniumTestBrowserDefault.stopBrowser("NTSOUTHWEST");
+		SeleniumTestBrowserDefault.stopBrowser("NTSOUTHWEST", true);
 	}
 	
 }

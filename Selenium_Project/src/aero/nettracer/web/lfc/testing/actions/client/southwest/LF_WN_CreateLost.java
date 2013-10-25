@@ -105,7 +105,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		waitForPageToLoadImproved(2000,false);
 		selenium.select("id=lostForm:itemSubCategory", "label=Cloth Bag");
 		selenium.click("id=lostForm:buttonCreate");
-		waitForPageToLoadImproved(false);
+		waitForPageToLoadImproved(5000,false);
 	}
 
 	@Test
@@ -197,7 +197,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		
 		if(checkNoErrorPage())
 		{
-			selenium.click("id=menucol_2.4");
+			clickMenu("menucol_2.4");
 			waitForPageToLoadImproved();
 		}
 		

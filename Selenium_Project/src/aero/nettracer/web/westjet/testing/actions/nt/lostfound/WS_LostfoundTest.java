@@ -9,7 +9,7 @@ public class WS_LostfoundTest extends LoginUtil {
 	@Test
 	public void testFirstLastCategory() throws Exception {
 		waitForPageToLoadImproved(3000,false);
-		selenium.click("id=menucol_5.2");
+		clickMenu("menucol_5.2");
 		waitForPageToLoadImproved();
 		selenium.type("name=customer_firstname", "TestFirst");
 		selenium.type("name=customer_lastname", "TestLast");
@@ -19,7 +19,7 @@ public class WS_LostfoundTest extends LoginUtil {
 		String damage_id = selenium.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
 		Settings.FOUND_ID_WS = damage_id;
 		System.out.println("WS: Found Item Created: " + Settings.FOUND_ID_WS);
-		selenium.click("id=menucol_5.3");
+		clickMenu("menucol_5.3");
 		waitForPageToLoadImproved();
 		selenium.type("name=file_ref_number", Settings.FOUND_ID_WS);
 		selenium.type("name=lastname", "TestLast");

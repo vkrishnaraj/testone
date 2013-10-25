@@ -14,14 +14,14 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 
 	@Test
 	public void testModifiedByInfoPresent() {
-		selenium.click("//a[@id='menucol_4.1']");
+		clickMenu("menucol_4.1");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
 			verifyTrue(selenium.isTextPresent("Date/Time Modified"));
 			verifyTrue(selenium.isTextPresent("Modified Agent"));
-			verifyTrue(selenium.isElementPresent("name=dispModifiedDate"));
-			verifyTrue(selenium.isElementPresent("name=dispModifiedDate"));
+			verifyTrue(isElementPresent("name=dispModifiedDate"));
+			verifyTrue(isElementPresent("name=dispModifiedDate"));
 		} else {
 			System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Navigate to Add Onhand. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 			verifyTrue(false);
@@ -32,40 +32,40 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 	@Test
 	public void testPosIdPermission() {
 		verifyTrue(navigateToPermissionsPage());
-		verifyTrue(selenium.isElementPresent("name=635"));
+		verifyTrue(isElementPresent("name=635"));
 		selenium.uncheck("name=635");
 		verifyTrue(savePermissions());
 		verifyTrue(logoutOfNt());
 		verifyTrue(loginToNt());
-		
-		selenium.click("//a[@id='menucol_4.1']");
+
+		clickMenu("menucol_4.1");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
 			verifyFalse(selenium.isTextPresent("Position ID"));
 			verifyFalse(selenium.isTextPresent("Late Check"));
-			verifyFalse(selenium.isElementPresent("name=posId"));
-			verifyFalse(selenium.isElementPresent("name=lateCheckValue"));
+			verifyFalse(isElementPresent("name=posId"));
+			verifyFalse(isElementPresent("name=lateCheckValue"));
 		} else {
 			System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Navigate to Add Onhand. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 			verifyTrue(false);
 		}
 		
 		verifyTrue(navigateToPermissionsPage());
-		verifyTrue(selenium.isElementPresent("name=635"));
+		verifyTrue(isElementPresent("name=635"));
 		selenium.check("name=635");
 		verifyTrue(savePermissions());
 		verifyTrue(logoutOfNt());
 		verifyTrue(loginToNt());
-		
-		selenium.click("//a[@id='menucol_4.1']");
+
+		clickMenu("menucol_4.1");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
 			verifyTrue(selenium.isTextPresent("Position ID"));
 			verifyTrue(selenium.isTextPresent("Late Check"));
-			verifyTrue(selenium.isElementPresent("name=posId"));
-			verifyTrue(selenium.isElementPresent("name=lateCheckValue"));
+			verifyTrue(isElementPresent("name=posId"));
+			verifyTrue(isElementPresent("name=lateCheckValue"));
 		} else {
 			System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Navigate to Add Onhand. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 			verifyTrue(false);
@@ -75,7 +75,7 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 	
 	@Test
 	public void testCreateOnhand() {
-		selenium.click("//a[@id='menucol_4.1']");
+		clickMenu("menucol_4.1");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			selenium.type("name=posId", "123456");
@@ -109,7 +109,7 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
-				verifyTrue(selenium.isElementPresent("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a"));
+				verifyTrue(isElementPresent("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a"));
 				String ohdId = selenium.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
 				Settings.ONHAND_ID_WN = ohdId;
 				System.out.println("WN: Onhand Created: " + Settings.ONHAND_ID_WN);
@@ -166,7 +166,7 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 	@Test
 	public void testPoisIdNotOnAuditTrail() {
 		verifyTrue(navigateToPermissionsPage());
-		verifyTrue(selenium.isElementPresent("name=635"));
+		verifyTrue(isElementPresent("name=635"));
 		selenium.uncheck("name=635");
 		verifyTrue(savePermissions());
 		verifyTrue(logoutOfNt());
@@ -306,7 +306,7 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 	
 	private boolean navigateToAuditTrail() {
 		boolean success = false;
-		selenium.click("//a[contains(@href, 'audit.do')]");
+		clickMenu("menucol_9.12");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();

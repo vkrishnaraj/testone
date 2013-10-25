@@ -8,7 +8,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 
 	@Test
 	public void testCreateFoundRequiredFields() throws Exception {
-		selenium.click("id=menucol_5.1");
+		clickMenu("menucol_5.1");
 		waitForPageToLoadImproved();
 		if(checkNoErrorPage()){
 			selenium.click("id=saveButton");
@@ -64,7 +64,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 
 	@Test
 	public void testSearchFoundAllFields() throws Exception {
-		selenium.click("id=menucol_5.2");
+		clickMenu("menucol_5.2");
 		waitForPageToLoadImproved();
 		if(checkNoErrorPage()){
 			cycleSearch("name=lastName", "id=lastname", "Test", true, false);
@@ -86,7 +86,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 			selenium.type("name=email", "test@test.com");
 			selenium.click("id=button");
 			waitForPageToLoadImproved();
-			if (selenium.isElementPresent("id=resultLink0")) {
+			if (isElementPresent("id=resultLink0")) {
 				selenium.click("id=resultLink0");
 				waitForPageToLoadImproved();
 			}
@@ -107,11 +107,10 @@ public class WN_FoundItem extends WN_SeleniumTest {
 		if (select) {
 			selenium.select(searchField, "label=" + value);
 		}
-		waitForPageToLoadImproved(3000,false);
 		selenium.click("id=button");
 		waitForPageToLoadImproved();
 		if(checkNoErrorPage()){
-			if (selenium.isElementPresent("id=resultLink0")) {
+			if (isElementPresent("id=resultLink0")) {
 				selenium.click("id=resultLink0");
 				waitForPageToLoadImproved();
 			}
@@ -121,7 +120,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 			if (select) {
 				verifyEquals(value, selenium.getSelectedLabel(formField));
 			}
-			selenium.click("id=menucol_5.2");
+			clickMenu("menucol_5.2");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("cycleSearch failure line 115 fields: " + searchField + ", " + formField + ", " + value);
@@ -254,7 +253,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 
 			if(checkNoErrorPage()){
 				verifyNotEquals(shipped_found_id, selenium.getText("id=link0")); // Check that found is no longer in the list
-				selenium.click("id=menucol_5.2");
+				clickMenu("menucol_5.2");
 				waitForPageToLoadImproved();
 			} else {
 				System.out.println("testRemove failure line 207");

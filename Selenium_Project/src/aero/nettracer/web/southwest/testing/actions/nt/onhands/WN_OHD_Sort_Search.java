@@ -9,8 +9,8 @@ public class WN_OHD_Sort_Search extends DefaultSeleneseTestCase {
 	@Test
 	public void testSortSearchText() throws Exception {
 		//TODO: Create OnHand Code and Use the ID (unable to guarantee it's use on a constant basis)
-		
-		selenium.click("id=menucol_4.4");
+
+		clickMenu("menucol_4.4");
 		waitForPageToLoadImproved();
 		String sortCheck="";
 		if(checkNoErrorPage()) {
@@ -177,7 +177,7 @@ public class WN_OHD_Sort_Search extends DefaultSeleneseTestCase {
 	@Test
 	public void testStationOnHandSort() throws Exception {
 
-		selenium.click("id=menucol_0.0");
+		clickMenu("menucol_0.0");
 		waitForPageToLoadImproved();
 		String sortCheck="";
 		if(checkNoErrorPage()) {
@@ -344,7 +344,7 @@ public class WN_OHD_Sort_Search extends DefaultSeleneseTestCase {
 		}
 		if(checkNoErrorPage()) {
 			verifyNotEquals("//td[@id='middlecolumn']/div/table/tbody/tr/td[12]",sortCheck);
-			selenium.click("id=menucol_0.0");
+			clickMenu("menucol_0.0");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("!!!!!!!!!!!!!!! - Failed to Sort by Comments Reverse - !!!!!!!!!!!!!!!!!!");

@@ -87,47 +87,47 @@
   	</target>
   	
     	
-  	<target name="testNew" depends="compile-test">
+  	<target name="testNew" depends="compile-wd-test">
 
   		<parallel>
   			<junit printsummary="yes"  showoutput="true" fork="true">
-	      		<classpath refid="junitpath.test" />
+	      		<classpath refid="junitpath.wd.test" />
 	      		<formatter type="xml" usefile="true" />
 	      		<test name="aero.nettracer.web.defaul.testing.TestWestJet" />
 	    		<jvmarg value="-Dselenium.port=1234"/>
 	    	</junit>
 	    	<junit printsummary="yes"  showoutput="true" fork="true">
-	      		<classpath refid="junitpath.test" />
+	      		<classpath refid="junitpath.wd.test" />
 	      		<formatter type="xml" usefile="true" />
 	      		<test name="aero.nettracer.web.defaul.testing.TestAzul" />
 	    		<jvmarg value="-Dselenium.port=1234"/>
 	    	</junit>
   			<junit printsummary="yes"  showoutput="true" fork="true">
-	      		<classpath refid="junitpath.test" />
+	      		<classpath refid="junitpath.wd.test" />
 	      		<formatter type="xml" usefile="true" />
 	      		<test name="aero.nettracer.web.defaul.testing.TestJetBlue" />
 	    		<jvmarg value="-Dselenium.port=1234"/>
 	    	</junit>
   			<junit printsummary="yes"  showoutput="true" fork="true">
-	      		<classpath refid="junitpath.test" />
+	      		<classpath refid="junitpath.wd.test" />
 	      		<formatter type="xml" usefile="true" />
 	      		<test name="aero.nettracer.web.defaul.testing.TestSpirit" />
 	    		<jvmarg value="-Dselenium.port=1234"/>
 	    	</junit>
   			<junit printsummary="yes"  showoutput="true" fork="true">
-	      		<classpath refid="junitpath.test" />
+	      		<classpath refid="junitpath.wd.test" />
 	      		<formatter type="xml" usefile="true" />
 	      		<test name="aero.nettracer.web.defaul.testing.TestAvis" />
 	    		<jvmarg value="-Dselenium.port=1234"/>
 	    	</junit>
   			<junit printsummary="yes"  showoutput="true" fork="true">
-	      		<classpath refid="junitpath.test" />
+	      		<classpath refid="junitpath.wd.test" />
 	      		<formatter type="xml" usefile="true" />
 	      		<test name="aero.nettracer.web.defaul.testing.TestLfc" />
 	    		<jvmarg value="-Dselenium.port=1234"/>
 	    	</junit>
   			<junit printsummary="yes"  showoutput="true" fork="true">
-	      		<classpath refid="junitpath.test" />
+	      		<classpath refid="junitpath.wd.test" />
 	      		<formatter type="xml" usefile="true" />
 	      		<test name="aero.nettracer.web.defaul.testing.TestSouthwest" />
 	    		<jvmarg value="-Dselenium.port=1234"/>
@@ -228,9 +228,8 @@
   	
     	
   	<target name="testWD" depends="compile-wd-test">
-
   		<parallel>
-  		<!--	<junit printsummary="yes"  showoutput="true" fork="true">
+	    	<junit printsummary="yes"  showoutput="true" fork="true">
 	      		<classpath refid="junitpath.wd.test" />
 	      		<formatter type="xml" usefile="true" />
 	      		<test name="aero.nettracer.web.defaul.testing.TestAvis" />
@@ -239,7 +238,27 @@
 	      		<classpath refid="junitpath.wd.test" />
 	      		<formatter type="xml" usefile="true" />
 	      		<test name="aero.nettracer.web.defaul.testing.TestLfc" />
-	    	</junit> -->
+	    	</junit>
+  			<junit printsummary="yes"  showoutput="true" fork="true">
+	      		<classpath refid="junitpath.wd.test" />
+	      		<formatter type="xml" usefile="true" />
+	      		<test name="aero.nettracer.web.defaul.testing.TestWestJet" />
+	    	</junit>
+  			<junit printsummary="yes"  showoutput="true" fork="true">
+	      		<classpath refid="junitpath.wd.test" />
+	      		<formatter type="xml" usefile="true" />
+	      		<test name="aero.nettracer.web.defaul.testing.TestSouthwest" />
+	    	</junit>
+  			<junit printsummary="yes"  showoutput="true" fork="true">
+	      		<classpath refid="junitpath.wd.test" />
+	      		<formatter type="xml" usefile="true" />
+	      		<test name="aero.nettracer.web.defaul.testing.TestJetBlue" />
+	    	</junit>
+  			<junit printsummary="yes"  showoutput="true" fork="true">
+	      		<classpath refid="junitpath.wd.test" />
+	      		<formatter type="xml" usefile="true" />
+	      		<test name="aero.nettracer.web.defaul.testing.TestAzul" />
+	    	</junit>
   			<junit printsummary="yes"  showoutput="true" fork="true">
 	      		<classpath refid="junitpath.wd.test" />
 	      		<formatter type="xml" usefile="true" />

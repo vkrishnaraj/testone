@@ -26,23 +26,31 @@ import aero.nettracer.web.utility.Settings;
 @RunWith(Suite.class)
 @SuiteClasses({
     // AVIS
-	AB_LoginFailure.class, AB_Login.class,
-	AB_CreateLost_VerifyRequiredFields.class, AB_CreateFound_VerifyRequiredFields.class,
-	AB_SearchLost.class, AB_SearchFound.class, AB_ManualMatch_FoundToLost.class,
-	AB_CloseFound.class, AB_SearchLost.class, AB_CloseLost.class,
-	AB_CreateLost_Detailed.class, AB_CreateFound_Detailed.class,
-	AB_ConfirmMatch.class, AB_CreateDelivery.class
+	AB_LoginFailure.class
+	, AB_Login.class
+	, AB_CreateLost_VerifyRequiredFields.class
+	, AB_CreateFound_VerifyRequiredFields.class
+	, AB_SearchLost.class
+	, AB_SearchFound.class
+	, AB_ManualMatch_FoundToLost.class
+	, AB_CloseFound.class
+	, AB_SearchLost.class
+	, AB_CloseLost.class
+	, AB_CreateLost_Detailed.class
+	, AB_CreateFound_Detailed.class
+	, AB_ConfirmMatch.class
+	, AB_CreateDelivery.class
 	})
 public class TestAvis { 
 	
 	@BeforeClass
 	public static void oneTimeSetUp() {
-		SeleniumTestBrowserDefault.initBrowser(Settings.PORT2);
+		SeleniumTestBrowserDefault.initBrowser(Settings.PORT2, true);
 	}
 	
 	@AfterClass
 	public static void oneTimeTearDown() {
-		SeleniumTestBrowserDefault.stopBrowser("AVIS");
+		SeleniumTestBrowserDefault.stopBrowser("AVIS", true);
 	}
 	
 }

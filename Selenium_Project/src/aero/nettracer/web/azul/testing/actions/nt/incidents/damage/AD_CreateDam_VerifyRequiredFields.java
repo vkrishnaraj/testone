@@ -10,7 +10,7 @@ public class AD_CreateDam_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	@Test
 	public void testVerifyText() throws Exception {
 		goToTaskManager();
-		selenium.click("id=menucol_2.1");
+		clickMenu("menucol_2.1");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();

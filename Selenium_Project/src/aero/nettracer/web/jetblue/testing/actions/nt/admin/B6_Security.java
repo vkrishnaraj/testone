@@ -7,8 +7,7 @@ import aero.nettracer.web.utility.DefaultSeleneseTestCase;
 public class B6_Security extends DefaultSeleneseTestCase{
 	@Test
 	public void testMinPasswordLength(){
-//		goToTaskManager();
-		selenium.click("id=menucol_8.2");
+		clickMenu("menucol_8.2");
 		waitForPageToLoadImproved();
 		selenium.click("//td[@id='navmenucell']/div/dl/dd[4]/a/span[2]");
 		waitForPageToLoadImproved();
@@ -18,8 +17,7 @@ public class B6_Security extends DefaultSeleneseTestCase{
 		verifyEquals("8", selenium.getValue("min_pass_size"));
 		verifyTrue(selenium.isTextPresent("Company Information Saved."));
 		
-//		goToTaskManager();
-		selenium.click("id=menucol_8.2");
+		clickMenu("menucol_8.2");
 		waitForPageToLoadImproved();
 		selenium.click("//td[@id='navmenucell']/div/dl/dd[4]/a/span[2]");
 		waitForPageToLoadImproved();
@@ -29,8 +27,7 @@ public class B6_Security extends DefaultSeleneseTestCase{
 		verifyEquals("7", selenium.getValue("min_pass_size"));
 		verifyTrue(!selenium.isTextPresent("Company Information Saved."));
 		
-//		goToTaskManager();
-		selenium.click("id=menucol_8.2");
+		clickMenu("menucol_8.2");
 		waitForPageToLoadImproved();
 		selenium.click("//td[@id='navmenucell']/div/dl/dd[4]/a/span[2]");
 		waitForPageToLoadImproved();

@@ -9,7 +9,7 @@ public class WS_LDVerifyRonKits extends LoginUtil {
 
 	@Test
 	public void testRonKits() throws Exception {
-		selenium.click("id=menucol_1.1");
+		clickMenu("menucol_1.1");
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
@@ -22,7 +22,7 @@ public class WS_LDVerifyRonKits extends LoginUtil {
 		
 		if (checkNoErrorPage()) {
 			verifyFalse(selenium.isTextPresent("# RON Kits issued:"));
-			verifyFalse(selenium.isElementPresent("//select[@id='numRonKitsIssued']"));
+			verifyFalse(isElementPresent("//select[@id='numRonKitsIssued']"));
 			selenium.click("link=[ Logout ]");
 			waitForPageToLoadImproved();
 		} else {
@@ -38,7 +38,7 @@ public class WS_LDVerifyRonKits extends LoginUtil {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.click("id=menucol_9.2");
+			clickMenu("menucol_9.2");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LDVRK: Failed to log in as ogadmin.");
@@ -95,7 +95,7 @@ public class WS_LDVerifyRonKits extends LoginUtil {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.click("id=menucol_1.1");
+			clickMenu("menucol_1.1");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LDVRK: Failed on log back in after setting the issue ron kit permission.");
@@ -112,7 +112,7 @@ public class WS_LDVerifyRonKits extends LoginUtil {
 
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("# Toiletry Kits issued:"));
-			verifyTrue(selenium.isElementPresent("//select[@id='numRonKitsIssued']"));
+			verifyTrue(isElementPresent("//select[@id='numRonKitsIssued']"));
 			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr/td[4]/input", "444444");
 
 			selenium.type("name=passenger[0].lastname", "Test");
@@ -148,7 +148,7 @@ public class WS_LDVerifyRonKits extends LoginUtil {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isElementPresent("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a"));
+			verifyTrue(isElementPresent("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a"));
 		    selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
 	    	waitForPageToLoadImproved();
 		} else {
@@ -173,7 +173,7 @@ public class WS_LDVerifyRonKits extends LoginUtil {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.click("id=menucol_9.2");
+			clickMenu("menucol_9.2");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LDVRK: An error occurred while attempting to load back in as ogadmin.");

@@ -29,7 +29,7 @@ public class US_Login extends LoginUtil {
 				System.out.println("Still going: " + count);
 			}
 			count++;
-			selenium.click("menucol_10.13");
+			clickMenu("menucol_10.13");
 			waitForPageToLoadImproved();
 			keepGoing = selenium.isTextPresent("Data retention length");
 		}

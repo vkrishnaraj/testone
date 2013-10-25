@@ -10,7 +10,7 @@ public class AD_CreatePilf_VerifyRequiredFields extends DefaultSeleneseTestCase 
 	@Test
 	public void testVerifyText() throws Exception {
 		goToTaskManager();
-		selenium.click("id=menucol_3.1");
+		clickMenu("menucol_3.1");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();

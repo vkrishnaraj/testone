@@ -1,6 +1,8 @@
 package aero.nettracer.web.lfc.testing.actions.lfc.itementry;
 
 import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.Select;
 
 import aero.nettracer.web.utility.LoginUtil;
 
@@ -10,7 +12,7 @@ public class LF_ItemEntry extends LoginUtil {
 	
 	@Test
 	public void testAlertMessages() {
-		selenium.click("//a[contains(@href, 'enter_items.do')]");
+		clickMenu("menucol_3.1");
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
@@ -71,77 +73,6 @@ public class LF_ItemEntry extends LoginUtil {
 		}
 		
 	}
-		
-//	@Test
-//	public void testLastNamePresent() {
-//		testId = String.valueOf(System.currentTimeMillis());
-//		selenium.type("//input[@id='barcode']", testId);
-//		selenium.select("//select[@id='category']", "label=Bags");
-//		selenium.click("//input[@id='button']");
-//		verifyFalse(selenium.isEditable("//input[@id='button']"));
-//		selenium.type("//input[@id='lastName']", "test");
-//		selenium.click("//input[@id='saveButton']");
-//		waitForPageToLoadImproved();
-//		
-//		if (checkNoErrorPage()) {
-//			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
-//			verifyTrue(selenium.isTextPresent("Desc: Bags"));
-//			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
-//			verifySummaryDiv(1);
-//			clearSummaryDivs();
-//		} else {
-//			System.out.println("LFIE: Failed to save item with last name present.");
-//			return;
-//		}
-//	}
-	
-//	@Test
-//	public void testFirstNamePresent() {
-//		testId = String.valueOf(System.currentTimeMillis());
-//		selenium.type("//input[@id='barcode']", testId);
-//		selenium.select("//select[@id='category']", "label=Blueprints/Posters");
-//		selenium.click("//select[@id='category']/option[3]");
-//		selenium.click("//input[@id='button']");
-//		selenium.type("//input[@id='firstName']", "test");
-//		selenium.click("//input[@id='saveButton']");
-//		waitForPageToLoadImproved();
-//		
-//		if (checkNoErrorPage()) {
-//			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
-//			verifyTrue(selenium.isTextPresent("Desc: Blueprints/Posters"));
-//			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
-//			verifySummaryDiv(2);
-//			clearSummaryDivs();
-//		} else {
-//			System.out.println("LFIE: Failed to save item with first name present.");
-//			return;			
-//		}
-//
-//	}
-	
-//	@Test
-//	public void testMiddleNamePresent() {
-//		testId = String.valueOf(System.currentTimeMillis());
-//		selenium.type("//input[@id='barcode']", testId);
-//		selenium.select("//select[@id='category']", "label=Books/Notebooks");
-//		selenium.click("//select[@id='category']/option[4]");
-//		selenium.click("//input[@id='button']");
-//		selenium.type("//input[@id='middleName']", "t");
-//		selenium.click("//input[@id='saveButton']");
-//		waitForPageToLoadImproved();
-//		
-//		if (checkNoErrorPage()) {
-//			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
-//			verifyTrue(selenium.isTextPresent("Desc: Books/Notebooks"));
-//			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
-//			verifySummaryDiv(2);
-//			clearSummaryDivs();
-//		} else {
-//			System.out.println("LFIE: Failed to save item with middle name present.");
-//			return;			
-//		}
-//		
-//	}
 	
 	@Test
 	public void testAddress1Present() {
@@ -150,7 +81,6 @@ public class LF_ItemEntry extends LoginUtil {
 		selenium.select("//select[@id='category']", "label=Briefcase/Portfolio");
 		selenium.select("//select[@name='found.companyId']", "label=SWA");
 		selenium.select("//select[@name='found.locationId']", "label=LZ");
-		selenium.click("//select[@id='category']/option[5]");
 		selenium.click("//input[@id='button']");
 		selenium.type("//input[@id='addr1']", "test");
 		selenium.click("//input[@id='saveButton']");
@@ -176,7 +106,6 @@ public class LF_ItemEntry extends LoginUtil {
 		selenium.select("//select[@id='category']", "label=Camera/Photo Equipment");
 		selenium.select("//select[@name='found.companyId']", "label=SWA");
 		selenium.select("//select[@name='found.locationId']", "label=LZ");
-		selenium.click("//select[@id='category']/option[6]");
 		selenium.click("//input[@id='button']");
 		selenium.type("//input[@id='addr1']", "test");
 		selenium.click("//input[@id='saveButton']");
@@ -202,7 +131,6 @@ public class LF_ItemEntry extends LoginUtil {
 		selenium.select("//select[@id='category']", "label=Cards (ATM, Credit, etc.)");
 		selenium.select("//select[@name='found.companyId']", "label=SWA");
 		selenium.select("//select[@name='found.locationId']", "label=LZ");
-		selenium.click("//select[@id='category']/option[7]");
 		selenium.click("//input[@id='button']");
 		selenium.type("//input[@id='city']", "test");
 		selenium.click("//input[@id='saveButton']");
@@ -228,7 +156,6 @@ public class LF_ItemEntry extends LoginUtil {
 		selenium.select("//select[@id='category']", "label=Cellphone");
 		selenium.select("//select[@name='found.companyId']", "label=SWA");
 		selenium.select("//select[@name='found.locationId']", "label=LZ");
-		selenium.click("css=option[value=\"7\"]");
 		selenium.click("//input[@id='button']");
 		selenium.select("//select[@id='state']", "label=Alabama");
 		verifyEquals("United States", selenium.getSelectedLabel("//div[@id='contactInfoDiv']/table/tbody/tr[3]/td[5]/select"));
@@ -256,7 +183,6 @@ public class LF_ItemEntry extends LoginUtil {
 		selenium.select("//select[@id='category']", "label=Cellphone Accessories");
 		selenium.select("//select[@name='found.companyId']", "label=SWA");
 		selenium.select("//select[@name='found.locationId']", "label=LZ");
-		selenium.click("//select[@id='category']/option[9]");
 		selenium.click("//input[@id='button']");
 		selenium.type("//input[@id='province']", "test");
 		selenium.click("//input[@id='saveButton']");
@@ -282,7 +208,6 @@ public class LF_ItemEntry extends LoginUtil {
 		selenium.select("//select[@id='category']", "label=Clothing");
 		selenium.select("//select[@name='found.companyId']", "label=SWA");
 		selenium.select("//select[@name='found.locationId']", "label=LZ");
-		selenium.click("//option[@value='9']");
 		selenium.click("//input[@id='button']");
 		selenium.type("//input[@id='zip']", "test");
 		selenium.click("//input[@id='saveButton']");
@@ -308,7 +233,6 @@ public class LF_ItemEntry extends LoginUtil {
 		selenium.select("//select[@id='category']", "label=Computer-Related");
 		selenium.select("//select[@name='found.companyId']", "label=SWA");
 		selenium.select("//select[@name='found.locationId']", "label=LZ");
-		selenium.click("//select[@id='category']/option[11]");
 		selenium.click("//input[@id='button']");
 		selenium.select("//select[@id='country']", "label=Afghanistan");
 		verifyFalse(selenium.isEditable("//select[@id='state']"));
@@ -339,7 +263,6 @@ public class LF_ItemEntry extends LoginUtil {
 		selenium.select("//select[@id='category']", "label=Cosmetic/Shaving Kit");
 		selenium.select("//select[@name='found.companyId']", "label=SWA");
 		selenium.select("//select[@name='found.locationId']", "label=LZ");
-		selenium.click("//select[@id='category']/option[12]");
 		selenium.click("//input[@id='button']");
 
 		selenium.type("//input[@name='primaryInternationalNumber']", "4"); //556666
@@ -371,7 +294,6 @@ public class LF_ItemEntry extends LoginUtil {
 		selenium.select("//select[@id='category']", "label=Electronic Equipment");
 		selenium.select("//select[@name='found.companyId']", "label=SWA");
 		selenium.select("//select[@name='found.locationId']", "label=LZ");
-		selenium.click("//select[@id='category']/option[13]");
 		selenium.click("//input[@id='button']");
 		selenium.type("//input[@name='secondaryInternationalNumber']", "4"); //556666
 		selenium.type("//input[@name='secondaryAreaNumber']", "445");
@@ -401,7 +323,6 @@ public class LF_ItemEntry extends LoginUtil {
 		selenium.select("//select[@id='category']", "label=Glasses");
 		selenium.select("//select[@name='found.companyId']", "label=SWA");
 		selenium.select("//select[@name='found.locationId']", "label=LZ");
-		selenium.click("//select[@id='category']/option[14]");
 		selenium.click("//div[@id='itementryleft']/center[2]/input");
 		selenium.type("//input[@id='email']", "test@test.com");
 		selenium.click("//input[@id='saveButton']");
@@ -427,7 +348,7 @@ public class LF_ItemEntry extends LoginUtil {
 		selenium.select("//select[@id='category']", "label=Jewelry/Watches");
 		selenium.select("//select[@name='found.companyId']", "label=SWA");
 		selenium.select("//select[@name='found.locationId']", "label=LZ");
-		selenium.click("//select[@id='category']/option[15]");
+		waitForPageToLoadImproved(500, false);
 		selenium.select("//div[@id='subcategorydiv']/select", "label=Bracelet");
 		selenium.type("//input[@id='brand']", "test");
 		selenium.type("//input[@id='model']", "test");
@@ -477,24 +398,24 @@ public class LF_ItemEntry extends LoginUtil {
 	
 	private void verifySummaryDiv(int divId) {
 		verifyTrue(selenium.isTextPresent("Bin #:"));
-		verifyTrue(selenium.isElementPresent("//div[@id='moveDiv_" + divId + "']/input"));
-		verifyTrue(selenium.isElementPresent("//div[@id='moveDiv_" + divId + "']/center/input[@type='button']"));
+		verifyTrue(isElementPresent("//div[@id='moveDiv_" + divId + "']/input"));
+		verifyTrue(isElementPresent("//div[@id='moveDiv_" + divId + "']/center/input[@type='button']"));
 		waitForPageToLoadImproved(3000, false);
 		verifyFalse(selenium.isEditable("//input[@id='saveButton']"));
 		selenium.click("//div[@id='moveDiv_" + divId + "']/center/input");
-		verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_" + divId + "']/input"));
-		verifyFalse(selenium.isElementPresent("//div[@id='moveDiv_" + divId + "']/center/input[@type='button']"));
+		verifyFalse(isElementPresent("//div[@id='moveDiv_" + divId + "']/input"));
+		verifyFalse(isElementPresent("//div[@id='moveDiv_" + divId + "']/center/input[@type='button']"));
 		waitForPageToLoadImproved(3000, false);
 		verifyTrue(selenium.isEditable("//input[@id='saveButton']"));
 	}
 	
 	private void clearSummaryDivs() {
 		
-		if (selenium.isElementPresent("//div[@id='moveDiv_1']/center/input[@type='button']")) {
+		if (isElementPresent("//div[@id='moveDiv_1']/center/input[@type='button']")) {
 			selenium.click("//div[@id='moveDiv_1']/center/input[@type='button']");
 		}
 		
-		if (selenium.isElementPresent("//div[@id='moveDiv_0']/center/input[@type='button']")) {
+		if (isElementPresent("//div[@id='moveDiv_0']/center/input[@type='button']")) {
 			selenium.click("//div[@id='moveDiv_0']/center/input[@type='button']");
 		}
 		

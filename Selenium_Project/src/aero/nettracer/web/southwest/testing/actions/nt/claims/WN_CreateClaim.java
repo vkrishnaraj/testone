@@ -26,8 +26,8 @@ public class WN_CreateClaim extends WN_SeleniumTest {
 	@Test
 	public void testCreate_New_Claim() throws Exception {
 		verifyTrue(setPermissions(new String[] { CLAIM_DEPREC_CALC,DEPREC_CALC_ADMIN }, new boolean[] { false, false }));
-		
-		selenium.click("id=menucol_8.1");
+
+		clickMenu("menucol_8.1");
 		waitForPageToLoadImproved();
 		
 		if(checkNoErrorPage()){
@@ -74,7 +74,7 @@ public class WN_CreateClaim extends WN_SeleniumTest {
 	@Test
 	public void testUpdate_Depreciation_Categories() throws Exception {
 		verifyTrue(setPermissions(new String[] { CLAIM_DEPREC_CALC,DEPREC_CALC_ADMIN }, new boolean[] { true, true }));
-		selenium.click("id=menucol_9.18");
+		clickMenu("menucol_9.18");
 		waitForPageToLoadImproved();
 			
 		if(checkNoErrorPage()){
@@ -118,7 +118,7 @@ public class WN_CreateClaim extends WN_SeleniumTest {
 	@Test
 	public void testCreate_Depreciation_Items() throws Exception {	
 		if(checkNoErrorPage()){
-			selenium.click("id=menucol_8.2");
+			clickMenu("menucol_8.2");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("Failed to reach TaskManager");

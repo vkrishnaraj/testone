@@ -36,24 +36,41 @@ import aero.nettracer.web.utility.Settings;
 @RunWith(Suite.class)
 @SuiteClasses({
 	// LFC
-	LF_Login.class, 
-	LF_CreateLost_VerifyRequiredFields.class, LF_CreateFound_VerifyRequiredFields.class,
-	LF_SearchLost.class, LF_SearchFound.class, LF_ManualMatch_FoundToLost.class,
-	LF_CloseFound.class, LF_SearchLost.class, LF_CloseLost.class, 
-	LF_CreateLost_Detailed.class, LF_CreateFound_Detailed.class, LF_FoundReportSummary.class, LF_VerifyText_TaskManager.class, 
-	LF_ConfirmMatch.class, LF_CreateDeliveryFromFound.class, LF_ItemEntry.class, LF_ProcessTraceResults.class,
-	LF_CreateLostAndFoundReadOnly.class,LF_Salvage.class, LF_SalvageSearch.class, LF_BoxCount.class, LF_DeliveredFound.class, LF_QuickHistory.class, LF_WN_CreateLost.class
+	LF_Login.class
+	, LF_CreateLost_VerifyRequiredFields.class
+	, LF_CreateFound_VerifyRequiredFields.class
+	, LF_SearchLost.class
+	, LF_SearchFound.class
+	, LF_ManualMatch_FoundToLost.class
+	, LF_CloseFound.class
+	, LF_SearchLost.class
+	, LF_CloseLost.class
+	, LF_CreateLost_Detailed.class
+	, LF_CreateFound_Detailed.class
+	, LF_FoundReportSummary.class
+	, LF_VerifyText_TaskManager.class
+	, LF_ConfirmMatch.class
+	, LF_CreateDeliveryFromFound.class
+	, LF_ItemEntry.class
+	, LF_ProcessTraceResults.class
+	, LF_CreateLostAndFoundReadOnly.class
+	, LF_Salvage.class
+	, LF_SalvageSearch.class
+	, LF_BoxCount.class
+	, LF_DeliveredFound.class
+	, LF_QuickHistory.class
+	, LF_WN_CreateLost.class
 	})
 public class TestLfc { 
 	
 	@BeforeClass
 	public static void oneTimeSetUp() {
-		SeleniumTestBrowserDefault.initBrowser(Settings.PORT2);
+		SeleniumTestBrowserDefault.initBrowser(Settings.PORT2, true);
 	}
 	
 	@AfterClass
 	public static void oneTimeTearDown() {
-		SeleniumTestBrowserDefault.stopBrowser("LFC");
+		SeleniumTestBrowserDefault.stopBrowser("LFC", true);
 	}
 	
 }

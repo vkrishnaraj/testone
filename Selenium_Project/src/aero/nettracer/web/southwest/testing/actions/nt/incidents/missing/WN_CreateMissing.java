@@ -11,7 +11,7 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 
 	@Test
 	public void testCreateMissingIncident() {
-		selenium.click("//a[@id='menucol_3.1']");
+		clickMenu("menucol_3.1");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
@@ -177,8 +177,8 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 	public void testAdditionalMissingItemInformationDisabled() {
 		verifyTrue(setPermissions(new String[] { ADDITIONAL_MISSING_ITEM_INFORMATION }, new boolean[] { false }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_MISSING));
-		verifyFalse(selenium.isElementPresent("name=article[0].disEnteredDate"));
-		verifyFalse(selenium.isElementPresent("name=article[0].statusId"));
+		verifyFalse(isElementPresent("name=article[0].disEnteredDate"));
+		verifyFalse(isElementPresent("name=article[0].statusId"));
 		goToTaskManager();
 	}
 	
@@ -194,8 +194,8 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 	public void testAdditionalMissingItemInformationEnabled() {
 		verifyTrue(setPermissions(new String[] { ADDITIONAL_MISSING_ITEM_INFORMATION }, new boolean[] { true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_MISSING));
-		verifyTrue(selenium.isElementPresent("name=article[0].disEnteredDate"));
-		verifyTrue(selenium.isElementPresent("name=article[0].statusId"));
+		verifyTrue(isElementPresent("name=article[0].disEnteredDate"));
+		verifyTrue(isElementPresent("name=article[0].statusId"));
 
 		selenium.type("name=article[0].dispurchasedate", WN_SeleniumTest.TODAY);
 		selenium.type("name=article[0].discost", "1");
