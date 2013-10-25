@@ -217,8 +217,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		
 		if(checkNoErrorPage())
 		{
-			selenium.click("link=[ Logout ]");
-			waitForPageToLoadImproved();
+			logout();
 		}
 		
 		if(checkNoErrorPage())

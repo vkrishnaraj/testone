@@ -12,8 +12,7 @@ public class LF_CreateLostAndFoundReadOnly extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testARemoveReopenPermission() {
-		selenium.click("//a[contains(@href, 'logoff.do')]");
-		waitForPageToLoadImproved();
+		logout();
 
 		if (checkNoErrorPage()) {
 			selenium.open("/lostandfound/logon.do?companyCode=OW&username=ogadmin&password=Ladendead51!");
@@ -51,8 +50,7 @@ public class LF_CreateLostAndFoundReadOnly extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.click("//a[contains(@href, 'logoff.do')]");
-			waitForPageToLoadImproved();
+			logout();
 		} else {
 			System.out.println("CLAFRO: An error occurred when attempting to save the permissions page for the Admin group.");
 			return;			

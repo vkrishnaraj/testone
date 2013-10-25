@@ -100,5 +100,11 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 			driver.manage().timeouts().implicitlyWait(Settings.ELEMENT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
 		}
 	}
+	
+	public void logout() {
+		selenium.click("id=mainLayoutLogoutLink");
+		waitForPageToLoadImproved(500, false);
+		verifyTrue(selenium.isTextPresent("Log In"));
+	}
 
 }

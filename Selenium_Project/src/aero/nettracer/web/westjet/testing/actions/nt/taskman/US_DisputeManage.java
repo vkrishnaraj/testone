@@ -8,8 +8,7 @@ import aero.nettracer.web.utility.Settings;
 public class US_DisputeManage extends LoginUtil {
 	@Test
 	public void testDisputeManage() throws Exception {
-		selenium.click("link=[ Logout ]");
-		waitForPageToLoadImproved();
+		logout();
 		
 		if(checkNoErrorPage())
 		{
@@ -80,8 +79,7 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-		selenium.click("link=[ Logout ]");
-		waitForPageToLoadImproved();
+			logout();
 		}
 		else
 		{
@@ -365,8 +363,7 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-			selenium.click("link=[ Logout ]");
-			waitForPageToLoadImproved();
+			logout();
 		}
 		else
 		{
@@ -443,8 +440,7 @@ public class US_DisputeManage extends LoginUtil {
 		
 		if(checkNoErrorPage())
 		{
-			selenium.click("link=[ Logout ]");
-			waitForPageToLoadImproved();
+			logout();
 		}
 		else
 		{

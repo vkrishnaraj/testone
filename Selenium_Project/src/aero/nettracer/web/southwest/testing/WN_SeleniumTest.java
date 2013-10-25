@@ -209,9 +209,7 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 	
 	protected boolean logoutOfNt() {
 		boolean success = true;
-		selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
-		waitForPageToLoadImproved();
-		checkCopyrightAndQuestionMarks();
+		logout();
 		return success;
 	}
 	

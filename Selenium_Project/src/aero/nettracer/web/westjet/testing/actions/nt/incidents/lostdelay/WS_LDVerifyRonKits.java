@@ -23,8 +23,7 @@ public class WS_LDVerifyRonKits extends LoginUtil {
 		if (checkNoErrorPage()) {
 			verifyFalse(selenium.isTextPresent("# RON Kits issued:"));
 			verifyFalse(isElementPresent("//select[@id='numRonKitsIssued']"));
-			selenium.click("link=[ Logout ]");
-			waitForPageToLoadImproved();
+			logout();
 		} else {
 			System.out.println("LDVRK: Failed to load the delayed incident page after pressing skip prepopulation.");
 			return;
@@ -80,8 +79,7 @@ public class WS_LDVerifyRonKits extends LoginUtil {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.click("link=[ Logout ]");
-			waitForPageToLoadImproved();
+			logout();
 		} else {
 			System.out.println("LDVRK: Failed to save the permissions page.");
 			return;
@@ -158,8 +156,7 @@ public class WS_LDVerifyRonKits extends LoginUtil {
 		
 		if (checkNoErrorPage()) {
 			verifyEquals("1", selenium.getValue("//select[@id='numRonKitsIssued']"));
-			selenium.click("link=[ Logout ]");
-			waitForPageToLoadImproved();
+			logout();
 		} else {
 			System.out.println("LDVRK: An error occurred while attempting to reload the damaged incident.");
 			return;
@@ -215,8 +212,7 @@ public class WS_LDVerifyRonKits extends LoginUtil {
 		}
 
 		if (checkNoErrorPage()) {
-			selenium.click("link=[ Logout ]");
-			waitForPageToLoadImproved();
+			logout();
 		} else {
 			System.out.println("LDVRK: An error occurred while attempting to save the permissions page.");
 			return;
