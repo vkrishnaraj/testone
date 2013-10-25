@@ -7,20 +7,15 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import aero.nettracer.web.southwest.testing.actions.nt.admin.WN_StatusMessageTest;
-import aero.nettracer.web.southwest.testing.actions.nt.claims.WN_CreateClaim;
 import aero.nettracer.web.southwest.testing.actions.nt.core.WN_Login;
-import aero.nettracer.web.southwest.testing.actions.nt.founds.WN_FoundItem;
+import aero.nettracer.web.southwest.testing.actions.nt.incidents.communications.WN_CustomerCommunications;
 import aero.nettracer.web.southwest.testing.actions.nt.incidents.damaged.WN_CreateDamaged;
-import aero.nettracer.web.southwest.testing.actions.nt.incidents.lostdelay.WN_CreateLD_VerifyRequiredFields;
 import aero.nettracer.web.southwest.testing.actions.nt.incidents.lostdelay.WN_CloseLD;
+import aero.nettracer.web.southwest.testing.actions.nt.incidents.lostdelay.WN_CreateLD_VerifyRequiredFields;
 import aero.nettracer.web.southwest.testing.actions.nt.incidents.missing.WN_CreateMissing;
 import aero.nettracer.web.southwest.testing.actions.nt.onhands.WN_CreateOhd;
 import aero.nettracer.web.southwest.testing.actions.nt.onhands.WN_OHD_Sort_Search;
 import aero.nettracer.web.southwest.testing.actions.nt.onhands.WN_ViewStationOhds;
-import aero.nettracer.web.southwest.testing.actions.nt.taskmanager.WN_CSSCallSystem;
-import aero.nettracer.web.southwest.testing.actions.nt.templates.WN_EditTemplates;
-import aero.nettracer.web.southwest.testing.actions.nt.templates.WN_SearchTemplates;
 import aero.nettracer.web.utility.SeleniumTestBrowserDefault;
 import aero.nettracer.web.utility.Settings;
 
@@ -34,6 +29,7 @@ import aero.nettracer.web.utility.Settings;
 	, WN_CloseLD.class
 	, WN_CreateDamaged.class
 	, WN_CreateMissing.class
+	, WN_CustomerCommunications.class
 	})
 public class TestSouthwest { 
 	
