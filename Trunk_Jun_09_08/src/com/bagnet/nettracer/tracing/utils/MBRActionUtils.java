@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
@@ -295,6 +296,7 @@ public class MBRActionUtils {
 		return false;
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static boolean actionIssueItem(IncidentForm theform, HttpServletRequest request, Agent user) {
 		// add new remark box
 		boolean issueQ = (request.getParameter("issueItem") != null);
@@ -303,7 +305,8 @@ public class MBRActionUtils {
 		Incident incident = new Incident();//The incident will be coming from the IncidentForm not the database
 		try {
 			// copy into incident bean
-			BeanUtils.copyProperties(incident, theform);			
+			BeanUtils.copyProperties(incident, theform);
+			incident.setPassengers(new LinkedHashSet(theform.getPassengerlist()));			
 		} catch (Exception e) {
 			logger.error("unable to insert incident due to bean copyproperties error: " + e);
 			e.printStackTrace();

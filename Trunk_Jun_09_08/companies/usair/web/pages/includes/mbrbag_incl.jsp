@@ -971,10 +971,10 @@
 						value="<bean:message key="issuance.item.button.return" />" >
 					</input></td>
 				<% } %>
-						<td style="text-align:right;">
+						<td style="text-align:left;">
 							<logic:notEmpty name="issuanceitem" property="document">
-							<a hef="#" onclick="openPreviewWindow3('<bean:write name="issuanceitem" property="document.fileName" />')">
-																<bean:message key="link.preview" />
+							<a href="#" onclick="openPreviewWindow3('<bean:write name="issuanceitem" property="document.fileName" />')">
+																<bean:message key="link.preview" /></a>
 							</logic:notEmpty>
 							<logic:empty name="issuanceitem" property="document">
 							&nbsp;
@@ -983,7 +983,7 @@
           </tr>
           </logic:iterate>
           <tr>
-          	<td colspan="8" align="center"><b><bean:message key="issuance.item.issue" /></b></td>
+          	<td colspan="9" align="center"><b><bean:message key="issuance.item.issue" /></b></td>
           </tr>
           <tr>
           	<td colspan="2"><bean:message key="issuance.item.category" /><br/>
@@ -1002,7 +1002,7 @@
 	               </select>
           		</td>
           	<td align="center" colspan="2" id="issuanceAdd3" name="issuanceAdd3">&nbsp;</td>
-          	<td align="center" colspan="2" id="issuanceAdd4" name="issuanceAdd4">&nbsp;</td>
+          	<td align="center" colspan="3" id="issuanceAdd4" name="issuanceAdd4">&nbsp;</td>
           </tr>
         </table>
 <% } %>
