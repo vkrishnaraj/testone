@@ -237,6 +237,24 @@
   			<junit printsummary="yes"  showoutput="true" fork="true">
 	      		<classpath refid="junitpath.wd.test" />
 	      		<formatter type="xml" usefile="true" />
+	      		<test name="aero.nettracer.web.defaul.testing.TestJetBlue" />
+	    	</junit>
+  			<junit printsummary="yes"  showoutput="true" fork="true">
+	      		<classpath refid="junitpath.wd.test" />
+	      		<formatter type="xml" usefile="true" />
+	      		<test name="aero.nettracer.web.defaul.testing.TestAzul" />
+	    	</junit>
+  			<junit printsummary="yes"  showoutput="true" fork="true">
+	      		<classpath refid="junitpath.wd.test" />
+	      		<formatter type="xml" usefile="true" />
+	      		<test name="aero.nettracer.web.defaul.testing.TestSpirit" />
+	    	</junit>
+  		</parallel>
+  		
+  		<parallel>
+  			<junit printsummary="yes"  showoutput="true" fork="true">
+	      		<classpath refid="junitpath.wd.test" />
+	      		<formatter type="xml" usefile="true" />
 	      		<test name="aero.nettracer.web.defaul.testing.TestLfc" />
 	    	</junit>
   			<junit printsummary="yes"  showoutput="true" fork="true">
@@ -252,17 +270,7 @@
   			<junit printsummary="yes"  showoutput="true" fork="true">
 	      		<classpath refid="junitpath.wd.test" />
 	      		<formatter type="xml" usefile="true" />
-	      		<test name="aero.nettracer.web.defaul.testing.TestJetBlue" />
-	    	</junit>
-  			<junit printsummary="yes"  showoutput="true" fork="true">
-	      		<classpath refid="junitpath.wd.test" />
-	      		<formatter type="xml" usefile="true" />
-	      		<test name="aero.nettracer.web.defaul.testing.TestAzul" />
-	    	</junit>
-  			<junit printsummary="yes"  showoutput="true" fork="true">
-	      		<classpath refid="junitpath.wd.test" />
-	      		<formatter type="xml" usefile="true" />
-	      		<test name="aero.nettracer.web.defaul.testing.TestSpirit" />
+	      		<test name="aero.nettracer.web.defaul.testing.TestSouthwest2" />
 	    	</junit>
   		</parallel>
   </target>
