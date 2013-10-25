@@ -1,3 +1,4 @@
+<%@page import="java.text.MessageFormat"%>
 <%@ page contentType="text/javascript" %> 
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent"%>
 <%@ page import="org.apache.struts.action.Action"%>
@@ -233,9 +234,12 @@
 			    currentElement.focus();
 			    return false;
 		      }
-		} else if (currentElementName.indexOf("mobile") != -1) {  
-		      if (currentElement.value.length == 0) {
-		        alert("<%= (String)bundle.getString( "colname.mobile_ph") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+		} else if (currentElementName.indexOf("].mobile") != -1) {
+			  var homephone = document.getElementsByName(currentElementName.replace('].mobile', '].homephone'))[0].value;
+			  var workphone = document.getElementsByName(currentElementName.replace('].mobile', '].workphone'))[0].value;
+			  var mobile = document.getElementsByName(currentElementName)[0].value;		  
+		      if (homephone.length == 0 && workphone.length == 0 && mobile.length == 0) {
+		        alert("<%= (String)bundle.getString( "colname.phone") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
 			    currentElement.focus();
 			    return false;
 		      }
@@ -289,21 +293,25 @@
 		}
 		
 		//baggage check information validation
-		else if (currentElementName.indexOf("numpassengers") != -1) {  
-		      if (currentElement.value.length == 0) {
-		        alert("<%= (String)bundle.getString( "colname.num_pass") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+		else if (currentElementName.indexOf("numpassengers") != -1) { 
+			  <%int minPassengers = 1;%> 
+		      if (!minimumInteger(currentElement.value, <%=minPassengers%>)) {
+		        alert("<%= (String)bundle.getString( "colname.num_pass") %>" + " <%= MessageFormat.format(bundle.getString( "error.validation.minimum.requiredValue"), minPassengers) %>");
 			    currentElement.focus();
 			    return false;
 		      }
-		} else if (currentElementName.indexOf("numbagchecked") != -1) {  
-		      if (currentElement.value.length == 0) {
-		        alert("<%= (String)bundle.getString( "colname.num_bag_checked") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+		      
+		} else if (currentElementName.indexOf("numbagchecked") != -1) { 
+			  <%int minBagChecked = 1;%> 
+		      if (!minimumInteger(currentElement.value, <%=minBagChecked%>)) {
+		        alert("<%= (String)bundle.getString( "colname.num_bag_checked") %>" + " <%= MessageFormat.format(bundle.getString( "error.validation.minimum.requiredValue"), minBagChecked) %>");
 			    currentElement.focus();
 			    return false;
 		      }
-		} else if (currentElementName.indexOf("numbagreceived") != -1) {  
-		      if (currentElement.value.length == 0) {
-		        alert("<%= (String)bundle.getString( "colname.bags_rec") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+		} else if (currentElementName.indexOf("numbagreceived") != -1) { 
+			  <%int minBagReceived = 0;%> 
+		      if (!minimumInteger(currentElement.value, <%=minBagReceived%>)) {
+		        alert("<%= (String)bundle.getString( "colname.bags_rec") %>" + " <%= MessageFormat.format(bundle.getString( "error.validation.minimum.requiredValue"), minBagReceived) %>");
 			    currentElement.focus();
 			    return false;
 		      }
