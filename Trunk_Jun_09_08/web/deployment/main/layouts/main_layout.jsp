@@ -210,7 +210,7 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
             </td>
           </tr>
           <tr>
-            <td colspan="2"><a href="logoff.do">[ <bean:message key="logout"/> ]</a></td>
+            <td colspan="2"><a id="mainLayoutLogoutLink" href="logoff.do">[ <bean:message key="logout"/> ]</a></td>
           </tr>
         </table>
 </div>
