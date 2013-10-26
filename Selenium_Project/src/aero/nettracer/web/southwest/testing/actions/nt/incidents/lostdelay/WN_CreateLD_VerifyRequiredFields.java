@@ -119,7 +119,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 				verifyEquals("Zip is required.", selenium.getAlert());
 				selenium.type("name=addresses[0].zip", "33213");
 				selenium.click("name=savetracingButton");
-				verifyEquals("Mobile Phone is required.", selenium.getAlert());
+				verifyEquals("Phone is required.", selenium.getAlert());
 				selenium.type("name=addresses[0].mobile", "4040213465");
 				selenium.click("name=savetracingButton");
 				verifyEquals("Claim Check Number is required.",selenium.getAlert());

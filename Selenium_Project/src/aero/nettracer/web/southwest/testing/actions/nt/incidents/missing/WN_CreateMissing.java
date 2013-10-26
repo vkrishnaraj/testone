@@ -105,7 +105,7 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 					verifyEquals("Zip is required.", selenium.getAlert());
 					selenium.type("name=addresses[0].zip", "33213");
 					selenium.click("id=saveButton");
-					verifyEquals("Mobile Phone is required.", selenium.getAlert());
+					verifyEquals("Phone is required.", selenium.getAlert());
 					selenium.type("name=addresses[0].mobile", "4040213465");
 					selenium.click("id=saveButton");
 					verifyEquals("Claim Check Number is required.", selenium.getAlert());
