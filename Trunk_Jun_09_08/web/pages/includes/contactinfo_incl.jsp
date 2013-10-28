@@ -142,9 +142,9 @@
           </tr>
           <tr>
             <td colspan="1">
-              <bean:message key="colname.salutation" />
+              <bean:message key="colname.salutation.req" />
               <br>
-              <html:select name="passenger" indexed="true" property="salutation" styleClass="dropdown">
+              <html:select name="passenger" styleId='<%= "passenger[" + i + "].salutation" %>' indexed="true" property="salutation" styleClass="dropdown">
                 <html:option value="0">
                   <bean:message key="select.please_select" />
                 </html:option>

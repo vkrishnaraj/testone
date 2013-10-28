@@ -182,7 +182,7 @@
 
         </logic:iterate>
       </table>
-      <center><html:submit property="addremark" styleId="button">
+      <center><html:submit property="addremark" styleId="addremark" styleClass="button">
         <bean:message key="button.add_remark" />
       </html:submit></center>
       <br>

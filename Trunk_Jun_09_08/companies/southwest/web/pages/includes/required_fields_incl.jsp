@@ -65,6 +65,7 @@
   {
     returnValue = true;
 
+    var hasRemarkText  = false;
 	var baggageItinerary = false;
     var hasPassengerItinerary = false;
     var hasPermanentAddressChecked =  false;
@@ -164,6 +165,10 @@
 	      			firstPermanentAddressCheckboxId = currentElement.id; //save the first checkbox
 	      		}
 	      	}
+	   } else if (currentElementName.indexOf("remark[") != -1 && currentElementName.indexOf("remark[") < currentElementName.indexOf("].remarktext")) {
+	      	if (!hasRemarkText) {
+				hasRemarkText = true;
+	    	 }
 	   } else if (currentElementName.indexOf("].itinerarytype") != -1) {
 	      	if (currentElement.value == '0') { //Passenger Itinerary --> value=0
 	      		if (!hasPassengerItinerary) {
@@ -177,7 +182,14 @@
 	   }
     }
     
-    if (!hasPermanentAddressChecked) {
+    if (!hasRemarkText) {
+		alert("<%= (String)bundle.getString( "colname.remark") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+		currentElement = document.getElementById('addremark');
+		if (currentElement) {
+			currentElement.focus();
+		} 
+		return false;
+    } else if (!hasPermanentAddressChecked) {
 		if (firstPermanentAddressCheckboxId == -1) {
 			alert("<%= (String)bundle.getString( "colname.is_permanent") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
 			currentElement = document.getElementById('addPassengerNum');
@@ -222,9 +234,9 @@
 		} 
 		
 		//passenger validation
-		else if (currentElementName.indexOf("jobtitle") != -1) {  
-		      if (currentElement.value.length == 0) {
-		        alert("<%= (String)bundle.getString( "colname.job_title") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
+		else if (currentElementName.indexOf("passenger[") != -1 && currentElementName.indexOf("passenger[") < currentElementName.indexOf("].salutation")) {  
+		      if (currentElement.value.length == 0 || currentElement.value == '0') {
+		        alert("<%= (String)bundle.getString( "colname.salutation") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
 			    currentElement.focus();
 			    return false;
 		      }
