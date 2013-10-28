@@ -88,8 +88,11 @@ function checkZip( strValue ) {
   return objRegExp.test(strng);
  }
  
- function checkInteger(argvalue)
- {
+ function checkInteger(argvalue) {
+	 if (argvalue == null) {
+		 return false;
+	 } 
+	 
     argvalue = argvalue.toString();
     var validChars = "0123456789";
     var startFrom = 0;
@@ -108,6 +111,26 @@ function checkZip( strValue ) {
     }
     return true;
 }
+  
+ function isPositiveInteger(argvalue) {
+	 if (!checkInteger(argvalue)) {
+		 return false;
+	 } 
+	 
+	 var iValue = parseInt(argvalue,10);
+	 return !isNaN(iValue) && iValue > -1;
+} 
+ 
+ function minimumInteger(argvalue, minimum) {
+	 if (!isPositiveInteger(argvalue) || !isPositiveInteger(minimum)) {
+		 return false;
+	 } 
+
+	 var iValue = parseInt(argvalue, 10);
+	 var iMinimum = parseInt(minimum, 10);
+	 return !isNaN(iValue) && !isNaN(iMinimum) && iValue >= iMinimum;
+} 
+ 
 
 var whitespace = " \t\n\r";
 
