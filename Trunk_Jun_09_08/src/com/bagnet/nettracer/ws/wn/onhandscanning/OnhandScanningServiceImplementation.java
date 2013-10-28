@@ -430,6 +430,8 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 					serviceResponse.setCreateUpdateIndicator(STATUS_CREATE);
 					logger.info(resDoc);
 					return resDoc;
+				} else {
+					serviceResponse.addError("unable to insert ohd into NT, please contact NT support");
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
