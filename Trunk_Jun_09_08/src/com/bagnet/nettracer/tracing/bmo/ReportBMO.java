@@ -5957,8 +5957,7 @@ public class ReportBMO {
 
 			JasperReport jasperReport = getCompiledReport(
 					ReportingConstants.STATION_ONHAND_RPT_NAME, reportPath);
-			JRDataSource ds = new JROnhandDataSource(jasperReport, onhandArray,
-					(Agent) request.getSession().getAttribute("user"));
+			JRDataSource ds = new JROnhandDataSource(jasperReport, onhandArray,user);
 			return rbmo.getReportFile(jasperReport, ds, parameters,
 					ReportingConstants.STATION_ONHAND_RPT_NAME, reportPath,
 					outputtype);

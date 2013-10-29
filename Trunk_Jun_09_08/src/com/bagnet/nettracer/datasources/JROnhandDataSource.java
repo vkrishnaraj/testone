@@ -101,13 +101,13 @@ public class JROnhandDataSource implements JRDataSource {
 				return currentObject.getColor();
 			} else if (fieldName.equals(BAGTAGNUMBER_NAME)) {
 				return currentObject.getClaimnum();
-			} else if(fieldName.equals(INCIDENT_ID_NAME)){
+			} else if (fieldName.equals(INCIDENT_ID_NAME)){
 				return currentObject.getMatched_incident();
-			} else if(fieldName.equals(MODIFIEDDATE_NAME)){
+			} else if (fieldName.equals(MODIFIEDDATE_NAME)){
 				return DateUtils.formatDate(currentObject.getModifiedDate(), TracingConstants.DISPLAY_DATEFORMAT + " " + TracingConstants.DISPLAY_TIMEFORMAT_C, null, currentObject.get_TIMEZONE());
-			} else if(fieldName.equals(DESTINATION_NAME)){
+			} else if (fieldName.equals(DESTINATION_NAME)){
 				return currentObject.getDispDestination();
-			} else if(fieldName.equals(COMMENTS_NAME)){
+			} else if (fieldName.equals(COMMENTS_NAME)){
 				return currentObject.getStorage_location();
 			}  
 		}
@@ -115,10 +115,14 @@ public class JROnhandDataSource implements JRDataSource {
 		if (fieldName.equals(PASSENGER_NAME)) {
 			if (currentElement < passengers.size()) {
 				OHD_Passenger tmp = passengers.get(currentElement);
-				if (tmp.getLastname().length() > 0 && tmp.getFirstname().length() > 0)
-					return  tmp.getLastname() + ", " + tmp.getFirstname() + " " + tmp.getMiddlename();
-				else if (tmp.getFirstname().length() > 0)
-					return tmp.getFirstname() + " " + tmp.getMiddlename();
+				if (tmp.getLastname() != null && tmp.getFirstname() != null && tmp.getLastname().length() > 0 && tmp.getFirstname().length() > 0)
+					return tmp.getLastname() + ", " + tmp.getFirstname()+ " " + tmp.getMiddlename();
+				else if (tmp.getLastname() == null && tmp.getFirstname() == null )
+					return null;
+				else if (tmp.getLastname() != null && tmp.getLastname().length() > 0)
+					return  tmp.getLastname();
+				else if (tmp.getFirstname() != null && tmp.getFirstname().length() > 0)
+					return  ", " + tmp.getFirstname();
 				else 
 					return null;
 			}
