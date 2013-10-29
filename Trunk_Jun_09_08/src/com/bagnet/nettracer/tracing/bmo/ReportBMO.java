@@ -7,10 +7,6 @@ package com.bagnet.nettracer.tracing.bmo;
 
 import java.awt.Color;
 import java.io.File;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,10 +49,7 @@ import net.sf.jasperreports.engine.export.JRXmlExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.MessageResources;
-import org.apache.taglibs.standard.resources.Resources;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -64,7 +57,6 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.criterion.Expression;
 
-import aero.nettracer.selfservice.fraud.ClaimRemote;
 import aero.nettracer.selfservice.fraud.client.ClaimClientRemote;
 import ar.com.fdvs.dj.core.DynamicJasperHelper;
 import ar.com.fdvs.dj.core.layout.ClassicLayoutManager;
@@ -103,8 +95,6 @@ import com.bagnet.nettracer.reporting.SimpleReportRow;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.SalvageDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
-import com.bagnet.nettracer.tracing.db.Claim_Type;
-import com.bagnet.nettracer.tracing.db.Depreciation_Category;
 import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.Report;
 import com.bagnet.nettracer.tracing.db.Station;
@@ -443,6 +433,7 @@ public class ReportBMO {
 		return sb.toString();
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
 	private String create_mbr_rpt(StatReportDTO srDTO, int reportnum,
 			String reportname, String reporttitle) throws HibernateException {
 		Session sess = HibernateWrapper.getDirtySession().openSession();
@@ -1029,6 +1020,7 @@ public class ReportBMO {
 		}
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private String create_passboarding_rpt(StatReportDTO srDTO, int reportnum,
 			String reportname, String reporttitle) throws HibernateException {
 		Session sess = HibernateWrapper.getDirtySession().openSession();
@@ -1254,6 +1246,7 @@ public class ReportBMO {
 	 * @param reporttitle
 	 * @return @throws HibernateException
 	 */
+	@SuppressWarnings({ "unchecked", "unused", "rawtypes" })
 	private String create_flt_rpt(StatReportDTO srDTO, int reportnum,
 			String reportname, String reporttitle) throws HibernateException {
 		Session sess = HibernateWrapper.getDirtySession().openSession();
@@ -1579,6 +1572,7 @@ public class ReportBMO {
 	 * @param reporttitle
 	 * @return @throws HibernateException
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private String create_exp_rpt(StatReportDTO srDTO, int reportnum,
 			String reportname, String reporttitle) throws HibernateException {
 		Session sess = HibernateWrapper.getDirtySession().openSession();
@@ -1865,7 +1859,6 @@ public class ReportBMO {
 
 			List templist = q.list();
 
-			@SuppressWarnings("rawtypes")
 			List list = new ArrayList();
 			if (templist.size() == 0) {
 				logger.debug("no data for report");
@@ -1963,6 +1956,7 @@ public class ReportBMO {
 	 * @param reporttitle
 	 * @return @throws HibernateException
 	 */
+	@SuppressWarnings({ "unused", "rawtypes", "unchecked" })
 	private String create_station2_rpt(StatReportDTO srDTO, int reportnum,
 			String reportname, String reporttitle) throws HibernateException {
 		Session sess = HibernateWrapper.getDirtySession().openSession();
@@ -2360,6 +2354,7 @@ public class ReportBMO {
 		}
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
 	private String create_station_rpt(StatReportDTO srDTO, int reportnum,
 			String reportname, String reporttitle) throws HibernateException {
 		Session sess = HibernateWrapper.getDirtySession().openSession();
@@ -2857,6 +2852,7 @@ public class ReportBMO {
 	 * @param reporttitle
 	 * @return @throws HibernateException
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private String create_recovery_rpt(StatReportDTO srDTO, int reportnum,
 			String reportname, String reporttitle) throws HibernateException {
 		Session sess = HibernateWrapper.getDirtySession().openSession();
@@ -3144,6 +3140,7 @@ public class ReportBMO {
 	 * @param reporttitle
 	 * @return @throws HibernateException
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
 	private String create_crecovery_rpt(StatReportDTO srDTO, int reportnum,
 			String reportname, String reporttitle) throws HibernateException {
 		Session sess = HibernateWrapper.getDirtySession().openSession();
@@ -3438,6 +3435,7 @@ public class ReportBMO {
 	}
 
 	// dispute resolution report begins
+	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
 	private String create_dispute_resolution_rpt(StatReportDTO srDTO,
 			int reportnum, String reportname, String reporttitle,
 			boolean earlyBag) throws HibernateException {
@@ -3653,6 +3651,7 @@ public class ReportBMO {
 	} // end of dispute resolution report
 
 	// fraud valuation report begins
+	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
 	public String create_fraud_valuation_rpt(StatReportDTO srDTO,
 			String reportname, String reporttitle) throws HibernateException {
 		Session sess = HibernateWrapper.getDirtySession().openSession();
@@ -3822,6 +3821,7 @@ public class ReportBMO {
 	} // end of fraud valuation report
 
 
+	@SuppressWarnings({ "rawtypes", "unused", "unchecked" })
 	private String create_onhand_rpt(StatReportDTO srDTO, int reportnum,
 			String reportname, String reporttitle, boolean earlyBag)
 			throws HibernateException {
@@ -4293,6 +4293,7 @@ public class ReportBMO {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Status getStatus(int status_ID) throws HibernateException {
 		Session sess = HibernateWrapper.getDirtySession().openSession();
 		try {
@@ -4336,6 +4337,7 @@ public class ReportBMO {
 		return (JasperReport) JRLoader.loadObject(reportFile.getPath());
 	}
 
+	@SuppressWarnings("rawtypes")
 	public String getReportFile(List list, Map parameters, String reportname,
 			String rootpath, int outputtype) throws Exception {
 		JasperReport jasperReport = getCompiledReport(reportname, rootpath);
@@ -4344,6 +4346,7 @@ public class ReportBMO {
 				rootpath, outputtype);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static String getReportFile(List list, Map parameters,
 			String reportname, String rootpath, int outputtype,
 			HttpServletRequest request) throws Exception {
@@ -4354,6 +4357,7 @@ public class ReportBMO {
 	}
 
 	// overload starts
+	@SuppressWarnings("rawtypes")
 	public static String getReportFile(List list, Map parameters,
 			String reportname, String rootpath, int outputtype,
 			HttpServletRequest request, int MAX_NUMBER_OF_PAGES)
@@ -4364,6 +4368,7 @@ public class ReportBMO {
 				rootpath, outputtype, request, null, MAX_NUMBER_OF_PAGES);
 	} // overload ends
 
+	@SuppressWarnings("rawtypes")
 	private String getReportFile(JasperReport jasperReport, JRDataSource ds,
 			Map parameters, String reportname, String rootpath, int outputtype)
 			throws Exception {
@@ -4371,6 +4376,7 @@ public class ReportBMO {
 				rootpath, outputtype, req, this);
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static String getReportFile(JasperReport jasperReport,
 			JRDataSource ds, Map parameters, String reportname,
 			String rootpath, int outputtype, HttpServletRequest request,
@@ -4581,6 +4587,7 @@ public class ReportBMO {
 	}
 
 	// method overload
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static String getReportFile(JasperReport jasperReport,
 			JRDataSource ds, Map parameters, String reportname,
 			String rootpath, int outputtype, HttpServletRequest request,
@@ -4781,9 +4788,11 @@ public class ReportBMO {
 	}
 
 	// dj reporting starts
+	@SuppressWarnings("serial")
 	private static CustomExpression getSubTotalCustomExpression() {
 		return new CustomExpression() {
 
+			@SuppressWarnings("rawtypes")
 			public Object evaluate(Map fields, Map variables, Map parameters) {
 				String subTotal = "Sub-Total: ";
 				return subTotal;
@@ -4796,6 +4805,7 @@ public class ReportBMO {
 		};
 	}
 
+	@SuppressWarnings("static-access")
 	public static DynamicReport buildExcelReport(int reportStyle,
 			Locale reportLocale, ResourceBundle resourceBundle)
 			throws Exception {
@@ -5102,6 +5112,7 @@ public class ReportBMO {
 		return dr;
 	}
 
+	@SuppressWarnings("unused")
 	private static DynamicReportBuilder excelReportStyleSelector() {
 		DynamicReportBuilder result = null;
 
@@ -5545,6 +5556,7 @@ public class ReportBMO {
 		return dr;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static String getReportFileDj(JRDataSource ds, Map parameters,
 			String reportname, String rootpath, int outputtype,
 			HttpServletRequest request, ReportBMO rbmo) throws Exception {
@@ -5780,6 +5792,7 @@ public class ReportBMO {
 	 * @param tz
 	 * @return
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static ArrayList calculateDateDiff(StatReportDTO srDTO, TimeZone tz,
 			Agent u) {
 		ArrayList al = new ArrayList();
@@ -5849,6 +5862,7 @@ public class ReportBMO {
 		return al;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unused", "unchecked" })
 	public static String createSearchIncidentReport(ArrayList incidentArray,
 			HttpServletRequest request, int outputtype, String language,
 			String reportPath, ReportBMO rbmo) {
@@ -5884,6 +5898,7 @@ public class ReportBMO {
 		}
 	}
 
+	@SuppressWarnings({ "rawtypes", "unused", "unchecked" })
 	public static String createSearchOnhandReport(List onhandArray,
 			HttpServletRequest request, int outputtype, String language,
 			String reportPath, ReportBMO rbmo) {
@@ -5919,6 +5934,43 @@ public class ReportBMO {
 		}
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
+	public static String createStationOnhandReport(List onhandArray,
+			HttpServletRequest request, int outputtype, String language,
+			String reportPath, ReportBMO rbmo) {
+		try {
+
+			Map parameters = new HashMap();
+			HttpSession session = request.getSession();
+			Agent user = (Agent) session.getAttribute("user");
+
+			ResourceBundle myResources = ResourceBundle
+					.getBundle(
+							"com.bagnet.nettracer.tracing.resources.ApplicationResources",
+							new Locale(language));
+			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
+			parameters.put("showdetail", "1");
+			parameters.put("form", request.getAttribute("searchIncidentForm"));
+
+			IncidentBMO bmo = new IncidentBMO();
+			BagService bs = new BagService();
+
+			JasperReport jasperReport = getCompiledReport(
+					ReportingConstants.STATION_ONHAND_RPT_NAME, reportPath);
+			JRDataSource ds = new JROnhandDataSource(jasperReport, onhandArray,
+					(Agent) request.getSession().getAttribute("user"));
+			return rbmo.getReportFile(jasperReport, ds, parameters,
+					ReportingConstants.STATION_ONHAND_RPT_NAME, reportPath,
+					outputtype);
+
+		} catch (Exception e) {
+			logger.error("unable to create station onhand report: " + e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	@SuppressWarnings({ "rawtypes", "unused", "unchecked" })
 	public static String createSearchScandataReport(ScannerDTO dto,
 			HttpServletRequest request, int outputtype, String language,
 			String reportPath) {
@@ -5954,6 +6006,7 @@ public class ReportBMO {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public static List<Report> getAllCustomReports() {
 		Session sess = null;
 		try {
@@ -5974,6 +6027,7 @@ public class ReportBMO {
 		}
 	}
 
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	public static Report getCustomReport(int number) {
 		Session sess = null;
 		try {
@@ -6015,6 +6069,7 @@ public class ReportBMO {
 	}
 
 	// custom dynamic report for AirTran MBR Report
+	@SuppressWarnings("rawtypes")
 	public static String getDynamicReportFile(List list, Map parameters,
 			String reportname, String rootpath, int outputtype,
 			HttpServletRequest request) throws Exception {
@@ -6028,6 +6083,7 @@ public class ReportBMO {
 	}
 
 	// custom dynamic report for AirTran MBR Report
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static String getDynamicReportFile(JasperReport jasperReport,
 			JRDataSource ds, Map parameters, String reportname,
 			String rootpath, int outputtype, HttpServletRequest request,
@@ -6223,6 +6279,7 @@ public class ReportBMO {
 		return locale;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
 	public String createInboundExpediteBagsReport(String rootpath,
 			List bagsList, Agent user, StatReportDTO srDTO) {
 		String result = "";
@@ -6259,6 +6316,7 @@ public class ReportBMO {
 		return result;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public String createSalvageReport(String root, int salvageId, Agent user) {
 		Salvage salvage = SalvageDAO.loadSalvage(salvageId);
 		if (salvage == null || root == null) {
@@ -6346,6 +6404,7 @@ public class ReportBMO {
 		return fileName;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static String createSearchFoundItemReport(List<LFFound> lfcArray,
 			HttpServletRequest request, int outputtype, String language,
 			String reportPath, ReportBMO rbmo) {

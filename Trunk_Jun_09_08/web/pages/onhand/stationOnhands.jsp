@@ -16,6 +16,8 @@
 <%@page import="java.util.Locale" %>
 <%@page import="org.displaytag.tags.TableTagParameters"%>
 <%@page import="org.displaytag.util.ParamEncoder"%>
+<%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
+
 <%
 	Agent a = (Agent) session.getAttribute("user");
 	org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources) request
@@ -110,6 +112,26 @@ function submitForwardForm()
             </tr>
           </table>
         </div>
+           <%
+              if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_QUERY_REPORTS, a)) {
+            %>
+            <div id="pageheaderright">
+              <select class="dropdown" name="outputtype">
+                <% if (!TracerProperties.isTrue(a.getCompanycode_ID(),TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
+                  <option value="0" selected="selected"><bean:message key="radio.pdf" /></option>
+                <% } %>
+                <option value="1"><bean:message key="radio.html" /></option>
+              </select>
+              <input onclick='document.deliverForm.sortBy.value="<%=request.getAttribute("sortNum").toString()%>";' type="submit" name="generateReport" id="button" value="<bean:message key="button.generateReport" />">
+              <logic:present name="reportfile" scope="request">
+                <script language="javascript">
+                    openReportWindow('reporting?outputtype=<%= request.getAttribute("outputtype") %>&reportfile=<bean:write name="reportfile" scope="request" />','report',800,600);
+                </script>
+              </logic:present>
+            </div>
+            <%
+              }
+            %>                    
       </td>
     </tr>
     

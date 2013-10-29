@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -21,6 +22,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.constant.TracingConstants.SortParam;
@@ -31,6 +33,7 @@ import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.OHDUtils;
+import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
@@ -44,6 +47,8 @@ import org.displaytag.util.ParamEncoder;
  * @author Ankur Gupta
  */
 public class ViewOnhands extends Action {
+	private static Logger logger = Logger.getLogger(ViewOnhands.class);
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
@@ -77,18 +82,22 @@ public class ViewOnhands extends Action {
 
 		BagService bs = new BagService();
 		SearchIncidentForm daform = new SearchIncidentForm();
-		//daform.setStatus_ID("" + TracingConstants.OHD_STATUS_OPEN);
+
 		daform.setCompanycode_ID(agent_station.getCompany().getCompanyCode_ID());
 		daform.setStationassigned_ID(agent_station.getStation_ID());
 
 		List resultlist = null;
+
 		// get number of records found
 		/* 
 		 * Getting the sort logic 
 		 */
 		String sort=request.getParameter((new ParamEncoder("ohd")).encodeParameterName(TableTagParameters.PARAMETER_SORT));
+		boolean runReport = true;
 		if(sort==null){
-			sort=request.getParameter("sortBy")!=null?request.getParameter("sortBy").toString():TracingConstants.SortParam.OHD_NUM.getParamString();
+			sort=(request.getParameter("sortBy")!=null && request.getParameter("sortBy").length() > 0)?request.getParameter("sortBy").toString():TracingConstants.SortParam.OHD_NUM.getParamString();
+		} else {
+			runReport = false;
 		}
 		
 		if (sort != null && sort.length() > 0 && SortParam.isValid(sort)) request.setAttribute("sortNum", sort);
@@ -154,6 +163,46 @@ public class ViewOnhands extends Action {
 			}
 			request.setAttribute("onhandlist", searchList);
 		}
+
+		// Generate report
+		if (runReport && request.getParameter("generateReport") != null && 
+				request.getParameter("outputtype") != null) {
+			
+			try {
+				String reportPath = getServlet().getServletContext().getRealPath("/");
+				int outputType = new Integer(request.getParameter("outputtype")).intValue();
+				String reportFile = null;
+				int rc = ((Long) resultlist.get(0)).intValue();
+				int maxRc = TracerProperties.getMaxReportRows(user.getStation().getCompany().getCompanyCode_ID()); 
+									
+				if (rc < maxRc) {
+					List resultArray =  bs.findOnHandBagsBySearchCriteria(daform, user, 0, 0, false, true, true, sort);
+					ReportBMO rbmo = new ReportBMO(request);
+
+					reportFile = ReportBMO.createStationOnhandReport(resultArray, request, outputType, user.getCurrentlocale(), reportPath, rbmo);
+					
+					if (rbmo.getErrormsg() != null) {
+						ActionMessages errors = new ActionMessages();
+						ActionMessage error = new ActionMessage(rbmo.getErrormsg());
+						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+						saveMessages(request, errors);
+					} else {
+						request.setAttribute("reportfile", reportFile);
+						request.setAttribute("outputtype", outputType);
+					} 
+
+				} else {
+					ActionMessages errors = new ActionMessages();
+					ActionMessage error = new ActionMessage("error.maxdata");
+					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+					saveMessages(request, errors);
+				}
+				
+			} catch (Exception e) {
+				logger.error(e.getStackTrace());
+			} 
+		}
+				
 		return (mapping.findForward(TracingConstants.ONHAND_LIST));
 	}
 }

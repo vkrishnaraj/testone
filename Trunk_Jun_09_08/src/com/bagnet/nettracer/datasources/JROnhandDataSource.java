@@ -13,10 +13,12 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 import net.sf.jasperreports.engine.JasperReport;
 
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHD_Passenger;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 /**
  * @author Byron
@@ -26,6 +28,7 @@ import com.bagnet.nettracer.tracing.utils.AdminUtils;
 public class JROnhandDataSource implements JRDataSource {
 
 	private String OHD_ID_NAME = "ohdId";
+	private String INCIDENT_ID_NAME = "incidentId";
 	private String TYPE_NAME = "type";
 	private String COLOR_NAME = "color";
 	private String STATIONFOUND_NAME = "stationFound";
@@ -34,6 +37,11 @@ public class JROnhandDataSource implements JRDataSource {
 	private String STATUS_NAME = "status";
 	private String BAGTAGNUMBER_NAME = "bagTagNumber";
 	private String PASSENGER_NAME = "passengerName";
+	private String MODIFIEDDATE_NAME = "modifiedDate";
+	private String DESTINATION_NAME = "destination";
+	private String COMMENTS_NAME = "comments";
+	
+		
 	
 	private String dateFormat = null;
 	private String timeFormat = null;
@@ -93,13 +101,26 @@ public class JROnhandDataSource implements JRDataSource {
 				return currentObject.getColor();
 			} else if (fieldName.equals(BAGTAGNUMBER_NAME)) {
 				return currentObject.getClaimnum();
-			}
+			} else if(fieldName.equals(INCIDENT_ID_NAME)){
+				return currentObject.getMatched_incident();
+			} else if(fieldName.equals(MODIFIEDDATE_NAME)){
+				return DateUtils.formatDate(currentObject.getModifiedDate(), TracingConstants.DISPLAY_DATEFORMAT + " " + TracingConstants.DISPLAY_TIMEFORMAT_C, null, currentObject.get_TIMEZONE());
+			} else if(fieldName.equals(DESTINATION_NAME)){
+				return currentObject.getDispDestination();
+			} else if(fieldName.equals(COMMENTS_NAME)){
+				return currentObject.getStorage_location();
+			}  
 		}
 		
 		if (fieldName.equals(PASSENGER_NAME)) {
 			if (currentElement < passengers.size()) {
 				OHD_Passenger tmp = passengers.get(currentElement);
-				return  tmp.getLastname() + ", " + tmp.getFirstname() + " " + tmp.getMiddlename();
+				if (tmp.getLastname().length() > 0 && tmp.getFirstname().length() > 0)
+					return  tmp.getLastname() + ", " + tmp.getFirstname() + " " + tmp.getMiddlename();
+				else if (tmp.getFirstname().length() > 0)
+					return tmp.getFirstname() + " " + tmp.getMiddlename();
+				else 
+					return null;
 			}
 			return null;
 		} else {
@@ -107,6 +128,7 @@ public class JROnhandDataSource implements JRDataSource {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public boolean next() throws JRException {
 
 		if (currentElement + 1 < totalElements) {
