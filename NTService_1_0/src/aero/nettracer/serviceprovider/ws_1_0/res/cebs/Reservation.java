@@ -1,6 +1,7 @@
 package aero.nettracer.serviceprovider.ws_1_0.res.cebs;
 
 import java.util.Calendar;
+import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 
@@ -332,7 +333,10 @@ public class Reservation implements ReservationInterface {
 		
 		// DATE
 		if (flight.getDepartureDate() != null) {
-			i.setSchdeparttime(flight.getDepartureDate());
+			Calendar depDate = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+			Calendar provDate = flight.getDepartureDate();
+			depDate.set(provDate.get(Calendar.YEAR), provDate.get(Calendar.MONTH), provDate.get(Calendar.DATE));
+			i.setSchdeparttime(depDate);
 		}
 	}
 }
