@@ -40,7 +40,7 @@ public class JROnhandDataSource implements JRDataSource {
 	private String MODIFIEDDATE_NAME = "modifiedDate";
 	private String DESTINATION_NAME = "destination";
 	private String COMMENTS_NAME = "comments";
-	
+	private String POS_ID_NAME = "posId";
 		
 	
 	private String dateFormat = null;
@@ -109,7 +109,9 @@ public class JROnhandDataSource implements JRDataSource {
 				return currentObject.getDispDestination();
 			} else if (fieldName.equals(COMMENTS_NAME)){
 				return currentObject.getStorage_location();
-			}  
+			} else if (fieldName.equals(POS_ID_NAME)){
+				return currentObject.getPosId();
+			}    
 		}
 		
 		if (fieldName.equals(PASSENGER_NAME)) {

@@ -3752,6 +3752,7 @@
 		<copy todir="${basedir}/web/reports" file="companies/ab/environment/${environment.name}/MissingReceipt_fr.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/bdo_receipt.jrxml" overwrite="true"/>
 		<copy todir="${basedir}/web/reports" file="companies/tracer/ma_bag_info.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/tracer/station_onhand.jrxml" overwrite="true" />
 		
 		<antcall target="jasper_compile" />
 
@@ -3796,6 +3797,7 @@
 		
 		<copy todir="${basedir}/web/reports" file="companies/tracer/bdo_receipt.jrxml" overwrite="true"/>
 		<copy todir="${basedir}/web/reports" file="companies/tracer/ma_bag_info.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/tracer/station_onhand.jrxml" overwrite="true" />
 		
 		<antcall target="jasper_compile" />
 
@@ -3841,6 +3843,7 @@
 		<copy todir="${basedir}/src" file="companies/flyafrica/report_email_dam.html" overwrite="true" />
 		<copy todir="${basedir}/src" file="companies/flyafrica/report_email_pil.html" overwrite="true" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/ma_bag_info.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/tracer/station_onhand.jrxml" overwrite="true" />
 		
 		<antcall target="jasper_compile" />
 
@@ -3872,6 +3875,7 @@
 		<antcall target="generate-hibernate-xmls" />
 
 		<copy todir="${basedir}/web/reports" file="companies/tracer/ma_bag_info.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/tracer/station_onhand.jrxml" overwrite="true" />
 		
 		<antcall target="jasper_compile" />
 
@@ -3903,7 +3907,8 @@
 		<antcall target="generate-hibernate-xmls" />
 
 		<copy todir="${basedir}/web/reports" file="companies/tracer/ma_bag_info.jrxml" overwrite="true" />
-		
+		<copy todir="${basedir}/web/reports" file="companies/southwest/station_onhand.jrxml" overwrite="true" />
+
 		<antcall target="jasper_compile" />
 
 		<copy todir="${basedir}/src" file="companies/southwest-fs/custom_ui.properties" />
@@ -3946,6 +3951,7 @@
 		<copy todir="${basedir}/web/reports" file="companies/tracer/DamageReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/MissingReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/southwest/ma_bag_info.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/southwest/station_onhand.jrxml" overwrite="true" />
 		
 		<antcall target="jasper_compile" />
 
@@ -3972,6 +3978,7 @@
 		<copy todir="${basedir}/web/reports" file="companies/airtran/MissingReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/bdo_receipt.jrxml" overwrite="true"/>
 		<copy todir="${basedir}/web/reports" file="companies/tracer/ma_bag_info.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/tracer/station_onhand.jrxml" overwrite="true" />
 		
 		<antcall target="jasper_compile" />
 
@@ -4027,6 +4034,7 @@
 		<copy todir="${basedir}/web/reports" file="companies/fraud/environment/${environment.name}/MissingReceipt_fr.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/bdo_receipt.jrxml" overwrite="true"/>
 		<copy todir="${basedir}/web/reports" file="companies/tracer/ma_bag_info.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/tracer/station_onhand.jrxml" overwrite="true" />
 		
 		<antcall target="jasper_compile" />
 
@@ -4067,6 +4075,7 @@
 		<copy todir="${basedir}/web/reports" file="companies/azul/MissingReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/bdo_receipt.jrxml" overwrite="true"/>
 		<copy todir="${basedir}/web/reports" file="companies/tracer/ma_bag_info.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/tracer/station_onhand.jrxml" overwrite="true" />
 
 		<antcall target="jasper_compile" />
 
@@ -4109,6 +4118,7 @@
 		<!-- <copy todir="${basedir}/web/reports" file="companies/delta-fs/MissingReceipt.jrxml" /> -->
 		<copy todir="${basedir}/web/reports" file="companies/tracer/bdo_receipt.jrxml" overwrite="true"/>
 		<copy todir="${basedir}/web/reports" file="companies/tracer/ma_bag_info.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/tracer/station_onhand.jrxml" overwrite="true" />
 
 		<antcall target="jasper_compile" />
 
@@ -4150,6 +4160,7 @@
 		<!-- <copy todir="${basedir}/web/reports" file="companies/delta-fs/MissingReceipt.jrxml" /> -->
 		<copy todir="${basedir}/web/reports" file="companies/tracer/bdo_receipt.jrxml" overwrite="true"/>
 		<copy todir="${basedir}/web/reports" file="companies/tracer/ma_bag_info.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/tracer/station_onhand.jrxml" overwrite="true" />
 
 		<antcall target="jasper_compile" />
 
@@ -4191,6 +4202,7 @@
 		<!-- <copy todir="${basedir}/web/reports" file="companies/delta-fs/MissingReceipt.jrxml" /> -->
 		<copy todir="${basedir}/web/reports" file="companies/tracer/bdo_receipt.jrxml" overwrite="true"/>
 		<copy todir="${basedir}/web/reports" file="companies/tracer/ma_bag_info.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/tracer/station_onhand.jrxml" overwrite="true" />
 
 		<antcall target="jasper_compile" />
 
@@ -4228,6 +4240,7 @@
 		
 		<copy todir="${basedir}/web/reports" file="companies/tracer/bdo_receipt.jrxml" overwrite="true"/>
 		<copy todir="${basedir}/web/reports" file="companies/tracer/ma_bag_info.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/tracer/station_onhand.jrxml" overwrite="true" />
 
 		<antcall target="jasper_compile" />
 
@@ -4265,6 +4278,7 @@
 		<copy todir="${basedir}/web/reports" file="companies/webjet/DamageReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/webjet/bdo_receipt.jrxml" overwrite="true"/>
 		<copy todir="${basedir}/web/reports" file="companies/tracer/ma_bag_info.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/tracer/station_onhand.jrxml" overwrite="true" />
 			
 		<antcall target="jasper_compile" />
 
@@ -4349,6 +4363,7 @@
 		<copy todir="${basedir}/web/reports" file="companies/tracer/DamageReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/MissingReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/ma_bag_info.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/tracer/station_onhand.jrxml" overwrite="true" />
 			
 		<antcall target="jasper_compile" />
 
@@ -4391,6 +4406,7 @@
 		<copy todir="${basedir}/src" file="companies/flyafrica/report_email_dam.html" overwrite="true" />
 		<copy todir="${basedir}/src" file="companies/flyafrica/report_email_pil.html" overwrite="true" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/ma_bag_info.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/tracer/station_onhand.jrxml" overwrite="true" />
 			
 		<antcall target="jasper_compile" />
 
@@ -4418,6 +4434,7 @@
 		<copy todir="${basedir}/web/reports" file="companies/spirit/DamageReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/spirit/MissingReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/ma_bag_info.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/tracer/station_onhand.jrxml" overwrite="true" />
 
 		<property name="hibernate_props_loc" value="companies/spirit/environment/${environment.name}" />
 		<property name="hibernate_dialect" value="mysql" />
@@ -4473,6 +4490,7 @@
 		<copy todir="${basedir}/web/reports" file="companies/jetblue/MissingReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/bdo_receipt.jrxml" overwrite="true"/>
 		<copy todir="${basedir}/web/reports" file="companies/tracer/ma_bag_info.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/tracer/station_onhand.jrxml" overwrite="true" />
 		
 		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/jetblue/ApplicationResources_es.properties" />
 
@@ -4525,6 +4543,7 @@
 		<copy todir="${basedir}/web/reports" file="companies/westjet/environment/${environment.name}/MissingReceipt_fr.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/bdo_receipt.jrxml" overwrite="true"/>
 		<copy todir="${basedir}/web/reports" file="companies/tracer/ma_bag_info.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/tracer/station_onhand.jrxml" overwrite="true" />
 		
 		<antcall target="jasper_compile" />
 
