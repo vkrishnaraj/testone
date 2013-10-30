@@ -6466,7 +6466,7 @@ public class ReportBMO {
 							new Locale(language));
 
 			myResources.getString("header.report.incoming.incident");
-			String title=myResources.getString("header.report.incoming.incident");//messages.getMessage(new Locale(user.getCurrentlocale()),"header.report.incoming.incident");
+			String title=myResources.getString("header.report.incoming.incident");
 			parameters.put("title", title);
 			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
 			
@@ -6570,8 +6570,9 @@ public class ReportBMO {
 						i=0;
 						for(com.bagnet.nettracer.tracing.db.Itinerary itin:inc.getItinerary_list()){
 							if(itin.getItinerarytype()==TracingConstants.PASSENGER_ROUTING){
-								if(i!=0)
+								if(i!=0){
 									itineraryList+="\n";
+								}
 								if(itin.getAirline()!=null && !itin.getAirline().isEmpty()){
 									itineraryList+=itin.getAirline()+" ";
 								}

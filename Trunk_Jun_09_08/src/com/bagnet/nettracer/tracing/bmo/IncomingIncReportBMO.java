@@ -92,9 +92,9 @@ public class IncomingIncReportBMO {
 			
 			virtualizer.setReadOnly(true);
 	
-			if (outputtype == TracingConstants.REPORT_OUTPUT_HTML)
+			if (outputtype == TracingConstants.REPORT_OUTPUT_HTML){
 				outfile += ".html";
-			else if (outputtype == TracingConstants.REPORT_OUTPUT_PDF)
+			} else if (outputtype == TracingConstants.REPORT_OUTPUT_PDF){
 				// If the client doesn't have the proper property, default to HTML
 				if (!TracerProperties.isTrue(user.getCompanycode_ID(),TracerProperties.SUPPRESSION_PRINTING_NONHTML)) {
 					outfile += ".pdf";
@@ -103,7 +103,7 @@ public class IncomingIncReportBMO {
 					outputtype = TracingConstants.REPORT_OUTPUT_HTML;
 					request.setAttribute("outputtype", Integer.toString(TracingConstants.REPORT_OUTPUT_HTML));
 				}
-			else if (outputtype == TracingConstants.REPORT_OUTPUT_UNDECLARED) {
+			} else if (outputtype == TracingConstants.REPORT_OUTPUT_UNDECLARED) {
 				// In the event the file type is undeclared, we will use the default - PDF if available, HTML otherwise.
 				if (!TracerProperties.isTrue(user.getCompanycode_ID(),TracerProperties.SUPPRESSION_PRINTING_NONHTML)) {
 					outfile += ".pdf";
@@ -118,9 +118,9 @@ public class IncomingIncReportBMO {
 			String outputpath = rootpath + ReportingConstants.REPORT_TMP_PATH + outfile;
 			JRExporter exporter = null;
 	
-			if (outputtype == TracingConstants.REPORT_OUTPUT_PDF)
+			if (outputtype == TracingConstants.REPORT_OUTPUT_PDF) {
 				JasperExportManager.exportReportToPdfFile(jasperPrint, outputpath);
-			else if (outputtype == TracingConstants.REPORT_OUTPUT_HTML) {
+			} else if (outputtype == TracingConstants.REPORT_OUTPUT_HTML) {
 				exporter = new JRHtmlExporter();
 	
 				Map imagesMap = new HashMap();
