@@ -102,21 +102,11 @@ function submitForwardForm()
             <bean:message key="header.On-hand*Bags" />
           </h1>
         </div>
-        <div id="pageheaderright">
-          <table id="pageheaderright">
-            <tr>
-              <jsp:include page="/pages/includes/mail_incl.jsp" />
-              <td>
-                <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><bean:message key="Help" /></a>
-              </td>
-            </tr>
-          </table>
-        </div>
-           <%
+            <%
               if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_QUERY_REPORTS, a)) {
             %>
             <div id="pageheaderright">
-              <select class="dropdown" name="outputtype">
+              <select styleClass="dropdown" name="outputtype">
                 <% if (!TracerProperties.isTrue(a.getCompanycode_ID(),TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
                   <option value="0" selected="selected"><bean:message key="radio.pdf" /></option>
                 <% } %>
