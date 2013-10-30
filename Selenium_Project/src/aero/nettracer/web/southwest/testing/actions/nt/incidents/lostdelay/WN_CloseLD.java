@@ -32,7 +32,6 @@ public class WN_CloseLD extends WN_SeleniumTest {
 			verifyEquals("Passenger Pick Up",selenium.getValue("name=passengerpickedup0"));
 			verifyFalse(selenium.isEditable("name=theitem[0].lossCode"));
 			verifyFalse(selenium.isEditable("name=theitem[0].faultStation_id"));
-			verifyTrue(setPermissions(new String[] { "663","662"}, new boolean[] { false, true}));
 			goToTaskManager();
 		} else {
 			System.out.println("!!!!!!!!!!!!!!!! Failed to save BDO for incident");
@@ -41,6 +40,7 @@ public class WN_CloseLD extends WN_SeleniumTest {
 	
 	@Test
 	public void testPassengerPickUpLD(){
+		verifyTrue(setPermissions(new String[] { "663","662"}, new boolean[] { false, true}));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		selenium.select("name=theitem[0].lossCode", "label=Please Select");
 		selenium.select("name=theitem[0].faultStation_id", "label=Please Select");
