@@ -113,8 +113,8 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 				verifyEquals("Record Locator is required.", selenium.getAlert());
 				selenium.type("name=recordlocator", TODAY_SIX_DIGIT);
 				selenium.click("name=savetracingButton");
-				verifyEquals("Job Title is required.", selenium.getAlert());
-				selenium.type("name=passenger[0].jobtitle", "agent");
+				verifyEquals("Salutation is required.", selenium.getAlert());
+				selenium.select("name=passenger[0].salutation", "label=Mr.");
 				selenium.click("name=savetracingButton");
 				verifyEquals("Zip is required.", selenium.getAlert());
 				selenium.type("name=addresses[0].zip", "33213");
@@ -686,6 +686,8 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		verifyTrue(selenium.isTextPresent("Chargeback Code"));
 		verifyTrue(selenium.isTextPresent("Chargeback Station"));
+		verifyTrue(selenium.isEditable("name=theitem[0].lossCode"));
+		verifyTrue(selenium.isEditable("name=theitem[0].faultStation_id"));
 		selenium.select("name=theitem[0].lossCode", "value=11");
 		selenium.select("name=theitem[0].faultStation_id", "label=LZ");
 		selenium.click("name=saveButton");
@@ -754,10 +756,21 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 			verifyTrue(selenium.isTextPresent("The Baggage Delivery Order has been successfully saved"));
 			verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 			verifyTrue(selenium.isTextPresent("Cannot Passenger Pick Up - There is a Non-Cancelled BDO for this Item"));
+			verifyFalse(selenium.isEditable("name=theitem[0].lossCode"));
+			verifyFalse(selenium.isEditable("name=theitem[0].faultStation_id"));
 			goToTaskManager();
 		} else {
 			System.out.println("!!!!!!!!!!!!!!!! Failed to save BDO for incident");
 		}
+	}
+	
+	@Test
+	public void testBagLossEditDelivered(){
+		verifyTrue(setPermissions(new String[] { "662","663"}, new boolean[] { false, true}));
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
+		verifyTrue(selenium.isEditable("name=theitem[0].lossCode"));
+		verifyTrue(selenium.isEditable("name=theitem[0].faultStation_id"));
+		goToTaskManager();
 	}
 	
 	@Test

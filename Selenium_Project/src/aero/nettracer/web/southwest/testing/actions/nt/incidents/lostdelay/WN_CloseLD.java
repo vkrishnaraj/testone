@@ -30,6 +30,9 @@ public class WN_CloseLD extends WN_SeleniumTest {
 		if (checkNoErrorPage()) {
 			verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 			verifyEquals("Passenger Pick Up",selenium.getValue("name=passengerpickedup0"));
+			verifyFalse(selenium.isEditable("name=theitem[0].lossCode"));
+			verifyFalse(selenium.isEditable("name=theitem[0].faultStation_id"));
+			verifyTrue(setPermissions(new String[] { "663","662"}, new boolean[] { false, true}));
 			goToTaskManager();
 		} else {
 			System.out.println("!!!!!!!!!!!!!!!! Failed to save BDO for incident");
@@ -140,6 +143,9 @@ public class WN_CloseLD extends WN_SeleniumTest {
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
 				verifyTrue(selenium.isTextPresent("Lost/Delayed Bag Incident has been closed."));
+				verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
+				verifyFalse(selenium.isEditable("name=theitem[0].lossCode"));
+				verifyFalse(selenium.isEditable("name=theitem[0].faultStation_id"));
 				goToTaskManager();
 				waitForPageToLoadImproved();
 			} else {
@@ -148,6 +154,42 @@ public class WN_CloseLD extends WN_SeleniumTest {
 			}
 		} else {
 			System.out.println("!!!!!!!!!!!!!!! - Close Lost/Delay Page Failed To Load. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+			verifyTrue(false);
+		}
+	}
+	
+	@Test
+	public void testBagLossCloseLD() throws Exception {
+		verifyTrue(setPermissions(new String[] { "662","664"}, new boolean[] { false, true}));
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
+		verifyTrue(selenium.isEditable("name=theitem[0].lossCode"));
+		verifyTrue(selenium.isEditable("name=theitem[0].faultStation_id"));
+		goToTaskManager();
+		selenium.select("name=cbroStation", "label=ATL");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
+			verifyFalse(selenium.isEditable("name=theitem[0].lossCode"));
+			verifyFalse(selenium.isEditable("name=theitem[0].faultStation_id"));
+			verifyTrue(setPermissions(new String[] { "664","665"}, new boolean[] { false, true}));
+			verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
+			verifyTrue(selenium.isEditable("name=theitem[0].lossCode"));
+			verifyTrue(selenium.isEditable("name=theitem[0].faultStation_id"));
+			goToTaskManager();
+			selenium.select("name=cbroStation", "label=LZ");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Changing Station to ATL. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
+			verifyTrue(false);
+		}
+
+		if (checkNoErrorPage()) {
+			verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
+			verifyFalse(selenium.isEditable("name=theitem[0].lossCode"));
+			verifyFalse(selenium.isEditable("name=theitem[0].faultStation_id"));
+			goToTaskManager();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Changing Station to LZ. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 			verifyTrue(false);
 		}
 	}

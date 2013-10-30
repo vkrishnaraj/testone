@@ -328,7 +328,7 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 			selenium.type("name=inventorylist[1].description", "TEST");
 			selenium.type("name=inventorylist[2].description", "TEST");
 			selenium.type("name=recordlocator", "TESTER");					
-			selenium.type("name=passenger[0].jobtitle", "agent");			
+			selenium.select("name=passenger[0].salutation", "label=Mr.");			
 			selenium.type("name=addresses[0].zip", "33213");					
 			selenium.type("name=addresses[0].mobile", "4040213465");				
 			selenium.type("name=claimcheck[0].claimchecknum", "1234567890");
