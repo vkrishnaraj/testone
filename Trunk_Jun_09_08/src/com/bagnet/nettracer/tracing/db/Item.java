@@ -1309,7 +1309,7 @@ public class Item implements Serializable {
 	 */
 	public boolean isNotDelivered(){
 		if(getStatus()!=null)
-			return getStatus().getStatus_ID()!=TracingConstants.ITEM_STATUS_TOBEDELIVERED;;
+			return getStatus().getStatus_ID()!=TracingConstants.ITEM_STATUS_PROCESSFORDELIVERY;
 		return true;
 	}
 }
