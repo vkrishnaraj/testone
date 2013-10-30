@@ -6510,10 +6510,18 @@ public class ReportBMO {
 					if(inc.getItemlist()!=null){
 						for(com.bagnet.nettracer.tracing.db.Item item:inc.getItemlist()){
 							if(i!=0){
-								colorList+="\n";
-								typeList+="\n";
-								posList+="\n";
-								claimCheckList+="\n";
+								if(!colorList.isEmpty()){
+									colorList+="\n";
+								}
+								if(!typeList.isEmpty()){
+									typeList+="\n";
+								}
+								if(!posList.isEmpty()){
+									posList+="\n";
+								}
+								if(!claimCheckList.isEmpty()){
+									claimCheckList+="\n";
+								}
 							}
 							if(item.getColor()!=null && !item.getColor().isEmpty())
 								colorList+=item.getColor();
@@ -6530,8 +6538,9 @@ public class ReportBMO {
 					if(inc.getClaimcheck_list()!=null){
 						for(com.bagnet.nettracer.tracing.db.Incident_Claimcheck incCC:inc.getClaimcheck_list()){
 							if(incCC.getClaimchecknum()!=null && !incCC.getClaimchecknum().isEmpty()){
-								if(!claimCheckList.isEmpty())
+								if(!claimCheckList.isEmpty()){
 									claimCheckList+="\n";
+								}
 								claimCheckList+=incCC.getClaimchecknum();
 							}
 						}
@@ -6544,7 +6553,7 @@ public class ReportBMO {
 							boolean passLast=false;
 							boolean passFirst=false;
 
-							if(i!=0){
+							if(i!=0 && !passengerList.isEmpty()){
 								passengerList+="\n";
 							}
 
@@ -6570,7 +6579,7 @@ public class ReportBMO {
 						i=0;
 						for(com.bagnet.nettracer.tracing.db.Itinerary itin:inc.getItinerary_list()){
 							if(itin.getItinerarytype()==TracingConstants.PASSENGER_ROUTING){
-								if(i!=0){
+								if(i!=0 && !itineraryList.isEmpty()){
 									itineraryList+="\n";
 								}
 								if(itin.getAirline()!=null && !itin.getAirline().isEmpty()){
