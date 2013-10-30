@@ -240,4 +240,13 @@ public final class ClaimForm extends ActionForm {
 		return null;
 	}
 	
+	@Override
+	public void reset(org.apache.struts.action.ActionMapping mapping, javax.servlet.http.HttpServletRequest request) {
+		super.reset(mapping, request);
+		if(this.claim!=null){
+			this.claim.setIx(false);
+			this.claim.setCarryon(false);
+		}
+	}
+	
 }

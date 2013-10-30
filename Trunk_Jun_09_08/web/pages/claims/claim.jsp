@@ -16,18 +16,22 @@
 <%@ page import="aero.nettracer.fs.model.FsReceipt" %>
 <%@ page import="aero.nettracer.fs.model.Attachment" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.DateUtils" %>
+<%@ page import="com.bagnet.nettracer.reporting.ReportingConstants" %>
 <%@ page import="org.apache.struts.util.LabelValueBean" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Company" %>
 <%@ page import="java.util.ArrayList" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
+
   ArrayList<LabelValueBean> stateList = (ArrayList<LabelValueBean>) session.getAttribute("statelist");
   ArrayList<Company> companyList = (ArrayList<Company>) session.getAttribute("companylistByName");
   ArrayList<LabelValueBean> countryList = (ArrayList<LabelValueBean>) session.getAttribute("countrylist");
-	
+  
+  ClaimForm cform=(ClaimForm)session.getAttribute("claimForm");
   boolean ntUser = PropertyBMO.isTrue("nt.user");
   boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
-
+  boolean crapFields=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CLAIM_REPORT_ADJUSTMENT_PREDICTION, a);
+  boolean hasIncident=(cform.getClaim()!=null && cform.getClaim().getNtIncidentId()!=null);
 %>
   
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
@@ -175,8 +179,8 @@
                         </td>
                         <td>
                           <a href="#" onclick="openReportWindow('reporting?print=<bean:write name="CLAIM_PAYOUT_RPT" scope="request"/>&outputtype=0','ExpensePayout',800,600);return false;"><bean:message key="link.claim_payout" /></a>
-                		</logic:notPresent>
                         </td>
+                		</logic:notPresent>
                       </logic:notPresent>
 	                  <% } %>
                       <jsp:include page="/pages/includes/mail_incl.jsp" />
@@ -184,6 +188,19 @@
                         <a href="#" onclick="openHelp('pages/WebHelp/nettracerhelp.htm');return false;"><bean:message key="Help" /></a>
                       </td>
                     </tr>
+                    <% if(crapFields && hasIncident){ %>
+                    
+                    	<logic:present name="claimForm" property="claim.ntIncident">
+	                    <tr>
+	                    	<td>
+	                          <a href="#" onclick="openReportWindow('reporting?print=<%=ReportingConstants.CRAP_SHEET %>&outputtype=0','CRAPSheet',800,600);return false;"><img src="deployment/main/images/nettracer/icon_printrpt.gif" width="12" height="12"></a>
+	                        </td>
+	                        <td>
+	                          <a href="#" onclick="openReportWindow('reporting?print=<%=ReportingConstants.CRAP_SHEET %>&outputtype=0','CRAPSheet',800,600);return false;"><bean:message key="link.crap_sheet" /></a>
+	                        </td>
+		                </tr>
+		                </logic:present>
+                    <%} %>
                   </table>
                 </div>
               </td>
@@ -369,17 +386,17 @@
                     <br />
                     <table class="form2" cellspacing="0" cellpadding="0">
                       <tr>
-                        <td>
+                        <td colspan="2">
                         	<bean:message key="colname.claim.id" />
                         	<br />
                         	<html:text name="claimForm" property="claim.id" size="5" styleClass="textfield" disabled="true" />
                         </td>
-                        <td>
+                        <td colspan="2">
                         	<bean:message key="colname.claim.date" />
                         	<br />
                         	<html:text property="dispCreateTime" styleClass="textfield" disabled="true" />
                         </td>
-                        <td>
+                        <td colspan="2">
                         	<bean:message key="colname.claim.create.agent" />
                         	<br />
                         	<logic:notEmpty name="claimForm" property="claim.createagent">
@@ -389,7 +406,7 @@
                         		<input type="text"  value="" size="10" styleClass="textfield" disabled="true" />
                         	</logic:empty>
                         </td></tr><tr>
-                      	<td colspan="2">
+                      	<td colspan="4">
                       		<bean:message key="header.claim_type"/>
                       		<br />
                       		<html:select name="claimForm" property="claim.claimType" styleClass="dropdown" >
@@ -407,7 +424,7 @@
 			                </html:select>
                       	</td>
                         
-                        <td>
+                        <td colspan="2">
                           <bean:message key="colname.claim_status" />
                           <br />
                           <div id="tohide1">
@@ -418,35 +435,73 @@
                         </td>
                       </tr>
                       <tr>
-                      	<td colspan="1">
+                      	<td colspan="<%=crapFields?1:2%>">
                           <bean:message key="colname.claim_amount" />
                           <br />
                           <html:text property="claim.amountClaimed" size="13" maxlength="13" styleClass="textfield" />
                         </td>
  
-                        <td colspan="2">
+                        <td colspan="<%=crapFields?2:4%>">
                           <bean:message key="colname.currency" />
                           <br />
                           <html:select property="claim.amountClaimedCurrency" styleClass="dropdown">
                             <html:options collection="currencylist" property="currency_ID" labelProperty="id_desc" />
                           </html:select>
                         </td>
+                        <%if (crapFields){%>
+	                      	<td colspan="3">
+	                          <bean:message key="colname.total_liability" />
+	                          <br />
+	                          <html:text property="claim.totalLiability" size="13" maxlength="13" styleClass="textfield" />
+	                        </td>
+                        <%} %>
                       </tr>
                       <tr>
-                        <td colspan="1">
+                        <td colspan="<%=crapFields?1:2%>">
                           <bean:message key="colname.amount_paid" />
                           <br />
                           <html:text property="claim.amountPaid" size="13" maxlength="13" styleClass="textfield" />
                         </td>
-                        <td colspan="2">
+                        <td colspan="<%=crapFields?2:4%>">
                           <bean:message key="colname.currency" />
                           <br />
                           <html:select property="claim.amountPaidCurrency" styleClass="dropdown">
                             <html:options collection="currencylist" property="currency_ID" labelProperty="id_desc" />
                           </html:select>
                         </td>
+                        
+                        <%if (crapFields){%>
+	                      	<td colspan="1">
+	                          <bean:message key="colname.ix" />:
+	                          <html:checkbox property="claim.ix"/>
+	                        </td>
+	                      	<td colspan="2">
+	                          <bean:message key="colname.carry_on" />:
+	                          <html:checkbox property="claim.carryon" />
+	                        </td>
+                        <% } %>
+                        
+                      <%if (crapFields){%>
+	                      <tr>
+	                        <td colspan="3">
+	                          <bean:message key="colname.excess.value.amount" />
+	                          <br />
+	                          <html:text property="claim.excessValueAmt" size="13" maxlength="13" styleClass="textfield" />
+	                        </td>
+	                      	<td colspan="3">
+	                          <bean:message key="colname.claim.check" />
+	                          <br/>
+	                          <html:select name="claimForm" property="claim.claimCheck" styleClass="dropdown" >
+				                  <html:option value="">
+				                    <bean:message key="select.please_select" />
+				                  </html:option>
+				                  <html:options collection="claimchecklist" property="value" labelProperty="label"/>
+				                </html:select>
+	                        </td>
+	                      </tr>
+                      <%} %>
                       <tr>
-                        <td colspan="3">
+                        <td colspan="6">
                           <bean:message key="colname.reason" />
                           &nbsp;(
                           <bean:message key="colname.for_audit" />
@@ -457,12 +512,12 @@
                         </td>
                       </tr>
                       <tr>
-							<td colspan="3">
-								<bean:message key="colname.claim_remarks" />
-								<br/>
-								<html:textarea  name="claimForm" property="claim.claimRemark"  cols="80" rows="10" styleClass="textfield" />
-							</td>
-						</tr>
+						<td colspan="6">
+							<bean:message key="colname.claim_remarks" />
+							<br/>
+							<html:textarea  name="claimForm" property="claim.claimRemark"  cols="80" rows="10" styleClass="textfield" />
+						</td>
+					  </tr>
                       
                     </table>
                     <br />

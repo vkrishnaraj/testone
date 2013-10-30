@@ -58,6 +58,11 @@ public class FsClaim implements Serializable {
 	protected String ntIncidentId;
 	protected int claimProrateId;
 	protected int statusId;
+	protected double totalLiability;
+	protected double excessValueAmt;
+	protected boolean ix;
+	protected boolean carryon;
+	protected String claimCheck;
 	
 	@Column(name="claimRemark",columnDefinition="text")
 	protected String claimRemark;
@@ -420,5 +425,44 @@ public class FsClaim implements Serializable {
 	public Set<Phone> getPhones() {
 		return phones;
 	}
+
+	public double getTotalLiability(){
+		return totalLiability;
+	}
 	
+	public void setTotalLiability(double totalLiability){
+		this.totalLiability=totalLiability;
+	}
+
+	public double getExcessValueAmt(){
+		return excessValueAmt;
+	}
+	
+	public void setExcessValueAmt(double excessValueAmt){
+		this.excessValueAmt=excessValueAmt;
+	}
+	
+	public void setIx(boolean ix){
+		this.ix=ix;
+	}
+	
+	public boolean isIx(){
+		return ix;
+	}
+
+	public void setCarryon(boolean carryon){
+		this.carryon=carryon;
+	}
+	
+	public boolean isCarryon(){
+		return carryon;
+	}
+	
+	public String getClaimCheck(){
+		return claimCheck;
+	}
+	
+	public void setClaimCheck(String claimCheck){
+		this.claimCheck=claimCheck;
+	}
 }

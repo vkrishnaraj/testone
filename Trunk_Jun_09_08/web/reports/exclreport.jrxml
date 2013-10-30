@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="deprecreport" pageWidth="183" pageHeight="351" orientation="Landscape" columnWidth="183" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.scriptlethandling" value="2"/>
+	<property name="ireport.zoom" value="1.9487171000000054"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="categoryName" class="java.lang.String"/>
+	<field name="dispCalcValue" class="java.lang.String"/>
+	<field name="dispAmountClaimed" class="java.lang.String"/>
+	<field name="percent" class="java.lang.String"/>
+	<field name="depamount" class="java.lang.String"/>
+	<background>
+		<band isSplitAllowed="false"/>
+	</background>
+	<title>
+		<band isSplitAllowed="false"/>
+	</title>
+	<pageHeader>
+		<band isSplitAllowed="false"/>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="21">
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-13" x="3" y="0" width="68" height="20">
+					<printWhenExpression><![CDATA[new Boolean($F{categoryName} != null ? true : false)]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{categoryName}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-10" x="71" y="0" width="52" height="20">
+					<printWhenExpression><![CDATA[new Boolean($F{dispAmountClaimed} != null ? true : false)]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dispAmountClaimed}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="182" y="0" width="1" height="21"/>
+			</line>
+			<line>
+				<reportElement x="-1" y="0" width="1" height="21"/>
+			</line>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-10" x="123" y="0" width="58" height="20">
+					<printWhenExpression><![CDATA[new Boolean($F{depamount} != null ? true : false)]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement lineSpacing="Single"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{depamount}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band isSplitAllowed="false"/>
+	</columnFooter>
+	<pageFooter>
+		<band isSplitAllowed="false"/>
+	</pageFooter>
+	<summary>
+		<band isSplitAllowed="false"/>
+	</summary>
+</jasperReport>

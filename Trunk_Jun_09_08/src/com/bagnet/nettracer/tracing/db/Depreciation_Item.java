@@ -360,6 +360,16 @@ public class Depreciation_Item {
 			return "";
 		}
 	}
+	
+	@Transient
+	public String getDepamount(){
+		return TracingConstants.DECIMALFORMAT.format(getAmountClaimed()-getCalcValue());
+	}
+
+	@Transient
+	public String getPercent(){
+		return TracingConstants.DECIMALFORMAT.format((getCalcValue()/getAmountClaimed())*100)+"%";
+	}
 
 	
 }

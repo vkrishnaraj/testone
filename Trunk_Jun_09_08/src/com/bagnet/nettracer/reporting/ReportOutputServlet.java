@@ -172,6 +172,9 @@ public class ReportOutputServlet extends HttpServlet {
 							
 							iFile = getFile(DeprecSummary.createReport(deprecForm, sc, request, outputtype,language),sc);
 							break;
+						case ReportingConstants.CRAP_SHEET:
+							iFile = getFile(CRAPReport.createReport(cform, sc, request, outputtype,language),sc);
+							break;
 						default:
 							break;
 					}

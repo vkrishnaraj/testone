@@ -35,6 +35,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
@@ -44,6 +45,7 @@ import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Articles;
+import com.bagnet.nettracer.tracing.db.Category;
 import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.ClaimProrate;
 import com.bagnet.nettracer.tracing.db.Company;
@@ -572,6 +574,10 @@ public class TracerUtils {
 				session.getAttribute("customerCommunicationsList") != null ?
 						session.getAttribute("customerCommunicationsList") :
 							getStatusList(TracingConstants.TABLE_COMMUNICATIONS_METHOD, user.getCurrentlocale()));
+		
+		session.setAttribute("claimchecklist",
+				session.getAttribute("claimchecklist") != null ? session
+						.getAttribute("claimchecklist") : getClaimcheckValues());
 	}
 
 	private static List<LabelValueBean> getSpokenLanguageList(String locale){
@@ -1270,6 +1276,43 @@ public class TracerUtils {
 		}
 		return al;
 	}
+	
+	/**
+	 * Method to get the Claim Check values for the Claim Check field under claims
+	 * Mainly a SWA Specific Fields
+	 * @return list of labelBeanValues for filling the Claim Check select dropdown
+	 */
+	private static Object getClaimcheckValues() {
+		ArrayList ccl = new ArrayList();
+		List result = null;
+
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Category.class);
+			cri.add(Restrictions.eq("type", TracingConstants.CLAIM_CHECK));
+			result = cri.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		if (result != null) {
+			for (Iterator i = result.iterator(); i.hasNext();) {
+				Category claimCheckValue= (Category) i.next();
+				ccl.add(new LabelValueBean(claimCheckValue.getDescription(), claimCheckValue.getDescription()));
+			}
+		}
+		return ccl;
+	}
+
 	
 	public static boolean isValidState(String state) {
 		if(state==null || state.length()==0){
