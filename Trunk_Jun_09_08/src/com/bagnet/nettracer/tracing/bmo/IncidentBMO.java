@@ -1362,6 +1362,9 @@ public class IncidentBMO {
 			//order by
 			if (!iscount) {
 				s.append(" order by ");
+				if(siDTO.isDjReport()){
+					s.append("incident.itemtype.itemType_ID asc, ");
+				}
 				if (SortParam.OHD_POSITION.getParamString().equalsIgnoreCase(sort)) {
 					s.append("item.posId desc");
 				} else if (SortParam.OHD_POSITIONREV.getParamString().equalsIgnoreCase(sort)) {

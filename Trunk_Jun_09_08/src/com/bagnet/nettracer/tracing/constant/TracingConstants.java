@@ -175,6 +175,7 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP_LOSTDELAY= "Passenger Pick Up for Lost/Delay Incidents";
 	public final static String SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP_MISSING= "Passenger Pick Up for Missing Incidents";
 	public final static String SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP_DAMAGE= "Passenger Pick Up for Damaged Incidents";
+	public final static String SYSTEM_COMPONENT_NAME_CLAIM_REPORT_ADJUSTMENT_PREDICTION= "Claims Report and Adjustment Prediction";
 	
 	//TODO: adding three sub items under last one to get the itemized view for WS
 	public final static String SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS_TYPE_DELAYED = "Incoming Incidents Type Delayed";
@@ -1404,6 +1405,8 @@ public class TracingConstants {
 	
 	public static final String CUSTOMER_COMMUNICATIONS = "customerCommunications";
 	public static final String EDIT_COMMUNICATIONS = "editCommunications";
+
+	public static final int CLAIM_CHECK = 3;
 	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {

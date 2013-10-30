@@ -271,7 +271,7 @@ function updatePagination() {
                 if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_QUERY_REPORTS, a)) {
               %>
               <div id="pageheaderright">
-                <select name="outputtype">
+                <select name="outputtype" class="dropdown">
                   <% if (!TracerProperties.isTrue(a.getCompanycode_ID(),TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
                     <option value="0" selected="yes"><bean:message key="radio.pdf" /></option>
                   <% } %>

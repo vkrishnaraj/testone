@@ -54,6 +54,7 @@ public class ReportingConstants {
 	public final static int MISSING_RECEPIT_RPT = 18;
 	public static final int PPLC_RPT = 19;
 	public static final int DEPREC_SUMMARY = 20;
+	public static final int CRAP_SHEET = 21; //For NT-751, Not NT-772
 	
 	// report titles
 	public static String CLAIM_PAYOUT_TITLE = "Claim Payout";
@@ -66,6 +67,10 @@ public class ReportingConstants {
 	public final static String RPT_20_CUSTOM_501_NAME = "stat_rpt_20_custom_501";
 	public final static String RPT_20_CUSTOM_11_NAME = "stat_rpt_20_custom_11";
 	public final static int RPT_20_CUSTOM_1 = 1; // AirTran, mishandled bags summary by location
+	
+	//Incoming Incident Report
+	public final static int RPT_INCOMING_INCIDENT = 21;
+	public final static String RPT_INCOMING_INCIDENT_NAME = "incoming_incident_report";
 	
 	public final static int RPT_20_CUSTOM_2 = 2;
 	public final static int RPT_20_CUSTOM_501 = 501;

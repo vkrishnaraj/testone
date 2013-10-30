@@ -75,6 +75,7 @@ public final class SearchIncidentForm extends ValidatorForm {
 	
 	private String expediteTagNum = "";
 	private String posId = "";
+	private boolean djReport=false;
 	
 	public int getAssigned2StationWithin24hrs() {
 		return assigned2StationWithin24hrs;
@@ -811,6 +812,14 @@ public final class SearchIncidentForm extends ValidatorForm {
 
 	public void setPosId(String posId) {
 		this.posId = posId;
+	}
+
+	public boolean isDjReport() {
+		return djReport;
+	}
+
+	public void setDjReport(boolean djReport) {
+		this.djReport = djReport;
 	}
 	
 }

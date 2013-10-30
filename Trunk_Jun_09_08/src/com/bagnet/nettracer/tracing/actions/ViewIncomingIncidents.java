@@ -8,6 +8,7 @@ package com.bagnet.nettracer.tracing.actions;
 import java.util.ArrayList;
 import java.util.TimeZone;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -21,6 +22,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.constant.TracingConstants.SortParam;
@@ -80,7 +82,7 @@ public class ViewIncomingIncidents extends Action {
 		statuses[2] = TracingConstants.MBR_STATUS_TEMP;
 		daform.setStatus_IDs(statuses);
 		
-		if (request.getParameter("search") == null && request.getParameter("update") == null
+		if (request.getParameter("search") == null && request.getParameter("update") == null && request.getParameter("generateReport") == null
 				&& (request.getParameter("pagination") == null || !request.getParameter("pagination").equals("1"))) {
 			daform = new SearchIncidentForm();
 			//newform.setAirline(user.getStation().getCompany().getCompanyCode_ID());
@@ -128,9 +130,11 @@ public class ViewIncomingIncidents extends Action {
 			daform.setAssigned2StationWithin24hrs(1);  //magic number 1 signifies yes 
 		}
 		
+		// Create report if necessary
+		ActionMessages errors = new ActionMessages();
+		
 		// get number of records found
 		if ((resultlist = bs.findIncident(daform, user, 0, 0, true, true, sort)) == null || resultlist.size() <= 0) {
-			ActionMessages errors = new ActionMessages();
 			ActionMessage error = new ActionMessage("error.nosearchresult");
 			errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 			saveMessages(request, errors);
@@ -184,6 +188,38 @@ public class ViewIncomingIncidents extends Action {
 			}
 
 			request.setAttribute("resultlist", resultlist);
+			//Generate a Report based on current parameters if requested
+			if (request.getParameter("generateReport") != null && 
+					request.getParameter("outputtype") != null) {
+				daform.setDjReport(true);
+				ServletContext sc = getServlet().getServletContext();
+				String reportpath = sc.getRealPath("/");
+				String reportfile = null;
+				ReportBMO rBMO = new ReportBMO(request);
+				int outputtype=Integer.valueOf(request.getParameter("outputtype"));
+				
+				reportfile = rBMO.createIncomingIncidentReport(daform,
+					request, outputtype, user.getCurrentlocale(),
+					reportpath, sort);
+				
+				if (reportfile == null || reportfile.equals("")) {
+					//no data to report
+					if (rBMO.getErrormsg() != null && rBMO.getErrormsg().length() > 0) {
+						ActionMessage error = new ActionMessage(rBMO.getErrormsg());
+						errors.add(ActionMessages.GLOBAL_MESSAGE,error);
+					} else {
+						ActionMessage error = new ActionMessage("message.nodata");
+						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+					}
+					
+					saveMessages(request, errors);
+				} else {
+					request.setAttribute("reportfile", reportfile);
+					if (request.getAttribute("outputtype") == null) {
+						request.setAttribute("outputtype", request.getParameter("outputtype"));
+					}
+				}
+			}
 
 		}
 

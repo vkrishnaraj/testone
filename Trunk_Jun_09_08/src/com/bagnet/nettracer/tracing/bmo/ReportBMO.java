@@ -103,6 +103,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.salvage.Salvage;
 import com.bagnet.nettracer.tracing.dto.DisputeResolutionReportDTO;
 import com.bagnet.nettracer.tracing.dto.FraudValuationReportDTO;
+import com.bagnet.nettracer.tracing.dto.IncomingIncDTO;
 import com.bagnet.nettracer.tracing.dto.ScannerDTO;
 import com.bagnet.nettracer.tracing.dto.StatReportDTO;
 import com.bagnet.nettracer.tracing.dto.StatReport_3_DTO;
@@ -110,6 +111,7 @@ import com.bagnet.nettracer.tracing.dto.StatReport_ExpDTO;
 import com.bagnet.nettracer.tracing.dto.StatReport_OHD_DTO;
 import com.bagnet.nettracer.tracing.dto.StatReport_RecoveryDTO;
 import com.bagnet.nettracer.tracing.dto.StatReport_TopFlightDTO;
+import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
@@ -119,6 +121,7 @@ import com.bagnet.nettracer.tracing.utils.StringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
+import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
 
 /**
@@ -6433,6 +6436,183 @@ public class ReportBMO {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	/**
+	 * @author Sean Fine
+	 * Public Method that uses the Search Incident Form to get results and
+	 * create a list of IncomingIncDTOs to create a Dynamic Jasper Report.
+	 * @param daform - Form taking in to get results for report
+	 * @param request - Request to get the session, user and other necessary information
+	 * @param outputtype - the selected output type for the report
+	 * @param language - User's language
+	 * @param reportPath - Path to where the temp report is stored and retrieved
+	 * @param sort - The Sort for the Results
+	 */
+	public String createIncomingIncidentReport(SearchIncidentForm daform,
+			HttpServletRequest request, int outputtype, String language,
+			String reportPath, String sort) {
+
+		try {
+			BagService bs=new BagService();
+			Map parameters = new HashMap();
+
+			HttpSession session = request.getSession();
+			Agent user = (Agent) session.getAttribute("user");
+
+			ResourceBundle myResources = ResourceBundle
+					.getBundle(
+							"com.bagnet.nettracer.tracing.resources.ApplicationResources",
+							new Locale(language));
+
+			myResources.getString("header.report.incoming.incident");
+			String title=myResources.getString("header.report.incoming.incident");//messages.getMessage(new Locale(user.getCurrentlocale()),"header.report.incoming.incident");
+			parameters.put("title", title);
+			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
+			
+			if(daform.getS_createtime()!=null && !daform.getS_createtime().isEmpty())
+				parameters.put("sdate", daform.getS_createtime());
+			if(daform.getE_createtime()!=null && !daform.getE_createtime().isEmpty())
+				parameters.put("edate", daform.getE_createtime());
+			
+			parameters.put("reportLocale", new Locale(user.getCurrentlocale()));
+			ArrayList resultlist=bs.findIncident(daform, user, 0, 0, false, true, sort);
+			
+			List<IncomingIncDTO> incIncList=new ArrayList();
+			boolean showPosId=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_COLLECT_POS_ID, user);
+			if(resultlist!=null){
+				for(Object obj:resultlist){
+					com.bagnet.nettracer.tracing.db.Incident inc=(com.bagnet.nettracer.tracing.db.Incident)obj;
+					IncomingIncDTO iid=new IncomingIncDTO();
+					iid.setIncident_ID(inc.getIncident_ID());
+					iid.setIncidentType(inc.getItemtype().getDescription());
+					if(inc.getItemtype_ID()==TracingConstants.DAMAGED_BAG || inc.getItemtype_ID()==TracingConstants.MISSING_ARTICLES){
+						showPosId=false;
+					}
+					iid.setCreatedDate(inc.getDisplaydate());
+					if(inc.getStationcreated()!=null && inc.getStationcreated().getCompany()!=null){
+						iid.setAirlineCreated(inc.getStationcreated().getCompany().getCompanyCode_ID());
+						iid.setStationCreated(inc.getStationcreated().getStationcode());
+					}
+					
+					if(inc.getStationassigned()!=null){
+						iid.setStationAssigned(inc.getStationassigned().getStationcode());
+					}
+					
+					iid.setStatus(inc.getStatus().getDescription());
+					String colorList="";
+					String typeList="";
+					String posList="";
+					String claimCheckList="";
+					String passengerList="";
+					String itineraryList="";
+					int i=0;
+					if(inc.getItemlist()!=null){
+						for(com.bagnet.nettracer.tracing.db.Item item:inc.getItemlist()){
+							if(i!=0){
+								colorList+="\n";
+								typeList+="\n";
+								posList+="\n";
+								claimCheckList+="\n";
+							}
+							if(item.getColor()!=null && !item.getColor().isEmpty())
+								colorList+=item.getColor();
+							if(item.getBagtype()!=null && !item.getBagtype().isEmpty())
+								typeList+=item.getBagtype();
+							if(item.getPosId()!=null && !item.getPosId().isEmpty())
+								posList+=item.getPosId();
+							if(item.getClaimchecknum()!=null && !item.getClaimchecknum().isEmpty())
+								claimCheckList+=item.getClaimchecknum();
+							i++;
+						}
+					}
+					
+					if(inc.getClaimcheck_list()!=null){
+						for(com.bagnet.nettracer.tracing.db.Incident_Claimcheck incCC:inc.getClaimcheck_list()){
+							if(incCC.getClaimchecknum()!=null && !incCC.getClaimchecknum().isEmpty()){
+								if(!claimCheckList.isEmpty())
+									claimCheckList+="\n";
+								claimCheckList+=incCC.getClaimchecknum();
+							}
+						}
+						
+					}
+					
+					if(inc.getPassenger_list()!=null){
+						i=0;
+						for(com.bagnet.nettracer.tracing.db.Passenger pass:inc.getPassenger_list()){
+							boolean passLast=false;
+							boolean passFirst=false;
+
+							if(i!=0){
+								passengerList+="\n";
+							}
+
+							if(pass.getLastname()!=null && !pass.getLastname().isEmpty()){
+								passLast=true;
+							}
+							if(pass.getFirstname()!=null && !pass.getFirstname().isEmpty()){
+								passFirst=true;
+							}
+							if(passLast){
+								passengerList+=pass.getLastname();
+							}
+							if(passLast && passFirst){
+								passengerList+=", ";
+							}
+							if(passFirst){
+								passengerList+=pass.getFirstname();
+							}
+						}
+					}
+					
+					if(inc.getItinerary_list()!=null){
+						i=0;
+						for(com.bagnet.nettracer.tracing.db.Itinerary itin:inc.getItinerary_list()){
+							if(itin.getItinerarytype()==TracingConstants.PASSENGER_ROUTING){
+								if(i!=0)
+									itineraryList+="\n";
+								if(itin.getAirline()!=null && !itin.getAirline().isEmpty()){
+									itineraryList+=itin.getAirline()+" ";
+								}
+								if(itin.getFlightnum()!=null && !itin.getFlightnum().isEmpty()){
+									itineraryList+=itin.getFlightnum()+" ";
+								}
+								if(itin.getDisdepartdate()!=null && !itin.getDisdepartdate().isEmpty()){
+									itineraryList+=itin.getDisdepartdate();
+								}
+							}
+						}
+					}
+					
+					iid.setColor(colorList);
+					iid.setType(typeList);
+					iid.setPositionId(posList);
+					iid.setClaimCheck(claimCheckList);
+					iid.setItinerary(itineraryList);
+					iid.setPassengerName(passengerList);
+					
+					incIncList.add(iid);
+				}
+			}
+			if(showPosId){
+				parameters.put("showPosId", showPosId);
+			}
+			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(incIncList);
+			return IncomingIncReportBMO.getReportFileDj(ds, parameters, ReportingConstants.RPT_INCOMING_INCIDENT_NAME,
+					reportPath, outputtype, req, this);
+		} catch (MissingRequiredFieldsException e) {
+			setErrormsg("error.missingRequired");
+			return null;
+		} catch (AmountOfDataOutOfRangeException e) {
+			setErrormsg("error.amount.of.data.exceeds.limit");
+			return null;
+		} catch (Exception e){
+			logger.error("unable to incoming incident report: " + e);
+			e.printStackTrace();
+			return null;
+		} 
+		
 	}
 
 }

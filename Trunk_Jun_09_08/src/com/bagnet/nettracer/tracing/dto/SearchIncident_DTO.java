@@ -46,6 +46,7 @@ public class SearchIncident_DTO {
 	private int assigned2StationWithin24hrs;
 	
 	private String expediteTagNum;
+	private boolean djReport=false;
 	
 	public int getAssigned2StationWithin24hrs() {
 		return assigned2StationWithin24hrs;
@@ -453,6 +454,14 @@ public class SearchIncident_DTO {
 
 	public void setExpediteTagNum(String expediteTagNum) {
 		this.expediteTagNum = expediteTagNum;
+	}
+
+	public boolean isDjReport() {
+		return djReport;
+	}
+
+	public void setDjReport(boolean djReport) {
+		this.djReport = djReport;
 	}	
 	
 }
