@@ -106,13 +106,13 @@ function submitForwardForm()
               if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_QUERY_REPORTS, a)) {
             %>
             <div id="pageheaderright">
-              <select styleClass="dropdown" name="outputtype">
+              <select class="dropdown" name="outputtype">
                 <% if (!TracerProperties.isTrue(a.getCompanycode_ID(),TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
                   <option value="0" selected="selected"><bean:message key="radio.pdf" /></option>
                 <% } %>
                 <option value="1"><bean:message key="radio.html" /></option>
               </select>
-              <input onclick='document.deliverForm.sortBy.value="<%=request.getAttribute("sortNum").toString()%>";' type="submit" name="generateReport" id="button" value="<bean:message key="button.generateReport" />">
+              <input onclick='document.deliverForm.sortBy.value="<%=request.getAttribute("sortNum").toString()%>";' type="submit" name="generateReport" id="button" value="<bean:message key="button.generateReport" />">&nbsp;&nbsp;
               <logic:present name="reportfile" scope="request">
                 <script language="javascript">
                     openReportWindow('reporting?outputtype=<%= request.getAttribute("outputtype") %>&reportfile=<bean:write name="reportfile" scope="request" />','report',800,600);
