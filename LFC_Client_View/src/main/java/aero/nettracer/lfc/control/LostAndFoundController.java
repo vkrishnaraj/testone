@@ -365,7 +365,6 @@ public class LostAndFoundController {
 		boolean isValid = true;
 		isValid = validateName();
 		isValid = validateAddress() && isValid;
-		isValid = validateContact() && isValid;
 		if (getSubCompany() != null
 				&& (getSubCompany().equals("SWA") || getSubCompany().equals(
 						"AA"))) {
@@ -678,8 +677,35 @@ public class LostAndFoundController {
 
 		return isValid;
 	}
+	
+	private boolean validateABContact() {
+		boolean isValid = true;
+		boolean hasContactPhoneOrEmail = false;
+		if (lostReport.getContact().getPrimaryPhone().getNumber() != null								// VALIDATE: PHONE AND EMAIL
+				&& lostReport.getContact().getPrimaryPhone().getNumber().trim().length() > 0) {
+			hasContactPhoneOrEmail = true;
+		}
+		if (lostReport.getContact().getSecondaryPhone().getNumber() != null
+				&& lostReport.getContact().getSecondaryPhone().getNumber().trim().length() > 0) {
+			hasContactPhoneOrEmail = true;
+		}
+		if (lostReport.getContact().getEmailAddress() != null
+				&& lostReport.getContact().getEmailAddress().trim().length() > 0) {
+			hasContactPhoneOrEmail = true;
+			if (lostReport.getContact().getConfirmEmail() == null										// VALIDATE: CONFIRM EMAIL
+					|| !lostReport.getContact().getConfirmEmail().equals(lostReport.getContact().getEmailAddress())) {
+				FacesUtil.addError("ERROR: Email Address and Confirm Email Address must match.");
+				isValid = false;
+			}
+		}
+		if (!hasContactPhoneOrEmail) {
+			FacesUtil.addError("ERROR: Contact Information must contain at least one Phone Number or Email Address.");
+			isValid = false;
+		}
+		return isValid;
+	}
 
-	private boolean validateContact() {
+	private boolean validateLFContact() {
 		boolean isValid = true;
 		boolean hasContactPhoneOrEmail = false;
 		if (lostReport.getContact().getAddress().getCountry() != null
@@ -812,6 +838,7 @@ public class LostAndFoundController {
 
 	private boolean validateAB() {
 		boolean isValid = true;
+		isValid = validateABContact();
 		if (lostReport.getDateLost() == null) { // VALIDATE: DATE LOST
 			FacesUtil.addError("ERROR: Rental Date is required.");
 			isValid = false;
@@ -830,6 +857,7 @@ public class LostAndFoundController {
 	private boolean validateLF_SWA() {
 		boolean isValid = true;
 		isValid = validateSegments();
+		isValid = validateLFContact() && isValid;
 		if (lostReport.getDateLost() == null) { // VALIDATE: DATE LOST
 			FacesUtil.addError("ERROR: Date Lost is required.");
 			isValid = false;
