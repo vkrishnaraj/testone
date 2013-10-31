@@ -106,7 +106,7 @@ function submitForwardForm()
               if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_QUERY_REPORTS, a)) {
             %>
             <div id="pageheaderright">
-              <select class="dropdown" name="outputtype">
+              <select style="font-size:9px;	border:1px solid #569ECD;margin:2px 0px 1px 0px;display:inline;" name="outputtype">
                 <% if (!TracerProperties.isTrue(a.getCompanycode_ID(),TracerProperties.SUPPRESSION_PRINTING_NONHTML)) { %>
                   <option value="0" selected="selected"><bean:message key="radio.pdf" /></option>
                 <% } %>
