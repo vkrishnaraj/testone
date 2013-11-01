@@ -657,7 +657,7 @@ function gotoHistoricalReport() {
       <tr>
       	<td>
       		<bean:message key="colname.posId" /><br>
-      		<html:text property="posId" size="6" maxlength="6" styleClass="textfield" />
+      		<html:text property="posId" size="8" maxlength="8" styleClass="textfield" />
       	</td>
       	<td colspan=2>
       		<bean:message key="colname.latecheck" /><br>

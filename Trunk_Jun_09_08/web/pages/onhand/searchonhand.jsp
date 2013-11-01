@@ -224,7 +224,7 @@ function sortSearchOhd(sortOrder) {
                 	<td>
                 		<bean:message key="colname.posId" />
                 		<br>
-                		<html:text property="posId" size="6" maxlength="6" styleClass="textfield" />
+                		<html:text property="posId" size="8" maxlength="8" styleClass="textfield" />
                 	</td>
                 <% } %>
               </tr>

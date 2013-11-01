@@ -348,7 +348,7 @@
 	            <td colspan=2>
 	            	<bean:message key="colname.posId" />
 	            	<br>
-	            	<html:text name="theitem" property="posId" size="6" maxlength="6" styleClass="textfield" indexed="true" />
+	            	<html:text name="theitem" property="posId" size="8" maxlength="8" styleClass="textfield" indexed="true" />
 	            </td>
             <% } %>
           </tr>
