@@ -794,7 +794,7 @@ public class Audit_Item implements Serializable {
 	}
 
 	/**
-	 * @hibernate.property type="string" length="6"
+	 * @hibernate.property type="string" length="8"
 	 */
 	public String getPosId() {
 		return posId;
