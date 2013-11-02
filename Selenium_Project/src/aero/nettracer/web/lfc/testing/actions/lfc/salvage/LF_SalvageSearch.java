@@ -1,6 +1,7 @@
 package aero.nettracer.web.lfc.testing.actions.lfc.salvage;
 
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 import aero.nettracer.web.utility.DefaultSeleneseTestCase;
 
@@ -73,7 +74,7 @@ public class LF_SalvageSearch extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(isElementPresent("//a[contains(@href, 'lf_salvage.do?id=" + LF_SalvageSearch.OPEN_SALVAGE_ID + "')]"));
+			verifyTrue(isElementPresent(By.xpath("//a[contains(@href, 'lf_salvage.do?id=" + LF_SalvageSearch.OPEN_SALVAGE_ID + "')]")));
 			selenium.select("//select[@id='salvageStatus']", "label=Open");
 			selenium.click("//input[@id='button']");
 			waitForPageToLoadImproved();
@@ -83,7 +84,7 @@ public class LF_SalvageSearch extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(isElementPresent("//a[contains(@href, 'lf_salvage.do?id=" + LF_SalvageSearch.OPEN_SALVAGE_ID + "')]"));
+			verifyTrue(isElementPresent(By.xpath("//a[contains(@href, 'lf_salvage.do?id=" + LF_SalvageSearch.OPEN_SALVAGE_ID + "')]")));
 			selenium.click("//img[@id='calendar']");
 			selenium.click("//div[@id='maincontent']/table/tbody/tr[2]/td/input[2]");
 			selenium.click("//div[@id='calstyle']/table/tbody/tr/td/center/table[2]/tbody/tr[8]/td/a");
@@ -96,7 +97,7 @@ public class LF_SalvageSearch extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(isElementPresent("//a[contains(@href, 'lf_salvage.do?id=" + LF_SalvageSearch.OPEN_SALVAGE_ID + "')]"));
+			verifyTrue(isElementPresent(By.xpath("//a[contains(@href, 'lf_salvage.do?id=" + LF_SalvageSearch.OPEN_SALVAGE_ID + "')]")));
 			selenium.type("//input[@id='startTime']", "");
 			selenium.select("//select[@id='salvageStatus']", "label=Closed");
 			selenium.click("//input[@id='button']");
@@ -107,7 +108,7 @@ public class LF_SalvageSearch extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(isElementPresent("//a[contains(@href, 'lf_salvage.do?id=" + LF_SalvageSearch.CLOSED_SALVAGE_ID + "')]"));
+			verifyTrue(isElementPresent(By.xpath("//a[contains(@href, 'lf_salvage.do?id=" + LF_SalvageSearch.CLOSED_SALVAGE_ID + "')]")));
 		} else {
 			System.out.println("LFSS: an error occurred when trying to search for closed salvages.");
 			return;

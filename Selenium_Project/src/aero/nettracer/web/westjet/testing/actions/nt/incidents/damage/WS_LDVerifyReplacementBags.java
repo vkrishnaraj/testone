@@ -1,11 +1,11 @@
 package aero.nettracer.web.westjet.testing.actions.nt.incidents.damage;
 
 import org.junit.Test;
+import org.openqa.selenium.By;
 
-import aero.nettracer.web.utility.LoginUtil;
-import aero.nettracer.web.utility.Settings;
+import aero.nettracer.web.westjet.testing.WS_SeleniumTest;
 
-public class WS_LDVerifyReplacementBags extends LoginUtil {
+public class WS_LDVerifyReplacementBags extends WS_SeleniumTest {
 
 	@Test
 	public void testRonKits() throws Exception {
@@ -22,74 +22,10 @@ public class WS_LDVerifyReplacementBags extends LoginUtil {
 		
 		if (checkNoErrorPage()) {
 			verifyFalse(selenium.isTextPresent("Tradeout Issued"));
-			verifyFalse(isElementPresent("//select[@id='replacementBagIssued']"));
-			selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
-			waitForPageToLoadImproved();
+			verifyFalse(isElementPresent(By.xpath("//select[@id='replacementBagIssued']")));
+			setPermissions(new String[] {"627"}, new boolean[] {true});
 		} else {
 			System.out.println("LDVRK: Failed to load the delayed incident page after pressing skip prepopulation.");
-			return;
-		}
-		
-		if (checkNoErrorPage()) {
-			loginOGAdminProcedure();
-		} else {
-			System.out.println("LDVRK: Failed to log out of the application.");
-			return;
-		}
-		
-		if (checkNoErrorPage()) {
-			clickMenu("menucol_9.2");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("LDVRK: Failed to log in as ogadmin.");
-			return;
-		}
-		
-		if (checkNoErrorPage()) {
-			selenium.click("//div[@id='maincontent']/table[2]/tbody/tr[17]/td/a[2]");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("LDVRK: Failed to load the companies page.");
-			return;
-		}
-		
-		if (checkNoErrorPage()) {
-			selenium.click("//div[@id='maincontent']/table[2]/tbody/tr[12]/td[5]/a");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("LDVRK: Failed to load the 3rd companies page.");
-			return;
-		}
-		
-		if (checkNoErrorPage()) {
-			selenium.click("//div[@id='maincontent']/table[2]/tbody/tr[11]/td[4]/a");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("LDVRK: Failed to load the groups page.");
-			return;
-		}
-		
-		if (checkNoErrorPage()) {
-			selenium.check("name=627");
-			selenium.click("name=save");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("LDVRK: Failed to load the permissions page.");
-			return;
-		}
-		
-		if (checkNoErrorPage()) {
-			selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("LDVRK: Failed to save the permissions page.");
-			return;
-		}
-		
-		if (checkNoErrorPage()) {
-			loginAdminProcedure();
-		} else {
-			System.out.println("LDVRK: Failed on log out after setting the issue replacement bag permission.");
 			return;
 		}
 		
@@ -111,7 +47,7 @@ public class WS_LDVerifyReplacementBags extends LoginUtil {
 	
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Tradeout Issued"));
-			verifyTrue(isElementPresent("//select[@id='replacementBagIssued']"));
+			verifyTrue(isElementPresent(By.xpath("//select[@id='replacementBagIssued']")));
 			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr/td[4]/input", "444444");
 
 			selenium.type("name=passenger[0].lastname", "Test");
@@ -148,7 +84,7 @@ public class WS_LDVerifyReplacementBags extends LoginUtil {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(isElementPresent("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a"));
+			verifyTrue(isElementPresent(By.xpath("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a")));
 		    selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
 	    	waitForPageToLoadImproved();
 		} else {
@@ -158,78 +94,9 @@ public class WS_LDVerifyReplacementBags extends LoginUtil {
 		
 		if (checkNoErrorPage()) {
 			verifyEquals("1", selenium.getValue("//select[@id='replacementBagIssued']"));
-			selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
-			waitForPageToLoadImproved();
+			setPermissions(new String[] {"627"}, new boolean[] {false});
 		} else {
 			System.out.println("LDVRK: An error occurred while attempting to reload the damaged incident.");
-			return;
-		}
-		
-		if (checkNoErrorPage()) {
-			loginOGAdminProcedure();
-		} else {
-			System.out.println("LDVRK: An error occurred while attempting to verify the damaged incident.");
-			return;
-		}
-		
-		if (checkNoErrorPage()) {
-			clickMenu("menucol_9.2");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("LDVRK: An error occurred while attempting to load back in as ogadmin.");
-			return;
-		}
-		
-		if (checkNoErrorPage()) {
-			selenium.click("//div[@id='maincontent']/table[2]/tbody/tr[17]/td/a[2]");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("LDVRK: An error occurred while attempting to load the companies page.");
-			return;
-		}
-		
-		if (checkNoErrorPage()) {
-			selenium.click("//div[@id='maincontent']/table[2]/tbody/tr[12]/td[5]/a");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("LDVRK: An error occurred while attempting to load the 3rd companies page.");
-			return;
-		}
-	
-		if (checkNoErrorPage()) {
-			selenium.click("//div[@id='maincontent']/table[2]/tbody/tr[11]/td[4]/a");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("LDVRK: An error occurred while attempting to load the permissions page.");
-			return;
-		}
-		
-		if (checkNoErrorPage()) {
-			selenium.uncheck("name=627");
-			selenium.click("name=save");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("LDVRK: An error occurred while attempting to load the permissions page.");
-			return;
-		}
-	
-		if (checkNoErrorPage()) {
-			selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("LDVRK: An error occurred while attempting to save the permissions page.");
-			return;
-		}
-		
-		if (checkNoErrorPage()) {
-			loginAdminProcedure();
-		} else {
-			System.out.println("LDVRK: An error occurred while attempting to log out of the application.");
-			return;
-		}
-		
-		if (!checkNoErrorPage()) {
-			System.out.println("LDVRK: An error occurred while attempting to log back into the application.");
 			return;
 		}
 	}

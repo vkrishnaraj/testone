@@ -2,10 +2,10 @@ package aero.nettracer.web.westjet.testing.actions.nt.core;
 
 import org.junit.Test;
 
-import aero.nettracer.web.utility.LoginUtil;
 import aero.nettracer.web.utility.Settings;
+import aero.nettracer.web.westjet.testing.WS_SeleniumTest;
 
-public class WS_QuickHistory extends LoginUtil {
+public class WS_QuickHistory extends WS_SeleniumTest {
 	
 	@Test
 	public void testLogin() throws Exception {

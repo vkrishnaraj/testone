@@ -4,8 +4,9 @@ import org.junit.Test;
 
 import aero.nettracer.web.utility.LoginUtil;
 import aero.nettracer.web.utility.Settings;
+import aero.nettracer.web.westjet.testing.WS_SeleniumTest;
 
-public class WS_TestWarehouse extends LoginUtil {
+public class WS_TestWarehouse extends WS_SeleniumTest {
 
 	@Test
 	public void testWarehouseDates() throws Exception {
@@ -17,40 +18,19 @@ public class WS_TestWarehouse extends LoginUtil {
 				verifyFalse(selenium.isTextPresent("Date Received by Warehouse"));
 
 				verifyFalse(selenium.isTextPresent("Date Sent from Warehouse"));
-		}
-		else{
+		} else {
 			System.err.println("Failed to enter create OHD page.");
 			verifyTrue(false);
 		}
 		
-		if(checkNoErrorPage())
-		{	
-			logout();
-			loginOGAdminProcedure();
-			clickMenu("menucol_9.2");
-			waitForPageToLoadImproved();
-			selenium.type("name=companySearchName", "WS");
-			selenium.click("id=button");
-			waitForPageToLoadImproved();
-			selenium.click("xpath=(//a[contains(text(),'Maintain')])[13]");
-			waitForPageToLoadImproved();
-			selenium.click("xpath=(//a[contains(text(),'Maintain')])[20]");
-			waitForPageToLoadImproved();
-			selenium.click("name=704");
-			selenium.click("name=save");
-			waitForPageToLoadImproved();
-		}
-
-		else{
+		if(checkNoErrorPage()) {	
+			setPermissions(new String[] {"704"}, new boolean[] {true});
+		} else {
 			System.err.println("Failed to verifyFalse Warehouse Date Received Fields.");
 			verifyTrue(false);
 		}
 		
-		if(checkNoErrorPage())
-		{
-
-			logout();
-			loginAdminProcedure();
+		if(checkNoErrorPage()) {
 			clickMenu("menucol_4.1");
 			waitForPageToLoadImproved();
 			selenium.click("name=skip_prepopulate");
@@ -59,15 +39,13 @@ public class WS_TestWarehouse extends LoginUtil {
 					verifyTrue(selenium.isTextPresent("Date Received by Warehouse"));
 
 					verifyTrue(selenium.isTextPresent("Date Sent from Warehouse"));
-			}
-			else{
+			} else {
 				System.err.println("Update Permissions.");
 				verifyTrue(false);
 			}
 		}
 		
-		if(checkNoErrorPage())
-		{
+		if(checkNoErrorPage()) {
 
 			selenium.select("name=bagColor", "label=WT - White/clear");
 			selenium.select("name=bagType", "label=01");
@@ -98,28 +76,9 @@ public class WS_TestWarehouse extends LoginUtil {
 			}
 		}
 		
-		if(checkNoErrorPage())
-		{	
-			logout();
-			loginOGAdminProcedure();
-			clickMenu("menucol_9.2");
-			waitForPageToLoadImproved();
-			selenium.type("name=companySearchName", "WS");
-			selenium.click("id=button");
-			waitForPageToLoadImproved();
-			selenium.click("xpath=(//a[contains(text(),'Maintain')])[13]");
-			waitForPageToLoadImproved();
-			selenium.click("xpath=(//a[contains(text(),'Maintain')])[20]");
-			waitForPageToLoadImproved();
-			selenium.click("name=704");
-			
-			selenium.click("name=save");
-			waitForPageToLoadImproved();
-			logout();
-			loginAdminProcedure();
-		}
-
-		else{
+		if(checkNoErrorPage()) {	
+			setPermissions(new String[] {"704"}, new boolean[] {false});
+		} else {
 			System.err.println("Failed to verifyFalse Warehouse Date Received Fields.");
 			verifyTrue(false);
 		}

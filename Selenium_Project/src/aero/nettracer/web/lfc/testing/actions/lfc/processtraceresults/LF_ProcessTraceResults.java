@@ -1,10 +1,11 @@
 package aero.nettracer.web.lfc.testing.actions.lfc.processtraceresults;
 
 import org.junit.Test;
+import org.openqa.selenium.By;
 
-import aero.nettracer.web.utility.LoginUtil;
+import aero.nettracer.web.lfc.testing.LFC_SeleniumTest;
 
-public class LF_ProcessTraceResults extends LoginUtil {
+public class LF_ProcessTraceResults extends LFC_SeleniumTest {
 	
 	private static String lostId;
 	private static String foundId;
@@ -107,7 +108,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 		
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent(LF_ProcessTraceResults.foundId));
-			verifyTrue(isElementPresent("//div[@id='maincontent']/table[2]/tbody/tr[2]/td/a"));
+			verifyTrue(isElementPresent(By.xpath("//div[@id='maincontent']/table[2]/tbody/tr[2]/td/a")));
 			verifyTrue(selenium.isTextPresent("Cellphone, Apple, iPhone 4S, AP1234"));
 			selenium.click("//div[@id='maincontent']/table/tbody/tr/td/center/input");
 			waitForPageToLoadImproved();
@@ -157,7 +158,7 @@ public class LF_ProcessTraceResults extends LoginUtil {
 		
 		if (checkNoErrorPage()) {
 			verifyFalse(selenium.isTextPresent(LF_ProcessTraceResults.foundId));
-			verifyFalse(isElementPresent("//div[@id='maincontent']/table[2]/tbody/tr[2]/td/a"));
+			verifyFalse(isElementPresent(By.xpath("//div[@id='maincontent']/table[2]/tbody/tr[2]/td/a")));
 			selenium.click("//a[contains(@href, 'logon.do?taskmanager=1')]");
 			waitForPageToLoadImproved();
 		} else {

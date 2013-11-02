@@ -1,10 +1,10 @@
 package aero.nettracer.web.utility;
 
-import java.util.concurrent.TimeUnit;
-
 import org.junit.Before;
-import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.interactions.Actions;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
 
@@ -19,92 +19,67 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 	}
 	
 	public void goToTaskManager() {
-		if (!selenium.isTextPresent("Task Manager Home")) {
-			clickMenu("menucol_0.0");
-			waitForPageToLoadImproved();
-		}
+		WebDriverUtil.goToTaskManager(driver);
 	}
 	
 	public void checkCopyrightAndQuestionMarks() {
-		verifyTrue(selenium.isTextPresent("NetTracer, Inc."));
-		verifyTrue(selenium.isTextPresent("2003-201"));
-		verifyFalse(selenium.isTextPresent("exact:???"));
+		WebDriverUtil.checkCopyrightAndQuestionMarks(driver);
 	}
 	
 	public boolean checkNoErrorPage() {
-		return !selenium.isTextPresent("There is an error with your request.");
+		return WebDriverUtil.checkNoErrorPage(driver);
 	}
 	
 	public void waitForPageToLoadImproved(long wait){
-		waitForPageToLoadImproved(wait, true);
+		WebDriverUtil.waitForPageToLoadImproved(wait);
 	}
 	
 	public void waitForPageToLoadImproved(long wait, boolean useWait){
-		try {
-			Thread.sleep(wait);
-		} catch (InterruptedException e) {
-			//continue
-		}
-		if (useWait) {
-			waitForPageToLoadImproved();
-		}
+		WebDriverUtil.waitForPageToLoadImproved(wait);
 	}
 	
 	public void waitForPageToLoadImproved() {
-		waitForPageToLoadImproved(true, 0, Settings.PAGE_LOAD_TIMEOUT);
+		// UNUSED BY WEBDRIVER
 	}
 	
 	public void waitForPageToLoadImproved(boolean doCheck) {
-		waitForPageToLoadImproved(doCheck, 0, Settings.PAGE_LOAD_TIMEOUT);
+		// UNUSED BY WEBDRIVER
 	}
 	
 	public void waitForPageToLoadImproved(boolean doCheck, int check, String timeout) {
-		boolean loadFailed = false;
-		try {
-			selenium.waitForPageToLoad(timeout);
-		} catch (Exception e) {
-			loadFailed = true;
-			System.out.println("PAGE DID NOT LOAD: CHECKING FOR COPYRIGHT!");
-		}
-		if (doCheck && loadFailed && check < Settings.CHECK_TIMES && !isElementPresent("id=copyright")) {
-			System.out.println("COPYRIGHT NOT LOADED: TRY NUMBER " + (check + 2) + " OF " + Settings.CHECK_TIMES);
-			waitForPageToLoadImproved(true, check++, timeout);
-		}
+		// UNUSED BY WEBDRIVER
 	}
 	
 	public void verifyTrue(boolean testThis) {
-		super.verifyTrue(testThis);
-		if (!testThis) {
-			System.out.println("SYSTEM FUBAR. Failure on previous test...");
-		}
+		WebDriverUtil.verifyTrue(testThis);
 	}
 	
 	public void verifyFalse(boolean testThis) {
-		super.verifyFalse(testThis);
-		if (testThis) {
-			System.out.println("SYSTEM FUBAR. Failure on previous test...");
-		}
+		WebDriverUtil.verifyFalse(testThis);
 	}
 	
 	public void clickMenu(String menu) {
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-		String toExecute = "var x = document.getElementById('" + menu + "'); x.click();";
-		js.executeScript(toExecute);
+		WebDriverUtil.clickMenu(driver, menu);
 	}
 	
-	public boolean isElementPresent(String element) {
-		driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
-		try {
-			return selenium.isElementPresent(element);
-		} finally {
-			driver.manage().timeouts().implicitlyWait(Settings.ELEMENT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-		}
+	public boolean isElementPresent(By by) {
+		return WebDriverUtil.isElementPresent(driver, by);
 	}
 	
-	public void logout() {
-		selenium.click("id=mainLayoutLogoutLink");
-		waitForPageToLoadImproved(500, false);
-		verifyTrue(selenium.isTextPresent("Log In"));
+	public void loadQuickSearch() {
+		waitForPageToLoadImproved(500,false);
+		new Actions(driver).sendKeys(Keys.chord(Keys.CONTROL, "s")).perform();
+		waitForPageToLoadImproved(500,false);
+	}
+	
+	public void closeQuickSearch() {
+		driver.findElement(By.id("quickSearchQuery3")).click();
+		new Actions(driver).sendKeys(Keys.chord(Keys.ESCAPE)).perform();
+		waitForPageToLoadImproved(500,false);
+	}
+	
+	protected void logout() {
+		LoginUtil.logout(driver);
 	}
 
 }

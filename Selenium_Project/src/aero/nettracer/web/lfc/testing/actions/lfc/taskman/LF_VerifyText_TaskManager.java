@@ -2,10 +2,9 @@ package aero.nettracer.web.lfc.testing.actions.lfc.taskman;
 
 import org.junit.Test;
 
-import aero.nettracer.web.utility.LoginUtil;
-import aero.nettracer.web.utility.Settings;
+import aero.nettracer.web.lfc.testing.LFC_SeleniumTest;
 
-public class LF_VerifyText_TaskManager extends LoginUtil {
+public class LF_VerifyText_TaskManager extends LFC_SeleniumTest {
 	
 	@Test
 	public void testVerifyText() throws Exception {

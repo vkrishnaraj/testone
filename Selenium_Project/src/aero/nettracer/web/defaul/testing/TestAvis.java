@@ -8,7 +8,6 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 import aero.nettracer.web.avis.testing.actions.lf.core.AB_Login;
-import aero.nettracer.web.avis.testing.actions.lf.core.AB_LoginFailure;
 import aero.nettracer.web.avis.testing.actions.lf.found.AB_CloseFound;
 import aero.nettracer.web.avis.testing.actions.lf.found.AB_CreateFound_Detailed;
 import aero.nettracer.web.avis.testing.actions.lf.found.AB_CreateFound_VerifyRequiredFields;
@@ -26,8 +25,7 @@ import aero.nettracer.web.utility.Settings;
 @RunWith(Suite.class)
 @SuiteClasses({
     // AVIS
-	AB_LoginFailure.class
-	, AB_Login.class
+	AB_Login.class
 	, AB_CreateLost_VerifyRequiredFields.class
 	, AB_CreateFound_VerifyRequiredFields.class
 	, AB_SearchLost.class

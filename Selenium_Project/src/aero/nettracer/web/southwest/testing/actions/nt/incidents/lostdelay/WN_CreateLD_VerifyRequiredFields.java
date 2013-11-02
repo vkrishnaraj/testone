@@ -6,8 +6,10 @@ import java.util.Date;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.interactions.Actions;
 
 import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
+import aero.nettracer.web.utility.PermissionsUtil;
 import aero.nettracer.web.utility.Settings;
 
 public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
@@ -17,7 +19,8 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		// MJS: initial state is drivers license collection enabled
 		// 		and view/edit drivers license disabled.
 		verifyTrue(setPermissions(new String[] { "632", "633", "636", "637", "635", "661", "662", "663", "664", "665", "666"}, new boolean[] { true, false, true, false, true, false, false, false, false, false, true }));
-		
+
+
 		clickMenu("menucol_1.1");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
@@ -135,12 +138,12 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 						.println("!!!!!!!!!!!!!!!! failed to 'Add Bag Itinerary'.");
 			}
 
-			verifyTrue(isElementPresent("name=passenger[0].decriptedDriversLicense"));
-			verifyTrue(isElementPresent("name=passenger[0].dlstate"));
-			verifyTrue(isElementPresent("name=passenger[0].driversLicenseProvince"));
-			verifyTrue(isElementPresent("name=passenger[0].driversLicenseCountry"));
-			verifyTrue(isElementPresent("name=passenger[0].decryptedPassportNumber"));
-			verifyTrue(isElementPresent("name=passenger[0].passportIssuer"));
+			verifyTrue(isElementPresent(By.name("passenger[0].decriptedDriversLicense")));
+			verifyTrue(isElementPresent(By.name("passenger[0].dlstate")));
+			verifyTrue(isElementPresent(By.name("passenger[0].driversLicenseProvince")));
+			verifyTrue(isElementPresent(By.name("passenger[0].driversLicenseCountry")));
+			verifyTrue(isElementPresent(By.name("passenger[0].decryptedPassportNumber")));
+			verifyTrue(isElementPresent(By.name("passenger[0].passportIssuer")));
 			selenium.type("name=passenger[0].decriptedDriversLicense",WN_SeleniumTest.DRIVERS_LICENSE);
 			selenium.select("name=passenger[0].dlstate", "label=Georgia");
 			verifyFalse(selenium.isEditable("name=passenger[0].driversLicenseProvince"));
@@ -173,7 +176,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	
 	@Test
 	public void testVerifyDriversLicenseRedacted() {
-		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
+		verifyTrue(navigateToIncidentTest(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		verifyFalse(selenium.isEditable("name=passenger[0].redactedDriversLicense"));
 		verifyEquals("*********", selenium.getValue("name=passenger[0].redactedDriversLicense"));
 		verifyFalse(selenium.isEditable("name=passenger[0].dlstate"));
@@ -219,7 +222,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	
 	@Test
 	public void testDriversLicenseRedactedAuditTrail() {
-		verifyTrue(navigateToIncidentAuditTrail());
+		verifyTrue(navigateToIncidentAuditTrailTest());
 		verifyTrue(selenium.isTextPresent("Driver's License Number : *********"));
 		verifyTrue(selenium.isTextPresent("State : GA"));
 		verifyTrue(selenium.isTextPresent("Province :"));
@@ -275,7 +278,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
-			verifyTrue(isElementPresent("//a[contains(text(),'" + Settings.INCIDENT_ID_WN + "')]"));
+			verifyTrue(isElementPresent(By.xpath("//a[contains(text(),'" + Settings.INCIDENT_ID_WN + "')]")));
 			selenium.click("link=" + Settings.INCIDENT_ID_WN);
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
@@ -295,7 +298,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
 					checkCopyrightAndQuestionMarks();
-					verifyTrue(isElementPresent("//a[contains(text(),'" + Settings.INCIDENT_ID_WN + "')]"));
+					verifyTrue(isElementPresent(By.xpath("//a[contains(text(),'" + Settings.INCIDENT_ID_WN + "')]")));
 					selenium.click("link=" + Settings.INCIDENT_ID_WN);
 					waitForPageToLoadImproved();
 					if (checkNoErrorPage()) {
@@ -349,7 +352,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	public void testCollectPosIdFields() {
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		verifyTrue(selenium.isTextPresent("Position ID"));
-		verifyTrue(isElementPresent("name=theitem[0].posId"));
+		verifyTrue(isElementPresent(By.name("theitem[0].posId")));
 		goToTaskManager();
 	}
 	
@@ -365,7 +368,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		verifyTrue(setPermissions(new String[] { "635" }, new boolean[] { false }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		verifyFalse(selenium.isTextPresent("Position ID"));
-		verifyFalse(isElementPresent("name=theitem[0].posId"));
+		verifyFalse(isElementPresent(By.name("theitem[0].posId")));
 		goToTaskManager();
 	}
 	
@@ -437,17 +440,12 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.controlKeyDown();
-			selenium.keyDown("id=header", "\\83");
-			selenium.keyUp("id=header", "\\83");
-			selenium.controlKeyUp();
-			waitForPageToLoadImproved(3000,false);
+			loadQuickSearch();
 			selenium.type("id=quickSearchQuery3", utbNum);
 			selenium.click("id=button");
-			waitForPageToLoadImproved(10000,false);
+			waitForPageToLoadImproved(3000,false);
 			verifyTrue(selenium.isTextPresent(Settings.INCIDENT_ID_WN));
-			selenium.keyDown("id=header", "\\27");
-			selenium.keyUp("id=header", "\\27");
+			closeQuickSearch();
 		} else {
 			System.out.println("CLDVRF: ERROR NAVIGATING TO TASKMANAGER.");
 			return;
@@ -458,7 +456,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	public void testPopulateQSCheck() {
 		if (checkNoErrorPage()) {
 			clickMenu("menucol_1.1");
-			waitForPageToLoadImproved();
+			waitForPageToLoadImproved(10000);
 			selenium.type("name=recordlocator", TODAY_SIX_DIGIT);
 			selenium.click("id=button");
 			waitForPageToLoadImproved();
@@ -476,14 +474,10 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		}
 
 		if (checkNoErrorPage()) {
-			selenium.controlKeyDown();
-			selenium.keyDown("id=header", "\\83");
-			selenium.keyUp("id=header", "\\83");
-			selenium.controlKeyUp();
-			waitForPageToLoadImproved(3000,false);
+			loadQuickSearch();
 			selenium.type("id=quickSearchQuery3", TODAY_SIX_DIGIT);
 			selenium.click("id=button");
-			waitForPageToLoadImproved(10000,false);
+			waitForPageToLoadImproved(3000,false);
 		} else {
 			System.out.println("CLDVRF: Failed to load prepopulate page.");
 			return;			
@@ -491,8 +485,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent(Settings.INCIDENT_ID_WN));
-			selenium.keyDown("id=header", "\\27");
-			selenium.keyUp("id=header", "\\27");
+			closeQuickSearch();
 		} else {
 			System.out.println("CLDVRF: Failed to check for existing PNR Incidents.");
 			return;			
@@ -536,7 +529,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 				selenium.select("name=theitem[0].color", "label=BN - Brown");
 				selenium.select("id=bagtype0", "label=25");			
 				selenium.type("name=recordlocator", "TESTER");			
-				selenium.type("name=passenger[0].jobtitle", "agent");		
+				selenium.select("name=passenger[0].salutation", "label=Mr.");	
 				selenium.type("name=addresses[0].zip", "33213");
 				selenium.type("name=addresses[0].mobile", "4040213465");		
 				selenium.select("name=theitem[0].manufacturer_ID", "label=Andiamo");
@@ -628,7 +621,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 
 	@Test
 	public void testCourtesyReasonDropdownValuesLD() {
-		verifyTrue(setPermissions(new String[] { WN_SeleniumTest.COURTESY_REASON_COLLECT }, new boolean[] { true }));
+		verifyTrue(setPermissions(new String[] { PermissionsUtil.INCIDENT_COURTESY_REASON_COLLECT }, new boolean[] { true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		verifyEquals("Please Select Other Outside 4-Hour Claim Check on Another Carrier No Claim Check Voluntary Separation Late Check", selenium.getText("id=courtesyReasonId"));
 		goToTaskManager();

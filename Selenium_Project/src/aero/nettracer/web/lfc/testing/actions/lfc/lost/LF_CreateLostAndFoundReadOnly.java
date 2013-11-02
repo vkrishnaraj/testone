@@ -1,6 +1,7 @@
 package aero.nettracer.web.lfc.testing.actions.lfc.lost;
 
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 import aero.nettracer.web.utility.DefaultSeleneseTestCase;
 import aero.nettracer.web.utility.Settings;
@@ -178,7 +179,7 @@ public class LF_CreateLostAndFoundReadOnly extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyFalse(isElementPresent("xpath=(//a[contains(text(),'Undo Confirmation')])[2]"));
+			verifyFalse(isElementPresent(By.xpath("(//a[contains(text(),'Undo Confirmation')])[2]")));
 		} else {
 			System.out.println("CLAFRO: An error occurred while attempting to open the Lost Report from the Found Item.");
 			return;

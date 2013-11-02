@@ -1,6 +1,7 @@
 package aero.nettracer.web.westjet.testing.actions.nt.incidents.lostdelay;
 
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 import aero.nettracer.web.utility.DefaultSeleneseTestCase;
 import aero.nettracer.web.utility.Settings;
@@ -74,7 +75,7 @@ public class WS_LDVerifyApplyAllOnClose extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(isElementPresent("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a"));
+			verifyTrue(isElementPresent(By.xpath("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a")));
  		    selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
 			waitForPageToLoadImproved();
 		} else {

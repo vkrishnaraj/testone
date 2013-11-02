@@ -3,12 +3,13 @@ package aero.nettracer.web.southwest.testing.actions.nt.onhands;
 import org.junit.Test;
 
 import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
+import aero.nettracer.web.utility.PermissionsUtil;
 
 public class WN_ViewStationOhds extends WN_SeleniumTest {
 
 	@Test
 	public void testVerifyColumnsWithPosId() {
-		verifyTrue(setCollectPosIdPermission(true));
+		verifyTrue(setPermissions(new String[] {PermissionsUtil.COLLECT_POS_ID}, new boolean[] {true}));
 		selenium.click("xpath=(//a[contains(@href, 'onhands.do')])[2]");
 		selenium.waitForPageToLoad("30000");
 		verifyTrue(selenium.isTextPresent("On-hand Bags in Station"));
@@ -21,7 +22,7 @@ public class WN_ViewStationOhds extends WN_SeleniumTest {
 	
 	@Test
 	public void testVerifyColumnsWithoutPosId() {
-		verifyTrue(setCollectPosIdPermission(false));
+		verifyTrue(setPermissions(new String[] {PermissionsUtil.COLLECT_POS_ID}, new boolean[] {false}));
 		selenium.click("xpath=(//a[contains(@href, 'onhands.do')])[2]");
 		selenium.waitForPageToLoad("30000");
 		verifyTrue(selenium.isTextPresent("On-hand Bags in Station"));
@@ -30,23 +31,6 @@ public class WN_ViewStationOhds extends WN_SeleniumTest {
 		verifyTrue(selenium.isTextPresent("Destination"));
 		verifyTrue(selenium.isTextPresent("Comments"));
 		goToTaskManager();
-	}
-	
-	private boolean setCollectPosIdPermission(boolean check) {
-		if (!navigateToPermissionsPage()) return false;
-		if (!isElementPresent("name=635")) return false;
-		
-		if (check) {
-			selenium.check("name=635");			
-		} else {
-			selenium.uncheck("name=635");
-		}
-		
-		if (!savePermissions()) return false;
-		if (!logoutOfNt()) return false;
-		if (!loginToNt()) return false;
-		
-		return true;
 	}
 	
 }

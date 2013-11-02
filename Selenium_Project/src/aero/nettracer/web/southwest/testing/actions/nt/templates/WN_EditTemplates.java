@@ -1,23 +1,25 @@
 package aero.nettracer.web.southwest.testing.actions.nt.templates;
 
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
+import aero.nettracer.web.utility.PermissionsUtil;
 import aero.nettracer.web.utility.Settings;
 
 public class WN_EditTemplates extends WN_SeleniumTest {
 	
 	@Test
 	public void testVerifyMaintainTemplatesPermissionDisabled() {
-		verifyTrue(setPermissions(new String[] { WN_SeleniumTest.MAINTAIN_TEMPLATES_PERMISSION }, new boolean[] { false }));
-		verifyFalse(isElementPresent("//a[contains(@href, 'searchTemplate.do')]"));
+		verifyTrue(setPermissions(new String[] { PermissionsUtil.DOCUMENT_TEMPLATES_MANAGE }, new boolean[] { false }));
+		verifyFalse(isElementPresent(By.xpath("//a[contains(@href, 'searchTemplate.do')]")));
 		goToTaskManager();
 	}
 	
 	@Test
 	public void testVarifyMaintainTemplatesPermissionEnabled() {
-		verifyTrue(super.setPermissions(new String[] { WN_SeleniumTest.MAINTAIN_TEMPLATES_PERMISSION }, new boolean[] { true }));
-		verifyTrue(isElementPresent("//a[contains(@href, 'searchTemplate.do')]"));
+		verifyTrue(super.setPermissions(new String[] { PermissionsUtil.DOCUMENT_TEMPLATES_MANAGE }, new boolean[] { true }));
+		verifyTrue(isElementPresent(By.xpath("//a[contains(@href, 'searchTemplate.do')]")));
 		goToTaskManager();
 	}
 	
@@ -84,7 +86,7 @@ public class WN_EditTemplates extends WN_SeleniumTest {
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
 				verifyEquals("Successfully updated template: Test Template\nDocument successfully generated", selenium.getText("//div[@id='maincontent']/span/font"));
-				verifyTrue(isElementPresent("link=Preview Document"));
+				verifyTrue(isElementPresent(By.linkText("Preview Document")));
 			} else {
 				System.out.println("!!!!!!!!!!!!!!! - Failed to save & preview on the edit template page. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 				verifyTrue(false);

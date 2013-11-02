@@ -31,7 +31,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Please save the salvage to begin adding items."));
-			verifyFalse(isElementPresent("//input[@id='addBarcode']"));
+			verifyFalse(isElementPresent(By.xpath("//input[@id='addBarcode']")));
 			selenium.click("//input[@id='saveButton']");
 			waitForPageToLoadImproved();
 		} else {
@@ -41,7 +41,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("The salvage was successfully saved."));
-			verifyTrue(isElementPresent("//input[@id='addBarcode']"));
+			verifyTrue(isElementPresent(By.xpath("//input[@id='addBarcode']")));
 			LF_Salvage.SALVAGE_ID = selenium.getValue("//input[@id='salvageId']");
 			System.out.println("LFS: Created salvage: " + LF_Salvage.SALVAGE_ID);
 			clickMenu("menucol_4.2");
@@ -61,7 +61,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(isElementPresent("//a[contains(@href, 'lf_salvage.do?id=" + LF_Salvage.SALVAGE_ID + "')]"));
+			verifyTrue(isElementPresent(By.xpath("//a[contains(@href, 'lf_salvage.do?id=" + LF_Salvage.SALVAGE_ID + "')]")));
 			selenium.click("//a[contains(@href, 'lf_salvage.do?id=" + LF_Salvage.SALVAGE_ID + "')]");
 			waitForPageToLoadImproved();
 		} else {
@@ -70,7 +70,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(isElementPresent("//input[@id='salvageId']"));
+			verifyTrue(isElementPresent(By.xpath("//input[@id='salvageId']")));
 			verifyEquals(LF_Salvage.SALVAGE_ID, selenium.getValue("//input[@id='salvageId']"));
 		} else {
 			System.out.println("LFS: An error occurred when attempting to navigate back to the salvage page from the salvage search page.");
@@ -259,7 +259,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(isElementPresent("//input[@id='salvageId']"));
+			verifyTrue(isElementPresent(By.xpath("//input[@id='salvageId']")));
 			verifyEquals(LF_Salvage.SALVAGE_ID, selenium.getValue("//input[@id='salvageId']"));
 		} else {
 			System.out.println("LFS: failed to load salvage: " + LF_Salvage.SALVAGE_ID + " from the salvage search page.");
@@ -388,7 +388,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(isElementPresent("//input[@id='salvageId']"));
+			verifyTrue(isElementPresent(By.xpath("//input[@id='salvageId']")));
 			verifyEquals(LF_Salvage.SALVAGE_ID, selenium.getValue("//input[@id='salvageId']"));
 			selenium.click("//input[@id='saveButton']");
 			waitForPageToLoadImproved();
@@ -495,7 +495,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(isElementPresent("//input[@id='salvageId']"));
+			verifyTrue(isElementPresent(By.xpath("//input[@id='salvageId']")));
 			verifyEquals(LF_Salvage.SALVAGE_ID, selenium.getValue("//input[@id='salvageId']"));
 		} else {
 			System.out.println("LFS: failed to load salvage: " + LF_Salvage.SALVAGE_ID + " from the salvage search page.");

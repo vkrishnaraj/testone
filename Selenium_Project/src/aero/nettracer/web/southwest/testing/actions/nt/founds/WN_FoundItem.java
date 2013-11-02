@@ -1,6 +1,7 @@
 package aero.nettracer.web.southwest.testing.actions.nt.founds;
 
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
 
@@ -86,7 +87,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 			selenium.type("name=email", "test@test.com");
 			selenium.click("id=button");
 			waitForPageToLoadImproved();
-			if (isElementPresent("id=resultLink0")) {
+			if (isElementPresent(By.id("resultLink0"))) {
 				selenium.click("id=resultLink0");
 				waitForPageToLoadImproved();
 			}
@@ -110,7 +111,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 		selenium.click("id=button");
 		waitForPageToLoadImproved();
 		if(checkNoErrorPage()){
-			if (isElementPresent("id=resultLink0")) {
+			if (isElementPresent(By.id("resultLink0"))) {
 				selenium.click("id=resultLink0");
 				waitForPageToLoadImproved();
 			}

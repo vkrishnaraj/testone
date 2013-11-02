@@ -1,14 +1,16 @@
 package aero.nettracer.web.southwest.testing.actions.nt.templates;
 
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
+import aero.nettracer.web.utility.PermissionsUtil;
 
 public class WN_SearchTemplates extends WN_SeleniumTest {
 
 	@Test
 	public void testTemplateSearchResults() {
-		verifyTrue(setPermissions(new String[] { WN_SeleniumTest.MAINTAIN_TEMPLATES_PERMISSION }, new boolean[] { true }));
+		verifyTrue(setPermissions(new String[] { PermissionsUtil.DOCUMENT_TEMPLATES_MANAGE }, new boolean[] { true }));
 		for (int i = 0; i < 2; ++i) {
 			clickMenu("menucol_9.17");
 			waitForPageToLoadImproved();
@@ -53,11 +55,11 @@ public class WN_SearchTemplates extends WN_SeleniumTest {
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
 				verifyEquals("Results", selenium.getText("//div[@id='maincontent']/h1[2]"));
-				verifyTrue(isElementPresent("link=Template Id"));
-				verifyTrue(isElementPresent("link=Template Name"));
+				verifyTrue(isElementPresent(By.linkText("Template Id")));
+				verifyTrue(isElementPresent(By.linkText("Template Name")));
 				verifyEquals("Template Description", selenium.getText("//table[@id='templates']/thead/tr/th[3]"));
-				verifyTrue(isElementPresent("link=Template Created Date/Time"));
-				verifyTrue(isElementPresent("link=Active"));
+				verifyTrue(isElementPresent(By.linkText("Template Created Date/Time")));
+				verifyTrue(isElementPresent(By.linkText("Active")));
 			} else {
 				System.out.println("!!!!!!!!!!!!!!! - Failed to load the template search page. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 				verifyTrue(false);

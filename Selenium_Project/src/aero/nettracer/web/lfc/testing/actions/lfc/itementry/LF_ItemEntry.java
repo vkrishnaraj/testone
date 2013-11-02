@@ -4,9 +4,10 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.Select;
 
+import aero.nettracer.web.lfc.testing.LFC_SeleniumTest;
 import aero.nettracer.web.utility.LoginUtil;
 
-public class LF_ItemEntry extends LoginUtil {
+public class LF_ItemEntry extends LFC_SeleniumTest {
 
 	private static String testId;
 	
@@ -398,24 +399,24 @@ public class LF_ItemEntry extends LoginUtil {
 	
 	private void verifySummaryDiv(int divId) {
 		verifyTrue(selenium.isTextPresent("Bin #:"));
-		verifyTrue(isElementPresent("//div[@id='moveDiv_" + divId + "']/input"));
-		verifyTrue(isElementPresent("//div[@id='moveDiv_" + divId + "']/center/input[@type='button']"));
+		verifyTrue(isElementPresent(By.xpath("//div[@id='moveDiv_" + divId + "']/input")));
+		verifyTrue(isElementPresent(By.xpath("//div[@id='moveDiv_" + divId + "']/center/input[@type='button']")));
 		waitForPageToLoadImproved(3000, false);
 		verifyFalse(selenium.isEditable("//input[@id='saveButton']"));
 		selenium.click("//div[@id='moveDiv_" + divId + "']/center/input");
-		verifyFalse(isElementPresent("//div[@id='moveDiv_" + divId + "']/input"));
-		verifyFalse(isElementPresent("//div[@id='moveDiv_" + divId + "']/center/input[@type='button']"));
+		verifyFalse(isElementPresent(By.xpath("//div[@id='moveDiv_" + divId + "']/input")));
+		verifyFalse(isElementPresent(By.xpath("//div[@id='moveDiv_" + divId + "']/center/input[@type='button']")));
 		waitForPageToLoadImproved(3000, false);
 		verifyTrue(selenium.isEditable("//input[@id='saveButton']"));
 	}
 	
 	private void clearSummaryDivs() {
 		
-		if (isElementPresent("//div[@id='moveDiv_1']/center/input[@type='button']")) {
+		if (isElementPresent(By.xpath("//div[@id='moveDiv_1']/center/input[@type='button']"))) {
 			selenium.click("//div[@id='moveDiv_1']/center/input[@type='button']");
 		}
 		
-		if (isElementPresent("//div[@id='moveDiv_0']/center/input[@type='button']")) {
+		if (isElementPresent(By.xpath("//div[@id='moveDiv_0']/center/input[@type='button']"))) {
 			selenium.click("//div[@id='moveDiv_0']/center/input[@type='button']");
 		}
 		

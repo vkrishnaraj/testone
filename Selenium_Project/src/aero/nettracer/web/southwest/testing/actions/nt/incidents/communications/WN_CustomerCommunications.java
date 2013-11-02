@@ -1,6 +1,7 @@
 package aero.nettracer.web.southwest.testing.actions.nt.incidents.communications;
 
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
 import aero.nettracer.web.utility.Settings;
@@ -13,7 +14,8 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 	private String CUST_COMM_VIEW_PUBLISHED = "670";
 	private String CUST_COMM_APPROVAL = "671";
 	
-	private String[] links = { "menucol_1.4", "menucol_2.4", "menucol_3.4" };
+	private String[] searchLinks = { "menucol_1.4", "menucol_2.3", "menucol_3.3" };
+	private String[] newLinks = { "menucol_1.1", "menucol_2.1", "menucol_3.1" };
 	private String[] types = { "Lost/Delayed", "Damaged", "Missing Articles" };
 	
 	@Test
@@ -36,8 +38,8 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 
 		verifyTrue(setPermissions(permissions, values));
 		
-		for (int i = 0; i < links.length; ++i) {
-			clickMenu(links[i]);
+		for (int i = 0; i < searchLinks.length; ++i) {
+			clickMenu(searchLinks[i]);
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
@@ -73,8 +75,8 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 		boolean[] values = new boolean[] { true };
 		verifyTrue(setPermissions(permissions, values));
 		
-		for (int i = 0; i < links.length; ++i) {
-			clickMenu(links[i]);
+		for (int i = 0; i < newLinks.length; ++i) {
+			clickMenu(newLinks[i]);
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				selenium.click("name=skip_prepopulate");
@@ -96,8 +98,8 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 	
 	@Test
 	public void testCustomerCommunicationsCreateEnabled() {
-		for (int i = 0; i < links.length; ++i) {
-			clickMenu(links[i]);
+		for (int i = 0; i < searchLinks.length; ++i) {
+			clickMenu(searchLinks[i]);
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				selenium.click("id=button");
@@ -132,7 +134,7 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 		
 		createIncident(true);
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-		verifyTrue(isElementPresent("name=custCommId"));
+		verifyTrue(isElementPresent(By.name("custCommId")));
 		selenium.select("name=custCommId", "label=Web Portal");
 		selenium.click("id=setCommMethodButton");
 		waitForPageToLoadImproved();
@@ -164,9 +166,9 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
 			verifyTrue(selenium.isTextPresent("Create Outgoing Communication"));
-			verifyTrue(isElementPresent("id=documentTitle"));
+			verifyTrue(isElementPresent(By.id("documentTitle")));
 			verifyEquals("Test Template", selenium.getValue("id=documentTitle"));
-			verifyTrue(isElementPresent("id=documentId"));
+			verifyTrue(isElementPresent(By.id("documentId")));
 			verifyEquals("0", selenium.getValue("id=documentId"));
 			selenium.click("id=submitCustComm");
 			waitForPageToLoadImproved();
@@ -179,7 +181,7 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 				selenium.click("id=savePreviewButton");
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
-					verifyTrue(isElementPresent("link=Preview"));
+					verifyTrue(isElementPresent(By.linkText("Preview")));
 					selenium.click("css=span.bb");
 					waitForPageToLoadImproved();
 					if (checkNoErrorPage()) {
@@ -208,13 +210,13 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 	public void testEditCustomerCommunication() {
 		verifyTrue(setPermissions(new String[] { CUST_COMM_EDIT }, new boolean[] { false }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-		verifyFalse(isElementPresent("//a[contains(@href, 'customerCommunications.do?command=edit&communicationsId=" + Settings.CUST_COMM_ID + "')]"));
-		verifyFalse(isElementPresent("//a[@onclick=\"openPreviewWindow('" + Settings.CUST_COMM_ID + "')\"]"));
+		verifyFalse(isElementPresent(By.xpath("//a[contains(@href, 'customerCommunications.do?command=edit&communicationsId=" + Settings.CUST_COMM_ID + "')]")));
+		verifyFalse(isElementPresent(By.xpath("//a[@onclick=\"openPreviewWindow('" + Settings.CUST_COMM_ID + "')\"]")));
 		
 		verifyTrue(setPermissions(new String[] { CUST_COMM_EDIT }, new boolean[] { true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-		verifyTrue(isElementPresent("//a[contains(@href, 'customerCommunications.do?command=edit&communicationsId=" + Settings.CUST_COMM_ID + "')]"));
-		verifyTrue(isElementPresent("//a[contains(text(),'View Sample Printout')]"));
+		verifyTrue(isElementPresent(By.xpath("//a[contains(@href, 'customerCommunications.do?command=edit&communicationsId=" + Settings.CUST_COMM_ID + "')]")));
+		verifyTrue(isElementPresent(By.xpath("//a[contains(text(),'View Sample Printout')]")));
 		
 		selenium.click("//a[contains(@href, 'customerCommunications.do?command=edit&communicationsId=" + Settings.CUST_COMM_ID + "')]");
 		waitForPageToLoadImproved();
@@ -230,20 +232,16 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 	public void testDeleteCustomerCommunication() {
 		verifyTrue(setPermissions(new String[] { CUST_COMM_DELETE }, new boolean[] { false }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-		verifyFalse(isElementPresent("//a[contains(@href, 'customerCommunications.do?command=delete&communicationsId=" + Settings.CUST_COMM_ID + "')]"));
+		verifyFalse(isElementPresent(By.xpath("//a[contains(@href, 'customerCommunications.do?command=delete&communicationsId=" + Settings.CUST_COMM_ID + "')]")));
 		
 		verifyTrue(setPermissions(new String[] { CUST_COMM_DELETE }, new boolean[] { true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-		verifyTrue(isElementPresent("//a[contains(@href, 'customerCommunications.do?command=delete&communicationsId=" + Settings.CUST_COMM_ID + "')]"));
+		verifyTrue(isElementPresent(By.xpath("//a[contains(@href, 'customerCommunications.do?command=delete&communicationsId=" + Settings.CUST_COMM_ID + "')]")));
 		
-		selenium.chooseCancelOnNextConfirmation();
-		selenium.click("//a[contains(@href, 'customerCommunications.do?command=delete&communicationsId=" + Settings.CUST_COMM_ID + "&incident=" + Settings.INCIDENT_ID_WN + "')]");
-		assertTrue(selenium.getConfirmation().matches("^Are you sure you want to delete this template[\\s\\S]$"));
 		selenium.click("//a[contains(@href, 'customerCommunications.do?command=delete&communicationsId=" + Settings.CUST_COMM_ID + "&incident=" + Settings.INCIDENT_ID_WN + "')]");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
-			assertTrue(selenium.getConfirmation().matches("^Are you sure you want to delete this template[\\s\\S]$"));
-			verifyFalse(isElementPresent("//a[contains(@href, 'customerCommunications.do?command=delete&communicationsId=" + Settings.CUST_COMM_ID + "&incident=" + Settings.INCIDENT_ID_WN + "')]"));
+			verifyFalse(isElementPresent(By.xpath("//a[contains(@href, 'customerCommunications.do?command=delete&communicationsId=" + Settings.CUST_COMM_ID + "&incident=" + Settings.INCIDENT_ID_WN + "')]")));
 		} else {
 			System.out.println("!!!!!!!!!!!!!!!! Failed to delete Customer Communication with id: " + Settings.CUST_COMM_ID);
 			verifyTrue(false);

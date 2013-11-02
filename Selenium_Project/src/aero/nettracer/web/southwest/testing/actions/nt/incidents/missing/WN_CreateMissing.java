@@ -1,8 +1,10 @@
 package aero.nettracer.web.southwest.testing.actions.nt.incidents.missing;
 
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
+import aero.nettracer.web.utility.PermissionsUtil;
 import aero.nettracer.web.utility.Settings;
 
 public class WN_CreateMissing extends WN_SeleniumTest {
@@ -99,8 +101,8 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 					verifyEquals("Record Locator is required.", selenium.getAlert());
 					selenium.type("name=recordlocator", "12345");
 					selenium.click("id=saveButton");
-					verifyEquals("Job Title is required.", selenium.getAlert());
-					selenium.type("name=passenger[0].jobtitle", "agent");
+					verifyEquals("Salutation is required.", selenium.getAlert());
+					selenium.select("name=passenger[0].salutation", "label=Mr.");	
 					selenium.click("id=saveButton");
 					verifyEquals("Zip is required.", selenium.getAlert());
 					selenium.type("name=addresses[0].zip", "33213");
@@ -167,7 +169,7 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 	
 	@Test
 	public void testCourtesyReasonDropdownValuesMissing() {
-		verifyTrue(setPermissions(new String[] { WN_SeleniumTest.COURTESY_REASON_COLLECT }, new boolean[] { true }));
+		verifyTrue(setPermissions(new String[] { PermissionsUtil.INCIDENT_COURTESY_REASON_COLLECT }, new boolean[] { true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_MISSING));
 		verifyEquals("Please Select Other Outside 4-Hour Claim Check on Another Carrier No Claim Check", selenium.getText("id=courtesyReasonId"));
 		goToTaskManager();
@@ -177,8 +179,8 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 	public void testAdditionalMissingItemInformationDisabled() {
 		verifyTrue(setPermissions(new String[] { ADDITIONAL_MISSING_ITEM_INFORMATION }, new boolean[] { false }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_MISSING));
-		verifyFalse(isElementPresent("name=article[0].disEnteredDate"));
-		verifyFalse(isElementPresent("name=article[0].statusId"));
+		verifyFalse(isElementPresent(By.name("article[0].disEnteredDate")));
+		verifyFalse(isElementPresent(By.name("article[0].statusId")));
 		goToTaskManager();
 	}
 	
@@ -194,8 +196,8 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 	public void testAdditionalMissingItemInformationEnabled() {
 		verifyTrue(setPermissions(new String[] { ADDITIONAL_MISSING_ITEM_INFORMATION }, new boolean[] { true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_MISSING));
-		verifyTrue(isElementPresent("name=article[0].disEnteredDate"));
-		verifyTrue(isElementPresent("name=article[0].statusId"));
+		verifyTrue(isElementPresent(By.name("article[0].disEnteredDate")));
+		verifyTrue(isElementPresent(By.name("article[0].statusId")));
 
 		selenium.type("name=article[0].dispurchasedate", WN_SeleniumTest.TODAY);
 		selenium.type("name=article[0].discost", "1");

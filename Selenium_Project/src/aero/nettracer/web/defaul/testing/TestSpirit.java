@@ -7,11 +7,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import aero.nettracer.web.defaul.testing.actions.nt.core.Def_Logout;
 import aero.nettracer.web.spirit.testing.actions.nt.admin.NK_Audit;
 import aero.nettracer.web.spirit.testing.actions.nt.admin.NK_Security;
 import aero.nettracer.web.spirit.testing.actions.nt.core.NK_Login;
-import aero.nettracer.web.spirit.testing.actions.nt.core.NK_LoginFailure;
 import aero.nettracer.web.spirit.testing.actions.nt.incidents.damage.NK_CloseDam_VerifyRequiredFields;
 import aero.nettracer.web.spirit.testing.actions.nt.incidents.damage.NK_CreateDam_VerifyRequiredFields;
 import aero.nettracer.web.spirit.testing.actions.nt.incidents.lostdelay.NK_CloseLD_VerifyRequiredFields;
@@ -29,9 +27,6 @@ import aero.nettracer.web.utility.SeleniumTestBrowserDefault;
 @SuiteClasses({
 //	 SPIRIT
 	NK_Login.class
-	, Def_Logout.class
-	, NK_LoginFailure.class
-	, NK_Login.class
 	, NK_VerifyText_TaskManager.class
 	, NK_CreateLD_VerifyRequiredFields.class
 	, NK_CloseLD_VerifyRequiredFields.class

@@ -1,6 +1,7 @@
 package aero.nettracer.web.lfc.testing.actions.lfc.delivery;
 
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 import aero.nettracer.web.utility.DefaultSeleneseTestCase;
 
@@ -106,7 +107,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(isElementPresent("//a[contains(text(),'" + LF_CreateDeliveryFromFound.foundId + "')]"));
+			verifyTrue(isElementPresent(By.xpath("//a[contains(text(),'" + LF_CreateDeliveryFromFound.foundId + "')]")));
 			verifyTrue(selenium.isTextPresent("To Be Delivered"));
 		} else {
 			System.out.println("CDFF: Failed to load the Items to Deliver page.");
@@ -142,7 +143,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		
 		if (checkNoErrorPage()) {
 			verifyEquals("Closed", selenium.getSelectedLabel("//div[@id='maincontent']/table/tbody/tr[2]/td[2]/select"));
-			verifyTrue(isElementPresent("name=trackingNumber"));
+			verifyTrue(isElementPresent(By.name("trackingNumber")));
 			verifyEquals("12341234", selenium.getValue("name=trackingNumber"));
 			selenium.click("link=Undo");
 			waitForPageToLoadImproved();
@@ -223,7 +224,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Delivery rejected"));
 			verifyEquals(LF_CreateDeliveryFromFound.today, selenium.getTable("//div[@id='maincontent']/table[5].1.1"));
-			verifyTrue(isElementPresent("xpath=(//a[contains(text(),'Undo')])[2]"));
+			verifyTrue(isElementPresent(By.xpath("(//a[contains(text(),'Undo')])[2]")));
 			verifyEquals("Closed", selenium.getSelectedLabel("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[4]/select"));
 			selenium.click("//div[@id='maincontent']/table[4]/tbody/tr/td/a");
 			waitForPageToLoadImproved();
@@ -235,7 +236,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			verifyEquals("Closed", selenium.getSelectedLabel("//div[@id='maincontent']/table/tbody/tr[2]/td[2]/select"));
 			verifyTrue(selenium.isTextPresent("Delivery rejected"));
-			verifyTrue(isElementPresent("//div[@id='maincontent']/table[4]/tbody/tr/td[2]/a"));
+			verifyTrue(isElementPresent(By.xpath("//div[@id='maincontent']/table[4]/tbody/tr/td[2]/a")));
 			selenium.click("//div[@id='maincontent']/table[4]/tbody/tr/td[2]/a");
 			waitForPageToLoadImproved();
 		} else {
@@ -271,7 +272,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			verifyTrue(selenium.isTextPresent("Picked up by customer"));
 			verifyEquals(LF_CreateDeliveryFromFound.today, selenium.getTable("//div[@id='maincontent']/table[5].1.1"));
-			verifyTrue(isElementPresent("xpath=(//a[contains(text(),'Undo')])[2]"));
+			verifyTrue(isElementPresent(By.xpath("(//a[contains(text(),'Undo')])[2]")));
 			verifyEquals("Closed", selenium.getSelectedLabel("//div[@id='maincontent']/table[2]/tbody/tr[2]/td[4]/select"));
 			selenium.click("//div[@id='maincontent']/table[4]/tbody/tr/td/a");
 			waitForPageToLoadImproved();
@@ -283,7 +284,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			verifyEquals("Closed", selenium.getSelectedLabel("//div[@id='maincontent']/table/tbody/tr[2]/td[2]/select"));
 			verifyTrue(selenium.isTextPresent("Picked up by customer"));
-			verifyTrue(isElementPresent("//div[@id='maincontent']/table[4]/tbody/tr/td[2]/a"));
+			verifyTrue(isElementPresent(By.xpath("//div[@id='maincontent']/table[4]/tbody/tr/td[2]/a")));
 			selenium.click("//div[@id='maincontent']/table[4]/tbody/tr/td[2]/a");
 			waitForPageToLoadImproved();
 		} else {
@@ -312,10 +313,10 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 	
 	private void verifyDeliveryOptions() {
 		verifyTrue(selenium.isTextPresent("Tracking Number:"));
-		verifyTrue(isElementPresent("//div[@id='maincontent']/table[5]/tbody/tr[2]/td/input"));
+		verifyTrue(isElementPresent(By.xpath("//div[@id='maincontent']/table[5]/tbody/tr[2]/td/input")));
 		verifyEquals("", selenium.getValue("//div[@id='maincontent']/table[5]/tbody/tr[2]/td/input"));
-		verifyTrue(isElementPresent("link=Delivery rejected"));
-		verifyTrue(isElementPresent("link=Picked up by customer"));
+		verifyTrue(isElementPresent(By.linkText("Delivery rejected")));
+		verifyTrue(isElementPresent(By.linkText("Picked up by customer")));
 	}
 	
 }

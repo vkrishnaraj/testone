@@ -7,11 +7,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import aero.nettracer.web.defaul.testing.actions.nt.core.Def_Logout;
 import aero.nettracer.web.jetblue.testing.actions.nt.admin.B6_Audit;
 import aero.nettracer.web.jetblue.testing.actions.nt.admin.B6_Security;
 import aero.nettracer.web.jetblue.testing.actions.nt.core.B6_Login;
-import aero.nettracer.web.jetblue.testing.actions.nt.core.B6_LoginFailure;
 import aero.nettracer.web.jetblue.testing.actions.nt.incidents.damage.B6_CloseDam_VerifyRequiredFields;
 import aero.nettracer.web.jetblue.testing.actions.nt.incidents.damage.B6_CreateDam_VerifyRequiredFields;
 import aero.nettracer.web.jetblue.testing.actions.nt.incidents.lostdelay.B6_CloseLD_VerifyRequiredFields;
@@ -31,9 +29,6 @@ import aero.nettracer.web.utility.Settings;
 @SuiteClasses({
 	// JETBLUE
 	B6_Login.class
-	, Def_Logout.class
-	, B6_LoginFailure.class
-	, B6_Login.class
 	, B6_VerifyText_TaskManager.class
 	, B6_CreateLD_VerifyRequiredFields.class
 	, B6_EditLD_VerifyText.class

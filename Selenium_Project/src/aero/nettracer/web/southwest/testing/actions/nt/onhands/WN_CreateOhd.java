@@ -6,8 +6,10 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
+import aero.nettracer.web.utility.PermissionsUtil;
 import aero.nettracer.web.utility.Settings;
 
 public class WN_CreateOhd extends WN_SeleniumTest {
@@ -20,8 +22,7 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 			checkCopyrightAndQuestionMarks();
 			verifyTrue(selenium.isTextPresent("Date/Time Modified"));
 			verifyTrue(selenium.isTextPresent("Modified Agent"));
-			verifyTrue(isElementPresent("name=dispModifiedDate"));
-			verifyTrue(isElementPresent("name=dispModifiedDate"));
+			verifyTrue(isElementPresent(By.name("dispModifiedDate")));
 		} else {
 			System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Navigate to Add Onhand. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 			verifyTrue(false);
@@ -31,12 +32,7 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 	
 	@Test
 	public void testPosIdPermission() {
-		verifyTrue(navigateToPermissionsPage());
-		verifyTrue(isElementPresent("name=635"));
-		selenium.uncheck("name=635");
-		verifyTrue(savePermissions());
-		verifyTrue(logoutOfNt());
-		verifyTrue(loginToNt());
+		verifyTrue(setPermissions(new String[] {PermissionsUtil.COLLECT_POS_ID}, new boolean[] {false}));
 
 		clickMenu("menucol_4.1");
 		waitForPageToLoadImproved();
@@ -44,19 +40,14 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 			checkCopyrightAndQuestionMarks();
 			verifyFalse(selenium.isTextPresent("Position ID"));
 			verifyFalse(selenium.isTextPresent("Late Check"));
-			verifyFalse(isElementPresent("name=posId"));
-			verifyFalse(isElementPresent("name=lateCheckValue"));
+			verifyFalse(isElementPresent(By.name("posId")));
+			verifyFalse(isElementPresent(By.name("lateCheckValue")));
 		} else {
 			System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Navigate to Add Onhand. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 			verifyTrue(false);
 		}
-		
-		verifyTrue(navigateToPermissionsPage());
-		verifyTrue(isElementPresent("name=635"));
-		selenium.check("name=635");
-		verifyTrue(savePermissions());
-		verifyTrue(logoutOfNt());
-		verifyTrue(loginToNt());
+
+		verifyTrue(setPermissions(new String[] {PermissionsUtil.COLLECT_POS_ID}, new boolean[] {true}));
 
 		clickMenu("menucol_4.1");
 		waitForPageToLoadImproved();
@@ -64,8 +55,8 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 			checkCopyrightAndQuestionMarks();
 			verifyTrue(selenium.isTextPresent("Position ID"));
 			verifyTrue(selenium.isTextPresent("Late Check"));
-			verifyTrue(isElementPresent("name=posId"));
-			verifyTrue(isElementPresent("name=lateCheckValue"));
+			verifyTrue(isElementPresent(By.name("posId")));
+			verifyTrue(isElementPresent(By.name("lateCheckValue")));
 		} else {
 			System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Navigate to Add Onhand. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 			verifyTrue(false);
@@ -109,7 +100,7 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
-				verifyTrue(isElementPresent("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a"));
+				verifyTrue(isElementPresent(By.xpath("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a")));
 				String ohdId = selenium.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
 				Settings.ONHAND_ID_WN = ohdId;
 				System.out.println("WN: Onhand Created: " + Settings.ONHAND_ID_WN);
@@ -165,12 +156,7 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 	
 	@Test
 	public void testPoisIdNotOnAuditTrail() {
-		verifyTrue(navigateToPermissionsPage());
-		verifyTrue(isElementPresent("name=635"));
-		selenium.uncheck("name=635");
-		verifyTrue(savePermissions());
-		verifyTrue(logoutOfNt());
-		verifyTrue(loginToNt());
+		verifyTrue(setPermissions(new String[] {PermissionsUtil.COLLECT_POS_ID}, new boolean[] {false}));
 		verifyTrue(navigateToAuditTrail());
 		verifyFalse(selenium.isTextPresent("Position ID"));
 		verifyFalse(selenium.isTextPresent("Late Check"));
@@ -278,73 +264,8 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 		
 	}
 	
-	private boolean setSecureRemarksPermission(boolean secureRemarks) {
-		boolean success = false;
-		if (!navigateToPermissionsPage()) {
-			return success;
-		}
-		
-		if (secureRemarks) {
-			selenium.check("name=335");
-		} else {
-			selenium.uncheck("name=335");
-		}
-		
-		
-		selenium.click("xpath=(//input[@id='button'])[2]");
-		waitForPageToLoadImproved();
-		if (checkNoErrorPage()) {
-			selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
-			waitForPageToLoadImproved();
-			success = loginToNt();
-		} else {
-			System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Save Permissions. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-		}
-		
-		return success;
-	}
-	
 	private boolean navigateToAuditTrail() {
-		boolean success = false;
-		clickMenu("menucol_9.12");
-		waitForPageToLoadImproved();
-		if (checkNoErrorPage()) {
-			checkCopyrightAndQuestionMarks();
-			selenium.click("//td[@id='navmenucell']/div/dl/dd/a/span[2]");
-			waitForPageToLoadImproved();
-			if (checkNoErrorPage()) {
-				checkCopyrightAndQuestionMarks();
-				selenium.type("//input[@name='ohd_ID']", Settings.ONHAND_ID_WN);
-				selenium.click("//input[@id='button']");
-				waitForPageToLoadImproved();
-				if (checkNoErrorPage()) {
-					checkCopyrightAndQuestionMarks();
-					selenium.click("//a[contains(@href, 'audit_ohd.do?detail=1&ohd_ID=" + Settings.ONHAND_ID_WN + "')]");
-					waitForPageToLoadImproved();
-					if (checkNoErrorPage()) {
-						checkCopyrightAndQuestionMarks();
-						selenium.check("//input[@name='audit_id']");
-						selenium.click("xpath=(//input[@id='button'])[3]");
-						waitForPageToLoadImproved();
-						if (checkNoErrorPage()) {
-							checkCopyrightAndQuestionMarks();
-							success = true;
-						} else {
-							System.out.println("!!!!!!!!!!!!!!! - Failed to Load Audit Trail for Onhand: " + Settings.ONHAND_ID_WN + ". Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-						}
-					} else {
-						System.out.println("!!!!!!!!!!!!!!! - Failed to Load Audit Trail for Incident: " + Settings.ONHAND_ID_WN + ". Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-					}
-				} else {
-					System.out.println("!!!!!!!!!!!!!!! - Failed to Load Incident: " + Settings.ONHAND_ID_WN + ". Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-				}
-			} else {
-				System.out.println("!!!!!!!!!!!!!!! - Failed to Load Incident Tab. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-			}
-		} else {
-			System.out.println("!!!!!!!!!!!!!!! - Failed to Load Audit Trail. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-		}
-		return success;
+		return navigateToOHDAuditTrail();
 	}
 	
 }

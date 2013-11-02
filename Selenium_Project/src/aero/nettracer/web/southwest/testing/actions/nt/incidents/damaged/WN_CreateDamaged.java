@@ -4,8 +4,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
+import aero.nettracer.web.utility.PermissionsUtil;
 import aero.nettracer.web.utility.Settings;
 
 public class WN_CreateDamaged extends WN_SeleniumTest {
@@ -42,7 +44,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
 				
-				verifyFalse(isElementPresent("id=rxButton"));
+				verifyFalse(isElementPresent(By.id("rxButton")));
 				selenium.click("id=button");
 				selenium.click("name=saveButton");
 				verifyEquals("Permanent Address is required.", selenium.getAlert());
@@ -121,8 +123,8 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 					verifyEquals("Record Locator is required.", selenium.getAlert());
 					selenium.type("name=recordlocator", "12345");						
 					selenium.click("name=saveButton");
-					verifyEquals("Job Title is required.", selenium.getAlert());
-					selenium.type("name=passenger[0].jobtitle", "agent");						
+					verifyEquals("Salutation is required.", selenium.getAlert());
+					selenium.select("name=passenger[0].salutation", "label=Mr.");				
 					selenium.click("name=saveButton");
 					verifyEquals("Zip is required.", selenium.getAlert());
 					selenium.type("name=addresses[0].zip", "33213");						
@@ -184,7 +186,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 		verifyTrue(setPermissions(new String[] { EXPEDITE_TAG_NUM_COLLECT }, new boolean[] { true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
 		verifyTrue(selenium.isTextPresent("Expedite Tag Number"));
-		verifyTrue(isElementPresent("name=theitem[0].expediteTagNum"));				
+		verifyTrue(isElementPresent(By.name("theitem[0].expediteTagNum")));				
 		verifyEquals(WN_SeleniumTest.EXPEDITE_TAG_NUM, selenium.getValue("name=theitem[0].expediteTagNum"));
 		goToTaskManager();
 	}
@@ -201,7 +203,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 		verifyTrue(setPermissions(new String[] { EXPEDITE_TAG_NUM_COLLECT }, new boolean[] { false }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
 		verifyFalse(selenium.isTextPresent("Expedite Tag Number"));
-		verifyFalse(isElementPresent("name=theitem[0].expediteTagNum"));				
+		verifyFalse(isElementPresent(By.name("theitem[0].expediteTagNum")));				
 		goToTaskManager();
 	}
 
@@ -216,7 +218,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	public void testInvalidExpediteTagNum() {
 		verifyTrue(setPermissions(new String[] { EXPEDITE_TAG_NUM_COLLECT }, new boolean[] { true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
-		verifyTrue(isElementPresent("name=theitem[0].expediteTagNum"));
+		verifyTrue(isElementPresent(By.name("theitem[0].expediteTagNum")));
 		selenium.type("name=theitem[0].expediteTagNum", "01234567891");
 		selenium.click("name=saveButton");
 		assertEquals("Expedite Number is an invalid expedite number.[10 or 12 digits or 8 character AN]", selenium.getAlert());
@@ -236,12 +238,12 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	public void testRxTimestampSet() {
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
 		verifyEquals("Additional Functions", selenium.getText("//div[@id='maincontent']/h1"));
-		verifyTrue(isElementPresent("id=rxButton"));
+		verifyTrue(isElementPresent(By.id("rxButton")));
 		selenium.click("id=rxButton");
 		for (int second = 0;; second++) {
 			if (second >= 60) fail("timeout");
 			try { 
-				if (isElementPresent("name=dispRxTimestamp")) break; 
+				if (isElementPresent(By.name("dispRxTimestamp"))) break; 
 			} catch (Exception e) { }
 			
 			try {
@@ -250,8 +252,8 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 		}
 
 		verifyEquals("Date/Time Received at LZ:", selenium.getText("xpath=(//div[@id='rxTimestampDiv'])[2]"));
-		verifyTrue(isElementPresent("name=dispRxTimestamp"));
-		verifyTrue(isElementPresent("id=undoRxButton"));
+		verifyTrue(isElementPresent(By.name("dispRxTimestamp")));
+		verifyTrue(isElementPresent(By.id("undoRxButton")));
 		
 		WN_CreateDamaged.RX_TIMESTAMP = selenium.getValue("name=dispRxTimestamp");
 		goToTaskManager();
@@ -260,9 +262,9 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	@Test
 	public void testRxTimestampPresent() {
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
-		verifyTrue(isElementPresent("name=dispRxTimestamp"));
+		verifyTrue(isElementPresent(By.name("dispRxTimestamp")));
 		verifyEquals(WN_CreateDamaged.RX_TIMESTAMP, selenium.getValue("name=dispRxTimestamp"));
-		verifyTrue(isElementPresent("id=undoRxButton"));
+		verifyTrue(isElementPresent(By.id("undoRxButton")));
 		goToTaskManager();
 	}
 	
@@ -278,8 +280,8 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	public void testRxTimestampUndoDisabled() {
 		verifyTrue(setPermissions(new String[] { RX_TIMESTAMP_DELETE }, new boolean[] { false }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
-		verifyTrue(isElementPresent("name=dispRxTimestamp"));
-		verifyFalse(isElementPresent("id=undoRxButton"));
+		verifyTrue(isElementPresent(By.name("dispRxTimestamp")));
+		verifyFalse(isElementPresent(By.id("undoRxButton")));
 		goToTaskManager();
 	}
 	
@@ -287,12 +289,12 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	public void testRxTimestampUndo() {
 		verifyTrue(setPermissions(new String[] { RX_TIMESTAMP_DELETE }, new boolean[] { true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
-		verifyTrue(isElementPresent("id=undoRxButton"));
+		verifyTrue(isElementPresent(By.id("undoRxButton")));
 		selenium.click("id=undoRxButton");
 		for (int second = 0;; second++) {
 			if (second >= 60) fail("timeout");
 			try { 
-				if (isElementPresent("id=rxButton")) break; 
+				if (isElementPresent(By.id("rxButton"))) break; 
 			} catch (Exception e) { }
 			
 			try {
@@ -300,9 +302,9 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 			} catch (InterruptedException e) { }
 		}
 		
-		verifyFalse(isElementPresent("name=dispRxTimestamp"));
-		verifyFalse(isElementPresent("id=undoRxButton"));
-		verifyTrue(isElementPresent("id=rxButton"));
+		verifyFalse(isElementPresent(By.name("dispRxTimestamp")));
+		verifyFalse(isElementPresent(By.id("undoRxButton")));
+		verifyTrue(isElementPresent(By.id("rxButton")));
 		goToTaskManager();
 	}
 	
@@ -316,10 +318,10 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	
 	@Test
 	public void testCourtesyReasonDisabled() {
-		verifyTrue(setPermissions(new String[] { WN_SeleniumTest.COURTESY_REASON_COLLECT }, new boolean[] { false }));
+		verifyTrue(setPermissions(new String[] { PermissionsUtil.INCIDENT_COURTESY_REASON_COLLECT }, new boolean[] { false }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
-		verifyFalse(isElementPresent("id=courtesyReasonId"));
-		verifyFalse(isElementPresent("id=courtesyDescription"));
+		verifyFalse(isElementPresent(By.id("courtesyReasonId")));
+		verifyFalse(isElementPresent(By.id("courtesyDescription")));
 		selenium.select("courtesyreport", "label=yes");
 		selenium.click("saveButton");
 		waitForPageToLoadImproved();
@@ -341,11 +343,11 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	
 	@Test
 	public void testCourtesyReasonEnabled() {
-		verifyTrue(setPermissions(new String[] { WN_SeleniumTest.COURTESY_REASON_COLLECT }, new boolean[] { true }));
+		verifyTrue(setPermissions(new String[] { PermissionsUtil.INCIDENT_COURTESY_REASON_COLLECT }, new boolean[] { true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
-		verifyTrue(isElementPresent("id=courtesyReasonId"));
+		verifyTrue(isElementPresent(By.id("courtesyReasonId")));
 		assertEquals("Please Select Other Outside 4-Hour Claim Check on Another Carrier No Claim Check Conditional Acceptance", selenium.getText("id=courtesyReasonId"));
-		verifyTrue(isElementPresent("id=courtesyDescription"));
+		verifyTrue(isElementPresent(By.id("courtesyDescription")));
 		selenium.select("courtesyreport", "label=yes");
 		selenium.select("courtesyReasonId", "label=Please Select");
 		selenium.click("saveButton");
@@ -397,7 +399,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 		verifyTrue(setPermissions(new String[] { SPECIAL_CONDITIONS_COLLECT }, new boolean[] { true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
 		verifyTrue(selenium.isTextPresent("Special Conditions"));
-		verifyTrue(isElementPresent("name=theitem[0].specialCondition"));
+		verifyTrue(isElementPresent(By.name("theitem[0].specialCondition")));
 		verifyEquals("Please Select Overweight Oversized Both", selenium.getText("name=theitem[0].specialCondition"));
 		selenium.select("name=theitem[0].specialCondition", "label=Overweight");
 		selenium.click("name=saveButton");
@@ -421,7 +423,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 		verifyTrue(setPermissions(new String[] { SPECIAL_CONDITIONS_COLLECT }, new boolean[] { false }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
 		verifyFalse(selenium.isTextPresent("Special Conditions"));
-		verifyFalse(isElementPresent("name=theitem[0].specialCondition"));
+		verifyFalse(isElementPresent(By.name("theitem[0].specialCondition")));
 		goToTaskManager();
 	}
 
@@ -437,11 +439,11 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 		verifyTrue(setPermissions(new String[] { ADDITIONAL_ITEM_INFORMATION_COLLECT }, new boolean[] { false }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
 		verifyFalse(selenium.isTextPresent("Entered Date"));
-		verifyFalse(isElementPresent("name=inventorylist[0].dispPurchaseDate"));
-		verifyFalse(isElementPresent("name=inventorylist[0].dispInvItemCost"));
-		verifyFalse(isElementPresent("name=inventorylist[0].invItemCurrency"));
-		verifyFalse(isElementPresent("name=inventorylist[0].itemStatusId"));
-		verifyTrue(isElementPresent("name=deleteinventory_0"));
+		verifyFalse(isElementPresent(By.name("inventorylist[0].dispPurchaseDate")));
+		verifyFalse(isElementPresent(By.name("inventorylist[0].dispInvItemCost")));
+		verifyFalse(isElementPresent(By.name("inventorylist[0].invItemCurrency")));
+		verifyFalse(isElementPresent(By.name("inventorylist[0].itemStatusId")));
+		verifyTrue(isElementPresent(By.name("deleteinventory_0")));
 		
 		checkAdditionalItemInformationOtherIncidents();
 		
@@ -460,11 +462,11 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 		verifyTrue(setPermissions(new String[] { ADDITIONAL_ITEM_INFORMATION_COLLECT }, new boolean[] { true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
 		verifyTrue(selenium.isTextPresent("Entered Date"));
-		verifyTrue(isElementPresent("name=inventorylist[0].dispPurchaseDate"));
-		verifyTrue(isElementPresent("name=inventorylist[0].dispInvItemCost"));
-		verifyTrue(isElementPresent("name=inventorylist[0].invItemCurrency"));
-		verifyTrue(isElementPresent("name=inventorylist[0].itemStatusId"));
-		verifyTrue(isElementPresent("name=deleteinventory_0"));
+		verifyTrue(isElementPresent(By.name("inventorylist[0].dispPurchaseDate")));
+		verifyTrue(isElementPresent(By.name("inventorylist[0].dispInvItemCost")));
+		verifyTrue(isElementPresent(By.name("inventorylist[0].invItemCurrency")));
+		verifyTrue(isElementPresent(By.name("inventorylist[0].itemStatusId")));
+		verifyTrue(isElementPresent(By.name("deleteinventory_0")));
 		
 		selenium.type("name=inventorylist[0].dispPurchaseDate", WN_SeleniumTest.TODAY);
 		selenium.type("name=inventorylist[0].dispInvItemCost", "1");
@@ -559,11 +561,11 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
 				verifyFalse(selenium.isTextPresent("Entered Date"));
-				verifyFalse(isElementPresent("name=inventorylist[0].dispPurchaseDate"));
-				verifyFalse(isElementPresent("name=inventorylist[0].dispInvItemCost"));
-				verifyFalse(isElementPresent("name=inventorylist[0].invItemCurrency"));
-				verifyFalse(isElementPresent("name=inventorylist[0].itemStatusId"));
-				verifyTrue(isElementPresent("name=deleteinventory_0"));
+				verifyFalse(isElementPresent(By.name("inventorylist[0].dispPurchaseDate")));
+				verifyFalse(isElementPresent(By.name("inventorylist[0].dispInvItemCost")));
+				verifyFalse(isElementPresent(By.name("inventorylist[0].invItemCurrency")));
+				verifyFalse(isElementPresent(By.name("inventorylist[0].itemStatusId")));
+				verifyTrue(isElementPresent(By.name("deleteinventory_0")));
 			} else {
 				System.out.println("!!!!!!!!!!!!!!! - Failed to load the lost/delay incident page after clicking skip prepopulate. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 				verifyTrue(false);
@@ -581,11 +583,11 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
-				verifyFalse(isElementPresent("name=inventorylist[0].dispPurchaseDate"));
-				verifyFalse(isElementPresent("name=inventorylist[0].dispInvItemCost"));
-				verifyFalse(isElementPresent("name=inventorylist[0].invItemCurrency"));
-				verifyFalse(isElementPresent("name=inventorylist[0].itemStatusId"));
-				verifyTrue(isElementPresent("name=deleteinventory_0"));
+				verifyFalse(isElementPresent(By.name("inventorylist[0].dispPurchaseDate")));
+				verifyFalse(isElementPresent(By.name("inventorylist[0].dispInvItemCost")));
+				verifyFalse(isElementPresent(By.name("inventorylist[0].invItemCurrency")));
+				verifyFalse(isElementPresent(By.name("inventorylist[0].itemStatusId")));
+				verifyTrue(isElementPresent(By.name("deleteinventory_0")));
 			} else {
 				System.out.println("!!!!!!!!!!!!!!! - Failed to load the missing incident page after clicking skip prepopulate. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 				verifyTrue(false);
