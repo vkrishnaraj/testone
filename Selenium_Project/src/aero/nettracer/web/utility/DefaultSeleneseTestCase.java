@@ -81,5 +81,9 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 	protected void logout() {
 		LoginUtil.logout(driver);
 	}
+	
+	protected String getSelectedLabel(By by) {
+		return WebDriverUtil.getSelectedLabel(driver, by);
+	}
 
 }

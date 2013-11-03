@@ -2,6 +2,7 @@ package aero.nettracer.web.southwest.testing.actions.nt.founds;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.Select;
 
 import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
 
@@ -66,72 +67,63 @@ public class WN_FoundItem extends WN_SeleniumTest {
 	@Test
 	public void testSearchFoundAllFields() throws Exception {
 		clickMenu("menucol_5.2");
-		waitForPageToLoadImproved();
 		if(checkNoErrorPage()){
-			cycleSearch("name=lastName", "id=lastname", "Test", true, false);
-			cycleSearch("name=firstName", "id=firstname", "Test", true, false);
-			cycleSearch("id=priInterNum", "id=priInterNum", "1", true, false);
-			cycleSearch("id=priAreaNum", "id=priAreaNum", "222", true, false);
-			cycleSearch("id=priExchaNum", "id=priExchaNum", "333", true, false);
-			cycleSearch("id=priLineNum", "id=priLineNum", "4444", true, false);
-			cycleSearch("name=category", "id=category_0", "Bags", false, true);
-			cycleSearch("name=subCategory", "id=subcategories_0", "Baby Bag", false, true);
-			cycleSearch("name=brand", "id=itembrand_0", "Test", true, false);
-			cycleSearch("name=email", "id=email", "test@test.com", true, false);
-			cycleSearch("name=serialNumber", "id=itemserial_0", "123", true, false);
-			selenium.click("id=calendar");
-			selenium.click("link=Today");
-			selenium.click("id=calendar2");
-			selenium.click("link=Today");
-			selenium.select("name=statusId", "label=Open");
-			selenium.type("name=email", "test@test.com");
-			selenium.click("id=button");
-			waitForPageToLoadImproved();
+			cycleSearch(By.name("lastName"), By.id("lastname"), "Test", true);
+			cycleSearch(By.name("firstName"), By.id("firstname"), "Test", true);
+			cycleSearch(By.id("priInterNum"), By.id("priInterNum"), "1", true);
+			cycleSearch(By.id("priAreaNum"), By.id("priAreaNum"), "222", true);
+			cycleSearch(By.id("priExchaNum"), By.id("priExchaNum"), "333", true);
+			cycleSearch(By.id("priLineNum"), By.id("priLineNum"), "4444", true);
+			cycleSearch(By.name("category"), By.id("category_0"), "Bags", false);
+			cycleSearch(By.name("subCategory"), By.id("subcategories_0"), "Baby Bag", false);
+			cycleSearch(By.name("brand"), By.id("itembrand_0"), "Test", true);
+			cycleSearch(By.name("email"), By.id("email"), "test@test.com", true);
+			cycleSearch(By.name("serialNumber"), By.id("itemserial_0"), "123", true);
+			driver.findElement(By.id("calendar")).click();
+			driver.findElement(By.linkText("Today")).click();
+			driver.findElement(By.id("calendar2")).click();
+			driver.findElement(By.linkText("Today")).click();
+			(new Select(driver.findElement(By.name("statusId")))).selectByVisibleText("Open");
+			driver.findElement(By.name("email")).sendKeys("test@test.com");
+			driver.findElement(By.id("button")).click();
 			if (isElementPresent(By.id("resultLink0"))) {
-				selenium.click("id=resultLink0");
-				waitForPageToLoadImproved();
+				driver.findElement(By.id("resultLink0")).click();
 			}
 		} else {
 			System.out.println("testSearchFoundAllFields failure line 88");
 		}
 	}
 	
-	private void cycleSearch(String searchField, String formField, String value, boolean type, boolean select) {
-		selenium.click("id=calendar");
-		selenium.click("link=Today");
-		selenium.click("id=calendar2");
-		selenium.click("link=Today");
-		selenium.select("name=statusId", "label=Open");
+	private void cycleSearch(By searchField, By formField, String value, boolean type) {
+		driver.findElement(By.id("calendar")).click();
+		driver.findElement(By.linkText("Today")).click();
+		driver.findElement(By.id("calendar2")).click();
+		driver.findElement(By.linkText("Today")).click();
+		(new Select(driver.findElement(By.name("statusId")))).selectByVisibleText("Open");
 		if (type) {
-			selenium.type(searchField, value);
+			driver.findElement(searchField).sendKeys(value);
+		} else {
+			(new Select(driver.findElement(searchField))).selectByVisibleText(value);
 		}
-		if (select) {
-			selenium.select(searchField, "label=" + value);
-		}
-		selenium.click("id=button");
-		waitForPageToLoadImproved();
+		driver.findElement(By.id("button")).click();
 		if(checkNoErrorPage()){
 			if (isElementPresent(By.id("resultLink0"))) {
-				selenium.click("id=resultLink0");
-				waitForPageToLoadImproved();
+				driver.findElement(By.id("resultLink0")).click();
 			}
 			if (type) {
-				verifyEquals(value, selenium.getValue(formField));
-			}
-			if (select) {
-				verifyEquals(value, selenium.getSelectedLabel(formField));
+				verifyEquals(value, driver.findElement(formField).getText());
+			} else {
+				verifyEquals(value, getSelectedLabel(formField));
 			}
 			clickMenu("menucol_5.2");
-			waitForPageToLoadImproved();
 		} else {
 			System.out.println("cycleSearch failure line 115 fields: " + searchField + ", " + formField + ", " + value);
 		}
 		if(checkNoErrorPage()){
 			if (type) {
-				selenium.type(searchField, "");
-			}
-			if (select) {
-				selenium.select(searchField, "label=Please select...");
+				driver.findElement(searchField).clear();
+			} else {
+				(new Select(driver.findElement(searchField))).selectByVisibleText("Please select...");
 			}
 		} else {
 			System.out.println("cycleSearch failure line 125 fields: " + searchField + ", " + formField + ", " + value);
@@ -141,8 +133,8 @@ public class WN_FoundItem extends WN_SeleniumTest {
 	@Test
 	public void testDeliveryRequiredFields() throws Exception {
 		if(checkNoErrorPage()){
-			verifyEquals("Open", selenium.getSelectedLabel("name=found.statusId"));
-			verifyEquals("None", selenium.getSelectedLabel("name=foundItem.disposition.status_ID"));
+			verifyEquals("Open", getSelectedLabel(By.name("found.statusId")));
+			verifyEquals("None", getSelectedLabel(By.name("foundItem.disposition.status_ID")));
 			selenium.click("link=Deliver to customer");
 			assertEquals("Tracking Number is required.", selenium.getAlert());
 			selenium.click("link=Send to LFC");
@@ -159,16 +151,16 @@ public class WN_FoundItem extends WN_SeleniumTest {
 		selenium.click("link=Picked up by customer");
 		waitForPageToLoadImproved(500);
 		if(checkNoErrorPage()){
-			verifyEquals("Closed", selenium.getSelectedLabel("name=found.statusId"));
-			verifyEquals("Picked Up", selenium.getSelectedLabel("name=foundItem.disposition.status_ID"));
+			verifyEquals("Closed", getSelectedLabel(By.name("found.statusId")));
+			verifyEquals("Picked Up", getSelectedLabel(By.name("foundItem.disposition.status_ID")));
 			selenium.click("link=Undo");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("testPassengerPickUp failure line 145");
 		}
 		if (checkNoErrorPage()) {
-			verifyEquals("Open", selenium.getSelectedLabel("name=found.statusId"));
-			verifyEquals("None", selenium.getSelectedLabel("name=foundItem.disposition.status_ID"));
+			verifyEquals("Open", getSelectedLabel(By.name("found.statusId")));
+			verifyEquals("None", getSelectedLabel(By.name("foundItem.disposition.status_ID")));
 		} else {
 			System.out.println("testPassengerPickUp failure line 151");
 		}
@@ -180,16 +172,16 @@ public class WN_FoundItem extends WN_SeleniumTest {
 		selenium.click("link=Deliver to customer");
 		waitForPageToLoadImproved(500);
 		if(checkNoErrorPage()){
-			verifyEquals("Closed", selenium.getSelectedLabel("name=found.statusId"));
-			verifyEquals("Delivered", selenium.getSelectedLabel("name=foundItem.disposition.status_ID"));
+			verifyEquals("Closed", getSelectedLabel(By.name("found.statusId")));
+			verifyEquals("Delivered", getSelectedLabel(By.name("foundItem.disposition.status_ID")));
 			selenium.click("link=Undo");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("testDeliver failure line 166");
 		}
 		if (checkNoErrorPage()) {
-			verifyEquals("Open", selenium.getSelectedLabel("name=found.statusId"));
-			verifyEquals("None", selenium.getSelectedLabel("name=foundItem.disposition.status_ID"));
+			verifyEquals("Open", getSelectedLabel(By.name("found.statusId")));
+			verifyEquals("None", getSelectedLabel(By.name("foundItem.disposition.status_ID")));
 		} else {
 			System.out.println("testDeliver failure line 172");
 		}
@@ -201,16 +193,16 @@ public class WN_FoundItem extends WN_SeleniumTest {
 		selenium.click("link=Send to LFC");
 		waitForPageToLoadImproved(500);
 		if(checkNoErrorPage()){
-			verifyEquals("Closed", selenium.getSelectedLabel("name=found.statusId"));
-			verifyEquals("Sent to LFC", selenium.getSelectedLabel("name=foundItem.disposition.status_ID"));
+			verifyEquals("Closed", getSelectedLabel(By.name("found.statusId")));
+			verifyEquals("Sent to LFC", getSelectedLabel(By.name("foundItem.disposition.status_ID")));
 			selenium.click("link=Undo");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("testSendToLFC failure line 187");
 		}
 		if (checkNoErrorPage()) {
-			verifyEquals("Open", selenium.getSelectedLabel("name=found.statusId"));
-			verifyEquals("None", selenium.getSelectedLabel("name=foundItem.disposition.status_ID"));
+			verifyEquals("Open", getSelectedLabel(By.name("found.statusId")));
+			verifyEquals("None", getSelectedLabel(By.name("foundItem.disposition.status_ID")));
 		} else {
 			System.out.println("testSendToLFC failure line 193");
 		}
@@ -222,8 +214,8 @@ public class WN_FoundItem extends WN_SeleniumTest {
 		selenium.click("link=Remove item");
 		waitForPageToLoadImproved(500);
 		if(checkNoErrorPage()){
-			verifyEquals("Closed", selenium.getSelectedLabel("name=found.statusId"));
-			verifyEquals("Removed", selenium.getSelectedLabel("name=foundItem.disposition.status_ID"));
+			verifyEquals("Closed", getSelectedLabel(By.name("found.statusId")));
+			verifyEquals("Removed", getSelectedLabel(By.name("foundItem.disposition.status_ID")));
 			goToTaskManager();
 		} else {
 			System.out.println("testRemove failure line 207");
@@ -269,8 +261,8 @@ public class WN_FoundItem extends WN_SeleniumTest {
 			}
 
 			if(checkNoErrorPage()){
-				verifyEquals("Closed", selenium.getSelectedLabel("name=found.statusId")); // Check statuses and tracking number for match
-				verifyEquals("Sent to LFC", selenium.getSelectedLabel("name=foundItem.disposition.status_ID"));
+				verifyEquals("Closed", getSelectedLabel(By.name("found.statusId"))); // Check statuses and tracking number for match
+				verifyEquals("Sent to LFC", getSelectedLabel(By.name("foundItem.disposition.status_ID")));
 				verifyEquals("Tracking Number:  " + trackingNumber, selenium.getText("//div[@id='maincontent']/table[4]/tbody/tr[2]/td"));
 				goToTaskManager();
 			} else {

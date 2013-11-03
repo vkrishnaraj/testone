@@ -7,6 +7,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
 
 import com.thoughtworks.selenium.SeleneseTestBase;
 
@@ -81,6 +82,10 @@ public class WebDriverUtil {
 		if (checkBox.isSelected()) {
 			checkBox.click();
 		}
+	}
+	
+	public static String getSelectedLabel(WebDriver driver, By by) {
+		return (new Select(driver.findElement(by))).getFirstSelectedOption().getText();
 	}
 
 	

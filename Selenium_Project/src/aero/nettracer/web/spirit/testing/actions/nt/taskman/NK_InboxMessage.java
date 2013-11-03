@@ -43,7 +43,7 @@ public class NK_InboxMessage extends NK_SeleniumTest {
 				clickMenu("menucol_0.0");
 				LoginUtil.setCbroStation(driver, "BOS");
 				selenium.click("16link");
-				waitForPageToLoadImproved();
+				waitForPageToLoadImproved(500);
 				selenium.click("link=Test Message: " + inc_id);
 				waitForPageToLoadImproved();
 				verifyTrue(selenium.isTextPresent("Test Message that references Incident: " + inc_id));
