@@ -56,7 +56,7 @@ public class WebDriverUtil {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		String toExecute = "var x = document.getElementById('" + menu + "'); x.click();";
 		js.executeScript(toExecute);
-		waitForPageToLoadImproved(500);
+		waitForPageToLoadImproved(2000);
 	}
 	
 	public static boolean isElementPresent(WebDriver driver, By by) {
