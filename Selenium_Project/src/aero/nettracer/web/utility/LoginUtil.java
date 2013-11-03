@@ -45,11 +45,13 @@ public class LoginUtil {
 	
 	public static void loginNTAuto(WebDriver driver, String location, String companyCode, String lzStation) {
 		driver.get(location + "logon.do?username=" + Settings.USERNAME_ADMIN + "&companyCode=" + companyCode + "&password=" + Settings.PASSWORD_ADMIN);
+		WebDriverUtil.waitForPageToLoadImproved(500);
 		setCbroStation(driver, lzStation);
 	}
 	
 	public static void loginOGAdmin(WebDriver driver, String location) {
 		driver.get(location + "logon.do?username=" + Settings.USERNAME_OGADMIN + "&companyCode=OW&password=" + Settings.PASSWORD_OGADMIN);
+		WebDriverUtil.waitForPageToLoadImproved(500);
 	}
 	
 	public static void logout(WebDriver driver) {
