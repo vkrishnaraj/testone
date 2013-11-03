@@ -2,16 +2,16 @@ package aero.nettracer.web.jetblue.testing.actions.nt.taskman;
 
 import org.junit.Test;
 
-import aero.nettracer.web.utility.DefaultSeleneseTestCase;
+import aero.nettracer.web.jetblue.testing.B6_SeleniumTest;
 import aero.nettracer.web.utility.LoginUtil;
 import aero.nettracer.web.utility.Settings;
 
-public class B6_InboxMessage extends DefaultSeleneseTestCase {
+public class B6_InboxMessage extends B6_SeleniumTest {
 	
 	@Test
 	public void testVerifyText() throws Exception {
 		goToTaskManager();
-		selenium.click("//div[@id='maincontent']/form/table/tbody/tr[29]/td/a");
+		selenium.click("16link");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
@@ -40,18 +40,12 @@ public class B6_InboxMessage extends DefaultSeleneseTestCase {
 				waitForPageToLoadImproved();
 				verifyTrue(selenium.isTextPresent("Message has been sent."));
 				clickMenu("menucol_0.0");
-				waitForPageToLoadImproved();
-				selenium.select("name=cbroStation", "label=BOS");
-				waitForPageToLoadImproved();
-				selenium.click("//div[@id='maincontent']/form/table/tbody/tr[29]/td/a");
-				waitForPageToLoadImproved();
+				LoginUtil.setCbroStation(driver, "BOS");
+				selenium.click("16link");
 				selenium.click("link=Test Message: " + inc_id);
-				waitForPageToLoadImproved();
 				verifyTrue(selenium.isTextPresent("Test Message that references PAWOB: " + inc_id));
 				clickMenu("menucol_0.0");
-				waitForPageToLoadImproved();
-				selenium.select("name=cbroStation", "label=CBS");
-				waitForPageToLoadImproved();
+				LoginUtil.setCbroStation(driver, LZ_STATION);
 			} else {
 				System.out.println("!!!!!!!!!!!!!!!! - Message Creation Page did not load. Error Page loaded instead. - !!!!!!!!!!!!!!!!!!!!!");
 				verifyTrue(false);

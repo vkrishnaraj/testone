@@ -5,8 +5,9 @@ import org.junit.Test;
 import aero.nettracer.web.utility.DefaultSeleneseTestCase;
 import aero.nettracer.web.utility.LoginUtil;
 import aero.nettracer.web.utility.Settings;
+import aero.nettracer.web.westjet.testing.WS_SeleniumTest;
 
-public class WS_InboxMessage extends DefaultSeleneseTestCase {
+public class WS_InboxMessage extends WS_SeleniumTest {
 	
 	@Test
 	public void testVerifyText() throws Exception {
@@ -40,18 +41,14 @@ public class WS_InboxMessage extends DefaultSeleneseTestCase {
 				waitForPageToLoadImproved();
 				verifyTrue(selenium.isTextPresent("Message has been sent."));
 				clickMenu("menucol_0.0");
-				waitForPageToLoadImproved();
-				selenium.select("name=cbroStation", "label=BGI");
-				waitForPageToLoadImproved();
+				LoginUtil.setCbroStation(driver, "BGI");
 				selenium.click("id=16link");
 				waitForPageToLoadImproved();
 				selenium.click("link=Test Message: " + inc_id);
 				waitForPageToLoadImproved();
 				verifyTrue(selenium.isTextPresent("Test Message that references PIR: " + inc_id));
 				clickMenu("menucol_0.0");
-				waitForPageToLoadImproved();
-				selenium.select("name=cbroStation", "label=YYC");
-				waitForPageToLoadImproved();
+				LoginUtil.setCbroStation(driver, LZ_STATION);
 			} else {
 				System.out.println("!!!!!!!!!!!!!!!! - Message Creation Page did not load. Error Page loaded instead. - !!!!!!!!!!!!!!!!!!!!!");
 				verifyTrue(false);

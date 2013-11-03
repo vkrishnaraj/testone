@@ -13,7 +13,7 @@ public class LoginUtil {
 	
 	public static void loginNTAutoTest(WebDriver driver, String location, String companyCode, String lzStation) throws Exception {
 		loginProcedure(driver, location, Settings.USERNAME_ADMIN, Settings.PASSWORD_ADMIN, companyCode, false);
-		setLZStation(driver, lzStation);
+		setCbroStation(driver, lzStation);
 	}
 	
 	public static void loginFailureTest(WebDriver driver, String location, String companyCode) throws Exception {
@@ -45,7 +45,7 @@ public class LoginUtil {
 	
 	public static void loginNTAuto(WebDriver driver, String location, String companyCode, String lzStation) {
 		driver.get(location + "logon.do?username=" + Settings.USERNAME_ADMIN + "&companyCode=" + companyCode + "&password=" + Settings.PASSWORD_ADMIN);
-		setLZStation(driver, lzStation);
+		setCbroStation(driver, lzStation);
 	}
 	
 	public static void loginOGAdmin(WebDriver driver, String location) {
@@ -57,11 +57,12 @@ public class LoginUtil {
 		base.verifyTrue(driver.getPageSource().contains("Log In"));
 	}
 	
-	private static void setLZStation(WebDriver driver, String lzStation) {
-		Select cbroStation = new Select(driver.findElement(By.name("cbroStation")));
-		String logStation = cbroStation.getFirstSelectedOption().getText();
-		if (logStation != null && !logStation.equals(lzStation)) {
-			cbroStation.selectByVisibleText(lzStation);
+	public static void setCbroStation(WebDriver driver, String cbroStation) {
+		Select cbroSelect = new Select(driver.findElement(By.name("cbroStation")));
+		String logStation = cbroSelect.getFirstSelectedOption().getText();
+		if (logStation != null && !logStation.equals(cbroStation)) {
+			cbroSelect.selectByVisibleText(cbroStation);
+			WebDriverUtil.waitForPageToLoadImproved(500);
 		}
 	}
 	

@@ -11,7 +11,7 @@ public class AD_CreateDam_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	public void testVerifyText() throws Exception {
 		goToTaskManager();
 		clickMenu("menucol_2.1");
-		waitForPageToLoadImproved();
+		waitForPageToLoadImproved(500);
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
 			selenium.click("name=skip_prepopulate");

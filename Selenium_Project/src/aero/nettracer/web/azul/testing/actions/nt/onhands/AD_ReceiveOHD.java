@@ -2,18 +2,17 @@ package aero.nettracer.web.azul.testing.actions.nt.onhands;
 
 import org.junit.Test;
 
-import aero.nettracer.web.utility.DefaultSeleneseTestCase;
+import aero.nettracer.web.azul.testing.AD_SeleniumTest;
+import aero.nettracer.web.utility.LoginUtil;
 import aero.nettracer.web.utility.Settings;
 
-public class AD_ReceiveOHD extends DefaultSeleneseTestCase {
+public class AD_ReceiveOHD extends AD_SeleniumTest {
 
 	@Test
 	public void testAD_CreateOHD_VerifyRequiredFields() throws Exception {
 		goToTaskManager();
-		selenium.select("name=cbroStation", "label=BEL");
-		waitForPageToLoadImproved();
-		selenium.click("//div[@id='maincontent']/form/table/tbody/tr[8]/td/a");
-		waitForPageToLoadImproved();
+		LoginUtil.setCbroStation(driver, "BEL");
+		selenium.click("25link");
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
 			selenium.click("//a[contains(@href, 'incomingBags.do?close=1&ohd_ID=" + Settings.ONHAND_ID_AD + "')]");
@@ -22,8 +21,7 @@ public class AD_ReceiveOHD extends DefaultSeleneseTestCase {
 				checkCopyrightAndQuestionMarks();
 				verifyTrue(selenium.isTextPresent("On-hand incident has been transfered to your station."));
 				goToTaskManager();
-				selenium.select("name=cbroStation", "label=CSB");
-				waitForPageToLoadImproved();
+				LoginUtil.setCbroStation(driver, LZ_STATION);
 			} else {
 				System.err.println("Receive Onhand Success Page Failed To Load. Error Page Loaded Instead.");
 				verifyTrue(false);

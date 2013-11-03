@@ -8,7 +8,6 @@ public class AD_Security extends DefaultSeleneseTestCase{
 	@Test
 	public void testMinPasswordLength(){
 		clickMenu("menucol_9.2");
-		waitForPageToLoadImproved();
 		selenium.click("//td[@id='navmenucell']/div/dl/dd[4]/a/span[2]");
 		waitForPageToLoadImproved();
 		selenium.type("min_pass_size", "8");
@@ -18,7 +17,6 @@ public class AD_Security extends DefaultSeleneseTestCase{
 		verifyTrue(selenium.isTextPresent("Company Information Saved."));
 		
 		clickMenu("menucol_9.2");
-		waitForPageToLoadImproved();
 		selenium.click("//td[@id='navmenucell']/div/dl/dd[4]/a/span[2]");
 		waitForPageToLoadImproved();
 		selenium.type("min_pass_size", "7");
@@ -28,7 +26,6 @@ public class AD_Security extends DefaultSeleneseTestCase{
 		verifyTrue(!selenium.isTextPresent("Company Information Saved."));
 		
 		clickMenu("menucol_9.2");
-		waitForPageToLoadImproved();
 		selenium.click("//td[@id='navmenucell']/div/dl/dd[4]/a/span[2]");
 		waitForPageToLoadImproved();
 		verifyNotEquals("7", selenium.getValue("min_pass_size"));

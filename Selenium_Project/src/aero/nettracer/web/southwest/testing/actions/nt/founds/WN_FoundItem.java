@@ -157,7 +157,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 	@Test
 	public void testPassengerPickUpFound() throws Exception {
 		selenium.click("link=Picked up by customer");
-		waitForPageToLoadImproved();
+		waitForPageToLoadImproved(500);
 		if(checkNoErrorPage()){
 			verifyEquals("Closed", selenium.getSelectedLabel("name=found.statusId"));
 			verifyEquals("Picked Up", selenium.getSelectedLabel("name=foundItem.disposition.status_ID"));
@@ -178,7 +178,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 	public void testDeliver() throws Exception {
 		selenium.type("id=trackingNumber", "123123123");
 		selenium.click("link=Deliver to customer");
-		waitForPageToLoadImproved();
+		waitForPageToLoadImproved(500);
 		if(checkNoErrorPage()){
 			verifyEquals("Closed", selenium.getSelectedLabel("name=found.statusId"));
 			verifyEquals("Delivered", selenium.getSelectedLabel("name=foundItem.disposition.status_ID"));
@@ -199,7 +199,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 	public void testSendToLFC() throws Exception {
 		selenium.type("id=trackingNumber", "123123123");
 		selenium.click("link=Send to LFC");
-		waitForPageToLoadImproved();
+		waitForPageToLoadImproved(500);
 		if(checkNoErrorPage()){
 			verifyEquals("Closed", selenium.getSelectedLabel("name=found.statusId"));
 			verifyEquals("Sent to LFC", selenium.getSelectedLabel("name=foundItem.disposition.status_ID"));
@@ -220,7 +220,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 	public void testRemove() throws Exception {
 		selenium.type("id=removalReason", "Test Reason");
 		selenium.click("link=Remove item");
-		waitForPageToLoadImproved();
+		waitForPageToLoadImproved(500);
 		if(checkNoErrorPage()){
 			verifyEquals("Closed", selenium.getSelectedLabel("name=found.statusId"));
 			verifyEquals("Removed", selenium.getSelectedLabel("name=foundItem.disposition.status_ID"));
