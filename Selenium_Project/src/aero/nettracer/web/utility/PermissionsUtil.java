@@ -296,6 +296,7 @@ public class PermissionsUtil {
 			}
 		}
 		
+		driver.findElement(By.id("copyright")).click();
 		WebElement element = driver.findElement(By.xpath("(//input[@id='button'])[2]"));
 		element.click();
 		WebDriverUtil.waitForStaleElement(driver, element);

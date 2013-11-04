@@ -84,7 +84,7 @@ public class US_SeleniumTest extends DefaultSeleneseTestCase {
 	}
 	
 	protected boolean loginToNt() {
-		boolean success = false;
+		boolean success = true;
 		LoginUtil.loginNTAuto(driver, BASE_URL, COMPANY_CODE, LZ_STATION);
 		return success;
 	}

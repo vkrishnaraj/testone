@@ -37,7 +37,7 @@ public class AB_SeleniumTest extends DefaultSeleneseTestCase {
 	}
 	
 	protected boolean loginToNt() {
-		boolean success = false;
+		boolean success = true;
 		LoginUtil.loginNTAuto(driver, BASE_URL, null, LZ_STATION);
 		return success;
 	}
