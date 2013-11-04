@@ -40,6 +40,7 @@ public class NK_InboxMessage extends NK_SeleniumTest {
 				verifyTrue(driver.getPageSource().contains("Message has been sent."));
 				clickMenu("menucol_0.0");
 				LoginUtil.setCbroStation(driver, "BOS");
+				waitForPageToLoadImproved(5000);
 				driver.findElement(By.id("16link")).click();
 				driver.findElement(By.linkText("Test Message: " + inc_id)).click();
 				verifyTrue(driver.getPageSource().contains("Test Message that references Incident: " + inc_id));
