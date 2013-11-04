@@ -12,18 +12,16 @@ public class WS_LDVerifyRonKits extends WS_SeleniumTest {
 	@Test
 	public void testRonKits() throws Exception {
 		clickMenu("menucol_1.1");
-		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
-			selenium.click("name=skip_prepopulate");
-			waitForPageToLoadImproved();
+			driver.findElement(By.name("skip_prepopulate")).click();
 		} else {
 			System.out.println("LDVRK: Failed to load the delayed incident page.");
 			return;
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyFalse(selenium.isTextPresent("# RON Kits issued:"));
+			verifyFalse(driver.getPageSource().contains("# RON Kits issued:"));
 			setPermissions(new String[] {"626"}, new boolean[] {true});
 		} else {
 			System.out.println("LDVRK: Failed to load the delayed incident page after pressing skip prepopulation.");
@@ -33,22 +31,20 @@ public class WS_LDVerifyRonKits extends WS_SeleniumTest {
 		try {
 			if (checkNoErrorPage()) {
 				clickMenu("menucol_1.1");
-				waitForPageToLoadImproved();
 			} else {
 				System.out.println("LDVRK: Failed on log back in after setting the issue ron kit permission.");
 				return;
 			}
 			
 			if (checkNoErrorPage()) {
-				selenium.click("name=skip_prepopulate");
-				waitForPageToLoadImproved();
+				driver.findElement(By.name("skip_prepopulate")).click();
 			} else {
 				System.out.println("LDVRK: Failed on load the damaged incident page.");
 				return;
 			}
 	
 			if (checkNoErrorPage()) {
-				verifyTrue(selenium.isTextPresent("# Toiletry Kits issued:"));
+				verifyTrue(driver.getPageSource().contains("# Toiletry Kits issued:"));
 				verifyTrue(isElementPresent(By.xpath("//select[@id='numRonKitsIssued']")));
 				selenium.type("//div[@id='maincontent']/table[2]/tbody/tr/td[4]/input", "444444");
 	
@@ -74,10 +70,10 @@ public class WS_LDVerifyRonKits extends WS_SeleniumTest {
 				selenium.select("name=theitem[0].bagtype", "label=50");
 				selenium.select("name=theitem[0].color", "label=WT - White/clear");
 				selenium.type("name=claimcheck[0].claimchecknum", "3333333333");
-				selenium.click("id=saveButton");
+				selenium.click("savetracingButton");
 				assertEquals("Please select a value for  # Toiletry Kits issued", selenium.getAlert());
 				selenium.select("//select[@id='numRonKitsIssued']", "label=1");
-				selenium.click("id=saveButton");
+				selenium.click("savetracingButton");
 				waitForPageToLoadImproved();
 			} else {
 				System.out.println("LDVRK: Failed on load the damaged incident page after pressing skip prepopulation.");

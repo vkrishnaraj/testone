@@ -22,7 +22,7 @@ public class WS_LDVerifyReplacementBags extends WS_SeleniumTest {
 		
 		if (checkNoErrorPage()) {
 			verifyFalse(selenium.isTextPresent("Tradeout Issued"));
-			verifyFalse(isElementPresent(By.xpath("//select[@id='replacementBagIssued']")));
+			verifyFalse(isElementPresent(By.id("replacementBagIssued")));
 			setPermissions(new String[] {"627"}, new boolean[] {true});
 		} else {
 			System.out.println("LDVRK: Failed to load the delayed incident page after pressing skip prepopulation.");
