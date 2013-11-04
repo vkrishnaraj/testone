@@ -7,7 +7,9 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.thoughtworks.selenium.SeleneseTestBase;
 
@@ -86,6 +88,11 @@ public class WebDriverUtil {
 	
 	public static String getSelectedLabel(WebDriver driver, By by) {
 		return (new Select(driver.findElement(by))).getFirstSelectedOption().getText();
+	}
+	
+	public static void waitForStaleElement(WebDriver driver, WebElement element) {
+		WebDriverWait wait = new WebDriverWait(driver, 30);
+		wait.until(ExpectedConditions.stalenessOf(element));
 	}
 
 	

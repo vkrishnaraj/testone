@@ -2,6 +2,7 @@ package aero.nettracer.web.utility;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
 import com.thoughtworks.selenium.SeleneseTestBase;
@@ -60,11 +61,12 @@ public class LoginUtil {
 	}
 	
 	public static void setCbroStation(WebDriver driver, String cbroStation) {
-		Select cbroSelect = new Select(driver.findElement(By.name("cbroStation")));
+		WebElement cbroElement = driver.findElement(By.name("cbroStation"));
+		Select cbroSelect = new Select(cbroElement);
 		String logStation = cbroSelect.getFirstSelectedOption().getText();
 		if (logStation != null && !logStation.equals(cbroStation)) {
 			cbroSelect.selectByVisibleText(cbroStation);
-			WebDriverUtil.waitForPageToLoadImproved(500);
+			WebDriverUtil.waitForStaleElement(driver, cbroElement);
 		}
 	}
 	
