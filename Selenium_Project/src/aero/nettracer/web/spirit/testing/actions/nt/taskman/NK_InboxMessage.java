@@ -1,6 +1,8 @@
 package aero.nettracer.web.spirit.testing.actions.nt.taskman;
 
 import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.Select;
 
 import aero.nettracer.web.spirit.testing.NK_SeleniumTest;
 import aero.nettracer.web.utility.DefaultSeleneseTestCase;
@@ -12,12 +14,10 @@ public class NK_InboxMessage extends NK_SeleniumTest {
 	@Test
 	public void testVerifyText() throws Exception {
 		goToTaskManager();
-		selenium.click("16link");
-		waitForPageToLoadImproved();
+		driver.findElement(By.id("16link")).click();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
-			selenium.click("name=new");
-			waitForPageToLoadImproved();
+			driver.findElement(By.name("new")).click();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
 				String inc_id = "NO ID FOUND";
@@ -26,27 +26,23 @@ public class NK_InboxMessage extends NK_SeleniumTest {
 					inc_id = Settings.INCIDENT_ID_NK;
 					has_inc_id = true;
 				}
-				selenium.select("name=recp_list[0].station_id", "label=BOS");
-				selenium.type("name=subject", "Test Message: " + inc_id);
-				selenium.type("name=body", "Test Message that references Incident: " + inc_id);
+				(new Select(driver.findElement(By.name("recp_list[0].station_id")))).selectByVisibleText("BOS");
+				driver.findElement(By.name("subject")).sendKeys("Test Message: " + inc_id);
+				driver.findElement(By.name("body")).sendKeys("Test Message that references Incident: " + inc_id);
 				if (has_inc_id) {
-					selenium.select("name=file_type", "label=Incident");
-					selenium.type("name=file_ref_number", "TTTTT");
-					selenium.click("name=send2");
-					waitForPageToLoadImproved();
-					verifyTrue(selenium.isTextPresent("Incorrect incident number/type"));
-					selenium.type("name=file_ref_number", inc_id);
+					(new Select(driver.findElement(By.name("file_type")))).selectByVisibleText("Incident");
+					driver.findElement(By.name("file_ref_number")).sendKeys("TTTTT");
+					driver.findElement(By.name("send2")).click();
+					verifyTrue(driver.getPageSource().contains("Incorrect incident number/type"));
+					driver.findElement(By.name("file_ref_number")).sendKeys(inc_id);
 				}
-				selenium.click("name=send2");
-				waitForPageToLoadImproved();
-				verifyTrue(selenium.isTextPresent("Message has been sent."));
+				driver.findElement(By.name("send2")).click();
+				verifyTrue(driver.getPageSource().contains("Message has been sent."));
 				clickMenu("menucol_0.0");
 				LoginUtil.setCbroStation(driver, "BOS");
-				selenium.click("16link");
-				waitForPageToLoadImproved(500);
-				selenium.click("link=Test Message: " + inc_id);
-				waitForPageToLoadImproved();
-				verifyTrue(selenium.isTextPresent("Test Message that references Incident: " + inc_id));
+				driver.findElement(By.id("16link")).click();
+				driver.findElement(By.linkText("Test Message: " + inc_id)).click();
+				verifyTrue(driver.getPageSource().contains("Test Message that references Incident: " + inc_id));
 				clickMenu("menucol_0.0");
 				LoginUtil.setCbroStation(driver, LZ_STATION);
 			} else {
