@@ -115,7 +115,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 				driver.findElement(By.id("resultLink0")).click();
 			}
 			if (type) {
-				verifyEquals(value, driver.findElement(formField).getText());
+				verifyEquals(value, driver.findElement(formField).getAttribute("value"));
 			} else {
 				verifyEquals(value, getSelectedLabel(formField));
 			}

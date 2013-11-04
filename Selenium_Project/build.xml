@@ -252,7 +252,7 @@
   		</parallel> -->
   		
   		<parallel>
-  			<junit printsummary="yes"  showoutput="true" fork="true">
+<!--  			<junit printsummary="yes"  showoutput="true" fork="true">
 	      		<classpath refid="junitpath.wd.test" />
 	      		<formatter type="xml" usefile="true" />
 	      		<test name="aero.nettracer.web.defaul.testing.TestLfc" />
@@ -266,7 +266,7 @@
 	      		<classpath refid="junitpath.wd.test" />
 	      		<formatter type="xml" usefile="true" />
 	      		<test name="aero.nettracer.web.defaul.testing.TestSouthwest" />
-	    	</junit>
+	    	</junit> -->
   			<junit printsummary="yes"  showoutput="true" fork="true">
 	      		<classpath refid="junitpath.wd.test" />
 	      		<formatter type="xml" usefile="true" />
