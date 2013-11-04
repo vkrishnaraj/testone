@@ -19,7 +19,7 @@ public class AB_Login extends AB_SeleniumTest {
 	
 	@Test
 	public void testLogout() throws Exception {
-		LoginUtil.logout(driver);
+		logoutTest();
 	}
 	
 	@Test

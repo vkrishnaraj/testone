@@ -32,7 +32,7 @@ public class LFC_SeleniumTest extends DefaultSeleneseTestCase {
 	
 	protected boolean logoutOfNt() {
 		boolean success = true;
-		logout();
+		LoginUtil.logout(driver, BASE_URL);
 		return success;
 	}
 	

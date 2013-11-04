@@ -24,7 +24,7 @@ public class AD_Login extends AD_SeleniumTest {
 	
 	@Test
 	public void testLogout() throws Exception {
-		LoginUtil.logout(driver);
+		logoutTest();
 	}
 	
 	@Test

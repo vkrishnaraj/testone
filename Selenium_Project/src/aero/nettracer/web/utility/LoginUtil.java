@@ -55,9 +55,15 @@ public class LoginUtil {
 		WebDriverUtil.waitForPageToLoadImproved(500);
 	}
 	
-	public static void logout(WebDriver driver) {
-		driver.findElement(By.id("mainLayoutLogoutLink")).click();
+	public static void logoutTest(WebDriver driver) {
+		WebElement element = driver.findElement(By.id("mainLayoutLogoutLink"));
+		element.click();
+		WebDriverUtil.waitForStaleElement(driver, element);
 		base.verifyTrue(driver.getPageSource().contains("Log In"));
+	}
+	
+	public static void logout(WebDriver driver, String location) {
+		driver.get(location + "logoff.do");
 	}
 	
 	public static void setCbroStation(WebDriver driver, String cbroStation) {

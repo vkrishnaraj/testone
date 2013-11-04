@@ -24,7 +24,7 @@ public class NK_Login extends NK_SeleniumTest {
 	
 	@Test
 	public void testLogout() throws Exception {
-		LoginUtil.logout(driver);
+		logoutTest();
 	}
 	
 	@Test

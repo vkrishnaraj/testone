@@ -3,74 +3,17 @@ package aero.nettracer.web.lfc.testing.actions.lfc.lost;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
-import aero.nettracer.web.utility.DefaultSeleneseTestCase;
+import aero.nettracer.web.lfc.testing.LFC_SeleniumTest;
 import aero.nettracer.web.utility.Settings;
 
-public class LF_CreateLostAndFoundReadOnly extends DefaultSeleneseTestCase {
+public class LF_CreateLostAndFoundReadOnly extends LFC_SeleniumTest {
 
 	private static String lostId;
 	private static String foundId;
 	
 	@Test
 	public void testARemoveReopenPermission() {
-		logout();
-
-		if (checkNoErrorPage()) {
-			selenium.open("/lostandfound/logon.do?companyCode=OW&username=ogadmin&password=Ladendead51!");
-			waitForPageToLoadImproved();
-			clickMenu("menucol_9.2");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("CLAFRO: An error occurred when attempting to logout.");
-			return;
-		}
-			
-		if (checkNoErrorPage()) {
-			selenium.click("//a[contains(@href, 'createGroup.do?companyCode=LF')]");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("CLAFRO: Failed to login as ogadmin.");
-			return;
-		}
-		
-		if (checkNoErrorPage()) {
-			selenium.click("//a[contains(@href, 'componentAdmin.do?groupId=240')]");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("CLAFRO: An error occurred when attempting to open the Admin group for LF.");
-			return;			
-		}
-		
-		if (checkNoErrorPage()) {
-			selenium.uncheck("name=618");
-			selenium.click("xpath=(//input[@id='button'])[2]");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("CLAFRO: An error occurred when attempting to open the permissions page for the Admin group.");
-			return;			
-		}
-		
-		if (checkNoErrorPage()) {
-			logout();
-		} else {
-			System.out.println("CLAFRO: An error occurred when attempting to save the permissions page for the Admin group.");
-			return;			
-		}
-		
-		if (checkNoErrorPage()) {
-			selenium.type("//div[@id='mainlogin']/form/table/tbody/tr[4]/td[2]/input", "ntauto");
-			selenium.type("//div[@id='mainlogin']/form/table/tbody/tr[5]/td[2]/input", "IpoL!Jan7");
-			selenium.click("//input[@id='button']");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("CLAFRO: An error occurred when attempting to log off.");
-			return;			
-		}
-		
-		if (!checkNoErrorPage()) {
-			System.out.println("CLAFRO: An error occurred when attempting to log in as: " + Settings.USERNAME_ADMIN + ".");
-		}
-		
+		setPermissions(new String[] {"618"}, new boolean[] {false});
 	}
 	
 	@Test
@@ -189,65 +132,7 @@ public class LF_CreateLostAndFoundReadOnly extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testEResetReopenPermission() {
-		selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
-		waitForPageToLoadImproved();
-		
-		if (checkNoErrorPage()) {
-			selenium.open("/lostandfound/logon.do?companyCode=OW&username=ogadmin&password=Ladendead51!");
-			clickMenu("menucol_9.2");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("CLAFRO: An error occurred while attempting to log out.");
-			return;
-		}
-		
-		if (checkNoErrorPage()) {
-			selenium.click("//a[contains(@href, 'createGroup.do?companyCode=LF')]");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("CLAFRO: An error occurred while attempting to log in as ogadmin.");
-			return;
-		}
-		
-		if (checkNoErrorPage()) {
-			selenium.click("//a[contains(@href, 'componentAdmin.do?groupId=240')]");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("CLAFRO: An error occurred when attempting to open the Admin group for LF.");
-			return;
-		}
-		
-		if (checkNoErrorPage()) {
-			selenium.check("name=618");
-			selenium.click("xpath=(//input[@id='button'])[2]");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("CLAFRO: An error occurred when attempting to open the permissions page for the Admin group.");
-			return;
-		}
-		
-		if (checkNoErrorPage()) {
-			selenium.click("//table[@id='headercontent']/tbody/tr[4]/td/a");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("CLAFRO: An error occurred when attempting to save the permissions page for the Admin group.");
-			return;	
-		}
-		
-		if (checkNoErrorPage()) {
-			selenium.type("//div[@id='mainlogin']/form/table/tbody/tr[4]/td[2]/input", "ntauto");
-			selenium.type("//div[@id='mainlogin']/form/table/tbody/tr[5]/td[2]/input", "IpoL!Jan7");
-			selenium.click("//input[@id='button']");
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("CLAFRO: An error occurred when attempting to log off.");
-			return;
-		}
-		
-		if (!checkNoErrorPage()) {
-			System.out.println("CLAFRO: An error occurred when attempting to log in as: " + Settings.USERNAME_ADMIN + ".");
-		}
-		
+		setPermissions(new String[] {"618"}, new boolean[] {true});
 	}
 	
 }

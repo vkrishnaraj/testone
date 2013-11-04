@@ -78,8 +78,8 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 		waitForPageToLoadImproved(500,false);
 	}
 	
-	protected void logout() {
-		LoginUtil.logout(driver);
+	protected void logoutTest() {
+		LoginUtil.logoutTest(driver);
 	}
 	
 	protected String getSelectedLabel(By by) {

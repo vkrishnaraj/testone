@@ -2,11 +2,10 @@ package aero.nettracer.web.lfc.testing.actions.client.southwest;
 
 import org.junit.Test;
 
-import aero.nettracer.web.utility.DefaultSeleneseTestCase;
+import aero.nettracer.web.lfc.testing.LFC_SeleniumTest;
 import aero.nettracer.web.utility.Settings;
-import aero.nettracer.web.utility.LoginUtil;
 
-public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
+public class LF_WN_CreateLost extends LFC_SeleniumTest {
 
 	@Test
 	public void testLandingPage() throws Exception {
@@ -217,7 +216,7 @@ public class LF_WN_CreateLost extends DefaultSeleneseTestCase {
 		
 		if(checkNoErrorPage())
 		{
-			logout();
+			logoutOfNt();
 		}
 		
 		if(checkNoErrorPage())

@@ -24,7 +24,7 @@ public class WS_Login extends WS_SeleniumTest {
 	
 	@Test
 	public void testLogout() throws Exception {
-		LoginUtil.logout(driver);
+		logoutTest();
 	}
 	
 	@Test
