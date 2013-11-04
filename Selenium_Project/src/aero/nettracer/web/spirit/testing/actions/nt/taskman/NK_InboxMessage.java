@@ -33,19 +33,23 @@ public class NK_InboxMessage extends NK_SeleniumTest {
 					(new Select(driver.findElement(By.name("file_type")))).selectByVisibleText("Incident");
 					driver.findElement(By.name("file_ref_number")).sendKeys("TTTTT");
 					driver.findElement(By.name("send2")).click();
+					waitForPageToLoadImproved(1000);
 					verifyTrue(driver.getPageSource().contains("Incorrect incident number/type"));
 					driver.findElement(By.name("file_ref_number")).sendKeys(inc_id);
 				}
 				driver.findElement(By.name("send2")).click();
+				waitForPageToLoadImproved(1000);
 				verifyTrue(driver.getPageSource().contains("Message has been sent."));
 				clickMenu("menucol_0.0");
 				LoginUtil.setCbroStation(driver, "BOS");
-				waitForPageToLoadImproved(5000);
-				driver.findElement(By.id("16link")).click();
-				driver.findElement(By.linkText("Test Message: " + inc_id)).click();
-				verifyTrue(driver.getPageSource().contains("Test Message that references Incident: " + inc_id));
-				clickMenu("menucol_0.0");
-				LoginUtil.setCbroStation(driver, LZ_STATION);
+				try {
+					driver.findElement(By.id("16link")).click();
+					driver.findElement(By.linkText("Test Message: " + inc_id)).click();
+					verifyTrue(driver.getPageSource().contains("Test Message that references Incident: " + inc_id));
+					clickMenu("menucol_0.0");
+				} finally {
+					LoginUtil.setCbroStation(driver, LZ_STATION);
+				}
 			} else {
 				System.out.println("!!!!!!!!!!!!!!!! - Message Creation Page did not load. Error Page loaded instead. - !!!!!!!!!!!!!!!!!!!!!");
 				verifyTrue(false);
