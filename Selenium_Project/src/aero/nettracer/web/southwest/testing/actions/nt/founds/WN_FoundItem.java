@@ -80,8 +80,10 @@ public class WN_FoundItem extends WN_SeleniumTest {
 			cycleSearch(By.name("email"), By.id("email"), "test@test.com", true);
 			cycleSearch(By.name("serialNumber"), By.id("itemserial_0"), "123", true);
 			driver.findElement(By.id("calendar")).click();
+			waitForPageToLoadImproved(500);
 			driver.findElement(By.linkText("Today")).click();
 			driver.findElement(By.id("calendar2")).click();
+			waitForPageToLoadImproved(500);
 			driver.findElement(By.linkText("Today")).click();
 			(new Select(driver.findElement(By.name("statusId")))).selectByVisibleText("Open");
 			driver.findElement(By.name("email")).sendKeys("test@test.com");
@@ -96,8 +98,10 @@ public class WN_FoundItem extends WN_SeleniumTest {
 	
 	private void cycleSearch(By searchField, By formField, String value, boolean type) {
 		driver.findElement(By.id("calendar")).click();
+		waitForPageToLoadImproved(500);
 		driver.findElement(By.linkText("Today")).click();
 		driver.findElement(By.id("calendar2")).click();
+		waitForPageToLoadImproved(500);
 		driver.findElement(By.linkText("Today")).click();
 		(new Select(driver.findElement(By.name("statusId")))).selectByVisibleText("Open");
 		if (type) {
