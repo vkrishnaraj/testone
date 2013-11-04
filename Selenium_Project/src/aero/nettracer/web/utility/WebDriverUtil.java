@@ -94,6 +94,7 @@ public class WebDriverUtil {
 	public static void waitForStaleElement(WebDriver driver, WebElement element) {
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		wait.until(ExpectedConditions.stalenessOf(element));
+		driver.findElement(By.id("copyright")).click();
 	}
 
 	
