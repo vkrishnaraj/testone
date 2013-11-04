@@ -1,8 +1,11 @@
 package aero.nettracer.web.utility;
 
+import java.util.concurrent.TimeUnit;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.ie.InternetExplorerDriver;
 
 
 public class PermissionsUtil {
@@ -284,21 +287,24 @@ public class PermissionsUtil {
 		if (permissions == null || values == null || permissions.length != values.length) {
 			throw new IllegalArgumentException("Please provide the permissions and a value to which each one should be set.");
 		}
+		WebDriver ogDriver = new InternetExplorerDriver();
+		ogDriver.manage().timeouts().implicitlyWait(Settings.ELEMENT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
 		
-		navigateToPermissionsPage(driver, location, groupId);
+		navigateToPermissionsPage(ogDriver, location, groupId);
 		
 		for (int i = 0; i < permissions.length; ++i) {
 			if (values[i]) {
-				WebDriverUtil.check(driver.findElement(By.name(permissions[i])));
+				WebDriverUtil.check(ogDriver.findElement(By.name(permissions[i])));
 			} else {
-				WebDriverUtil.uncheck(driver.findElement(By.name(permissions[i])));
+				WebDriverUtil.uncheck(ogDriver.findElement(By.name(permissions[i])));
 			}
 		}
 		
-		WebElement element = driver.findElement(By.xpath("(//input[@id='button'])[2]"));
+		WebElement element = ogDriver.findElement(By.xpath("(//input[@id='button'])[2]"));
 		element.click();
-		WebDriverUtil.waitForStaleElement(driver, element);
+		WebDriverUtil.waitForStaleElement(ogDriver, element);
 		WebDriverUtil.waitForPageToLoadImproved(2000);
+		ogDriver.close();
 		return true;
 	}
 }
