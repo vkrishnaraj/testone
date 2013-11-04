@@ -18,7 +18,7 @@ public class WN_EditTemplates extends WN_SeleniumTest {
 	
 	@Test
 	public void testVarifyMaintainTemplatesPermissionEnabled() {
-		verifyTrue(super.setPermissions(new String[] { PermissionsUtil.DOCUMENT_TEMPLATES_MANAGE }, new boolean[] { true }));
+		verifyTrue(setPermissions(new String[] { PermissionsUtil.DOCUMENT_TEMPLATES_MANAGE }, new boolean[] { true }));
 		verifyTrue(isElementPresent(By.xpath("//a[contains(@href, 'searchTemplate.do')]")));
 		goToTaskManager();
 	}
