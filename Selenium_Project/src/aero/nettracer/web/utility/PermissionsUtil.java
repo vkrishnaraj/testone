@@ -289,21 +289,24 @@ public class PermissionsUtil {
 		}
 		WebDriver ogDriver = new InternetExplorerDriver();
 		ogDriver.manage().timeouts().implicitlyWait(Settings.ELEMENT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-		
-		navigateToPermissionsPage(ogDriver, location, groupId);
-		
-		for (int i = 0; i < permissions.length; ++i) {
-			if (values[i]) {
-				WebDriverUtil.check(ogDriver.findElement(By.name(permissions[i])));
-			} else {
-				WebDriverUtil.uncheck(ogDriver.findElement(By.name(permissions[i])));
+		try {
+			navigateToPermissionsPage(ogDriver, location, groupId);
+			
+			for (int i = 0; i < permissions.length; ++i) {
+				if (values[i]) {
+					WebDriverUtil.check(ogDriver.findElement(By.name(permissions[i])));
+				} else {
+					WebDriverUtil.uncheck(ogDriver.findElement(By.name(permissions[i])));
+				}
 			}
+			
+			WebElement element = ogDriver.findElement(By.xpath("(//input[@id='button'])[2]"));
+			element.click();
+			WebDriverUtil.waitForPageToLoadImproved(2000);
+			LoginUtil.logout(ogDriver, location);
+		} finally {
+			ogDriver.quit();
 		}
-		
-		WebElement element = ogDriver.findElement(By.xpath("(//input[@id='button'])[2]"));
-		element.click();
-		WebDriverUtil.waitForPageToLoadImproved(2000);
-		ogDriver.quit();
 		return true;
 	}
 }

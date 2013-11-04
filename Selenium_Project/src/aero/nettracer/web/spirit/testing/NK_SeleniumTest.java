@@ -87,7 +87,8 @@ public class NK_SeleniumTest extends DefaultSeleneseTestCase {
 	}
 	
 	protected boolean setPermissions(String[] permissions, boolean[] values) {
-		boolean success =  PermissionsUtil.setPermissions(driver, BASE_URL, COMPANY_CODE, ADMIN_GROUP_ID, permissions, values);
+		boolean success = logoutOfNt();
+		success = success && PermissionsUtil.setPermissions(driver, BASE_URL, COMPANY_CODE, ADMIN_GROUP_ID, permissions, values);
 		success = success && loginToNt();
 		return success;
 	}
