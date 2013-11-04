@@ -276,7 +276,6 @@ public class PermissionsUtil {
 	}
 	
 	public static void navigateToPermissionsPage(WebDriver driver, String location, String groupId) {
-		LoginUtil.logout(driver, location);
 		LoginUtil.loginOGAdmin(driver, location);	
 		driver.get(location + "componentAdmin.do?groupId=" + groupId);
 	}
@@ -296,10 +295,10 @@ public class PermissionsUtil {
 			}
 		}
 		
-		driver.findElement(By.id("copyright")).click();
 		WebElement element = driver.findElement(By.xpath("(//input[@id='button'])[2]"));
 		element.click();
 		WebDriverUtil.waitForStaleElement(driver, element);
+		WebDriverUtil.waitForPageToLoadImproved(2000);
 		return true;
 	}
 }

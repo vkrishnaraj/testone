@@ -7,6 +7,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -94,7 +95,8 @@ public class WebDriverUtil {
 	public static void waitForStaleElement(WebDriver driver, WebElement element) {
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		wait.until(ExpectedConditions.stalenessOf(element));
-		driver.findElement(By.id("copyright")).click();
+		Actions action = new Actions(driver);
+		action.moveToElement(driver.findElement(By.id("copyright"))).perform();
 	}
 
 	
