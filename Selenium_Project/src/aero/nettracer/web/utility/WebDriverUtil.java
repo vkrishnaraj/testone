@@ -56,10 +56,11 @@ public class WebDriverUtil {
 	}
 	
 	public static void clickMenu(WebDriver driver, String menu) {
+		WebElement element = driver.findElement(By.id(menu));
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		String toExecute = "var x = document.getElementById('" + menu + "'); x.click();";
 		js.executeScript(toExecute);
-		waitForPageToLoadImproved(2000);
+		waitForStaleElement(driver, element);
 	}
 	
 	public static boolean isElementPresent(WebDriver driver, By by) {
