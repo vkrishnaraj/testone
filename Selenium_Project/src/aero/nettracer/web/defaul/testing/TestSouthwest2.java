@@ -20,12 +20,12 @@ import aero.nettracer.web.utility.Settings;
 @RunWith(Suite.class)
 @SuiteClasses({
 	WN_Login.class
-	, WN_CSSCallSystem.class
+//	, WN_CSSCallSystem.class
 	, WN_EditTemplates.class
 	, WN_SearchTemplates.class
-	, WN_CreateClaim.class
-	, WN_FoundItem.class
-	, WN_StatusMessageTest.class
+//	, WN_CreateClaim.class
+//	, WN_FoundItem.class
+//	, WN_StatusMessageTest.class
 	})
 public class TestSouthwest2 { 
 	

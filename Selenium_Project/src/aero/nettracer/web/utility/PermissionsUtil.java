@@ -299,7 +299,6 @@ public class PermissionsUtil {
 		WebElement element = driver.findElement(By.xpath("(//input[@id='button'])[2]"));
 		element.click();
 		WebDriverUtil.waitForStaleElement(driver, element);
-		LoginUtil.logout(driver, location);
 		return true;
 	}
 }

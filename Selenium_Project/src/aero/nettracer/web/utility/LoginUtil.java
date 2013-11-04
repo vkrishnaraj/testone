@@ -64,6 +64,7 @@ public class LoginUtil {
 	
 	public static void logout(WebDriver driver, String location) {
 		driver.get(location + "logoff.do");
+		WebDriverUtil.waitForPageToLoadImproved(1500);
 	}
 	
 	public static void setCbroStation(WebDriver driver, String cbroStation) {
