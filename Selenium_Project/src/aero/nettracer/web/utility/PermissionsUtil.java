@@ -302,9 +302,8 @@ public class PermissionsUtil {
 		
 		WebElement element = ogDriver.findElement(By.xpath("(//input[@id='button'])[2]"));
 		element.click();
-		WebDriverUtil.waitForStaleElement(ogDriver, element);
 		WebDriverUtil.waitForPageToLoadImproved(2000);
-		ogDriver.close();
+		ogDriver.quit();
 		return true;
 	}
 }
