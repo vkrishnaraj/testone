@@ -2,6 +2,7 @@ package aero.nettracer.web.spirit.testing.actions.nt.taskman;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
 import aero.nettracer.web.spirit.testing.NK_SeleniumTest;
@@ -33,12 +34,12 @@ public class NK_InboxMessage extends NK_SeleniumTest {
 					(new Select(driver.findElement(By.name("file_type")))).selectByVisibleText("Incident");
 					driver.findElement(By.name("file_ref_number")).sendKeys("TTTTT");
 					driver.findElement(By.name("send2")).click();
-					waitForPageToLoadImproved(1000);
 					verifyTrue(driver.getPageSource().contains("Incorrect incident number/type"));
-					driver.findElement(By.name("file_ref_number")).sendKeys(inc_id);
+					WebElement file_ref = driver.findElement(By.name("file_ref_number"));
+					file_ref.clear();
+					file_ref.sendKeys(inc_id);
 				}
 				driver.findElement(By.name("send2")).click();
-				waitForPageToLoadImproved(1000);
 				verifyTrue(driver.getPageSource().contains("Message has been sent."));
 				clickMenu("menucol_0.0");
 				LoginUtil.setCbroStation(driver, "BOS");
