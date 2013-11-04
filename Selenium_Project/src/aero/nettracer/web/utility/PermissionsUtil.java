@@ -2,6 +2,7 @@ package aero.nettracer.web.utility;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 
 public class PermissionsUtil {
@@ -293,9 +294,10 @@ public class PermissionsUtil {
 				WebDriverUtil.uncheck(driver.findElement(By.name(permissions[i])));
 			}
 		}
-				
-		driver.findElement(By.xpath("(//input[@id='button'])[2]")).click();
-		WebDriverUtil.waitForPageToLoadImproved(500);
+		
+		WebElement element = driver.findElement(By.xpath("(//input[@id='button'])[2]"));
+		element.click();
+		WebDriverUtil.waitForStaleElement(driver, element);
 		return true;
 	}
 }
