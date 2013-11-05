@@ -102,7 +102,7 @@
               <% }
               if (request.getAttribute("lostdelay") != null) { %>
               <tr>
-                <td>
+                <td  style="width:25%">
                   <bean:message key="colname.ldclose.arr_airline_id" />
                   <br>
                   
@@ -116,19 +116,20 @@
                     <html:options collection="companylistByName" property="companyCode_ID" labelProperty="companydesc" />
                   </html:select>
                 </td>
-                <td>
-                  <bean:message key="colname.ldclose.arr_flight_num" />
-                  <br>
-                  <html:text name="theitem" property="arrivedonflightnum" size="10" maxlength="5" styleClass="textfield" indexed="true" />
+                <td style="width:25%" >
+	                  <bean:message key="colname.ldclose.arr_flight_num" />
+	                  <br>
+	                  <html:text name="theitem" property="arrivedonflightnum" size="10" maxlength="5" styleClass="textfield" indexed="true" />
                 </td>
-                <td>
-                  <bean:message key="colname.ldclose.arr_date" />
-                  (
-                  <%= a.getDateformat().getFormat() %>)
-                  <br>
-                  <html:text name="theitem" property="disarrivedondate" size="13" maxlength="13" styleClass="textfield" indexed="true" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2<%= i %>" name="calendar2<%= i %>" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select2(document.incidentForm, '<%= "theitem[" + i + "].disarrivedondate" %>','calendar2<%= i %>','<%= a.getDateformat().getFormat() %>'); return false;"></td>
+                <td colspan="<%=i==0?1:2 %>">
+	                  <bean:message key="colname.ldclose.arr_date" />
+	                  (
+	                  <%= a.getDateformat().getFormat() %>)
+	                  <br>
+	                  <html:text name="theitem" property="disarrivedondate" size="13" maxlength="13" styleClass="textfield" indexed="true" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2<%= i %>" name="calendar2<%= i %>" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select2(document.incidentForm, '<%= "theitem[" + i + "].disarrivedondate" %>','calendar2<%= i %>','<%= a.getDateformat().getFormat() %>'); return false;">
+                </td>
                   <% if (i == 0) { %>
-                  <td><br>
+                  <td style="width:25%" ><br>
                   	<center>
                   		<input type="button" id="button" onclick="populateBagInfo(this);" value="<bean:message key="apply.to.all"/>" />
                   	</center>
@@ -150,7 +151,7 @@
 			        <html:hidden property="faultStation_id" value="<%=String.valueOf(theitem.getFaultStation_id()) %>" name="theitem"  indexed="true"/>
 		          <%} %>
 	              <tr>
-	              	<td colspan="3">
+	              	<td colspan="3" style="width:80%">
 	            		<bean:message key="colname.loss.code" />
 		            	<br>
 		            	<% String isLossCodeString="lossCodeChanged("+i+")"; %>

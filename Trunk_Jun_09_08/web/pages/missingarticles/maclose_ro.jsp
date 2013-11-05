@@ -149,7 +149,7 @@
 				  </tr>
           		
 				  <tr>
-					<td colspan="2">
+					<td colspan="2" style="width:60%">
 						<b><bean:message key="colname.loss.code" /></b>
 			  <br>
 			  <%  	for (java.util.Iterator i = lossCodes.iterator(); i.hasNext(); ) {
