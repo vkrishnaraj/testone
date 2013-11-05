@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverBackedSelenium;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.server.RemoteControlConfiguration;
 import org.openqa.selenium.server.SeleniumServer;
@@ -19,6 +20,7 @@ public class SeleniumTestBrowserDefault extends Settings {
 	private static Selenium browser;
 	private static SeleniumServer server;
 	private static WebDriver driver;
+	private static WebDriver ogDriver;
 
 	public synchronized static void setBrowser(Selenium _browser) {
 		browser = _browser;
@@ -36,6 +38,14 @@ public class SeleniumTestBrowserDefault extends Settings {
 		return driver;
 	}
 
+	public synchronized static void setOgDriver(WebDriver _driver) {
+		ogDriver = _driver;
+	}
+
+	public synchronized static WebDriver getOgDriver() {
+		return ogDriver;
+	}
+
 	public synchronized static void stopBrowser() {
 		stopBrowser("DEFAULT", false);
 	}
@@ -47,6 +57,7 @@ public class SeleniumTestBrowserDefault extends Settings {
 	public synchronized static void stopBrowser(String client, boolean useWD) {
 		if (useWD) {
 			driver.quit();
+			ogDriver.quit();
 		} else {
 			browser.stop();
 		}
@@ -69,6 +80,8 @@ public class SeleniumTestBrowserDefault extends Settings {
 		if (useWD) {
 			driver = new InternetExplorerDriver();
 			driver.manage().timeouts().implicitlyWait(Settings.ELEMENT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+			ogDriver = new FirefoxDriver();
+			ogDriver.manage().timeouts().implicitlyWait(Settings.ELEMENT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
 			browser = new WebDriverBackedSelenium(driver, APP_URL_LOCAL + portnum);
 		} else {
 			int port = 6789;

@@ -11,11 +11,13 @@ import com.thoughtworks.selenium.SeleneseTestCase;
 public class DefaultSeleneseTestCase extends SeleneseTestCase {
 	
 	public WebDriver driver = null;
+	public WebDriver ogDriver = null;
 	
 	@Before
 	public void setUp() throws Exception {
 		selenium = SeleniumTestBrowserDefault.getBrowser();
 		driver = SeleniumTestBrowserDefault.getDriver();
+		ogDriver = SeleniumTestBrowserDefault.getOgDriver();
 	}
 	
 	public void goToTaskManager() {

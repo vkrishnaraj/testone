@@ -287,29 +287,19 @@ public class PermissionsUtil {
 		if (permissions == null || values == null || permissions.length != values.length) {
 			throw new IllegalArgumentException("Please provide the permissions and a value to which each one should be set.");
 		}
-		WebDriver ogDriver = new InternetExplorerDriver();
-		ogDriver.manage().timeouts().implicitlyWait(Settings.ELEMENT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-		try {
-			navigateToPermissionsPage(ogDriver, location, groupId);
+		navigateToPermissionsPage(driver, location, groupId);
 			
-			for (int i = 0; i < permissions.length; ++i) {
-				if (values[i]) {
-					WebDriverUtil.check(ogDriver.findElement(By.name(permissions[i])));
-				} else {
-					WebDriverUtil.uncheck(ogDriver.findElement(By.name(permissions[i])));
-				}
+		for (int i = 0; i < permissions.length; ++i) {
+			if (values[i]) {
+				WebDriverUtil.check(driver.findElement(By.name(permissions[i])));
+			} else {
+				WebDriverUtil.uncheck(driver.findElement(By.name(permissions[i])));
 			}
-			
-			WebElement element = ogDriver.findElement(By.xpath("(//input[@id='button'])[2]"));
-			element.click();
-			WebDriverUtil.waitForPageToLoadImproved(2000);
-			LoginUtil.logout(ogDriver, location);
-		} catch (Exception e) {
-			System.out.println("Failed to set permissions:" + permissions.toString());
-			return false;
-		} finally {
-			ogDriver.quit();
 		}
+			
+		WebElement element = driver.findElement(By.xpath("(//input[@id='button'])[2]"));
+		element.click();
+		WebDriverUtil.waitForPageToLoadImproved(2000);
 		return true;
 	}
 }
