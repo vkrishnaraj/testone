@@ -85,12 +85,12 @@ public class US_SeleniumTest extends DefaultSeleneseTestCase {
 	
 	protected boolean loginToNt() {
 		boolean success = true;
-		LoginUtil.loginNTAuto(driver, BASE_URL, COMPANY_CODE, LZ_STATION);
+		LoginUtil.loginNTAutoTest(driver, BASE_URL, COMPANY_CODE, LZ_STATION);
 		return success;
 	}
 	
 	protected boolean setPermissions(String[] permissions, boolean[] values) {
-		refreshDriver();
+		logoutTest();
 		boolean success = PermissionsUtil.setPermissions(ogDriver, BASE_URL, COMPANY_CODE, ADMIN_GROUP_ID, permissions, values);
 		success = loginToNt() && success;
 		return success;

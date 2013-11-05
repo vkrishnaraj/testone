@@ -12,16 +12,16 @@ public class LoginUtil {
 	
 	private static SeleneseTestBase base = new SeleneseTestBase();
 	
-	public static void loginNTAutoTest(WebDriver driver, String location, String companyCode, String lzStation) throws Exception {
+	public static void loginNTAutoTest(WebDriver driver, String location, String companyCode, String lzStation) {
 		loginProcedure(driver, location, Settings.USERNAME_ADMIN, Settings.PASSWORD_ADMIN, companyCode, false);
 		setCbroStation(driver, lzStation);
 	}
 	
-	public static void loginFailureTest(WebDriver driver, String location, String companyCode) throws Exception {
+	public static void loginFailureTest(WebDriver driver, String location, String companyCode) {
 		loginProcedure(driver, location, Settings.USERNAME_TEST, Settings.PASSWORD_CHANGE, companyCode, true);
 	}
 	
-	public static void loginOGAdminTest(WebDriver driver, String location) throws Exception {
+	public static void loginOGAdminTest(WebDriver driver, String location) {
 		loginProcedure(driver, location, Settings.USERNAME_OGADMIN, Settings.PASSWORD_OGADMIN, "OW", false);
 	}
 	
