@@ -56,9 +56,8 @@ public class LoginUtil {
 	}
 	
 	public static void logoutTest(WebDriver driver) {
-		WebElement element = driver.findElement(By.id("mainLayoutLogoutLink"));
-		element.click();
-		WebDriverUtil.waitForStaleElement(driver, element, "mainLayoutLogoutLink");
+		WebDriverUtil.clickMenu(driver, "mainLayoutLogoutLink");
+		WebDriverUtil.waitForPageToLoadImproved(1500);
 		base.verifyTrue(driver.getPageSource().contains("Log In"));
 	}
 	
