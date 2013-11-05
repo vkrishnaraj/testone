@@ -87,5 +87,9 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 	protected String getSelectedLabel(By by) {
 		return WebDriverUtil.getSelectedLabel(driver, by);
 	}
+	
+	protected boolean isTextPresent(String text) {
+		return driver.getPageSource().contains(text);
+	}
 
 }

@@ -16,6 +16,8 @@ public class LFC_SeleniumTest extends DefaultSeleneseTestCase {
 	protected static final String LZ_STATION = "LZ";
 	protected static final String BASE_URL = Settings.APP_URL_LOCAL + Settings.PORT2 + "lostandfound/";
 	protected static final String ADMIN_GROUP_ID = "240";
+	protected static final String CLIENT_WN_URL = Settings.APP_URL_LOCAL + Settings.PORT2 + Settings.START_URL_LF_WN;
+	protected static final String CLIENT_WN_LOGIN_URL = Settings.APP_URL_LOCAL + Settings.PORT2 + Settings.START_URL_LF_LG;
 	
 	protected static String TODAY;
 	protected static String TODAY_SIX_DIGIT;
