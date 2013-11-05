@@ -40,7 +40,7 @@ public class LFC_SeleniumTest extends DefaultSeleneseTestCase {
 	
 	protected boolean loginToNt() {
 		boolean success = true;
-		LoginUtil.loginNTAuto(driver, BASE_URL, null, LZ_STATION);
+		LoginUtil.loginNTAuto(driver, BASE_URL, COMPANY_CODE, LZ_STATION);
 		return success;
 	}
 	

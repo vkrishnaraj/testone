@@ -1,6 +1,7 @@
 package aero.nettracer.web.lfc.testing.actions.client.southwest;
 
 import org.junit.Test;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.Select;
 
@@ -83,8 +84,10 @@ public class LF_WN_CreateLost extends LFC_SeleniumTest {
 	@Test
 	public void testLostReportPage() throws Exception {
 		driver.findElement(By.id("lostForm:buttonCreate")).click();
+		Alert alert = driver.switchTo().alert();
+		assertEquals("Please be advised that if an email address is not provided, we will contact you via telephone and only in the event that we find an item closely matching the description of your reported lost item.", alert.getText());
+		alert.accept();
 		waitForPageToLoadImproved(1000);
-		assertEquals("Please be advised that if an email address is not provided, we will contact you via telephone and only in the event that we find an item closely matching the description of your reported lost item.", selenium.getConfirmation());
 		(new Select(driver.findElement(By.id("lostForm:itemCategory")))).selectByVisibleText("Cellphone");
 		(new Select(driver.findElement(By.id("lostForm:itemColor")))).selectByVisibleText("Black");
 		(new Select(driver.findElement(By.id("lostForm:itemCaseColor")))).selectByVisibleText("Does Not Apply");
