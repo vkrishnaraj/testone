@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.ie.InternetExplorerDriver;
@@ -94,8 +95,23 @@ public class WebDriverUtil {
 	}
 	
 	public static void waitForStaleElement(WebDriver driver, WebElement element) {
-		WebDriverWait wait = new WebDriverWait(driver, 30);
-		wait.until(ExpectedConditions.stalenessOf(element));
+		waitForStaleElement(driver, element, 0);
+	}
+	
+	private static void waitForStaleElement(WebDriver driver, WebElement element, int tryNumber) {
+		try {
+			WebDriverWait wait = new WebDriverWait(driver, 30);
+			wait.until(ExpectedConditions.stalenessOf(element));
+		} catch (TimeoutException ex) {
+			tryNumber++;
+			if (tryNumber < Settings.CHECK_TIMES) {
+				System.out.println("ELEMENT NOT STALE - TRY NUMBER " + tryNumber + " - TRYING AGAIN.");
+				waitForStaleElement(driver, element, tryNumber);
+				return;
+			} else {
+				System.out.println("ELEMENT NOT STALE - TRY NUMBER " + tryNumber + " - MOVING ON.");
+			}
+		}
 		Actions action = new Actions(driver);
 		action.moveToElement(driver.findElement(By.id("copyright"))).perform();
 	}
