@@ -100,10 +100,12 @@ public class WebDriverUtil {
 		action.moveToElement(driver.findElement(By.id("copyright"))).perform();
 	}
 	
-	public static void refreshDriver(WebDriver driver) {
+	public static WebDriver refreshDriver(WebDriver driver) {
 		driver.quit();
-		driver = new InternetExplorerDriver();
-		driver.manage().timeouts().implicitlyWait(Settings.ELEMENT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+		driver = null;
+		WebDriver newDriver = new InternetExplorerDriver();
+		newDriver.manage().timeouts().implicitlyWait(Settings.ELEMENT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+		return newDriver;
 	}
 
 	

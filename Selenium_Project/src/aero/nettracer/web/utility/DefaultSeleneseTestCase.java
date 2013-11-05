@@ -96,7 +96,7 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 	}
 	
 	protected void refreshDriver() {
-		WebDriverUtil.refreshDriver(driver);
+		driver = WebDriverUtil.refreshDriver(driver);
 	}
 
 }
