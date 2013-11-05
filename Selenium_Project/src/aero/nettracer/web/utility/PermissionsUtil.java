@@ -298,7 +298,7 @@ public class PermissionsUtil {
 			
 		WebElement element = driver.findElement(By.xpath("(//input[@id='button'])[2]"));
 		element.click();
-		WebDriverUtil.waitForPageToLoadImproved(2000);
+		WebDriverUtil.waitForPageToLoadImproved(5000);
 		return true;
 	}
 }
