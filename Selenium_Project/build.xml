@@ -275,4 +275,68 @@
   		</parallel>
   </target>
 	
+	<target name="testWD-AB" depends="compile-wd-test">
+    	<junit printsummary="yes"  showoutput="true" fork="true">
+      		<classpath refid="junitpath.wd.test" />
+      		<formatter type="xml" usefile="true" />
+      		<test name="aero.nettracer.web.defaul.testing.TestAvis" />
+    	</junit>
+	</target>
+	
+	<target name="testWD-AD" depends="compile-wd-test">
+    	<junit printsummary="yes"  showoutput="true" fork="true">
+      		<classpath refid="junitpath.wd.test" />
+      		<formatter type="xml" usefile="true" />
+      		<test name="aero.nettracer.web.defaul.testing.TestAzul" />
+    	</junit>
+	</target>
+	
+	<target name="testWD-B6" depends="compile-wd-test">
+    	<junit printsummary="yes"  showoutput="true" fork="true">
+      		<classpath refid="junitpath.wd.test" />
+      		<formatter type="xml" usefile="true" />
+      		<test name="aero.nettracer.web.defaul.testing.TestJetBlue" />
+    	</junit>
+	</target>
+	
+	<target name="testWD-NK" depends="compile-wd-test">
+    	<junit printsummary="yes"  showoutput="true" fork="true">
+      		<classpath refid="junitpath.wd.test" />
+      		<formatter type="xml" usefile="true" />
+      		<test name="aero.nettracer.web.defaul.testing.TestSpirit" />
+    	</junit>
+	</target>
+	
+	<target name="testWD-LF" depends="compile-wd-test">
+    	<junit printsummary="yes"  showoutput="true" fork="true">
+      		<classpath refid="junitpath.wd.test" />
+      		<formatter type="xml" usefile="true" />
+      		<test name="aero.nettracer.web.defaul.testing.TestLfc" />
+    	</junit>
+	</target>
+	
+	<target name="testWD-WS" depends="compile-wd-test">
+    	<junit printsummary="yes"  showoutput="true" fork="true">
+      		<classpath refid="junitpath.wd.test" />
+      		<formatter type="xml" usefile="true" />
+      		<test name="aero.nettracer.web.defaul.testing.TestWestJet" />
+    	</junit>
+	</target>
+	
+	<target name="testWD-WN" depends="compile-wd-test">
+    	<junit printsummary="yes"  showoutput="true" fork="true">
+      		<classpath refid="junitpath.wd.test" />
+      		<formatter type="xml" usefile="true" />
+      		<test name="aero.nettracer.web.defaul.testing.TestSouthwest" />
+    	</junit>
+	</target>
+	
+	<target name="testWD-WN2" depends="compile-wd-test">
+    	<junit printsummary="yes"  showoutput="true" fork="true">
+      		<classpath refid="junitpath.wd.test" />
+      		<formatter type="xml" usefile="true" />
+      		<test name="aero.nettracer.web.defaul.testing.TestSouthwest2" />
+    	</junit>
+	</target>
+	
 </project>
