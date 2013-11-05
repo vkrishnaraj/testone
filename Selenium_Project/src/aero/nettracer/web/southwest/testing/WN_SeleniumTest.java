@@ -90,8 +90,8 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 	}
 	
 	protected boolean setPermissions(String[] permissions, boolean[] values) {
-		logoutTest();
 		boolean success = PermissionsUtil.setPermissions(ogDriver, BASE_URL, COMPANY_CODE, ADMIN_GROUP_ID, permissions, values);
+		logoutTest();
 		success = loginToNt() && success;
 		return success;
 	}

@@ -26,7 +26,7 @@ public class LoginUtil {
 	}
 	
 	private static void loginProcedure(WebDriver driver, String location, String user, String pass, String companyCode, boolean isFail) {
-		System.out.println("Logging In Using " + user + " " + pass);
+		System.out.println("Logging In Using " + user + " " + pass + (companyCode == null ? "" : " " + companyCode));
 		driver.get(location + "logon.do");
 		driver.findElement(By.name("username")).sendKeys(user);
 		driver.findElement(By.name("password")).sendKeys(pass);
@@ -58,7 +58,7 @@ public class LoginUtil {
 	public static void logoutTest(WebDriver driver) {
 		WebElement element = driver.findElement(By.id("mainLayoutLogoutLink"));
 		element.click();
-		WebDriverUtil.waitForStaleElement(driver, element);
+		WebDriverUtil.waitForStaleElement(driver, element, "mainLayoutLogoutLink");
 		base.verifyTrue(driver.getPageSource().contains("Log In"));
 	}
 	
@@ -73,7 +73,7 @@ public class LoginUtil {
 		String logStation = cbroSelect.getFirstSelectedOption().getText();
 		if (logStation != null && !logStation.equals(cbroStation)) {
 			cbroSelect.selectByVisibleText(cbroStation);
-			WebDriverUtil.waitForStaleElement(driver, cbroElement);
+			WebDriverUtil.waitForStaleElement(driver, cbroElement, "cbroStation");
 		}
 	}
 	

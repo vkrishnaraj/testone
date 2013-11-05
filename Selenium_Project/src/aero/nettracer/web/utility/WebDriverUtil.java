@@ -63,7 +63,7 @@ public class WebDriverUtil {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		String toExecute = "var x = document.getElementById('" + menu + "'); x.click();";
 		js.executeScript(toExecute);
-		waitForStaleElement(driver, element);
+		waitForStaleElement(driver, element, menu);
 	}
 	
 	public static boolean isElementPresent(WebDriver driver, By by) {
@@ -94,22 +94,22 @@ public class WebDriverUtil {
 		return (new Select(driver.findElement(by))).getFirstSelectedOption().getText();
 	}
 	
-	public static void waitForStaleElement(WebDriver driver, WebElement element) {
-		waitForStaleElement(driver, element, 0);
+	public static void waitForStaleElement(WebDriver driver, WebElement element, String identifier) {
+		waitForStaleElement(driver, element, identifier, 0);
 	}
 	
-	private static void waitForStaleElement(WebDriver driver, WebElement element, int tryNumber) {
+	private static void waitForStaleElement(WebDriver driver, WebElement element, String identifier, int tryNumber) {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, 30);
 			wait.until(ExpectedConditions.stalenessOf(element));
 		} catch (TimeoutException ex) {
 			tryNumber++;
 			if (tryNumber < Settings.CHECK_TIMES) {
-				System.out.println("ELEMENT NOT STALE - TRY NUMBER " + tryNumber + " - TRYING AGAIN.");
-				waitForStaleElement(driver, element, tryNumber);
+				System.out.println("ELEMENT " + identifier + " NOT STALE - TRY NUMBER " + tryNumber + " - TRYING AGAIN.");
+				waitForStaleElement(driver, element, identifier, tryNumber);
 				return;
 			} else {
-				System.out.println("ELEMENT NOT STALE - TRY NUMBER " + tryNumber + " - MOVING ON.");
+				System.out.println("ELEMENT " + identifier + " NOT STALE - TRY NUMBER " + tryNumber + " - MOVING ON.");
 			}
 		}
 		Actions action = new Actions(driver);
