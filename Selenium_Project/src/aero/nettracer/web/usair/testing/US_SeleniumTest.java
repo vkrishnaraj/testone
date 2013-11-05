@@ -90,6 +90,7 @@ public class US_SeleniumTest extends DefaultSeleneseTestCase {
 	}
 	
 	protected boolean setPermissions(String[] permissions, boolean[] values) {
+		refreshDriver();
 		boolean success = PermissionsUtil.setPermissions(ogDriver, BASE_URL, COMPANY_CODE, ADMIN_GROUP_ID, permissions, values);
 		success = loginToNt() && success;
 		return success;

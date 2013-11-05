@@ -1,9 +1,12 @@
 package aero.nettracer.web.utility;
 
+import java.util.concurrent.TimeUnit;
+
 import org.junit.Before;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.interactions.Actions;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
@@ -90,6 +93,10 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 	
 	protected boolean isTextPresent(String text) {
 		return driver.getPageSource().contains(text);
+	}
+	
+	protected void refreshDriver() {
+		WebDriverUtil.refreshDriver(driver);
 	}
 
 }

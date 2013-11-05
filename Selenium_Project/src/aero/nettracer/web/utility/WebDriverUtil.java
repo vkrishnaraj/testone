@@ -7,6 +7,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -97,6 +98,12 @@ public class WebDriverUtil {
 		wait.until(ExpectedConditions.stalenessOf(element));
 		Actions action = new Actions(driver);
 		action.moveToElement(driver.findElement(By.id("copyright"))).perform();
+	}
+	
+	public static void refreshDriver(WebDriver driver) {
+		driver.quit();
+		driver = new InternetExplorerDriver();
+		driver.manage().timeouts().implicitlyWait(Settings.ELEMENT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
 	}
 
 	
