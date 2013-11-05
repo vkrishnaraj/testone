@@ -304,6 +304,9 @@ public class PermissionsUtil {
 			element.click();
 			WebDriverUtil.waitForPageToLoadImproved(2000);
 			LoginUtil.logout(ogDriver, location);
+		} catch (Exception e) {
+			System.out.println("Failed to set permissions:" + permissions.toString());
+			return false;
 		} finally {
 			ogDriver.quit();
 		}
