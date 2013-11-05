@@ -15,6 +15,7 @@ public class LF_Login extends LFC_SeleniumTest {
 	
 	public void testNavigateToPermissionsPage() throws Exception {
 		verifyTrue(PermissionsUtil.navigateToPermissionsPageTest(driver, BASE_URL, COMPANY_CODE, ADMIN_GROUP_ID));
+		LoginUtil.loginOGAdmin(ogDriver, BASE_URL);
 	}
 	
 	@Test

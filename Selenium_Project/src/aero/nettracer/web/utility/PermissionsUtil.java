@@ -279,7 +279,6 @@ public class PermissionsUtil {
 	}
 	
 	public static void navigateToPermissionsPage(WebDriver driver, String location, String groupId) {
-		LoginUtil.loginOGAdmin(driver, location);	
 		driver.get(location + "componentAdmin.do?groupId=" + groupId);
 	}
 	
