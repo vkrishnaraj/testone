@@ -351,10 +351,10 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 		selenium.select("courtesyreport", "label=yes");
 		selenium.select("courtesyReasonId", "label=Please Select");
 		selenium.click("saveButton");
-		assertEquals("Courtesy Reason is required.", selenium.getAlert());
+		assertEquals("Reason is required.", selenium.getAlert());
 		selenium.select("id=courtesyReasonId", "label=Other");
 		selenium.click("name=saveButton");
-		assertEquals("Courtesy Reason Description is required.", selenium.getAlert());
+		assertEquals("Reason Description is required.", selenium.getAlert());
 		selenium.type("id=courtesyDescription", "test");
 		selenium.click("name=saveButton");
 		waitForPageToLoadImproved();
@@ -459,6 +459,20 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	
 	@Test
 	public void testAdditionalItemInformationEnabled() {
+		// TEMPORARY
+		System.out.println("PAY ATTENTION!!!");
+		System.out.println("PAY ATTENTION!!!");
+		System.out.println("PAY ATTENTION!!!");
+		System.out.println("PAY ATTENTION!!!");
+		System.out.println("PAY ATTENTION!!!");
+		System.out.println("PAY ATTENTION!!!");
+		System.out.println("PAY ATTENTION!!!");
+		System.out.println("PAY ATTENTION!!!");
+		System.out.println("PAY ATTENTION!!!");
+		System.out.println("PAY ATTENTION!!!");
+		System.out.println("PAY ATTENTION!!!");
+		waitForPageToLoadImproved(30000);
+		// END TEMPORARY
 		verifyTrue(setPermissions(new String[] { ADDITIONAL_ITEM_INFORMATION_COLLECT }, new boolean[] { true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
 		verifyTrue(selenium.isTextPresent("Entered Date"));
@@ -511,6 +525,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	
 	@Test
 	public void testCreateBDODamaged(){
+		verifyTrue(setPermissions(new String[] { "661", "662"}, new boolean[] { true, true}));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
 		waitForPageToLoadImproved(3000,false);
 		selenium.click("xpath=(//a[contains(@href, 'bdo.do?mbr_id=')])[1]");

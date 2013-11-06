@@ -242,6 +242,7 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 	
 	@Test
 	public void testCreateBDOMissing(){
+		verifyTrue(setPermissions(new String[] { "661", "662"}, new boolean[] { true, true}));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_MISSING));
 		waitForPageToLoadImproved(3000,false);
 		selenium.click("xpath=(//a[contains(@href, 'bdo.do?mbr_id=')])[1]");

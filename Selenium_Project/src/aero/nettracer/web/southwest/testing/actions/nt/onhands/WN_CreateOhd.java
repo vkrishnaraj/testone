@@ -150,7 +150,7 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 		verifyTrue(selenium.isTextPresent("Position ID"));
 		assertEquals("123456", selenium.getText("//div[@id='maincontent']/table/tbody/tr[5]/td[2]"));
 		verifyTrue(selenium.isTextPresent("Late Check"));
-		assertEquals("Yes", selenium.getText("//div[@id='maincontent']/table/tbody/tr[6]/td[2]"));
+		assertEquals("No", selenium.getText("//div[@id='maincontent']/table/tbody/tr[6]/td[2]"));
 		goToTaskManager();
 	}
 	
