@@ -427,7 +427,15 @@ public class BDOAction extends Action {
 				if(bdo.getDelivery_integration_type()==bdo.getDelivery_integration_type().SERV && bdo.getDelivery_integration_id()!=null && !bdo.getDelivery_integration_id().isEmpty() && PropertyBMO.getValue(PropertyBMO.BDSI_ADDRESS_ENDPOINT)!=null){
 					DecimalFormat myFormatter=new DecimalFormat("0000000000");
 					String bdoNum=myFormatter.format(bdo.getBDO_ID());
-					List<StatusListDisp> statuslist=BagDelStatusInfoUtils.getStatusList(bdo.getIncident().getStationcode()+bdo.getCompanycode_ID()+bdoNum,user);
+					String stationCode="";
+					if(bdo.getIncident()!=null){
+						stationCode=bdo.getIncident().getStationcode();
+					} else if (bdo.getOhd()!=null && bdo.getOhd().getFoundAtStation()!=null){
+						stationCode=bdo.getOhd().getFoundAtStation().getStationcode();
+					} else if(user.getStation()!=null) {
+						stationCode=user.getStation().getStationcode();
+					}
+					List<StatusListDisp> statuslist=BagDelStatusInfoUtils.getStatusList(stationCode+bdo.getCompanycode_ID()+bdoNum,user);
 					if(statuslist!=null) {
 						request.setAttribute("statusList", statuslist);
 					}	else { 
