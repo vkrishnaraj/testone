@@ -3901,7 +3901,6 @@
 	<target name="donotrun-build-southwest" if="southwest.init.complete">
 		<copy todir="${basedir}/web/pages/login" file="companies/southwest-fs/environment/${environment.name}/login/center.jsp" />
 		<copy todir="${basedir}/src" file="companies/southwest-fs/environment/${environment.name}/tracer.properties" />
-
 		<property name="hibernate_props_loc" value="companies/southwest-fs/environment/${environment.name}" />
 		<property name="hibernate_dialect" value="mysql" />
 		<antcall target="generate-hibernate-xmls" />
@@ -3937,6 +3936,7 @@
 		<antcall target="generate-hibernate-xmls" />
 		
 		<copy todir="${basedir}/web/pages/login" file="companies/southwest/environment/${environment.name}/login/center.jsp" />
+		<copy todir="${basedir}/web/deployment/main/css" file="companies/southwest/web/deployment/main/css/nettracerstyles1.css" />
 		
 		<ant antfile="build-gen.xml" target="combineResourceFiles">
 			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
