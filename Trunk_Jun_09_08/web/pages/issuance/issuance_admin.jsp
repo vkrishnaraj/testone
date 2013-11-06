@@ -271,7 +271,7 @@
 	                     <input type="text" name="item_desc_<%=i_item.getId() %>" value="<%=i_item.getDescription()%>" size="10" class="textfield" />
 	                  </td>
 	                  <td>
-	                     <input type="text" name="item_barcode_<%=i_item.getId() %>" value="<%=i_item.getBarcode()%>" size="4" class="textfield" />
+	                     <input type="text" name="item_barcode_<%=i_item.getId() %>" value="<%=i_item.getBarcode()%>" size="4" maxlength="20" class="textfield" />
 	                  </td>
 	                  <td>
 	                     <select name="item_tradetype_<%=i_item.getId() %>" class="dropdown" >
@@ -379,7 +379,7 @@
 	                     	<input type="text" name="item_desc" value="" size="10" class="textfield" />
 	                  	</td>
 	                  	<td>
-	                     	<input type="text" name="item_barcode" value="" size="4" class="textfield" />
+	                     	<input type="text" name="item_barcode" value="" size="4" maxlength="20" class="textfield" />
 	                  	</td>
 	                  	<td>
 	                     <select name="item_tradetype" class="dropdown" >
