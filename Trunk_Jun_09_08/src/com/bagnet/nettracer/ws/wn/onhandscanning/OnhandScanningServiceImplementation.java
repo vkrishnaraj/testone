@@ -525,11 +525,16 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		if(wsohd.getXdescelement3() == null || wsohd.getXdescelement3().length() == 0){
 			wsohd.setXdescelement3("X");
 		}
-		if(wsohd.getFounddatetime() == null){
-			GregorianCalendar c = new GregorianCalendar();
-			c.setTime(DateUtils.convertToGMTDate(new Date()));
-			wsohd.setFounddatetime(c);
-		}
+		/**
+		 * Removed FoundDateTime check due to SimpleValue Calendar value not
+		 * being able to factor in time to the date, regardless of actions
+		 * against it, resulting in DateTimes of the current day at Midnight,
+		 * which when localized can lead to an inaccurate date, such as the
+		 * previous day
+		 * 
+		 * Refer to WStoOHD_Mapping method in WSCoreOHDUtil.java class for
+		 * setting Null FoundDates
+		 */
 	}
 	
 	/**

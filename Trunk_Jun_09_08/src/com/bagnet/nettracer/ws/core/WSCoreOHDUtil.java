@@ -399,11 +399,15 @@ public class WSCoreOHDUtil {
  		Date thedate = null;
  		
  		if(ws.getFounddatetime() != null){
- 		Calendar tmpCal = ws.getFounddatetime();
- 		Date tmpDate = tmpCal.getTime();
-		
-		ohd.setFounddate(tmpDate);
-		ohd.setFoundtime(tmpDate);
+	 		Calendar tmpCal = ws.getFounddatetime();
+	 		Date tmpDate = tmpCal.getTime();
+			
+			ohd.setFounddate(tmpDate);
+			ohd.setFoundtime(tmpDate);
+ 		} else { //If no founddate is provided, will default to current time
+ 			Date tmpDate=DateUtils.convertToGMTDate(new Date());
+ 			ohd.setFounddate(tmpDate);
+ 			ohd.setFoundtime(tmpDate);
  		}
 		
 		String datetimestr = null;
