@@ -471,20 +471,6 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 		selenium.type("name=inventorylist[0].dispPurchaseDate", WN_SeleniumTest.TODAY);
 		selenium.type("name=inventorylist[0].dispInvItemCost", "1");
 		selenium.select("name=inventorylist[0].itemStatusId", "label=Returned");
-		// TEMPORARY
-		System.out.println("PAY ATTENTION!!!");
-		System.out.println("PAY ATTENTION!!!");
-		System.out.println("PAY ATTENTION!!!");
-		System.out.println("PAY ATTENTION!!!");
-		System.out.println("PAY ATTENTION!!!");
-		System.out.println("PAY ATTENTION!!!");
-		System.out.println("PAY ATTENTION!!!");
-		System.out.println("PAY ATTENTION!!!");
-		System.out.println("PAY ATTENTION!!!");
-		System.out.println("PAY ATTENTION!!!");
-		System.out.println("PAY ATTENTION!!!");
-		waitForPageToLoadImproved(30000);
-		// END TEMPORARY
 		selenium.click("name=saveButton");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
