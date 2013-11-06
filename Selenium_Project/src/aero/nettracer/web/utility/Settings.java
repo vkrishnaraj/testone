@@ -69,7 +69,7 @@ public class Settings {
 	//TIMEOUT SETTINGS
 	public static final String LOGIN_TIMEOUT = "120000";
 	public static final String PAGE_LOAD_TIMEOUT = "120000";
-	public static final int ELEMENT_TIMEOUT_SECONDS = 30;
+	public static final int ELEMENT_TIMEOUT_SECONDS = 120;
 	public static final int CHECK_TIMES = 1;
 	
 	//VARIABLE SETTINGS / GLOBALS

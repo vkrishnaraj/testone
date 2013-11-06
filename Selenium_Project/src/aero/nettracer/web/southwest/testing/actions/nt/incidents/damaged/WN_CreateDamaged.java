@@ -354,7 +354,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 		assertEquals("Reason is required.", selenium.getAlert());
 		selenium.select("id=courtesyReasonId", "label=Other");
 		selenium.click("name=saveButton");
-		assertEquals("Reason Description is required.", selenium.getAlert());
+		assertEquals("Courtesy Reason Description is required.", selenium.getAlert());
 		selenium.type("id=courtesyDescription", "test");
 		selenium.click("name=saveButton");
 		waitForPageToLoadImproved();
@@ -459,6 +459,18 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	
 	@Test
 	public void testAdditionalItemInformationEnabled() {
+		verifyTrue(setPermissions(new String[] { ADDITIONAL_ITEM_INFORMATION_COLLECT }, new boolean[] { true }));
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
+		verifyTrue(selenium.isTextPresent("Entered Date"));
+		verifyTrue(isElementPresent(By.name("inventorylist[0].dispPurchaseDate")));
+		verifyTrue(isElementPresent(By.name("inventorylist[0].dispInvItemCost")));
+		verifyTrue(isElementPresent(By.name("inventorylist[0].invItemCurrency")));
+		verifyTrue(isElementPresent(By.name("inventorylist[0].itemStatusId")));
+		verifyTrue(isElementPresent(By.name("deleteinventory_0")));
+		
+		selenium.type("name=inventorylist[0].dispPurchaseDate", WN_SeleniumTest.TODAY);
+		selenium.type("name=inventorylist[0].dispInvItemCost", "1");
+		selenium.select("name=inventorylist[0].itemStatusId", "label=Returned");
 		// TEMPORARY
 		System.out.println("PAY ATTENTION!!!");
 		System.out.println("PAY ATTENTION!!!");
@@ -473,18 +485,6 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 		System.out.println("PAY ATTENTION!!!");
 		waitForPageToLoadImproved(30000);
 		// END TEMPORARY
-		verifyTrue(setPermissions(new String[] { ADDITIONAL_ITEM_INFORMATION_COLLECT }, new boolean[] { true }));
-		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
-		verifyTrue(selenium.isTextPresent("Entered Date"));
-		verifyTrue(isElementPresent(By.name("inventorylist[0].dispPurchaseDate")));
-		verifyTrue(isElementPresent(By.name("inventorylist[0].dispInvItemCost")));
-		verifyTrue(isElementPresent(By.name("inventorylist[0].invItemCurrency")));
-		verifyTrue(isElementPresent(By.name("inventorylist[0].itemStatusId")));
-		verifyTrue(isElementPresent(By.name("deleteinventory_0")));
-		
-		selenium.type("name=inventorylist[0].dispPurchaseDate", WN_SeleniumTest.TODAY);
-		selenium.type("name=inventorylist[0].dispInvItemCost", "1");
-		selenium.select("name=inventorylist[0].itemStatusId", "label=Returned");
 		selenium.click("name=saveButton");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
