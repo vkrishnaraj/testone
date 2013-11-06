@@ -22,9 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import net.sourceforge.jtds.util.Logger;
-
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -36,7 +33,7 @@ import com.bagnet.clients.us.SharesIntegrationWrapper;
 import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
-import com.bagnet.nettracer.tracing.bmo.ProactiveNotificationBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -44,12 +41,9 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.ControlLog;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Item;
-import com.bagnet.nettracer.tracing.db.Match_Detail;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHDRequest;
-import com.bagnet.nettracer.tracing.db.OHD_Address;
 import com.bagnet.nettracer.tracing.db.OHD_Log;
-import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
@@ -57,7 +51,6 @@ import com.bagnet.nettracer.tracing.dto.StatReportDTO;
 import com.bagnet.nettracer.tracing.forms.ViewIncomingRequestForm;
 import com.bagnet.nettracer.tracing.utils.BDOUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
-import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.OHDUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
@@ -89,8 +82,9 @@ public class ViewIncomingBags extends CheckedAction {
 			return null;
 		}
 
-		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)) return (mapping
-				.findForward(TracingConstants.NO_PERMISSION));
+		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)) {
+			return (mapping.findForward(TracingConstants.NO_PERMISSION));
+		}
 
 		String sort = request.getParameter("sort");
 
@@ -131,6 +125,8 @@ public class ViewIncomingBags extends CheckedAction {
 						if (tmpIncident != null && tmpIncident.getStationassigned().getStation_ID() == user.getStation().getStation_ID()) {
 							ohd.getStatus().setStatus_ID(TracingConstants.OHD_STATUS_TO_BE_DELIVERED);
 							deliveredFlag = true;
+						} else if (agent_station.isThisOhdLz() && PropertyBMO.isTrue(PropertyBMO.PROPERTY_TO_BE_INVENTORIED)) {
+							ohd.getStatus().setStatus_ID(TracingConstants.OHD_STATUS_TO_BE_INVENTORIED);
 						} else {
 							ohd.getStatus().setStatus_ID(TracingConstants.OHD_STATUS_OPEN);
 						}
@@ -227,6 +223,8 @@ public class ViewIncomingBags extends CheckedAction {
 					if (tmpIncident != null && tmpIncident.getStationassigned().getStation_ID() == user.getStation().getStation_ID()) {
 						ohd.getStatus().setStatus_ID(TracingConstants.OHD_STATUS_TO_BE_DELIVERED);
 						deliveredFlag = true;
+					} else if (agent_station.isThisOhdLz() && PropertyBMO.isTrue(PropertyBMO.PROPERTY_TO_BE_INVENTORIED)) {
+						ohd.getStatus().setStatus_ID(TracingConstants.OHD_STATUS_TO_BE_INVENTORIED); 
 					} else {
 						ohd.getStatus().setStatus_ID(TracingConstants.OHD_STATUS_OPEN);
 					}

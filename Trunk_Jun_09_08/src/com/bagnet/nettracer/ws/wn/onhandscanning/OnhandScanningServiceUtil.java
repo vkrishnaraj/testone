@@ -221,7 +221,7 @@ public class OnhandScanningServiceUtil {
 				twoCharBagTag = bagtag;
 			}
 			q.setString("claimnum2", twoCharBagTag);
-			q.setParameter("status", TracingConstants.OHD_STATUS_TBI);
+			q.setParameter("status", TracingConstants.OHD_STATUS_TO_BE_INVENTORIED);
 			q.setParameter("holding_station_ID", holdingStationID);
 			List list = q.list();
 			if (list.size() == 0) {

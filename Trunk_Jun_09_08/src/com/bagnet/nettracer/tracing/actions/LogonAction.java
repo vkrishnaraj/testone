@@ -238,7 +238,7 @@ public class LogonAction extends Action {
 		LinkedHashMap map = UserPermissions.renderApplicationLinks(agent);
 		session.setAttribute("menu_links", map);
 		//Setup the activity list
-		if (map.get("Task Manager") != null) {
+		if (map != null && map.get("Task Manager") != null) {
 			taskManagerSetup(session, request);
 		}
 		// prepopulate list
@@ -349,6 +349,22 @@ public class LogonAction extends Action {
 							int x = OHDUtils.getIncomingBagsCount(s.getStation_ID(), new ViewIncomingRequestForm(), true);
 							if (x != -1)
 								entries = x;
+						} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_TO_BE_INVENTORIED)) {
+							if (!s.isThisOhdLz() || !PropertyBMO.isTrue(PropertyBMO.PROPERTY_TO_BE_INVENTORIED)) {
+								continue;
+							}
+							
+							BagService bs = new BagService();
+							SearchIncidentForm daform = new SearchIncidentForm();
+							daform.setStatus_ID(TracingConstants.OHD_STATUS_TO_BE_INVENTORIED);
+							daform.setCompanycode_ID(s.getCompany().getCompanyCode_ID());
+							daform.setStationassigned_ID(s.getStation_ID());
+							List<?> resultlist = bs.findOnHandBagsBySearchCriteria(daform, agent, 0, 0, true, false, true);
+							if (resultlist == null || resultlist.isEmpty()) {
+								continue;
+							}
+							
+							entries = ((Long) resultlist.get(0)).intValue();
 						} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_FRAUD_REQUESTS) && PropertyBMO.isTrue("ntfs.user")) {
 							int x = 0;
 							

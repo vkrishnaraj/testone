@@ -39,6 +39,7 @@ public class Audit_OHD implements Serializable {
 	private Date foundtime;
 	private Date founddate;
 	private Date bagarrivedate;
+	private Date inventoryDate;
 	private String claimnum;
 	private String color;
 	private String type;
@@ -190,6 +191,30 @@ public class Audit_OHD implements Serializable {
 		this.bagarrivedate = bagarrivedate;
 	}
 
+	/**
+	 * @hibernate.property type="timestamp"
+	 * @return Returns the inventoryDate.
+	 */
+	public Date getInventoryDate() {
+		return inventoryDate;
+	}
+	
+	/**
+	 * @param inventoryDate
+	 * The inventoryDate to set.
+	 */
+	public void setInventoryDate(Date inventoryDate) {
+		this.inventoryDate = inventoryDate;
+	}
+
+	/**
+	 * 
+	 * @return formated inventory date
+	 */
+	public String getDispInventoryDate() {
+		return DateUtils.formatDate(this.getInventoryDate(), _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
+	}
+	
 	/**
 	 * @hibernate.set cascade="all" inverse="true"
 	 *                order-by="itinerarytype,departdate,schdeparttime"

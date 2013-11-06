@@ -40,6 +40,7 @@ public class OHD implements Serializable {
 	private Date foundtime;
 	private Date founddate;
 	private Date bagarrivedate;
+	private Date inventoryDate;
 	private Date warehouseSentDate;
 	private Date warehouseReceivedDate;
 	private String claimnum;
@@ -141,6 +142,22 @@ public class OHD implements Serializable {
 	 */
 	public void setBagarrivedate(Date bagarrivedate) {
 		this.bagarrivedate = bagarrivedate;
+	}
+	
+	/**
+	 * @hibernate.property type="timestamp"
+	 * @return Returns the inventoryDate.
+	 */
+	public Date getInventoryDate() {
+		return inventoryDate;
+	}
+
+	/**
+	 * @param inventoryDate
+	 * The inventoryDate to set.
+	 */
+	public void setInventoryDate(Date inventoryDate) {
+		this.inventoryDate = inventoryDate;
 	}
 	
 	/**

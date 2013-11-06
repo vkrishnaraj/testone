@@ -241,6 +241,7 @@ public class AuditOHDUtils {
 		audit_ohd.set_TIMEZONE(ohd.get_TIMEZONE());
 		audit_ohd.setAgent(ohd.getAgent());
 		audit_ohd.setBagarrivedate(ohd.getBagarrivedate());
+		audit_ohd.setInventoryDate(ohd.getInventoryDate());
 		audit_ohd.setClaimnum(ohd.getClaimnum());
 		audit_ohd.setClose_date(ohd.getClose_date());
 		audit_ohd.setColor(ohd.getColor());

@@ -291,27 +291,33 @@ public class OnHandAction extends CheckedAction {
 			Status s = new Status();
 
 			// Do a temporary saving..Matching is not initiated.
-			if(request.getParameter("savetemp") != null && !request.getParameter("savetemp").equals(""))
+			if(request.getParameter("savetemp") != null && !request.getParameter("savetemp").equals("")) {
 				s.setStatus_ID(TracingConstants.OHD_STATUS_TEMP);
-			else {
+			} else if(theform.getStatus() == null) {
 				//file status of null indicates new file so we have to set status
 				//to "open" or "early bag"
-				if(theform.getStatus() == null) {
-					if(theform.getEarlyBag() != null && theform.getEarlyBag()) {
-						s.setStatus_ID(TracingConstants.OHD_STATUS_EARLY_BAG);
-						oDTO.setEarlyBag(true);
-					}
-					else {
-						s.setStatus_ID(TracingConstants.OHD_STATUS_OPEN);
-					}
+				if(theform.getEarlyBag() != null && theform.getEarlyBag()) {
+					s.setStatus_ID(TracingConstants.OHD_STATUS_EARLY_BAG);
+					oDTO.setEarlyBag(true);
+				} else if (user.getStation().isThisOhdLz() && PropertyBMO.isTrue(PropertyBMO.PROPERTY_TO_BE_INVENTORIED)) {
+					s.setStatus_ID(TracingConstants.OHD_STATUS_TO_BE_INVENTORIED);
+				} else {
+					s.setStatus_ID(TracingConstants.OHD_STATUS_OPEN);
 				}
-				else {
-					s.setStatus_ID(theform.getStatus().getStatus_ID());
-					//earlybag indicator is tightly coupled with status so we set it here instead of
-					//in insertOnHand function below
-					if(theform.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_EARLY_BAG) {
-						oDTO.setEarlyBag(true);
-					}
+			} else if(theform.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_TO_BE_INVENTORIED 
+					&& (oDTO.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_TO_BE_INVENTORIED //already saved
+						|| !user.getStation().isThisOhdLz() 
+						|| !PropertyBMO.isTrue(PropertyBMO.PROPERTY_TO_BE_INVENTORIED))) {
+				s.setStatus_ID(TracingConstants.OHD_STATUS_OPEN);
+				if (oDTO.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_TO_BE_INVENTORIED) {
+					oDTO.setInventoryDate(TracerDateTime.getGMTDate());
+				}
+			} else {
+				s.setStatus_ID(theform.getStatus().getStatus_ID());
+				//earlybag indicator is tightly coupled with status so we set it here instead of
+				//in insertOnHand function below
+				if(theform.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_EARLY_BAG) {
+					oDTO.setEarlyBag(true);
 				}
 			}
 			oDTO.setStatus(s);
@@ -322,8 +328,7 @@ public class OnHandAction extends CheckedAction {
 			}
 			if(request.getParameter("savetowt") != null && oDTO.getStatus().getStatus_ID() != TracingConstants.OHD_STATUS_OPEN) {
 				rohd = false;
-			}
-			else if(request.getParameter("savetracing") != null 
+			} else if(request.getParameter("savetracing") != null 
 					|| request.getParameter("savetowt") != null  
 					|| request.getParameter("amendtowt") != null
 					|| (request.getParameter("savetemp") != null && !request.getParameter("savetemp").equals(""))) {

@@ -109,13 +109,14 @@ public class TracingProducer implements Runnable {
 					String dateRange = " FOUNDDATE >= :beginDateRange AND FOUNDDATE <= :endDateRange ";
 
 					String sql = "SELECT OHD_ID, lastupdated FROM OHD WHERE "
-							+ "(STATUS_ID = :status1 or STATUS_ID = :status2) AND "
+							+ "(STATUS_ID = :status1 or STATUS_ID = :status2 or STATUS_ID = :status3) AND "
 							+ dateRange + " AND " + lastUpdatedStr
 							+ " ORDER BY LASTUPDATED ASC";
 
 					SQLQuery query = dirtySess.createSQLQuery(sql);
 					query.setInteger("status1", TracingConstants.OHD_STATUS_OPEN);
 					query.setInteger("status2", TracingConstants.OHD_STATUS_IN_TRANSIT);
+					query.setInteger("status3", TracingConstants.OHD_STATUS_TO_BE_INVENTORIED);
 					query.setTimestamp("beginDateRange", beginDateRange);
 					query.setTimestamp("endDateRange", endDateRange);
 

@@ -697,7 +697,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		OhdBMO obmo = new OhdBMO();
 		OHD ohd = obmo.findOHDByID(id);
 		Status status = new Status();
-		status.setStatus_ID(TracingConstants.OHD_STATUS_TBI);
+		status.setStatus_ID(TracingConstants.OHD_STATUS_TO_BE_INVENTORIED);
 		ohd.setStatus(status);
 		ohd.setHoldingStation(holdingstation);
 		addOHDUpdateRemark(ohd, agent, REMARK_IMPROPER_FOWARD);
@@ -1006,7 +1006,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 	private void handleTBI(OHD ohd, boolean TBI){
 		Status status = new Status();
 		if(TBI){
-			status.setStatus_ID(TracingConstants.OHD_STATUS_TBI);
+			status.setStatus_ID(TracingConstants.OHD_STATUS_TO_BE_INVENTORIED);
 			ohd.setStatus(status);
 		} else {
 			status.setStatus_ID(TracingConstants.OHD_STATUS_CLOSED);

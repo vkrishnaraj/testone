@@ -161,6 +161,7 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_MAINTAIN_AGENTS = "Maintain Agents";
 	public final static String SYSTEM_COMPONENT_NAME_MAINTAIN_WEB_SERVICE_AGENTS = "Maintain Web Service Agents";
 	public final static String SYSTEM_COMPONENT_NAME_INCOMING_BAGS = "Incoming Bags";
+	public final static String SYSTEM_COMPONENT_NAME_TO_BE_INVENTORIED = "To Be Inventoried";
 	public final static String SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS = "Incoming Incidents";
 	public final static String SYSTEM_COMPONENT_NAME_SHARED_ATTACHMENTS = "Shared Attachments";
 	public final static String SYSTEM_COMPONENT_NAME_DELETE_BAGTAG_BAGS = "Delete Bagtags to Bags";
@@ -522,7 +523,7 @@ public class TracingConstants {
 	public final static int OHD_STATUS_TO_BE_DELIVERED = 7;
 	public final static int OHD_STATUS_EARLY_BAG = 57;
 	public final static int OHD_STATUS_OWNER_PICKED_UP = 42;
-	public final static int OHD_STATUS_TBI = 58;
+	public final static int OHD_STATUS_TO_BE_INVENTORIED = 58;
 	public final static int OHD_STATUS_PASSENGER_PICKED_UP = 60;
 
 	public final static int OHD_REQUEST_STATUS_DENIED = 8;
@@ -747,8 +748,8 @@ public class TracingConstants {
 	// search
 	public final static String DELIVERY_LIST = "deliveryList";
 	public final static String ONHAND_LIST = "onhandList";
+	public final static String TO_BE_INVENTORIED_LIST = "to_be_inventoriedList";
 	
-
 	// integration prepopulate page
 	public final static String PREPOPULATE_INCIDENT = "prepopulateincident";
 	
