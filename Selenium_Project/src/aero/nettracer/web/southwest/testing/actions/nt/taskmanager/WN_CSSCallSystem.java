@@ -25,11 +25,7 @@ public class WN_CSSCallSystem extends WN_SeleniumTest {
 	private final String FIVEDAYREMARK = "CS&S Five Day Call - ";
 
 	@Test
-	public void testSeedAndCheckTaskManager() throws Exception {
-		// Create 5 Incidents to seed call system
-		createIncident(false);
-		createIncident(false);
-		createIncident(false);
+	public void testCheckTaskManager() throws Exception {
 		goToTaskManager();
 		verifyTrue(selenium.isTextPresent("Customer Contact Station List"));
 		String cssSizeStr = selenium.getText("id=658entry");
