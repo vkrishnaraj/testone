@@ -936,7 +936,7 @@
 			<%
                       } else if (report_type == 1) {
 %> <a href="#"
-			onclick="openHelp('pages/WebHelp/nettracerhelp.htAUAB600013418m#lost_delayed_bag_reports/work_with_baggage_check_information_(ld).htm#top');return false;">
+			onclick="openHelp('pages/WebHelp/nettracerhelp.htm#lost_delayed_bag_reports/work_with_baggage_check_information_(ld).htm#top');return false;">
 				<%
                         } else if (report_type == 2) {
 %> <a href="#"
