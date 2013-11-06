@@ -714,8 +714,8 @@ function gotoHistoricalReport() {
         </html:select> <br>
         <br>
         <bean:message key="colname.bagtype.req" /> 
-        <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=1&type=bagType',800,280,230);return false;"><bean:message key="chart1" /></a>
-        <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=2&type=bagType',800,370,230);return false;"><bean:message key="chart2" /></a>
+        <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=1&key=bagType&type=bagType',800,280,230);return false;"><bean:message key="chart1" /></a>
+        <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=2&key=bagType&type=bagType',800,370,230);return false;"><bean:message key="chart2" /></a>
         <br>
         <html:select property="bagType" styleClass="dropdown">
           <html:options collection="typelist"  property="value" labelProperty="label"  />

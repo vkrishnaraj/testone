@@ -150,7 +150,7 @@ function choosetype(o) {
 				field.options[i].selected = true;
 <% 
 	String type = request.getParameter("type");
-	if (type.equalsIgnoreCase("bagtype")) {
+	if (type.equalsIgnoreCase("bagtype") && !type.equals(request.getParameter("key"))) {
 %>
 				field.onchange();
 <%
