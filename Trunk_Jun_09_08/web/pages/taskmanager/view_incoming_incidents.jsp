@@ -60,10 +60,19 @@ function sortIncident(sortIncident) {
 	o.sort.value = sortIncident;
 	o.submit();
 }
+
+function resetSort() {
+	o = document.getElementById('sort_id');
+	if (o && 0 < o.value.length) {
+		o.value = '';
+	}
+	
+	return true;
+}
   </script>
   
   <jsp:include page="/pages/includes/validation_search.jsp" />
-  <html:form action="incomingReports.do" method="post" focus="incident_ID" onsubmit="fillzero(this.incident_ID, 13); return validateSearch(this);">
+  <html:form action="incomingReports.do" method="post" focus="incident_ID" onsubmit="resetSort(); fillzero(this.incident_ID, 13); return validateSearch(this);">
   
   <jsp:include page="/pages/includes/taskmanager_header.jsp" />
   
@@ -71,9 +80,9 @@ function sortIncident(sortIncident) {
 	    String sort = StringUtils.trimToNull((String)request.getAttribute("sort"));	
 	    if (sort != null) {
 	%>
-	    <input type="hidden" name="sort" value="<%= sort %>"/>
+	    <input type="hidden" name="sort" id="sort_id" value="<%= sort %>"/>
 	<%} else {%>
-	      <input type="hidden" name="sort" value="<%=TracingConstants.SortParam.OHD_POSITION.getParamString()%>">
+	      <input type="hidden" name="sort" id="sort_id" value="<%=TracingConstants.SortParam.OHD_POSITION.getParamString()%>">
 	<%}%>
 	 
     <tr>
