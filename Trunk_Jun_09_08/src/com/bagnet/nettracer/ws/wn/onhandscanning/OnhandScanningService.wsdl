@@ -207,6 +207,8 @@
                     <xs:sequence>
                         <xs:element minOccurs="0" name="authentication" nillable="true" type="ax22:Authentication"/>
                         <xs:element minOccurs="0" name="onhand" nillable="true" type="ax25:WS_OHD"/>
+                        <xs:element minOccurs="0" name="positionId" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="lateCheckIndicator" type="xs:boolean"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -223,6 +225,8 @@
                         <xs:element minOccurs="0" name="authentication" nillable="true" type="ax22:Authentication"/>
                         <xs:element minOccurs="0" name="TBI" type="xs:boolean"/>
                         <xs:element minOccurs="0" name="onhand" nillable="true" type="ax25:WS_OHD"/>
+                        <xs:element minOccurs="0" name="positionId" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="lateCheckIndicator" type="xs:boolean"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -254,7 +258,9 @@
                     <xs:element minOccurs="0" name="claimCheckInd" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="createUpdateIndicator" nillable="true" type="xs:string"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="error" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="lateCheckIndicator" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="onhand" nillable="true" type="ax26:WS_OHD"/>
+                    <xs:element minOccurs="0" name="positionId" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="positiveIdInd" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="returnStatus" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="success" type="xs:boolean"/>

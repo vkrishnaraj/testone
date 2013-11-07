@@ -37,6 +37,8 @@ public class ServiceResponse {
 	private String returnStatus;
 	private String assoicatedIncidentId;
 	private boolean TBI;
+	private String positionId; 
+	private boolean lateCheckIndicator;
 	
 	public String getClaimCheckInd() {
 		return claimCheckInd;
@@ -79,6 +81,18 @@ public class ServiceResponse {
 	}
 	public void setTBI(boolean tBI) {
 		TBI = tBI;
+	}
+	public String getPositionId() {
+		return positionId;
+	}
+	public void setPositionId(String positionId) {
+		this.positionId = positionId;
+	}
+	public boolean isLateCheckIndicator() {
+		return lateCheckIndicator;
+	}
+	public void setLateCheckIndicator(boolean lateCheckIndicator) {
+		this.lateCheckIndicator = lateCheckIndicator;
 	}
 	private String positiveIdInd;
 	

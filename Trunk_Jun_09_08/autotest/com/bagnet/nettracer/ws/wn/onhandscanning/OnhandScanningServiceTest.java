@@ -169,10 +169,13 @@ public class OnhandScanningServiceTest {
 		CreateUpdateOnhandDocument doc = getBlankOhdDocuement();
 
 		String bagtag = "WN000009";
+		String posId = "bin1";
 		closeOHD(bagtag, stationcode);
 
 		WSOHD ohd = doc.getCreateUpdateOnhand().addNewOnhand();
 		populateWSOHDObject(ohd, bagtag);
+		doc.getCreateUpdateOnhand().setLateCheckIndicator(true);
+		doc.getCreateUpdateOnhand().setPositionId(posId);
 
 		CreateUpdateOnhandResponseDocument response = service
 				.createUpdateOnhand(doc);
@@ -190,6 +193,8 @@ public class OnhandScanningServiceTest {
 
 		WSOHD retohd = ret.getOnhand();
 		assertWSOHD(bagtag, retohd);
+		assertTrue(ret.getLateCheckIndicator() == true);
+		assertTrue(ret.getPositionId().equals(posId));
 
 		// verify we flag the OHD create method as created by web service
 		OHD loadOHD = OhdBMO.getOHDByID(retohd.getOHDID(), null);
@@ -202,6 +207,7 @@ public class OnhandScanningServiceTest {
 		CreateUpdateOnhandDocument doc = getBlankOhdDocuement();
 
 		String bagtag = "WN000009";
+		String posId = "bin1";
 		closeOHD(bagtag, stationcode);
 
 		String ohdId = createOHD(bagtag, stationcode);
@@ -211,6 +217,10 @@ public class OnhandScanningServiceTest {
 		WSOHD ohd = doc.getCreateUpdateOnhand().addNewOnhand();
 		ohd.setBagtagnum(bagtag);
 		ohd.setHoldingStation(stationcode);
+		
+		doc.getCreateUpdateOnhand().setLateCheckIndicator(true);
+		doc.getCreateUpdateOnhand().setPositionId(posId);
+		
 		CreateUpdateOnhandResponseDocument response = service.createUpdateOnhand(doc);
 		ServiceResponse ret = response.getCreateUpdateOnhandResponse().getReturn();
 		if (ret.getErrorArray() != null) {
@@ -221,6 +231,9 @@ public class OnhandScanningServiceTest {
 		assertTrue(ret.getSuccess());
 		assertTrue(OnhandScanningServiceImplementation.STATUS_UPDATE.equals(ret
 				.getCreateUpdateIndicator()));
+		
+		assertTrue(ret.getLateCheckIndicator() == true);
+		assertTrue(ret.getPositionId().equals(posId));
 
 		// verify that fields that are not to be alter are in fact not altered.
 		WSOHD retohd = ret.getOnhand();
@@ -291,8 +304,15 @@ public class OnhandScanningServiceTest {
 		ServiceResponse res = responsedoc.getReturnOnhandResponse().getReturn();
 		assertTrue(res.getSuccess());
 		assertTrue("Closed".equals(res.getOnhand().getStatus()));
-		assertTrue("Owner Picked Up"
-				.equals(res.getOnhand().getDisposalStatus()));
+		System.out.println(res.getOnhand().getDisposalStatus());
+		
+		//The stock tracer application properties as "Owner Picked Up",
+		//however, southwest has custom verbeige  as "Passenger Pick Up"
+		assertTrue("Passenger Pick Up"
+				.equals(res.getOnhand().getDisposalStatus())
+				||
+				"Passenger Picked Up".equals(res.getOnhand().getDisposalStatus())
+				);
 
 	}
 
@@ -577,6 +597,7 @@ public class OnhandScanningServiceTest {
 	@Test
 	public void addBagForLZAddTest() {
 		String bagtag = "WN000102";
+		String posId = "bin1";
 		closeOHD(bagtag, stationcode);
 
 		AddBagForLZDocument addBagForLZDoc = AddBagForLZDocument.Factory
@@ -591,18 +612,24 @@ public class OnhandScanningServiceTest {
 		populateWSOHDObject(ohd, bagtag);
 
 		addBagForLZ.setTBI(true);
+		addBagForLZ.setPositionId(posId);
+		addBagForLZ.setLateCheckIndicator(true);
+		
 		AddBagForLZResponseDocument ret = service.addBagForLZ(addBagForLZDoc);
 		ServiceResponse response = ret.getAddBagForLZResponse().getReturn();
 
 		assertTrue(response.getSuccess());
 		assertWSOHD(bagtag, response.getOnhand());
 		assertTrue(response.getOnhand().getStatus().equals("TBI"));
+		assertTrue(response.getLateCheckIndicator() == true);
+		assertTrue(response.getPositionId().equals(posId));
 		assertTrue(response.getReturnStatus().equals("Successful Create/Update"));
 	}
 
 	@Test
 	public void addBagForLZUpdateTest() {
 		String bagtag = "WN000103";
+		String posId = "bin1";
 		closeOHD(bagtag, stationcode);
 
 		createOHD(bagtag, stationcode);
@@ -619,6 +646,8 @@ public class OnhandScanningServiceTest {
 		populateWSOHDObject(ohd, bagtag);
 
 		addBagForLZ.setTBI(false);
+		addBagForLZ.setPositionId(posId);
+		addBagForLZ.setLateCheckIndicator(true);
 
 		AddBagForLZResponseDocument retLZ = service.addBagForLZ(addBagForLZDoc);
 		ServiceResponse responseLZ = retLZ.getAddBagForLZResponse().getReturn();
@@ -627,6 +656,10 @@ public class OnhandScanningServiceTest {
 		assertWSOHD(bagtag, responseLZ.getOnhand());
 		assertTrue(responseLZ.getOnhand().getStatus().equals("Closed"));
 		assertTrue(responseLZ.getReturnStatus().equals("Successful Create/Update"));
+		
+		//for updates, we only update the itinerary and TBI status
+		assertTrue(responseLZ.getLateCheckIndicator() == false);
+		assertTrue(responseLZ.getPositionId() == null);
 	}
 
 	private void closeOHD(String bagtag, String foundStation) {

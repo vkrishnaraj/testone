@@ -2,7 +2,6 @@ package com.bagnet.nettracer.ws.wn.onhandscanning;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 
@@ -244,7 +243,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		if(obmo.insertOHD(ohd, ohd.getAgent())){
 			WSCoreOHDUtil util = new WSCoreOHDUtil();
 			try {
-				serviceResponse.setOnhand(util.OHDtoWS_Mapping(OhdBMO.getOHDByID(ohd.getOHD_ID(),null)));
+				serviceResponse = ohdToWSOHD(OhdBMO.getOHDByID(ohd.getOHD_ID(),null), serviceResponse);
 				serviceResponse.setSuccess(true);
 				serviceResponse.setCreateUpdateIndicator(STATUS_UPDATE);
 				logger.info(resDoc);
@@ -347,6 +346,8 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		}
 		
 		WSOHD wsohd = createUpdateOnhand.getCreateUpdateOnhand().getOnhand();
+		String posId = createUpdateOnhand.getCreateUpdateOnhand().getPositionId();
+		boolean lateCheckInc = createUpdateOnhand.getCreateUpdateOnhand().getLateCheckIndicator();
 		
 		//Populated default information that is required by NetTracer but not required by SWA
 		populateMissingOHDFields(wsohd, agent);
@@ -375,12 +376,10 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		if((ohdId =  OnhandScanningServiceUtil.lookupBagtag(wsohd.getBagtagnum(), holdingstation.getStation_ID()))!= null){
 			//existing OHD found, update
 			wsohd.setOHDID(ohdId);
-			WSCoreOHDUtil util = new WSCoreOHDUtil();
 			try {
-				
-				OHD ntohd = util.WStoOHD_Mapping(wsohd);
+				OHD ntohd = wsohdToOHD(wsohd, posId, lateCheckInc);
 				if(updateExistingOhd(ntohd)){
-					serviceResponse.setOnhand(util.OHDtoWS_Mapping(OhdBMO.getOHDByID(ntohd.getOHD_ID(),null)));
+					serviceResponse = ohdToWSOHD(OhdBMO.getOHDByID(ntohd.getOHD_ID(),null), serviceResponse);
 					serviceResponse.setSuccess(true);
 					serviceResponse.setCreateUpdateIndicator(STATUS_UPDATE);
 					logger.info(resDoc);
@@ -396,10 +395,10 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 			wsohd.setOHDID(incomingOHD.getOHD_ID());
 			WSCoreOHDUtil util = new WSCoreOHDUtil();
 			try {
-				OHD ntohd = util.WStoOHD_Mapping(wsohd);
+				OHD ntohd = wsohdToOHD(wsohd, posId, lateCheckInc);
 				if(updateExistingOhd(ntohd)){
 					util.properlyHandleForwardedOnHand(incomingOHD, agent, holdingstation);
-					serviceResponse.setOnhand(util.OHDtoWS_Mapping(OhdBMO.getOHDByID(ntohd.getOHD_ID(),null)));
+					serviceResponse = ohdToWSOHD(OhdBMO.getOHDByID(ntohd.getOHD_ID(),null), serviceResponse);
 					serviceResponse.setSuccess(true);
 					serviceResponse.setCreateUpdateIndicator(STATUS_UPDATE);
 					logger.info(resDoc);
@@ -420,12 +419,11 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 				return resDoc;
 			}
 			
-			WSCoreOHDUtil util = new WSCoreOHDUtil();
 			try {
-				OHD ntohd = util.WStoOHD_Mapping(wsohd);
+				OHD ntohd = wsohdToOHD(wsohd, posId, lateCheckInc);
 				OhdBMO obmo = new OhdBMO();
 				if(obmo.insertOHD(ntohd, ntohd.getAgent())){
-					serviceResponse.setOnhand(util.OHDtoWS_Mapping(OhdBMO.getOHDByID(ntohd.getOHD_ID(),null)));
+					serviceResponse = ohdToWSOHD(OhdBMO.getOHDByID(ntohd.getOHD_ID(),null), serviceResponse);
 					serviceResponse.setSuccess(true);
 					serviceResponse.setCreateUpdateIndicator(STATUS_CREATE);
 					logger.info(resDoc);
@@ -633,7 +631,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 			util.properlyHandleForwardedOnHand(incomingOHD, agent, holdingstation);
 			try{
 				OhdBMO obmo = new OhdBMO();
-				serviceResponse.setOnhand(util.OHDtoWS_Mapping(obmo.findOHDByID(incomingOHD.getOHD_ID())));
+				serviceResponse = ohdToWSOHD(obmo.findOHDByID(incomingOHD.getOHD_ID()),serviceResponse);
 			} catch (Exception e) {
 				e.printStackTrace();
 				serviceResponse.setSuccess(false);
@@ -668,7 +666,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		//Send web service response
 		if(ohd != null){
 			try{
-				serviceResponse.setOnhand(util.OHDtoWS_Mapping(ohd));
+				serviceResponse = ohdToWSOHD(ohd, serviceResponse);
 			} catch (Exception e) {
 				e.printStackTrace();
 				serviceResponse.setSuccess(false);
@@ -933,6 +931,8 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		
 		WSOHD wsohd = addBagForLZ.getAddBagForLZ().getOnhand();
 		boolean TBI = addBagForLZ.getAddBagForLZ().getTBI();
+		String posId = addBagForLZ.getAddBagForLZ().getPositionId();
+		boolean lateCheckInc = addBagForLZ.getAddBagForLZ().getLateCheckIndicator();
 		
 		
 		
@@ -980,7 +980,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 				return resDoc;
 			}
 			try {
-				ohd = util.WStoOHD_Mapping(wsohd);
+				ohd = wsohdToOHD(wsohd, posId, lateCheckInc);
 				handleTBI(ohd, TBI);
 				obmo.insertOHD(ohd, ohd.getAgent());
 			} catch (Exception e) {
@@ -993,7 +993,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		} 
 		
 		try {
-			serviceResponse.setOnhand(util.OHDtoWS_Mapping(OhdBMO.getOHDByID(ohd.getOHD_ID(),null)));
+			serviceResponse = ohdToWSOHD(OhdBMO.getOHDByID(ohd.getOHD_ID(),null), serviceResponse);
 		} catch (Exception e) {
 			e.printStackTrace();
 			serviceResponse.setSuccess(false);
@@ -1124,7 +1124,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		//Handle response
 		if(ohd != null){
 			try{
-				serviceResponse.setOnhand(util.OHDtoWS_Mapping(ohd));
+				serviceResponse = ohdToWSOHD(ohd, serviceResponse);
 			} catch (Exception e) {
 				e.printStackTrace();
 				serviceResponse.setSuccess(false);
@@ -1151,6 +1151,42 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 			logger.info(resDoc);
 			return resDoc;
 		}
+	}
+	
+	/**
+	 * Created customer wrapper for core mapper for the Southwest specific fields that we do not want to include in our core model
+	 * to prevent the current clients from having to re-consume the core wsdl.
+	 * 
+	 * 
+	 * @param wsohd
+	 * @param posId
+	 * @param lateCheckInd
+	 * @return
+	 * @throws Exception
+	 */
+	private static OHD wsohdToOHD(WSOHD wsohd, String posId, boolean lateCheckInd) throws Exception{
+		WSCoreOHDUtil util = new WSCoreOHDUtil();
+		OHD ohd = util.WStoOHD_Mapping(wsohd);
+		ohd.setPosId(posId);
+		ohd.setLateCheckInd(lateCheckInd);
+		return ohd;
+	}
+	
+	/**
+	 * Created customer wrapper for core mapper for the Southwest specific fields that we do not want to include in our core model
+	 * to prevent the current clients from having to re-consume the core wsdl.
+	 * 
+	 * @param ohd
+	 * @param response
+	 * @return
+	 * @throws Exception 
+	 */
+	private static ServiceResponse ohdToWSOHD(OHD ohd, ServiceResponse response) throws Exception{
+		WSCoreOHDUtil util = new WSCoreOHDUtil();
+		response.setOnhand(util.OHDtoWS_Mapping(ohd));
+		response.setPositionId(ohd.getPosId());
+		response.setLateCheckIndicator(ohd.getLateCheckInd());
+		return response;
 	}
 	
 }

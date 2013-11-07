@@ -14,7 +14,7 @@ public class OnhandScanningService {
 		return null;
 	}
 	
-	public ServiceResponse createUpdateOnhand(Authentication authentication, WS_OHD onhand){
+	public ServiceResponse createUpdateOnhand(Authentication authentication, WS_OHD onhand, String positionId, boolean lateCheckIndicator){
 		return null;
 	}
 	
@@ -22,7 +22,7 @@ public class OnhandScanningService {
 		return null;
 	}
 	
-	public ServiceResponse addBagForLZ(Authentication authentication, boolean TBI, WS_OHD onhand){
+	public ServiceResponse addBagForLZ(Authentication authentication, boolean TBI, WS_OHD onhand, String positionId, boolean lateCheckIndicator){
 		return null;
 	}
 	
