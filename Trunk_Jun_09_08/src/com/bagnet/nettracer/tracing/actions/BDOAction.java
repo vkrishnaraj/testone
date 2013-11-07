@@ -243,32 +243,34 @@ public class BDOAction extends Action {
 				saveMessages(request, messages);
 				return (mapping.findForward(TracingConstants.BDO_MAIN));
 			} else if(theform.getIncident()!=null && theform.getIncident().getItinerary_list()!=null && theform.getIncident().getItinerary_list().size()>0){
-				HashMap<String,String> paxItinMap=new HashMap<String,String>();
-				for(Itinerary itin:theform.getIncident().getItinerary_list()){
-					if(itin.getItinerarytype()==TracingConstants.PASSENGER_ROUTING){
-						if(paxItinMap.get(itin.getLegfrom())==null){
-							paxItinMap.put(itin.getLegfrom(), "1");
-						}
-						if(paxItinMap.get(itin.getLegto())==null){
-							paxItinMap.put(itin.getLegto(), "1");
-						}
-					}
-				}
-				boolean inPaxItin=false;
-				for(Object item:theform.getItemlist()){
-					Item it=(Item)item;
-					if(it.getFaultStation()!=null && it.getFaultStation().getStationcode()!=null && it.getFaultStation().getStationcode().length()>0){
-						if(paxItinMap.get(it.getFaultStation().getStationcode())!=null){
-							inPaxItin=true;
-							break;
+				if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL, user)){
+					HashMap<String,String> paxItinMap=new HashMap<String,String>();
+					for(Itinerary itin:theform.getIncident().getItinerary_list()){
+						if(itin.getItinerarytype()==TracingConstants.PASSENGER_ROUTING){
+							if(paxItinMap.get(itin.getLegfrom())==null){
+								paxItinMap.put(itin.getLegfrom(), "1");
+							}
+							if(paxItinMap.get(itin.getLegto())==null){
+								paxItinMap.put(itin.getLegto(), "1");
+							}
 						}
 					}
-				}
-				if(!inPaxItin){
-					ActionMessage error = new ActionMessage("error.fault.pax.itin");
-					messages.add(ActionMessages.GLOBAL_MESSAGE, error);
-					saveMessages(request, messages);
-					return (mapping.findForward(TracingConstants.BDO_MAIN));
+					boolean inPaxItin=false;
+					for(Object item:theform.getItemlist()){
+						Item it=(Item)item;
+						if(it.getFaultStation()!=null && it.getFaultStation().getStationcode()!=null && it.getFaultStation().getStationcode().length()>0){
+							if(paxItinMap.get(it.getFaultStation().getStationcode())!=null){
+								inPaxItin=true;
+								break;
+							}
+						}
+					}
+					if(!inPaxItin){
+						ActionMessage error = new ActionMessage("error.fault.pax.itin");
+						messages.add(ActionMessages.GLOBAL_MESSAGE, error);
+						saveMessages(request, messages);
+						return (mapping.findForward(TracingConstants.BDO_MAIN));
+					}
 				}
 			}
 			
