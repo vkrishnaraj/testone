@@ -60,6 +60,7 @@ public class WebDriverUtil {
 	
 	public static void clickMenu(WebDriver driver, String menu) {
 		WebElement element = driver.findElement(By.id(menu));
+		System.out.println("CLICKING ELEMENT id = " + menu + ", TEXT = " + element.getText());
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		String toExecute = "var x = document.getElementById('" + menu + "'); x.click();";
 		js.executeScript(toExecute);
