@@ -5,6 +5,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 
+import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
@@ -12,7 +13,6 @@ import com.bagnet.nettracer.tracing.db.wtq.WorldTracerTransaction;
 import com.bagnet.nettracer.tracing.db.wtq.WtqFwdOhd;
 import com.bagnet.nettracer.wt.WorldTracerAlreadyClosedException;
 import com.bagnet.nettracer.wt.bmo.WtTransactionBmo;
-import com.bagnet.nettracer.wt.svc.WorldTracerService;
 import com.bagnet.nettracer.wt.svc.WorldTracerService.TxType;
 
 @Aspect
@@ -26,6 +26,7 @@ public class WorldTracerLogger {
 		this.txBmo = txBmo;
 	}
 
+	@SuppressWarnings("incomplete-switch")
 	@Around("PointCuts.inWorldTracerService() &&" + "@annotation(tx)")
 	public Object logWorldTracer(ProceedingJoinPoint pjp, WorldTracerTx tx) throws Throwable {
 
@@ -33,13 +34,15 @@ public class WorldTracerLogger {
 		WorldTracerTransaction wttx = new WorldTracerTransaction(type);
 		wttx.startTransaction();
 		try {
+			Agent agent = (Agent) pjp.getArgs()[0];
+			wttx.setAgent(agent);
 			switch (type) {
 			case CREATE_AHL:
 			case AMEND_AHL:
 			case SUSPEND_AHL:
 			case REINSTATE_AHL:
 			case CLOSE_AHL:
-				Incident inc = (Incident) pjp.getArgs()[0];
+				Incident inc = (Incident) pjp.getArgs()[1];
 				wttx.setIncident(inc);
 				break;
 			case AMEND_OHD:
@@ -47,18 +50,18 @@ public class WorldTracerLogger {
 			case CREATE_OHD:
 			case REINSTATE_OHD:
 			case SUSPEND_OHD:
-				OHD ohd = (OHD) pjp.getArgs()[0];
+				OHD ohd = (OHD) pjp.getArgs()[1];
 				wttx.setOhd(ohd);
 				break;
 			case FWD_OHD:
-				WtqFwdOhd foh = (WtqFwdOhd) pjp.getArgs()[0];
+				WtqFwdOhd foh = (WtqFwdOhd) pjp.getArgs()[1];
 				if(foh != null) {
 					OHD ohd2 = foh.getOhd();
 					wttx.setOhd(ohd2);
 				}
 				break;
 			case CREATE_BDO:
-				BDO bdo = (BDO) pjp.getArgs()[0];
+				BDO bdo = (BDO) pjp.getArgs()[1];
 				if(bdo != null) {
 					if(bdo.getOhd() != null) {
 						wttx.setOhd(bdo.getOhd());

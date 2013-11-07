@@ -98,6 +98,7 @@ public class OnHandAction extends CheckedAction {
     private static final String FAULT_STATION_LIST = "faultStationList";
 	private static Logger logger = Logger.getLogger(OnHandAction.class);
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 
@@ -543,7 +544,7 @@ public class OnHandAction extends CheckedAction {
 					
 					try {
 						wts.getWtConnector().initialize();
-						foundohd = wts.getOhdforOhd(request.getParameter("wt_id"), WTStatus.ACTIVE, user, WorldTracerWebService.getBasicDto(session));
+						foundohd = wts.getOhdforOhd(user, request.getParameter("wt_id"), WTStatus.ACTIVE, WorldTracerWebService.getBasicDto(session));
 						
 						if (foundohd == null) {
 							errors = new ActionMessages();
@@ -770,6 +771,7 @@ public class OnHandAction extends CheckedAction {
 		return result;
 	}
 
+	@SuppressWarnings("unchecked")
 	private List<Station> createFaultStationList(OnHandForm theform, Agent user) {
 		List<Station> result = new ArrayList<Station>();
 		if(UserPermissions.hasLimitedSavePermissionByType(user, TracingConstants.OHD)) {
@@ -805,6 +807,7 @@ public class OnHandAction extends CheckedAction {
 		return result;
 	}
 
+	@SuppressWarnings({ "unused", "rawtypes", "unchecked" })
 	private String getReportFile(OnHandForm theform, Agent user, HttpServletRequest request) {
 
 		// need the historical report for this report.
@@ -911,6 +914,7 @@ public class OnHandAction extends CheckedAction {
 		return reportfile;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private static String createReport(int type, ServletContext sc, String ohd_id, Agent user, HashMap selections,
 			HttpServletRequest request) {
 
@@ -1195,6 +1199,7 @@ public class OnHandAction extends CheckedAction {
 			return input;
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked", "unused" })
 	private static String buildTeletypeStyleHistoricalReport(Map parameters) {
 		StringBuilder historicalReport = new StringBuilder();
 		historicalReport.append(newline);

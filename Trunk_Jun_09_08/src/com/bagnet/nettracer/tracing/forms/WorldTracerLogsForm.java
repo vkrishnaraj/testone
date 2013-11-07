@@ -1,11 +1,6 @@
 package com.bagnet.nettracer.tracing.forms;
 
-import java.util.Date;
-
 import org.apache.struts.validator.ValidatorForm;
-
-import com.bagnet.nettracer.tracing.db.wtq.WorldTracerTransaction.Result;
-import com.bagnet.nettracer.wt.svc.WorldTracerService.TxType;
 
 public class WorldTracerLogsForm extends ValidatorForm {
 
@@ -26,7 +21,17 @@ public class WorldTracerLogsForm extends ValidatorForm {
 	private String incident_id = null;
 	
 	private String ohd_id = null;
-	
+	private String agentCreate = null;
+
+	public String getAgentCreate() {
+		return agentCreate;
+	}
+
+
+	public void setAgentCreate(String agentCreate) {
+		this.agentCreate = agentCreate;
+	}
+
 	public WorldTracerLogsForm() {
 		super();
 	}

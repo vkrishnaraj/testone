@@ -63,8 +63,8 @@ public class ActionFileStationBMO {
 				List<ActionFileCount> countList;
 				try {
 					wtService.getWtConnector().initialize();
-					countList = wtService.getActionFileCount(companyCode,
-							wtStation, user, dto);
+					countList = wtService.getActionFileCount(user, companyCode,
+							wtStation, dto);
 				} catch (CaptchaException e) {
 					throw e;
 				} finally {
@@ -205,8 +205,8 @@ public class ActionFileStationBMO {
 		try {
 			wtService.getWtConnector().initialize();
 			List<Worldtracer_Actionfiles> result = wtService
-					.getActionFileSummary(companyCode, wtStation, category,
-							seq, day, user, dto);
+					.getActionFileSummary(user, companyCode, wtStation, category,
+							seq, day, dto);
 
 			if (result == null || result.size() < 1) {
 				return null;

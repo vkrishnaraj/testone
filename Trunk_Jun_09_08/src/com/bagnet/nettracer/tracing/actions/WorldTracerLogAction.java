@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,9 +25,7 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerTransaction;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerTransaction.Result;
 import com.bagnet.nettracer.tracing.forms.WorldTracerLogsForm;
-import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
-import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.wt.bmo.WtTransactionBmo;
@@ -49,6 +46,7 @@ public class WorldTracerLogAction extends Action {
 	
 	private static WtTransactionBmo wttBmo = SpringUtils.getWtTxBmo();
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -100,7 +98,7 @@ public class WorldTracerLogAction extends Action {
 
 			// find out total pages
 			
-			long totalRows = wttBmo.getTransactionCount(wtForm.getTxType(), wtForm.getResult(), startDate, endDate, wtForm.getIncident_id(), wtForm.getOhd_id());
+			long totalRows = wttBmo.getTransactionCount(wtForm.getTxType(), wtForm.getResult(), startDate, endDate, wtForm.getIncident_id(), wtForm.getOhd_id(),wtForm.getAgentCreate());
 			totalpages = (int) Math.ceil((double) totalRows / (double) rowsperpage);
 
 			if (totalpages <= currpage) {
@@ -120,7 +118,7 @@ public class WorldTracerLogAction extends Action {
 			
 			List<WorldTracerTransaction> results =  wttBmo.findTransactions(wtForm.getTxType(),
 					wtForm.getResult(), startDate, endDate,
-					wtForm.getIncident_id(), wtForm.getOhd_id(), currpage * rowsperpage, rowsperpage);
+					wtForm.getIncident_id(), wtForm.getOhd_id(), currpage * rowsperpage, rowsperpage,wtForm.getAgentCreate());
 			
 			request.setAttribute("resultlist", results);
 		}

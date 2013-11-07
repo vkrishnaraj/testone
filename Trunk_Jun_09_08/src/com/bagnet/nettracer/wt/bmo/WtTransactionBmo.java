@@ -13,10 +13,10 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerTransaction;
 import com.bagnet.nettracer.tracing.db.wtq.WorldTracerTransaction.Result;
 import com.bagnet.nettracer.wt.svc.WorldTracerService.TxType;
+
 
 public class WtTransactionBmo {
 
@@ -59,7 +59,7 @@ public class WtTransactionBmo {
 	@Transactional(readOnly=true)
 	public long getTransactionCount(String txType,
 			String result, Date startDate, Date endDate, String incident_id,
-			String ohd_id) {
+			String ohd_id, String agent_id) {
 		Session sess = null;
 		try {
 			sess = getSessionFactory().openSession();
@@ -83,6 +83,11 @@ public class WtTransactionBmo {
 			if(ohd_id != null && ohd_id.trim().length() > 0) {
 				cri.add(Restrictions.like("ohd.OHD_ID", ohd_id).ignoreCase());
 			}
+			if(agent_id != null && agent_id.trim().length() > 0) {
+				cri.createAlias("agent", "a");
+				cri.add(Restrictions.like("a.username", agent_id).ignoreCase());
+			}				
+			
 			cri.setProjection(Projections.rowCount());
 			Long foo = (Long) cri.uniqueResult();
 			return foo;
@@ -96,16 +101,17 @@ public class WtTransactionBmo {
 		return 0;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Transactional(readOnly = true)
 	public List<WorldTracerTransaction> findTransactions(String txType,
 			String result, Date startDate, Date endDate, String incident_id,
-			String ohd_id, int startrow, int rowsperpage) {
+			String ohd_id, int startrow, int rowsperpage, String agent_id) {
 		Session sess = null;
 		List<WorldTracerTransaction> txList = null;
 		try {
 			sess = getSessionFactory().openSession();
 			Criteria cri = sess.createCriteria(WorldTracerTransaction.class);
-			
+
 			cri.addOrder(Order.desc("createDate"));
 			if(txType != null && !"ALL".equals(txType)) {
 				cri.add(Restrictions.eq("txType", TxType.valueOf(txType)));
@@ -125,6 +131,11 @@ public class WtTransactionBmo {
 			if(ohd_id != null && ohd_id.trim().length() > 0) {
 				cri.add(Restrictions.like("ohd.OHD_ID", ohd_id).ignoreCase());
 			}
+			if(agent_id != null && agent_id.trim().length() > 0) {
+				cri.createAlias("agent", "a");
+				cri.add(Restrictions.like("a.username", agent_id).ignoreCase());
+			}			
+			
 			cri.setFirstResult(startrow);
 			cri.setMaxResults(rowsperpage);
 		

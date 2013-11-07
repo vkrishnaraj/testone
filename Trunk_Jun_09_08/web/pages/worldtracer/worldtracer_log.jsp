@@ -140,6 +140,9 @@ function updatePagination() {
 					onmouseover="this.style.cursor='hand'"
 					onClick="cal1xx.select(document.searchWtLogsForm.endDate,'calendar2','<%=a.getDateformat().getFormat()%>'); return false;">
 				</td>
+        		<td><bean:message key="colname.create_agent" /> <br>
+        			<html:text property="agentCreate" size="20" styleClass="textfield" />
+          		</td>				
 			</tr>
 			<tr>
 				<td colspan="4" align="center" valign="top"><html:submit
@@ -168,6 +171,7 @@ function updatePagination() {
 					<th><bean:message key="colname.wt_error" /></th>
 					<th><bean:message key="colname.incident_num" /></th>
 					<th><bean:message key="colname.ohd_ID" /></th>
+					<th><bean:message key="colname.create_agent" /></th>
 				</tr>
 				<c:forEach var="wtTx" items="${resultlist}">
 					<tr>
@@ -192,10 +196,16 @@ function updatePagination() {
 							</c:when>
 							<c:otherwise>&nbsp;</c:otherwise>
 						</c:choose></td>
+						<td><c:choose>
+							<c:when test="${!empty wtTx.agent}">
+								${wtTx.agent.username}
+							</c:when>
+							<c:otherwise>&nbsp;</c:otherwise>
+						</c:choose></td>						
 					</tr>
 				</c:forEach>
 				<tr>
-					<td colspan="6"> <jsp:include
+					<td colspan="7"> <jsp:include
 						page="/pages/includes/pagination_incl.jsp" /> 
 					</td>
 				</tr>

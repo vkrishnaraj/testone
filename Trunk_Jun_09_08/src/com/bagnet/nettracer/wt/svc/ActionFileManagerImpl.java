@@ -133,8 +133,8 @@ public class ActionFileManagerImpl implements ActionFileManager {
 		try {
 			wtService.getWtConnector().initialize();
 
-			String result = wtService.getActionFileDetail(companyCode,
-					wtStation, category, day, fileNum, user, dto);
+			String result = wtService.getActionFileDetail(user, companyCode,
+					wtStation, category, day, fileNum, dto);
 			String ahl_id = ParsingUtils.parseAhlId(result);
 			String ohd_id = ParsingUtils.parseOhdId(result);
 			double percent = ParsingUtils.parsePercentMatch(result);

@@ -18,11 +18,13 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Proxy;
 
+import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.wt.svc.WorldTracerService.TxType;
 
+@SuppressWarnings("serial")
 @Entity
 @Table(name="wt_transaction")
 @Proxy(lazy=false)
@@ -30,7 +32,6 @@ public class WorldTracerTransaction implements Serializable {
 	
 	public static final String UNKNOWN_ERROR = "Unknown Error";
 	
-	private static int MAX_SUCCESS_MSG = 99;
 	private static int MAX_ERROR_MSG = 99;
 	
 	public enum Result {FAILURE("wt_txfailure"), SUCCESS("wt_txsuccess");
@@ -62,7 +63,9 @@ public class WorldTracerTransaction implements Serializable {
 	private TxType txType;
 
 	private Incident incident;
-	
+
+	private Agent agent;
+
 	private OHD ohd;
 	
 	private String txInputData;
@@ -138,6 +141,16 @@ public class WorldTracerTransaction implements Serializable {
 		this.incident = incidentId;
 	}
 	
+	@ManyToOne(targetEntity = Agent.class)
+	@JoinColumn(name = "agent_ID")
+	public Agent getAgent() {
+		return agent;
+	}
+
+	public void setAgent(Agent agent) {
+		this.agent = agent;
+	}
+
 	@ManyToOne(targetEntity = OHD.class)
 	@JoinColumn(name = "ohd_id")
 	public OHD getOhd() {

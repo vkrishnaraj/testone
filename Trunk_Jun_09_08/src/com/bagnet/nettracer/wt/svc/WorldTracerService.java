@@ -66,52 +66,52 @@ public interface WorldTracerService {
 
 	String MAX_ACTIONFILES = "max.actionfiles";
 
-	String insertIncident(Incident incident, WebServiceDto dto) throws WorldTracerException, CaptchaException;
+	String insertIncident(Agent agent, Incident incident, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 
-	String insertOhd(OHD ohd, WebServiceDto dto) throws WorldTracerException, CaptchaException;
+	String insertOhd(Agent agent, OHD ohd, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 
-	String closeIncident(Incident incident, WebServiceDto dto) throws WorldTracerException, CaptchaException;
+	String closeIncident(Agent agent, Incident incident, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 
-	String closeOHD(OHD ohd, WebServiceDto dto) throws WorldTracerException, CaptchaException;
+	String closeOHD(Agent agent, OHD ohd, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 	
-	String suspendIncident(Incident incident, WebServiceDto dto)throws WorldTracerException, CaptchaException;
+	String suspendIncident(Agent agent, Incident incident, WebServiceDto dto)throws WorldTracerException, CaptchaException;
 	
-	String suspendOhd(OHD ohd, WebServiceDto dto) throws WorldTracerException, CaptchaException;
+	String suspendOhd(Agent agent, OHD ohd, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 	
-	String reinstateIncident(Incident incident, WebServiceDto dto) throws WorldTracerException, CaptchaException;
+	String reinstateIncident(Agent agent, Incident incident, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 	
-	String reinstateOhd(OHD ohd, WebServiceDto dto) throws WorldTracerException, CaptchaException;
+	String reinstateOhd(Agent agent, OHD ohd, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 
-	String sendFwdMsg(WtqFwdGeneral fwd, Agent defaultWtAgent, WebServiceDto dto) throws WorldTracerException, CaptchaException;
+	String sendFwdMsg( Agent defaultWtAgent, WtqFwdGeneral fwd, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 	
-	String forwardOhd(WtqFwdOhd fwd, WebServiceDto dto) throws WorldTracerException, CaptchaException;
+	String forwardOhd(Agent agent, WtqFwdOhd fwd, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 	
-	String requestOhd(WtqRequestOhd roh, WebServiceDto dto) throws WorldTracerException, CaptchaException;
+	String requestOhd(Agent agent, WtqRequestOhd roh, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 	
-	String requestQoh(WtqRequestQoh qoh, WebServiceDto dto) throws WorldTracerException, CaptchaException;
+	String requestQoh(Agent agent, WtqRequestQoh qoh, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 
-	void eraseActionFile(Worldtracer_Actionfiles waf, WebServiceDto dto) throws WorldTracerException, CaptchaException;
+	void eraseActionFile(Agent agent, Worldtracer_Actionfiles waf, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 	
-	String insertBdo(BDO bdo, WebServiceDto dto) throws WorldTracerException, CaptchaException;
+	String insertBdo(Agent agent, BDO bdo, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 
-	Incident getIncidentForAHL(String wt_id, WTStatus status, Agent user, WebServiceDto dto) throws WorldTracerException, CaptchaException;
+	Incident getIncidentForAHL(Agent user, String wt_id, WTStatus status, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 	
-	OHD getOhdforOhd(String wt_id, WTStatus status, Agent agent, WebServiceDto dto) throws WorldTracerException, CaptchaException;
+	OHD getOhdforOhd( Agent agent, String wt_id, WTStatus status,WebServiceDto dto) throws WorldTracerException, CaptchaException;
 
-	String amendAhl(Incident incident, WebServiceDto dto) throws WorldTracerException, CaptchaException;
+	String amendAhl(Agent agent, Incident incident, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 	
-	String amendOhd(OHD ohd, WebServiceDto dto) throws WorldTracerException, CaptchaException;
+	String amendOhd(Agent agent, OHD ohd, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 	
-	public List<ActionFileCount> getActionFileCount(String companyCode,	String wtStation, Agent user, WebServiceDto dto) throws CaptchaException;
+	public List<ActionFileCount> getActionFileCount( Agent user, String companyCode, String wtStation, WebServiceDto dto) throws CaptchaException;
 	
-	List<Worldtracer_Actionfiles> getActionFileSummary(String companyCode, String wtStation, ActionFileType afType, String afSeq, int day, Agent user, WebServiceDto dto) throws WorldTracerException, CaptchaException;
+	List<Worldtracer_Actionfiles> getActionFileSummary(Agent user, String companyCode, String wtStation, ActionFileType afType, String afSeq, int day, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 	
-	String getActionFileDetail(String companyCode, String wtStation, ActionFileType afType, int day, int itemNum, Agent user, WebServiceDto dto) throws WorldTracerException, CaptchaException;
+	String getActionFileDetail(Agent user, String companyCode, String wtStation, ActionFileType afType, int day, int itemNum, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 
 	WorldTracerConnector getWtConnector();
 	
-	public String sendPxf(WtqRequestPxf pxf, WebServiceDto dto) throws WorldTracerException, CaptchaException;
+	public String sendPxf(Agent agent, WtqRequestPxf pxf, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 
-	String insertQoh(WtqQoh wtqQoh, WebServiceDto dto) throws WorldTracerException, CaptchaException;
+	String insertQoh(Agent agent,WtqQoh wtqQoh, WebServiceDto dto) throws WorldTracerException, CaptchaException;
 	
 }

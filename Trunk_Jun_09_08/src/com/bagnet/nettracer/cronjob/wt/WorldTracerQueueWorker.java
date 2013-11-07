@@ -69,6 +69,7 @@ public class WorldTracerQueueWorker implements Runnable {
 	private WT_ActionFileBmo wafBmo;
 	ConcurrentLinkedQueue<Long> qqueue;
 
+	@SuppressWarnings("unused")
 	private RuleMapper wtRuleMap;
 
 	private ErrorHandler errorHandler;
@@ -134,6 +135,7 @@ public class WorldTracerQueueWorker implements Runnable {
 	 * @param dto
 	 * @throws CaptchaException
 	 */
+	@SuppressWarnings("static-access")
 	public void createAhl(WtqCreateAhl queue, WebServiceDto dto) throws CaptchaException{
 		IncidentBMO iBmo = new IncidentBMO();
 		String wtId = null;
@@ -146,7 +148,7 @@ public class WorldTracerQueueWorker implements Runnable {
 			return;
 		}
 		try {
-			wtId = wtService.insertIncident(incident, dto);
+			wtId = wtService.insertIncident(queue.getAgent(), incident, dto);
 			success = true;
 		}
 		catch(WorldTracerLoggedOutException ex) {
@@ -210,7 +212,7 @@ public class WorldTracerQueueWorker implements Runnable {
 		String response = null;
 		OhdBMO ohdBmo = new OhdBMO();
 		try {
-			response = wtService.insertQoh(((WtqQoh) queue), dto);
+			response = wtService.insertQoh(queue.getAgent(), ((WtqQoh) queue), dto);
 			Collection<OHD> tags = ((WtqQoh) queue).getOhdTags();
 			for (OHD ohd: tags) {
 				
@@ -269,7 +271,7 @@ public class WorldTracerQueueWorker implements Runnable {
 			return;
 		}
 		try {
-			wtId = wtService.insertOhd(ohd, dto);
+			wtId = wtService.insertOhd(queue.getAgent(), ohd, dto);
 			success = true;
 		}
 		catch(WorldTracerLoggedOutException ex) {
@@ -323,7 +325,7 @@ public class WorldTracerQueueWorker implements Runnable {
 		boolean success = false;
 		String error = null;
 		try {
-			result = wtService.closeIncident(incident, dto);
+			result = wtService.closeIncident(queue.getAgent(), incident, dto);
 			success = true;
 		}
 		catch(WorldTracerLoggedOutException ex) {
@@ -383,7 +385,7 @@ public class WorldTracerQueueWorker implements Runnable {
 		boolean success = false;
 		String error = null;
 		try {
-			wtId = wtService.closeOHD(ohd, dto);
+			wtId = wtService.closeOHD(queue.getAgent(), ohd, dto);
 			success = true;
 		}
 		catch(WorldTracerLoggedOutException ex) {
@@ -459,7 +461,7 @@ public class WorldTracerQueueWorker implements Runnable {
 		}
 
 		try {
-			wtId = wtService.suspendIncident(incident, dto);
+			wtId = wtService.suspendIncident(queue.getAgent(), incident, dto);
 			success = true;
 		}
 		catch(WorldTracerLoggedOutException ex) {
@@ -520,7 +522,7 @@ public class WorldTracerQueueWorker implements Runnable {
 		String error = null;
 		
 		try {
-			wtId = wtService.reinstateIncident(incident, dto);
+			wtId = wtService.reinstateIncident(queue.getAgent(), incident, dto);
 			success = true;
 		}
 		catch(WorldTracerLoggedOutException ex) {
@@ -588,7 +590,7 @@ public class WorldTracerQueueWorker implements Runnable {
 			return;
 		}
 		try {
-			wtId = wtService.suspendOhd(ohd, dto);
+			wtId = wtService.suspendOhd(queue.getAgent(), ohd, dto);
 			success = true;
 		}
 		catch(WorldTracerLoggedOutException ex) {
@@ -641,7 +643,7 @@ public class WorldTracerQueueWorker implements Runnable {
 		boolean success = false;
 		String error = null;
 		try {
-			wtId = wtService.reinstateOhd(ohd, dto);
+			wtId = wtService.reinstateOhd(queue.getAgent(), ohd, dto);
 			success = true;
 		}
 		catch(WorldTracerLoggedOutException ex) {
@@ -688,7 +690,8 @@ public class WorldTracerQueueWorker implements Runnable {
 	 */
 	public void fwdGeneral(WtqFwdGeneral queue, WebServiceDto dto) throws CaptchaException{
 		try {
-			String result = wtService.sendFwdMsg((WtqFwdGeneral) queue, queue.getAgent() == null ? defaultWtAgent : queue.getAgent(), dto);
+			@SuppressWarnings("unused")
+			String result = wtService.sendFwdMsg(queue.getAgent() == null ? defaultWtAgent : queue.getAgent(), (WtqFwdGeneral) queue, dto);
 		}
 		catch(WorldTracerLoggedOutException ex) {
 			handleWorldTracerLoggedOutException(ex);
@@ -732,7 +735,8 @@ public class WorldTracerQueueWorker implements Runnable {
 		String error = null;
 
 		try {
-			String result = wtService.forwardOhd((WtqFwdOhd) queue, dto);
+			@SuppressWarnings("unused")
+			String result = wtService.forwardOhd(queue.getAgent(), (WtqFwdOhd) queue, dto);
 			success = true;
 		}
 		catch(WorldTracerLoggedOutException ex) {
@@ -790,7 +794,8 @@ public class WorldTracerQueueWorker implements Runnable {
 			// this one is a little complicated. gotta have an ahl and
 			// an ohd
 			// then we need to map them up...
-			String result = wtService.requestQoh(wtq, dto);
+			@SuppressWarnings("unused")
+			String result = wtService.requestQoh(queue.getAgent(), wtq, dto);
 		}
 		catch(WorldTracerLoggedOutException ex) {
 			handleWorldTracerLoggedOutException(ex);
@@ -829,6 +834,7 @@ public class WorldTracerQueueWorker implements Runnable {
 	 * @throws CaptchaException
 	 */
 	public void requestOhd(WtqRequestOhd queue, WebServiceDto dto) throws CaptchaException{
+		@SuppressWarnings("unused")
 		OHD ohd = null;
 		try {
 			WtqRequestOhd wtq = (WtqRequestOhd) queue;
@@ -843,7 +849,8 @@ public class WorldTracerQueueWorker implements Runnable {
 				ohdBmo.insertOHD(ohd, defaultWtAgent);
 			}
 			*/
-			String result = wtService.requestOhd(wtq, dto);
+			@SuppressWarnings("unused")
+			String result = wtService.requestOhd(queue.getAgent(), wtq, dto);
 		}
 		catch(WorldTracerLoggedOutException ex) {
 			handleWorldTracerLoggedOutException(ex);
@@ -907,7 +914,8 @@ public class WorldTracerQueueWorker implements Runnable {
 		}
 
 		try {
-			String result = wtService.amendAhl(incident, dto);
+			@SuppressWarnings("unused")
+			String result = wtService.amendAhl(queue.getAgent(), incident, dto);
 			success = true;
 		}
 		catch(WorldTracerLoggedOutException ex) {
@@ -973,7 +981,8 @@ public class WorldTracerQueueWorker implements Runnable {
 		
 		try {
 			ohd = ((WtqOhdAction) queue).getOhd();
-			String result = wtService.amendOhd(ohd, dto);
+			@SuppressWarnings("unused")
+			String result = wtService.amendOhd(queue.getAgent(), ohd, dto);
 			success = true;
 		}
 		catch(WorldTracerLoggedOutException ex) {
@@ -1022,7 +1031,8 @@ public class WorldTracerQueueWorker implements Runnable {
 			if(bdo == null) {
 				throw new WorldTracerException("Cannot export BDO, invalid bdo referenced in queue");
 			}
-			String result = wtService.insertBdo(bdo, dto);
+			@SuppressWarnings("unused")
+			String result = wtService.insertBdo(queue.getAgent(), bdo, dto);
 		}
 		catch(WorldTracerLoggedOutException ex) {
 			handleWorldTracerLoggedOutException(ex);
@@ -1080,7 +1090,7 @@ public class WorldTracerQueueWorker implements Runnable {
 				eraseTask.setStatus(WtqStatus.FAIL);
 			}
 			else {
-				wtService.eraseActionFile(waf, dto);
+				wtService.eraseActionFile(queue.getAgent(), waf, dto);
 				wafBmo.deleteActionFile(waf);
 				eraseTask.setStatus(WtqStatus.SUCCESS);
 			}
@@ -1124,7 +1134,7 @@ public class WorldTracerQueueWorker implements Runnable {
 		try {
 			WtqRequestPxf wtq = (WtqRequestPxf) queue;
 			// we need to map them up...
-			result = wtService.sendPxf(wtq, dto);
+			result = wtService.sendPxf(queue.getAgent(), wtq, dto);
 		}
 		catch(WorldTracerLoggedOutException ex) {
 			handleWorldTracerLoggedOutException(ex);
