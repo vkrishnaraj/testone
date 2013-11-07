@@ -402,8 +402,8 @@ public class BDOAction extends Action {
 					String stationCode="";
 					if(bdo.getIncident()!=null){
 						stationCode=bdo.getIncident().getStationcode();
-					} else if (bdo.getOhd()!=null && bdo.getOhd().getFoundAtStation()!=null){
-						stationCode=bdo.getOhd().getFoundAtStation().getStationcode();
+					} else if (bdo.getOhd()!=null && bdo.getOhd().getHoldingStation()!=null){
+						stationCode=bdo.getOhd().getHoldingStation().getStationcode();
 					} else if(user.getStation()!=null) {
 						stationCode=user.getStation().getStationcode();
 					}
