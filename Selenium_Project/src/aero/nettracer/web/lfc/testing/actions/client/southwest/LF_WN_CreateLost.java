@@ -148,6 +148,9 @@ public class LF_WN_CreateLost extends LFC_SeleniumTest {
 		waitForPageToLoadImproved(2500);
 
 		verifyTrue(isTextPresent("Lost Item Report Form"));
+		driver.findElement(By.id("lostForm:firstName")).clear();
+		driver.findElement(By.id("lostForm:city")).clear();
+		driver.findElement(By.id("lostForm:address1")).clear();
 		driver.findElement(By.id("lostForm:firstName")).sendKeys("2");
 		driver.findElement(By.id("lostForm:city")).sendKeys("2");
 		driver.findElement(By.id("lostForm:address1")).sendKeys("2");

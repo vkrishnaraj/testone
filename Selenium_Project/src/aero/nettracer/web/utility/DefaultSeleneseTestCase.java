@@ -98,7 +98,7 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 	}
 	
 	protected boolean isTextPresent(String text) {
-		return driver.getPageSource().contains(text);
+		return driver.findElement(By.tagName("body")).getText().contains(text);
 	}
 	
 	protected void refreshDriver() {
