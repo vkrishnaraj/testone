@@ -532,6 +532,8 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		 * 
 		 * Refer to WStoOHD_Mapping method in WSCoreOHDUtil.java class for
 		 * setting Null FoundDates
+		 * 
+		 * Refactoring ticket to further investigate this issue - NT-1638
 		 */
 	}
 	
