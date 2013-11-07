@@ -530,10 +530,10 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 			selenium.click("link=Today");
 			selenium.type("name=cost","150");
 			selenium.click("id=button");
-			assertEquals("Chargeback Code is required.", selenium.getAlert());
+			assertEquals("Fault Code is required.", selenium.getAlert());
 			selenium.select("name=theitem[0].lossCode", "value=11");
 			selenium.click("id=button");
-			assertEquals("Chargeback Station is required.", selenium.getAlert());
+			assertEquals("Fault Station is required.", selenium.getAlert());
 			selenium.select("name=theitem[0].faultStation_id", "label=ATL");
 			selenium.click("id=button");
 			assertEquals("Remark for Loss Code Change is required.", selenium.getAlert());

@@ -45,10 +45,10 @@ public class WN_CloseLD extends WN_SeleniumTest {
 		selenium.select("name=theitem[0].lossCode", "label=Please Select");
 		selenium.select("name=theitem[0].faultStation_id", "label=Please Select");
 		selenium.click("name=passengerpickedup0");
-		assertEquals("Chargeback Code is required.", selenium.getAlert());
+		assertEquals("Fault Code is required.", selenium.getAlert());
 		selenium.select("name=theitem[0].lossCode", "value=11");
 		selenium.click("name=passengerpickedup0");
-		assertEquals("Chargeback Station is required.", selenium.getAlert());
+		assertEquals("Fault Station is required.", selenium.getAlert());
 		selenium.select("name=theitem[0].faultStation_id", "label=ATL");
 		selenium.click("name=passengerpickedup0");
 		waitForPageToLoadImproved();
@@ -130,13 +130,13 @@ public class WN_CloseLD extends WN_SeleniumTest {
 			selenium.select("name=theitem[0].lossCode", "label=Please Select");
 			selenium.select("name=theitem[0].faultStation_id", "label=Please Select");
 			selenium.click("name=doclose");
-			assertEquals("Chargeback Code is required.", selenium.getAlert());
+			assertEquals("Fault Code is required.", selenium.getAlert());
 			selenium.select("name=theitem[0].lossCode", "value=10");
 			selenium.click("name=doclose");
 			assertEquals("Remark for Loss Code Change is required.", selenium.getAlert());
 			selenium.type("name=remark[6].remarktext", "Loss Code Change Remark4");
 			selenium.click("name=doclose");
-			assertEquals("Chargeback Station is required.", selenium.getAlert());
+			assertEquals("Fault Station is required.", selenium.getAlert());
 			selenium.select("name=theitem[0].faultStation_id", "label=ATL");
 			selenium.click("name=doclose");
 			waitForPageToLoadImproved();

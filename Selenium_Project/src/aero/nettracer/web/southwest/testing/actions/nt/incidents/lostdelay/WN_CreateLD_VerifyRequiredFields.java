@@ -677,8 +677,8 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	public void testBagLossCode(){
 		verifyTrue(setPermissions(new String[] { "661", "662"}, new boolean[] { true, true}));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-		verifyTrue(selenium.isTextPresent("Chargeback Code"));
-		verifyTrue(selenium.isTextPresent("Chargeback Station"));
+		verifyTrue(selenium.isTextPresent("Fault Code"));
+		verifyTrue(selenium.isTextPresent("Fault Station"));
 		verifyTrue(selenium.isEditable("name=theitem[0].lossCode"));
 		verifyTrue(selenium.isEditable("name=theitem[0].faultStation_id"));
 		selenium.select("name=theitem[0].lossCode", "value=11");
@@ -692,7 +692,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 			assertEquals("Remark for Loss Code Change is required.", selenium.getAlert());
 			selenium.type("id=remark[2]", "Loss Code Change Remark");
 			selenium.click("name=saveButton");
-			assertEquals("Chargeback Station must be in Passenger Itinerary", selenium.getAlert());
+			assertEquals("Fault Station must be in Passenger Itinerary", selenium.getAlert());
 			selenium.select("name=theitem[0].faultStation_id", "label=ATL");
 			selenium.click("name=saveButton");
 			waitForPageToLoadImproved();
@@ -730,10 +730,10 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 			selenium.select("name=theitem[0].lossCode", "label=Please Select");
 			selenium.select("name=theitem[0].faultStation_id", "label=Please Select");
 			selenium.click("id=button");
-			assertEquals("Chargeback Code is required.", selenium.getAlert());
+			assertEquals("Fault Code is required.", selenium.getAlert());
 			selenium.select("name=theitem[0].lossCode", "value=11");
 			selenium.click("id=button");
-			assertEquals("Chargeback Station is required.", selenium.getAlert());
+			assertEquals("Fault Station is required.", selenium.getAlert());
 			selenium.select("name=theitem[0].faultStation_id", "label=ATL");
 			selenium.click("id=button");
 			assertEquals("Remark for Loss Code Change is required.", selenium.getAlert());
