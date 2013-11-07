@@ -27,6 +27,10 @@ public class Ohd_DTO {
 
 	private String s_createtime = "";
 	private String e_createtime = "";
+	private String s_inventorydate = "";
+	private String e_inventorydate= "";
+	private String routingdate = "";
+	
 	private String airline = "";
 	private String flightnum = "";
 	private String firstname = "";
@@ -38,6 +42,7 @@ public class Ohd_DTO {
 
 	private String foundStation = "";
 	private String heldStation = "";
+	private String routingStation = "";
 
 	private String foundCompany = "";
 	private String heldCompany = "";
@@ -565,6 +570,38 @@ public class Ohd_DTO {
 
 	public void setPosId(String posId) {
 		this.posId = posId;
+	}
+
+	public String getS_inventorydate() {
+		return s_inventorydate;
+	}
+
+	public void setS_inventorydate(String s_inventorydate) {
+		this.s_inventorydate = s_inventorydate;
+	}
+
+	public String getE_inventorydate() {
+		return e_inventorydate;
+	}
+
+	public void setE_inventorydate(String e_inventorydate) {
+		this.e_inventorydate = e_inventorydate;
+	}
+
+	public String getRoutingStation() {
+		return routingStation;
+	}
+
+	public void setRoutingStation(String routingStation) {
+		this.routingStation = routingStation;
+	}
+
+	public String getRoutingdate() {
+		return routingdate;
+	}
+
+	public void setRoutingdate(String routingdate) {
+		this.routingdate = routingdate;
 	}
 	
 }

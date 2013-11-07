@@ -22,10 +22,14 @@ public final class SearchIncidentForm extends ValidatorForm {
 	private int itemType_ID;
 	private String s_createtime = "";
 	private String e_createtime = "";
+	private String s_inventorydate = "";
+	private String e_inventorydate = "";
+	private String routingdate = "";
 	private String agent = ""; // create agent username
 
 	private int stationcreated_ID;
 	private int stationassigned_ID;
+	private String routingstation;
 	private String agentassigned = "";
 	private String companycreated_ID = "";
 	private String ticketnumber = "";
@@ -820,6 +824,38 @@ public final class SearchIncidentForm extends ValidatorForm {
 
 	public void setDjReport(boolean djReport) {
 		this.djReport = djReport;
+	}
+
+	public String getS_inventorydate() {
+		return s_inventorydate;
+	}
+
+	public void setS_inventorydate(String s_inventorydate) {
+		this.s_inventorydate = s_inventorydate;
+	}
+
+	public String getE_inventorydate() {
+		return e_inventorydate;
+	}
+
+	public void setE_inventorydate(String e_inventorydate) {
+		this.e_inventorydate = e_inventorydate;
+	}
+
+	public String getRoutingdate() {
+		return routingdate;
+	}
+
+	public void setRoutingdate(String routingdate) {
+		this.routingdate = routingdate;
+	}
+
+	public String getRoutingstation() {
+		return routingstation;
+	}
+
+	public void setRoutingstation(String routingstation) {
+		this.routingstation = routingstation;
 	}
 	
 }

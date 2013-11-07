@@ -228,6 +228,31 @@ function sortSearchOhd(sortOrder) {
                 	</td>
                 <% } %>
               </tr>
+              
+              <tr>
+	              <td>
+	              	  <bean:message key="colname.inventory.date"/>
+	                  (
+	                  <%= a.getDateformat().getFormat() %>)
+	                  <br/>
+	              	  <html:text property="s_inventorydate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar3" name="calendar3" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchIncidentForm.s_inventorydate,'calendar3','<%= a.getDateformat().getFormat() %>'); return false;">-
+                      <html:text property="e_inventorydate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar4" name="calendar4" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchIncidentForm.e_inventorydate,'calendar4','<%= a.getDateformat().getFormat() %>'); return false;">
+                
+	              </td>
+	              <td colspan="2">
+	              	  <bean:message key="colname.routing.date"/>
+	                  (
+	                  <%= a.getDateformat().getFormat() %>)
+	                  <br/>
+	              	  <html:text property="routingdate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar5" name="calendar5" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchIncidentForm.routingdate,'calendar5','<%= a.getDateformat().getFormat() %>'); return false;">
+                  	  
+	              </td>
+	              <td>
+	              	  <bean:message key="colname.routing.station"/>
+	                  <br>
+	                  <html:text property="routingstation" size="3" maxlength="3" styleClass="textfield" />
+	              </td>
+              </tr>
               <tr>
                 <td colspan="4" align="center" valign="top">
                   <html:submit property="search" styleId="button">

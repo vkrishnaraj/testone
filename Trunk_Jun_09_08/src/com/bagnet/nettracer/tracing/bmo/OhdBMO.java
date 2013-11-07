@@ -47,6 +47,7 @@ import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue.WtqStatus;
 import com.bagnet.nettracer.tracing.dto.Ohd_DTO;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.MatchUtils;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
@@ -681,7 +682,9 @@ public class OhdBMO {
 				sql.append(" join ohd.items items ");
 			}
 
-			if (oDTO.getAirline().length() > 0 || oDTO.getFlightnum().trim().length() > 0 || (sort != null && (sort.equalsIgnoreCase(SortParam.OHD_DESTINATION.getParamString()) || sort.equalsIgnoreCase(SortParam.OHD_DESTINATIONREV.getParamString())))) {
+			if (oDTO.getAirline().length() > 0 || oDTO.getFlightnum().trim().length() > 0 
+					|| oDTO.getRoutingStation().trim().length()>0 || oDTO.getRoutingdate().length()>0 
+					|| (sort != null && (sort.equalsIgnoreCase(SortParam.OHD_DESTINATION.getParamString()) || sort.equalsIgnoreCase(SortParam.OHD_DESTINATIONREV.getParamString())))) {
 				sql.append(" join ohd.itinerary itinerary ");
 			}
 
@@ -777,6 +780,9 @@ public class OhdBMO {
 			if (oDTO.getFlightnum() != null && oDTO.getFlightnum().length() > 0) {
 				sql.append(" and itinerary.flightnum like :flightnum");
 			}
+			if(oDTO.getRoutingStation()!=null && oDTO.getRoutingStation().length()>0){
+				sql.append(" and (itinerary.legfrom = :routingstation or itinerary.legto = :routingstation) ");
+			}
 			
 			if (!oDTO.getPosId().isEmpty()) {
 				sql.append(" and ohd.posId like :posId");
@@ -809,6 +815,40 @@ public class OhdBMO {
 				}
 			}
 
+			Date sidate = null, eidate = null;
+			Date eidate1 = null; // add one for timezone
+			ArrayList dateal2 = null;
+			if ((dateal2 = IncidentUtils.calculateDateDiff(oDTO.getS_inventorydate(),oDTO.getE_inventorydate(),tz,user)) == null) {
+				return null;
+			} 
+			sidate = (Date)dateal2.get(0);
+			eidate = (Date)dateal2.get(2);eidate1 = (Date)dateal2.get(3);
+			
+			
+			if (sidate != null) {
+				if (eidate != null && sidate != eidate) {
+					sql.append(" and ((ohd.inventoryDate= :startinvdate) "
+						+ " or (ohd.inventoryDate= :endinvdate)"
+						+ " or (ohd.inventoryDate > :startinvdate and ohd.inventoryDate <= :endinvdate1))");
+
+				} else {
+					sql.append(" and ohd.inventoryDate > :startinvdate ");
+				}
+			} else if (eidate!=null){
+				sql.append(" and ohd.inventoryDate < :endinvdate1");
+			}
+
+			//Routing Date
+			Date srdate = null, erdate = null;
+			if (oDTO.getRoutingdate().length()>0) {
+				srdate = DateUtils.convertToDate(oDTO.getRoutingdate(), user.getDateformat().getFormat(), null);
+				Calendar c=Calendar.getInstance();
+				c.setTime(srdate);
+				c.add(Calendar.DATE, 1);
+				erdate = c.getTime();
+				sql.append(" and ((itinerary.departdate >= :startroutedate and itinerary.departdate<= :endroutedate) "
+					+ " or (itinerary.arrivedate >= :startroutedate and itinerary.arrivedate <= :endroutedate))");
+			}
 			
 			if (!iscount) {
 				if (sort == null || sort.equals("")) {
@@ -971,6 +1011,28 @@ public class OhdBMO {
 				}
 			}
 
+			if(oDTO.getRoutingStation()!=null && !oDTO.getRoutingStation().isEmpty()){
+				q.setString("routingstation", oDTO.getRoutingStation());
+			}
+			
+			if (sidate != null) {
+				if (eidate != null && sidate != eidate) {
+					q.setDate("startinvdate", sidate);
+					q.setDate("endinvdate", eidate);
+					q.setDate("endinvdate1", eidate1);
+					
+				} else {
+					q.setDate("startinvdate", sidate);
+				}
+			} else if (eidate !=null ){
+				q.setDate("endinvdate1", eidate1);
+			}
+			
+			if (oDTO.getRoutingdate().length()>0) {
+				q.setDate("startroutedate", srdate);
+				q.setDate("endroutedate", erdate);
+			}
+
 			if (notClosed) {
 				q.setInteger("status_ID", TracingConstants.OHD_STATUS_CLOSED);
 			}	else if (oDTO.getStatus_ID() != null && !oDTO.getStatus_ID().equals("") && !oDTO.getStatus_ID().equals("0")) {
@@ -1033,15 +1095,16 @@ public class OhdBMO {
 			TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
 
 
-			if (iscount) s
-					.append("select count(ohd.OHD_ID) from com.bagnet.nettracer.tracing.db.OHD ohd ");
+			if (iscount) 
+				s.append("select count(ohd.OHD_ID) from com.bagnet.nettracer.tracing.db.OHD ohd ");
 			else s.append("select distinct ohd from com.bagnet.nettracer.tracing.db.OHD ohd ");
 
-			if (siDTO.getFlightnum().length() > 0 || siDTO.getAirline().length() > 0) s
-					.append(" join ohd.itinerary itinerary ");
+			if (siDTO.getFlightnum().length() > 0 || siDTO.getAirline().length() > 0
+					|| siDTO.getRoutingstation().length()>0 || siDTO.getRoutingdate().length()>0) 
+				s.append(" join ohd.itinerary itinerary ");
 
-			if (siDTO.getDescription().length() > 0 || siDTO.getCategory_ID() > 0) s
-					.append(" join ohd.items item");
+			if (siDTO.getDescription().length() > 0 || siDTO.getCategory_ID() > 0) 
+				s.append(" join ohd.items item");
 
 			if (siDTO.getFirstname().length() > 0 || siDTO.getMiddlename().length() > 0
 					|| siDTO.getLastname().length() > 0 || siDTO.getAddress1().length() > 0 || siDTO.getAddress2().length() > 0
@@ -1101,7 +1164,44 @@ public class OhdBMO {
 							+ " or (ohd.founddate= :startdate1 and ohd.foundtime <= :starttime))");
 				}
 			}
+			
+			//Invetory Date
+			Date sidate = null, eidate = null;
+			Date eidate1 = null; // add one for timezone
+			ArrayList dateal2 = null;
+			if ((dateal2 = IncidentUtils.calculateDateDiff(siDTO.getS_inventorydate(),siDTO.getE_inventorydate(),tz,user)) == null) {
+				return null;
+			} 
+			sidate = (Date)dateal2.get(0);
+			eidate = (Date)dateal2.get(2);eidate1 = (Date)dateal2.get(3);
+			
+			
+			if (sidate != null) {
+				if (eidate != null && sidate != eidate) {
+					s.append(" and ((ohd.inventoryDate= :startinvdate) "
+						+ " or (ohd.inventoryDate= :endinvdate)"
+						+ " or (ohd.inventoryDate > :startinvdate and ohd.inventoryDate <= :endinvdate1))");
 
+				} else {
+					s.append(" and ohd.inventoryDate > :startinvdate ");
+				}
+			} else if (eidate!=null){
+				s.append(" and ohd.inventoryDate < :endinvdate1");
+			}
+
+			//Routing Date
+			Date srdate = null, erdate = null;
+			
+			if (siDTO.getRoutingdate().length()>0) {
+				srdate = DateUtils.convertToDate(siDTO.getRoutingdate(), user.getDateformat().getFormat(), null);
+				Calendar c=Calendar.getInstance();
+				c.setTime(srdate);
+				c.add(Calendar.DATE, 1);
+				erdate = c.getTime();
+				s.append(" and ((itinerary.departdate>= :startroutedate and itinerary.departdate<= :endroutedate) "
+					+ " or (itinerary.arrivedate >= :startroutedate and itinerary.arrivedate <= :endroutedate))");
+			}
+			
 			// record locator
 			if (siDTO.getRecordlocator().length() > 0) {
 				s.append(" and ohd.record_locator like :recordlocator");
@@ -1179,6 +1279,10 @@ public class OhdBMO {
 
 			if (siDTO.getFlightnum().length() > 0) s.append(" and itinerary.flightnum like :flightnum");
 
+			if(siDTO.getRoutingstation().length()>0){
+				s.append(" and (itinerary.legfrom = :routingstation or itinerary.legto = :routingstation) ");
+			}
+			
 			if (siDTO.getAirline().length() > 0) s.append(" and itinerary.airline like :airline");
 			
 			if (siDTO.getStatus_ID() > 0) {
@@ -1232,6 +1336,24 @@ public class OhdBMO {
 					q.setDate("startdate1", sdate1);
 					q.setTime("starttime", stime);
 				}
+			}
+			
+			if (sidate != null) {
+				if (eidate != null && sidate != eidate) {
+					q.setDate("startinvdate", sidate);
+					q.setDate("endinvdate", eidate);
+					q.setDate("endinvdate1", eidate1);
+					
+				} else {
+					q.setDate("startinvdate", sidate);
+				}
+			} else if (eidate !=null ){
+				q.setDate("endinvdate1", eidate1);
+			}
+
+			if (siDTO.getRoutingdate().length()>0) {
+				q.setDate("startroutedate", srdate);
+				q.setDate("endroutedate", erdate);
 			}
 
 			if (siDTO.getStatus_ID() > 0) {
@@ -1345,6 +1467,10 @@ public class OhdBMO {
 			
 			if (!siDTO.getPosId().isEmpty()) {
 				q.setString("posId", siDTO.getPosId());
+			}
+
+			if (siDTO.getRoutingstation().length()>0) {
+				q.setString("routingstation", siDTO.getRoutingstation());
 			}
 			
 			List results = q.list();

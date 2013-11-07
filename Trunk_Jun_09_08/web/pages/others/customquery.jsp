@@ -79,8 +79,10 @@
 		if (type != 2) {
 			colspan = 2;
 			posIdTd.style.display = "none";
+			document.getElementById("ohdFields").style.display="none";
 		} else {
 			posIdTd.style.display = "inline";
+			document.getElementById("ohdFields").style.display="block";
 		}
 
 		var assignStationTd = document.getElementById("assignStationTd");
@@ -235,7 +237,7 @@ function updatePagination() {
       int selectedStatusId = ((SearchIncidentForm)request.getAttribute("searchIncidentForm")).getStatus_ID();
 	%>
 	<br />
-	<html:select property="status_ID" >
+	<html:select property="status_ID" styleClass="dropdown">
 		<html:option value="<%= Integer.toString(TracingConstants.OHD_STATUS_ALL) %>"><bean:message key="select.all" /></html:option>
 		<%
 		if (request.getAttribute("ohd") != null) {
@@ -318,6 +320,30 @@ function updatePagination() {
               		<html:text property="posId" size="8" maxlength="8" styleClass="textfield" />
               	</td>
          		<% } %>
+              </tr>
+              <tr id="ohdFields" style="display:none">
+             	 <td>
+	             	  <bean:message key="colname.inventory.date"/>
+	                  (
+	                  <%= a.getDateformat().getFormat() %>)
+	                  <br/>
+		              <html:text property="s_inventorydate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar3" name="calendar3" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchIncidentForm.s_inventorydate,'calendar3','<%= a.getDateformat().getFormat() %>'); return false;">-
+	                  <html:text property="e_inventorydate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar4" name="calendar4" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchIncidentForm.e_inventorydate,'calendar4','<%= a.getDateformat().getFormat() %>'); return false;">
+                
+	              </td>
+	              <td colspan="2">
+	              	  <bean:message key="colname.routing.date"/>
+	                  (
+	                  <%= a.getDateformat().getFormat() %>)
+	                  <br/>
+		              <html:text property="routingdate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar5" name="calendar5" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchIncidentForm.routingdate,'calendar5','<%= a.getDateformat().getFormat() %>'); return false;">
+                
+	              </td>
+	              <td>
+	              	  <bean:message key="colname.routing.station"/>
+	                  <br>
+	                  <html:text property="routingstation" size="3" maxlength="3" styleClass="textfield" />
+	              </td>
               </tr>
             </table>
             <script language="javascript" >

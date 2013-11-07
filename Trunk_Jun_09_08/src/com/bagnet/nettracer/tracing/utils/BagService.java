@@ -2223,6 +2223,10 @@ public class BagService {
 				oDTO.setHeldStation(StationBMO.getStation(daform.getStationassigned_ID()).getStationcode());
 			}
 
+			if(daform.getRoutingstation()!=null && daform.getRoutingstation().length() > 0) {
+				oDTO.setRoutingStation(daform.getRoutingstation());
+			}
+
 			return oBMO.findOnHandBagsBySearchCriteria(oDTO, user, rowsperpage, currpage, isCount, notClosed, dirtyRead, sort);
 
 		}
