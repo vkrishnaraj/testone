@@ -28,7 +28,7 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 	}
 	
 	public void checkCopyrightAndQuestionMarks() {
-		WebDriverUtil.checkCopyrightAndQuestionMarks(driver);
+		verifyTrue(WebDriverUtil.checkCopyrightAndQuestionMarks(driver));
 	}
 	
 	public boolean checkNoErrorPage() {
@@ -56,11 +56,17 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 	}
 	
 	public void verifyTrue(boolean testThis) {
-		WebDriverUtil.verifyTrue(testThis);
+		verifyTrue(testThis);
+		if (!testThis) {
+			System.out.println("SYSTEM FUBAR. Failure on previous test...");
+		}
 	}
 	
 	public void verifyFalse(boolean testThis) {
-		WebDriverUtil.verifyFalse(testThis);
+		verifyFalse(testThis);
+		if (testThis) {
+			System.out.println("SYSTEM FUBAR. Failure on previous test...");
+		}
 	}
 	
 	public void clickMenu(String menu) {

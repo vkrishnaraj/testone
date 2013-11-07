@@ -27,10 +27,11 @@ public class WebDriverUtil {
 		}
 	}
 	
-	public static void checkCopyrightAndQuestionMarks(WebDriver driver) {
-		verifyTrue(driver.getPageSource().contains("NetTracer, Inc."));
-		verifyTrue(driver.getPageSource().contains("2003-201"));
-		verifyFalse(driver.getPageSource().contains("???"));
+	public static boolean checkCopyrightAndQuestionMarks(WebDriver driver) {
+		boolean check = driver.getPageSource().contains("NetTracer, Inc.");
+		check = check && driver.getPageSource().contains("2003-201");
+		check = check && !(driver.getPageSource().contains("???"));
+		return check;
 	}
 	
 	public static boolean checkNoErrorPage(WebDriver driver) {
@@ -41,20 +42,6 @@ public class WebDriverUtil {
 		try {
 			Thread.sleep(wait);
 		} catch (InterruptedException e) {
-		}
-	}
-	
-	public static void verifyTrue(boolean testThis) {
-		base.verifyTrue(testThis);
-		if (!testThis) {
-			System.out.println("SYSTEM FUBAR. Failure on previous test...");
-		}
-	}
-	
-	public static void verifyFalse(boolean testThis) {
-		base.verifyFalse(testThis);
-		if (testThis) {
-			System.out.println("SYSTEM FUBAR. Failure on previous test...");
 		}
 	}
 	
