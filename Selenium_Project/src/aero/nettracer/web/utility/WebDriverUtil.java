@@ -47,9 +47,11 @@ public class WebDriverUtil {
 	
 	public static void clickMenu(WebDriver driver, String menu) {
 		WebElement element = driver.findElement(By.id(menu));
-		System.out.println("CLICKING ELEMENT id = " + menu + ", TEXT = " + element.getText());
 		JavascriptExecutor js = (JavascriptExecutor) driver;
+		String getText = "var x = document.getElementById('" + menu + "'); return x.innerHTML;";
 		String toExecute = "var x = document.getElementById('" + menu + "'); x.click();";
+		String text = (String) js.executeScript(getText);
+		System.out.println("CLICKING ELEMENT id = " + menu + ", TEXT = " + text);
 		js.executeScript(toExecute);
 		waitForStaleElement(driver, element, menu);
 	}

@@ -56,14 +56,14 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 	}
 	
 	public void verifyTrue(boolean testThis) {
-		verifyTrue(testThis);
+		super.verifyTrue(testThis);
 		if (!testThis) {
 			System.out.println("SYSTEM FUBAR. Failure on previous test...");
 		}
 	}
 	
 	public void verifyFalse(boolean testThis) {
-		verifyFalse(testThis);
+		super.verifyFalse(testThis);
 		if (testThis) {
 			System.out.println("SYSTEM FUBAR. Failure on previous test...");
 		}
