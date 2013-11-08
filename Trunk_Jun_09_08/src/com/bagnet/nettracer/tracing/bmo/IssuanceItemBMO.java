@@ -17,6 +17,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.exception.StaleStateException;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -353,6 +354,7 @@ public class IssuanceItemBMO {
 	 * If minQuantity is less than 0 it will not be edited.
 	 * If quantity is less than 0 then the items quantity will be decremented by the negative number.
 	 * Also provides incidentID and agent for the audit data which gets created for each edit.
+	 * This method is only used by the admin pages and will not be called from any incident.
 	 * @param id
 	 * @param quantity
 	 * @param minQuantity
@@ -360,8 +362,25 @@ public class IssuanceItemBMO {
 	 * @param incID
 	 */
 	public static void editQuantifiedItem(long id, int quantity, int minQuantity, Agent user, String incID) {
+		editQuantifiedItem(id, quantity, minQuantity, user, incID, true);
+	}
+	
+	/**
+	 * Edits the data for a quantified item. Only minQuantity and quantity can be edited.
+	 * If minQuantity is less than 0 it will not be edited.
+	 * If quantity is less than 0 then the items quantity will be decremented by the negative number.
+	 * Also provides incidentID and agent for the audit data which gets created for each edit.
+	 * @param id
+	 * @param quantity
+	 * @param minQuantity
+	 * @param user
+	 * @param incID
+	 * @param fromAdmin
+	 */
+	public static void editQuantifiedItem(long id, int quantity, int minQuantity, Agent user, String incID, boolean fromAdmin) {
 			Session sess = null;
 			Transaction t = null;
+			boolean issued = false;
 			try {
 				sess = HibernateWrapper.getSession().openSession();
 				IssuanceItemQuantity qItem = (IssuanceItemQuantity) sess.load(IssuanceItemQuantity.class, id);
@@ -369,6 +388,7 @@ public class IssuanceItemBMO {
 				if (quantity >= 0) {
 					qItem.setQuantity(quantity);
 				} else {
+					issued = true;
 					qItem.setQuantity(qItem.getQuantity() + quantity);
 					if (qItem.getQuantity() < 0) {
 						qItem.setQuantity(0);
@@ -389,6 +409,11 @@ public class IssuanceItemBMO {
 				sess.update(qItem);
 				sess.save(auditQItem);
 				t.commit();
+				if (fromAdmin && issued) {
+					if (!saveIssuanceItemIncident(qItem, null, user, incID)) {
+						t.rollback();
+					}
+				}
 			} catch (Exception e) {
 				logger.fatal(e.getMessage());
 				t.rollback();
@@ -492,6 +517,7 @@ public class IssuanceItemBMO {
 	
 	/**
 	 * Changes the status on an inventoried item. Also creates audit data for this action, collecting a custom reason as well.
+	 * This method is used by the admin pages only and do not come from any incidents.
 	 * @param id
 	 * @param status_id
 	 * @param user
@@ -499,6 +525,19 @@ public class IssuanceItemBMO {
 	 * @param reason
 	 */
 	public static void moveInventoriedItem(long id, int status_id, Agent user, String incID, String reason) {
+		moveInventoriedItem(id, status_id, user, incID, reason, true);
+	}
+	
+	/**
+	 * Changes the status on an inventoried item. Also creates audit data for this action, collecting a custom reason as well.
+	 * @param id
+	 * @param status_id
+	 * @param user
+	 * @param incID
+	 * @param reason
+	 * @param fromAdmin
+	 */
+	public static void moveInventoriedItem(long id, int status_id, Agent user, String incID, String reason, boolean fromAdmin) {
 			Session sess = null;
 			Transaction t = null;
 			try {
@@ -510,6 +549,7 @@ public class IssuanceItemBMO {
 						iItem.setIncidentID(incID);
 					} else if (status_id == TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_AVAILABLE
 							|| status_id == TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_DISCARDED) {
+						incID = iItem.getIncidentID();
 						iItem.setIncidentID(null);
 					}
 					if (status_id == TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_ISSUED
@@ -527,6 +567,17 @@ public class IssuanceItemBMO {
 					sess.update(iItem);
 					sess.save(auditIItem);
 					t.commit();
+					if (fromAdmin && status_id != TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_DISCARDED) {
+						boolean success = true;
+						if (status_id == TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_AVAILABLE) {
+							success = updateIssuanceItemIncident(iItem, user, incID);
+						} else {
+							success = saveIssuanceItemIncident(null, iItem, user, incID);
+						}
+						if (!success) {
+							t.rollback();
+						}
+					}
 				}
 			} catch (Exception e) {
 				logger.fatal(e.getMessage());
@@ -601,18 +652,18 @@ public class IssuanceItemBMO {
 		boolean isInventoried = (iItem.getIssuanceItemInventory() != null);
 		if (iItem.isReturned()) {
 			if (isInventoried) {
-				moveInventoriedItem(iItem.getIssuanceItemInventory().getId(), TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_AVAILABLE, iItem.getIssueAgent(), iItem.getIncident().getIncident_ID(), "Returned from Incident");
+				moveInventoriedItem(iItem.getIssuanceItemInventory().getId(), TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_AVAILABLE, iItem.getIssueAgent(), iItem.getIncident().getIncident_ID(), "Returned from Incident", false);
 			} else {
 				int quantity = iItem.getIssuanceItemQuantity().getQuantity() + iItem.getQuantity();
-				editQuantifiedItem(iItem.getIssuanceItemQuantity().getId(), quantity, -1, iItem.getIssueAgent(), iItem.getIncident().getIncident_ID());
+				editQuantifiedItem(iItem.getIssuanceItemQuantity().getId(), quantity, -1, iItem.getIssueAgent(), iItem.getIncident().getIncident_ID(), false);
 			}
 		} else {
 			if (isInventoried) {
 				int status_id = iItem.getIssuanceItemInventory().getInventoryStatus().getStatus_ID();
-				moveInventoriedItem(iItem.getIssuanceItemInventory().getId(), status_id, iItem.getIssueAgent(), iItem.getIncident().getIncident_ID(), "Issued/Loaned from Incident");
+				moveInventoriedItem(iItem.getIssuanceItemInventory().getId(), status_id, iItem.getIssueAgent(), iItem.getIncident().getIncident_ID(), "Issued/Loaned from Incident", false);
 			} else {
 				int quantity = -1 * iItem.getQuantity();
-				editQuantifiedItem(iItem.getIssuanceItemQuantity().getId(), quantity, -1, iItem.getIssueAgent(), iItem.getIncident().getIncident_ID());
+				editQuantifiedItem(iItem.getIssuanceItemQuantity().getId(), quantity, -1, iItem.getIssueAgent(), iItem.getIncident().getIncident_ID(), false);
 			}
 		}
 	}
@@ -623,14 +674,14 @@ public class IssuanceItemBMO {
 		if (iItem.isReturned()) {
 			if (isInventoried) {
 				IssuanceItemInventory item = iItem.getIssuanceItemInventory();
-				toReturn = item.getDescription() + " #" + item.getBarcode() + " WAS RETURNED TO A CUSTOMER ON THIS REPORT\n";
+				toReturn = item.getDescription() + " #" + item.getBarcode() + " WAS RETURNED BY A CUSTOMER ON THIS REPORT\n";
 			} else {
 				int quantity = iItem.getQuantity();
 				String wasWere = " WAS";
 				if (quantity > 1) {
 					wasWere = "s WERE";
 				}
-				toReturn = quantity + " " + iItem.getIssuanceItemQuantity().getIssuanceItem().getDescription() + wasWere + " RETURNED TO A CUSTOMER ON THIS REPORT\n";
+				toReturn = quantity + " " + iItem.getIssuanceItemQuantity().getIssuanceItem().getDescription() + wasWere + " RETURNED BY A CUSTOMER ON THIS REPORT\n";
 			}
 		} else {
 			if (isInventoried) {
@@ -674,6 +725,73 @@ public class IssuanceItemBMO {
 				r.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
 				r.setIncident(iDTO);
 				iDTO.getRemarks().add(r);
+			}
+		}
+	}
+	
+	private static boolean saveIssuanceItemIncident(IssuanceItemQuantity qItem, IssuanceItemInventory iItem, Agent user, String incident_ID) {
+		IncidentBMO bmo = new IncidentBMO();
+		Incident inc = bmo.findIncidentByID(incident_ID);
+		if (inc != null) {
+			IssuanceItemIncident iss_inc = new IssuanceItemIncident();
+			iss_inc.setIssueAgent(user);
+			iss_inc.setIssueDate(TracerDateTime.getGMTDate());
+			iss_inc.setIncident(inc);
+			iss_inc.setUpdated(true);
+			if (qItem != null) {
+				iss_inc.setQuantity(1);
+				iss_inc.setIssuanceItemQuantity(qItem);
+			} else if (iItem != null) {
+				iss_inc.setIssuanceItemInventory(iItem);
+			}
+			inc.getIssuanceItemIncidents().add(iss_inc);
+			addIssuanceItemRemarks(inc, user);
+			try {
+				bmo.saveAndAuditIncident(true, inc, user, null);
+			} catch (StaleStateException e) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private static boolean updateIssuanceItemIncident(IssuanceItemInventory iItem, Agent user, String incident_ID) {
+		IssuanceItemIncident iss_inc = getIssuanceItemIncident(iItem, incident_ID);
+		if (iss_inc != null) {
+			iss_inc.setUpdated(true);
+			iss_inc.setReturned(true);
+			iss_inc.setReturnDate(TracerDateTime.getGMTDate());
+			iss_inc.setIssuanceItemInventory(iItem);
+			addIssuanceItemRemarks(iss_inc.getIncident(), user);
+			try {
+				IncidentBMO bmo = new IncidentBMO();
+				bmo.saveAndAuditIncident(true, iss_inc.getIncident(), user, null);
+			} catch (StaleStateException e) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private static IssuanceItemIncident getIssuanceItemIncident(IssuanceItemInventory iItem, String incident_ID) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Query query = sess.createQuery("from IssuanceItemIncident i where i.incident.incident_ID = :incID "
+					+ "and i.issuanceItemInventory.id = :issID and i.returned = 0");
+			query.setParameter("incID", incident_ID);
+			query.setParameter("issID", iItem.getId());
+			return  (IssuanceItemIncident) query.uniqueResult();
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.error(e.getMessage());
+				}
 			}
 		}
 	}
