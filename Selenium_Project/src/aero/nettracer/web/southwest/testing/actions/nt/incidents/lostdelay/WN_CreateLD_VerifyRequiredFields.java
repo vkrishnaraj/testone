@@ -749,8 +749,8 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 			verifyTrue(isTextPresent("The Baggage Delivery Order has been successfully saved"));
 			verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 			verifyTrue(isTextPresent("Cannot Passenger Pick Up - There is a Non-Cancelled BDO for this Item"));
-			verifyFalse(isEditable(By.name("theitem[0].lossCode")));
-			verifyFalse(isEditable(By.name("theitem[0].faultStation_id")));
+			verifyTrue(isEditable(By.name("theitem[0].lossCode")));
+			verifyTrue(isEditable(By.name("theitem[0].faultStation_id")));
 			goToTaskManager();
 		} else {
 			System.out.println("!!!!!!!!!!!!!!!! Failed to save BDO for incident");

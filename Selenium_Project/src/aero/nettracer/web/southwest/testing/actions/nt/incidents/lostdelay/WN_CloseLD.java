@@ -31,8 +31,8 @@ public class WN_CloseLD extends WN_SeleniumTest {
 		if (checkNoErrorPage()) {
 			verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 			verifyEquals("Passenger Pick Up",selenium.getValue("name=passengerpickedup0"));
-			verifyFalse(isEditable(By.name("theitem[0].lossCode")));
-			verifyFalse(isEditable(By.name("theitem[0].faultStation_id")));
+			verifyTrue(isEditable(By.name("theitem[0].lossCode")));
+			verifyTrue(isEditable(By.name("theitem[0].faultStation_id")));
 			goToTaskManager();
 		} else {
 			System.out.println("!!!!!!!!!!!!!!!! Failed to save BDO for incident");
@@ -145,8 +145,8 @@ public class WN_CloseLD extends WN_SeleniumTest {
 				checkCopyrightAndQuestionMarks();
 				verifyTrue(isTextPresent("Lost/Delayed Bag Incident has been closed."));
 				verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-				verifyFalse(isEditable(By.name("theitem[0].lossCode")));
-				verifyFalse(isEditable(By.name("theitem[0].faultStation_id")));
+				verifyTrue(isEditable(By.name("theitem[0].lossCode")));
+				verifyTrue(isEditable(By.name("theitem[0].faultStation_id")));
 				goToTaskManager();
 				waitForPageToLoadImproved();
 			} else {
@@ -170,8 +170,8 @@ public class WN_CloseLD extends WN_SeleniumTest {
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-			verifyFalse(isEditable(By.name("theitem[0].lossCode")));
-			verifyFalse(isEditable(By.name("theitem[0].faultStation_id")));
+			verifyTrue(isEditable(By.name("theitem[0].lossCode")));
+			verifyTrue(isEditable(By.name("theitem[0].faultStation_id")));
 			verifyTrue(setPermissions(new String[] { "664","665"}, new boolean[] { false, true}));
 			verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 			verifyTrue(isEditable(By.name("theitem[0].lossCode")));
@@ -186,8 +186,8 @@ public class WN_CloseLD extends WN_SeleniumTest {
 
 		if (checkNoErrorPage()) {
 			verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-			verifyFalse(isEditable(By.name("theitem[0].lossCode")));
-			verifyFalse(isEditable(By.name("theitem[0].faultStation_id")));
+			verifyTrue(isEditable(By.name("theitem[0].lossCode")));
+			verifyTrue(isEditable(By.name("theitem[0].faultStation_id")));
 			goToTaskManager();
 		} else {
 			System.out.println("!!!!!!!!!!!!!!! - Changing Station to LZ. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");

@@ -98,7 +98,8 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 	}
 	
 	protected boolean isTextPresent(String text) {
-		return driver.findElement(By.tagName("body")).getText().contains(text);
+		return selenium.isTextPresent(text);
+		//return driver.findElement(By.tagName("body")).getText().contains(text);
 	}
 	
 	protected boolean isEditable(By by) {
