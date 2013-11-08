@@ -902,7 +902,7 @@ if (i.intValue() == 0) {
                 <b>
                 <logic:equal name="BDOForm" property="choosebags" value="1">
                 
-                <input type="checkbox" name="bagchosen" value="<%= theitem.getBagnumber() %>">
+                <input type="checkbox" name="bagchosen" id="bagchosen<%= theitem.getBagnumber() %>" value="<%= theitem.getBagnumber() %>">
               </logic:equal>
               <bean:message key="colname.bag_number" />
               : &nbsp;&nbsp;

@@ -373,11 +373,13 @@
   
   function validateReqBDO(form) {
     returnValue = true;
+    var i=0;
     for (var j=0;j < form.length;j++) {
       currentElement = form.elements[j];
       currentElementName=currentElement.name;
       if (currentElementName.indexOf("].lossCode") != -1){
-        if (currentElement!=null && currentElement.value=="0"){
+        var isbagchosen=document.getElementById("bagchosen"+i);
+        if ((isbagchosen==null || isbagchosen.checked==true) && currentElement!=null && currentElement.value=="0"){
           alert("<%= (String)bundle.getString("colname.loss.code") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
           currentElement.focus();
           return false;
@@ -385,12 +387,15 @@
       }
       else if (currentElementName.indexOf("].faultStation_id") != -1)
       {
-        if (currentElement.value.length < 1)
+      
+        var isbagchosen=document.getElementById("bagchosen"+i);
+        if ((isbagchosen==null || isbagchosen.checked==true) && currentElement.value.length < 1)
         {
           alert("<%= (String)bundle.getString("colname.fault.station") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>"); 
           currentElement.focus();
           return false;
         }
+        i++;
       }
       else if (currentElementName.indexOf("remark") != -1)
       {
