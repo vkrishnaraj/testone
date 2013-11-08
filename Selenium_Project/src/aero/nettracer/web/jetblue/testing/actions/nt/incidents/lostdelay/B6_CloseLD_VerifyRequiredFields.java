@@ -11,7 +11,7 @@ public class B6_CloseLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	public void testVerifyText() throws Exception {
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
-			verifyTrue(selenium.isTextPresent("Pawob Information"));
+			verifyTrue(isTextPresent("Pawob Information"));
 			selenium.click("//td[@id='navmenucell']/div/dl/dd[6]/a/span[2]");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
@@ -25,19 +25,19 @@ public class B6_CloseLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 				selenium.click("link=Today");
 				selenium.click("name=doclose");
 				waitForPageToLoadImproved();
-				if (selenium.isTextPresent("Please select a fault airline and station")) {
+				if (isTextPresent("Please select a fault airline and station")) {
 					selenium.select("name=faultstation_id", "label=CBS");
 					selenium.click("name=doclose");
 					waitForPageToLoadImproved();
 				}
-				if (selenium.isTextPresent("Please select a reason for loss")) {
+				if (isTextPresent("Please select a reason for loss")) {
 					selenium.select("name=loss_code", "label=21- Failed to Load");
 					selenium.click("name=doclose");
 					waitForPageToLoadImproved();
 				}
 				if (checkNoErrorPage()) {
 					checkCopyrightAndQuestionMarks();
-					verifyTrue(selenium.isTextPresent("Lost/Delayed Bag Pawob has been closed."));
+					verifyTrue(isTextPresent("Lost/Delayed Bag Pawob has been closed."));
 					selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
 					waitForPageToLoadImproved();
 				} else {
@@ -67,7 +67,7 @@ public class B6_CloseLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 			return;
 		}
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent(Settings.INCIDENT_ID_WN));
+			verifyTrue(isTextPresent(Settings.INCIDENT_ID_WN));
 			clickMenu("menucol_0.0");
 			waitForPageToLoadImproved();
 		} else {
@@ -89,7 +89,7 @@ public class B6_CloseLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent(Settings.INCIDENT_ID_WN));
+			verifyTrue(isTextPresent(Settings.INCIDENT_ID_WN));
 			selenium.keyDown("id=header", "\\27");
 			selenium.keyUp("id=header", "\\27");
 		} else {

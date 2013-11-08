@@ -51,7 +51,7 @@ public class LF_CreateLostAndFoundReadOnly extends LFC_SeleniumTest {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Your lost report was successfully saved."));
+			verifyTrue(isTextPresent("Your lost report was successfully saved."));
 			LF_CreateLostAndFoundReadOnly.lostId = selenium.getValue("//div[@id='maincontent']/table/tbody/tr/td/input");
 			System.out.println("CLAFRO: Created Lost Report: " + LF_CreateLostAndFoundReadOnly.lostId);
 		} else {
@@ -87,7 +87,7 @@ public class LF_CreateLostAndFoundReadOnly extends LFC_SeleniumTest {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
+			verifyTrue(isTextPresent("Your found item was successfully saved."));
 			System.out.println("CLAFRO: Created Found Item: " + LF_CreateLostAndFoundReadOnly.foundId);
 			
 			// Manually match to the Lost Report that we just created.
@@ -112,8 +112,8 @@ public class LF_CreateLostAndFoundReadOnly extends LFC_SeleniumTest {
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
-			verifyTrue(selenium.isTextPresent("[Undo Confirmation]"));
+			verifyTrue(isTextPresent("Your found item was successfully saved."));
+			verifyTrue(isTextPresent("[Undo Confirmation]"));
 			selenium.click("//div[@id='maincontent']/table[4]/tbody/tr/td/a");
 			waitForPageToLoadImproved();
 		} else {

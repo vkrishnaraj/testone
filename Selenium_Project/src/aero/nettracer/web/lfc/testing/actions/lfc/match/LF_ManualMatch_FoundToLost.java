@@ -15,8 +15,8 @@ public class LF_ManualMatch_FoundToLost extends DefaultSeleneseTestCase {
 		selenium.click("id=confirmInput");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Match lost report Id: " + Settings.LOST_ID_LF));
-			verifyTrue(selenium.isTextPresent("[Undo Confirmation]"));
+			verifyTrue(isTextPresent("Match lost report Id: " + Settings.LOST_ID_LF));
+			verifyTrue(isTextPresent("[Undo Confirmation]"));
 		} else {
 			System.err.println("Edit Lost Page Did Not Load After Manual Match. Error Page Loaded Instead.");
 			verifyTrue(false);

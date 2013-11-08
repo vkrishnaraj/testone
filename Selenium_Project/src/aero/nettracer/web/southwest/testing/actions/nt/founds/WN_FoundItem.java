@@ -26,7 +26,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 			System.out.println("testCreateFoundRequiredFields failure line 24");
 		}
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Your found item was successfully saved"));
+			verifyTrue(isTextPresent("Your found item was successfully saved"));
 		} else {
 			System.out.println("testCreateFoundRequiredFields failure line 29");
 		}
@@ -58,7 +58,7 @@ public class WN_FoundItem extends WN_SeleniumTest {
 		selenium.click("id=saveButton");
 		waitForPageToLoadImproved();
 		if(checkNoErrorPage()){
-			verifyTrue(selenium.isTextPresent("Your found item was successfully saved"));
+			verifyTrue(isTextPresent("Your found item was successfully saved"));
 		} else {
 			System.out.println("testCreateFoundAllFields failure line 61");
 		}

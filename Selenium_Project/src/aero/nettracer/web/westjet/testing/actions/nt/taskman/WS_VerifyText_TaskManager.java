@@ -12,38 +12,38 @@ public class WS_VerifyText_TaskManager extends DefaultSeleneseTestCase {
 	public void testVerifyText() throws Exception {
 		goToTaskManager();
 
-		verifyTrue(selenium.isTextPresent("PIR/DPR Tasks")); //SECTION HEADER
-		verifyTrue(selenium.isTextPresent("Trace Results"));
-		verifyTrue(selenium.isTextPresent("Local PIRs and DPRs"));
-		verifyTrue(selenium.isTextPresent("Local Delayed"));
-		verifyTrue(selenium.isTextPresent("Local Pilferage"));
-		verifyTrue(selenium.isTextPresent("Local Damaged"));
-		verifyTrue(selenium.isTextPresent("Local PIRs and DPRs Assigned in Last 24 Hours"));
-		verifyTrue(selenium.isTextPresent("Local ROHs"));
-		verifyTrue(selenium.isTextPresent("Temporary PIR(s)"));
+		verifyTrue(isTextPresent("PIR/DPR Tasks")); //SECTION HEADER
+		verifyTrue(isTextPresent("Trace Results"));
+		verifyTrue(isTextPresent("Local PIRs and DPRs"));
+		verifyTrue(isTextPresent("Local Delayed"));
+		verifyTrue(isTextPresent("Local Pilferage"));
+		verifyTrue(isTextPresent("Local Damaged"));
+		verifyTrue(isTextPresent("Local PIRs and DPRs Assigned in Last 24 Hours"));
+		verifyTrue(isTextPresent("Local ROHs"));
+		verifyTrue(isTextPresent("Temporary PIR(s)"));
 
-		verifyTrue(selenium.isTextPresent("OHD Tasks")); //SECTION HEADER
-		verifyTrue(selenium.isTextPresent("Forward Baggage to LZ"));
-		verifyTrue(selenium.isTextPresent("Inbound Expedite Baggage"));
-		verifyTrue(selenium.isTextPresent("Incoming ROH"));
-		verifyTrue(selenium.isTextPresent("Baggage To Be Delivered"));
-		verifyTrue(selenium.isTextPresent("Temporary OHD(s)"));
-		verifyTrue(selenium.isTextPresent("Mass OHD(s)"));
-		verifyTrue(selenium.isTextPresent("Local OHDs"));
-		verifyTrue(selenium.isTextPresent("Forward Copies"));
+		verifyTrue(isTextPresent("OHD Tasks")); //SECTION HEADER
+		verifyTrue(isTextPresent("Forward Baggage to LZ"));
+		verifyTrue(isTextPresent("Inbound Expedite Baggage"));
+		verifyTrue(isTextPresent("Incoming ROH"));
+		verifyTrue(isTextPresent("Baggage To Be Delivered"));
+		verifyTrue(isTextPresent("Temporary OHD(s)"));
+		verifyTrue(isTextPresent("Mass OHD(s)"));
+		verifyTrue(isTextPresent("Local OHDs"));
+		verifyTrue(isTextPresent("Forward Copies"));
 
-		verifyTrue(selenium.isTextPresent("Claim Tasks")); //SECTION HEADER
-		verifyTrue(selenium.isTextPresent("Claims To Be Processed"));
-		verifyTrue(selenium.isTextPresent("Created Interim Expense Requests"));
-		verifyTrue(selenium.isTextPresent("Expense Requests"));
-		verifyTrue(selenium.isTextPresent("Approved Payments"));
+		verifyTrue(isTextPresent("Claim Tasks")); //SECTION HEADER
+		verifyTrue(isTextPresent("Claims To Be Processed"));
+		verifyTrue(isTextPresent("Created Interim Expense Requests"));
+		verifyTrue(isTextPresent("Expense Requests"));
+		verifyTrue(isTextPresent("Approved Payments"));
 
-		verifyTrue(selenium.isTextPresent("Local Tasks")); //SECTION HEADER
-		verifyTrue(selenium.isTextPresent("Inbox"));
-		verifyTrue(selenium.isTextPresent("Local Tasks"));
-		verifyTrue(selenium.isTextPresent("Local Guest Messages"));
-		verifyTrue(selenium.isTextPresent("Bag Buzz"));
-		verifyTrue(selenium.isTextPresent("Manage Fault Dispute"));
+		verifyTrue(isTextPresent("Local Tasks")); //SECTION HEADER
+		verifyTrue(isTextPresent("Inbox"));
+		verifyTrue(isTextPresent("Local Tasks"));
+		verifyTrue(isTextPresent("Local Guest Messages"));
+		verifyTrue(isTextPresent("Bag Buzz"));
+		verifyTrue(isTextPresent("Manage Fault Dispute"));
 		checkCopyrightAndQuestionMarks();
 	}
 	

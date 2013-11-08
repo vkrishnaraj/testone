@@ -34,19 +34,19 @@ public class AD_InboxMessage extends AD_SeleniumTest {
 					selenium.type("name=file_ref_number", "TTTTT");
 					selenium.click("name=send2");
 					waitForPageToLoadImproved();
-					verifyTrue(selenium.isTextPresent("Incorrect incident number/type"));
+					verifyTrue(isTextPresent("Incorrect incident number/type"));
 					selenium.type("name=file_ref_number", inc_id);
 				}
 				selenium.click("name=send2");
 				waitForPageToLoadImproved();
-				verifyTrue(selenium.isTextPresent("Message has been sent."));
+				verifyTrue(isTextPresent("Message has been sent."));
 				clickMenu("menucol_0.0");
 				LoginUtil.setCbroStation(driver, "BEL");
 				selenium.click("16link");
 				waitForPageToLoadImproved();
 				selenium.click("link=Test Message: " + inc_id);
 				waitForPageToLoadImproved();
-				verifyTrue(selenium.isTextPresent("Test Message that references Incident: " + inc_id));
+				verifyTrue(isTextPresent("Test Message that references Incident: " + inc_id));
 				clickMenu("menucol_0.0");
 				LoginUtil.setCbroStation(driver, LZ_STATION);
 			} else {

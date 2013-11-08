@@ -22,7 +22,7 @@ public class WN_OHD_Sort_Search extends DefaultSeleneseTestCase {
 		}
 
 		if(checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent(Settings.ONHAND_ID_WN));
+			verifyTrue(isTextPresent(Settings.ONHAND_ID_WN));
 			selenium.type("name=s_inventorydate", "");
 			selenium.click("id=calendar4");
 			selenium.click("link=Today");
@@ -33,7 +33,7 @@ public class WN_OHD_Sort_Search extends DefaultSeleneseTestCase {
 		}
 
 		if(checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent(Settings.ONHAND_ID_WN));
+			verifyTrue(isTextPresent(Settings.ONHAND_ID_WN));
 			selenium.click("id=calendar3");
 			selenium.click("link=Today");
 			selenium.click("id=button");
@@ -43,7 +43,7 @@ public class WN_OHD_Sort_Search extends DefaultSeleneseTestCase {
 		}
 
 		if(checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent(Settings.ONHAND_ID_WN));
+			verifyTrue(isTextPresent(Settings.ONHAND_ID_WN));
 			selenium.type("name=s_inventorydate", "");
 			selenium.type("name=e_inventorydate", "");
 			selenium.click("id=calendar5");
@@ -55,7 +55,7 @@ public class WN_OHD_Sort_Search extends DefaultSeleneseTestCase {
 		}
 		
 		if(checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent(Settings.ONHAND_ID_WN));
+			verifyTrue(isTextPresent(Settings.ONHAND_ID_WN));
 			selenium.type("name=routingstation", "ATL");
 			selenium.click("id=button");
 			waitForPageToLoadImproved();
@@ -64,7 +64,7 @@ public class WN_OHD_Sort_Search extends DefaultSeleneseTestCase {
 		}
 
 		if(checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent(Settings.ONHAND_ID_WN));
+			verifyTrue(isTextPresent(Settings.ONHAND_ID_WN));
 			selenium.type("name=routingstation", "LAX");
 			selenium.click("id=button");
 			waitForPageToLoadImproved();
@@ -73,7 +73,7 @@ public class WN_OHD_Sort_Search extends DefaultSeleneseTestCase {
 		}
 
 		if(checkNoErrorPage()) {
-			verifyFalse(selenium.isTextPresent(Settings.ONHAND_ID_WN));
+			verifyFalse(isTextPresent(Settings.ONHAND_ID_WN));
 			goToTaskManager();
 		} else {
 			System.out.println("!!!!!!!!!!!!!!! - Failed to Search on routing date 2- !!!!!!!!!!!!!!!!!!");

@@ -51,7 +51,7 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 					waitForPageToLoadImproved();
 					if (checkNoErrorPage()) {
 						checkCopyrightAndQuestionMarks();
-						verifyFalse(selenium.isTextPresent("Customer Communications & Activity"));
+						verifyFalse(isTextPresent("Customer Communications & Activity"));
 					} else {
 						System.out.println("!!!!!!!!!!!!!!!! Failed to load the first " + types[i] + " incident.");
 						verifyTrue(false);
@@ -82,7 +82,7 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 				selenium.click("name=skip_prepopulate");
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
-					verifyFalse(selenium.isTextPresent("Customer Communications & Activity"));
+					verifyFalse(isTextPresent("Customer Communications & Activity"));
 				} else {
 					System.out.println("!!!!!!!!!!!!!!!! Failed to load " + types[i] + " incident page.");
 					verifyTrue(false);
@@ -108,7 +108,7 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 					selenium.click("//div[@id='maincontent']/table[2]/tbody/tr[2]/td/a");
 					waitForPageToLoadImproved();
 					if (checkNoErrorPage()) {
-						verifyTrue(selenium.isTextPresent("Customer Communications & Activity"));
+						verifyTrue(isTextPresent("Customer Communications & Activity"));
 					} else {
 						System.out.println("!!!!!!!!!!!!!!!! Failed to load the first " + types[i] + " incident.");
 						verifyTrue(false);
@@ -139,7 +139,7 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 		selenium.click("id=setCommMethodButton");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Lost/Delayed Bag Incident has been modified."));
+			verifyTrue(isTextPresent("Lost/Delayed Bag Incident has been modified."));
 			selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
@@ -165,7 +165,7 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
-			verifyTrue(selenium.isTextPresent("Create Outgoing Communication"));
+			verifyTrue(isTextPresent("Create Outgoing Communication"));
 			verifyTrue(isElementPresent(By.id("documentTitle")));
 			verifyEquals("Test Template", selenium.getValue("id=documentTitle"));
 			verifyTrue(isElementPresent(By.id("documentId")));

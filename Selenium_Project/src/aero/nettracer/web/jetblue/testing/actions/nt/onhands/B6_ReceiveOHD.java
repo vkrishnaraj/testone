@@ -19,7 +19,7 @@ public class B6_ReceiveOHD extends B6_SeleniumTest {
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
-				verifyTrue(selenium.isTextPresent("BOH has been received by your station."));
+				verifyTrue(isTextPresent("BOH has been received by your station."));
 				goToTaskManager();
 				LoginUtil.setCbroStation(driver, LZ_STATION);
 			} else {

@@ -17,7 +17,7 @@ public class AB_ConfirmMatch extends DefaultSeleneseTestCase {
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
-			verifyTrue(selenium.isTextPresent("Trace Results"));
+			verifyTrue(isTextPresent("Trace Results"));
 			selenium.type("name=filter.lostId", Settings.LOST_ID_AB);
 			selenium.type("name=filter.foundId", Settings.FOUND_ID_AB);
 			selenium.click("id=button");
@@ -26,7 +26,7 @@ public class AB_ConfirmMatch extends DefaultSeleneseTestCase {
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
-				verifyTrue(selenium.isTextPresent("Match Details"));
+				verifyTrue(isTextPresent("Match Details"));
 				verifyEquals(Settings.LOST_ID_AB, selenium.getText("//div[@id='maincontent']/table/tbody/tr[2]/td/a"));
 				verifyEquals(Settings.FOUND_ID_AB, selenium.getText("//div[@id='maincontent']/table/tbody/tr[2]/td[2]/a"));
 				clickMenu("menucol_0.0");
@@ -42,7 +42,7 @@ public class AB_ConfirmMatch extends DefaultSeleneseTestCase {
 					selenium.type("name=id", Settings.LOST_ID_AB);
 					selenium.click("id=button");
 					waitForPageToLoadImproved();
-					verifyTrue(selenium.isTextPresent("Match found item Id: " + Settings.FOUND_ID_AB + "  [Undo Confirmation]"));
+					verifyTrue(isTextPresent("Match found item Id: " + Settings.FOUND_ID_AB + "  [Undo Confirmation]"));
 				} else {
 					System.out.println("Trace Results Page Didn't Load After Confirmation. Error Page Loaded Instead.");
 					verifyTrue(false);

@@ -155,7 +155,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 			selenium.click("savetracingButton");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
-				verifyTrue(selenium.isTextPresent("Lost/Delayed Bag Incident has been submitted."));
+				verifyTrue(isTextPresent("Lost/Delayed Bag Incident has been submitted."));
 
 				checkCopyrightAndQuestionMarks();
 				String incident_id = selenium.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
@@ -223,18 +223,18 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	@Test
 	public void testDriversLicenseRedactedAuditTrail() {
 		verifyTrue(navigateToIncidentAuditTrailTest());
-		verifyTrue(selenium.isTextPresent("Driver's License Number : *********"));
-		verifyTrue(selenium.isTextPresent("State : GA"));
-		verifyTrue(selenium.isTextPresent("Province :"));
-		verifyTrue(selenium.isTextPresent("Country Of Issue : US"));
+		verifyTrue(isTextPresent("Driver's License Number : *********"));
+		verifyTrue(isTextPresent("State : GA"));
+		verifyTrue(isTextPresent("Province :"));
+		verifyTrue(isTextPresent("Country Of Issue : US"));
 		goToTaskManager();
 	}
 
 	@Test
 	public void testPassportRedactedAuditTrail() {
 		verifyTrue(navigateToIncidentAuditTrail());
-		verifyTrue(selenium.isTextPresent("Common Number (Passport) : ***************"));
-		verifyTrue(selenium.isTextPresent("Country : US"));
+		verifyTrue(isTextPresent("Common Number (Passport) : ***************"));
+		verifyTrue(isTextPresent("Country : US"));
 		goToTaskManager();
 	}
 	
@@ -258,10 +258,10 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	@Test
 	public void testDriversLicenseViewEditAuditTrail() {
 		verifyTrue(navigateToIncidentAuditTrail());
-		verifyTrue(selenium.isTextPresent("Driver's License Number : " + WN_CreateLD_VerifyRequiredFields.DRIVERS_LICENSE));
-		verifyTrue(selenium.isTextPresent("State : GA"));
-		verifyTrue(selenium.isTextPresent("Province :"));
-		verifyTrue(selenium.isTextPresent("Country Of Issue : US"));
+		verifyTrue(isTextPresent("Driver's License Number : " + WN_CreateLD_VerifyRequiredFields.DRIVERS_LICENSE));
+		verifyTrue(isTextPresent("State : GA"));
+		verifyTrue(isTextPresent("Province :"));
+		verifyTrue(isTextPresent("Country Of Issue : US"));
 		goToTaskManager();
 		waitForPageToLoadImproved();
 	}
@@ -342,8 +342,8 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	@Test
 	public void testPassportViewEditAuditTrail() {
 		verifyTrue(navigateToIncidentAuditTrail());
-		verifyTrue(selenium.isTextPresent("Common Number (Passport) : " + WN_CreateLD_VerifyRequiredFields.PASSPORT_NUMBER));
-		verifyTrue(selenium.isTextPresent("Country : US"));
+		verifyTrue(isTextPresent("Common Number (Passport) : " + WN_CreateLD_VerifyRequiredFields.PASSPORT_NUMBER));
+		verifyTrue(isTextPresent("Country : US"));
 		goToTaskManager();
 		waitForPageToLoadImproved();
 	}
@@ -351,7 +351,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	@Test
 	public void testCollectPosIdFields() {
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-		verifyTrue(selenium.isTextPresent("Position ID"));
+		verifyTrue(isTextPresent("Position ID"));
 		verifyTrue(isElementPresent(By.name("theitem[0].posId")));
 		goToTaskManager();
 	}
@@ -359,7 +359,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	@Test
 	public void testPosIdAuditTrail() {
 		verifyTrue(navigateToIncidentAuditTrail());
-		verifyTrue(selenium.isTextPresent("Position ID : 123456"));
+		verifyTrue(isTextPresent("Position ID : 123456"));
 		goToTaskManager();
 	}
 	
@@ -367,7 +367,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	public void testPosIdFieldsNotPresent() {
 		verifyTrue(setPermissions(new String[] { "635" }, new boolean[] { false }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-		verifyFalse(selenium.isTextPresent("Position ID"));
+		verifyFalse(isTextPresent("Position ID"));
 		verifyFalse(isElementPresent(By.name("theitem[0].posId")));
 		goToTaskManager();
 	}
@@ -375,7 +375,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	@Test
 	public void testPosIdNotPresentAuditTrail() {
 		verifyTrue(navigateToIncidentAuditTrail());
-		verifyFalse(selenium.isTextPresent("Position ID : 123456"));
+		verifyFalse(isTextPresent("Position ID : 123456"));
 		goToTaskManager();
 	}
 	
@@ -431,7 +431,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent(Settings.INCIDENT_ID_WN));
+			verifyTrue(isTextPresent(Settings.INCIDENT_ID_WN));
 			goToTaskManager();
 			waitForPageToLoadImproved();
 		} else {
@@ -444,7 +444,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 			selenium.type("id=quickSearchQuery3", utbNum);
 			selenium.click("id=button");
 			waitForPageToLoadImproved(3000,false);
-			verifyTrue(selenium.isTextPresent(Settings.INCIDENT_ID_WN));
+			verifyTrue(isTextPresent(Settings.INCIDENT_ID_WN));
 			closeQuickSearch();
 		} else {
 			System.out.println("CLDVRF: ERROR NAVIGATING TO TASKMANAGER.");
@@ -465,7 +465,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 			return;
 		}
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent(Settings.INCIDENT_ID_WN));
+			verifyTrue(isTextPresent(Settings.INCIDENT_ID_WN));
 			clickMenu("menucol_0.0");
 			waitForPageToLoadImproved();
 		} else {
@@ -484,7 +484,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent(Settings.INCIDENT_ID_WN));
+			verifyTrue(isTextPresent(Settings.INCIDENT_ID_WN));
 			closeQuickSearch();
 		} else {
 			System.out.println("CLDVRF: Failed to check for existing PNR Incidents.");
@@ -548,7 +548,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 				selenium.click("savetracingButton");
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
-					verifyTrue(selenium.isTextPresent("Lost/Delayed Bag Incident has been submitted."));
+					verifyTrue(isTextPresent("Lost/Delayed Bag Incident has been submitted."));
 					checkCopyrightAndQuestionMarks();
 					String incident_id = selenium.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
 					Settings.INCIDENT_ID_WN = incident_id;
@@ -631,9 +631,9 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	public void testSecureRemarksDisabledLD() {
 		verifyTrue(setPermissions(new String[] { "335" }, new boolean[] { false }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-		verifyFalse(selenium.isTextPresent("Secure Remark"));
-		verifyFalse(selenium.isTextPresent("General Remark"));
-		verifyFalse(selenium.isTextPresent("Remark is Secure"));
+		verifyFalse(isTextPresent("Secure Remark"));
+		verifyFalse(isTextPresent("General Remark"));
+		verifyFalse(isTextPresent("Remark is Secure"));
 		selenium.type("id=remark[0]", "General Test");
 		selenium.click("name=saveButton");
 		waitForPageToLoadImproved();
@@ -654,7 +654,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		waitForPageToLoadImproved();
 
 		if (checkNoErrorPage()) {
-		verifyTrue(selenium.isTextPresent("Secure Remark"));
+		verifyTrue(isTextPresent("Secure Remark"));
 		selenium.check("name=remark[1].secure");
 		selenium.type("id=remark[1]", "Secure Test");
 		selenium.click("name=saveButton");
@@ -665,7 +665,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		if (checkNoErrorPage()) {
 
 			verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-			verifyTrue(selenium.isTextPresent("Remark is Secure"));
+			verifyTrue(isTextPresent("Remark is Secure"));
 		} else {
 			System.out.println("Failed to Save Remark");
 		}
@@ -677,8 +677,8 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	public void testBagLossCode(){
 		verifyTrue(setPermissions(new String[] { "661", "662"}, new boolean[] { true, true}));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-		verifyTrue(selenium.isTextPresent("Fault Code"));
-		verifyTrue(selenium.isTextPresent("Fault Station"));
+		verifyTrue(isTextPresent("Fault Code"));
+		verifyTrue(isTextPresent("Fault Station"));
 		verifyTrue(isEditable(By.name("theitem[0].lossCode")));
 		verifyTrue(isEditable(By.name("theitem[0].faultStation_id")));
 		selenium.select("name=theitem[0].lossCode", "value=11");
@@ -701,7 +701,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Lost/Delayed Bag Incident has been modified"));
+			verifyTrue(isTextPresent("Lost/Delayed Bag Incident has been modified"));
 			goToTaskManager();
 		} else {
 			System.out.println("!!!!!!!!!!!!!!!! Failed to save incident for loss code change");
@@ -746,9 +746,9 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		
 		if (checkNoErrorPage()) {
 			Settings.BDO_ID_WN=selenium.getText("//td[@id='middlecolumn']/div/table/tbody/tr[2]/td");
-			verifyTrue(selenium.isTextPresent("The Baggage Delivery Order has been successfully saved"));
+			verifyTrue(isTextPresent("The Baggage Delivery Order has been successfully saved"));
 			verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-			verifyTrue(selenium.isTextPresent("Cannot Passenger Pick Up - There is a Non-Cancelled BDO for this Item"));
+			verifyTrue(isTextPresent("Cannot Passenger Pick Up - There is a Non-Cancelled BDO for this Item"));
 			verifyFalse(isEditable(By.name("theitem[0].lossCode")));
 			verifyFalse(isEditable(By.name("theitem[0].faultStation_id")));
 			goToTaskManager();

@@ -11,7 +11,7 @@ public class B6_ClosePilf_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	public void testVerifyText() throws Exception {
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
-			verifyTrue(selenium.isTextPresent("Pawob Information"));
+			verifyTrue(isTextPresent("Pawob Information"));
 			selenium.click("//td[@id='navmenucell']/div/dl/dd[10]/a/span[2]");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
@@ -20,7 +20,7 @@ public class B6_ClosePilf_VerifyRequiredFields extends DefaultSeleneseTestCase {
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
 					checkCopyrightAndQuestionMarks();
-					verifyTrue(selenium.isTextPresent("Pilferage Pawob has been closed."));
+					verifyTrue(isTextPresent("Pilferage Pawob has been closed."));
 					selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
 					waitForPageToLoadImproved();
 				} else {

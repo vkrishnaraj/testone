@@ -69,7 +69,7 @@ public class NK_CreatePilf_VerifyRequiredFields extends DefaultSeleneseTestCase 
 				selenium.click("name=saveButton");
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
-					verifyTrue(selenium.isTextPresent("Pilferage Incident has been submitted."));
+					verifyTrue(isTextPresent("Pilferage Incident has been submitted."));
 					checkCopyrightAndQuestionMarks();
 					String pilferage_id = selenium.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
 					Settings.PILFERAGE_ID_NK = pilferage_id;

@@ -75,7 +75,7 @@ public class WS_CreatePilf_VerifyRequiredFields extends DefaultSeleneseTestCase 
 				selenium.click("name=saveButton");
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
-					verifyTrue(selenium.isTextPresent("Pilferage PIR has been submitted."));
+					verifyTrue(isTextPresent("Pilferage PIR has been submitted."));
 					checkCopyrightAndQuestionMarks();
 					String pilferage_id = selenium.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
 					Settings.PILFERAGE_ID_WS = pilferage_id;

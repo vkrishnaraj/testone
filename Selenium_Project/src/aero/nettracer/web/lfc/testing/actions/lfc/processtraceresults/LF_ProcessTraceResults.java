@@ -45,7 +45,7 @@ public class LF_ProcessTraceResults extends LFC_SeleniumTest {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Your lost report was successfully saved."));
+			verifyTrue(isTextPresent("Your lost report was successfully saved."));
 			LF_ProcessTraceResults.lostId = selenium.getValue("//div[@id='maincontent']/table/tbody/tr/td/input");
 			System.out.println("LFPTR: created Lost Report: " + LF_ProcessTraceResults.lostId);
 		} else {
@@ -82,7 +82,7 @@ public class LF_ProcessTraceResults extends LFC_SeleniumTest {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
+			verifyTrue(isTextPresent("Your found item was successfully saved."));
 			selenium.click("//div[@id='maincontent']/center[3]/input[2]");
 			waitForPageToLoadImproved(10000);
 			System.out.println("LFPTR: created Found Item: " + LF_ProcessTraceResults.foundId);
@@ -107,9 +107,9 @@ public class LF_ProcessTraceResults extends LFC_SeleniumTest {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent(LF_ProcessTraceResults.foundId));
+			verifyTrue(isTextPresent(LF_ProcessTraceResults.foundId));
 			verifyTrue(isElementPresent(By.xpath("//div[@id='maincontent']/table[2]/tbody/tr[2]/td/a")));
-			verifyTrue(selenium.isTextPresent("Cellphone, Apple, iPhone 4S, AP1234"));
+			verifyTrue(isTextPresent("Cellphone, Apple, iPhone 4S, AP1234"));
 			selenium.click("//div[@id='maincontent']/table/tbody/tr/td/center/input");
 			waitForPageToLoadImproved();
 		} else {
@@ -118,8 +118,8 @@ public class LF_ProcessTraceResults extends LFC_SeleniumTest {
 		}
 		System.out.println("LFPTR: 1");
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Found Item:  " + LF_ProcessTraceResults.foundId));
-			verifyTrue(selenium.isTextPresent("Lost Report:  " + LF_ProcessTraceResults.lostId));
+			verifyTrue(isTextPresent("Found Item:  " + LF_ProcessTraceResults.foundId));
+			verifyTrue(isTextPresent("Lost Report:  " + LF_ProcessTraceResults.lostId));
 			selenium.click("id=confirm"+LF_ProcessTraceResults.lostId);
 			waitForPageToLoadImproved();
 		} else {
@@ -147,7 +147,7 @@ public class LF_ProcessTraceResults extends LFC_SeleniumTest {
 		System.out.println("LFPTR: 3");
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Your lost report was successfully saved."));
+			verifyTrue(isTextPresent("Your lost report was successfully saved."));
 			clickMenu("menucol_0.1");
 			waitForPageToLoadImproved();
 		} else {
@@ -157,7 +157,7 @@ public class LF_ProcessTraceResults extends LFC_SeleniumTest {
 		System.out.println("LFPTR: 4");
 		
 		if (checkNoErrorPage()) {
-			verifyFalse(selenium.isTextPresent(LF_ProcessTraceResults.foundId));
+			verifyFalse(isTextPresent(LF_ProcessTraceResults.foundId));
 			verifyFalse(isElementPresent(By.xpath("//div[@id='maincontent']/table[2]/tbody/tr[2]/td/a")));
 			selenium.click("//a[contains(@href, 'logon.do?taskmanager=1')]");
 			waitForPageToLoadImproved();

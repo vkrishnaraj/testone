@@ -64,9 +64,9 @@ public class LF_ItemEntry extends LFC_SeleniumTest {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
-			verifyTrue(selenium.isTextPresent("Desc: Bags"));
-			verifyTrue(selenium.isTextPresent("Status:  Entered"));
+			verifyTrue(isTextPresent("Item ID: " + testId));
+			verifyTrue(isTextPresent("Desc: Bags"));
+			verifyTrue(isTextPresent("Status:  Entered"));
 			clearSummaryDivs();
 		} else {
 			System.out.println("LFIE: Failed to enter an item after checking the alert messages.");
@@ -88,9 +88,9 @@ public class LF_ItemEntry extends LFC_SeleniumTest {
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
-			verifyTrue(selenium.isTextPresent("Desc: Briefcase/Portfolio"));
-			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
+			verifyTrue(isTextPresent("Item ID: " + testId));
+			verifyTrue(isTextPresent("Desc: Briefcase/Portfolio"));
+			verifyTrue(isTextPresent("Status:  Verification needed"));
 			verifySummaryDiv(1);
 			clearSummaryDivs();
 		} else {
@@ -113,9 +113,9 @@ public class LF_ItemEntry extends LFC_SeleniumTest {
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
-			verifyTrue(selenium.isTextPresent("Desc: Camera/Photo Equipment"));
-			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
+			verifyTrue(isTextPresent("Item ID: " + testId));
+			verifyTrue(isTextPresent("Desc: Camera/Photo Equipment"));
+			verifyTrue(isTextPresent("Status:  Verification needed"));
 			verifySummaryDiv(2);
 			clearSummaryDivs();
 		} else {
@@ -138,9 +138,9 @@ public class LF_ItemEntry extends LFC_SeleniumTest {
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
-			verifyTrue(selenium.isTextPresent("Desc: Cards (ATM, Credit, etc.)"));
-			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
+			verifyTrue(isTextPresent("Item ID: " + testId));
+			verifyTrue(isTextPresent("Desc: Cards (ATM, Credit, etc.)"));
+			verifyTrue(isTextPresent("Status:  Verification needed"));
 			verifySummaryDiv(2);
 			clearSummaryDivs();
 		} else {
@@ -165,9 +165,9 @@ public class LF_ItemEntry extends LFC_SeleniumTest {
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
-			verifyTrue(selenium.isTextPresent("Desc: Cellphone"));
-			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
+			verifyTrue(isTextPresent("Item ID: " + testId));
+			verifyTrue(isTextPresent("Desc: Cellphone"));
+			verifyTrue(isTextPresent("Status:  Verification needed"));
 			verifySummaryDiv(2);
 			clearSummaryDivs();
 		} else {
@@ -190,9 +190,9 @@ public class LF_ItemEntry extends LFC_SeleniumTest {
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
-			verifyTrue(selenium.isTextPresent("Desc: Cellphone Accessories"));
-			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
+			verifyTrue(isTextPresent("Item ID: " + testId));
+			verifyTrue(isTextPresent("Desc: Cellphone Accessories"));
+			verifyTrue(isTextPresent("Status:  Verification needed"));
 			verifySummaryDiv(2);
 			clearSummaryDivs();
 		} else {
@@ -215,9 +215,9 @@ public class LF_ItemEntry extends LFC_SeleniumTest {
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
-			verifyTrue(selenium.isTextPresent("Desc: Clothing"));
-			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
+			verifyTrue(isTextPresent("Item ID: " + testId));
+			verifyTrue(isTextPresent("Desc: Clothing"));
+			verifyTrue(isTextPresent("Status:  Verification needed"));
 			verifySummaryDiv(2);
 			clearSummaryDivs();
 		} else {
@@ -245,9 +245,9 @@ public class LF_ItemEntry extends LFC_SeleniumTest {
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
-			verifyTrue(selenium.isTextPresent("Desc: Computer-Related"));
-			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
+			verifyTrue(isTextPresent("Item ID: " + testId));
+			verifyTrue(isTextPresent("Desc: Computer-Related"));
+			verifyTrue(isTextPresent("Status:  Verification needed"));
 			verifySummaryDiv(2);
 			clearSummaryDivs();
 		} else {
@@ -276,9 +276,9 @@ public class LF_ItemEntry extends LFC_SeleniumTest {
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
-			verifyTrue(selenium.isTextPresent("Desc: Cosmetic/Shaving Kit"));
-			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
+			verifyTrue(isTextPresent("Item ID: " + testId));
+			verifyTrue(isTextPresent("Desc: Cosmetic/Shaving Kit"));
+			verifyTrue(isTextPresent("Status:  Verification needed"));
 			verifySummaryDiv(2);
 			clearSummaryDivs();
 		} else {
@@ -305,9 +305,9 @@ public class LF_ItemEntry extends LFC_SeleniumTest {
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
-			verifyTrue(selenium.isTextPresent("Desc: Electronic Equipment"));
-			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
+			verifyTrue(isTextPresent("Item ID: " + testId));
+			verifyTrue(isTextPresent("Desc: Electronic Equipment"));
+			verifyTrue(isTextPresent("Status:  Verification needed"));
 			verifySummaryDiv(2);
 			clearSummaryDivs();
 		} else {
@@ -330,9 +330,9 @@ public class LF_ItemEntry extends LFC_SeleniumTest {
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
-			verifyTrue(selenium.isTextPresent("Desc: Glasses"));
-			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
+			verifyTrue(isTextPresent("Item ID: " + testId));
+			verifyTrue(isTextPresent("Desc: Glasses"));
+			verifyTrue(isTextPresent("Status:  Verification needed"));
 			verifySummaryDiv(2);
 			clearSummaryDivs();
 		} else {
@@ -385,9 +385,9 @@ public class LF_ItemEntry extends LFC_SeleniumTest {
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Item ID: " + testId));
-			verifyTrue(selenium.isTextPresent("Desc: Jewelry/Watches, Bracelet, test, test, test"));
-			verifyTrue(selenium.isTextPresent("Status:  Verification needed"));
+			verifyTrue(isTextPresent("Item ID: " + testId));
+			verifyTrue(isTextPresent("Desc: Jewelry/Watches, Bracelet, test, test, test"));
+			verifyTrue(isTextPresent("Status:  Verification needed"));
 			verifySummaryDiv(2);
 			clearSummaryDivs();
 		} else {
@@ -398,7 +398,7 @@ public class LF_ItemEntry extends LFC_SeleniumTest {
 	}
 	
 	private void verifySummaryDiv(int divId) {
-		verifyTrue(selenium.isTextPresent("Bin #:"));
+		verifyTrue(isTextPresent("Bin #:"));
 		verifyTrue(isElementPresent(By.xpath("//div[@id='moveDiv_" + divId + "']/input")));
 		verifyTrue(isElementPresent(By.xpath("//div[@id='moveDiv_" + divId + "']/center/input[@type='button']")));
 		waitForPageToLoadImproved(3000, false);

@@ -32,7 +32,7 @@ public class LF_CreateFound_Detailed extends DefaultSeleneseTestCase {
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
-				verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
+				verifyTrue(isTextPresent("Your found item was successfully saved."));
 				found_id = selenium.getValue("//div[@id='maincontent']/table/tbody/tr/td/input");
 				Settings.FOUND_ID_LF = found_id;
 				System.out.println("LF: Found Item Created: " + Settings.FOUND_ID_LF);

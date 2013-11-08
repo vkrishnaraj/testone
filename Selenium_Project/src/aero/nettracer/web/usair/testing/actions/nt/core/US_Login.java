@@ -23,7 +23,7 @@ public class US_Login extends US_SeleniumTest {
 			count++;
 			clickMenu("menucol_10.13");
 			waitForPageToLoadImproved();
-			keepGoing = selenium.isTextPresent("Data retention length");
+			keepGoing = isTextPresent("Data retention length");
 		}
 		System.out.println("Error occurred: " + (new Date()));
 		

@@ -11,7 +11,7 @@ public class WS_ClosePilf_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	public void testVerifyText() throws Exception {
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
-			verifyTrue(selenium.isTextPresent("Pilferage Details"));
+			verifyTrue(isTextPresent("Pilferage Details"));
 			selenium.click("//td[@id='navmenucell']/div/dl/dd[12]/a/span[2]");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
@@ -19,13 +19,13 @@ public class WS_ClosePilf_VerifyRequiredFields extends DefaultSeleneseTestCase {
 				selenium.click("name=doclose");
 				
 				waitForPageToLoadImproved();
-				verifyTrue(selenium.isTextPresent("Please select a reason for loss"));
+				verifyTrue(isTextPresent("Please select a reason for loss"));
 				selenium.select("name=loss_code", "label=90- Pilferage");
 				selenium.click("name=doclose");
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
 					checkCopyrightAndQuestionMarks();
-					verifyTrue(selenium.isTextPresent("Pilferage PIR has been closed."));
+					verifyTrue(isTextPresent("Pilferage PIR has been closed."));
 					selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
 					waitForPageToLoadImproved();
 				} else {

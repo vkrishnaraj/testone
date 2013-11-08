@@ -18,7 +18,7 @@ public class AB_SearchLost extends DefaultSeleneseTestCase {
 			selenium.click("id=button");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
-				verifyTrue(selenium.isTextPresent("Report Information"));
+				verifyTrue(isTextPresent("Report Information"));
 			} else {
 				System.err.println("Lost ID " + Settings.LOST_ID_AB + " Did Not Load. Error Page Loaded Instead.");
 				verifyTrue(false);

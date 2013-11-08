@@ -22,7 +22,7 @@ public class LF_FoundReportSummary extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Report Summary"));
+			verifyTrue(isTextPresent("Report Summary"));
 //			selenium.type("name=found.client.lastName", "Test");
 //			selenium.click("name=saveButton");
 			selenium.type("name=found.client.address.decryptedAddress1", "Test");
@@ -34,8 +34,8 @@ public class LF_FoundReportSummary extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
-			verifyTrue(selenium.isTextPresent("This item has identification information. See below for further details."));
+			verifyTrue(isTextPresent("Your found item was successfully saved."));
+			verifyTrue(isTextPresent("This item has identification information. See below for further details."));
 			selenium.type("name=found.client.address.decryptedAddress1", "");
 			selenium.click("name=saveButton");
 			waitForPageToLoadImproved();
@@ -46,8 +46,8 @@ public class LF_FoundReportSummary extends DefaultSeleneseTestCase {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
-			verifyFalse(selenium.isTextPresent("This item has identification information. See below for further details."));
+			verifyTrue(isTextPresent("Your found item was successfully saved."));
+			verifyFalse(isTextPresent("This item has identification information. See below for further details."));
 		} else {
 			System.out.println("Failed to load after removing name: Test");
 			verifyTrue(false);
@@ -58,8 +58,8 @@ public class LF_FoundReportSummary extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testTraceResults() throws Exception {
-		verifyTrue(selenium.isTextPresent("Found Item:  " + Settings.FOUND_ID_LF));
-		verifyTrue(selenium.isTextPresent("Lost Report:  " + Settings.LOST_ID_LF));
+		verifyTrue(isTextPresent("Found Item:  " + Settings.FOUND_ID_LF));
+		verifyTrue(isTextPresent("Lost Report:  " + Settings.LOST_ID_LF));
 		verifyTrue(isElementPresent(By.linkText("Confirm Match")));
 		verifyTrue(isElementPresent(By.linkText("Reject")));
 		
@@ -91,7 +91,7 @@ public class LF_FoundReportSummary extends DefaultSeleneseTestCase {
 		
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Rejected Matches"));
+			verifyTrue(isTextPresent("Rejected Matches"));
 			verifyTrue(isElementPresent(By.linkText("Expand")));
 			selenium.click("link=Expand");
 			verifyTrue(isElementPresent(By.xpath("//div[@id='rejectedMatches']/table/tbody/tr[2]/td[4]/a")));
@@ -104,7 +104,7 @@ public class LF_FoundReportSummary extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyFalse(selenium.isTextPresent("Rejected Matches"));
+			verifyFalse(isTextPresent("Rejected Matches"));
 			verifyTrue(isElementPresent(By.linkText("Confirm Match")));
 			verifyTrue(isElementPresent(By.linkText("Reject")));
 		} else {
@@ -116,14 +116,14 @@ public class LF_FoundReportSummary extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testLocationField() {
-		verifyTrue(selenium.isTextPresent("Item Location"));
+		verifyTrue(isTextPresent("Item Location"));
 		verifyTrue(isElementPresent(By.name("found.itemLocation")));
 		selenium.select("name=found.itemLocation", "label=Verification Bin");
 		selenium.click("name=saveButton");
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
+			verifyTrue(isTextPresent("Your found item was successfully saved."));
 			verifyEquals("1", selenium.getValue("name=found.itemLocation"));
 		} else {
 			System.out.println("Failed in test found item trace results summary.");

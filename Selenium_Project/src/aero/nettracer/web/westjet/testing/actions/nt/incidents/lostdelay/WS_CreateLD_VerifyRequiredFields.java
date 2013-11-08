@@ -73,7 +73,7 @@ public class WS_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 				selenium.click("savetracingButton");
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
-					verifyTrue(selenium.isTextPresent("Delayed PIR has been submitted."));
+					verifyTrue(isTextPresent("Delayed PIR has been submitted."));
 					checkCopyrightAndQuestionMarks();
 					String incident_id = selenium.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
 					Settings.INCIDENT_ID_WS = incident_id;
@@ -114,7 +114,7 @@ public class WS_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Delayed PIR has been modified."));
+			verifyTrue(isTextPresent("Delayed PIR has been modified."));
 			checkCopyrightAndQuestionMarks();
 			selenium.click("menucol_10.0");
 			selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");

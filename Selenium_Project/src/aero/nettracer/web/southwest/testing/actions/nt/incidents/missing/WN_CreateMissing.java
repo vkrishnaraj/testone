@@ -143,7 +143,7 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 					selenium.click("id=saveButton");
 					waitForPageToLoadImproved();
 					if (checkNoErrorPage()) {
-						verifyTrue(selenium.isTextPresent("Missing Articles Incident has been submitted."));
+						verifyTrue(isTextPresent("Missing Articles Incident has been submitted."));
 						checkCopyrightAndQuestionMarks();
 						String incident_id = selenium.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
 						Settings.INCIDENT_ID_WN = incident_id;
@@ -187,8 +187,8 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 	@Test
 	public void testAdditionalMissingItemInformationAuditTrailDisabled() {
 		verifyTrue(navigateToIncidentAuditTrail());
-		verifyFalse(selenium.isTextPresent("Entered Date : " + WN_SeleniumTest.TODAY));
-		verifyFalse(selenium.isTextPresent("Status : Returned"));
+		verifyFalse(isTextPresent("Entered Date : " + WN_SeleniumTest.TODAY));
+		verifyFalse(isTextPresent("Status : Returned"));
 		goToTaskManager();
 	}
 	
@@ -208,7 +208,7 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
-			verifyTrue(selenium.isTextPresent("Missing Articles Incident has been modified."));
+			verifyTrue(isTextPresent("Missing Articles Incident has been modified."));
 			selenium.click("link=" + Settings.INCIDENT_ID_WN);
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
@@ -231,12 +231,12 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 	@Test
 	public void testAdditionalMissingItemInformationAuditTrailEnabled() {
 		verifyTrue(navigateToIncidentAuditTrail());
-		verifyTrue(selenium.isTextPresent("Article : Test Article"));
-		verifyTrue(selenium.isTextPresent("Entered Date : " + WN_SeleniumTest.TODAY));
-		verifyTrue(selenium.isTextPresent("Purchase Date : " + WN_SeleniumTest.TODAY));
-		verifyTrue(selenium.isTextPresent("Cost : 1.00 USD"));
-		verifyTrue(selenium.isTextPresent("Status : Returned"));
-		verifyTrue(selenium.isTextPresent("Description : Test article description."));
+		verifyTrue(isTextPresent("Article : Test Article"));
+		verifyTrue(isTextPresent("Entered Date : " + WN_SeleniumTest.TODAY));
+		verifyTrue(isTextPresent("Purchase Date : " + WN_SeleniumTest.TODAY));
+		verifyTrue(isTextPresent("Cost : 1.00 USD"));
+		verifyTrue(isTextPresent("Status : Returned"));
+		verifyTrue(isTextPresent("Description : Test article description."));
 		goToTaskManager();
 	}
 	
@@ -276,7 +276,7 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("The Baggage Delivery Order has been successfully saved"));
+			verifyTrue(isTextPresent("The Baggage Delivery Order has been successfully saved"));
 			goToTaskManager();
 		} else {
 			System.out.println("!!!!!!!!!!!!!!!! Failed to save BDO for incident");

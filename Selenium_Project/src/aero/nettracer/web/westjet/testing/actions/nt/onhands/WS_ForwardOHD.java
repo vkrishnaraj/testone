@@ -32,7 +32,7 @@ public class WS_ForwardOHD extends DefaultSeleneseTestCase {
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
 					checkCopyrightAndQuestionMarks();
-					verifyTrue(selenium.isTextPresent("OHD Baggage has been forwarded."));
+					verifyTrue(isTextPresent("OHD Baggage has been forwarded."));
 				} else {
 					System.err.println("Forward Onhand Success Page Failed To Load. Error Page Loaded Instead.");
 					verifyTrue(false);

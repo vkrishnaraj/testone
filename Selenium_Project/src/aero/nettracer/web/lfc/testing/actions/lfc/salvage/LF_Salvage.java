@@ -30,7 +30,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		waitForPageToLoadImproved();
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Please save the salvage to begin adding items."));
+			verifyTrue(isTextPresent("Please save the salvage to begin adding items."));
 			verifyFalse(isElementPresent(By.xpath("//input[@id='addBarcode']")));
 			selenium.click("//input[@id='saveButton']");
 			waitForPageToLoadImproved();
@@ -40,7 +40,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("The salvage was successfully saved."));
+			verifyTrue(isTextPresent("The salvage was successfully saved."));
 			verifyTrue(isElementPresent(By.xpath("//input[@id='addBarcode']")));
 			LF_Salvage.SALVAGE_ID = selenium.getValue("//input[@id='salvageId']");
 			System.out.println("LFS: Created salvage: " + LF_Salvage.SALVAGE_ID);
@@ -112,7 +112,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
+			verifyTrue(isTextPresent("Your found item was successfully saved."));
 			System.out.println("LFS: Created Low value, < 30 Found Item: " + LF_Salvage.LOW_LT_30);
 			clickMenu("menucol_2.1");
 			waitForPageToLoadImproved();
@@ -151,7 +151,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
+			verifyTrue(isTextPresent("Your found item was successfully saved."));
 			System.out.println("LFS: Created Low value, > 30 Found Item: " + LF_Salvage.LOW_GT_30 + " with date: " + lvCutoff);
 			clickMenu("menucol_2.1");
 			waitForPageToLoadImproved();
@@ -187,7 +187,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
+			verifyTrue(isTextPresent("Your found item was successfully saved."));
 			System.out.println("LFS: Created High value, < 60 Found Item: " + LF_Salvage.HIGH_LT_60);
 			clickMenu("menucol_2.1");
 			waitForPageToLoadImproved();
@@ -226,7 +226,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Your found item was successfully saved."));
+			verifyTrue(isTextPresent("Your found item was successfully saved."));
 			verifyEquals("600",selenium.getValue("name=found.statusId"));
 			verifyEquals("0", selenium.getValue("name=found.itemLocation"));
 			System.out.println("LFS: Created High value, > 60 Found Item: " + LF_Salvage.HIGH_GT_60 + " with date: " + hvCutoff);
@@ -273,7 +273,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		waitForPageToLoadImproved(3000, false);
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Item: " + LF_Salvage.LOW_LT_30 + " was received on: " + LF_Salvage.TODAY + " and cannot be salvaged before: 30 days."));
+			verifyTrue(isTextPresent("Item: " + LF_Salvage.LOW_LT_30 + " was received on: " + LF_Salvage.TODAY + " and cannot be salvaged before: 30 days."));
 		} else {
 			System.out.println("LFS: failed to enter LOW_LT_30: " + LF_Salvage.LOW_LT_30);
 			return;
@@ -291,8 +291,8 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent(LF_Salvage.LOW_GT_30));
-			verifyTrue(selenium.isTextPresent("Cellphone Accessories, Cordless Ear Plug, Plantronics,"));
+			verifyTrue(isTextPresent(LF_Salvage.LOW_GT_30));
+			verifyTrue(isTextPresent("Cellphone Accessories, Cordless Ear Plug, Plantronics,"));
 		} else {
 			System.out.println("LFS: failed to enter LOW_GT_30: " + LF_Salvage.LOW_GT_30);
 			return;
@@ -310,7 +310,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Item: " + LF_Salvage.HIGH_LT_60 + " was received on: " + LF_Salvage.TODAY + " and cannot be salvaged before: 60 days."));
+			verifyTrue(isTextPresent("Item: " + LF_Salvage.HIGH_LT_60 + " was received on: " + LF_Salvage.TODAY + " and cannot be salvaged before: 60 days."));
 		} else {
 			System.out.println("LFS: failed to enter HIGH_LT_60: " + LF_Salvage.HIGH_LT_60);
 			return;
@@ -342,8 +342,8 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent(LF_Salvage.HIGH_GT_60));
-			verifyTrue(selenium.isTextPresent("Cellphone Accessories, Cordless Ear Plug, Plantronics,"));
+			verifyTrue(isTextPresent(LF_Salvage.HIGH_GT_60));
+			verifyTrue(isTextPresent("Cellphone Accessories, Cordless Ear Plug, Plantronics,"));
 			clickMenu("menucol_0.0");
 			waitForPageToLoadImproved();
 		} else {
@@ -398,11 +398,11 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("The salvage was successfully saved."));
-			verifyFalse(selenium.isTextPresent(LF_Salvage.LOW_LT_30));
-			verifyTrue(selenium.isTextPresent(LF_Salvage.LOW_GT_30));
-			verifyFalse(selenium.isTextPresent(LF_Salvage.HIGH_LT_60));
-			verifyTrue(selenium.isTextPresent(LF_Salvage.HIGH_GT_60));
+			verifyTrue(isTextPresent("The salvage was successfully saved."));
+			verifyFalse(isTextPresent(LF_Salvage.LOW_LT_30));
+			verifyTrue(isTextPresent(LF_Salvage.LOW_GT_30));
+			verifyFalse(isTextPresent(LF_Salvage.HIGH_LT_60));
+			verifyTrue(isTextPresent(LF_Salvage.HIGH_GT_60));
 		} else {
 			System.out.println("LFS: An error occurred while attempting to save salvage: " + LF_Salvage.SALVAGE_ID);
 			return;
@@ -419,7 +419,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 			e.printStackTrace();
 		}
 
-		verifyTrue(selenium.isTextPresent("Item: " + LF_Salvage.LOW_GT_30 + " has already been added to this salvage."));
+		verifyTrue(isTextPresent("Item: " + LF_Salvage.LOW_GT_30 + " has already been added to this salvage."));
 
 	}
 
@@ -437,7 +437,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("The salvage was successfully saved."));
+			verifyTrue(isTextPresent("The salvage was successfully saved."));
 			driver.findElement(By.id("addBarcode")).sendKeys(LF_Salvage.LOW_GT_30 + Keys.ENTER);
 			waitForPageToLoadImproved(3000, false);
 		} else {
@@ -454,7 +454,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Item: " + LF_Salvage.LOW_GT_30 + " was already included in salvage: " + LF_Salvage.SALVAGE_ID));
+			verifyTrue(isTextPresent("Item: " + LF_Salvage.LOW_GT_30 + " was already included in salvage: " + LF_Salvage.SALVAGE_ID));
 			selenium.select("//select[@id='statusId']", "label=Closed");
 			selenium.click("//input[@id='saveButton']");
 			waitForPageToLoadImproved();
@@ -464,7 +464,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("The salvage was successfully saved."));
+			verifyTrue(isTextPresent("The salvage was successfully saved."));
 		} else {
 			System.out.println("LFS: an error occurred while attempting to close duplicate savlage.");
 			return;
@@ -512,7 +512,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("The salvage was successfully saved."));
+			verifyTrue(isTextPresent("The salvage was successfully saved."));
 		} else {
 			System.out.println("LFS: an error occurred while attempting to close original savlage.");
 			return;

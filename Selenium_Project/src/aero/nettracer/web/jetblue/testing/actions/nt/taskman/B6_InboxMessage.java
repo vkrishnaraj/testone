@@ -33,17 +33,17 @@ public class B6_InboxMessage extends B6_SeleniumTest {
 					selenium.type("name=file_ref_number", "TTTTT");
 					selenium.click("name=send2");
 					waitForPageToLoadImproved();
-					verifyTrue(selenium.isTextPresent("Incorrect pawob number/type"));
+					verifyTrue(isTextPresent("Incorrect pawob number/type"));
 					selenium.type("name=file_ref_number", inc_id);
 				}
 				selenium.click("name=send2");
 				waitForPageToLoadImproved();
-				verifyTrue(selenium.isTextPresent("Message has been sent."));
+				verifyTrue(isTextPresent("Message has been sent."));
 				clickMenu("menucol_0.0");
 				LoginUtil.setCbroStation(driver, "BOS");
 				selenium.click("16link");
 				selenium.click("link=Test Message: " + inc_id);
-				verifyTrue(selenium.isTextPresent("Test Message that references PAWOB: " + inc_id));
+				verifyTrue(isTextPresent("Test Message that references PAWOB: " + inc_id));
 				clickMenu("menucol_0.0");
 				LoginUtil.setCbroStation(driver, LZ_STATION);
 			} else {

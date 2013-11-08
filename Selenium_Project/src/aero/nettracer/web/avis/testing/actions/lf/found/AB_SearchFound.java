@@ -18,7 +18,7 @@ public class AB_SearchFound extends DefaultSeleneseTestCase {
 			selenium.click("id=button");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
-				verifyTrue(selenium.isTextPresent("Report Information"));
+				verifyTrue(isTextPresent("Report Information"));
 			} else {
 				System.err.println("Found Item " + Settings.FOUND_ID_AB + " Did Not Load. Error Page Loaded Instead.");
 				verifyTrue(false);

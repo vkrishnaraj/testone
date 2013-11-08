@@ -27,7 +27,7 @@ public class WN_CSSCallSystem extends WN_SeleniumTest {
 	@Test
 	public void testCheckTaskManager() throws Exception {
 		goToTaskManager();
-		verifyTrue(selenium.isTextPresent("Customer Contact Station List"));
+		verifyTrue(isTextPresent("Customer Contact Station List"));
 		String cssSizeStr = selenium.getText("id=658entry");
 		System.out.println("CSS Task Number: " + cssSizeStr);
 		int cssSize = 0;
@@ -209,7 +209,7 @@ public class WN_CSSCallSystem extends WN_SeleniumTest {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent(remark));
+			verifyTrue(isTextPresent(remark));
 			clickMenu("menucol_1.4");
 			waitForPageToLoadImproved();
 		} else {

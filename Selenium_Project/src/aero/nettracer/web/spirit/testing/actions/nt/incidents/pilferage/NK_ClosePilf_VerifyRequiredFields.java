@@ -11,20 +11,20 @@ public class NK_ClosePilf_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	public void testVerifyText() throws Exception {
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
-			verifyTrue(selenium.isTextPresent("Incident Information"));
+			verifyTrue(isTextPresent("Incident Information"));
 			selenium.click("//td[@id='navmenucell']/div/dl/dd[10]/a/span[2]");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
 				selenium.click("name=doclose");
 				waitForPageToLoadImproved();
-				verifyTrue(selenium.isTextPresent("Please select a reason for loss"));
+				verifyTrue(isTextPresent("Please select a reason for loss"));
 				selenium.select("name=loss_code", "label=22- Bag received too late from check-in actions");
 				selenium.click("name=doclose");
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
 					checkCopyrightAndQuestionMarks();
-					verifyTrue(selenium.isTextPresent("Pilferage Incident has been closed."));
+					verifyTrue(isTextPresent("Pilferage Incident has been closed."));
 					selenium.click("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
 					waitForPageToLoadImproved();
 				} else {

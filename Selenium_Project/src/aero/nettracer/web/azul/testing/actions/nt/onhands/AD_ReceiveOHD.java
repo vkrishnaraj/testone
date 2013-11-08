@@ -19,7 +19,7 @@ public class AD_ReceiveOHD extends AD_SeleniumTest {
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
-				verifyTrue(selenium.isTextPresent("On-hand incident has been transfered to your station."));
+				verifyTrue(isTextPresent("On-hand incident has been transfered to your station."));
 				goToTaskManager();
 				LoginUtil.setCbroStation(driver, LZ_STATION);
 			} else {

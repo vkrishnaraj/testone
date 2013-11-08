@@ -24,7 +24,7 @@ public class B6_CreateOHD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
 					checkCopyrightAndQuestionMarks();
-					verifyTrue(selenium.isTextPresent("BOH(s) have been submitted."));
+					verifyTrue(isTextPresent("BOH(s) have been submitted."));
 					String onhand_id = selenium.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
 					Settings.ONHAND_ID_B6 = onhand_id;
 					System.out.println("B6: Onhand Created: " + Settings.ONHAND_ID_B6);

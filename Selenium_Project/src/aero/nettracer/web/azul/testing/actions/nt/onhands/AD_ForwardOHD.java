@@ -20,7 +20,7 @@ public class AD_ForwardOHD extends DefaultSeleneseTestCase {
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
 					checkCopyrightAndQuestionMarks();
-					verifyTrue(selenium.isTextPresent("On-hand Baggage has been forwarded."));
+					verifyTrue(isTextPresent("On-hand Baggage has been forwarded."));
 				} else {
 					System.err.println("Forward Onhand Success Page Failed To Load. Error Page Loaded Instead.");
 					verifyTrue(false);

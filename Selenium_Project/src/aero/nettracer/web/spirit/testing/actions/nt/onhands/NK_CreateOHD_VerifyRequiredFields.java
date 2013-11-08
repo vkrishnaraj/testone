@@ -23,7 +23,7 @@ public class NK_CreateOHD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
-				verifyTrue(selenium.isTextPresent("On-hand incident(s) have been submitted."));
+				verifyTrue(isTextPresent("On-hand incident(s) have been submitted."));
 				String onhand_id = selenium.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
 				Settings.ONHAND_ID_NK = onhand_id;
 				System.out.println("NK: Onhand Created: " + Settings.ONHAND_ID_NK);

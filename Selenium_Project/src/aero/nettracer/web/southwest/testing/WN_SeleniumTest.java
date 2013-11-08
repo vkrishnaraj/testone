@@ -119,7 +119,7 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 			selenium.click("savetracingButton");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
-				verifyTrue(selenium.isTextPresent("Lost/Delayed Bag Incident has been submitted."));
+				verifyTrue(isTextPresent("Lost/Delayed Bag Incident has been submitted."));
 				if (forTest) {
 					checkCopyrightAndQuestionMarks();
 					String incident_id = selenium.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");

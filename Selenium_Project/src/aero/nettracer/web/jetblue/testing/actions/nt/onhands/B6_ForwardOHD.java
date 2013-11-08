@@ -20,7 +20,7 @@ public class B6_ForwardOHD extends DefaultSeleneseTestCase {
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
 					checkCopyrightAndQuestionMarks();
-					verifyTrue(selenium.isTextPresent("BOH has been forwarded."));
+					verifyTrue(isTextPresent("BOH has been forwarded."));
 				} else {
 					System.err.println("Forward Onhand Success Page Failed To Load. Error Page Loaded Instead.");
 					verifyTrue(false);

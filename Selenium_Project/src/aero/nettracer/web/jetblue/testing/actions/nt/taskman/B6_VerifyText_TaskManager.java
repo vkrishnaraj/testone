@@ -12,36 +12,36 @@ public class B6_VerifyText_TaskManager extends DefaultSeleneseTestCase {
 	public void testVerifyText() throws Exception {
 		goToTaskManager();
 
-		verifyTrue(selenium.isTextPresent("Pawob Tasks")); //SECTION HEADER
-		verifyTrue(selenium.isTextPresent("Trace Results"));
-		verifyTrue(selenium.isTextPresent("Incoming Pawobs"));
-		verifyTrue(selenium.isTextPresent("Delayed Pawobs"));
-		verifyTrue(selenium.isTextPresent("Missing Items Pawobs"));
-		verifyTrue(selenium.isTextPresent("Damaged Pawobs"));
-		verifyTrue(selenium.isTextPresent("Pawobs Assigned in Last 24 Hours"));
-		verifyTrue(selenium.isTextPresent("Created Requests"));
-		verifyTrue(selenium.isTextPresent("Temporary Pawob(s)"));
+		verifyTrue(isTextPresent("Pawob Tasks")); //SECTION HEADER
+		verifyTrue(isTextPresent("Trace Results"));
+		verifyTrue(isTextPresent("Incoming Pawobs"));
+		verifyTrue(isTextPresent("Delayed Pawobs"));
+		verifyTrue(isTextPresent("Missing Items Pawobs"));
+		verifyTrue(isTextPresent("Damaged Pawobs"));
+		verifyTrue(isTextPresent("Pawobs Assigned in Last 24 Hours"));
+		verifyTrue(isTextPresent("Created Requests"));
+		verifyTrue(isTextPresent("Temporary Pawob(s)"));
 
-		verifyTrue(selenium.isTextPresent("On-Hand Tasks")); //SECTION HEADER
-		verifyTrue(selenium.isTextPresent("Forward Bags to LZ"));
-		verifyTrue(selenium.isTextPresent("Inbound Bags"));
-		verifyTrue(selenium.isTextPresent("BOH Requests"));
-		verifyTrue(selenium.isTextPresent("Bags To Be Delivered"));
-		verifyTrue(selenium.isTextPresent("Temporary BOH(s)"));
-		verifyTrue(selenium.isTextPresent("Mass BOH(s)"));
-		verifyTrue(selenium.isTextPresent("On-hand Bags"));
+		verifyTrue(isTextPresent("On-Hand Tasks")); //SECTION HEADER
+		verifyTrue(isTextPresent("Forward Bags to LZ"));
+		verifyTrue(isTextPresent("Inbound Bags"));
+		verifyTrue(isTextPresent("BOH Requests"));
+		verifyTrue(isTextPresent("Bags To Be Delivered"));
+		verifyTrue(isTextPresent("Temporary BOH(s)"));
+		verifyTrue(isTextPresent("Mass BOH(s)"));
+		verifyTrue(isTextPresent("On-hand Bags"));
 
-		verifyTrue(selenium.isTextPresent("Claim Tasks")); //SECTION HEADER
-		verifyTrue(selenium.isTextPresent("Claims To Be Processed"));
-		verifyTrue(selenium.isTextPresent("Expense Requests"));
-		verifyTrue(selenium.isTextPresent("Created Expense Requests"));
-		verifyTrue(selenium.isTextPresent("Approved Payments"));
+		verifyTrue(isTextPresent("Claim Tasks")); //SECTION HEADER
+		verifyTrue(isTextPresent("Claims To Be Processed"));
+		verifyTrue(isTextPresent("Expense Requests"));
+		verifyTrue(isTextPresent("Created Expense Requests"));
+		verifyTrue(isTextPresent("Approved Payments"));
 
-		verifyTrue(selenium.isTextPresent("Other Tasks")); //SECTION HEADER
-		verifyTrue(selenium.isTextPresent("Email"));
-		verifyTrue(selenium.isTextPresent("Other Tasks"));
-		verifyTrue(selenium.isTextPresent("Briefing Items"));
-		verifyTrue(selenium.isTextPresent("Manage Fault Dispute"));
+		verifyTrue(isTextPresent("Other Tasks")); //SECTION HEADER
+		verifyTrue(isTextPresent("Email"));
+		verifyTrue(isTextPresent("Other Tasks"));
+		verifyTrue(isTextPresent("Briefing Items"));
+		verifyTrue(isTextPresent("Manage Fault Dispute"));
 		checkCopyrightAndQuestionMarks();
 	}
 	

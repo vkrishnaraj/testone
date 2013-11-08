@@ -25,7 +25,7 @@ public class LF_SalvageSearch extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("The salvage was successfully saved."));
+			verifyTrue(isTextPresent("The salvage was successfully saved."));
 			LF_SalvageSearch.OPEN_SALVAGE_ID = selenium.getValue("//input[@id='salvageId']");
 			clickMenu("menucol_4.1");
 			waitForPageToLoadImproved();
@@ -43,7 +43,7 @@ public class LF_SalvageSearch extends DefaultSeleneseTestCase {
 			return;
 		}
 		
-		verifyTrue(selenium.isTextPresent("The salvage was successfully saved."));
+		verifyTrue(isTextPresent("The salvage was successfully saved."));
 		LF_SalvageSearch.CLOSED_SALVAGE_ID = selenium.getValue("//input[@id='salvageId']");
 		
 	}

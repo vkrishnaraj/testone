@@ -75,7 +75,7 @@ public class B6_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 				selenium.click("name=savetracingButton");
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
-					verifyTrue(selenium.isTextPresent("Lost/Delayed Bag Report has been submitted."));
+					verifyTrue(isTextPresent("Lost/Delayed Bag Report has been submitted."));
 					checkCopyrightAndQuestionMarks();
 					String incident_id = selenium.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
 					Settings.INCIDENT_ID_B6 = incident_id;

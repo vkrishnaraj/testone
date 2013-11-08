@@ -31,14 +31,14 @@ public class WN_StatusMessageTest extends WN_SeleniumTest{
 		}		
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Company Information Saved."));
+			verifyTrue(isTextPresent("Company Information Saved."));
 			clickMenu("menucol_0.0");			
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("!!!!!!!!!!!!!!!! Status Message 3");
 		}
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent(message));
+			verifyTrue(isTextPresent(message));
 		} else {
 			System.out.println("!!!!!!!!!!!!!!!! Status Message 4");
 		}
@@ -57,7 +57,7 @@ public class WN_StatusMessageTest extends WN_SeleniumTest{
 		}
 		if (checkNoErrorPage()) {		
 			navigateAuditPagination("id");
-			verifyTrue(selenium.isTextPresent(message));
+			verifyTrue(isTextPresent(message));
 		} else {
 			System.out.println("!!!!!!!!!!!!!!!! Status Message 6");
 		}		

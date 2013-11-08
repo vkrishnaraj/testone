@@ -26,16 +26,16 @@ public class WS_LostfoundTest extends WS_SeleniumTest {
 		selenium.type("name=lastname", "TestLast");
 		selenium.click("id=button");
 		waitForPageToLoadImproved();
-		verifyTrue(selenium.isTextPresent(Settings.FOUND_ID_WS));
+		verifyTrue(isTextPresent(Settings.FOUND_ID_WS));
 		selenium.type("name=lastname", "");
 		selenium.type("name=firstname", "TestFirst");
 		selenium.click("id=button");
 		waitForPageToLoadImproved();
-		verifyTrue(selenium.isTextPresent(Settings.FOUND_ID_WS));
+		verifyTrue(isTextPresent(Settings.FOUND_ID_WS));
 		selenium.type("name=firstname", "");
 		selenium.select("name=category", "label=Book");
 		selenium.click("id=button");
 		waitForPageToLoadImproved();
-		verifyTrue(selenium.isTextPresent(Settings.FOUND_ID_WS));
+		verifyTrue(isTextPresent(Settings.FOUND_ID_WS));
 	}
 }

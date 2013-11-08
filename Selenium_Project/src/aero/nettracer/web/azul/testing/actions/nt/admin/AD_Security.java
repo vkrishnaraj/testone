@@ -14,7 +14,7 @@ public class AD_Security extends DefaultSeleneseTestCase{
 		selenium.click("xpath=(//input[@id='button'])[2]");
 		waitForPageToLoadImproved();
 		verifyEquals("8", selenium.getValue("min_pass_size"));
-		verifyTrue(selenium.isTextPresent("Company Information Saved."));
+		verifyTrue(isTextPresent("Company Information Saved."));
 		
 		clickMenu("menucol_9.2");
 		selenium.click("//td[@id='navmenucell']/div/dl/dd[4]/a/span[2]");
@@ -23,7 +23,7 @@ public class AD_Security extends DefaultSeleneseTestCase{
 		selenium.click("xpath=(//input[@id='button'])[2]");
 		assertEquals("Minimum password length must be at least eigth(8) characters", selenium.getAlert());
 		verifyEquals("7", selenium.getValue("min_pass_size"));
-		verifyTrue(!selenium.isTextPresent("Company Information Saved."));
+		verifyTrue(!isTextPresent("Company Information Saved."));
 		
 		clickMenu("menucol_9.2");
 		selenium.click("//td[@id='navmenucell']/div/dl/dd[4]/a/span[2]");
@@ -33,6 +33,6 @@ public class AD_Security extends DefaultSeleneseTestCase{
 		selenium.type("min_pass_size", "9");
 		selenium.click("xpath=(//input[@id='button'])[2]");
 		waitForPageToLoadImproved();
-		verifyTrue(selenium.isTextPresent("Company Information Saved."));
+		verifyTrue(isTextPresent("Company Information Saved."));
 	}
 }

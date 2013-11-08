@@ -19,7 +19,7 @@ public class WS_ReceiveOHD extends WS_SeleniumTest {
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
-				verifyTrue(selenium.isTextPresent("OHD has been transfered to your BSO."));
+				verifyTrue(isTextPresent("OHD has been transfered to your BSO."));
 				goToTaskManager();
 				LoginUtil.setCbroStation(driver, LZ_STATION);
 			} else {

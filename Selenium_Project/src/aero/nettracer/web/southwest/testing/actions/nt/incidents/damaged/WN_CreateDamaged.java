@@ -157,7 +157,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 					selenium.click("name=saveButton");
 					waitForPageToLoadImproved();
 					if (checkNoErrorPage()) {
-						verifyTrue(selenium.isTextPresent("Damaged Bag Incident has been submitted."));
+						verifyTrue(isTextPresent("Damaged Bag Incident has been submitted."));
 						checkCopyrightAndQuestionMarks();
 						String incident_id = selenium.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
 						Settings.INCIDENT_ID_WN = incident_id;
@@ -185,7 +185,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	public void testExpediteTagNumEnabled() {
 		verifyTrue(setPermissions(new String[] { EXPEDITE_TAG_NUM_COLLECT }, new boolean[] { true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
-		verifyTrue(selenium.isTextPresent("Expedite Tag Number"));
+		verifyTrue(isTextPresent("Expedite Tag Number"));
 		verifyTrue(isElementPresent(By.name("theitem[0].expediteTagNum")));				
 		verifyEquals(WN_SeleniumTest.EXPEDITE_TAG_NUM, selenium.getValue("name=theitem[0].expediteTagNum"));
 		goToTaskManager();
@@ -194,7 +194,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	@Test
 	public void testExpediteTagNumEnabledAuditTrail() {
 		verifyTrue(navigateToIncidentAuditTrail());
-		verifyTrue(selenium.isTextPresent("Expedite Tag Number : " + WN_SeleniumTest.EXPEDITE_TAG_NUM));
+		verifyTrue(isTextPresent("Expedite Tag Number : " + WN_SeleniumTest.EXPEDITE_TAG_NUM));
 		goToTaskManager();
 	}
 	
@@ -202,7 +202,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	public void testExpediteTagNumDisabled() {
 		verifyTrue(setPermissions(new String[] { EXPEDITE_TAG_NUM_COLLECT }, new boolean[] { false }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
-		verifyFalse(selenium.isTextPresent("Expedite Tag Number"));
+		verifyFalse(isTextPresent("Expedite Tag Number"));
 		verifyFalse(isElementPresent(By.name("theitem[0].expediteTagNum")));				
 		goToTaskManager();
 	}
@@ -210,7 +210,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	@Test
 	public void testExpediteTagNumDisabledAuditTrail() {
 		verifyTrue(navigateToIncidentAuditTrail());
-		verifyFalse(selenium.isTextPresent("Expedite Tag Number : " + WN_SeleniumTest.EXPEDITE_TAG_NUM));
+		verifyFalse(isTextPresent("Expedite Tag Number : " + WN_SeleniumTest.EXPEDITE_TAG_NUM));
 		goToTaskManager();
 	}
 	
@@ -271,8 +271,8 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	@Test
 	public void testRxTimestampAuditTrailEnabled() {
 		verifyTrue(navigateToIncidentAuditTrail());
-		verifyTrue(selenium.isTextPresent("Date/Time Received at LZ"));
-		verifyTrue(selenium.isTextPresent(WN_CreateDamaged.RX_TIMESTAMP));
+		verifyTrue(isTextPresent("Date/Time Received at LZ"));
+		verifyTrue(isTextPresent(WN_CreateDamaged.RX_TIMESTAMP));
 		goToTaskManager();
 	}
 	
@@ -312,7 +312,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	public void testRxTimestampAuditTrailDisabled() {
 		verifyTrue(setPermissions(new String[] { RX_TIMESTAMP_COLLECT }, new boolean[] { false }));
 		verifyTrue(navigateToIncidentAuditTrail());
-		verifyFalse(selenium.isTextPresent("Date/Time Received at LZ"));
+		verifyFalse(isTextPresent("Date/Time Received at LZ"));
 		goToTaskManager();
 	}
 	
@@ -326,7 +326,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 		selenium.click("saveButton");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Damaged Baggage Report has been modified."));
+			verifyTrue(isTextPresent("Damaged Baggage Report has been modified."));
 		} else {
 			System.out.println("!!!!!!!!!!!!!!! - Failed to save the damaged incident in testCourtesyReasonDisabled. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 			verifyTrue(false);
@@ -336,8 +336,8 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	@Test
 	public void testCourtesyReasonAuditTrailDisabled() {
 		verifyTrue(navigateToIncidentAuditTrail());
-		verifyFalse(selenium.isTextPresent("Courtesy Reason :"));
-		verifyFalse(selenium.isTextPresent("Courtesy Reason Description :"));
+		verifyFalse(isTextPresent("Courtesy Reason :"));
+		verifyFalse(isTextPresent("Courtesy Reason Description :"));
 		goToTaskManager();
 	}
 	
@@ -370,7 +370,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
 					checkCopyrightAndQuestionMarks();
-					verifyTrue(selenium.isTextPresent("Damaged Baggage Report has been modified."));
+					verifyTrue(isTextPresent("Damaged Baggage Report has been modified."));
 				} else {
 					System.out.println("!!!!!!!!!!!!!!! - Failed to save the damaged incident in testCourtesyReasonEnabled. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 					verifyTrue(false);
@@ -389,8 +389,8 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	@Test
 	public void testCourtesyReasonAuditTrailEnabled() {
 		verifyTrue(navigateToIncidentAuditTrail());
-		verifyTrue(selenium.isTextPresent("Reason : Outside 4-Hour"));
-		verifyTrue(selenium.isTextPresent("Courtesy Reason Description :"));
+		verifyTrue(isTextPresent("Reason : Outside 4-Hour"));
+		verifyTrue(isTextPresent("Courtesy Reason Description :"));
 		goToTaskManager();
 	}
 	
@@ -398,7 +398,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	public void testSpecialConditionsEnabled() {
 		verifyTrue(setPermissions(new String[] { SPECIAL_CONDITIONS_COLLECT }, new boolean[] { true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
-		verifyTrue(selenium.isTextPresent("Special Conditions"));
+		verifyTrue(isTextPresent("Special Conditions"));
 		verifyTrue(isElementPresent(By.name("theitem[0].specialCondition")));
 		verifyEquals("Please Select Overweight Oversized Both", selenium.getText("name=theitem[0].specialCondition"));
 		selenium.select("name=theitem[0].specialCondition", "label=Overweight");
@@ -414,7 +414,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	@Test
 	public void testSpecialConditionsAuditTrailEnabled() {
 		verifyTrue(navigateToIncidentAuditTrail());
-		verifyTrue(selenium.isTextPresent("Special Conditions : Overweight "));
+		verifyTrue(isTextPresent("Special Conditions : Overweight "));
 		goToTaskManager();
 	}
 	
@@ -422,7 +422,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	public void testSpecialConditionsDisabled() {
 		verifyTrue(setPermissions(new String[] { SPECIAL_CONDITIONS_COLLECT }, new boolean[] { false }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
-		verifyFalse(selenium.isTextPresent("Special Conditions"));
+		verifyFalse(isTextPresent("Special Conditions"));
 		verifyFalse(isElementPresent(By.name("theitem[0].specialCondition")));
 		goToTaskManager();
 	}
@@ -430,7 +430,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	@Test
 	public void testSpecialConditionsAuditTrailDisabled() {
 		verifyTrue(navigateToIncidentAuditTrail());
-		verifyFalse(selenium.isTextPresent("Special Conditions : Overweight "));
+		verifyFalse(isTextPresent("Special Conditions : Overweight "));
 		goToTaskManager();
 	}
 	
@@ -438,7 +438,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	public void testAdditionalItemInformationDisabled() {
 		verifyTrue(setPermissions(new String[] { ADDITIONAL_ITEM_INFORMATION_COLLECT }, new boolean[] { false }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
-		verifyFalse(selenium.isTextPresent("Entered Date"));
+		verifyFalse(isTextPresent("Entered Date"));
 		verifyFalse(isElementPresent(By.name("inventorylist[0].dispPurchaseDate")));
 		verifyFalse(isElementPresent(By.name("inventorylist[0].dispInvItemCost")));
 		verifyFalse(isElementPresent(By.name("inventorylist[0].invItemCurrency")));
@@ -453,7 +453,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	@Test
 	public void testAdditionalItemInformationAuditTrailDisabled() {
 		verifyTrue(navigateToIncidentAuditTrail());
-		verifyFalse(selenium.isTextPresent("Entered Date: " + WN_SeleniumTest.TODAY + "\n     Purchase Date: \n     Cost: \n     Currency: US Dollar\n     Status:"));
+		verifyFalse(isTextPresent("Entered Date: " + WN_SeleniumTest.TODAY + "\n     Purchase Date: \n     Cost: \n     Currency: US Dollar\n     Status:"));
 		goToTaskManager();
 	}
 	
@@ -461,7 +461,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	public void testAdditionalItemInformationEnabled() {
 		verifyTrue(setPermissions(new String[] { ADDITIONAL_ITEM_INFORMATION_COLLECT }, new boolean[] { true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_DAMAGED));
-		verifyTrue(selenium.isTextPresent("Entered Date"));
+		verifyTrue(isTextPresent("Entered Date"));
 		verifyTrue(isElementPresent(By.name("inventorylist[0].dispPurchaseDate")));
 		verifyTrue(isElementPresent(By.name("inventorylist[0].dispInvItemCost")));
 		verifyTrue(isElementPresent(By.name("inventorylist[0].invItemCurrency")));
@@ -501,11 +501,11 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	@Test
 	public void testAdditionalItemInformationAuditTrailEnabled() {
 		verifyTrue(navigateToIncidentAuditTrail());
-		verifyTrue(selenium.isTextPresent("Entered Date: " + WN_SeleniumTest.TODAY));
-		verifyTrue(selenium.isTextPresent("Purchase Date: " + WN_SeleniumTest.TODAY));
-		verifyTrue(selenium.isTextPresent("Cost: 1.00"));
-		verifyTrue(selenium.isTextPresent("Currency: US Dollar"));
-		verifyTrue(selenium.isTextPresent("Status: Returned"));
+		verifyTrue(isTextPresent("Entered Date: " + WN_SeleniumTest.TODAY));
+		verifyTrue(isTextPresent("Purchase Date: " + WN_SeleniumTest.TODAY));
+		verifyTrue(isTextPresent("Cost: 1.00"));
+		verifyTrue(isTextPresent("Currency: US Dollar"));
+		verifyTrue(isTextPresent("Status: Returned"));
 		goToTaskManager();		
 	}
 	
@@ -545,7 +545,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("The Baggage Delivery Order has been successfully saved"));
+			verifyTrue(isTextPresent("The Baggage Delivery Order has been successfully saved"));
 			goToTaskManager();
 		} else {
 			System.out.println("!!!!!!!!!!!!!!!! Failed to save BDO for incident");
@@ -561,7 +561,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
-				verifyFalse(selenium.isTextPresent("Entered Date"));
+				verifyFalse(isTextPresent("Entered Date"));
 				verifyFalse(isElementPresent(By.name("inventorylist[0].dispPurchaseDate")));
 				verifyFalse(isElementPresent(By.name("inventorylist[0].dispInvItemCost")));
 				verifyFalse(isElementPresent(By.name("inventorylist[0].invItemCurrency")));

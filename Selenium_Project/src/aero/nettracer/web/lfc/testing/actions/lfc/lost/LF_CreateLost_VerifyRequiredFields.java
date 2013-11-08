@@ -46,7 +46,7 @@ public class LF_CreateLost_VerifyRequiredFields extends DefaultSeleneseTestCase 
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
-				verifyTrue(selenium.isTextPresent("Your lost report was successfully saved."));
+				verifyTrue(isTextPresent("Your lost report was successfully saved."));
 				String lost_id = selenium.getValue("//div[@id='maincontent']/table/tbody/tr/td/input");
 				Settings.LOST_ID_LF = lost_id;
 				System.out.println("LF: Lost Report Created: " + Settings.LOST_ID_LF);

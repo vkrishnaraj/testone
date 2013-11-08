@@ -44,7 +44,7 @@ public class WS_ForwardMessage extends DefaultSeleneseTestCase {
 
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
-			verifyTrue(selenium.isTextPresent("OHD Baggage has been forwarded."));
+			verifyTrue(isTextPresent("OHD Baggage has been forwarded."));
 		} else {
 			System.err.println("Forward Onhand Success Page Failed To Load. Error Page Loaded Instead.");
 			verifyTrue(false);

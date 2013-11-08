@@ -20,8 +20,8 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
-			verifyTrue(selenium.isTextPresent("Date/Time Modified"));
-			verifyTrue(selenium.isTextPresent("Modified Agent"));
+			verifyTrue(isTextPresent("Date/Time Modified"));
+			verifyTrue(isTextPresent("Modified Agent"));
 			verifyTrue(isElementPresent(By.name("dispModifiedDate")));
 		} else {
 			System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Navigate to Add Onhand. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
@@ -38,8 +38,8 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
-			verifyFalse(selenium.isTextPresent("Position ID"));
-			verifyFalse(selenium.isTextPresent("Late Check"));
+			verifyFalse(isTextPresent("Position ID"));
+			verifyFalse(isTextPresent("Late Check"));
 			verifyFalse(isElementPresent(By.name("posId")));
 			verifyFalse(isElementPresent(By.name("lateCheckValue")));
 		} else {
@@ -53,8 +53,8 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
-			verifyTrue(selenium.isTextPresent("Position ID"));
-			verifyTrue(selenium.isTextPresent("Late Check"));
+			verifyTrue(isTextPresent("Position ID"));
+			verifyTrue(isTextPresent("Late Check"));
 			verifyTrue(isElementPresent(By.name("posId")));
 			verifyTrue(isElementPresent(By.name("lateCheckValue")));
 		} else {
@@ -147,9 +147,9 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 	@Test
 	public void testPosIdOnAuditTrail() {
 		verifyTrue(navigateToAuditTrail());
-		verifyTrue(selenium.isTextPresent("Position ID"));
+		verifyTrue(isTextPresent("Position ID"));
 		assertEquals("123456", selenium.getText("//div[@id='maincontent']/table/tbody/tr[5]/td[2]"));
-		verifyTrue(selenium.isTextPresent("Late Check"));
+		verifyTrue(isTextPresent("Late Check"));
 		assertEquals("No", selenium.getText("//div[@id='maincontent']/table/tbody/tr[7]/td[2]"));
 		goToTaskManager();
 	}
@@ -158,8 +158,8 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 	public void testPoisIdNotOnAuditTrail() {
 		verifyTrue(setPermissions(new String[] {PermissionsUtil.COLLECT_POS_ID}, new boolean[] {false}));
 		verifyTrue(navigateToAuditTrail());
-		verifyFalse(selenium.isTextPresent("Position ID"));
-		verifyFalse(selenium.isTextPresent("Late Check"));
+		verifyFalse(isTextPresent("Position ID"));
+		verifyFalse(isTextPresent("Late Check"));
 		goToTaskManager();		
 	}
 	
@@ -172,9 +172,9 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
-			verifyFalse(selenium.isTextPresent("Secure Remark"));
-			verifyFalse(selenium.isTextPresent("General Remark"));
-			verifyFalse(selenium.isTextPresent("Remark is Secure"));
+			verifyFalse(isTextPresent("Secure Remark"));
+			verifyFalse(isTextPresent("General Remark"));
+			verifyFalse(isTextPresent("Remark is Secure"));
 			selenium.type("name=remark[1].remarktext", "General Test");
 			selenium.click("name=savetracing");
 			waitForPageToLoadImproved();
@@ -197,7 +197,7 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 		selenium.click("name=addremark");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Secure Remark"));
+			verifyTrue(isTextPresent("Secure Remark"));
 			selenium.click("name=remark[2].secure");
 			selenium.type("name=remark[2].remarktext", "Secure Test");
 			selenium.click("name=savetracing");
@@ -209,7 +209,7 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 		if (checkNoErrorPage()) {
 
 			verifyTrue(navigateToOnhand());
-			verifyTrue(selenium.isTextPresent("Remark is Secure"));
+			verifyTrue(isTextPresent("Remark is Secure"));
 			verifyTrue(setPermissions(new String[] { "335"}, new boolean[] { false}));
 			goToTaskManager();
 		} else {

@@ -21,7 +21,7 @@ public class WS_LDVerifyReplacementBags extends WS_SeleniumTest {
 		}
 		
 		if (checkNoErrorPage()) {
-			verifyFalse(selenium.isTextPresent("Tradeout Issued"));
+			verifyFalse(isTextPresent("Tradeout Issued"));
 			verifyFalse(isElementPresent(By.id("replacementBagIssued")));
 			setPermissions(new String[] {"627"}, new boolean[] {true});
 		} else {
@@ -47,7 +47,7 @@ public class WS_LDVerifyReplacementBags extends WS_SeleniumTest {
 			}
 		
 			if (checkNoErrorPage()) {
-				verifyTrue(selenium.isTextPresent("Tradeout Issued"));
+				verifyTrue(isTextPresent("Tradeout Issued"));
 				verifyTrue(isElementPresent(By.xpath("//select[@id='replacementBagIssued']")));
 				selenium.type("//div[@id='maincontent']/table[2]/tbody/tr/td[4]/input", "444444");
 	

@@ -10,14 +10,14 @@ public class LF_VerifyText_TaskManager extends LFC_SeleniumTest {
 	public void testVerifyText() throws Exception {
 		goToTaskManager();
 		
-		verifyTrue(selenium.isTextPresent("Load Found Item")); //SECTION HEADER
+		verifyTrue(isTextPresent("Load Found Item")); //SECTION HEADER
 		
-		verifyTrue(selenium.isTextPresent("Lost and Found Tasks")); //SECTION HEADER
-		verifyTrue(selenium.isTextPresent("Trace Results"));
-		verifyTrue(selenium.isTextPresent("Open Lost Reports"));
-		verifyTrue(selenium.isTextPresent("Open Found Items"));
-		verifyTrue(selenium.isTextPresent("Items to Salvage"));
-		verifyTrue(selenium.isTextPresent("Items to Deliver"));
+		verifyTrue(isTextPresent("Lost and Found Tasks")); //SECTION HEADER
+		verifyTrue(isTextPresent("Trace Results"));
+		verifyTrue(isTextPresent("Open Lost Reports"));
+		verifyTrue(isTextPresent("Open Found Items"));
+		verifyTrue(isTextPresent("Items to Salvage"));
+		verifyTrue(isTextPresent("Items to Deliver"));
 		
 		checkCopyrightAndQuestionMarks();
 	}
@@ -25,7 +25,7 @@ public class LF_VerifyText_TaskManager extends LFC_SeleniumTest {
 	@Test
 	public void testFoundItemField() throws Exception {
 		checkCopyrightAndQuestionMarks();
-		verifyTrue(selenium.isTextPresent("Load Found Item"));
+		verifyTrue(isTextPresent("Load Found Item"));
 		selenium.click("id=button");
 		waitForPageToLoadImproved(1000, false);
 	}

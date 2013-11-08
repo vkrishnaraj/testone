@@ -12,11 +12,11 @@ public class WN_ViewStationOhds extends WN_SeleniumTest {
 		verifyTrue(setPermissions(new String[] {PermissionsUtil.COLLECT_POS_ID}, new boolean[] {true}));
 		selenium.click("xpath=(//a[contains(@href, 'onhands.do')])[2]");
 		selenium.waitForPageToLoad("30000");
-		verifyTrue(selenium.isTextPresent("On-hand Bags in Station"));
-		verifyTrue(selenium.isTextPresent("Date/Time Modified"));
-		verifyTrue(selenium.isTextPresent("Position ID"));
-		verifyTrue(selenium.isTextPresent("Destination"));
-		verifyTrue(selenium.isTextPresent("Comments"));
+		verifyTrue(isTextPresent("On-hand Bags in Station"));
+		verifyTrue(isTextPresent("Date/Time Modified"));
+		verifyTrue(isTextPresent("Position ID"));
+		verifyTrue(isTextPresent("Destination"));
+		verifyTrue(isTextPresent("Comments"));
 		goToTaskManager();
 	}
 	
@@ -25,11 +25,11 @@ public class WN_ViewStationOhds extends WN_SeleniumTest {
 		verifyTrue(setPermissions(new String[] {PermissionsUtil.COLLECT_POS_ID}, new boolean[] {false}));
 		selenium.click("xpath=(//a[contains(@href, 'onhands.do')])[2]");
 		selenium.waitForPageToLoad("30000");
-		verifyTrue(selenium.isTextPresent("On-hand Bags in Station"));
-		verifyTrue(selenium.isTextPresent("Date/Time Modified"));
-		verifyFalse(selenium.isTextPresent("Position ID"));
-		verifyTrue(selenium.isTextPresent("Destination"));
-		verifyTrue(selenium.isTextPresent("Comments"));
+		verifyTrue(isTextPresent("On-hand Bags in Station"));
+		verifyTrue(isTextPresent("Date/Time Modified"));
+		verifyFalse(isTextPresent("Position ID"));
+		verifyTrue(isTextPresent("Destination"));
+		verifyTrue(isTextPresent("Comments"));
 		goToTaskManager();
 	}
 	

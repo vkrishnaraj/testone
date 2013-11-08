@@ -38,7 +38,7 @@ public class WS_CreateOHD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
 					checkCopyrightAndQuestionMarks();
-					verifyTrue(selenium.isTextPresent("OHD has been submitted."));
+					verifyTrue(isTextPresent("OHD has been submitted."));
 					String onhand_id = selenium.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
 					Settings.ONHAND_ID_WS = onhand_id;
 					System.out.println("WS: Onhand Created: " + Settings.ONHAND_ID_WS);

@@ -15,9 +15,9 @@ public class WS_TestWarehouse extends WS_SeleniumTest {
 		selenium.click("name=skip_prepopulate");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
-				verifyFalse(selenium.isTextPresent("Date Received by Warehouse"));
+				verifyFalse(isTextPresent("Date Received by Warehouse"));
 
-				verifyFalse(selenium.isTextPresent("Date Sent from Warehouse"));
+				verifyFalse(isTextPresent("Date Sent from Warehouse"));
 		} else {
 			System.err.println("Failed to enter create OHD page.");
 			verifyTrue(false);
@@ -36,9 +36,9 @@ public class WS_TestWarehouse extends WS_SeleniumTest {
 			selenium.click("name=skip_prepopulate");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
-					verifyTrue(selenium.isTextPresent("Date Received by Warehouse"));
+					verifyTrue(isTextPresent("Date Received by Warehouse"));
 
-					verifyTrue(selenium.isTextPresent("Date Sent from Warehouse"));
+					verifyTrue(isTextPresent("Date Sent from Warehouse"));
 			} else {
 				System.err.println("Update Permissions.");
 				verifyTrue(false);
@@ -64,7 +64,7 @@ public class WS_TestWarehouse extends WS_SeleniumTest {
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
-				verifyTrue(selenium.isTextPresent("OHD has been submitted."));
+				verifyTrue(isTextPresent("OHD has been submitted."));
 				String onhand_id = selenium.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
 				Settings.ONHAND_ID_WS = onhand_id;
 				System.out.println("WS: Onhand Created: " + Settings.ONHAND_ID_WS);

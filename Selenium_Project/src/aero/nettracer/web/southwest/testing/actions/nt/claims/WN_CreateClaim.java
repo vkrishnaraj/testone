@@ -54,7 +54,7 @@ public class WN_CreateClaim extends WN_SeleniumTest {
 		
 //TODO: Need to check how to set up FS on Hudson for NTWN - Cannot save claims directly otherwise as the communication breaks.
 //		if (checkNoErrorPage()) { 
-//			verifyTrue(selenium.isTextPresent("Fraud Results Summary Claim"));
+//			verifyTrue(isTextPresent("Fraud Results Summary Claim"));
 //			String claimmade_id = selenium.getText("//div[@id='maincontent']/h1/");
 //			Settings.CLAIMREQ_ID_WN = claimmade_id.substring(29, claimmade_id.length());
 //			System.out.println("WN: Claim Made ID: " + Settings.CLAIMREQ_ID_WN);
@@ -83,7 +83,7 @@ public class WN_CreateClaim extends WN_SeleniumTest {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Cannot delete category currently in use"));
+			verifyTrue(isTextPresent("Cannot delete category currently in use"));
 			
 			selenium.select("name=category[0].calcMethod", "label=Defined Rate");
 			selenium.type("name=category[0].firstYear", "10");
@@ -102,7 +102,7 @@ public class WN_CreateClaim extends WN_SeleniumTest {
 
 		if (checkNoErrorPage()) {
 
-			verifyTrue(selenium.isTextPresent("General Depreciation Rules and Categories Saved"));
+			verifyTrue(isTextPresent("General Depreciation Rules and Categories Saved"));
 			goToTaskManager();
 		} else {
 			System.out.println("Failed to save Depreciation Calculator Admin page");
@@ -178,7 +178,7 @@ public class WN_CreateClaim extends WN_SeleniumTest {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Claim Depreciation and Items successfully saved"));
+			verifyTrue(isTextPresent("Claim Depreciation and Items successfully saved"));
 			selenium.click("name=deleteItem[1]");
 			waitForPageToLoadImproved();
 		} else {
@@ -187,7 +187,7 @@ public class WN_CreateClaim extends WN_SeleniumTest {
 		
 
 		if (checkNoErrorPage()) {
-			verifyTrue(selenium.isTextPresent("Depreciation Item successfully deleted"));
+			verifyTrue(isTextPresent("Depreciation Item successfully deleted"));
 			selenium.type("id=totalApprovedPayout", "30");
 			selenium.click("name=save");
 			waitForPageToLoadImproved();

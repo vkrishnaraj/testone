@@ -98,7 +98,7 @@ public class WN_CloseLD extends WN_SeleniumTest {
 		}
 		
 		if(checkNoErrorPage()){
-			verifyTrue(selenium.isTextPresent(Settings.INCIDENT_ID_WN));
+			verifyTrue(isTextPresent(Settings.INCIDENT_ID_WN));
 			verifyEquals("Closed",selenium.getSelectedLabel("name=status.status_ID"));
 			verifyEquals("Passenger Pick Up",selenium.getSelectedLabel("name=disposal_status.status_ID"));
 			selenium.click("link="+Settings.INCIDENT_ID_WN);
@@ -143,7 +143,7 @@ public class WN_CloseLD extends WN_SeleniumTest {
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
-				verifyTrue(selenium.isTextPresent("Lost/Delayed Bag Incident has been closed."));
+				verifyTrue(isTextPresent("Lost/Delayed Bag Incident has been closed."));
 				verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 				verifyFalse(isEditable(By.name("theitem[0].lossCode")));
 				verifyFalse(isEditable(By.name("theitem[0].faultStation_id")));

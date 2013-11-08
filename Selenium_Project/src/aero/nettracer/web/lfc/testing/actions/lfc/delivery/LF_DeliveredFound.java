@@ -20,7 +20,7 @@ public class LF_DeliveredFound extends DefaultSeleneseTestCase {
 		selenium.keyDown("//input[@id='addBarcode']", "\\13");
 		waitForPageToLoadImproved(1000,false);
 		if (checkNoErrorPage()) {
-			selenium.isTextPresent("Found Item: "+Settings.FOUND_ID_LF+", matched with Lost Report: "+Settings.LOST_ID_LF+", has been delivered with Tracking Number: Delivered for DMV");
+			isTextPresent("Found Item: "+Settings.FOUND_ID_LF+", matched with Lost Report: "+Settings.LOST_ID_LF+", has been delivered with Tracking Number: Delivered for DMV");
 		} else {
 			System.out.println("LFDF: failed to deliver: " + Settings.FOUND_ID_LF);
 			return;
@@ -33,7 +33,7 @@ public class LF_DeliveredFound extends DefaultSeleneseTestCase {
 		waitForPageToLoadImproved(1000,false);
 
 		if (checkNoErrorPage()) {
-			selenium.isTextPresent("Found Item: "+Settings.FOUND_ID_LF+" is already delivered");
+			isTextPresent("Found Item: "+Settings.FOUND_ID_LF+" is already delivered");
 		} else {
 			System.out.println("Error delivering delivered Found Item: "+Settings.FOUND_ID_LF);
 			return;
