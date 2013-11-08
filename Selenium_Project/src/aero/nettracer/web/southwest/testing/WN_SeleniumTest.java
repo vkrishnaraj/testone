@@ -3,6 +3,8 @@ package aero.nettracer.web.southwest.testing;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.openqa.selenium.By;
+
 import aero.nettracer.web.utility.DefaultSeleneseTestCase;
 import aero.nettracer.web.utility.IncidentUtil;
 import aero.nettracer.web.utility.LoginUtil;
@@ -180,7 +182,7 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 	private void fillOptionalFields() {
 		selenium.type("name=passenger[0].decriptedDriversLicense", WN_SeleniumTest.DRIVERS_LICENSE);
 		selenium.select("name=passenger[0].dlstate", "label=Georgia");
-		verifyFalse(selenium.isEditable("name=passenger[0].driversLicenseProvince"));
+		verifyFalse(isEditable(By.name("passenger[0].driversLicenseProvince")));
 		verifyEquals("US", selenium.getValue("name=passenger[0].driversLicenseCountry"));
 		selenium.type("name=passenger[0].decryptedPassportNumber", WN_SeleniumTest.PASSPORT_NUMBER);
 		selenium.select("name=passenger[0].passportIssuer", "label=United States");

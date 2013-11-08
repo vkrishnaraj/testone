@@ -365,7 +365,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
 				selenium.select("id=courtesyReasonId", "label=Outside 4-Hour");
-				verifyFalse(selenium.isEditable("id=courtesyDescription"));
+				verifyFalse(isEditable(By.id("courtesyDescription")));
 				selenium.click("name=saveButton");
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
@@ -389,7 +389,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 	@Test
 	public void testCourtesyReasonAuditTrailEnabled() {
 		verifyTrue(navigateToIncidentAuditTrail());
-		verifyTrue(selenium.isTextPresent("Courtesy Reason : Outside 4-Hour"));
+		verifyTrue(selenium.isTextPresent("Reason : Outside 4-Hour"));
 		verifyTrue(selenium.isTextPresent("Courtesy Reason Description :"));
 		goToTaskManager();
 	}

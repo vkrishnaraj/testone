@@ -146,7 +146,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 			verifyTrue(isElementPresent(By.name("passenger[0].passportIssuer")));
 			selenium.type("name=passenger[0].decriptedDriversLicense",WN_SeleniumTest.DRIVERS_LICENSE);
 			selenium.select("name=passenger[0].dlstate", "label=Georgia");
-			verifyFalse(selenium.isEditable("name=passenger[0].driversLicenseProvince"));
+			verifyFalse(isEditable(By.name("passenger[0].driversLicenseProvince")));
 			verifyEquals("US",selenium.getValue("name=passenger[0].driversLicenseCountry"));
 			selenium.type("name=passenger[0].decryptedPassportNumber",WN_SeleniumTest.PASSPORT_NUMBER);
 			selenium.select("name=passenger[0].passportIssuer","label=United States");
@@ -177,13 +177,13 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	@Test
 	public void testVerifyDriversLicenseRedacted() {
 		verifyTrue(navigateToIncidentTest(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-		verifyFalse(selenium.isEditable("name=passenger[0].redactedDriversLicense"));
+		verifyFalse(isEditable(By.name("passenger[0].redactedDriversLicense")));
 		verifyEquals("*********", selenium.getValue("name=passenger[0].redactedDriversLicense"));
-		verifyFalse(selenium.isEditable("name=passenger[0].dlstate"));
+		verifyFalse(isEditable(By.name("passenger[0].dlstate")));
 		verifyEquals("GA", selenium.getValue("name=passenger[0].dlstate"));
-		verifyFalse(selenium.isEditable("name=passenger[0].driversLicenseProvince"));
+		verifyFalse(isEditable(By.name("passenger[0].driversLicenseProvince")));
 		verifyEquals("", selenium.getValue("name=passenger[0].driversLicenseProvince"));
-		verifyFalse(selenium.isEditable("name=passenger[0].driversLicenseCountry"));
+		verifyFalse(isEditable(By.name("passenger[0].driversLicenseCountry")));
 		verifyEquals("US", selenium.getValue("name=passenger[0].driversLicenseCountry"));
 		goToTaskManager();
 	}
@@ -191,9 +191,9 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	@Test
 	public void testVerifyPassportRedacted() {
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-		verifyFalse(selenium.isEditable("name=passenger[0].redactedPassportNumber"));
+		verifyFalse(isEditable(By.name("passenger[0].redactedPassportNumber")));
 		verifyEquals("***************", selenium.getValue("name=passenger[0].redactedPassportNumber"));
-		verifyFalse(selenium.isEditable("name=passenger[0].passportIssuer"));
+		verifyFalse(isEditable(By.name("passenger[0].passportIssuer")));
 		verifyEquals("US", selenium.getValue("name=passenger[0].passportIssuer"));
 		goToTaskManager();
 	}
@@ -243,13 +243,13 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		// MJS: enable view/edit drivers license
 		verifyTrue(setPermissions(new String[] { "632", "633" }, new boolean[] { true, true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-		verifyTrue(selenium.isEditable("name=passenger[0].decriptedDriversLicense"));
+		verifyTrue(isEditable(By.name("passenger[0].decriptedDriversLicense")));
 		verifyEquals(WN_CreateLD_VerifyRequiredFields.DRIVERS_LICENSE, selenium.getValue("name=passenger[0].decriptedDriversLicense"));
-		verifyTrue(selenium.isEditable("name=passenger[0].dlstate"));
+		verifyTrue(isEditable(By.name("passenger[0].dlstate")));
 		verifyEquals("GA", selenium.getValue("name=passenger[0].dlstate"));
-		verifyFalse(selenium.isEditable("name=passenger[0].driversLicenseProvince"));
+		verifyFalse(isEditable(By.name("passenger[0].driversLicenseProvince")));
 		verifyEquals("", selenium.getValue("name=passenger[0].driversLicenseProvince"));
-		verifyTrue(selenium.isEditable("name=passenger[0].driversLicenseCountry"));
+		verifyTrue(isEditable(By.name("passenger[0].driversLicenseCountry")));
 		verifyEquals("US", selenium.getValue("name=passenger[0].driversLicenseCountry"));		
 		goToTaskManager();
 		waitForPageToLoadImproved();
@@ -271,8 +271,8 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		selenium.select("name=passenger[0].driversLicenseCountry", "label=United Kingdom");
 		verifyEquals("", selenium.getValue("name=passenger[0].dlstate"));
-		verifyFalse(selenium.isEditable("name=passenger[0].dlstate"));
-		verifyTrue(selenium.isEditable("name=passenger[0].driversLicenseProvince"));
+		verifyFalse(isEditable(By.name("passenger[0].dlstate")));
+		verifyTrue(isEditable(By.name("passenger[0].driversLicenseProvince")));
 		selenium.type("name=passenger[0].driversLicenseProvince", "Test");
 		selenium.click("name=saveButton");
 		waitForPageToLoadImproved();
@@ -284,13 +284,13 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
 				verifyEquals("", selenium.getValue("name=passenger[0].dlstate"));
-				verifyFalse(selenium.isEditable("name=passenger[0].dlstate"));
-				verifyTrue(selenium.isEditable("name=passenger[0].driversLicenseProvince"));
+				verifyFalse(isEditable(By.name("passenger[0].dlstate")));
+				verifyTrue(isEditable(By.name("passenger[0].driversLicenseProvince")));
 				verifyEquals("Test", selenium.getValue("name=passenger[0].driversLicenseProvince"));
 				
 				selenium.select("name=passenger[0].driversLicenseCountry", "label=United States");
-				verifyTrue(selenium.isEditable("name=passenger[0].dlstate"));
-				verifyFalse(selenium.isEditable("name=passenger[0].driversLicenseProvince"));
+				verifyTrue(isEditable(By.name("passenger[0].dlstate")));
+				verifyFalse(isEditable(By.name("passenger[0].driversLicenseProvince")));
 				verifyEquals("", selenium.getValue("name=passenger[0].driversLicenseProvince"));
 				selenium.select("name=passenger[0].dlstate", "label=Alabama");
 				
@@ -303,9 +303,9 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 					waitForPageToLoadImproved();
 					if (checkNoErrorPage()) {
 						checkCopyrightAndQuestionMarks();
-						verifyTrue(selenium.isEditable("name=passenger[0].dlstate"));
+						verifyTrue(isEditable(By.name("passenger[0].dlstate")));
 						verifyEquals("AL", selenium.getValue("name=passenger[0].dlstate"));
-						verifyFalse(selenium.isEditable("name=passenger[0].driversLicenseProvince"));
+						verifyFalse(isEditable(By.name("passenger[0].driversLicenseProvince")));
 						verifyEquals("", selenium.getValue("name=passenger[0].driversLicenseProvince"));
 					} else {
 						System.out.println("!!!!!!!!!!!!!!! - Failed to load Incident: " + Settings.INCIDENT_ID_WN + ". Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
@@ -331,9 +331,9 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	public void testPassportViewEdit() {
 		verifyTrue(setPermissions(new String[] { "636", "637" }, new boolean[] { true, true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-		verifyTrue(selenium.isEditable("name=passenger[0].decryptedPassportNumber"));
+		verifyTrue(isEditable(By.name("passenger[0].decryptedPassportNumber")));
 		verifyEquals(WN_CreateLD_VerifyRequiredFields.PASSPORT_NUMBER, selenium.getValue("name=passenger[0].decryptedPassportNumber"));
-		verifyTrue(selenium.isEditable("name=passenger[0].passportIssuer"));
+		verifyTrue(isEditable(By.name("passenger[0].passportIssuer")));
 		verifyEquals("US", selenium.getValue("name=passenger[0].passportIssuer"));		
 		goToTaskManager();
 		waitForPageToLoadImproved();
@@ -573,13 +573,13 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	@Test
 	public void testEmptyDriversLicenseDisabled() {
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-		verifyFalse(selenium.isEditable("name=passenger[0].redactedDriversLicense"));
+		verifyFalse(isEditable(By.name("passenger[0].redactedDriversLicense")));
 		verifyEquals("", selenium.getValue("name=passenger[0].redactedDriversLicense"));
-		verifyFalse(selenium.isEditable("name=passenger[0].dlstate"));
+		verifyFalse(isEditable(By.name("passenger[0].dlstate")));
 		verifyEquals("", selenium.getValue("name=passenger[0].dlstate"));
-		verifyFalse(selenium.isEditable("name=passenger[0].driversLicenseProvince"));
+		verifyFalse(isEditable(By.name("passenger[0].driversLicenseProvince")));
 		verifyEquals("", selenium.getValue("name=passenger[0].driversLicenseProvince"));
-		verifyFalse(selenium.isEditable("name=passenger[0].driversLicenseCountry"));
+		verifyFalse(isEditable(By.name("passenger[0].driversLicenseCountry")));
 		verifyEquals("US", selenium.getValue("name=passenger[0].driversLicenseCountry"));
 		goToTaskManager();
 	}
@@ -588,12 +588,12 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	public void testEmptyDriversLicenseEnabled() {
 		verifyTrue(setPermissions(new String[] { "632", "633" } , new boolean[] { true, true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-		verifyTrue(selenium.isEditable("name=passenger[0].decriptedDriversLicense"));
+		verifyTrue(isEditable(By.name("passenger[0].decriptedDriversLicense")));
 		verifyEquals("", selenium.getValue("name=passenger[0].decriptedDriversLicense"));
-		verifyTrue(selenium.isEditable("name=passenger[0].dlstate"));
+		verifyTrue(isEditable(By.name("passenger[0].dlstate")));
 		verifyEquals("", selenium.getValue("name=passenger[0].dlstate"));
 		verifyEquals("", selenium.getValue("name=passenger[0].driversLicenseProvince"));
-		verifyTrue(selenium.isEditable("name=passenger[0].driversLicenseCountry"));
+		verifyTrue(isEditable(By.name("passenger[0].driversLicenseCountry")));
 		verifyEquals("US", selenium.getValue("name=passenger[0].driversLicenseCountry"));
 		goToTaskManager();
 	}
@@ -601,9 +601,9 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	@Test
 	public void testEmptyPassportDisabled() {
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-		verifyFalse(selenium.isEditable("name=passenger[0].redactedPassportNumber"));
+		verifyFalse(isEditable(By.name("passenger[0].redactedPassportNumber")));
 		verifyEquals("", selenium.getValue("name=passenger[0].redactedPassportNumber"));
-		verifyFalse(selenium.isEditable("name=passenger[0].passportIssuer"));
+		verifyFalse(isEditable(By.name("passenger[0].passportIssuer")));
 		verifyEquals("US", selenium.getValue("name=passenger[0].passportIssuer"));
 		goToTaskManager();
 	}
@@ -612,9 +612,9 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	public void testEmptyPassportEnabled() {
 		verifyTrue(setPermissions(new String[] { "636", "637" }, new boolean[] { true, true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-		verifyTrue(selenium.isEditable("name=passenger[0].decryptedPassportNumber"));
+		verifyTrue(isEditable(By.name("passenger[0].decryptedPassportNumber")));
 		verifyEquals("", selenium.getValue("name=passenger[0].decryptedPassportNumber"));
-		verifyTrue(selenium.isEditable("name=passenger[0].passportIssuer"));
+		verifyTrue(isEditable(By.name("passenger[0].passportIssuer")));
 		verifyEquals("US", selenium.getValue("name=passenger[0].passportIssuer"));
 		goToTaskManager();
 	}
@@ -679,8 +679,8 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		verifyTrue(selenium.isTextPresent("Fault Code"));
 		verifyTrue(selenium.isTextPresent("Fault Station"));
-		verifyTrue(selenium.isEditable("name=theitem[0].lossCode"));
-		verifyTrue(selenium.isEditable("name=theitem[0].faultStation_id"));
+		verifyTrue(isEditable(By.name("theitem[0].lossCode")));
+		verifyTrue(isEditable(By.name("theitem[0].faultStation_id")));
 		selenium.select("name=theitem[0].lossCode", "value=11");
 		selenium.select("name=theitem[0].faultStation_id", "label=LZ");
 		selenium.click("name=saveButton");
@@ -749,8 +749,8 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 			verifyTrue(selenium.isTextPresent("The Baggage Delivery Order has been successfully saved"));
 			verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 			verifyTrue(selenium.isTextPresent("Cannot Passenger Pick Up - There is a Non-Cancelled BDO for this Item"));
-			verifyFalse(selenium.isEditable("name=theitem[0].lossCode"));
-			verifyFalse(selenium.isEditable("name=theitem[0].faultStation_id"));
+			verifyFalse(isEditable(By.name("theitem[0].lossCode")));
+			verifyFalse(isEditable(By.name("theitem[0].faultStation_id")));
 			goToTaskManager();
 		} else {
 			System.out.println("!!!!!!!!!!!!!!!! Failed to save BDO for incident");
@@ -761,8 +761,8 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	public void testBagLossEditDelivered(){
 		verifyTrue(setPermissions(new String[] { "662","663"}, new boolean[] { false, true}));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-		verifyTrue(selenium.isEditable("name=theitem[0].lossCode"));
-		verifyTrue(selenium.isEditable("name=theitem[0].faultStation_id"));
+		verifyTrue(isEditable(By.name("theitem[0].lossCode")));
+		verifyTrue(isEditable(By.name("theitem[0].faultStation_id")));
 		goToTaskManager();
 	}
 	

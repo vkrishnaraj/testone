@@ -101,6 +101,10 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 		return driver.findElement(By.tagName("body")).getText().contains(text);
 	}
 	
+	protected boolean isEditable(By by) {
+		return driver.findElement(by).isEnabled();
+	}
+	
 	protected void refreshDriver() {
 		driver = WebDriverUtil.refreshDriver(driver);
 	}

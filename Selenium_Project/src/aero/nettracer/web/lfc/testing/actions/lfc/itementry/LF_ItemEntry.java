@@ -160,7 +160,7 @@ public class LF_ItemEntry extends LFC_SeleniumTest {
 		selenium.click("//input[@id='button']");
 		selenium.select("//select[@id='state']", "label=Alabama");
 		verifyEquals("United States", selenium.getSelectedLabel("//div[@id='contactInfoDiv']/table/tbody/tr[3]/td[5]/select"));
-		verifyFalse(selenium.isEditable("//div[@id='contactInfoDiv']/table/tbody/tr[3]/td[3]/input"));
+		verifyFalse(isEditable(By.xpath("//div[@id='contactInfoDiv']/table/tbody/tr[3]/td[3]/input")));
 		selenium.click("//input[@id='saveButton']");
 		waitForPageToLoadImproved();
 		
@@ -236,11 +236,11 @@ public class LF_ItemEntry extends LFC_SeleniumTest {
 		selenium.select("//select[@name='found.locationId']", "label=LZ");
 		selenium.click("//input[@id='button']");
 		selenium.select("//select[@id='country']", "label=Afghanistan");
-		verifyFalse(selenium.isEditable("//select[@id='state']"));
-		verifyTrue(selenium.isEditable("//input[@id='province']"));
+		verifyFalse(isEditable(By.xpath("//select[@id='state']")));
+		verifyTrue(isEditable(By.xpath("//input[@id='province']")));
 		selenium.select("//select[@id='country']", "label=United States");
-		verifyTrue(selenium.isEditable("//select[@id='state']"));
-		verifyFalse(selenium.isEditable("//input[@id='province']"));
+		verifyTrue(isEditable(By.xpath("//select[@id='state']")));
+		verifyFalse(isEditable(By.xpath("//input[@id='province']")));
 		selenium.click("//input[@id='saveButton']");
 		waitForPageToLoadImproved();
 		
@@ -402,12 +402,12 @@ public class LF_ItemEntry extends LFC_SeleniumTest {
 		verifyTrue(isElementPresent(By.xpath("//div[@id='moveDiv_" + divId + "']/input")));
 		verifyTrue(isElementPresent(By.xpath("//div[@id='moveDiv_" + divId + "']/center/input[@type='button']")));
 		waitForPageToLoadImproved(3000, false);
-		verifyFalse(selenium.isEditable("//input[@id='saveButton']"));
+		verifyFalse(isEditable(By.xpath("//input[@id='saveButton']")));
 		selenium.click("//div[@id='moveDiv_" + divId + "']/center/input");
 		verifyFalse(isElementPresent(By.xpath("//div[@id='moveDiv_" + divId + "']/input")));
 		verifyFalse(isElementPresent(By.xpath("//div[@id='moveDiv_" + divId + "']/center/input[@type='button']")));
 		waitForPageToLoadImproved(3000, false);
-		verifyTrue(selenium.isEditable("//input[@id='saveButton']"));
+		verifyTrue(isEditable(By.xpath("//input[@id='saveButton']")));
 	}
 	
 	private void clearSummaryDivs() {
