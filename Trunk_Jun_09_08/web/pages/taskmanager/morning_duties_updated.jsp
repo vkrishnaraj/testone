@@ -49,7 +49,7 @@
                	}%>
           	<br/>
           	<logic:present name="gettaskbutton">
-          	<input type="button" value="<bean:message key="generaltask.getnexttask" />" onclick='document.location.href="<%=url %>.do?gettask=<%=day %>";' id="button">
+          	<input type="button" value="<bean:message key="generaltask.getnexttask" />" onclick='this.disabled;document.location.href="<%=url %>.do?gettask=<%=day %>";return true;' id="button">
   			</logic:present>   
   			<logic:present name="taskmanagerbutton" scope="request">
   			<input type="button" value="Return to Task Manager" onclick='document.location.href="logon.do?taskmanager=1";' id="button">

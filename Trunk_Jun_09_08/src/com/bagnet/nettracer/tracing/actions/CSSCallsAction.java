@@ -161,6 +161,7 @@ public class CSSCallsAction extends Action{
 				session.setAttribute("sessionTaskContainer", hasTask);
 				session.setAttribute("sessionTaskStartTime", new Date());
 				response.sendRedirect("css_calls.do?loadIncident=" + hasTask.getIncident().getIncident_ID());
+				return null;
 			}
 			
 			MorningDutiesTask gtask = null;

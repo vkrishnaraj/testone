@@ -84,13 +84,8 @@ if (hasPermission) {
 		<% if (isCss) { %>
 		        <SCRIPT LANGUAGE="JavaScript">
 
-		        var calTask = new CalendarPopup();
-		        var yesterdayDate = new Date();
-		        yesterdayDate.setDate(yesterdayDate.getDate() - 1);
-		        var futureDate = new Date();
-		        futureDate.setDate(futureDate.getDate() + 7);
-		        calTask.addDisabledDates(null, formatDate(yesterdayDate,"yyyy-MM-dd"));
-		        calTask.addDisabledDates(formatDate(futureDate,"yyyy-MM-dd"), null);
+		        var todayDate = new Date();
+		        var dateString = formatDate(todayDate,"<%=a.getDateformat().getFormat() %>");
 
 				function closeTask(type) {
 					var taskRemark = document.getElementById("taskRemark").value.replace(/^\s+|\s+$/g, '');
@@ -161,20 +156,12 @@ if (hasPermission) {
 					'<form><div>' +
 					'	<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" width="100%" >' +
 					'		<tr>' +
-					'   		<td width="50%"><strong><bean:message key="generaltask.new.start.date" /></strong><br/>' +
-					'			<input type="text" id="taskNewStartDate" class="textfield" value="" readonly="true" />' +
-					'			<img src="deployment/main/images/calendar/calendar_icon.gif" id="taskNewStartCal" name="taskExpireCal" height="15"' +
-					'				width="20" border="0" onmouseover="this.style.cursor=\'hand\'"' +
-					'				onClick="calTask.selectTask(\'taskNewStartDate\',\'taskNewStartCal\',\'<%= a.getDateformat().getFormat() %>\'); return false;"></td>' +
-					'   		<td width="50%"><strong><bean:message key="generaltask.new.start" /></strong><br/>' +
+					'   		<td><strong><bean:message key="generaltask.new.start" /></strong><br/>' +
+					'			<input type="hidden" id="taskNewStartDate" value="' + dateString + '" />' +
 					'			<input type="text" id="taskNewStart" class="textfield" value="" maxlength="5" /></td>' +
 					'		</tr><tr>' +
-					'			<td><strong><bean:message key="generaltask.expire.date" /></strong><br/>' +
-					'			<input type="text" id="taskExpireDate" class="textfield" value="" readonly="true" />' +
-					'			<img src="deployment/main/images/calendar/calendar_icon.gif" id="taskExpireCal" name="taskExpireCal" height="15"' +
-					'				width="20" border="0" onmouseover="this.style.cursor=\'hand\'"' +
-					'				onClick="calTask.selectTask(\'taskExpireDate\',\'taskExpireCal\',\'<%= a.getDateformat().getFormat() %>\'); return false;"></td>' +
 					'			<td><strong><bean:message key="generaltask.expire" /></strong><br/>' +
+					'			<input type="hidden" id="taskExpireDate" value="' + dateString + '" />' +
 					'			<input type="text" id="taskExpire" class="textfield" value="" maxlength="5" /></td>' +
 					'		</tr>' +
 					'	</table><br /><br />' +

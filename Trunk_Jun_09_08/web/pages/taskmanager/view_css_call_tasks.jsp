@@ -83,7 +83,7 @@ function updatePagination() {
               </logic:notPresent>
             <logic:present name="resultlist" scope="request">
             <center>
-            	<input type="button" value="Start Working!" onclick='document.location.href="css_calls.do?gettask=1";return true;' id="button">
+            	<input type="button" value="Start Working!" onclick='this.disabled;document.location.href="css_calls.do?gettask=1";return true;' id="button">
             </center>
             <br/>
               <h1 class="green">

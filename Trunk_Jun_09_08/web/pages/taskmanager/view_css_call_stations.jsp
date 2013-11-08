@@ -84,7 +84,7 @@
                 <logic:iterate id="cssStation" name="generaltaskForm" property="stationList" type="com.bagnet.nettracer.tracing.dto.CSSStationsDTO">
                   <tr>
                     <td style="width:8%;" align="center">
-                    	<% if (cssStation.getStation2Desc() != null) { %>
+                    	<% if (cssStation.getStation1Desc() != null) { %>
                     	<html:checkbox name="cssStation" property="station1Checked" indexed="true" styleId="<%="check" + cssStation.getStation1Desc() %>" />
                     	<% } %>
                     </td>
