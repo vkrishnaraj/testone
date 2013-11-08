@@ -80,8 +80,7 @@ public class AD_CreateDam_VerifyRequiredFields extends DefaultSeleneseTestCase {
 				selenium.click("name=saveButton");
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
-					verifyTrue(selenium
-							.isTextPresent("Damaged Bag Incident has been submitted."));
+					verifyTrue(isTextPresent("Damaged Bag Incident has been submitted."));
 					checkCopyrightAndQuestionMarks();
 					String damage_id = selenium
 							.getText("//td[@id='middlecolumn']/table/tbody/tr/td/h1/p/a");
