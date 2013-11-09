@@ -57,7 +57,6 @@ public class SeleniumTestBrowserDefault extends Settings {
 	public synchronized static void stopBrowser(String client, boolean useWD) {
 		if (useWD) {
 			driver.quit();
-			ogDriver.quit();
 		} else {
 			browser.stop();
 		}
