@@ -654,7 +654,8 @@ public class IssuanceItemBMO {
 			if (isInventoried) {
 				moveInventoriedItem(iItem.getIssuanceItemInventory().getId(), TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_AVAILABLE, iItem.getIssueAgent(), iItem.getIncident().getIncident_ID(), "Returned from Incident", false);
 			} else {
-				int quantity = iItem.getIssuanceItemQuantity().getQuantity() + iItem.getQuantity();
+				IssuanceItemQuantity qItem = getQuantifiedItem(iItem.getIssuanceItemQuantity().getId() + "");
+				int quantity = qItem.getQuantity() + iItem.getQuantity();
 				editQuantifiedItem(iItem.getIssuanceItemQuantity().getId(), quantity, -1, iItem.getIssueAgent(), iItem.getIncident().getIncident_ID(), false);
 			}
 		} else {
