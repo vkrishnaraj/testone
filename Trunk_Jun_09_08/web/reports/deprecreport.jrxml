@@ -5,7 +5,7 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="categoryName" class="java.lang.String"/>
-	<field name="dispCalcValue" class="java.lang.String"/>
+	<field name="dispClaimValue" class="java.lang.String"/>
 	<field name="dispAmountClaimed" class="java.lang.String"/>
 	<field name="percent" class="java.lang.String"/>
 	<field name="depamount" class="java.lang.String"/>
@@ -25,7 +25,7 @@
 		<band height="21">
 			<textField isBlankWhenNull="false">
 				<reportElement key="textField-16" x="283" y="0" width="60" height="20">
-					<printWhenExpression><![CDATA[new Boolean($F{dispCalcValue} != null ? true : false)]]></printWhenExpression>
+					<printWhenExpression><![CDATA[new Boolean($F{dispClaimValue} != null ? true : false)]]></printWhenExpression>
 				</reportElement>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -34,7 +34,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement lineSpacing="Single"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{dispCalcValue}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{dispClaimValue}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false">
 				<reportElement key="textField-13" x="5" y="0" width="82" height="20">

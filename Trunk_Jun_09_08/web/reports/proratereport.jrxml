@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="deprecreport" pageWidth="530" pageHeight="351" orientation="Landscape" columnWidth="530" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
 	<property name="ireport.scriptlethandling" value="2"/>
 	<property name="ireport.zoom" value="1.9487171000000054"/>
-	<property name="ireport.x" value="19"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<field name="prorate_Itinerary_ID" class="java.lang.Integer"/>
 	<field name="disdepartdate" class="java.lang.String"/>
@@ -10,7 +10,7 @@
 	<field name="percentage" class="java.lang.Double"/>
 	<field name="miles" class="java.lang.Double"/>
 	<field name="legto" class="java.lang.String"/>
-	<field name="share" class="java.lang.Double"/>
+	<field name="disshare" class="java.lang.String"/>
 	<background>
 		<band isSplitAllowed="false"/>
 	</background>
@@ -105,7 +105,7 @@
 			</textField>
 			<textField isBlankWhenNull="false">
 				<reportElement key="textField-10" x="399" y="0" width="60" height="20">
-					<printWhenExpression><![CDATA[new Boolean($F{share} != null ? true : false)]]></printWhenExpression>
+					<printWhenExpression><![CDATA[new Boolean($F{disshare} != null ? true : false)]]></printWhenExpression>
 				</reportElement>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -114,7 +114,7 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement lineSpacing="Single"/>
-				<textFieldExpression class="java.lang.Double"><![CDATA[$F{share}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{disshare}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
