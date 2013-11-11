@@ -334,7 +334,7 @@ if (request.getAttribute("lostdelay") != null || request.getAttribute("missing")
       <bean:message key="copyright.line1"/><br/>
     <bean:message key="copyright.line2"/></div><div id="dialog"><div id="dialog-inner-content"></div></div></td> 
       <td align="right" width="1">
-            <bean:message key="footer.current_version"/><% if (agent != null && "ntadmin".equals(agent.getUsername())) { %>.<bean:message key="build.number"/><% } %>-<%= TracerProperties.getInstanceLabel() %>
+            <bean:message key="footer.current_version"/><% if (agent != null && "ntadmin".equals(agent.getUsername())) { %><bean:message key="branch.number"/><bean:message key="build.number"/><% } %>-<%= TracerProperties.getInstanceLabel() %>
       </td>
       </tr>
       </table>

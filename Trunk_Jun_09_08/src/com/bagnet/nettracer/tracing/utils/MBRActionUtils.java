@@ -320,20 +320,25 @@ public class MBRActionUtils {
 				iss_inc.setIssueDate(TracerDateTime.getGMTDate());
 				iss_inc.setUpdated(true);
 				if (issueQ && quantity != null && quantity.matches("^\\d+$")) {
-					iss_inc.setQuantity(Integer.parseInt(quantity));
-					IssuanceItemQuantity qItem = getQuantifiedItem(request, type);
-					qItem.setQuantity(qItem.getQuantity() - iss_inc.getQuantity());
-					iss_inc.setIssuanceItemQuantity(qItem);
-					adjustIssuanceLists(request, qItem, null, null);
-					//generate tempalte receipt
-					DocumentTemplateResult result = generateTemplateReceipt(user, qItem.getIssuanceItem(), incident);
-					if (result.isSuccess()) {
-						Document d = (Document) result.getPayload();
-						iss_inc.setDocument(d);	 					
-						request.setAttribute("receiptName", d.getFileName());
-					} else {
-						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(result.getMessageKey()));
-					}										
+					int quantityInt = Integer.parseInt(quantity);
+					if (quantityInt > 0) {
+						iss_inc.setQuantity(quantityInt);
+						IssuanceItemQuantity qItem = getQuantifiedItem(request, type);
+						qItem.setQuantity(qItem.getQuantity() - iss_inc.getQuantity());
+						iss_inc.setIssuanceItemQuantity(qItem);
+						adjustIssuanceLists(request, qItem, null, null);
+						//generate tempalte receipt
+						DocumentTemplateResult result = generateTemplateReceipt(user, qItem.getIssuanceItem(), incident);
+						if (result.isSuccess()) {
+							Document d = (Document) result.getPayload();
+							iss_inc.setDocument(d);	 					
+							request.setAttribute("receiptName", d.getFileName());
+						} else {
+							errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(result.getMessageKey()));
+						}
+					} else { // quantity is a number but less than 1
+						return false;
+					}
 				} else if (issueL || issueT) {
 					IssuanceItemInventory iItem = getInventoriedItem(request, type);
 					if (issueL) {
