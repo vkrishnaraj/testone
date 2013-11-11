@@ -34,19 +34,19 @@ public class NK_InboxMessage extends NK_SeleniumTest {
 					(new Select(driver.findElement(By.name("file_type")))).selectByVisibleText("Incident");
 					driver.findElement(By.name("file_ref_number")).sendKeys("TTTTT");
 					driver.findElement(By.name("send2")).click();
-					verifyTrue(driver.getPageSource().contains("Incorrect incident number/type"));
+					verifyTrue(isTextPresent("Incorrect incident number/type"));
 					WebElement file_ref = driver.findElement(By.name("file_ref_number"));
 					file_ref.clear();
 					file_ref.sendKeys(inc_id);
 				}
 				driver.findElement(By.name("send2")).click();
-				verifyTrue(driver.getPageSource().contains("Message has been sent."));
+				verifyTrue(isTextPresent("Message has been sent."));
 				clickMenu("menucol_0.0");
 				LoginUtil.setCbroStation(driver, "BOS");
 				try {
 					driver.findElement(By.id("16link")).click();
 					driver.findElement(By.linkText("Test Message: " + inc_id)).click();
-					verifyTrue(driver.getPageSource().contains("Test Message that references Incident: " + inc_id));
+					verifyTrue(isTextPresent("Test Message that references Incident: " + inc_id));
 					clickMenu("menucol_0.0");
 				} finally {
 					LoginUtil.setCbroStation(driver, LZ_STATION);

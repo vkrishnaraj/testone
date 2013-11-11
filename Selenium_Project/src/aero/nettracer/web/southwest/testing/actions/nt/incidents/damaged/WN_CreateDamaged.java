@@ -525,6 +525,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 
 		if (checkNoErrorPage()) {
 			selenium.select("name=delivercompany_ID", "label=Dynamex");
+			waitForPageToLoadImproved(250);
 			selenium.select("name=servicelevel_ID", "label=Regular");
 			selenium.click("id=calendar");
 			selenium.click("link=Today");

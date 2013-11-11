@@ -90,7 +90,7 @@ public class WebDriverUtil {
 	
 	private static void waitForStaleElement(WebDriver driver, WebElement element, String identifier, int tryNumber) {
 		try {
-			WebDriverWait wait = new WebDriverWait(driver, 30);
+			WebDriverWait wait = new WebDriverWait(driver, Settings.ELEMENT_TIMEOUT_SECONDS);
 			wait.until(ExpectedConditions.stalenessOf(element));
 		} catch (TimeoutException ex) {
 			tryNumber++;
