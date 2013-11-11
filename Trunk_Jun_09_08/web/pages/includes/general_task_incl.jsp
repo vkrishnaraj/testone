@@ -156,11 +156,10 @@ if (hasPermission) {
 					'<form><div>' +
 					'	<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" width="100%" >' +
 					'		<tr>' +
-					'   		<td><strong><bean:message key="generaltask.new.start" /></strong><br/>' +
+					'   		<td width="50%"><strong><bean:message key="generaltask.new.start" /></strong><br/>' +
 					'			<input type="hidden" id="taskNewStartDate" value="' + dateString + '" />' +
 					'			<input type="text" id="taskNewStart" class="textfield" value="" maxlength="5" /></td>' +
-					'		</tr><tr>' +
-					'			<td><strong><bean:message key="generaltask.expire" /></strong><br/>' +
+					'			<td width="50%"><strong><bean:message key="generaltask.expire" /></strong><br/>' +
 					'			<input type="hidden" id="taskExpireDate" value="' + dateString + '" />' +
 					'			<input type="text" id="taskExpire" class="textfield" value="" maxlength="5" /></td>' +
 					'		</tr>' +
@@ -171,7 +170,7 @@ if (hasPermission) {
 					'	<br /><br />' +
 					'</div></form>';
 					jQuery("#dialog").dialog({bgiframe : true, autoOpen: false, modal: true, draggable: false, resizable: false, 
-									width: 500, height: 200, title: 'Defer Task', close: function(ev,ui){ jQuery('#dialog-inner-content').empty();} });
+									width: 400, height: 150, title: 'Defer Task', close: function(ev,ui){ jQuery('#dialog-inner-content').empty();} });
 					jQuery('#dialog-inner-content').html(theHtml);
 					jQuery("#dialog").dialog("open");
 					jQuery("#dialog").dialog("option", "title","Defer Task");

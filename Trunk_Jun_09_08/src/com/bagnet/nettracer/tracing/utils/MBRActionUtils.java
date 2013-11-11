@@ -430,7 +430,7 @@ public class MBRActionUtils {
 					}
 				}
 				if (addQItem) { // Adding to list if quantity not adjusted
-					item.getIssuanceItemQuantity().setQuantity(item.getIssuanceItemQuantity().getQuantity() + item.getQuantity());
+					item.getIssuanceItemQuantity().setQuantity(item.getQuantity());
 					returnQList.add(item.getIssuanceItemQuantity());
 				}
 			}

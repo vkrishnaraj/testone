@@ -855,6 +855,7 @@
         <script language="JavaScript">
 
         var issItemType = "0";
+        var validQuantity = "0";
 
     	function populateType() {
     		var catList=document.getElementById("issuance_category");
@@ -893,23 +894,24 @@
     						issItemType = "0";
 							<logic:iterate indexId="j" id="q_item" name="item_quantity_resultList" type="com.bagnet.nettracer.tracing.db.issuance.IssuanceItemQuantity" >
 							<% if (c_item.getId() == q_item.getIssuanceItem().getCategory().getId()) { 
-									String customDesc = q_item.getIssuanceItem().getDescription() + " (" + q_item.getQuantity() + " Available)"; %>
+									String customDesc = q_item.getIssuanceItem().getDescription() + " (" + q_item.getQuantity() + " Available)"; 
+									if (index == 0) { %> validQuantity = <%=q_item.getQuantity() %>;<% }%>
 								typeList.options[<%=index%>]=new Option("<%=customDesc%>","<%=q_item.getId()%>",false,false);
 							<% index++; } %>
 							</logic:iterate>
-				    		issueAddTR3.innerHTML="<bean:message key='issuance.item.quantity.issued' />" + "<br/><input type='text' name='issuance_quantity' class='textfield' value='1' />";
-				    		issueAddTR4.innerHTML="<br/><input type='submit' name='issueItem' id='button' value='"+"<bean:message key='issuance.item.button.issue' />"+"' >";
+				    		issueAddTR3.innerHTML="<bean:message key='issuance.item.quantity.issued' />" + "<br/><input type='text' name='issuance_quantity' id='issuance_quantity' class='textfield' value='1' />";
+				    		issueAddTR4.innerHTML="<br/><input type='submit' name='issueItem' id='button' onclick='return validateIssuanceQuantity();' value='"+"<bean:message key='issuance.item.button.issue' />"+"' >";
     				<%  } %>
     			}
     		</logic:iterate>
     	}
 
     	function populateInventoryOptions() {
+    		var typeList=document.getElementById("issuance_type");
+    		var selectedType=typeList.options[typeList.selectedIndex].value;
         	if ("1"==issItemType) {
-	    		var typeList=document.getElementById("issuance_type");
 				var issueAddTR3=document.getElementById("issuanceAdd3");
 	    		var issueAddTR4=document.getElementById("issuanceAdd4");
-	    		var selectedType=typeList.options[typeList.selectedIndex].value;
 		    	issueAddTR3.innerHTML="&nbsp;";
 		    	issueAddTR4.innerHTML="&nbsp;";
 				<logic:iterate indexId="i" id="i_item" name="item_inventory_resultList" type="com.bagnet.nettracer.tracing.db.issuance.IssuanceItemInventory" >
@@ -924,8 +926,24 @@
 						<% } %>
 	    			}
 				</logic:iterate>
-        	}
+        	} else {
+				<logic:iterate indexId="i" id="q_item" name="item_quantity_resultList" type="com.bagnet.nettracer.tracing.db.issuance.IssuanceItemQuantity" >
+    				if("<%=q_item.getId()%>"==selectedType) {
+    					validQuantity = <%=q_item.getQuantity() %>;
+    				}
+				</logic:iterate>
+            }
     	}
+
+    	function validateIssuanceQuantity() {
+			var quantField = document.getElementById("issuance_quantity");
+			if (quantField.value > validQuantity) {
+				alert("<bean:message key='issuance.item.quantity.issued' />" + " value must be less than or equal to " + validQuantity);
+				quantField.focus();
+				return false;	
+			}
+			return true;
+        }
     	
         </script>
   <a name="addissuanceitem"></a>
