@@ -846,8 +846,7 @@ public class OhdBMO {
 				c.setTime(srdate);
 				c.add(Calendar.DATE, 1);
 				erdate = c.getTime();
-				sql.append(" and ((itinerary.departdate >= :startroutedate and itinerary.departdate<= :endroutedate) "
-					+ " or (itinerary.arrivedate >= :startroutedate and itinerary.arrivedate <= :endroutedate))");
+				sql.append(" and (itinerary.departdate >= :startroutedate and itinerary.departdate< :endroutedate) ");
 			}
 			
 			if (!iscount) {
@@ -1198,8 +1197,7 @@ public class OhdBMO {
 				c.setTime(srdate);
 				c.add(Calendar.DATE, 1);
 				erdate = c.getTime();
-				s.append(" and ((itinerary.departdate>= :startroutedate and itinerary.departdate<= :endroutedate) "
-					+ " or (itinerary.arrivedate >= :startroutedate and itinerary.arrivedate <= :endroutedate))");
+				s.append(" and (itinerary.departdate>= :startroutedate and itinerary.departdate< :endroutedate) ");
 			}
 			
 			// record locator
