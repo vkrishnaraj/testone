@@ -683,7 +683,8 @@ public class OhdBMO {
 			}
 
 			if (oDTO.getAirline().length() > 0 || oDTO.getFlightnum().trim().length() > 0 
-					|| oDTO.getRoutingstation().trim().length()>0 || oDTO.getRoutingdate().length()>0 
+					|| (oDTO.getRoutingstation()!=null && oDTO.getRoutingstation().trim().length()>0)
+					|| (oDTO.getRoutingdate()!=null && oDTO.getRoutingdate().length()>0) 
 					|| (sort != null && (sort.equalsIgnoreCase(SortParam.OHD_DESTINATION.getParamString()) || sort.equalsIgnoreCase(SortParam.OHD_DESTINATIONREV.getParamString())))) {
 				sql.append(" join ohd.itinerary itinerary ");
 			}
@@ -1102,7 +1103,8 @@ public class OhdBMO {
 			}
 
 			if (siDTO.getFlightnum().length() > 0 || siDTO.getAirline().length() > 0
-					|| siDTO.getRoutingstation().length()>0 || siDTO.getRoutingdate().length()>0){ 
+					|| (siDTO.getRoutingstation()!=null && siDTO.getRoutingstation().length()>0)
+					|| (siDTO.getRoutingdate()!=null && siDTO.getRoutingdate().length()>0)){ 
 				s.append(" join ohd.itinerary itinerary ");
 			}
 
