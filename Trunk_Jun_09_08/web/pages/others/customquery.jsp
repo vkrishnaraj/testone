@@ -324,7 +324,7 @@ function updatePagination() {
               </tr>
               <tr id="ohdFields" style="display:none">
               	<% if(invDate){ %>
-	             	 <td>
+	             	 <td colspan="2">
 		             	  <bean:message key="colname.inventory.date"/>
 		                  (
 		                  <%= a.getDateformat().getFormat() %>)
@@ -334,7 +334,7 @@ function updatePagination() {
 	                
 		              </td>
 	            <% } %>
-	              <td colspan="2">
+	              <td colspan="<%=invDate?"1":"2"%>">
 	              	  <bean:message key="colname.routing.date"/>
 	                  (
 	                  <%= a.getDateformat().getFormat() %>)
