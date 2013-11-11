@@ -22,8 +22,15 @@ public class WebDriverUtil {
 	private static SeleneseTestBase base = new SeleneseTestBase();
 	
 	public static void goToTaskManager(WebDriver driver) {
-		if (!(driver.findElement(By.xpath("//div[@id='maincontent']/form/div/h1")).getText()).contains("Task Manager Home")) {
+		driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
+		try {
+			if (!(driver.findElement(By.xpath("//div[@id='maincontent']/form/div/h1")).getText()).contains("Task Manager Home")) {
+				clickMenu(driver, "menucol_0.0");
+			}
+		} catch (NoSuchElementException ex) {
 			clickMenu(driver, "menucol_0.0");
+		} finally {
+			driver.manage().timeouts().implicitlyWait(Settings.ELEMENT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
 		}
 	}
 	
