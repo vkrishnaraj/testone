@@ -42,7 +42,7 @@ public class Ohd_DTO {
 
 	private String foundStation = "";
 	private String heldStation = "";
-	private String routingStation = "";
+	private String routingstation = "";
 
 	private String foundCompany = "";
 	private String heldCompany = "";
@@ -588,12 +588,12 @@ public class Ohd_DTO {
 		this.e_inventorydate = e_inventorydate;
 	}
 
-	public String getRoutingStation() {
-		return routingStation;
+	public String getRoutingstation() {
+		return routingstation;
 	}
 
-	public void setRoutingStation(String routingStation) {
-		this.routingStation = routingStation;
+	public void setRoutingstation(String routingstation) {
+		this.routingstation = routingstation;
 	}
 
 	public String getRoutingdate() {

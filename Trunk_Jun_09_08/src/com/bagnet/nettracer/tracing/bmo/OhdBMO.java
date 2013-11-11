@@ -683,7 +683,7 @@ public class OhdBMO {
 			}
 
 			if (oDTO.getAirline().length() > 0 || oDTO.getFlightnum().trim().length() > 0 
-					|| oDTO.getRoutingStation().trim().length()>0 || oDTO.getRoutingdate().length()>0 
+					|| oDTO.getRoutingstation().trim().length()>0 || oDTO.getRoutingdate().length()>0 
 					|| (sort != null && (sort.equalsIgnoreCase(SortParam.OHD_DESTINATION.getParamString()) || sort.equalsIgnoreCase(SortParam.OHD_DESTINATIONREV.getParamString())))) {
 				sql.append(" join ohd.itinerary itinerary ");
 			}
@@ -780,7 +780,7 @@ public class OhdBMO {
 			if (oDTO.getFlightnum() != null && oDTO.getFlightnum().length() > 0) {
 				sql.append(" and itinerary.flightnum like :flightnum");
 			}
-			if(oDTO.getRoutingStation()!=null && oDTO.getRoutingStation().length()>0){
+			if(oDTO.getRoutingstation()!=null && oDTO.getRoutingstation().length()>0){
 				sql.append(" and (itinerary.legfrom = :routingstation or itinerary.legto = :routingstation) ");
 			}
 			
@@ -1010,8 +1010,8 @@ public class OhdBMO {
 				}
 			}
 
-			if(oDTO.getRoutingStation()!=null && !oDTO.getRoutingStation().isEmpty()){
-				q.setString("routingstation", oDTO.getRoutingStation());
+			if(oDTO.getRoutingstation()!=null && !oDTO.getRoutingstation().isEmpty()){
+				q.setString("routingstation", oDTO.getRoutingstation());
 			}
 			
 			if (sidate != null) {
@@ -1094,16 +1094,21 @@ public class OhdBMO {
 			TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
 
 
-			if (iscount) 
+			if (iscount) {
 				s.append("select count(ohd.OHD_ID) from com.bagnet.nettracer.tracing.db.OHD ohd ");
-			else s.append("select distinct ohd from com.bagnet.nettracer.tracing.db.OHD ohd ");
+			}
+			else {
+				s.append("select distinct ohd from com.bagnet.nettracer.tracing.db.OHD ohd ");
+			}
 
 			if (siDTO.getFlightnum().length() > 0 || siDTO.getAirline().length() > 0
-					|| siDTO.getRoutingstation().length()>0 || siDTO.getRoutingdate().length()>0) 
+					|| siDTO.getRoutingstation().length()>0 || siDTO.getRoutingdate().length()>0){ 
 				s.append(" join ohd.itinerary itinerary ");
+			}
 
-			if (siDTO.getDescription().length() > 0 || siDTO.getCategory_ID() > 0) 
+			if (siDTO.getDescription().length() > 0 || siDTO.getCategory_ID() > 0){ 
 				s.append(" join ohd.items item");
+			}
 
 			if (siDTO.getFirstname().length() > 0 || siDTO.getMiddlename().length() > 0
 					|| siDTO.getLastname().length() > 0 || siDTO.getAddress1().length() > 0 || siDTO.getAddress2().length() > 0
