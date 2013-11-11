@@ -22,15 +22,22 @@ public class WebDriverUtil {
 	private static SeleneseTestBase base = new SeleneseTestBase();
 	
 	public static void goToTaskManager(WebDriver driver) {
-		if (!driver.getPageSource().contains("Task Manager Home")) {
+		if (!(driver.findElement(By.xpath("//div[@id='maincontent']/form/div/h1")).getText()).contains("Task Manager Home")) {
 			clickMenu(driver, "menucol_0.0");
 		}
 	}
 	
 	public static boolean checkCopyrightAndQuestionMarks(WebDriver driver) {
-		boolean check = driver.getPageSource().contains("NetTracer, Inc.");
-		check = check && driver.getPageSource().contains("2003-201");
-		check = check && !(driver.getPageSource().contains("???"));
+		boolean check = false;
+		try {
+			WebElement copyElement = driver.findElement(By.id("copyright"));
+			check = copyElement.getText().contains("NetTracer, Inc.");
+			check = check && copyElement.getText().contains("2003-201");
+			check = check && !(driver.findElement(By.tagName("body")).getText().contains("???"));
+		} catch (Exception e) {
+			System.out.println("ERROR OCCURRED CHECKING COPYRIGHT!!!");
+			check = false;
+		}
 		return check;
 	}
 	

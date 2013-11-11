@@ -2,6 +2,7 @@ package aero.nettracer.web.southwest.testing.actions.nt.incidents.lostdelay;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -211,9 +212,9 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		} else {
 			System.out.println("!!!!!!!!!!!!!!! - Failed to Pre-populate Claim. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 		}
-		
+		driver.manage().timeouts().pageLoadTimeout(300, TimeUnit.SECONDS);
 		selenium.click("name=save");
-		waitForPageToLoadImproved();
+		driver.manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
 		goToTaskManager();
 
 		waitForPageToLoadImproved();
