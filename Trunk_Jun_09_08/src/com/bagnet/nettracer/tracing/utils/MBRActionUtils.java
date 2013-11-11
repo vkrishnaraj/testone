@@ -321,7 +321,7 @@ public class MBRActionUtils {
 				iss_inc.setUpdated(true);
 				if (issueQ && quantity != null && quantity.matches("^\\d+$")) {
 					iss_inc.setQuantity(Integer.parseInt(quantity));
-					IssuanceItemQuantity qItem = IssuanceItemBMO.getQuantifiedItem(type);
+					IssuanceItemQuantity qItem = getQuantifiedItem(request, type);
 					qItem.setQuantity(qItem.getQuantity() - iss_inc.getQuantity());
 					iss_inc.setIssuanceItemQuantity(qItem);
 					adjustIssuanceLists(request, qItem, null, null);
@@ -335,7 +335,7 @@ public class MBRActionUtils {
 						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(result.getMessageKey()));
 					}										
 				} else if (issueL || issueT) {
-					IssuanceItemInventory iItem = IssuanceItemBMO.getInventoriedItem(type);
+					IssuanceItemInventory iItem = getInventoriedItem(request, type);
 					if (issueL) {
 						iItem.setInventoryStatus(StatusBMO.getStatus(TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_ONLOAN));
 					} else {
@@ -362,6 +362,28 @@ public class MBRActionUtils {
 			}
 		}
 		return false;
+	}
+	
+	private static IssuanceItemQuantity getQuantifiedItem(HttpServletRequest request, String id) {
+		List<IssuanceItemQuantity> returnQList = (ArrayList<IssuanceItemQuantity>) request.getAttribute("item_quantity_resultList");
+		long qID = Long.parseLong(id);
+		for (IssuanceItemQuantity lQItem : returnQList) { // Find item and either adjust quantity or remove from list
+			if (qID == lQItem.getId()) {
+				return lQItem;
+			}
+		}
+		return IssuanceItemBMO.getQuantifiedItem(id);
+	}
+	
+	private static IssuanceItemInventory getInventoriedItem(HttpServletRequest request, String id) {
+		List<IssuanceItemInventory> returnIList = (ArrayList<IssuanceItemInventory>) request.getAttribute("item_inventory_resultList");
+		long iID = Long.parseLong(id);
+		for (IssuanceItemInventory lIItem : returnIList) { // Find item and either adjust quantity or remove from list
+			if (iID == lIItem.getId()) {
+				return lIItem;
+			}
+		}
+		return IssuanceItemBMO.getInventoriedItem(id);
 	}
 	
 	private static void adjustIssuanceLists(HttpServletRequest request, IssuanceItemQuantity qItem, IssuanceItemInventory iItem, IssuanceItemIncident item) {
@@ -476,7 +498,7 @@ public class MBRActionUtils {
 						}
 						if (notAdjusted && item.isReturned()) { // IF ITEM IS NOT CURRENTLY IN LIST AND IS BEING RETURNED, THEN INCREMENT AND ADD TO LIST
 							IssuanceItemQuantity qItem = item.getIssuanceItemQuantity();
-							qItem.setQuantity(qItem.getQuantity() + item.getQuantity());
+							qItem.setQuantity(item.getQuantity());
 							qItems.add(qItem);
 						}
 					} // END QUANTIFIED ITEM
