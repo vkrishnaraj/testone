@@ -170,7 +170,7 @@ if (hasPermission) {
 					'	<br /><br />' +
 					'</div></form>';
 					jQuery("#dialog").dialog({bgiframe : true, autoOpen: false, modal: true, draggable: false, resizable: false, 
-									width: 400, height: 150, title: 'Defer Task', close: function(ev,ui){ jQuery('#dialog-inner-content').empty();} });
+									width: 400, height: 160, title: 'Defer Task', close: function(ev,ui){ jQuery('#dialog-inner-content').empty();} });
 					jQuery('#dialog-inner-content').html(theHtml);
 					jQuery("#dialog").dialog("open");
 					jQuery("#dialog").dialog("option", "title","Defer Task");
