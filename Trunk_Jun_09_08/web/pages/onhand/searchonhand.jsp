@@ -231,8 +231,7 @@ function sortSearchOhd(sortOrder) {
               </tr>
               
               <tr>
-              	<% System.out.println("Inv Date permission: "+invDate);
-              	if(invDate) {%>
+              	<% if(invDate) {%>
 		              <td>
 		              	  <bean:message key="colname.inventory.date"/>
 		                  (
