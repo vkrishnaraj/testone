@@ -25,7 +25,7 @@ public class WN_CreateClaim extends WN_SeleniumTest {
 	 */
 	@Test
 	public void testCreate_New_Claim() throws Exception {
-		verifyTrue(setPermissions(new String[] { CLAIM_DEPREC_CALC,DEPREC_CALC_ADMIN }, new boolean[] { false, false }));
+		verifyTrue(setPermissions(new String[] { CLAIM_DEPREC_CALC,DEPREC_CALC_ADMIN, "674"}, new boolean[] { false, false, true }));
 
 		clickMenu("menucol_8.1");
 		waitForPageToLoadImproved();
@@ -46,6 +46,11 @@ public class WN_CreateClaim extends WN_SeleniumTest {
 			selenium.type("name=city", "Testville");
 			selenium.select("name=state", "label=Alabama");
 			selenium.type("name=zip", "12345");
+			selenium.type("name=claim.totalLiability", "150");
+			selenium.type("name=claim.excessValueAmt", "50");
+			selenium.select("name=claim.claimCheck", "label=WAIVE");
+			selenium.check("name=claim.ix");
+			selenium.check("name=claim.carryon");
 			selenium.click("name=save");
 			waitForPageToLoadImproved();
 		} else {
