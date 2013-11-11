@@ -110,6 +110,7 @@ public class TracingConstants {
 	public final static String MAINTAIN_AGENTS_TYPE_WEBSRVICE = "1";
 		
 	public final static String OWENS_GROUP = "OW";
+	public final static String CBS = "CBS";
 	public final static boolean LIMIT_FAULT_AIRLINE = true;
 	//System components
 	
@@ -1114,6 +1115,7 @@ public class TracingConstants {
 	
 	// defaults
 	public final static String US_COUNTRY_CODE = "US";
+	public final static String USD_CURRENCY_CODE = "USD";
 	//public final static String DEFAULT_AIRLINE = "FL";
 	
 	// update comment integration with airtran

@@ -25,6 +25,7 @@ import aero.nettracer.fs.model.Person;
 
 import com.bagnet.nettracer.tracing.bmo.ClaimBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -32,6 +33,7 @@ import com.bagnet.nettracer.tracing.db.Claim_Depreciation;
 import com.bagnet.nettracer.tracing.db.Depreciation_Item;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Prorate_Itinerary;
+import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.forms.ClaimForm;
 import com.bagnet.nettracer.tracing.utils.BagService;
@@ -70,48 +72,60 @@ public class CRAPReport {
 			
 			HashMap<String, Comparable> report_info=new HashMap();
 			report_info.put("claim_id", theform.getClaim().getId());
-			/**
-			 * TODO: determine the values of CIM Match, Date, Airline, and Other in the Last/Delay Section of Sheet
-			 * Make sure to confirm with Byron that the information displayed is accurate
-			 */
+			
+			double stationPaid=0;
+			double cbsslv=0;
+			double stationslv=0;
+			
 			if(theform.getClaim()!=null && theform.getClaim().getNtIncident()!=null){
 				report_info.put("numPax",String.valueOf(theform.getClaim().getNtIncident().getNumpassengers()));
 				report_info.put("numBagCK",String.valueOf(theform.getClaim().getNtIncident().getNumbagchecked()));
 				report_info.put("numBagRCV",String.valueOf(theform.getClaim().getNtIncident().getNumbagreceived()));
-				report_info.put("cimMatch", ""); //What is cim match?
 				report_info.put("airline", theform.getClaim().getNtIncident().getStationcreated().getCompany().getCompanyCode_ID());
 				report_info.put("date",theform.getClaim().getIncident().getDisOpenDate(user.getDateformat().getFormat()));
 				report_info.put("reportNum",  theform.getClaim().getNtIncidentId());
 				report_info.put("courtesy", theform.getClaim().getNtIncident().getCourtesyreport()==0?"No":"Yes");
+				if(theform.getClaim().getCreateagent()!=null){
+					report_info.put("cbsrep", theform.getClaim().getCreateagent().getUsername());
+				}
 				Status reason=StatusBMO.getStatus(theform.getClaim().getNtIncident().getCourtesyReasonId());
 				if(reason!=null){
 					report_info.put("reason", reason.getDescription());
 				}
+				
+				Station cbsStation=StationBMO.getStationByCode(TracingConstants.CBS, user.getCompanycode_ID());
 				for(ExpensePayout ep:theform.getClaim().getNtIncident().getExpenselist()){
-					/**
-					 * TODO: Calculate Station Paid(sum total of all dollar figures issues by non CBS stations), 
-					 * Gift Cert (Byron to follow up with Southwest), 
-					 * Station SLV (all approved/paid vouchers issued by stations), 
-					 * CBS SLV (all approved/paid vouchers issued by CBS)
-					 */
-					
+					boolean epApproved=ep.getStatus().getStatus_ID()==TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED;
+					boolean epDelivered=ep.getExpensetype().getExpensetype_ID()==TracingConstants.EXPENSEPAYOUT_DELIVERY;
+					boolean epPaid=ep.getStatus().getStatus_ID()==TracingConstants.EXPENSEPAYOUT_STATUS_PAID;
+					if(epApproved || epPaid){
+						if(cbsStation!=null && ep.getExpenselocation().getStation_ID()==cbsStation.getStation_ID()){
+							cbsslv+=ep.getVoucheramt();
+						} else {
+							if(ep.getVoucheramt()>0){
+								stationslv+=ep.getVoucheramt();
+							} else if(!epDelivered){
+								stationPaid+=ep.getCheckamt()+ep.getCreditCardRefund();
+							}
+						}
+					}
 				}
 			}
+			report_info.put("claimStatus", theform.getClaim().getStatus().getDescription());
 			report_info.put("claimcheck", theform.getClaim().getClaimCheck());
 			report_info.put("totalLiability", "$"+TracingConstants.DECIMALFORMAT.format(theform.getClaim().getTotalLiability()));
 			report_info.put("excessValueAmt", "$"+TracingConstants.DECIMALFORMAT.format(theform.getClaim().getExcessValueAmt()));
-			report_info.put("claimAmount", theform.getClaim().getAmountClaimed() +" "+theform.getClaim().getAmountClaimedCurrency());
-			report_info.put("remark", theform.getClaim().getClaimRemark());
-			if(theform.getClaim().getCreateagent()!=null){
-				report_info.put("cbsrep", theform.getClaim().getCreateagent().getUsername());
-			}
-			if(theform.getClaim().getClaimant()!=null){
-				report_info.put("claimant1first", theform.getClaimant().getFirstName());
-				report_info.put("claimant1last", theform.getClaimant().getLastName());
+			
+			if(theform.getClaim().getAmountClaimedCurrency().equals(TracingConstants.USD_CURRENCY_CODE)){
+				report_info.put("claimAmount", "$"+TracingConstants.DECIMALFORMAT.format(theform.getClaim().getAmountClaimed()));
+			} else {
+				report_info.put("claimAmount", theform.getClaim().getAmountClaimed() +" "+theform.getClaim().getAmountClaimedCurrency());
 			}
 			
-			if(theform.getClaim().getClaimants()!=null && theform.getClaim().getClaimants().size()>1){
-				int claimantCount=1;
+			report_info.put("remark", theform.getClaim().getClaimRemark());
+			
+			if(theform.getClaim().getClaimants()!=null && theform.getClaim().getClaimants().size()>0){
+				int claimantCount=0;
 				for(Person claimant:theform.getClaim().getClaimants()){
 					claimantCount++;
 					report_info.put("claimant"+claimantCount+"first",claimant.getFirstName());
@@ -135,8 +149,6 @@ public class CRAPReport {
 			}
 			
 			Claim_Depreciation cd=cbmo.getClaimDeprec(theform.getClaim().getId());
-			double totalclaimed=0;
-			double stationPaid=0;
 			double depreciation=0;
 			double exclusion=0;
 			double adjClaim=0;
@@ -158,14 +170,16 @@ public class CRAPReport {
 					parameters.put("depreciationReport", ReportBMO.getCompiledReport("deprecReport", sc.getRealPath("/")));
 					parameters.put("exclReport", ReportBMO.getCompiledReport("exclReport", sc.getRealPath("/")));
 				}
-				totalclaimed=cd.getTotalClaim();
-				adjClaim=cd.getTotalApprovedPayout();
+				adjClaim=theform.getClaim().getAmountClaimed()-stationPaid-exclusion-depreciation;
 			}
-			report_info.put("totalclaimed", "$"+TracingConstants.DECIMALFORMAT.format(totalclaimed));
 			report_info.put("stationpaid", "$"+TracingConstants.DECIMALFORMAT.format(stationPaid));
-			report_info.put("exclusion", "$"+TracingConstants.DECIMALFORMAT.format(exclusion)); //what determines what's excluded
-			report_info.put("depreciation", "$"+TracingConstants.DECIMALFORMAT.format(depreciation)); //what determines what's depreciated
+			report_info.put("cbsslv", "$"+TracingConstants.DECIMALFORMAT.format(cbsslv));
+			report_info.put("stationslv", "$"+TracingConstants.DECIMALFORMAT.format(stationslv));
+			report_info.put("exclusion", "$"+TracingConstants.DECIMALFORMAT.format(exclusion));
+			report_info.put("depreciation", "$"+TracingConstants.DECIMALFORMAT.format(depreciation));
 			report_info.put("adjclaim", "$"+TracingConstants.DECIMALFORMAT.format(adjClaim));
+			
+			/* Logic for the Title */
 			String crapTitle="Lost";
 			if(theform.getClaim().isIx()){
 				crapTitle+=" IX";
@@ -176,7 +190,7 @@ public class CRAPReport {
 			report_info.put("crapTitle",crapTitle);
 			parameters.put("report_info", report_info);
 			
-			
+			/* Required to populate the report */
 			List t = new ArrayList();
 			t.add("");
 			ReportBMO bmo = new ReportBMO(request);

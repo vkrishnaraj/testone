@@ -363,12 +363,13 @@ public class Depreciation_Item {
 	
 	@Transient
 	public String getDepamount(){
-		return TracingConstants.DECIMALFORMAT.format(getAmountClaimed()-getCalcValue());
+		return TracingConstants.DECIMALFORMAT.format(getAmountClaimed()-getClaimValue());
 	}
 
 	@Transient
 	public String getPercent(){
-		return TracingConstants.DECIMALFORMAT.format((getCalcValue()/getAmountClaimed())*100)+"%";
+		double divisor = getAmountClaimed()!=0?getAmountClaimed():1;
+		return TracingConstants.DECIMALFORMAT.format(((getAmountClaimed()-getClaimValue())/divisor)*100)+"%";
 	}
 
 	
