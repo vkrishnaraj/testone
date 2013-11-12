@@ -2,13 +2,14 @@ package aero.nettracer.web.southwest.testing.actions.nt.onhands;
 
 import org.junit.Test;
 
-import aero.nettracer.web.utility.DefaultSeleneseTestCase;
+import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
 import aero.nettracer.web.utility.Settings;
 
-public class WN_OHD_Sort_Search extends DefaultSeleneseTestCase {
+public class WN_OHD_Sort_Search extends WN_SeleniumTest {
 
 	@Test
 	public void testOHDSearch() throws Exception {
+		verifyTrue(setPermissions(new String[] {"412"}, new boolean[] {false}));
 
 		clickMenu("menucol_4.4");
 		waitForPageToLoadImproved();
