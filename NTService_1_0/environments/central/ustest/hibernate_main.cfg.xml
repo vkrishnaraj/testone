@@ -8,9 +8,9 @@
 <session-factory>
   <property name="connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property> 
   <property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
-	<property name="hibernate.connection.url">jdbc:sqlserver://10.52.101.31:1433;databaseName=nettracer_prod;sendStringParametersAsUnicode=false</property>
-	<property name="connection.username">nettracerprod</property>
-	<property name="connection.password">E74Liq!prod</property>
+	<property name="hibernate.connection.url">jdbc:sqlserver://SQLDBT01:1433;databaseName=NetTracer_Test;sendStringParametersAsUnicode=false</property>
+	<property name="connection.username">nettracer</property>
+	<property name="connection.password">nettracer</property>
   <property name="jdbc.fetch_size">50</property> 
   <property name="jdbc.batch_size">25</property> 
   <property name="jdbc.use_scrollable_resultset">false</property> 
