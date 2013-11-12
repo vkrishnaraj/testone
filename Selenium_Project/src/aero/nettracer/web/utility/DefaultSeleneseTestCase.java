@@ -10,6 +10,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
@@ -109,6 +110,10 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 	
 	protected String getSelectedLabel(By by) {
 		return WebDriverUtil.getSelectedLabel(driver, by);
+	}
+	
+	protected String getSelectedValue(By by) {
+		return driver.findElement(by).getAttribute("value");
 	}
 	
 	protected String getValue(By by) {

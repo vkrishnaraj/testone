@@ -206,8 +206,8 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
 			verifyEquals("*********", getValue(By.xpath("//input[@name='claimant.redactedDriversLicenseNumber']")));
-			verifyEquals("GA", getValue(By.name("claimant.driversLicenseState")));
-			verifyEquals("US", getValue(By.name("claimant.driversLicenseCountry")));
+			verifyEquals("GA", getSelectedValue(By.name("claimant.driversLicenseState")));
+			verifyEquals("US", getSelectedValue(By.name("claimant.driversLicenseCountry")));
 		} else {
 			System.out.println("!!!!!!!!!!!!!!! - Failed to Pre-populate Claim. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 		}
