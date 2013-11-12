@@ -19,8 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
-import org.apache.log4j.Logger;
-
 import aero.nettracer.fs.model.Person;
 
 import com.bagnet.nettracer.tracing.bmo.ClaimBMO;
@@ -36,7 +34,6 @@ import com.bagnet.nettracer.tracing.db.Prorate_Itinerary;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.forms.ClaimForm;
-import com.bagnet.nettracer.tracing.utils.BagService;
 
 /**
  * @author Sean Fine
@@ -44,21 +41,16 @@ import com.bagnet.nettracer.tracing.utils.BagService;
  * Report Class to get the CRAPReport.jrxml and fill in the necessary information
  */
 public class CRAPReport {
-	private static Logger logger = Logger.getLogger(CRAPReport.class);
 
-	/**
-	 *  
-	 */
 	public CRAPReport() {
 		super();
 	}
 
 	public static String createReport(ClaimForm theform, ServletContext sc, HttpServletRequest request, int outputtype, String language) {
 		ClaimBMO cbmo=new ClaimBMO();
-		BagService bs = new BagService();
 		Agent user=theform.getClaim().getCreateagent();
 		try{
-			Map<String, Object> parameters = new HashMap();
+			Map<String, Object> parameters = new HashMap<String, Object>();
 
 			ResourceBundle myResources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user
 					.getCurrentlocale()));
@@ -70,8 +62,8 @@ public class CRAPReport {
 				parameters.put("logo", logo.getAbsolutePath());
 			}
 			
-			HashMap<String, Comparable> report_info=new HashMap();
-			report_info.put("claim_id", theform.getClaim().getId());
+			HashMap<String, String> report_info=new HashMap<String, String>();
+			report_info.put("claim_id", String.valueOf(theform.getClaim().getId()));
 			
 			double stationPaid=0;
 			double cbsslv=0;
@@ -137,7 +129,7 @@ public class CRAPReport {
 			}
 			
 			if(theform.getClaim().getClaimprorate()!=null && theform.getClaim().getClaimprorate().getProrate_itineraries()!=null){
-				List prorations=new ArrayList();
+				List<Prorate_Itinerary> prorations=new ArrayList<Prorate_Itinerary>();
 				for(Object obj:theform.getClaim().getClaimprorate().getProrate_itineraries()){
 					Prorate_Itinerary pi=(Prorate_Itinerary)obj;
 					if(pi.getFlightnum()!=null && !pi.getFlightnum().isEmpty() && pi.getDepartdate()!=null){
@@ -154,8 +146,8 @@ public class CRAPReport {
 			double adjClaim=0;
 			if(cd!=null){
 				if(cd.getItemlist()!=null && cd.getItemlist().size()>0){
-					List depreciations=new ArrayList();
-					List exclusions=new ArrayList();
+					List<Depreciation_Item> depreciations=new ArrayList<Depreciation_Item>();
+					List<Depreciation_Item> exclusions=new ArrayList<Depreciation_Item>();
 					for(Depreciation_Item di:cd.getItemlist()){
 						if(di.isNotCoveredCoc()){
 							exclusion+=di.getAmountClaimed();
@@ -191,7 +183,7 @@ public class CRAPReport {
 			parameters.put("report_info", report_info);
 			
 			/* Required to populate the report */
-			List t = new ArrayList();
+			List<String> t = new ArrayList<String>();
 			t.add("");
 			ReportBMO bmo = new ReportBMO(request);
 			return bmo.getReportFile(t, parameters, "crap_report", sc.getRealPath("/"), outputtype);
