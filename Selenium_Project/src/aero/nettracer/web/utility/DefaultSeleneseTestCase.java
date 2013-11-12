@@ -117,7 +117,12 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 	}
 	
 	protected boolean isEditable(By by) {
-		return driver.findElement(by).isEnabled();
+		String isDisabled = driver.findElement(by).getAttribute("disabled");
+		if (isDisabled == null || !isDisabled.equals("disabled") || !isDisabled.equals("true")) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	protected void refreshDriver() {
