@@ -19,7 +19,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	public void testVerifyText() throws Exception {
 		// MJS: initial state is drivers license collection enabled
 		// 		and view/edit drivers license disabled.
-		verifyTrue(setPermissions(new String[] { "632", "633", "636", "637", "635", "661", "662", "663", "664", "665", "666"}, new boolean[] { true, false, true, false, true, false, false, false, false, false, true }));
+		verifyTrue(setPermissions(new String[] { "632", "633", "636", "637", "635", "661", "662", "663", "664", "665", "666","675"}, new boolean[] { true, false, true, false, true, false, false, false, false, false, true,false }));
 
 
 		clickMenu("menucol_1.1");
@@ -671,7 +671,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	
 	@Test
 	public void testBagLossCode(){
-		verifyTrue(setPermissions(new String[] { "661", "662"}, new boolean[] { true, true}));
+		verifyTrue(setPermissions(new String[] { "661", "662", "663"}, new boolean[] { true, true,false}));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		verifyTrue(isTextPresent("Fault Code"));
 		verifyTrue(isTextPresent("Fault Station"));
@@ -726,12 +726,15 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 			selenium.type("name=cost","150");
 			selenium.select("name=theitem[0].lossCode", "label=Please Select");
 			selenium.select("name=theitem[0].faultStation_id", "label=Please Select");
+			waitForPageToLoadImproved(1000,false);
 			selenium.click("id=button");
 			assertEquals("Fault Code is required.", selenium.getAlert());
 			selenium.select("name=theitem[0].lossCode", "value=11");
+			waitForPageToLoadImproved(1000,false);
 			selenium.click("id=button");
 			assertEquals("Fault Station is required.", selenium.getAlert());
 			selenium.select("name=theitem[0].faultStation_id", "label=ATL");
+			waitForPageToLoadImproved(1000,false);
 			selenium.click("id=button");
 			assertEquals("Remark for Loss Code Change is required.", selenium.getAlert());
 			selenium.type("name=remark", "BDO Loss Code Change Remark");
@@ -746,8 +749,8 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 			verifyTrue(isTextPresent("The Baggage Delivery Order has been successfully saved"));
 			verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 			verifyTrue(isTextPresent("Cannot Passenger Pick Up - There is a Non-Cancelled BDO for this Item"));
-			verifyTrue(isEditable(By.name("theitem[0].lossCode")));
-			verifyTrue(isEditable(By.name("theitem[0].faultStation_id")));
+			verifyFalse(isEditable(By.name("theitem[0].lossCode")));
+			verifyFalse(isEditable(By.name("theitem[0].faultStation_id")));
 			goToTaskManager();
 		} else {
 			System.out.println("!!!!!!!!!!!!!!!! Failed to save BDO for incident");
@@ -757,6 +760,10 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	@Test
 	public void testBagLossEditDelivered(){
 		verifyTrue(setPermissions(new String[] { "662","663"}, new boolean[] { false, true}));
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
+		verifyFalse(isEditable(By.name("theitem[0].lossCode")));
+		verifyFalse(isEditable(By.name("theitem[0].faultStation_id")));
+		verifyTrue(setPermissions(new String[] { "662","663"}, new boolean[] { true, true}));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		verifyTrue(isEditable(By.name("theitem[0].lossCode")));
 		verifyTrue(isEditable(By.name("theitem[0].faultStation_id")));
