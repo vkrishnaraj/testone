@@ -185,6 +185,11 @@ public class LostDelayAction extends CheckedAction {
 		//the company specific codes..
 		List codes = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.LOST_DELAY, true, user, checkLLC);
 		//add to the loss codes
+		
+		if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_WT_OTHER_CARRIER,user)){
+			TracerUtils.populateWtCompanyLists(session, user.getCompanycode_ID());
+		}
+		
 		request.setAttribute("losscodes", codes);
 
 		
@@ -598,7 +603,7 @@ public class LostDelayAction extends CheckedAction {
 						ProactiveNotificationBMO.setIncidentId(pcn_id, iDTO);
 					}
 					WtqIncidentAction wtq = null;
-					if(request.getParameter("savetowt") != null && (iDTO.getWt_id() == null || iDTO.getWt_id().trim().length() == 0) ) {
+					if((request.getParameter("savetowt") != null || (iDTO.getWtCompanyCode()!=null && !iDTO.getWtCompanyCode().isEmpty() && !iDTO.getWtCompanyCode().equals(user.getCompanycode_ID()))) && (iDTO.getWt_id() == null || iDTO.getWt_id().trim().length() == 0) ) {
 						wtq = new WtqCreateAhl();
 					}
 					else if (request.getParameter("amendWT") != null) {
@@ -800,6 +805,9 @@ public class LostDelayAction extends CheckedAction {
 			thenewform.setFaultcompany_id(user.getCompanycode_ID());
 			
 			request.setAttribute("newform", "1");
+			if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_WT_OTHER_CARRIER,user)){
+				thenewform.setWtCompanyCode(user.getCompanycode_ID());
+			}
 
 			
 			if(request.getParameter("pnrpopulate") == null && user.getStation().getCompany().getVariable().getPnr_last_x_days()!=0 && theform.getRecordlocator()!=null && theform.getRecordlocator().length()>0){

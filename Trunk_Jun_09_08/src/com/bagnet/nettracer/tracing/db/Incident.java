@@ -143,6 +143,9 @@ public class Incident implements Serializable {
 	
 	private Set<IncidentActivity> activities;
 
+	private String wtStationCode;
+	private String wtCompanyCode;
+	
 	@Column(name="tracing_status_id")
 	public int getTracingStatus() {
 		return tracingStatus;
@@ -1294,6 +1297,24 @@ public class Incident implements Serializable {
 	public void setOc_claim_id(long oc_claim_id) {
   	this.oc_claim_id = oc_claim_id;
   }
+	  
+		@Column(name = "wtStationId", length=3)
+		public String getWtStationCode() {
+			return wtStationCode;
+		}
+
+		public void setWtStationCode(String wtStationCode) {
+			this.wtStationCode = wtStationCode;
+		}
+
+		@Column(name = "wtCompanyId", length=3)
+		public String getWtCompanyCode() {
+			return wtCompanyCode;
+		}
+
+		public void setWtCompanyCode(String wtCompanyCode) {
+			this.wtCompanyCode = wtCompanyCode;
+		}
 
 	@Temporal(value = TemporalType.TIMESTAMP)
 	public Date getRxTimestamp() {

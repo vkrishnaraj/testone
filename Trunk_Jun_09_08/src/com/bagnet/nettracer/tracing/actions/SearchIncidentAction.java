@@ -309,6 +309,9 @@ public class SearchIncidentAction extends Action {
 				session.setAttribute("incidentForm", theform);
 				List agentassignedlist = TracerUtils.getAgentlist(theform.getStationassigned_ID());
 
+				if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_WT_OTHER_CARRIER,user)){
+					TracerUtils.populateWtCompanyLists(session, user.getCompanycode_ID());
+				}
 				request.setAttribute("agentassignedlist", agentassignedlist);
 
 				if (user.getStation().getStation_ID() != theform.getStationassigned_ID()) {

@@ -3758,7 +3758,7 @@ public class ReportBMO {
 				sr.setStatus((String)row[7]);
 				sr.setAmountClaimed(((Double)row[3]).toString());
 				sr.setAmountClaimedCurrency((String)row[4]);
-				sr.setAmountPaid(((Double)row[3]).toString());
+				sr.setAmountPaid(((Double)row[5]).toString());
 				sr.setAmountPaidCurrency((String)row[6]);
 
 				sr.set_DATEFORMAT(user.getDateformat().getFormat());

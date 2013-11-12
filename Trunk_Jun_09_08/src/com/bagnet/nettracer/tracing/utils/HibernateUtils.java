@@ -33,6 +33,7 @@ import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.Lz;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.UserGroup;
+import com.bagnet.nettracer.tracing.db.WTCompany;
 import com.bagnet.nettracer.tracing.db.Work_Shift;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Airport;
 import com.bagnet.nettracer.tracing.db.audit.Audit_DeliverCo_Station;
@@ -382,7 +383,6 @@ public class HibernateUtils {
 					if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_WORLDTRACER))  {
 						c.getVariable().setWt_user(obj.getVariable().getWt_user());
 						c.getVariable().setWt_pass(obj.getVariable().getWt_pass());
-						//c.getVariable().setRetrieve_actionfile_interval(obj.getVariable().getRetrieve_actionfile_interval());
 						c.getVariable().setMbr_to_wt_days(obj.getVariable().getMbr_to_wt_days());
 						c.getVariable().setOhd_to_wt_hours(obj.getVariable().getOhd_to_wt_hours());
 						c.getVariable().setOal_inc_hours(obj.getVariable().getOal_inc_hours());
@@ -908,6 +908,39 @@ public class HibernateUtils {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * saveWTCarriers - saves a list of WTCompany objects
+	 * @param wtCompanyList - List of WTCompany Objects to be saved
+	 */
+	public static void saveWTCarriers(List<WTCompany> wtCompanyList) {
+
+			Session sess = null;
+			Transaction tx=null;
+			try {
+				sess = HibernateWrapper.getSession().openSession();
+				tx = sess.beginTransaction();
+				for(WTCompany wtc:wtCompanyList)
+					sess.saveOrUpdate(wtc);
+				tx.commit();
+				sess.flush();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (tx != null) {
+					tx.rollback();
+				}
+			} finally {
+				if (sess != null) {
+					try {
+						sess.close();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		
 	}
 
 }

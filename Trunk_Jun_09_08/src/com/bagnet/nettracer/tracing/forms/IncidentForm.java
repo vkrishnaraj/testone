@@ -109,6 +109,10 @@ public final class IncidentForm extends ValidatorForm {
 	private String revenueCode;
 	
 	private int tracingStatus;
+
+	//WT for Other One World Carrier
+	private String wtStationCode;
+	private String wtCompanyCode;
 	
 	private Date rxTimestamp;
 	
@@ -1404,6 +1408,22 @@ public final class IncidentForm extends ValidatorForm {
 	}
 	public Date getLastupdated() {
 		return lastupdated;
+	}
+
+	public String getWtCompanyCode() {
+		return wtCompanyCode;
+	}
+
+	public void setWtCompanyCode(String wtCompanyCode) {
+		this.wtCompanyCode = wtCompanyCode;
+	}
+
+	public String getWtStationCode() {
+		return wtStationCode;
+	}
+
+	public void setWtStationCode(String wtStationCode) {
+		this.wtStationCode = wtStationCode;
 	}
 
 	public Date getRxTimestamp() {

@@ -1530,9 +1530,17 @@ public class WorldTracerWebService implements WorldTracerConnector {
 		if (c != null) {
 			a.setAhlId(c);
 		}
-		a.setAirlineCode(i.getStationcreated().getCompany().getCompanyCode_ID());
-
-		a.setStationCode(i.getStationcreated().getWt_stationcode());
+		if(i.getWtCompanyCode()!=null && i.getWtCompanyCode().length()>0){
+			a.setAirlineCode(i.getWtCompanyCode());
+		} else {
+			a.setAirlineCode(i.getStationcreated().getCompany().getCompanyCode_ID());
+		}
+		
+		if(i.getWtStationCode()!=null && i.getWtStationCode().length()==3){
+			a.setStationCode(i.getWtStationCode().toUpperCase());
+		} else {
+			a.setStationCode(i.getStationcreated().getWt_stationcode());
+		}
 		
 		GregorianCalendar cal = new GregorianCalendar();
 		cal.setTime(i.getCreatedate());

@@ -23,6 +23,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -30,10 +31,11 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.Lz;
+import com.bagnet.nettracer.tracing.db.Station;
+import com.bagnet.nettracer.tracing.db.WTCompany;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Company;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.forms.MaintainCompanyForm;
-import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.LzUtils;
@@ -76,6 +78,8 @@ public final class ManageCompany extends Action {
 					&& request.getParameter("saveLzList") == null
 					&& request.getParameter("saveAssignments") == null
 					&& request.getParameter("pagination") == null
+					&& request.getParameter("addCarrier") == null
+					&& request.getParameter("removeCarrier") == null
 					) || request.getParameter("companyCode") == null || !request.getParameter("companyCode").equals(user.getStation().getCompany().getCompanyCode_ID())) {
 				response.sendRedirect("companyAdmin.do?edit=1&companyCode=" + user.getStation().getCompany().getCompanyCode_ID());
 				return null;
@@ -220,6 +224,35 @@ public final class ManageCompany extends Action {
 					dForm.setWt_enabled("" + cmpny.getVariable().getWt_enabled());
 					dForm.setWt_write_enabled("" + cmpny.getVariable().getWt_write_enabled());
 					dForm.setAuto_wt_amend(cmpny.getVariable().isAuto_wt_amend());
+					
+					
+					/**
+					 * Logic for loading up list of World Tracer Companies to add, delete, and save.
+					 */
+					List<WTCompany> wtlist=CompanyBMO.getWTCarriers((String) dForm.getCompanyCode());
+
+					if (request.getParameter("index")!=null) {
+						String index=request.getParameter("index");
+						int indexToRemove = Integer.parseInt(index);
+						if (wtlist != null && !wtlist.isEmpty() && wtlist.size() > indexToRemove) {
+							int i = 0;
+							Iterator<WTCompany> iterator = wtlist.iterator();
+							while (iterator.hasNext()) {
+								WTCompany comp = iterator.next();
+								if (i == indexToRemove) {
+									wtlist.remove(comp);
+									if(comp.getId()!=0)
+										HibernateUtils.delete(comp);
+									break;
+								}
+								++i;
+							}
+						}
+					}
+					
+
+					dForm.setWtCompanyList(wtlist);
+					TracerUtils.populateCompanyLists(session);
 				}
 				
 				if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_STATUSMESSAGE)) {
@@ -301,6 +334,34 @@ public final class ManageCompany extends Action {
 			LzUtils.updateStationAssignments(dForm, request, user);
 			populateLists(request, dForm);
 			return mapping.findForward(TracingConstants.EDIT_COMPANY);
+		}
+		
+		if(request.getParameter("addCarrier")!=null){
+			if(dForm.getWtCompanyList()!=null){
+				List<WTCompany> wtlist=dForm.getWtCompanyList();
+				HashMap<String,WTCompany> wtMap=new HashMap<String,WTCompany>();
+				for(WTCompany wtc:wtlist){
+					if(wtMap.get(wtc.getWtCompanyCode())==null){
+						wtMap.put(wtc.getWtCompanyCode(), wtc);
+					}
+				}
+
+				if(request.getParameter("addCarrier")!=null && dForm.getSelectedCarrier()!=null && dForm.getSelectedCarrier().length()>0){
+					if(wtMap.get(dForm.getSelectedCarrier())==null && !dForm.getSelectedCarrier().isEmpty()){
+						Company c=CompanyBMO.getCompany(dForm.getSelectedCarrier());
+						WTCompany wtc=new WTCompany();
+						wtc.setCompany_id(user.getCompanycode_ID());
+						wtc.setWtCompanyCode(c.getCompanyCode_ID());
+						wtc.setCompanyName(c.getCompanydesc());
+						dForm.getWtCompanyList().add(wtc);
+					} else {
+						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+								"error.duplicate.wt.carrier"));
+						saveMessages(request, errors);
+					}
+				}
+				return mapping.findForward(TracingConstants.EDIT_COMPANY);
+			}
 		}
 		
 		if (request.getParameter("save") != null || saveLzList) {
@@ -501,6 +562,10 @@ public final class ManageCompany extends Action {
 
 				Company cmp = AdminUtils.getCompany(c.getCompanyCode_ID());
 
+				if(dForm.getWtCompanyList()!=null && dForm.getWtCompanyList().size()>0){
+					HibernateUtils.saveWTCarriers(dForm.getWtCompanyList());
+				}
+				
 				if (cmp != null && user.getStation().getCompany().getVariable().getAudit_company() == 1) {
 					Audit_Company_Specific_Variable csv = new Audit_Company_Specific_Variable();
 

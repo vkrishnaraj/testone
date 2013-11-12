@@ -88,7 +88,8 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			"LEFT OUTER JOIN lflost l ON l.id = h.lost_id LEFT OUTER JOIN lfitem i2 ON i2.lost_id = l.id AND i2.type = 1 WHERE i.value = :value " +
 			"AND l.closeDate < :enddate AND l.closeDate >= :lastweek AND ( ( i.trackingNumber IS NULL OR i.trackingNumber = '') AND " +
 			"i.deliveryRejected != 1 AND (( i2.trackingNumber IS NOT NULL AND i2.trackingNumber != '') OR i2.deliveryRejected = 1)) " +
-			"GROUP BY date(l.closeDate)) tb1 GROUP BY dt ";
+			"GROUP BY date(l.closeDate)) tb1"; 
+	private static final String CALCULATE_RETURNED_ITEMS_GROUP_BY = " GROUP BY dt ";
 	private static String autoagent = "autoagent";
 	
 	private static Agent auto;
@@ -242,13 +243,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		
 
 		String phone = null;
-//		if(dto.getPhoneNumber() != null && dto.getPhoneNumber().trim().length() > 0){
-//			try{
-//				phone = AES.encrypt(LFPhone.normalizePhone(dto.getPhoneNumber()));
-//			} catch (Exception e){
-//				e.printStackTrace();
-//			}
-//		} 
 
 		String intnum = null;
 
@@ -319,14 +313,14 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			}
 			
 			if (haveBrand) {
-				itemSql += " and i.brand like \'%" + dto.getBrand().trim() + "%\'";
+				itemSql += " and i.brand like \'%" + dto.getBrand().trim().replaceAll("'", "''") + "%\'";
 			}
 			
 			if (haveDesc) {
-				itemSql += " and i.description like \'%" + dto.getItemDescription().trim() + "%\'";
+				itemSql += " and i.description like \'%" + dto.getItemDescription().trim().replaceAll("'", "''") + "%\'";
 			}
 			if(haveSerial){
-				String sn = dto.getSerialNumber().trim();
+				String sn = dto.getSerialNumber().trim().replaceAll("'", "''");
 				if(sn != null){
 					if(sn.contains("%")){
 						itemSql += " and i.serialNumber like \'" + sn + "\'";
@@ -336,7 +330,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				}
 			}
 			if (haveTracking) {
-				itemSql += " and i.trackingNumber = \'" + dto.getTrackingNumber().trim() + "\'";
+				itemSql += " and i.trackingNumber = \'" + dto.getTrackingNumber().trim().replaceAll("'", "''") + "\'";
 			}
 			if (value > -1) {
 				itemSql += " and i.value = " + value;
@@ -365,19 +359,29 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			sql += " or (p.phoneNumber = \'" + phone + "\')";
 		}
 		if(dto.getType() == TracingConstants.LF_TYPE_FOUND && dto.getBarcode() != null && dto.getBarcode().trim().length() > 0){
-			sql += " and o.barcode = \'" + dto.getBarcode() + "\'";
+			sql += " and o.barcode = \'" + dto.getBarcode().replaceAll("'", "''") + "\'";
 		} else if(dto.getId() > 0){
 			sql += " and o.id = " + dto.getId();
 		}
 
 		if(dto.getLastName() != null && dto.getLastName().trim().length() > 0){
-			sql += " and o.client.lastName = \'" + dto.getLastName().toUpperCase() + "\'";
+			String lName = dto.getLastName().trim().toUpperCase().replaceAll("'", "''");
+			String comparator = "=";
+			if (lName.contains("%")) {
+				comparator = "like";
+			}
+			sql += " and o.client.lastName " + comparator + " \'" + lName + "\'";
 		}
 		if(dto.getFirstName() != null && dto.getFirstName().trim().length() > 0){
-			sql += " and o.client.firstName = \'" + dto.getFirstName().toUpperCase() + "\'";
+			String fName = dto.getFirstName().trim().toUpperCase().replaceAll("'", "''");
+			String comparator = "=";
+			if (fName.contains("%")) {
+				comparator = "like";
+			}
+			sql += " and o.client.firstName " + comparator + " \'" + fName + "\'";
 		}
 		if(dto.getCompanyId() !=null && dto.getCompanyId().length()>0){
-			sql+=" and o.companyId = \'"+dto.getCompanyId()+"\'";
+			sql+=" and o.companyId = \'"+dto.getCompanyId().replaceAll("'", "''")+"\'";
 		}
 		if(dto.getStationId() != -1){
 			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
@@ -401,9 +405,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		if(dto.getMvaNumber() != null && dto.getMvaNumber().trim().length() > 0){
 			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
-				sql += " and o.lossInfo.mvaNumber = \'" + dto.getMvaNumber() + "\'";
+				sql += " and o.lossInfo.mvaNumber = \'" + dto.getMvaNumber().replaceAll("'", "''") + "\'";
 			} else {
-				sql += " and o.mvaNumber = \'" + dto.getMvaNumber() + "\'";
+				sql += " and o.mvaNumber = \'" + dto.getMvaNumber().replaceAll("'", "''") + "\'";
 			}
 		}
 		if(dto.getStartDate() != null && dto.getStartDate().trim().length() > 0){
@@ -429,9 +433,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			String date = DateUtils.formatDate(dto.getStartRentDateAsDate(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null);
 			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
 				sql += " and o.lossInfo.lossdate >= \'" + date + "\'";
-			}/* else {
-				sql += " and o.foundDate >= \'" + date + "\'";
-			}*/
+			}
 		}
 		if(dto.getEndRentDate() != null && dto.getEndRentDate().trim().length() > 0){
 			GregorianCalendar cal = new GregorianCalendar();
@@ -440,15 +442,13 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			String date = DateUtils.formatDate(cal.getTime(), TracingConstants.getDBDateFormat(HibernateWrapper.getConfig().getProperties()), null, null);
 			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
 				sql += " and o.lossInfo.lossdate < \'" + date + "\'";
-			}/* else {
-				sql += " and o.foundDate < \'" + date + "\'";
-			}*/
+			}
 		}
 		if(dto.getAgreementNumber() != null && dto.getAgreementNumber().trim().length() > 0){
 			if(dto.getType() == TracingConstants.LF_TYPE_LOST){
-				sql += " and o.lossInfo.agreementNumber = \'" + dto.getAgreementNumber().trim() + "\'";
+				sql += " and o.lossInfo.agreementNumber = \'" + dto.getAgreementNumber().trim().replaceAll("'", "''") + "\'";
 			} else {
-				sql += " and o.agreementNumber = \'" + dto.getAgreementNumber().trim() + "\'";
+				sql += " and o.agreementNumber = \'" + dto.getAgreementNumber().trim().replaceAll("'", "''") + "\'";
 			}
 		}
 		if(dto.getEmail() != null && dto.getEmail().trim().length() > 0){
@@ -464,9 +464,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		
 		if(dto.getAgentName() != null && dto.getAgentName().trim().length() > 0){
 			try {
-				String ag = dto.getAgentName();
+				String ag = dto.getAgentName().replaceAll("'", "''");
 				if(ag != null){
-					sql += " and o.agent.username like \'" + ag + "\'"; //= \'" + ag + "\'";
+					sql += " and o.agent.username like \'" + ag + "\'";
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -2852,7 +2852,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	{
 		int weeklyTotal=0;
 		
-		String sql = CALCULATE_RETURNED_ITEMS_QUERY;
+		String sql = CALCULATE_RETURNED_ITEMS_QUERY + CALCULATE_RETURNED_ITEMS_GROUP_BY;
  		SQLQuery q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
@@ -2860,6 +2860,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			
 			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
 			q.setParameter("lastweek", DateUtils.formatDate(startDate, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setInteger("value",type);
 			
 			List lis = q.list();
 			Object[] o;
@@ -2888,7 +2889,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 					h.put(fieldNameLabel+(j), "0");
 				}
 			}
-			h.put(fieldNameLabel, weeklyTotal);
+			h.put(fieldNameLabel+"Week", weeklyTotal);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return;

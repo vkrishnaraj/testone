@@ -70,31 +70,37 @@
      	
     }
 
-     function confirmWt() {
+     function confirmCarrierWt(){
     	 <% if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_WT_OTHER_CARRIER, a) && request.getAttribute("lostdelay") != null){ %>
- 		
-    	 var wtAirline= document.getElementById("wtAirlineId"); 
-    	 var wtStation= document.getElementById("wtStationId"); 
- 			var hasWTID=document.getElementById("wtid"); 
- 		  if (wtAirline.value!="" && wtStation.value == "")
- 	      {
- 	        alert("<%= (String)bundle.getString( "colname.wt.station") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
- 	       wtStation.focus();
- 	        return false;
- 	      } else if (hasWTID==null && wtAirline.value != "" && wtAirline.value !="<%=a.getCompanycode_ID() %>")
- 	      {
- 	        if(!(confirm("You are creating a WorldTracer File on behalf of another airline. Is this correct?"))){
- 		        return false;
- 	        }
- 	      }
-    	 <% } %>
+  		
+    	 var wtAirline= document.getElementById("wtAirlineCode"); 
+    	 var wtStation= document.getElementById("wtStationCode");
+    	 wtStation.value=wtStation.value.toUpperCase();
+ 		 var hasWTID=document.getElementById("wtid");
+ 		 if(wtAirline!=null && wtStation!=null){
+	 		  if (wtAirline.value!=""  && wtAirline.value !="<%=a.getCompanycode_ID() %>" && wtStation.value.length != 3)
+	 	      {     alert("<%= (String)bundle.getString( "colname.wt.station") %>" + " <%= (String)bundle.getString( "error.validation.isRequired.and.wt.length") %>");
+		 	        wtStation.focus();
+		 	        return false;
+	 	      } else if (hasWTID==null && wtAirline.value != "" && wtAirline.value !="<%=a.getCompanycode_ID() %>")
+	 	      {
+		 	        if(!(confirm("You are creating a WorldTracer File on behalf of another airline. Is this correct?"))){
+		 		        return false;
+		 	        }
+	 	      }
+ 		 }
+	 <% } %>
+     }
+     
+     function confirmWt() {
+    	 confirmCarrierWt();
          <% if (!PropertyBMO.isTrue("confirm.wt.inc.action")) { %>
-         	return true;
+         		return true;
          <% } else { %>
-         	if (confirm("<bean:message key='confirm.wt.inc.action' />")) {
-             	return true;
-         	}
-         	return false;
+	         	if (confirm("<bean:message key='confirm.wt.inc.action' />")) {
+	             	return true;
+	         	}
+	         	return false;
          <% } %>
      }
     
@@ -704,7 +710,7 @@
                 value="">
 		<html:hidden property="save" value="" disabled="true" />
                 <html:button property="saveButton" styleId="button"
-			onclick="disableButtons(); anyLossCodeChanges(); if(validatereqFields(this.form, 'lostdelay') != false && validateRest(this.form) != false) {this.form.save.disabled = false; clearBeforeUnload(); enableStateProvince(); this.form.submit();} else {enableButtons(); this.form.save.disabled = true; return false;}">
+			onclick="disableButtons(); anyLossCodeChanges(); if(validatereqFields(this.form, 'lostdelay') != false && validateRest(this.form) != false && confirmCarrierWt() != false) {this.form.save.disabled = false; clearBeforeUnload(); enableStateProvince(); this.form.submit();} else {enableButtons(); this.form.save.disabled = true; return false;}">
                   <bean:message key="button.save" />
                 </html:button>
 
@@ -766,14 +772,14 @@
                 	if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_TEMP_INCIDENTS, a)) {
                 	%>
                 <input type="button" name="s" value="Save as Temporary"
-                  onclick="if(validatereqFields(this.form) && validateRest(this.form) != false){ enableStateProvince(); saveIncidentTemporary(this.form, 'lostdelay')};"
+                  onclick="if(validatereqFields(this.form) && validateRest(this.form) != false && confirmCarrierWt() != false){ enableStateProvince(); saveIncidentTemporary(this.form, 'lostdelay')};"
                   id="button">
                 &nbsp;&nbsp;&nbsp;
                 <% } %>
 
 		<%-- <html:submit property="savetracing" styleId="button" onclick="return validatereqFields(this.form, 'lostdelay');"> --%>
 			<html:hidden property="savetracing" value="" disabled="true" />
-                <html:button property="savetracingButton" styleClass="button" styleId="saveButton" onclick="disableButtons(); anyLossCodeChanges(); if(validatereqFields(this.form, 'lostdelay') != false && validateRest(this.form) != false) {this.form.savetracing.disabled = false; clearBeforeUnload(); enableStateProvince(); this.form.submit();} else {enableButtons(); this.form.savetracing.disabled = true; return false;}">
+                <html:button property="savetracingButton" styleClass="button" styleId="saveButton" onclick="disableButtons(); anyLossCodeChanges(); if(validatereqFields(this.form, 'lostdelay') != false && validateRest(this.form) != false && confirmCarrierWt() != false) {this.form.savetracing.disabled = false; clearBeforeUnload(); enableStateProvince(); this.form.submit();} else {enableButtons(); this.form.savetracing.disabled = true; return false;}">
                   <bean:message key="button.savetracing" />
                 </html:button>
 
@@ -792,14 +798,14 @@
                   property="incident_ID" value="">
 		<html:hidden property="save" value="" disabled="true" />
                 <html:button property="saveremarkButton" styleId="button"
-			onclick="disableButtons(); anyLossCodeChanges(); if(validatereqFields(this.form, 'lostdelay') != false  && validateRest(this.form) != false) {this.form.save.disabled = false; clearBeforeUnload(); enableStateProvince(); this.form.submit();} else {enableButtons(); this.form.save.disabled = true; return false;}">
+			onclick="disableButtons(); anyLossCodeChanges(); if(validatereqFields(this.form, 'lostdelay') != false  && validateRest(this.form) != false && confirmCarrierWt() != false) {this.form.save.disabled = false; clearBeforeUnload(); enableStateProvince(); this.form.submit();} else {enableButtons(); this.form.save.disabled = true; return false;}">
                   <bean:message key="button.saveremark" />
                 </html:button>
                  <% if (!UserPermissions.hasIncidentSavePermission(a,myform.getIncident_ID()) && val2 && myform.getStatus_ID()==TracingConstants.MBR_STATUS_OPEN) { %>
 					
 					<html:hidden property="saveadditions" value="" disabled="true" />
 					<html:button property="saveadditionsbutton" styleId="button"
-						onclick="disableButtons(); anyLossCodeChanges(); if(validatereqFields(this.form, 'lostdelay') != false && validateRest(this.form) != false) {this.form.saveadditions.disabled = false; clearBeforeUnload(); enableStateProvince(); this.form.submit();} else {enableButtons(); this.form.saveadditions.disabled = true; return false;}">
+						onclick="disableButtons(); anyLossCodeChanges(); if(validatereqFields(this.form, 'lostdelay') != false && validateRest(this.form) != false && confirmCarrierWt() != false) {this.form.saveadditions.disabled = false; clearBeforeUnload(); enableStateProvince(); this.form.submit();} else {enableButtons(); this.form.saveadditions.disabled = true; return false;}">
 						<bean:message key="button.save" />
 					</html:button>
 				<%}%>

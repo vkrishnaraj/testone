@@ -86,6 +86,20 @@
 		}
 	}
 	
+	function checkSameAirline(){
+		var wtAirline= document.getElementById("wtAirlineCode"); 
+   	 	var wtStation= document.getElementById("wtStationCode"); 
+   		<% if(myform.getIncident_ID()==null || myform.getIncident_ID().isEmpty()){ %>
+		 if(wtAirline!=null && wtStation!=null){
+	 		  if (wtAirline.value!=""  && wtAirline.value !="<%=a.getCompanycode_ID() %>"){
+	 			 wtStation.disabled=false;
+	 		  } else {
+	 			 wtStation.disabled=true;
+	 			 wtStation.value="";
+	 		  }
+		 }
+		 <% } %>
+	}
 
   </SCRIPT>
 
@@ -465,6 +479,45 @@
 				</div>
 			</td>
 		</tr>
+		<% if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_WT_OTHER_CARRIER, a) && request.getAttribute("lostdelay") != null){ %>
+		<logic:empty  name="incidentForm" property="incident_ID">
+		<tr>
+			<td colspan="3">
+				<bean:message key="colname.wt.airline" />
+				<br/>
+				<html:select name="incidentForm"  property="wtCompanyCode" styleClass="dropdown" styleId="WtAirlineCode" onchange="checkSameAirline()" >
+           			<html:option value=""><bean:message key="option.none" /></html:option>
+           			<html:options collection="wtCompList" property="wtCompanyCode" labelProperty="wtCompanyCode" />
+				</html:select>
+      			
+			</td>
+			<td colspan="4">
+				<bean:message key="colname.wt.station" />
+				<br>
+           		<html:text name="incidentForm"  property="wtStationCode" styleClass="textfield" styleId="wtStationCode" maxlength="3"  />
+			</td>
+		</tr>
+		</logic:empty>
+		<logic:notEmpty  name="incidentForm" property="incident_ID">
+		<tr>
+			<td colspan="3">
+				<bean:message key="colname.wt.airline" />
+				<br/>
+				<html:select disabled="true" name="incidentForm"  property="wtCompanyCode" styleClass="dropdown" styleId="WtAirlineCode">
+           			<html:option value=""><bean:message key="option.none" /></html:option>
+           			<html:options collection="wtCompList" property="wtCompanyCode" labelProperty="wtCompanyCode" />
+				</html:select>
+      			<input type="hidden" name="wtCompanyCode" value="<bean:write name="incidentForm" property="wtCompanyCode"/>"/>
+			</td>
+			<td colspan="4">
+				<bean:message key="colname.wt.station" />
+				<br>
+           		<html:text disabled="true" name="incidentForm"  property="wtStationCode" styleClass="textfield" styleId="wtStationCode" maxlength="3"/>
+      			<input type="hidden" name="wtStationCode" value="<bean:write name="incidentForm" property="wtStationCode"/>"/>
+			</td>
+		</tr>
+		</logic:notEmpty>
+		<%} %>
 	</table>
 	<br> <br> &nbsp;&nbsp;&uarr; <a href="#"><bean:message
 			key="link.to_top" /></a> <br> <br>
@@ -1064,4 +1117,7 @@
 	</table>
 	<br> <br> &nbsp;&nbsp;&uarr; <a href="#"><bean:message
 			key="link.to_top" /></a> <br> <br>
+	<script>
+		checkSameAirline();
+	</script>
 			

@@ -307,6 +307,8 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.logger.GeneralForwardLog"/>	
 		<mapping class="com.bagnet.nettracer.tracing.db.logger.GeneralScanQueryLog"/>			
 
+		<mapping class="com.bagnet.nettracer.tracing.db.WTCompany"/>
+		
 		<mapping class="com.bagnet.nettracer.tracing.db.issuance.IssuanceCategory"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.issuance.IssuanceItem"/>
 		<mapping class="com.bagnet.nettracer.tracing.db.issuance.IssuanceItemQuantity"/>

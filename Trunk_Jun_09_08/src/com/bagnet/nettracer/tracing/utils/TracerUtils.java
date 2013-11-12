@@ -38,6 +38,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
@@ -69,6 +70,7 @@ import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.State;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.WTCompany;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.XDescElement;
 import com.bagnet.nettracer.tracing.db.i8n.KeyValueBean;
@@ -94,6 +96,7 @@ import edu.emory.mathcs.backport.java.util.Collections;
 public class TracerUtils {
 	public static final int COMPANY_LIST_BY_NAME_INDEX = 0;
 	public static final int COMPANY_LIST_BY_ID_INDEX = 1;
+	public static final int WT_COMPANY_LIST_BY_ID_INDEX = 2;
 
 	private static Logger logger = Logger.getLogger(TracerUtils.class);
 	private static ConcurrentHashMap<Integer, String> cachedManufacturerMap = new ConcurrentHashMap<Integer, String>();
@@ -622,8 +625,22 @@ public class TracerUtils {
 				.get(COMPANY_LIST_BY_NAME_INDEX));
 		session.setAttribute("companylistById", result
 				.get(COMPANY_LIST_BY_ID_INDEX));
+		/**
+		 * New List for companies to populate the company's WTCompany Table
+		 */
+		session.setAttribute("wtCompanylistByName", result
+				.get(WT_COMPANY_LIST_BY_ID_INDEX));
 	}
 
+	/**
+	 * populateWtCompanyLists - populates a attribute for the purposes of displaying the available lists
+	 * @param session - session to save the attribute to
+	 * @param compCode - company code to get the WT Companies
+	 */
+	public static void populateWtCompanyLists(HttpSession session,String compCode) {
+		List<WTCompany> result = CompanyBMO.getWTCarriers(compCode);
+		session.setAttribute("wtCompList", result);
+	}
 	
 	public static void populateClaimProrate(ClaimProrateForm cpform,
 			IncidentForm theform, HttpServletRequest request) {
@@ -892,6 +909,10 @@ public class TracerUtils {
 			Company company = null;
 			ArrayList<Company> companyByName = new ArrayList<Company>();
 			ArrayList<Company> companyById = new ArrayList<Company>();
+			/**
+			 * New List for companies to populate the company's WTCompany Table
+			 */
+			ArrayList<Company> wtCompanyByName = new ArrayList<Company>();
 			Object[] o = null;
 			for (int i = 0; i < list.size(); i++) {
 				o = (Object[]) list.get(i);
@@ -900,9 +921,11 @@ public class TracerUtils {
 				company.setCompanydesc((String) o[1]);
 				companyByName.add(company);
 				companyById.add(company);
+				if(o[0]!=null && !((String) o[0]).equals(TracingConstants.OWENS_GROUP) && !((String) o[0]).equals(TracingConstants.DEMOAIR)){
+					wtCompanyByName.add(company);
+				}
 			}
-			// Collections.sort(companyById, companyById.new
-			// CompanyIdComparator<Company>());
+			
 			Collections.sort(companyById, new Comparator<Company>() {
 
 				public int compare(Company o1, Company o2) {
@@ -913,6 +936,7 @@ public class TracerUtils {
 			});
 			result.add(companyByName);
 			result.add(companyById);
+			result.add(wtCompanyByName);
 			return result;
 
 		} catch (Exception e) {
@@ -923,7 +947,7 @@ public class TracerUtils {
 			sess.close();
 		}
 	}
-
+	
 	@Deprecated
 	public static ArrayList retrieveRecords(String instr, String obj,
 			String tablename, String colname, String orderColumn)

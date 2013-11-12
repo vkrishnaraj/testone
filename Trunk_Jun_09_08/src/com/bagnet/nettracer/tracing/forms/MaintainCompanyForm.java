@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.struts.validator.ValidatorForm;
+import com.bagnet.nettracer.tracing.db.WTCompany;
 
 /**
  * @author Byron Smith
@@ -75,6 +76,7 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	private String webs_enabled;
 	private List lzStations = new ArrayList();
 	private List stations = new ArrayList();
+	private List<WTCompany> wtCompanyList = new ArrayList<WTCompany>();
 	private Integer defaultLz = 0;
 	private String bak_nttracer_data_days;
 	private String bak_nttracer_ohd_data_days;
@@ -83,6 +85,7 @@ public final class MaintainCompanyForm extends ValidatorForm {
   private String wt_airlinecode;
   private String wt_enabled;
   private String wt_write_enabled;
+  private String selectedCarrier;
  	private Integer scannerDefaultBack;
  	private Integer scannerDefaultForward;
  	private String blindEmail;
@@ -506,5 +509,20 @@ public final class MaintainCompanyForm extends ValidatorForm {
 		this.statusMessage = statusMessage;
 	}
 
+	public String getSelectedCarrier() {
+		return this.selectedCarrier;
+	}
+
+	public void setSelectedCarrier(String selectedCarrier) {
+		this.selectedCarrier = selectedCarrier;
+	}
+
+	public List<WTCompany> getWtCompanyList() {
+		return wtCompanyList;
+	}
+
+	public void setWtCompanyList(List<WTCompany> wtCompanyList) {
+		this.wtCompanyList = wtCompanyList;
+	}
 
 }

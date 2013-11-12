@@ -215,7 +215,6 @@
 				</logic:notEmpty>
 				<bean:write name="passenger" property="languageFreeFlow"/>
 				<br/>
-							
 				</td>
 				</tr>
 		</logic:iterate>

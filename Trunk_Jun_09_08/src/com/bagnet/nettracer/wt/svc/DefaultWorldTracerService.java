@@ -927,28 +927,32 @@ public class DefaultWorldTracerService implements WorldTracerService {
 			for(aero.nettracer.serviceprovider.wt_1_0.common.ActionFileCount count:result){
 				String type = count.getType();
 				String seq = count.getSeq();
-				if(count.getSeq() == null || count.getSeq().trim().length() == 0){
-					seq = TracingConstants.WT_AFC_DEFAULT_SEQ;
+				boolean enumExists=false;
+				enumExists=checkEnumType(type);
+				if(enumExists){
+					if(count.getSeq() == null || count.getSeq().trim().length() == 0){
+						seq = TracingConstants.WT_AFC_DEFAULT_SEQ;
+					}
+					
+					ActionFileCount afc;
+					if(countMap.containsKey(type+seq)){
+						afc = countMap.get(type+seq);
+					} else {
+						afc = new ActionFileCount();
+					}
+					afc.setAf_type(ActionFileType.valueOf(type));
+					afc.setAf_seq(seq);
+					switch(count.getDay()){
+					case 1: afc.setDayOne(count.getCount()); break;
+					case 2: afc.setDayTwo(count.getCount()); break;
+					case 3: afc.setDayThree(count.getCount()); break;
+					case 4: afc.setDayFour(count.getCount()); break;
+					case 5: afc.setDayFive(count.getCount()); break;
+					case 6: afc.setDaySix(count.getCount()); break;
+					case 7: afc.setDaySeven(count.getCount()); break;
+					}
+					countMap.put(type + seq, afc);
 				}
-				
-				ActionFileCount afc;
-				if(countMap.containsKey(type+seq)){
-					afc = countMap.get(type+seq);
-				} else {
-					afc = new ActionFileCount();
-				}
-				afc.setAf_type(ActionFileType.valueOf(type));
-				afc.setAf_seq(seq);
-				switch(count.getDay()){
-				case 1: afc.setDayOne(count.getCount()); break;
-				case 2: afc.setDayTwo(count.getCount()); break;
-				case 3: afc.setDayThree(count.getCount()); break;
-				case 4: afc.setDayFour(count.getCount()); break;
-				case 5: afc.setDayFive(count.getCount()); break;
-				case 6: afc.setDaySix(count.getCount()); break;
-				case 7: afc.setDaySeven(count.getCount()); break;
-				}
-				countMap.put(type + seq, afc);
 			}
 			for(String key:countMap.keySet()){
 				countList.add(countMap.get(key));
@@ -957,6 +961,16 @@ public class DefaultWorldTracerService implements WorldTracerService {
 		return countList;
 	}
 	
+	private boolean checkEnumType(String type) {
+		for(ActionFileType e:ActionFileType.values()){
+			if(e.name().equalsIgnoreCase(type)){
+				return true;
+			}
+		}
+		return false;
+		
+	}
+
 	@WorldTracerTx(type = TxType.AF_SUMMARY)
 	public List<Worldtracer_Actionfiles> getActionFileSummary(Agent user, String companyCode,
 			String wtStation, ActionFileType afType, String afSeq, int day, WebServiceDto dto) throws WorldTracerException, CaptchaException, WorldTracerRecordNotFoundException {

@@ -4346,6 +4346,7 @@
 	
 	<target name="donotrun-build-demonstration">		
 
+		<property name="include.demo" value="1" />
 		<property name="hibernate_props_loc" value="companies/demonstration/environment/${environment.name}" />
 		<property name="hibernate_dialect" value="mysql" />
 		<antcall target="generate-hibernate-xmls" />
@@ -4358,9 +4359,9 @@
 			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
 		</ant>
 
-		<copy todir="${basedir}/web/reports" file="companies/tracer/LostDelayReceipt.jrxml" />
-		<copy todir="${basedir}/web/reports" file="companies/tracer/DamageReceipt.jrxml" />
-		<copy todir="${basedir}/web/reports" file="companies/tracer/MissingReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/demonstration/LostDelayReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/demonstration/DamageReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/demonstration/MissingReceipt.jrxml" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/ma_bag_info.jrxml" overwrite="true" />
 		<copy todir="${basedir}/web/reports" file="companies/tracer/station_onhand.jrxml" overwrite="true" />
 			

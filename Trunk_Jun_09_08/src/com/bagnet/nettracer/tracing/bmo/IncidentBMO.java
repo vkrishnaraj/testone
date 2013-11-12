@@ -688,6 +688,7 @@ public class IncidentBMO {
 		}
 		
 		try {
+			incident.setLastupdated(TracerDateTime.getGMTDate());
 			
 			Audit_Incident audit_dto = null;
 			if ((incident.getItemtype().getItemType_ID() == TracingConstants.LOST_DELAY && incident.getAgent().getStation()
@@ -2434,6 +2435,7 @@ public class IncidentBMO {
 				return new ActionMessage("invalid.claim.info");
 			}
 
+			inc.setLastupdated(TracerDateTime.getGMTDate());
 			ep.setIncident(inc);
 			inc.getExpenses().add(ep);
 //			if (inc.getClaims()==null || inc.getClaims().size()<=0) {

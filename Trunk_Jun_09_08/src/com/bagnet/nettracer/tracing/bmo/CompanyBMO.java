@@ -1,5 +1,7 @@
 package com.bagnet.nettracer.tracing.bmo;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -12,6 +14,7 @@ import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.GeneralDepreciationRules;
+import com.bagnet.nettracer.tracing.db.WTCompany;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
@@ -85,6 +88,34 @@ public class CompanyBMO {
 			}
 		}
 		return retVal;
+	}
+
+	/**
+	 * GetWTCarriers - gets the list of full WTCompany objects based on Company Code
+	 * @param companycode
+	 * @return list of WTCompany objects
+	 */
+	public static List<WTCompany> getWTCarriers(String companycode){
+		String sql = "from com.bagnet.nettracer.tracing.db.WTCompany wtc where wtc.company_id=:companycode and wtc.wtCompanyCode!='DA' and wtc.wtCompanyCode!='OW' order by wtc.wtCompanyCode";
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(sql);
+			q.setParameter("companycode", companycode);
+			List<WTCompany> ilist= (List<WTCompany>) q.list();
+			return ilist;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	public static GeneralDepreciationRules getDeprecRules(String companyCode) {

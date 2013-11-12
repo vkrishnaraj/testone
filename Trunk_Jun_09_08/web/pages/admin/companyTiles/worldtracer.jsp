@@ -5,6 +5,8 @@
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@page import="com.bagnet.nettracer.tracing.forms.MaintainCompanyForm"%>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
+<%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
+<%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 
         <h1 class="green">
           <bean:message key="Company" />
@@ -197,6 +199,49 @@
               &nbsp;
             </td>
           </tr>
+        </table>
+        <% if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_WT_OTHER_CARRIER, ((Agent)session.getAttribute("user")))){ %>
+		<h1>
+              <bean:message key="colname.wt_carriers"/>
+        </h1>
+        <table class="form2" cellspacing="0" cellpadding="0">
+	      <tr>
+            <td colspan="2">
+              <bean:message key="colname.wt_carriers.info"/>
+            </td>
+          </tr>
+	      <tr>
+            <td colspan="2">
+              <table class="form2" cellspacing="0" cellpadding="0">
+              <% String removeCarrierAction="/companyAdmin.do?edit=1&companyCode="+((Agent)session.getAttribute("user")).getCompanycode_ID(); %>
+   				
+              <logic:iterate name="companyForm" property="wtCompanyList" id="wtcomp">
+                   <tr>
+	              	<td><bean:write name="wtcomp" property="wtCompanyCode"/> - <bean:write name="wtcomp" property="companyName"/>
+	              	</td>
+	              	<td>
+	              		<html:link action="<%=removeCarrierAction %>" indexed="true" paramId="removeCarrier" scope="request"><bean:message key="wt.carrier.remove" /></html:link>
+	            	</td>
+	              </tr>
+              </logic:iterate>
+              <tr>
+              	<td>
+              		<html:select name="companyForm" property="selectedCarrier">
+              			<html:options collection="wtCompanylistByName" property="companyCode_ID" labelProperty="companydesc"/>
+              		</html:select>
+              	</td>
+              	<td>
+   					<html:submit styleId="button" property="addCarrier"><bean:message key="wt.carrier.add" /></html:submit>
+              	</td>
+              </tr>
+              </table>
+            </td>
+          </tr>
+          
+          </table>
+        <% } %>
+        
+        <table class="form2" cellspacing="0" cellpadding="0">
           <tr>
             <td colspan="2">
               <center><INPUT type="button" Id="button" value="Back" onClick="history.back()">
