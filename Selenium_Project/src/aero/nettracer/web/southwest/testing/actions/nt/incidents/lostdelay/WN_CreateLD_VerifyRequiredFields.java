@@ -202,23 +202,18 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	@Test
 	public void testVerifyDriversLicensePrepopulateClaim() {
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-		selenium.click("//td[@id='navmenucell']/div/dl/dd[10]/a/span[2]");
-		waitForPageToLoadImproved();
+		click(By.xpath("//td[@id='navmenucell']/div/dl/dd[10]/a/span[2]"));
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
-			verifyEquals("*********", selenium.getValue("//input[@name='claimant.redactedDriversLicenseNumber']"));
-			verifyEquals("GA", selenium.getValue("name=claimant.driversLicenseState"));
-			verifyEquals("US", selenium.getValue("name=claimant.driversLicenseCountry"));
+			verifyEquals("*********", getValue(By.xpath("//input[@name='claimant.redactedDriversLicenseNumber']")));
+			verifyEquals("GA", getValue(By.name("claimant.driversLicenseState")));
+			verifyEquals("US", getValue(By.name("claimant.driversLicenseCountry")));
 		} else {
 			System.out.println("!!!!!!!!!!!!!!! - Failed to Pre-populate Claim. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 		}
 		driver.manage().timeouts().pageLoadTimeout(300, TimeUnit.SECONDS);
-		selenium.click("name=save");
-		driver.manage().timeouts().pageLoadTimeout(Settings.ELEMENT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-		goToTaskManager();
-
-		waitForPageToLoadImproved();
-		
+		click(By.name("save"));
+		driver.manage().timeouts().pageLoadTimeout(Settings.ELEMENT_TIMEOUT_SECONDS, TimeUnit.SECONDS);		
 	}
 	
 	@Test

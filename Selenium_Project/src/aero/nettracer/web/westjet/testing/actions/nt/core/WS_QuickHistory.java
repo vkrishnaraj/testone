@@ -3,6 +3,7 @@ package aero.nettracer.web.westjet.testing.actions.nt.core;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 import aero.nettracer.web.utility.Settings;
 import aero.nettracer.web.westjet.testing.WS_SeleniumTest;
@@ -191,7 +192,6 @@ public class WS_QuickHistory extends WS_SeleniumTest {
 		if(checkNoErrorPage())
 		{
 			clickMenu("menucol_8.2");
-			waitForPageToLoadImproved();
 		}
 		else
 		{
@@ -201,8 +201,7 @@ public class WS_QuickHistory extends WS_SeleniumTest {
 		
 		if(checkNoErrorPage())
 		{
-			selenium.click("id=button");
-			waitForPageToLoadImproved();
+			click(By.id("button"));
 		}
 		else
 		{
@@ -212,9 +211,7 @@ public class WS_QuickHistory extends WS_SeleniumTest {
 		
 		if(checkNoErrorPage())
 		{
-			Thread.sleep(2000);
-			selenium.click("//div[@id='maincontent']/table[3]/tbody/tr[2]/td/a");
-			waitForPageToLoadImproved();
+			click(By.xpath("//div[@id='maincontent']/table[3]/tbody/tr[2]/td/a"));
 		}
 		else
 		{
@@ -225,7 +222,7 @@ public class WS_QuickHistory extends WS_SeleniumTest {
 		if(checkNoErrorPage())
 		{
 			driver.manage().timeouts().pageLoadTimeout(300, TimeUnit.SECONDS);
-			selenium.click("name=save");
+			click(By.name("save"));
 			driver.manage().timeouts().pageLoadTimeout(Settings.ELEMENT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
 		}
 		else

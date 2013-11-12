@@ -111,6 +111,10 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 		return WebDriverUtil.getSelectedLabel(driver, by);
 	}
 	
+	protected String getValue(By by) {
+		return driver.findElement(by).getText();
+	}
+	
 	protected boolean isTextPresent(String text) {
 		return selenium.isTextPresent(text);
 		//return driver.findElement(By.tagName("body")).getText().contains(text);
