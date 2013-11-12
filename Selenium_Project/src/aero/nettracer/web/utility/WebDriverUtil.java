@@ -116,8 +116,16 @@ public class WebDriverUtil {
 				System.out.println("ELEMENT " + identifier + " NOT STALE - TRY NUMBER " + tryNumber + " - MOVING ON.");
 			}
 		}
-		Actions action = new Actions(driver);
-		action.moveToElement(driver.findElement(By.id("copyright"))).perform();
+		
+		try {
+			WebElement copyElem = driver.findElement(By.id("copyright"));
+			WebDriverWait wait = new WebDriverWait(driver, Settings.ELEMENT_TIMEOUT_SECONDS);
+			wait.until(ExpectedConditions.visibilityOf(copyElem));
+			Actions action = new Actions(driver);
+			action.moveToElement(copyElem).perform();
+		} catch (Exception e) {
+			System.out.println("UNABLE TO MOVE TO COPYRIGHT");
+		}
 	}
 	
 	public static WebDriver refreshDriver(WebDriver driver) {

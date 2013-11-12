@@ -212,8 +212,8 @@ public class WS_QuickHistory extends WS_SeleniumTest {
 		
 		if(checkNoErrorPage())
 		{
-			Thread.sleep(5000);
-			selenium.click("//div[@id='maincontent']/table/tbody/tr[2]/td[1]/a");
+			Thread.sleep(2000);
+			selenium.click("//div[@id='maincontent']/table[3]/tbody/tr[2]/td/a");
 			waitForPageToLoadImproved();
 		}
 		else
