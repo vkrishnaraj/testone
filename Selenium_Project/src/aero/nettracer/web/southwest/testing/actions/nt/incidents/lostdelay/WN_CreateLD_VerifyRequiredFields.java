@@ -214,7 +214,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		}
 		driver.manage().timeouts().pageLoadTimeout(300, TimeUnit.SECONDS);
 		selenium.click("name=save");
-		driver.manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
+		driver.manage().timeouts().pageLoadTimeout(Settings.ELEMENT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
 		goToTaskManager();
 
 		waitForPageToLoadImproved();

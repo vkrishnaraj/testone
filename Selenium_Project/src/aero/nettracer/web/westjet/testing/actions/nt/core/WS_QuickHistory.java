@@ -1,5 +1,7 @@
 package aero.nettracer.web.westjet.testing.actions.nt.core;
 
+import java.util.concurrent.TimeUnit;
+
 import org.junit.Test;
 
 import aero.nettracer.web.utility.Settings;
@@ -222,8 +224,9 @@ public class WS_QuickHistory extends WS_SeleniumTest {
 		
 		if(checkNoErrorPage())
 		{
+			driver.manage().timeouts().pageLoadTimeout(300, TimeUnit.SECONDS);
 			selenium.click("name=save");
-			waitForPageToLoadImproved();
+			driver.manage().timeouts().pageLoadTimeout(Settings.ELEMENT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
 		}
 		else
 		{
@@ -233,9 +236,8 @@ public class WS_QuickHistory extends WS_SeleniumTest {
 
 		if(checkNoErrorPage())
 		{
-			selenium.controlKeyDown();
-			selenium.keyPress("id=header", "\\72");
-			selenium.controlKeyUp();
+			loadQuickHistory();
+			closeQuickHistory();
 		}
 		else
 		{

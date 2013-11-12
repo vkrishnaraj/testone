@@ -79,6 +79,7 @@ public class SeleniumTestBrowserDefault extends Settings {
 		if (useWD) {
 			driver = new InternetExplorerDriver();
 			driver.manage().timeouts().implicitlyWait(Settings.ELEMENT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+			driver.manage().timeouts().pageLoadTimeout(Settings.ELEMENT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
 			browser = new WebDriverBackedSelenium(driver, APP_URL_LOCAL + portnum);
 		} else {
 			int port = 6789;

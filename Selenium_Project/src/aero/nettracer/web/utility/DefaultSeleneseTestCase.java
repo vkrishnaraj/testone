@@ -6,8 +6,11 @@ import org.junit.Before;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.thoughtworks.selenium.SeleneseTestCase;
 
@@ -83,8 +86,19 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 		waitForPageToLoadImproved(500,false);
 	}
 	
+	public void loadQuickHistory() {
+		waitForPageToLoadImproved(500,false);
+		new Actions(driver).sendKeys(Keys.chord(Keys.CONTROL, "h")).perform();
+		waitForPageToLoadImproved(500,false);
+	}
+	
 	public void closeQuickSearch() {
 		driver.findElement(By.id("quickSearchQuery3")).click();
+		new Actions(driver).sendKeys(Keys.chord(Keys.ESCAPE)).perform();
+		waitForPageToLoadImproved(500,false);
+	}
+	
+	public void closeQuickHistory() {
 		new Actions(driver).sendKeys(Keys.chord(Keys.ESCAPE)).perform();
 		waitForPageToLoadImproved(500,false);
 	}
@@ -108,6 +122,26 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 	
 	protected void refreshDriver() {
 		driver = WebDriverUtil.refreshDriver(driver);
+	}
+	
+	protected void click(By locator) {
+		click(locator, false, false);
+	}
+	
+	protected void click(By locator, boolean waitBefore, boolean waitAfter) {
+		try {
+			if (waitBefore) {
+				WebDriverWait wait = new WebDriverWait(driver, 5);
+				wait.until(ExpectedConditions.elementToBeClickable(locator));
+			}
+			WebElement element = driver.findElement(locator);
+			element.click();
+			if (waitAfter) {
+				WebDriverUtil.waitForStaleElement(driver, element, locator.toString());
+			}
+		} catch (Exception e) {
+			System.out.println("***FAILURE TO CLICK ELEMENT: " + locator);
+		}
 	}
 
 }
