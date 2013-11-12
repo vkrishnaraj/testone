@@ -21,6 +21,13 @@
 					<t:messages id="passLoginMsg" errorClass="loginerrormsg"
 						infoClass="infomsg" />
 					<h:outputText value="&#160;" />
+					<t:outputText value="Was your last flight on American Airlines?" style="font-weight:bold" rendered="#{passengerLoginController.loginBean.americanTextShown}"/>
+					<h:outputText value="If you arrived at your final destination on American, please go to aa.com to check bag status." rendered="#{passengerLoginController.loginBean.americanTextShown}"/>
+					<h:column rendered="#{passengerLoginController.loginBean.americanTextShown}">
+						<h:outputText value="Go to "/><a href="https://aa.com/bagstatus"><h:outputText value="aa.com/bagstatus"/></a>
+					</h:column>
+					<h:outputText value="Example TGGIBZ" rendered="#{passengerLoginController.loginBean.americanTextShown}" />
+					<h:outputText value="&#160;" rendered="#{passengerLoginController.loginBean.americanTextShown}" />
 					(<img src="/pax-view/_images/reqbullet.gif" class="reqbullet"/>Required )
 					<br/>
 					<p>&nbsp;<br /></p>
