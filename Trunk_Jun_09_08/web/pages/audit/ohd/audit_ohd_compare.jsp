@@ -255,6 +255,19 @@ function updatePagination() {
                 </td>
               </logic:iterate>
             </tr>
+            <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_TO_BE_INVENTORIED, a)) { %>
+	            <tr>
+	              <td>
+	                <bean:message key="colname.inventory_date" />
+	              </td>
+	              <logic:iterate id="audit_ohd" name="compareList" scope="request">
+	                <td>
+	                  <bean:write name="audit_ohd" property="dispInventoryDate" />
+	                  &nbsp;
+	                </td>
+	              </logic:iterate>
+	            </tr>
+            <% } %>
             <tr>
               <td>
                 <bean:message key="colname.status" />
@@ -273,18 +286,6 @@ function updatePagination() {
               <logic:iterate id="audit_ohd" name="compareList" scope="request">
                 <td>
                   <bean:write name="audit_ohd" property="dispPosId" />
-                  &nbsp;
-                </td>
-              </logic:iterate>
-            </tr>
-            <tr>
-              <td>
-                <bean:message key="colname.inventory_date" />
-              </td>
-              <logic:iterate id="audit_ohd" name="compareList" scope="request">
-                <td>
-                  <bean:write name="audit_ohd" property="dispInventoryDate" />
-                  &nbsp;
                 </td>
               </logic:iterate>
             </tr>
