@@ -261,7 +261,7 @@ public class PermissionsUtil {
 					if (WebDriverUtil.checkNoErrorPage(driver)) {
 						driver.findElement(By.xpath("//a[contains(@href, 'componentAdmin.do?groupId=" + groupId + "')]")).click();
 						if (WebDriverUtil.checkNoErrorPage(driver)) {
-							success = driver.getPageSource().contains("Maintain Group Permissions");
+							success = driver.findElement(By.xpath("//div[@id='maincontent']/h1")).getText().contains("Permissions");
 						} else {
 							System.out.println("!!!!!!!!!!!!!!! - Error Occurred When Trying to Maintain Permissions. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 						}

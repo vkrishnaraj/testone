@@ -148,7 +148,7 @@ public class WN_CreateOhd extends WN_SeleniumTest {
 	public void testPosIdOnAuditTrail() {
 		verifyTrue(navigateToAuditTrail());
 		verifyTrue(isTextPresent("Position ID"));
-		assertEquals("123456", selenium.getText("//div[@id='maincontent']/table/tbody/tr[5]/td[2]"));
+		assertEquals("123456", selenium.getText("//div[@id='maincontent']/table/tbody/tr[6]/td[2]"));
 		verifyTrue(isTextPresent("Late Check"));
 		assertEquals("No", selenium.getText("//div[@id='maincontent']/table/tbody/tr[7]/td[2]"));
 		goToTaskManager();
