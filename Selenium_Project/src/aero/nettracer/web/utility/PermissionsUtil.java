@@ -29,6 +29,7 @@ public class PermissionsUtil {
 	public static final String FORWARD_MESSAGE = "4";
 	public static final String OHD_PHOTOS = "3";
 	public static final String EXPRESS_ON_HAND_BAG = "51";
+	public static final String TO_BE_INVENTORIED = "412";
 	
 	// LOST DELAY SECTION
 	public static final String REMARK_UPDATE_LOSTDELAY = "88";
@@ -236,14 +237,15 @@ public class PermissionsUtil {
 	public static final String SEARCH_SALVAGE = "621";
 	
 	// GENERAL SECTION
-	public static final String EDIT_ANY_CLOSED_OR_DELIVERED_BAGS = "665";
-	public static final String EDIT_NON_CLOSED_AND_NON_DELIVERED_BAGS = "662";
+	public static final String LOSS_CODES_AT_PER_BAG_LEVEL = "661";
+	public static final String EDIT_NON_CLOSED_NON_DELIVERED_BAGS_SAME = "662";
+	public static final String EDIT_CLOSED_DELIVERED_BAGS_SAME = "663";
+	public static final String EDIT_NON_CLOSED_NON_DELIVERED_BAGS_OTHER = "664";
+	public static final String EDIT_CLOSED_DELIVERED_BAGS_OTHER = "665";
+	public static final String EDIT_ANY_BAGS= "675";
 	public static final String SECURE_REMARKS = "335";
 	public static final String INCIDENT_COURTESY_REASON_COLLECT = "648";
 	public static final String CAPTURE_ACAA_INFORMATION = "336";
-	public static final String EDIT_CLOSED_INCIDENT_BAGS_IN_SAME_STATION = "664";
-	public static final String LOSS_CODES_AT_PER_BAG_LEVEL = "661";
-	public static final String EDIT_DELIVERED_BAGS_IN_SAME_STATION = "663";
 	
 	public static boolean navigateToPermissionsPageTest(WebDriver driver, String location, String companyCode, String groupId) {
 		boolean success = false;
