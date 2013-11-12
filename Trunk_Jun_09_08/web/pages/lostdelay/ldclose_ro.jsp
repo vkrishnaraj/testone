@@ -194,7 +194,9 @@
 					<td>
 						<b><bean:message key="colname.fault.station" /></b>
 					  <br>
-			  <bean:write name="theitem" property="faultStation.stationcode"/>
+					  <% if(theitem.getFaultStation()!=null){ %>
+			  			<bean:write name="theitem" property="faultStation.stationcode"/>
+			  		  <% } %>
 					</td>
 				  </tr>
 				  <% } %>

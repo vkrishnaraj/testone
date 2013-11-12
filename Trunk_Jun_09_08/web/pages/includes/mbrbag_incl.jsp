@@ -25,12 +25,25 @@
   boolean collectExpTagNum = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EXPEDITE_TAG_NUM_COLLECT, a);
   boolean collectAddItemInfo = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ADDITIONAL_ITEM_INFORMATION_COLLECT, a);
   
-  boolean editNonClosedDeliveredBags=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_NON_CLOSED_DELIVERED_BAGS,a);
-  boolean editDeliveredSameStationBags=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_DELIVERED_BAGS_SAME_STATION,a);
-  boolean editClosedSameStationBags=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_CLOSED_INCIDENT,a);
-  boolean editAnyClosedDeliveredBags=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_ANY_CLOSED_DELIVERED,a); 
+  /*
+    Loss Code at Bag Level Permission Check Reference
+  	1. I can edit my own incidents that are not closed or delivered and not locked.
+ 	2. I can edit my own incidents that are closed and delivered and not locked (should depend on 1)
+	3. I can edit other station's incidents that are not closed or delivered and not locked (should depend on 1)
+	4. I can edit other station's incidents that are closed or delivered and not locked (should depend on 3)
+	5. I can edit any loss code, regardless of state or status. (admin level)
+  */
   boolean closed=myform.getExistIncStatus()!=null && myform.getExistIncStatus().getStatus_ID()==TracingConstants.MBR_STATUS_CLOSED;
   boolean sameStation=a.getStation().getStation_ID()==myform.getStationcreated().getStation_ID();
+  boolean swaLocked=myform.isSwaLocked();
+  boolean editSameNonClosedPermission=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_SAME_NON_CLOSED_DELIVERED,a);
+  boolean editOtherNonClosedDeliveredPermission=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_OTHER_NON_CLOSED_DELIVERED,a);
+  
+  boolean editSameNonClosedDeliveredBags=editSameNonClosedPermission && !closed && sameStation && !swaLocked;
+  boolean editSameClosedDeliveredBags=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_SAME_CLOSED_DELIVERED,a)  && sameStation && !swaLocked && editSameNonClosedPermission;
+  boolean editOtherNonClosedDeliveredBags=editOtherNonClosedDeliveredPermission  && !closed && !sameStation && !swaLocked && editSameNonClosedPermission;
+  boolean editOtherClosedDeliveredBags=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_OTHER_CLOSED_DELIVERED,a) && !sameStation && !swaLocked && editOtherNonClosedDeliveredPermission && editSameNonClosedPermission; 
+  boolean editAnyBags=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_ANY_BAGS_LOSS_CODES,a);
   
   boolean passengerPickUp=false;
   String inctype="";
@@ -353,17 +366,12 @@
             <% } %>
           </tr>
           <% if((UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL, a) && PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES))){ 
-        	
-          	boolean editLossCode=(editNonClosedDeliveredBags && !closed && theitem.isNotDelivered() && sameStation)
-    				|| (editDeliveredSameStationBags && sameStation && !theitem.isNotDelivered() )
-    				|| (editClosedSameStationBags && sameStation && closed )
-    				|| (editAnyClosedDeliveredBags && (closed || !theitem.isNotDelivered()));%>
-          <% if(!editLossCode){ %> 
-          
-	        <html:hidden property="lossCode" value="<%=String.valueOf(theitem.getLossCode()) %>"  name="theitem" indexed="true"/>
-	        
-	        <html:hidden property="faultStation_id" value="<%=String.valueOf(theitem.getFaultStation_id()) %>" name="theitem"  indexed="true"/>
-          <%} %>
+				
+        	  boolean editLossCode=((editSameNonClosedDeliveredBags && theitem.isNotDelivered())
+	    				|| (editSameClosedDeliveredBags && (closed || !theitem.isNotDelivered()) )
+	    				|| (editOtherNonClosedDeliveredBags && theitem.isNotDelivered())
+	    				|| (editOtherClosedDeliveredBags && (closed || !theitem.isNotDelivered()))
+	    				|| editAnyBags);%>
           <tr>
           	<td >
 	            	<bean:message key="colname.loss.code" />
@@ -392,6 +400,12 @@
             	<% } %>
           	</td>
           </tr>
+          <% if(!editLossCode){ %> 
+          
+	        <html:hidden property="lossCode" value="<%=String.valueOf(theitem.getLossCode()) %>"  name="theitem" indexed="true"/>
+	        
+	        <html:hidden property="faultStation_id" value="<%=String.valueOf(theitem.getFaultStation_id()) %>" name="theitem"  indexed="true"/>
+          <%} %>
           <% } %>
           <tr>
             <td>

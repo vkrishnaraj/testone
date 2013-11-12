@@ -171,10 +171,12 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_CREATE_WT_OTHER_CARRIER = "Create WT Files for other Carriers";
 	public final static String SYSTEM_COMPONENT_NAME_EXTERNAL_LINKS="External Links";
 	public final static String SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL = "Loss Codes at Per Bag Level";
-	public final static String SYSTEM_COMPONENT_NAME_EDIT_NON_CLOSED_DELIVERED_BAGS = "Edit Non Closed and Non Delivered Bags";
-	public final static String SYSTEM_COMPONENT_NAME_EDIT_DELIVERED_BAGS_SAME_STATION = "Edit Delivered Bags in Same Station";
-	public final static String SYSTEM_COMPONENT_NAME_EDIT_CLOSED_INCIDENT = "Edit Closed Incident Bags in Same Station";
-	public final static String SYSTEM_COMPONENT_NAME_EDIT_ANY_CLOSED_DELIVERED= "Edit Any Closed or Delivered Bags";
+	public final static String SYSTEM_COMPONENT_NAME_EDIT_SAME_NON_CLOSED_DELIVERED = "Edit Non Closed and Non Delivered Bags in Same Station";
+	public final static String SYSTEM_COMPONENT_NAME_EDIT_SAME_CLOSED_DELIVERED = "Edit Closed or Delivered Bags in Same Station";
+	public final static String SYSTEM_COMPONENT_NAME_EDIT_OTHER_NON_CLOSED_DELIVERED = "Edit Non Closed and Non Delivered Bags in Other Stations";
+	public final static String SYSTEM_COMPONENT_NAME_EDIT_OTHER_CLOSED_DELIVERED= "Edit Closed or Delivered Bags in Other Stations";
+	public final static String SYSTEM_COMPONENT_NAME_EDIT_ANY_BAGS_LOSS_CODES= "Edit Loss Codes for Any Bags";
+	 
 	public final static String SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP_LOSTDELAY= "Passenger Pick Up for Lost/Delay Incidents";
 	public final static String SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP_MISSING= "Passenger Pick Up for Missing Incidents";
 	public final static String SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP_DAMAGE= "Passenger Pick Up for Damaged Incidents";

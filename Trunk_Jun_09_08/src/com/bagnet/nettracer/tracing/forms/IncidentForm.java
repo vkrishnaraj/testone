@@ -102,6 +102,7 @@ public final class IncidentForm extends ValidatorForm {
 	private boolean locked = false;	//for dispute resolution process
 	private boolean codelocked = false;	//for dispute resolution process
 	private boolean stationlocked = false;	//for dispute resolution process
+	private boolean swaLocked =false; //for swa Loss Codes
 	
 	private String teletypeAddress; //for the big Teletype String for historical reporting
 	private long oc_claim_id;
@@ -1500,6 +1501,14 @@ public final class IncidentForm extends ValidatorForm {
 
 	public void setExistIncStatus(Status existIncStatus) {
 		this.existIncStatus = existIncStatus;
+	}
+
+	public boolean isSwaLocked() {
+		return swaLocked;
+	}
+
+	public void setSwaLocked(boolean swaLocked) {
+		this.swaLocked = swaLocked;
 	}
 
 }

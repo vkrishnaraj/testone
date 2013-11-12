@@ -1362,4 +1362,9 @@ public class Incident implements Serializable {
 		this.activities = activities;
 	}
 	
+	@Transient
+	public boolean isSwaLocked(){
+		return false;
+	}
+	
 }
