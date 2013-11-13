@@ -17,7 +17,8 @@ public class WS_Login extends WS_SeleniumTest {
 	public void testLoginOGAdmin() throws Exception {
 		LoginUtil.loginOGAdminTest(driver, BASE_URL);
 	}
-	
+
+	@Test
 	public void testNavigateToPermissionsPage() throws Exception {
 		verifyTrue(PermissionsUtil.navigateToPermissionsPageTest(driver, BASE_URL, COMPANY_CODE, ADMIN_GROUP_ID));
 	}

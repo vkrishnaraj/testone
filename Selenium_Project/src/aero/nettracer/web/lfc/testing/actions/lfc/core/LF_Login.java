@@ -12,7 +12,8 @@ public class LF_Login extends LFC_SeleniumTest {
 	public void testLoginFail() throws Exception {
 		LoginUtil.loginFailureTest(driver, BASE_URL, null);
 	}
-	
+
+	@Test
 	public void testNavigateToPermissionsPage() throws Exception {
 		verifyTrue(PermissionsUtil.navigateToPermissionsPageTest(driver, BASE_URL, COMPANY_CODE, ADMIN_GROUP_ID));
 	}
