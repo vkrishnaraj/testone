@@ -1871,6 +1871,7 @@ public class WorldTracerWebService implements WorldTracerConnector {
 		ohd.setStationCode(onhand.getHoldingStation().getWt_stationcode());
 		ohd.setStorageLocation(onhand.getStorage_location());
 		
+		ohd.setFurtherInfo(onhand.getOHD_ID());
 
 		aero.nettracer.serviceprovider.wt_1_0.common.Item item = new aero.nettracer.serviceprovider.wt_1_0.common.Item();
 		item.setColor(onhand.getColor());

@@ -162,26 +162,49 @@
 					<bean:write name="passenger" property="middlename" />
 					<bean:write name="passenger" property="lastname" />
 					<br/>
-				<bean:write name="passenger" property="address.address1" />
-<!--				<bean:write name="passenger" property="address.address2" />-->
-<!--				<br/>-->
-<!--				<bean:write name="passenger" property="address.city" />-->
-<!--				<bean:write name="passenger" property="address.state" />-->
-<!--				<bean:write name="passenger" property="address.zip" />-->
-				<%
-				Address addr = res.getPax()[i.intValue()].getAddress();
-				String a = "";
-				if (addr.getAddress1() != null && addr.getAddress1().length() > 0){
-					a += addr.getAddress1() + "<br/>";
-				}
-				if (addr.getAddress2() != null && addr.getAddress2().length() > 0){
-					a += addr.getAddress2() + "<br/>";
-				}
-				
-				
-				%>
-				
-				
+					<logic:notEmpty name="passenger" property="address">
+						<bean:write name="passenger" property="address.address1" />
+						<%
+						Address addr = res.getPax()[i.intValue()].getAddress();
+						String a = "";
+						if (addr.getAddress1() != null && addr.getAddress1().length() > 0){
+							a += addr.getAddress1() + "<br/>";
+						}
+						if (addr.getAddress2() != null && addr.getAddress2().length() > 0){
+							a += addr.getAddress2() + "<br/>";
+						}
+						
+						
+						%>
+						
+						<br/>
+						<bean:write name="passenger" property="address.emailAddress" />
+						<br/>
+						<logic:notEmpty name="passenger" property="address.homePhone">
+							<bean:message key="wt.view.ohd.passenger.homephone"/> 
+							<bean:write name="passenger" property="address.homePhone" />
+						<br/>
+						</logic:notEmpty>
+						<logic:notEmpty name="passenger" property="address.workPhone">
+							<bean:message key="wt.view.ohd.passenger.workphone"/>
+							<bean:write name="passenger" property="address.workPhone" />
+						<br/>
+						</logic:notEmpty>
+						<logic:notEmpty name="passenger" property="address.mobilePhone">
+							<bean:message key="wt.view.ohd.passenger.mobilephone"/>
+							<bean:write name="passenger" property="address.mobilePhone" />
+						<br/>
+						</logic:notEmpty>
+						<logic:notEmpty name="passenger" property="address.altPhone">
+							<bean:message key="wt.view.ohd.passenger.altphone"/>
+							<bean:write name="passenger" property="address.altPhone" />
+						<br/>
+						</logic:notEmpty>
+					</logic:notEmpty>
+					<logic:notEmpty name="passenger" property="languageFreeFlow">
+						<bean:write name="passenger" property="languageFreeFlow"/>
+						<br/>
+					</logic:notEmpty>
 				</td>
 				</tr>
 		</logic:iterate>
@@ -195,10 +218,6 @@
        				<td width="115px" class="label"></td>
        			<%} %>
        			<td align="char" char=":"  class="field">
-<!--       			<bean:write name="pitin" property="airline" />-->
-<!--       			<bean:write name="pitin" property="flightNumber" />-->
-<!--				<bean:write name="pitin" property="departureCity" />-->
-<!--				<bean:write name="pitin" property="arrivalCity" />-->
 				<%	
 				  	Itinerary itin = res.getPaxItinerary()[i.intValue()];
 					String itinString = itin.getAirline() + " " +
@@ -222,10 +241,6 @@
        				<td width="115px" class="label"></td>
        			<%} %>
        			<td align="char" char=":"  class="field">
-<!--       			<bean:write name="pitin" property="airline" />-->
-<!--       			<bean:write name="pitin" property="flightNumber" />-->
-<!--				<bean:write name="pitin" property="departureCity" />-->
-<!--				<bean:write name="pitin" property="arrivalCity" />-->
 				<%	
 				  	Itinerary itin = res.getPaxItinerary()[i.intValue()];
 					String itinString = itin.getAirline() + " " +
@@ -265,6 +280,8 @@
 					property="type" /> <br />
 				<span class="label"><bean:message key="wt.view.ohd.bag.description" /></span> <bean:write name="bag"
 					property="desc1" /> <br />
+				<span class="label"><bean:message key="wt.view.ohd.bag.manufacturer" /></span>
+					<bean:write name="bag" property="manufacturer" /> <br />
 				<dt>Contents:</dt>
 				<ul>
 				<logic:iterate id="content" name="bag" property="content"
@@ -279,7 +296,11 @@
 		</td>
 		
 		</tr>
-		
+       	<tr>
+			<td class="label"><span class="label"><bean:message key="wt.view.ohd.further.information" /></span></td>
+			<td><bean:write name="wtr" property="furtherInfo"/></td>
+			</tr>
+		<tr>
 	</td>
 </tr>
 
