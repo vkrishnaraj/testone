@@ -764,6 +764,8 @@ public class PreProcessor {
 
 		addIncidentFieldEntry(WorldTracerField.SL, ohd.getStorageLocation(), result);
 
+		addIncidentFieldEntry(WorldTracerField.FI, ohd.getFurtherInfo(), result);
+
 		if (ohd.getPax() != null && ohd.getPax().length > 0 && ohd.getPax()[0].getFfNumber() != null) {
 			String membership = ohd.getPax()[0].getFfNumber(); 
 			if (ohd.getPax()[0].getFfAirline() != null) {

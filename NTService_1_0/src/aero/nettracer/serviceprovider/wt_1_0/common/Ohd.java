@@ -17,6 +17,7 @@ public class Ohd {
 	private String storageLocation;
 	private Agent agent;
 	private String pnrLocator;
+	private String furtherInfo;
 	
 	public String getStorageLocation() {
   	return storageLocation;
@@ -130,4 +131,12 @@ public class Ohd {
 	public void setAirlineCode(String airlineCode) {
   	this.airlineCode = airlineCode;
   }
+
+	public String getFurtherInfo() {
+		return furtherInfo;
+	}
+
+	public void setFurtherInfo(String furtherInfo) {
+		this.furtherInfo = furtherInfo;
+	}
 }

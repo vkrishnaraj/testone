@@ -130,6 +130,7 @@ import aero.sita.www.bag.wtr._2009._01.StringLength1To58;
 import aero.sita.www.bag.wtr._2009._01.WTRAddressAmendType;
 import aero.sita.www.bag.wtr._2009._01.WTRAddressAmendType.Country;
 import aero.sita.www.bag.wtr._2009._01.WTRAddressAmendType.PostalCode;
+import aero.sita.www.bag.wtr._2009._01.WTROnhandBagRecReadRSDocument.WTROnhandBagRecReadRS.Passengers;
 
 import org.iata.www.iata._2007._00.TTYAddress;
 import aero.sita.www.bag.wtr._2009._01.WTRBagsCreateRSDocument;
@@ -1412,6 +1413,18 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			d1.addNewPOS().addNewSource().setAirlineVendorID(dto.getUser().getProfile().getAirline());
 
 			OnHandBagType d2 = d1.addNewOnHandBag();
+			
+			String freeFormText = null;
+			if ((List<String>) fieldMap.get(WorldTracerField.FI) != null
+					&& ((List<String>) fieldMap.get(WorldTracerField.FI))
+							.size() > 0) {
+				freeFormText = ((List<String>) fieldMap
+						.get(WorldTracerField.FI)).get(0);
+			}
+
+			if (freeFormText != null) {
+				d1.addNewAdditionalInfo().setFurtherInfo(freeFormText);
+			}
 
 			List<String> fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.CT);
 			if (fieldList != null && fieldList.size() >= 1) {
@@ -3390,6 +3403,88 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						rohd.setClaimCheck(cc);
 						cc.setAirlineCode(ores.getOnHandBag().getBagTag().getAirlineCode());
 						cc.setTagNumber(ores.getOnHandBag().getBagTag().getTagSequence());
+					}
+
+				}
+				if(ores.getAdditionalInfo()!=null && ores.getAdditionalInfo().getFurtherInfo()!=null){
+					rohd.setFurtherInfo(ores.getAdditionalInfo().getFurtherInfo());
+				}
+				
+				if(ores.getPassengers()!=null){
+
+					Passengers wsp = ores.getPassengers();
+
+					ArrayList<Passenger> paxList = new ArrayList<Passenger>();
+					Passenger fPax = null;
+
+					String[] temp = wsp.getNames().getNameArray();
+					for (String tem : temp) {
+						Passenger p = new Passenger();
+						paxList.add(p);
+						p.setLastname(tem);
+						if (fPax == null) {
+							fPax = p;
+						}
+					}
+					rohd.setPax(paxList.toArray(new Passenger[paxList.size()]));
+
+					if (fPax != null) {
+						if (wsp.getTitle() != null) {
+							// HERE
+							int sal = mapSalutation(wsp.getTitle());
+							fPax.setSalutation(sal);
+						}
+						
+						if(wsp.getLanguage()!=null){
+							fPax.setLanguageFreeFlow(wsp.getLanguage());
+						}
+					}
+
+					if (wsp.getFrequentFlyerID() != null) {
+						fPax.setFfNumber(wsp.getFrequentFlyerID());
+					}
+
+					if (wsp.getContactInfo() != null) {
+						ContactInfoType ci = wsp.getContactInfo();
+
+						aero.nettracer.serviceprovider.wt_1_0.common.Address add = new aero.nettracer.serviceprovider.wt_1_0.common.Address();
+						fPax.setAddress(add);
+
+						if (ci.getPermanentAddress() != null) {
+							int length = ci.getPermanentAddress().getAddressLineArray().length;
+
+							if (length >= 1)
+								add.setAddress1(ci.getPermanentAddress().getAddressLineArray(0));
+							if (length >= 2)
+								add.setAddress2(ci.getPermanentAddress().getAddressLineArray(1));
+						}
+						if(ci.getEmails()!=null){
+							add.setEmailAddress(ci.getEmails().getEmailArray(0));
+						}
+
+						if(ores.getOnHandBag().getBagAddress()!=null){
+							if(ores.getOnHandBag().getBagAddress().getAddressLineArray(0)!=null){
+								add.setAddress1(ores.getOnHandBag().getBagAddress().getAddressLineArray(0));
+							}
+							if(ores.getOnHandBag().getBagAddress().getCity()!=null){
+								add.setCity(ores.getOnHandBag().getBagAddress().getCity());
+							}
+							if(ores.getOnHandBag().getBagAddress().getCountry()!=null){
+								add.setCountryCode(ores.getOnHandBag().getBagAddress().getCountry().getCode());
+							}
+							if(ores.getOnHandBag().getBagAddress().getPostalCode()!=null){
+								add.setZip(ores.getOnHandBag().getBagAddress().getPostalCode().getStringValue());
+							}
+						}
+						
+
+						if (ci.getPermPhones() != null)
+							add.setHomePhone(ci.getPermPhones().getPhoneArray(0));
+						if (ci.getCellPhones() != null)
+							add.setMobilePhone(ci.getCellPhones().getPhoneArray(0));
+						if (ci.getTempPhones() != null)
+							add.setAltPhone(ci.getTempPhones().getPhoneArray(0));
+
 					}
 
 				}

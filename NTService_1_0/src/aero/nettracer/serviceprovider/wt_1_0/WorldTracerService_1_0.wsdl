@@ -12,6 +12,7 @@
                     <xs:element minOccurs="0" name="createDate" nillable="true" type="xs:dateTime"/>
                     <xs:element minOccurs="0" name="faultReason" type="xs:int"/>
                     <xs:element minOccurs="0" name="faultStation" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="furtherInfo" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="item" nillable="true" type="ax23:Item"/>
                     <xs:element minOccurs="0" name="ohdId" nillable="true" type="xs:string"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="pax" nillable="true" type="ax23:Passenger"/>
