@@ -18,22 +18,21 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-
 import aero.nettracer.fs.model.Person;
 
 import com.bagnet.nettracer.tracing.bmo.ClaimBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
-import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Claim_Depreciation;
 import com.bagnet.nettracer.tracing.db.Depreciation_Item;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
+import com.bagnet.nettracer.tracing.db.Lz;
 import com.bagnet.nettracer.tracing.db.Prorate_Itinerary;
-import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.forms.ClaimForm;
+import com.bagnet.nettracer.tracing.utils.LzUtils;
 
 /**
  * @author Sean Fine
@@ -84,14 +83,26 @@ public class CRAPReport {
 				if(reason!=null){
 					report_info.put("reason", reason.getDescription());
 				}
-				
-				Station cbsStation=StationBMO.getStationByCode(TracingConstants.CBS, user.getCompanycode_ID());
+				/*
+				 * Changing the method return type would be a significant rework
+				 * and testing to confirm it works properly. To make up for it,
+				 * will put a @SuppressWarnings("unchecked") around this call to insure it doesn't
+				 * potentially break the system
+				 */  
+				@SuppressWarnings("unchecked")
+				List<Lz> lzList=LzUtils.getIncidentLzStations(user.getCompanycode_ID());
+				HashMap<Integer,Lz> lzmap=new HashMap<Integer,Lz>();
+				if(lzList!=null){
+					for(Lz lz:lzList) {
+						lzmap.put(lz.getStation().getStation_ID(), lz);
+					}
+				}
 				for(ExpensePayout ep:theform.getClaim().getNtIncident().getExpenselist()){
 					boolean epApproved=ep.getStatus().getStatus_ID()==TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED;
 					boolean epDelivered=ep.getExpensetype().getExpensetype_ID()==TracingConstants.EXPENSEPAYOUT_DELIVERY;
 					boolean epPaid=ep.getStatus().getStatus_ID()==TracingConstants.EXPENSEPAYOUT_STATUS_PAID;
 					if(epApproved || epPaid){
-						if(cbsStation!=null && ep.getExpenselocation().getStation_ID()==cbsStation.getStation_ID()){
+						if(lzmap!=null && lzmap.get(ep.getAgent().getStation().getStation_ID())!=null && ep.getVoucheramt()>0){
 							cbsslv+=ep.getVoucheramt();
 						} else {
 							if(ep.getVoucheramt()>0){
