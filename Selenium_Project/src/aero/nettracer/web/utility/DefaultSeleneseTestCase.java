@@ -127,11 +127,11 @@ public class DefaultSeleneseTestCase extends SeleneseTestBase {
 		return WebDriverUtil.getSelectedLabel(driver, by);
 	}
 	
-	protected String getSelectedValue(By by) {
+	protected String getValue(By by) {
 		return driver.findElement(by).getAttribute("value");
 	}
 	
-	protected String getValue(By by) {
+	protected String getText(By by) {
 		return driver.findElement(by).getText();
 	}
 	
