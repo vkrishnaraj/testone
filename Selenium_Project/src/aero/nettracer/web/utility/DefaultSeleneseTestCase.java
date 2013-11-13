@@ -1,7 +1,5 @@
 package aero.nettracer.web.utility;
 
-import junit.framework.TestCase;
-
 import org.junit.Before;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -13,14 +11,11 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.thoughtworks.selenium.SeleneseTestBase;
-import com.thoughtworks.selenium.Selenium;
 
-public class DefaultSeleneseTestCase extends TestCase {
+public class DefaultSeleneseTestCase extends SeleneseTestBase {
 	
 	public WebDriver driver = null;
 	public WebDriver ogDriver = null;
-	protected Selenium selenium = null;
-	private SeleneseTestBase base = new SeleneseTestBase();
 	
 	@Before
 	public void setUp() throws Exception {
@@ -62,25 +57,17 @@ public class DefaultSeleneseTestCase extends TestCase {
 	}
 	
 	public void verifyTrue(boolean testThis) {
-		base.verifyTrue(testThis);
+		super.verifyTrue(testThis);
 		if (!testThis) {
 			System.out.println("SYSTEM FUBAR. Failure on previous test...");
 		}
 	}
 	
 	public void verifyFalse(boolean testThis) {
-		base.verifyFalse(testThis);
+		super.verifyFalse(testThis);
 		if (testThis) {
 			System.out.println("SYSTEM FUBAR. Failure on previous test...");
 		}
-	}
-	
-	public void verifyEquals(String testThis, String fromPage) {
-		base.verifyEquals(testThis, fromPage);
-	}
-	
-	public void verifyNotEquals(String testThis, String fromPage) {
-		base.verifyNotEquals(testThis, fromPage);
 	}
 	
 	public void clickMenu(String menu) {
