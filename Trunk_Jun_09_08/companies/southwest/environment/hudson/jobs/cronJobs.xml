@@ -16,6 +16,7 @@
 				<ref bean="AutoCloseOhdTrigger" />
 				<ref bean="cssExpireTrigger" />
 				<ref bean="cssCreateTrigger" />
+				<ref bean="cronWtQueueTrigger" /> 
 			</list>
 		</property>
 	</bean>
