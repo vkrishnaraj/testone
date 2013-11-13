@@ -1,5 +1,6 @@
 package aero.nettracer.web.utility;
 
+import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -22,6 +23,11 @@ public class DefaultSeleneseTestCase extends SeleneseTestBase {
 		selenium = SeleniumTestBrowserDefault.getBrowser();
 		driver = SeleniumTestBrowserDefault.getDriver();
 		ogDriver = SeleniumTestBrowserDefault.getOgDriver();
+	}
+	
+	@After
+	public void tearDown() throws Exception {
+		checkForVerificationErrors();
 	}
 	
 	public void goToTaskManager() {
