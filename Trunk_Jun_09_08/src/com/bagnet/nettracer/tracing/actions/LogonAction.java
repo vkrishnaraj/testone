@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -45,6 +46,7 @@ import com.bagnet.nettracer.tracing.db.ForwardNotice;
 import com.bagnet.nettracer.tracing.db.GroupComponentPolicy;
 import com.bagnet.nettracer.tracing.db.ProactiveNotification;
 import com.bagnet.nettracer.tracing.db.Station;
+import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.taskmanager.GeneralTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.MorningDutiesTask;
@@ -265,7 +267,38 @@ public class LogonAction extends Action {
 	private void taskManagerSetup(HttpSession session, HttpServletRequest request) {
 
 		Agent agent = (Agent) session.getAttribute("user");
-
+		
+		//Requirement that TBI will only be available for use in the LZ station;
+		String cbroStationID = StringUtils.stripToNull(request.getParameter("cbroStation"));
+		Station stationBMO = (cbroStationID == null) ? null : StationBMO.getStation(cbroStationID);
+		if (stationBMO != null) {
+			if (stationBMO.isThisOhdLz() && PropertyBMO.isTrue(PropertyBMO.PROPERTY_TO_BE_INVENTORIED)) {
+				if (session.getAttribute("ohdLZStatusList") != null) {
+					session.setAttribute("ohdStatusList", session.getAttribute("ohdLZStatusList"));
+					session.setAttribute("ohdLZStatusList", null); //reset
+				}
+			} else {
+				@SuppressWarnings("unchecked")
+				List<Status> ohdStatusList = (List<Status>)session.getAttribute("ohdStatusList");
+				List<Status> ohdStatusTBIList = null;
+				for (Status status : ohdStatusList) {
+					if (status.getStatus_ID() == TracingConstants.OHD_STATUS_TO_BE_INVENTORIED) {
+						if (ohdStatusTBIList == null) {
+							ohdStatusTBIList = new ArrayList<Status>();
+						}
+						
+						ohdStatusTBIList.add(status);
+					}
+				}
+				 
+				if (ohdStatusTBIList != null && !ohdStatusTBIList.isEmpty()) {
+					session.setAttribute("ohdLZStatusList", new ArrayList<Status>(ohdStatusList)); //save LZ statuses
+					ohdStatusList.removeAll(ohdStatusTBIList);
+					session.setAttribute("ohdStatusList", ohdStatusList);
+				}
+			}
+		}
+		
 		ArrayList<GroupComponentPolicy> taskList = (ArrayList<GroupComponentPolicy>) session.getAttribute("userTaskList");
 		if (taskList == null) {
 			taskList = UserPermissions.getTaskManagerComponents(agent);

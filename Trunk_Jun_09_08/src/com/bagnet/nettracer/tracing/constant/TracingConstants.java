@@ -163,7 +163,7 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_MAINTAIN_AGENTS = "Maintain Agents";
 	public final static String SYSTEM_COMPONENT_NAME_MAINTAIN_WEB_SERVICE_AGENTS = "Maintain Web Service Agents";
 	public final static String SYSTEM_COMPONENT_NAME_INCOMING_BAGS = "Incoming Bags";
-	public final static String SYSTEM_COMPONENT_NAME_TO_BE_INVENTORIED = "To_Be_Inventoried";
+	public final static String SYSTEM_COMPONENT_NAME_TO_BE_INVENTORIED = "To Be Inventoried";
 	public final static String SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS = "Incoming Incidents";
 	public final static String SYSTEM_COMPONENT_NAME_SHARED_ATTACHMENTS = "Shared Attachments";
 	public final static String SYSTEM_COMPONENT_NAME_DELETE_BAGTAG_BAGS = "Delete Bagtags to Bags";
