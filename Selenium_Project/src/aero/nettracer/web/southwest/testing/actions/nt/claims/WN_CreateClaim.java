@@ -9,13 +9,8 @@ import java.util.Date;
 import org.junit.Test;
 
 import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
-import aero.nettracer.web.utility.LoginUtil;
-import aero.nettracer.web.utility.DefaultSeleneseTestCase;
-import aero.nettracer.web.utility.Settings;
 
 public class WN_CreateClaim extends WN_SeleniumTest {
-
-	private static String RX_TIMESTAMP = "";
 
 	private String CLAIM_DEPREC_CALC = "656";
 	private String DEPREC_CALC_ADMIN = "657";
@@ -79,7 +74,7 @@ public class WN_CreateClaim extends WN_SeleniumTest {
 	@Test
 	public void testUpdate_Depreciation_Categories() throws Exception {
 		verifyTrue(setPermissions(new String[] { CLAIM_DEPREC_CALC,DEPREC_CALC_ADMIN }, new boolean[] { true, true }));
-		clickMenu("menucol_9.18");
+		clickMenu(MENU_ADMIN_DEPRECIATION);
 		waitForPageToLoadImproved();
 			
 		if(checkNoErrorPage()){

@@ -21,7 +21,10 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 	
 	protected static final String MENU_LD_SEARCH = "menucol_1.4";
 	protected static final String MENU_OHD_SEARCH = "menucol_4.4";
-	protected static final String MENU_ADMIN_AUDIT = "menucol_9.12";
+	protected static final String MENU_ADMIN_COMPANY = "menucol_10.2";
+	protected static final String MENU_ADMIN_AUDIT = "menucol_10.12";
+	protected static final String MENU_ADMIN_TEMPLATES = "menucol_10.17";
+	protected static final String MENU_ADMIN_DEPRECIATION = "menucol_10.18";
 	
 	protected static final String INCIDENT_TYPE_LOSTDELAY = "Lost/Delayed";
 	protected static final String INCIDENT_TYPE_MISSING = "Missing Articles";

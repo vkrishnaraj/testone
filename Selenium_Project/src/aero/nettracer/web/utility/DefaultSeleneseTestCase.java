@@ -1,21 +1,18 @@
 package aero.nettracer.web.utility;
 
-import java.util.concurrent.TimeUnit;
-
 import org.junit.Before;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.thoughtworks.selenium.SeleneseTestCase;
+import com.thoughtworks.selenium.SeleneseTestBase;
 
-public class DefaultSeleneseTestCase extends SeleneseTestCase {
+public class DefaultSeleneseTestCase extends SeleneseTestBase {
 	
 	public WebDriver driver = null;
 	public WebDriver ogDriver = null;
@@ -182,6 +179,18 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 	
 	protected void waitForStaleElement(WebElement element, String identifier) {
 		WebDriverUtil.waitForStaleElement(driver, element, identifier);
+	}
+	
+	protected String getAlert() {
+		String toReturn = "";
+		try {
+			Alert alert = driver.switchTo().alert();
+			toReturn = driver.switchTo().alert().getText();
+			alert.accept();
+		} catch (Exception e) {
+			System.out.println("UNABLE TO GET ALERT");
+		}
+		return toReturn;
 	}
 
 }

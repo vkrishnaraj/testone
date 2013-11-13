@@ -394,7 +394,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		type(By.name("claimcheck[0].claimchecknum"), "UTB");
 		click(By.name("saveButton"));
-		assertEquals("Claim Check Number is not a valid claim check number.[10 digits or 8 character AN or marked UTB]", selenium.getAlert());
+		assertEquals("Claim Check Number is not a valid claim check number.[10 digits or 8 character AN or marked UTB]", getAlert());
 		SimpleDateFormat df = new SimpleDateFormat("MMddyyyy");
 		String utbNum = "UTB" + df.format(new Date());
 		type(By.name("claimcheck[0].claimchecknum"), utbNum);

@@ -12,7 +12,7 @@ public class WN_SearchTemplates extends WN_SeleniumTest {
 	public void testTemplateSearchResults() {
 		verifyTrue(setPermissions(new String[] { PermissionsUtil.DOCUMENT_TEMPLATES_MANAGE }, new boolean[] { true }));
 		for (int i = 0; i < 2; ++i) {
-			clickMenu("menucol_9.17");
+			clickMenu(MENU_ADMIN_TEMPLATES);
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
@@ -48,7 +48,7 @@ public class WN_SearchTemplates extends WN_SeleniumTest {
 			}
 		}
 
-		clickMenu("menucol_9.17");
+		clickMenu(MENU_ADMIN_TEMPLATES);
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
 			selenium.click("id=searchButton");

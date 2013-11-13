@@ -1,8 +1,5 @@
 package aero.nettracer.web.southwest.testing.actions.nt.admin;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.junit.Test;
 
 import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
@@ -12,7 +9,7 @@ public class WN_StatusMessageTest extends WN_SeleniumTest{
 	@Test
 	public void testStatusMessage() throws Exception {
 
-		clickMenu("menucol_9.2");
+		clickMenu(MENU_ADMIN_COMPANY);
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
@@ -47,7 +44,7 @@ public class WN_StatusMessageTest extends WN_SeleniumTest{
 	@Test
 	public void testStatusMessageAudit() throws Exception {
 
-		clickMenu("menucol_9.12");			
+		clickMenu(MENU_ADMIN_AUDIT);			
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			selenium.click("//td[@id='navmenucell']/div/dl/dd[10]/a/span[2]");			

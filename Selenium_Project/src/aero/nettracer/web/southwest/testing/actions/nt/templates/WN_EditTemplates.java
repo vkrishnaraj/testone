@@ -25,7 +25,7 @@ public class WN_EditTemplates extends WN_SeleniumTest {
 	
 	@Test
 	public void testCreateTemplate() {
-		clickMenu("menucol_9.17");
+		clickMenu(MENU_ADMIN_TEMPLATES);
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
