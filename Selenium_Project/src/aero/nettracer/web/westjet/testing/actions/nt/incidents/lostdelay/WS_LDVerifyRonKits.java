@@ -3,8 +3,6 @@ package aero.nettracer.web.westjet.testing.actions.nt.incidents.lostdelay;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
-import aero.nettracer.web.utility.LoginUtil;
-import aero.nettracer.web.utility.Settings;
 import aero.nettracer.web.westjet.testing.WS_SeleniumTest;
 
 public class WS_LDVerifyRonKits extends WS_SeleniumTest {

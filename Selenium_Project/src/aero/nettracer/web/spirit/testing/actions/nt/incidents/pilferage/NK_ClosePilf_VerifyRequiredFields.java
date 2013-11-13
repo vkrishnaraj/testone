@@ -3,7 +3,6 @@ package aero.nettracer.web.spirit.testing.actions.nt.incidents.pilferage;
 import org.junit.Test;
 
 import aero.nettracer.web.utility.DefaultSeleneseTestCase;
-import aero.nettracer.web.utility.Settings;
 
 public class NK_ClosePilf_VerifyRequiredFields extends DefaultSeleneseTestCase {
 

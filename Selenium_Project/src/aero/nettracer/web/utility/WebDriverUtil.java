@@ -14,12 +14,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.thoughtworks.selenium.SeleneseTestBase;
-
 
 public class WebDriverUtil {
-	
-	private static SeleneseTestBase base = new SeleneseTestBase();
 	
 	public static void goToTaskManager(WebDriver driver) {
 		driver.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);

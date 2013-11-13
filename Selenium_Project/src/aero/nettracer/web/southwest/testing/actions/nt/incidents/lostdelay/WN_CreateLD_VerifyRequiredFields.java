@@ -7,12 +7,10 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.interactions.Actions;
 
 import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
 import aero.nettracer.web.utility.PermissionsUtil;
 import aero.nettracer.web.utility.Settings;
-import aero.nettracer.web.utility.WebDriverUtil;
 
 public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 

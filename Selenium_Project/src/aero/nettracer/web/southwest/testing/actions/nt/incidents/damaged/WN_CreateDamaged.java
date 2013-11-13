@@ -1,8 +1,5 @@
 package aero.nettracer.web.southwest.testing.actions.nt.incidents.damaged;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.junit.Test;
 import org.openqa.selenium.By;
 

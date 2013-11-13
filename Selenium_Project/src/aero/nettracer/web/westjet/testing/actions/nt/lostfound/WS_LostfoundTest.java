@@ -2,7 +2,6 @@ package aero.nettracer.web.westjet.testing.actions.nt.lostfound;
 
 import org.junit.Test;
 
-import aero.nettracer.web.utility.LoginUtil;
 import aero.nettracer.web.utility.Settings;
 import aero.nettracer.web.westjet.testing.WS_SeleniumTest;
 

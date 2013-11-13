@@ -2,10 +2,8 @@ package aero.nettracer.web.lfc.testing.actions.lfc.itementry;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.Select;
 
 import aero.nettracer.web.lfc.testing.LFC_SeleniumTest;
-import aero.nettracer.web.utility.LoginUtil;
 
 public class LF_ItemEntry extends LFC_SeleniumTest {
 

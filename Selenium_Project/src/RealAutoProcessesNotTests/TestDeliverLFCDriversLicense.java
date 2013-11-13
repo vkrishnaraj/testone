@@ -9,10 +9,10 @@ import org.openqa.selenium.server.RemoteControlConfiguration;
 import org.openqa.selenium.server.SeleniumServer;
 
 import com.thoughtworks.selenium.DefaultSelenium;
-import com.thoughtworks.selenium.SeleneseTestCase;
+import com.thoughtworks.selenium.SeleneseTestBase;
 
 
-public class TestDeliverLFCDriversLicense extends SeleneseTestCase {
+public class TestDeliverLFCDriversLicense extends SeleneseTestBase {
 
 	private static SeleniumServer server;
 	

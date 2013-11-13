@@ -1,8 +1,6 @@
 package aero.nettracer.web.avis.testing.actions.lf.match;
 
 import org.junit.Test;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.interactions.Actions;
 
 import aero.nettracer.web.utility.DefaultSeleneseTestCase;
 import aero.nettracer.web.utility.Settings;

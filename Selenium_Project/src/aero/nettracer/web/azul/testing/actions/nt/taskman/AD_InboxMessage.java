@@ -3,7 +3,6 @@ package aero.nettracer.web.azul.testing.actions.nt.taskman;
 import org.junit.Test;
 
 import aero.nettracer.web.azul.testing.AD_SeleniumTest;
-import aero.nettracer.web.utility.DefaultSeleneseTestCase;
 import aero.nettracer.web.utility.LoginUtil;
 import aero.nettracer.web.utility.Settings;
 

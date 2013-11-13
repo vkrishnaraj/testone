@@ -3,7 +3,6 @@ package aero.nettracer.web.westjet.testing.actions.nt.incidents.pilferage;
 import org.junit.Test;
 
 import aero.nettracer.web.utility.DefaultSeleneseTestCase;
-import aero.nettracer.web.utility.Settings;
 
 public class WS_ClosePilf_VerifyRequiredFields extends DefaultSeleneseTestCase {
 

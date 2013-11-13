@@ -1,7 +1,6 @@
 package aero.nettracer.web.lfc.testing.actions.lfc.salvage;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 import org.junit.Test;

@@ -2,7 +2,6 @@ package aero.nettracer.web.lfc.testing.actions.lfc.core;
 
 import org.junit.Test;
 
-import aero.nettracer.web.lfc.testing.actions.lfc.salvage.LF_Salvage;
 import aero.nettracer.web.utility.DefaultSeleneseTestCase;
 import aero.nettracer.web.utility.Settings;
 

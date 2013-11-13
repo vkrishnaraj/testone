@@ -3,8 +3,6 @@ package aero.nettracer.web.westjet.testing.actions.nt.taskman;
 import org.junit.Test;
 
 import aero.nettracer.web.utility.DefaultSeleneseTestCase;
-import aero.nettracer.web.utility.LoginUtil;
-import aero.nettracer.web.utility.Settings;
 
 public class WS_VerifyText_TaskManager extends DefaultSeleneseTestCase {
 	

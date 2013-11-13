@@ -3,7 +3,6 @@ package aero.nettracer.web.azul.testing.actions.nt.incidents.damage;
 import org.junit.Test;
 
 import aero.nettracer.web.utility.DefaultSeleneseTestCase;
-import aero.nettracer.web.utility.Settings;
 
 public class AD_CloseDam_VerifyRequiredFields extends DefaultSeleneseTestCase {
 

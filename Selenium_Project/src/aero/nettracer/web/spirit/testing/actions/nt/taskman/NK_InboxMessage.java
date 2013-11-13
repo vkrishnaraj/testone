@@ -6,7 +6,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
 import aero.nettracer.web.spirit.testing.NK_SeleniumTest;
-import aero.nettracer.web.utility.DefaultSeleneseTestCase;
 import aero.nettracer.web.utility.LoginUtil;
 import aero.nettracer.web.utility.Settings;
 

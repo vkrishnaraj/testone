@@ -101,15 +101,8 @@ public class NK_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 	
 	@Test
 	public void testPressEnterInRemarksField() {
-		String locator = "//textarea[@id='remark[0]']";
 		verifyEquals("1500", selenium.getValue("//input[@id='remark[0].counter']"));
 		driver.findElement(By.id("remark[0]")).sendKeys("Test line" + Keys.ENTER + Keys.ENTER + Keys.ENTER);
-//		typeString(locator, "Test line");
-//		selenium.focus(locator);
-//		selenium.setCursorPosition(locator, String.valueOf(selenium.getValue(locator).length()));
-//		selenium.keyDown(locator, "\\13");
-//		selenium.keyDown(locator, "\\13");
-//		selenium.keyDown(locator, "\\13");
 		verifyEquals("1485", selenium.getValue("//input[@id='remark[0].counter']"));
 		selenium.click("name=saveButton");
 		waitForPageToLoadImproved();
@@ -117,20 +110,5 @@ public class NK_CreateLD_VerifyRequiredFields extends DefaultSeleneseTestCase {
 		waitForPageToLoadImproved();
 
 	}
-	
-//	private void typeString(String locator, String string) {
-//		char[] chars = string.toCharArray();
-//		StringBuffer sb = new StringBuffer(selenium.getText(locator));
-//		selenium.setCursorPosition(locator, String.valueOf(selenium.getValue(locator).length()));
-//		for (int i = 0; i < chars.length; i++) {
-//			char aChar = chars[i];
-//			String key = Character.toString(aChar);
-//			sb.append(aChar);
-//			selenium.keyDown(locator, key);
-//			selenium.type(locator, sb.toString());
-//			selenium.keyPress(locator, key);
-//			selenium.keyUp(locator, key);
-//		}
-//	}
 
 }

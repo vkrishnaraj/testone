@@ -4,7 +4,6 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 
 import aero.nettracer.web.lfc.testing.LFC_SeleniumTest;
-import aero.nettracer.web.utility.Settings;
 
 public class LF_CreateLostAndFoundReadOnly extends LFC_SeleniumTest {
 
