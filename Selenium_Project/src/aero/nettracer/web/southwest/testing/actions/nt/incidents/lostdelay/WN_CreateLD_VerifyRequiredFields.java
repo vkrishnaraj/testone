@@ -12,6 +12,7 @@ import org.openqa.selenium.interactions.Actions;
 import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
 import aero.nettracer.web.utility.PermissionsUtil;
 import aero.nettracer.web.utility.Settings;
+import aero.nettracer.web.utility.WebDriverUtil;
 
 public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 
@@ -391,14 +392,13 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 	@Test
 	public void testUTBBagTag(){
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-		selenium.type("name=claimcheck[0].claimchecknum", "UTB");
-		selenium.click("name=saveButton");
+		type(By.name("claimcheck[0].claimchecknum"), "UTB");
+		click(By.name("saveButton"));
 		assertEquals("Claim Check Number is not a valid claim check number.[10 digits or 8 character AN or marked UTB]", selenium.getAlert());
 		SimpleDateFormat df = new SimpleDateFormat("MMddyyyy");
 		String utbNum = "UTB" + df.format(new Date());
-		selenium.type("name=claimcheck[0].claimchecknum", utbNum);
-		selenium.click("name=saveButton");
-		waitForPageToLoadImproved();
+		type(By.name("claimcheck[0].claimchecknum"), utbNum);
+		click(By.name("saveButton"));
 
 		if (checkNoErrorPage()) {
 			verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
@@ -408,9 +408,8 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyEquals(selenium.getValue("name=claimcheck[0].claimchecknum"), utbNum);
+			verifyEquals(getValue(By.name("claimcheck[0].claimchecknum")), utbNum);
 			clickMenu("menucol_1.4");
-			waitForPageToLoadImproved();
 		} else {
 			System.out.println("CLDVRF: ERROR NAVIGATING TO INCIDENT.");
 			return;
@@ -418,9 +417,8 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		
 
 		if (checkNoErrorPage()) {
-			selenium.type("name=claimchecknum", utbNum);
-			selenium.click("id=button");
-			waitForPageToLoadImproved();
+			type(By.name("claimchecknum"), utbNum);
+			click(By.id("button"));
 		} else {
 			System.out.println("CLDVRF: ERROR NAVIGATING TO THE LOST DELAY SEARCH PAGE.");
 			return;
@@ -429,7 +427,6 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		if (checkNoErrorPage()) {
 			verifyTrue(isTextPresent(Settings.INCIDENT_ID_WN));
 			goToTaskManager();
-			waitForPageToLoadImproved();
 		} else {
 			System.out.println("CLDVRF: ERROR SEARCHING FOR THE INCIDENT BY CLAIMCHECK NUMBER.");
 			return;
@@ -437,9 +434,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		
 		if (checkNoErrorPage()) {
 			loadQuickSearch();
-			selenium.type("id=quickSearchQuery3", utbNum);
-			selenium.click("id=button");
-			waitForPageToLoadImproved(3000,false);
+			searchQuickSearch(utbNum);
 			verifyTrue(isTextPresent(Settings.INCIDENT_ID_WN));
 			closeQuickSearch();
 		} else {

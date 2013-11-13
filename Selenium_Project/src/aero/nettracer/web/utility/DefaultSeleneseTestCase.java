@@ -93,6 +93,18 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 		waitForPageToLoadImproved(500,false);
 	}
 	
+	public void searchQuickSearch(String toSearch) {
+		type(By.id("quickSearchQuery3"), toSearch);
+		click(By.id("button"));
+		waitForPageToLoadImproved(500);
+		try {
+			WebDriverWait wait = new WebDriverWait(driver, Settings.ELEMENT_TIMEOUT_SECONDS);
+			wait.until(ExpectedConditions.textToBePresentInElement(By.id("dialog-inner-content"), "Matching Incidents"));
+		} catch (Exception e) {
+			System.out.println("QUICKSEARCH DID NOT RETURN!");
+		}
+	}
+	
 	public void closeQuickSearch() {
 		driver.findElement(By.id("quickSearchQuery3")).click();
 		new Actions(driver).sendKeys(Keys.chord(Keys.ESCAPE)).perform();
@@ -156,6 +168,20 @@ public class DefaultSeleneseTestCase extends SeleneseTestCase {
 		} catch (Exception e) {
 			System.out.println("***FAILURE TO CLICK ELEMENT: " + locator);
 		}
+	}
+	
+	protected void type(By locator, String text) {
+		try {
+			WebElement element = driver.findElement(locator);
+			element.clear();
+			element.sendKeys(text);
+		} catch (Exception e) {
+			System.out.println("FAILED TO TYPE \"" + text + "\" IN ELEMENT " + locator);
+		}
+	}
+	
+	protected void waitForStaleElement(WebElement element, String identifier) {
+		WebDriverUtil.waitForStaleElement(driver, element, identifier);
 	}
 
 }
