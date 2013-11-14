@@ -1,7 +1,10 @@
 package aero.nettracer.web.southwest.testing.actions.nt.incidents.communications;
 
+import java.util.List;
+
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
 import aero.nettracer.web.utility.Settings;
@@ -160,8 +163,23 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		selenium.click("id=addCommButton");
 		assertEquals("Customer Communications Type is required.", selenium.getAlert());
-		selenium.select("id=templateIdSelect", "label=Test Template");
+		selenium.select("id=activityIdSelect", "label=CREATE LETTER");
 		selenium.click("id=addCommButton");
+		waitForPageToLoadImproved(500,false);
+		
+		List<WebElement> buttons = driver.findElements(By.className("ui-state-default"));
+
+		buttons.get(1).click();
+		selenium.click("id=addCommButton");
+		waitForPageToLoadImproved(500,false);
+		
+		buttons.get(0).click();
+		assertEquals("You must select a document to send to the passenger.", selenium.getAlert());
+		selenium.click("id=addCommButton");
+		waitForPageToLoadImproved(500,false);
+		
+		selenium.select("id=templateSelect", "label=Test Template");
+		buttons.get(0).click();
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
@@ -246,6 +264,37 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 			System.out.println("!!!!!!!!!!!!!!!! Failed to delete Customer Communication with id: " + Settings.CUST_COMM_ID);
 			verifyTrue(false);
 		}
+	}
+	
+	@Test
+	public void testAddAssignedToActivity() {
+		verifyTrue(setPermissions(new String[] { CUST_COMM_DELETE }, new boolean[] { false }));
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
+		selenium.select("id=activityIdSelect", "label=ASSIGNED TO");
+		selenium.click("id=addCommButton");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			verifyEquals("ASSIGNED TO: ntadmin", selenium.getText("//div[@id='maincontent']/table[9]/tbody/tr[2]/td[3]"));
+			verifyFalse(isElementPresent(By.xpath("//a[contains(text(),'Delete')]")));
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Failed to create Incident Activity");
+			verifyTrue(false);
+		}
+
+		verifyTrue(setPermissions(new String[] { CUST_COMM_DELETE }, new boolean[] { true }));
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
+		verifyEquals("ASSIGNED TO: ntadmin", selenium.getText("//div[@id='maincontent']/table[9]/tbody/tr[2]/td[3]"));
+		verifyTrue(isElementPresent(By.xpath("//a[contains(text(),'Delete')]")));
+		selenium.click("//a[contains(text(),'Delete')]");
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			verifyFalse(isTextPresent("ASSIGNED TO: ntadmin"));
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Failed to delete Incident Activity");
+			verifyTrue(false);
+		}
+		
+		goToTaskManager();
 	}
 
 }
