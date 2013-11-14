@@ -1,12 +1,14 @@
 package com.bagnet.clients.defaul;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 
+import com.bagnet.nettracer.tracing.db.BagDrop;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
@@ -60,5 +62,10 @@ public class ReservationIntegrationImpl implements
 
 	public void doEventOnBeornWS(HashMap<String, String> map) {
 		// Do nothing
+	}
+
+	@Override
+	public ArrayList<BagDrop> getFlightInfo(String stationcode, Calendar date) {
+		return null;
 	}
 }

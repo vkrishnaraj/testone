@@ -3,7 +3,6 @@ package com.bagnet.clients.defaul;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,12 +22,12 @@ import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.AirlineMembership;
+import com.bagnet.nettracer.tracing.db.BagDrop;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.OHD_Address;
 import com.bagnet.nettracer.tracing.db.OHD_Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD_Passenger;
-import com.bagnet.nettracer.tracing.db.State;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
@@ -159,6 +158,8 @@ public class NTReservationIntegrationImpl extends
 	}
 
 	
+
+	@SuppressWarnings("rawtypes")
 	private void populateOhdFormInner(HttpServletRequest request, OnHandForm form) {
 		
 		
@@ -350,6 +351,7 @@ public class NTReservationIntegrationImpl extends
 			}
 		}
 		if (noneAdded) {
+			@SuppressWarnings("unused")
 			com.bagnet.nettracer.tracing.db.Itinerary fitin = form.getItinerary(form.getItinerarylist().size(), routingType);
 		}
 	}
@@ -372,6 +374,7 @@ public class NTReservationIntegrationImpl extends
 		return null;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void populateIncidentFormInner(IncidentForm form,
 			int itemtype, HttpServletRequest request) {
 		
@@ -505,5 +508,14 @@ public class NTReservationIntegrationImpl extends
 		routingType = TracingConstants.BAGGAGE_ROUTING;
 		processIncItinerary(form, bagItinArr, routingType);
 		
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.bagnet.clients.defaul.ReservationIntegrationImpl#getFlightInfo(java.lang.String, java.util.Calendar)
+	 */
+	@Override
+	public ArrayList<BagDrop> getFlightInfo(String stationcode, Calendar date) {
+		NTIntegrationWrapper wrapper = new NTIntegrationWrapper();
+		return wrapper.getFlightInfo(stationcode, date);
 	}
 }

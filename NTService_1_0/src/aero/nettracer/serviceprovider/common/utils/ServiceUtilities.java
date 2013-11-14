@@ -21,6 +21,7 @@ import aero.nettracer.serviceprovider.common.db.User;
 import aero.nettracer.serviceprovider.common.exceptions.ConfigurationException;
 import aero.nettracer.serviceprovider.common.exceptions.UserNotAuthorizedException;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
+import aero.nettracer.serviceprovider.ws_1_0.res.FlightServiceInterface;
 import aero.nettracer.serviceprovider.ws_1_0.res.ReservationInterface;
 import aero.nettracer.serviceprovider.ws_1_0.res.sabre.Reservation;
 
@@ -59,6 +60,14 @@ public class ServiceUtilities {
 		return false;
 	}
 
+	/**
+	 * Returns Reservation implementation based on the reservation system specified by the user profile
+	 * TODO - consider using Spring injection (jiri NT-1292)
+	 * 
+	 * @param user
+	 * @return
+	 * @throws ConfigurationException
+	 */
 	public static ReservationInterface getReservationSystem(User user)
 			throws ConfigurationException {
 		Map<ParameterType, String> parameters = user.getProfile()
@@ -87,6 +96,28 @@ public class ServiceUtilities {
 			}
 		}
 
+		throw new ConfigurationException();
+	}
+	
+	/**
+	 * Returns FlightService implementation based on the reservation system specified by the user profile
+	 * TODO - consider using Spring injection (jiri NT-1292)
+	 * 
+	 * @param user
+	 * @return
+	 * @throws ConfigurationException
+	 */
+	public static FlightServiceInterface getFlightService(User user) throws ConfigurationException {
+		Map<ParameterType, String> parameters = user.getProfile()
+				.getParameters();
+		if (parameters.containsKey(ParameterType.RESERVATION_SYSTEM_TYPE)) {
+			String value = parameters
+					.get(ParameterType.RESERVATION_SYSTEM_TYPE);
+			if (value.equals(ReservationSystemType.CEBS.name())) {
+				// TODO: Change to singleton? Use spring?
+				return new aero.nettracer.serviceprovider.ws_1_0.res.cebs.FlightService();
+			}
+		}
 		throw new ConfigurationException();
 	}
 

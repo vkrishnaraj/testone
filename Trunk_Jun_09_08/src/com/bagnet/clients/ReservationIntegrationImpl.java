@@ -1,11 +1,13 @@
 package com.bagnet.clients;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 
+import com.bagnet.nettracer.tracing.db.BagDrop;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
@@ -86,5 +88,11 @@ public class ReservationIntegrationImpl implements
 	public Incident populateIncidentForWS(Incident incident, int passIndex) {
 		// TODO Auto-generated method stub
 		return target.populateIncidentForWS(incident, passIndex);
+	}
+
+	@Override
+	public ArrayList<BagDrop> getFlightInfo(String stationcode, Calendar date) {
+		// TODO Auto-generated method stub
+		return target.getFlightInfo(stationcode, date);
 	}
 }

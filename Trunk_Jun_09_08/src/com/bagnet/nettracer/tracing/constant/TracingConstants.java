@@ -996,6 +996,8 @@ public class TracingConstants {
 	public final static String DEPREC_CALC_ADMIN = "depreccalcadmin";
 	public final static String CLAIM_DEPREC_CALC = "claim_deprec_calc";
 	
+	public final static String BAGDROP = "bagDrop";
+	
 	public final static String EDIT_AIRPORT = "editairport";
 	public final static String VIEW_AIRPORTS = "viewairports";
 
@@ -1332,6 +1334,10 @@ public class TracingConstants {
 	
 	public static final int FILE_CREATION_METHOD_APPLICATION = 0;
 	public static final int FILE_CREATION_METHOD_WEBSERVICE = 1;
+	
+	public static final int BAGDROP_ENTRY_METHOD_RESERVATION = 0;
+	public static final int BAGDROP_ENTRY_METHOD_SCANNER = 1;
+	public static final int BAGDROP_ENTRY_METHOD_WEB = 2;
 
 	public final static String UTB_CHECK = "UTB";
 

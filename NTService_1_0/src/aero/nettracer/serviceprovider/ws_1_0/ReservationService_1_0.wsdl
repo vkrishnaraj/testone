@@ -52,6 +52,22 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+            <xs:element name="getFlightData">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="header" nillable="true" type="ax22:RequestHeader"/>
+                        <xs:element minOccurs="0" name="station" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="date" nillable="true" type="xs:dateTime"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getFlightDataResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax23:FlightDataResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
             <xs:element name="getEnplanements">
                 <xs:complexType>
                     <xs:sequence>
@@ -95,6 +111,15 @@
                     <xs:extension base="ax23:GenericResponse">
                         <xs:sequence>
                             <xs:element minOccurs="0" name="osi" nillable="true" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+            <xs:complexType name="FlightDataResponse">
+                <xs:complexContent>
+                    <xs:extension base="ax23:GenericResponse">
+                        <xs:sequence>
+                            <xs:element maxOccurs="unbounded" minOccurs="0" name="flights" nillable="true" type="ax21:Itinerary"/>
                         </xs:sequence>
                     </xs:extension>
                 </xs:complexContent>
@@ -212,6 +237,12 @@
     <wsdl:message name="writeRemarkResponse">
         <wsdl:part name="parameters" element="ns:writeRemarkResponse"/>
     </wsdl:message>
+    <wsdl:message name="getFlightDataRequest">
+        <wsdl:part name="parameters" element="ns:getFlightData"/>
+    </wsdl:message>
+    <wsdl:message name="getFlightDataResponse">
+        <wsdl:part name="parameters" element="ns:getFlightDataResponse"/>
+    </wsdl:message>
     <wsdl:message name="getEnplanementsRequest">
         <wsdl:part name="parameters" element="ns:getEnplanements"/>
     </wsdl:message>
@@ -232,6 +263,10 @@
         <wsdl:operation name="writeRemark">
             <wsdl:input message="ns:writeRemarkRequest" wsaw:Action="urn:writeRemark"/>
             <wsdl:output message="ns:writeRemarkResponse" wsaw:Action="urn:writeRemarkResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getFlightData">
+            <wsdl:input message="ns:getFlightDataRequest" wsaw:Action="urn:getFlightData"/>
+            <wsdl:output message="ns:getFlightDataResponse" wsaw:Action="urn:getFlightDataResponse"/>
         </wsdl:operation>
         <wsdl:operation name="getEnplanements">
             <wsdl:input message="ns:getEnplanementsRequest" wsaw:Action="urn:getEnplanements"/>
@@ -264,6 +299,15 @@
         </wsdl:operation>
         <wsdl:operation name="getEnplanements">
             <soap:operation soapAction="urn:getEnplanements" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getFlightData">
+            <soap:operation soapAction="urn:getFlightData" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -310,6 +354,15 @@
                 <soap12:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="getFlightData">
+            <soap12:operation soapAction="urn:getFlightData" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="getReservationData">
             <soap12:operation soapAction="urn:getReservationData" style="document"/>
             <wsdl:input>
@@ -347,6 +400,15 @@
             </wsdl:input>
             <wsdl:output>
                 <mime:content type="text/xml" part="getEnplanements"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getFlightData">
+            <http:operation location="ReservationService_1_0/getFlightData"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getFlightData"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getFlightData"/>
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="getReservationData">

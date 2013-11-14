@@ -1,9 +1,11 @@
 package com.bagnet.nettracer.integrations.reservation;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.bagnet.nettracer.tracing.db.BagDrop;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.Incident;
@@ -21,4 +23,12 @@ public interface ReservationIntegration {
 	
 	public Incident populateIncidentForWS(Incident incident, int passIndex);
 	
+	/**
+	 * Service interface - retrieves flight information from client integrations via central service
+	 * 
+	 * @param stationcode
+	 * @param date
+	 * @return
+	 */
+	public ArrayList<BagDrop> getFlightInfo(String stationcode, Calendar date);
 }

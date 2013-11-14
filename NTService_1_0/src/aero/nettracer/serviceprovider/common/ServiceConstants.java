@@ -23,4 +23,6 @@ public class ServiceConstants {
 	public static final String CRON_USER = "CRON_USER";
 	public static final String REFERENCED_OBJECT_CLOSED = "REFERENCED OBJECT ALREADY CLOSED";
 	
+	public static final String REMOTE_EXCEPTION = "UNABLE TO CONNECT TO REMOTE SERVICE"; 
+	public static final String FLIGHT_DATA_EXCEPTION = "ERROR RECEIVING FLIGHT DATA";
 }

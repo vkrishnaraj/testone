@@ -6,6 +6,8 @@
  */
 package aero.nettracer.serviceprovider.ws_1_0;
 
+import java.util.Calendar;
+
 import aero.nettracer.serviceprovider.common.ServiceConstants;
 import aero.nettracer.serviceprovider.common.db.PermissionType;
 import aero.nettracer.serviceprovider.common.db.User;
@@ -13,11 +15,14 @@ import aero.nettracer.serviceprovider.common.exceptions.ConfigurationException;
 import aero.nettracer.serviceprovider.common.exceptions.UnexpectedException;
 import aero.nettracer.serviceprovider.common.exceptions.UserNotAuthorizedException;
 import aero.nettracer.serviceprovider.common.utils.ServiceUtilities;
+import aero.nettracer.serviceprovider.ws_1_0.GetFlightDataResponseDocument.GetFlightDataResponse;
 import aero.nettracer.serviceprovider.ws_1_0.GetReservationDataResponseDocument.GetReservationDataResponse;
 import aero.nettracer.serviceprovider.ws_1_0.WriteRemarkResponseDocument.WriteRemarkResponse;
 import aero.nettracer.serviceprovider.ws_1_0.common.xsd.RequestHeader;
 import aero.nettracer.serviceprovider.ws_1_0.common.xsd.WebServiceError;
+import aero.nettracer.serviceprovider.ws_1_0.res.FlightServiceInterface;
 import aero.nettracer.serviceprovider.ws_1_0.res.ReservationInterface;
+import aero.nettracer.serviceprovider.ws_1_0.response.xsd.FlightDataResponse;
 import aero.nettracer.serviceprovider.ws_1_0.response.xsd.RemarkResponse;
 import aero.nettracer.serviceprovider.ws_1_0.response.xsd.ReservationResponse;
 
@@ -137,5 +142,53 @@ public class ReservationService_1_0Impl extends ReservationService_1_0Skeleton{
 
 		throw new java.lang.UnsupportedOperationException("Please implement "
 				+ this.getClass().getName() + "#getOsiContents");
+	}
+	
+	/**
+	 * Service implementation for retrieving flight itinerary segments for a given arrival station and date
+	 * 
+	 * @param getFlightData
+	 */
+
+	public aero.nettracer.serviceprovider.ws_1_0.GetFlightDataResponseDocument getFlightData(
+			aero.nettracer.serviceprovider.ws_1_0.GetFlightDataDocument getFlightData){
+		
+		GetFlightDataResponseDocument doc = GetFlightDataResponseDocument.Factory.newInstance();
+		GetFlightDataResponse res = doc.addNewGetFlightDataResponse();
+		FlightDataResponse ret = res.addNewReturn();
+
+		RequestHeader header = getFlightData.getGetFlightData().getHeader();
+		String username = header.getUsername();
+		String password = header.getPassword();
+		
+		try {
+			//Auth user
+			User user = ServiceUtilities.getAndAuthorizeUser(username,
+					password, PermissionType.GET_FLIGHT_DATA);
+			FlightServiceInterface service = ServiceUtilities.getFlightService(user);
+			
+			//map request parameters
+			String station = getFlightData.getGetFlightData().getStation();
+			Calendar date = getFlightData.getGetFlightData().getDate();
+			
+			//submit request and return
+			ret = service.getFlightData(user, station, date);
+			res.setReturn(ret);
+		} catch (UserNotAuthorizedException e) {
+			WebServiceError error = ret.addNewError();
+			error.setDescription(ServiceConstants.USER_NOT_AUTHORIZED);
+			return doc;
+		} catch (ConfigurationException e) {
+			WebServiceError error = ret.addNewError();
+			error.setDescription(ServiceConstants.CONFIGURATION_ERROR);
+			return doc;
+		} catch (UnexpectedException e) {
+			WebServiceError error = ret.addNewError();
+			error.setDescription(ServiceConstants.UNEXPECTED_EXCEPTION);
+			return doc;
+		}
+		
+		return doc;
+		
 	}
 }
