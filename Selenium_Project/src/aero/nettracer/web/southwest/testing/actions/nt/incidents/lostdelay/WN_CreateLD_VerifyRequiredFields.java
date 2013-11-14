@@ -415,6 +415,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		
 
 		if (checkNoErrorPage()) {
+			type(By.name("incident_ID"), Settings.INCIDENT_ID_WN);
 			type(By.name("claimchecknum"), utbNum);
 			click(By.id("button"));
 		} else {
@@ -423,7 +424,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 		}
 
 		if (checkNoErrorPage()) {
-			verifyTrue(isTextPresent(Settings.INCIDENT_ID_WN));
+			verifyEquals(Settings.INCIDENT_ID_WN, getValue(By.name("incident_ID")));
 			goToTaskManager();
 		} else {
 			System.out.println("CLDVRF: ERROR SEARCHING FOR THE INCIDENT BY CLAIMCHECK NUMBER.");

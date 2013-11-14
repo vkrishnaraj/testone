@@ -85,12 +85,14 @@ public class DefaultSeleneseTestCase extends SeleneseTestBase {
 	}
 	
 	public void loadQuickSearch() {
+		System.out.println("LOADING QUICKSEARCH...");
 		waitForPageToLoadImproved(500,false);
 		new Actions(driver).sendKeys(Keys.chord(Keys.CONTROL, "s")).perform();
 		waitForPageToLoadImproved(500,false);
 	}
 	
 	public void loadQuickHistory() {
+		System.out.println("LOADING QUICKHISTORY...");
 		waitForPageToLoadImproved(500,false);
 		new Actions(driver).sendKeys(Keys.chord(Keys.CONTROL, "h")).perform();
 		waitForPageToLoadImproved(500,false);
@@ -109,12 +111,14 @@ public class DefaultSeleneseTestCase extends SeleneseTestBase {
 	}
 	
 	public void closeQuickSearch() {
+		System.out.println("CLOSING QUICKSEARCH...");
 		driver.findElement(By.id("quickSearchQuery3")).click();
 		new Actions(driver).sendKeys(Keys.chord(Keys.ESCAPE)).perform();
 		waitForPageToLoadImproved(500,false);
 	}
 	
 	public void closeQuickHistory() {
+		System.out.println("CLOSING QUICKHISTORY...");
 		new Actions(driver).sendKeys(Keys.chord(Keys.ESCAPE)).perform();
 		waitForPageToLoadImproved(500,false);
 	}
