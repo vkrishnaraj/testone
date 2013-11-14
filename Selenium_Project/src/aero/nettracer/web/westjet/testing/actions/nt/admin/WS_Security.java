@@ -15,14 +15,16 @@ public class WS_Security extends DefaultSeleneseTestCase {
 		verifyEquals("8", getValue(By.id("min_pass_size")));
 		verifyTrue(isTextPresent("Company Information Saved."));
 
-		driver.navigate().refresh();
+		clickMenu("menucol_10.2");
+		click(By.xpath("//td[@id='navmenucell']/div/dl/dd[4]/a/span[2]"));
 		type(By.id("min_pass_size"), "7");
-		click(By.xpath("(//input[@id='button'])[2]"), false, true);
+		click(By.xpath("(//input[@id='button'])[2]"), false, false);
 		assertEquals("Minimum password length must be at least eigth(8) characters", getAlert());
 		verifyEquals("7", getValue(By.id("min_pass_size")));
 		verifyTrue(!isTextPresent("Company Information Saved."));
 
-		driver.navigate().refresh();
+		clickMenu("menucol_10.2");
+		click(By.xpath("//td[@id='navmenucell']/div/dl/dd[4]/a/span[2]"));
 		verifyNotEquals("7", getValue(By.id("min_pass_size")));
 		type(By.id("min_pass_size"), "9");
 		click(By.xpath("(//input[@id='button'])[2]"), false, true);

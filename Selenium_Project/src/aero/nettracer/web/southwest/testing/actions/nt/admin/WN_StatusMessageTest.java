@@ -7,11 +7,12 @@ import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
 
 public class WN_StatusMessageTest extends WN_SeleniumTest {
 	
-	String message = "Test status message " + System.currentTimeMillis();
+	private String message = "";
 	
 	@Test
 	public void testStatusMessage() throws Exception {
 
+		message = "Test status message " + System.currentTimeMillis();
 		clickMenu(MENU_ADMIN_COMPANY);
 		
 		if (checkNoErrorPage()) {
@@ -51,8 +52,7 @@ public class WN_StatusMessageTest extends WN_SeleniumTest {
 		}
 		if (checkNoErrorPage()) {		
 			navigateAuditPagination("id");
-			waitForPageToLoadImproved(1000);
-			verifyTrue(isTextPresent(message));
+			verifyTrue(isTextPresent(By.id("maincontent"), message));
 		} else {
 			System.out.println("!!!!!!!!!!!!!!!! Status Message 6");
 		}		

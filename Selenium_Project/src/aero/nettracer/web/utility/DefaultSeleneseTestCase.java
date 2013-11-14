@@ -140,6 +140,10 @@ public class DefaultSeleneseTestCase extends SeleneseTestBase {
 		//return driver.findElement(By.tagName("body")).getText().contains(text);
 	}
 	
+	protected boolean isTextPresent(By locator, String text) {
+		return driver.findElement(locator).getText().contains(text);
+	}
+	
 	protected boolean isEditable(By by) {
 		String isDisabled = driver.findElement(by).getAttribute("disabled");
 		if (isDisabled == null || !(isDisabled.equals("disabled") || isDisabled.equals("true"))) {
