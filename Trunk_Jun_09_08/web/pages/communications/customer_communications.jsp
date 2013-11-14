@@ -55,7 +55,7 @@
 
 	function validateIncidentActivity() {
 		var activitySelect = document.getElementById("activityIdSelect");
-		if (activitySelect.options[activitySelect.selectedIndex].value == 0) {
+		if (activitySelect.options[activitySelect.selectedIndex].value == -1) {
 			alert('<%=(String) bundle.getString( "communications.type") + " " + (String) bundle.getString("error.validation.isRequired")%>');
 			templateSelect.focus();
 			return false;
@@ -227,7 +227,7 @@
 	</logic:notEmpty>
 	<center>
 		<select id="activityIdSelect" class="dropdown" >
-			<option value="0"><bean:message key="select.please_select" /></option>
+			<option value="-1"><bean:message key="select.please_select" /></option>
 		</select>
 		&nbsp;&nbsp;
 		<input type="button" id="addCommButton" class="button" value="<bean:message key="button.add.action.communication" />" onclick="if (validateIncidentActivity() && validatereqFields(this.form, '<%=formType %>')) { submitIncidentActivity(); }" />
