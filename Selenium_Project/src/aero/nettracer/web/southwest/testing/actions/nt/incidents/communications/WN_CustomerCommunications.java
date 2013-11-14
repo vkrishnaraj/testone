@@ -283,7 +283,7 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 
 		verifyTrue(setPermissions(new String[] { CUST_COMM_DELETE }, new boolean[] { true }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-		verifyEquals("ASSIGNED TO: ntadmin", selenium.getText("//div[@id='maincontent']/table[9]/tbody/tr[2]/td[3]"));
+		verifyEquals("ASSIGNED TO: " + Settings.USERNAME_ADMIN, selenium.getText("//div[@id='maincontent']/table[9]/tbody/tr[2]/td[3]"));
 		verifyTrue(isElementPresent(By.xpath("//a[contains(text(),'Delete')]")));
 		selenium.click("//a[contains(text(),'Delete')]");
 		waitForPageToLoadImproved();
