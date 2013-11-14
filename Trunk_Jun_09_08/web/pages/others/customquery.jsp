@@ -51,6 +51,7 @@
 
 	function getStatusIds(type) {
 		if (currentStatusId == type) {
+	    	updateFields(currentStatusId);
 			return true;
 		} else {
 		    o = document.searchIncidentForm;
@@ -75,18 +76,43 @@
 
 	function updateFields(type) {
 		var posIdTd = document.getElementById("posIdTd");
-
+		var wtIdTd = document.getElementById("wtIdTd");
+		var csTd = document.getElementById("csTd");
+		
 		var colspan = 1;
 		if (type != 2) {
 			colspan = 2;
 			if (posIdTd){
 				posIdTd.style.display = "none";
+			} 
+			if(wtIdTd){
+				var selectList=document.getElementsByName("searchtype");
+				if(selectList[0].checked){
+					wtIdTd.style.display = "inline";
+					if(csTd){
+						csTd.colSpan="1";
+					}
+				} else {
+					wtIdTd.style.display = "none";
+					if(csTd){
+						csTd.colSpan="2";
+					}
+				}
 			}
 			document.getElementById("ohdFields").style.display="none";
 		} else {
 
 			if (posIdTd){
 				posIdTd.style.display = "inline";
+			} else {
+				colspan=3;
+			}
+
+			if(wtIdTd){
+				wtIdTd.style.display = "inline";
+				if(csTd){
+					csTd.colSpan="1";
+				}
 			}
 			document.getElementById("ohdFields").style.display="block";
 		}
@@ -300,13 +326,13 @@ function updatePagination() {
               <tr>
               	
                 <% if(wtEnabled){ %>
-	                <td colspan=1>
+	                <td colspan=1 id="wtIdTd">
 	                  <bean:message key="colname.wt.id" />
 	                  <br>
 	                  <html:text property="wt_id" size="20" maxlength="10" styleClass="textfield" />
 	                </td>
                 <% } %>
-				<td colspan="<%=wtEnabled?"1":"2"%>">
+				<td colspan="<%=wtEnabled?"1":"2"%>" id="csTd">
 				<bean:message key="reports.create.station"/><br/>
               	 <html:select property="stationcreated_ID" styleClass="dropdown">
                     <html:option value="">

@@ -28,6 +28,17 @@
   
   <script language="javascript">
     
+  function checkWT(){
+	  var itemType=document.getElementById("itemType_ID");
+	  var wtid=document.getElementById("wt_id");
+	  if(itemType.value!=1){
+		  wtid.value="";
+		  wtid.disabled=true;
+	  } else{ 
+		  wtid.disabled=false;
+	  }
+  }
+  
 function goprev() {
   o = document.searchIncidentForm;
   o.prevpage.value = "1";
@@ -103,7 +114,7 @@ function updatePagination() {
                 <td width=33%>
                   <bean:message key="colname.report_type" />
                   <br>
-                  <html:select property="itemType_ID" styleClass="dropdown">
+                  <html:select property="itemType_ID" styleClass="dropdown" onchange="checkWT();">
                     <html:option value="0">
                       <bean:message key="select.all" />
                     </html:option>
@@ -510,8 +521,10 @@ function updatePagination() {
               </table>
               <script language=javascript>
                 
-  document.location.href="#result";
-
+  				document.location.href="#result";
               </script>
             </logic:present>
+              <script language=javascript>
+  				checkWT();
+              </script>
           </html:form>

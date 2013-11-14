@@ -55,12 +55,21 @@ function updatePagination() {
     return true;
 }
 
-function updateExpediteTagField() {
+function updateFields() {
 	var expTagNum = document.getElementById("expediteTagNum");
-	if (!expTagNum || expTagNum == null) return;
 
 	var itemTypeId = document.getElementById("itemType_ID");
-	expTagNum.disabled = itemTypeId.options[itemTypeId.selectedIndex].value != 3; 
+	if(expTagNum){
+		expTagNum.disabled = itemTypeId.options[itemTypeId.selectedIndex].value != 3;
+	}
+	
+	 var wtid=document.getElementById("wt_id");
+	  if(itemTypeId.value!=1){
+		  wtid.value="";
+		  wtid.disabled=true;
+	  } else{ 
+		  wtid.disabled=false;
+	  }
 }
 
 
@@ -113,7 +122,7 @@ function updateExpediteTagField() {
                 <td width=33%>
                   <bean:message key="colname.report_type" />
                   <br>
-                  <html:select property="itemType_ID" styleClass="dropdown" styleId="itemType_ID" onchange="updateExpediteTagField();">
+                  <html:select property="itemType_ID" styleClass="dropdown" styleId="itemType_ID" onchange="updateFields(); ">
                     <html:option value="0">
                       <bean:message key="select.all" />
                     </html:option>
@@ -528,8 +537,11 @@ function updateExpediteTagField() {
               </table>
               <script language=javascript>
                 
-  document.location.href="#result";
-
+  				document.location.href="#result";
               </script>
             </logic:present>
+            
+              <script language=javascript>
+              	updateFields();
+              </script>
           </html:form>

@@ -217,7 +217,7 @@ function sortSearchOhd(sortOrder) {
                   <br>
                   <html:text property="s_createtime" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchIncidentForm.s_createtime,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">-
                   <html:text property="e_createtime" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchIncidentForm.e_createtime,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;"></td>
-                <td colspan="<%=isWtEnabled?"2":"4"%>">
+                <td colspan="<%=isWtEnabled?"3":"4"%>">
                   <bean:message key="colname.ohd_create_agent" />
                   <br>
                   <html:text property="agent" size="20" maxlength="20" styleClass="textfield" />
@@ -251,7 +251,7 @@ function sortSearchOhd(sortOrder) {
 	                
 		              </td>
 	              <% } %>
-	              <td colspan="4">
+	              <td colspan="<%=invDate?"2":"4"%>">
 	              	  <bean:message key="colname.routing.date"/>
 	                  (
 	                  <%= a.getDateformat().getFormat() %>)
@@ -259,7 +259,7 @@ function sortSearchOhd(sortOrder) {
 	              	  <html:text property="routingdate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar5" name="calendar5" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchIncidentForm.routingdate,'calendar5','<%= a.getDateformat().getFormat() %>'); return false;">
                   	  
 	              </td>
-	              <td colspan="<%=invDate?"2":"4"%>">
+	              <td colspan="4">
 	              	  <bean:message key="colname.routing.station"/>
 	                  <br>
 	                  <html:text property="routingstation" size="3" maxlength="3" styleClass="textfield" />
