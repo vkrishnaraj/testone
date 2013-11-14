@@ -1220,7 +1220,7 @@ public class IncidentBMO {
 			if (siDTO.getIncident_ID().length() > 0) {
 				s.append(" and (incident.incident_ID like :incident_ID ");
 
-				if (siDTO.getWt_id().length() > 0) {
+				if (siDTO.getWt_id()!=null && siDTO.getWt_id().length() > 0) {
 
 					if (siDTO.isWtConditionOr()) {
 						s.append(" or incident.wtFile.wt_id like :wt_id )");
@@ -1230,10 +1230,9 @@ public class IncidentBMO {
 				} else {
 					s.append(") ");
 				}
-			} else if (siDTO.getWt_id().length() > 0) {
+			} else if (siDTO.getWt_id()!=null && siDTO.getWt_id().length() > 0) {
 				s.append(" and incident.wtFile.wt_id like :wt_id ");
 			}
-			
 			
 			if (siDTO.getExpediteTagNum() != null && !siDTO.getExpediteTagNum().isEmpty()) {
 				s.append("and item.expediteTagNum like :expediteTagNum ");
@@ -1389,7 +1388,7 @@ public class IncidentBMO {
 			if (siDTO.getIncident_ID().length() > 0)
 				q.setString("incident_ID", siDTO.getIncident_ID());
 			
-			if (siDTO.getWt_id().length() > 0)
+			if (siDTO.getWt_id()!=null && siDTO.getWt_id().length() > 0)
 				q.setString("wt_id", siDTO.getWt_id());
 
 			if (siDTO.getItemType_ID() > 0) {
@@ -1986,6 +1985,11 @@ public class IncidentBMO {
 				s.append(" and incident.recordlocator like :recordlocator");
 			}
 
+			//WT ID
+			if (siDTO.getWt_id()!=null && siDTO.getWt_id().length() > 0) {
+				s.append(" and incident.wtFile.wt_id like :wt_id ");
+			}
+			
 			// passenger
 			if (siDTO.getFirstname().length() > 0 || siDTO.getMiddlename().length() > 0
 					|| siDTO.getLastname().length() > 0) {
@@ -2027,15 +2031,6 @@ public class IncidentBMO {
 			if (siDTO.getEmail().length() > 0)
 				s.append(" and address.email like :email");
 
-			// bag
-
-//			if (siDTO.getClaimchecknum().length() > 0) {
-//				s.append(" and (item.claimchecknum like :claimchecknum");
-//				s.append(" or claimcheck.claimchecknum like :claimchecknum)");
-//			}
-			
-			
-
 			if (siDTO.getColor().length() > 0)
 				s.append(" and item.color like :color");
 			if (siDTO.getBagtype().length() > 0)
@@ -2059,8 +2054,6 @@ public class IncidentBMO {
 
 			if (siDTO.getDescription().length() > 0) {
 
-				// String[] words =
-				// StringUtils.removePronouns(siDTO.getDescription()).split("\\s");
 				String[] words = StringUtils.removePronouns(siDTO.getDescription().trim()).replace(' ', ',').split(
 						"\\,");
 				int tempx = 0;
@@ -2120,6 +2113,10 @@ public class IncidentBMO {
 				}
 			}
 
+			if (siDTO.getWt_id()!=null && siDTO.getWt_id().length() > 0) {
+				q.setString("wt_id", siDTO.getWt_id());
+			}
+			
 			if (siDTO.getStatus_ID() > 0)
 				q.setInteger("status_ID", siDTO.getStatus_ID());
 

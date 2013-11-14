@@ -13,6 +13,7 @@
   Agent a = (Agent)session.getAttribute("user");
   boolean collectPosId = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_COLLECT_POS_ID, a);
   boolean invDate=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_TO_BE_INVENTORIED, a);
+  boolean isWtEnabled=a.getStation().getCompany().getVariable().getWt_enabled()==1;
 %>
   
   <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
@@ -111,12 +112,12 @@ function sortSearchOhd(sortOrder) {
           </font>
             <table class="form2" cellspacing="0" cellpadding="0">
               <tr>
-                <td>
+                <td colspan="2">
                   <bean:message key="colname.on_hand_report_number" />
                   <br>
                   <html:text property="incident_ID" size="14" maxlength="13" styleClass="textfield" onblur="fillzero(this,13);" />
                 </td>
-                <td>
+                <td colspan="2">
                   <bean:message key="colname.ohd_status" />
                   <br>
                   <html:select property="status_ID" styleClass="dropdown">
@@ -129,13 +130,13 @@ function sortSearchOhd(sortOrder) {
                     <html:options collection="ohdStatusList" property="status_ID" labelProperty="description" />
                   </html:select>
                 </td>
-                <td>
+                <td colspan="2">
                   <bean:message key="colname.bag_tag_number" />
                   <br>
                   <html:text property="ticketnumber" size="14" maxlength="13" styleClass="textfield" />
                 </td>
                 
-                <td nowrap="nowrap">
+                <td nowrap="nowrap" colspan="2">
                   <bean:message key="colname.flightnum" />
                   <br>
                   <html:select property="airline" styleClass="dropdown">
@@ -150,24 +151,24 @@ function sortSearchOhd(sortOrder) {
 
               </tr>
               <tr>
-                <td>
+                <td colspan="2">
                   <bean:message key="colname.last_name" />
                   <br>
                   <html:text property="lastname" size="25" maxlength="25" styleClass="textfield" />
                 </td>
-                <td colspan="2">
+                <td colspan="4">
                   <bean:message key="colname.first_name" />
                   <br>
                   <html:text property="firstname" size="25" maxlength="25" styleClass="textfield" />
                 </td>
-                <td>
+                <td colspan="2">
                   <bean:message key="colname.mid_initial" />
                   <br>
                   <html:text property="middlename" size="25" maxlength="1" styleClass="textfield" />
                 </td>
               </tr>
               <tr>
-                <td>
+                <td colspan="2">
                   <bean:message key="colname.found_company" />
                   <br>
                   <html:select property="companycreated_ID" styleClass="dropdown">
@@ -177,7 +178,7 @@ function sortSearchOhd(sortOrder) {
                     <html:options collection="companylistById" property="companyCode_ID" labelProperty="companyCode_ID" />
                   </html:select>
                 </td>
-                <td>
+                <td colspan="2">
                   <bean:message key="colname.found_station_nobr" />
                   <br>
                   <html:select property="stationcreated_ID" styleClass="dropdown">
@@ -187,7 +188,7 @@ function sortSearchOhd(sortOrder) {
                     <html:options collection="stationlist" property="station_ID" labelProperty="stationcode" />
                   </html:select>
                 </td>
-                <td>
+                <td colspan="2">
                   <bean:message key="colname.holding_company" />
                   <br>
                   <html:select property="companycode_ID" styleClass="dropdown">
@@ -197,7 +198,7 @@ function sortSearchOhd(sortOrder) {
                     <html:options collection="companylistById" property="companyCode_ID" labelProperty="companyCode_ID" />
                   </html:select>
                 </td>
-                <td>
+                <td colspan="2">
                   <bean:message key="colname.holding_station_nobr" />
                   <br>
                   <html:select property="stationassigned_ID" styleClass="dropdown">
@@ -209,20 +210,28 @@ function sortSearchOhd(sortOrder) {
                 </td>
               </tr>
               <tr>
-                <td <% if (!collectPosId) { %>colspan="2"<% } %>>
+                <td <% if (!collectPosId) { %>colspan="4"<% } %>>
                   <bean:message key="colname.date_range" />
                   (
                   <%= a.getDateformat().getFormat() %>)
                   <br>
                   <html:text property="s_createtime" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchIncidentForm.s_createtime,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">-
                   <html:text property="e_createtime" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchIncidentForm.e_createtime,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;"></td>
-                <td colspan="2">
+                <td colspan="<%=isWtEnabled?"2":"4"%>">
                   <bean:message key="colname.ohd_create_agent" />
                   <br>
                   <html:text property="agent" size="20" maxlength="20" styleClass="textfield" />
                 </td>
+                
+                <% if(isWtEnabled){ %>
+	                <td colspan="2">
+	                  <bean:message key="colname.wt.id" />
+	                  <br>
+	                  <html:text property="wt_id" size="20" maxlength="20" styleClass="textfield" />
+	                </td>
+                <% } %>
                 <% if (collectPosId) { %>
-                	<td>
+                	<td colspan="2">
                 		<bean:message key="colname.posId" />
                 		<br>
                 		<html:text property="posId" size="8" maxlength="8" styleClass="textfield" />
@@ -232,7 +241,7 @@ function sortSearchOhd(sortOrder) {
               
               <tr>
               	<% if(invDate) {%>
-		              <td>
+		              <td colspan="2">
 		              	  <bean:message key="colname.inventory.date"/>
 		                  (
 		                  <%= a.getDateformat().getFormat() %>)
@@ -242,7 +251,7 @@ function sortSearchOhd(sortOrder) {
 	                
 		              </td>
 	              <% } %>
-	              <td colspan="2">
+	              <td colspan="4">
 	              	  <bean:message key="colname.routing.date"/>
 	                  (
 	                  <%= a.getDateformat().getFormat() %>)
@@ -250,14 +259,14 @@ function sortSearchOhd(sortOrder) {
 	              	  <html:text property="routingdate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar5" name="calendar5" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchIncidentForm.routingdate,'calendar5','<%= a.getDateformat().getFormat() %>'); return false;">
                   	  
 	              </td>
-	              <td colspan="<%=invDate?"1":"2"%>">
+	              <td colspan="<%=invDate?"2":"4"%>">
 	              	  <bean:message key="colname.routing.station"/>
 	                  <br>
 	                  <html:text property="routingstation" size="3" maxlength="3" styleClass="textfield" />
 	              </td>
               </tr>
               <tr>
-                <td colspan="4" align="center" valign="top">
+                <td colspan="8" align="center" valign="top">
                   <html:submit property="search" styleId="button">
                     <bean:message key="button.retrieve" />
                   </html:submit>

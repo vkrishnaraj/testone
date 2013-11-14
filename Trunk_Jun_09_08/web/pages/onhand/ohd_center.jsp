@@ -125,14 +125,7 @@
   </SCRIPT>
 
 <script language="javascript">
-	<%
-	boolean isDisposeLocal=false;
-	if(onHandForm.getOhd_id()!=null && onHandForm.getOhd_id().length()>0 && onHandForm.getDisposal_status()!=null){
-		isDisposeLocal=(onHandForm.getExistDisposalStatus()!=null && onHandForm.getRemarklist().size()<=onHandForm.getExistRemarkSize() 
-				&& onHandForm.getDisposal_status().getStatus_ID()!=onHandForm.getExistDisposalStatus().getStatus_ID()
-				&& onHandForm.getDisposal_status().getStatus_ID()==TracingConstants.ITEM_STATUS_DISPOSED_LOCALLY);
-	}%>
-	var disposeLocal=<%=isDisposeLocal%>;
+	var disposeLocal=false;
 
 
 		<%String Initial_OHD_DisStatusVal=(String)session.getAttribute("Initial_OHD_DisStatusVal");%>
@@ -1582,7 +1575,7 @@ function gotoHistoricalReport() {
   document.location.href="#photos";
 </logic:present>
 
-
+isDisposedCheck();
   </SCRIPT>
 </logic:notPresent>
 

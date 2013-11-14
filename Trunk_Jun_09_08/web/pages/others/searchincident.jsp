@@ -8,6 +8,9 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
+  boolean collectExpTag=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EXPEDITE_TAG_NUM_COLLECT, a);
+  boolean wtEnabled=a.getStation().getCompany().getVariable().getWt_enabled()==1;
+  
 %>
   
   <%@page import="com.bagnet.nettracer.reporting.ReportingConstants"%>
@@ -249,15 +252,23 @@ function updateExpediteTagField() {
                 </td>
                 
               </tr>
-              <% if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EXPEDITE_TAG_NUM_COLLECT, a)) { %>
               <tr>
-              	<td colspan="3" >
+              	<% if(collectExpTag){ %>
+              	<td colspan="<%=wtEnabled?"1":"3"%>">
               		<bean:message key="colname.expedite.tagnum" />
               		<br>
               		<html:text property="expediteTagNum" size="11" maxlength="10" styleClass="textfield" styleId="expediteTagNum" />
               	</td>
+              	<% } %>
+              	
+                <% if(wtEnabled){ %>
+              	<td colspan="<%=collectExpTag?"2":"3"%>" >
+              		<bean:message key="colname.wt.id" />
+              		<br>
+              		<html:text property="wt_id" size="20" maxlength="13" styleClass="textfield" styleId="wt_id" />
+              	</td>
+              	<% } %>
               </tr>
-              <% } %>
               <tr>
                 <td colspan="3" align="center" valign="top">
                   <html:submit property="search" styleId="button">

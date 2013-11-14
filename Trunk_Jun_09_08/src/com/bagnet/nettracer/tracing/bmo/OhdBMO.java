@@ -690,17 +690,12 @@ public class OhdBMO {
 			}
 
 			sql.append(" where 1=1 ");
-//
-//			if (oDTO.getOhd_ID() != null && !oDTO.getOhd_ID().equals("")) {
-//				sql.append(" and ohd.OHD_ID like :OHD_ID ");
-//			}
-//			
-//			
+
 			if (oDTO.getOhd_ID() != null && !oDTO.getOhd_ID().equals("")) {
 				sql.append(" and (ohd.OHD_ID like :OHD_ID ");
 
 
-				if (oDTO.getWt_id().length() > 0) {
+				if (oDTO.getWt_id()!=null && oDTO.getWt_id().length() > 0) {
 
 					if (oDTO.isWtConditionOr()) {
 						sql.append(" or ohd.wtFile.wt_id like :wt_id )");
@@ -713,10 +708,6 @@ public class OhdBMO {
 			} else if (oDTO.getWt_id() != null && !oDTO.getWt_id().equals("")) {
 				sql.append(" and ohd.wtFile.wt_id like :wt_id ");
 			}
-			
-//			if (oDTO.getTicketnumber() != null && !oDTO.getTicketnumber().equals("")) {
-//				sql.append(" and ohd.claimnum like :claimnum ");
-//			}
 
 			if (oDTO.getAgent() != null && oDTO.getAgent().length() > 0) sql.append(" and ohd.agent.username like :agent ");
 
@@ -939,8 +930,9 @@ public class OhdBMO {
 				q.setString("OHD_ID", oDTO.getOhd_ID());
 			}
 			
-			if (oDTO.getWt_id().length() > 0)
+			if (oDTO.getWt_id()!=null && oDTO.getWt_id().length() > 0){
 				q.setString("wt_id", oDTO.getWt_id());
+			}
 
 			
 			if (oDTO.getClaimcheck() != null && !oDTO.getClaimcheck().equals("")) {
@@ -1127,7 +1119,7 @@ public class OhdBMO {
 			if (siDTO.getOhd_id().length() > 0) {
 				s.append(" and (ohd.OHD_ID like :ohd_ID ");
 
-				if (siDTO.getWt_id().length() > 0) {
+				if (siDTO.getWt_id()!=null && siDTO.getWt_id().length() > 0) {
 
 					if (siDTO.isWtConditionOr()) {
 						s.append(" or ohd.wtFile.wt_id like :wt_id )");
@@ -1137,7 +1129,7 @@ public class OhdBMO {
 				} else {
 					s.append(") ");
 				}
-			} else if (siDTO.getWt_id().length() > 0) {
+			} else if (siDTO.getWt_id()!=null && siDTO.getWt_id().length() > 0) {
 				s.append(" and ohd.wtFile.wt_id like :wt_id ");
 			}
 			
@@ -1324,8 +1316,9 @@ public class OhdBMO {
 			if (siDTO.getOhd_id().length() > 0)
 				q.setString("ohd_ID", siDTO.getOhd_id());
 			
-			if (siDTO.getWt_id().length() > 0)
+			if (siDTO.getWt_id()!=null && siDTO.getWt_id().length() > 0){
 				q.setString("wt_id", siDTO.getWt_id());
+			}
 
 			
 			

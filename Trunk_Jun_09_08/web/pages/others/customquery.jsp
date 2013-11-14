@@ -16,6 +16,7 @@
   Agent a = (Agent)session.getAttribute("user");
   boolean collectPosId = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_COLLECT_POS_ID, a);
   boolean invDate=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_TO_BE_INVENTORIED, a);
+  boolean wtEnabled=a.getStation().getCompany().getVariable().getWt_enabled()==1;
 %>
   
   <%@page import="com.bagnet.nettracer.tracing.forms.SearchIncidentForm"%>
@@ -74,15 +75,19 @@
 
 	function updateFields(type) {
 		var posIdTd = document.getElementById("posIdTd");
-		if (!posIdTd) return;
 
 		var colspan = 1;
 		if (type != 2) {
 			colspan = 2;
-			posIdTd.style.display = "none";
+			if (posIdTd){
+				posIdTd.style.display = "none";
+			}
 			document.getElementById("ohdFields").style.display="none";
 		} else {
-			posIdTd.style.display = "inline";
+
+			if (posIdTd){
+				posIdTd.style.display = "inline";
+			}
 			document.getElementById("ohdFields").style.display="block";
 		}
 
@@ -293,7 +298,15 @@ function updatePagination() {
                   <html:text property="e_createtime" size="10" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.searchIncidentForm.e_createtime,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;"></td>
               </tr>
               <tr>
-			<td colspan=2>
+              	
+                <% if(wtEnabled){ %>
+	                <td colspan=1>
+	                  <bean:message key="colname.wt.id" />
+	                  <br>
+	                  <html:text property="wt_id" size="20" maxlength="10" styleClass="textfield" />
+	                </td>
+                <% } %>
+				<td colspan="<%=wtEnabled?"1":"2"%>">
 				<bean:message key="reports.create.station"/><br/>
               	 <html:select property="stationcreated_ID" styleClass="dropdown">
                     <html:option value="">
@@ -302,7 +315,6 @@ function updatePagination() {
                     <html:options collection="stationlist"  property="station_ID" labelProperty="stationcode"  />
                   </html:select>
               	 
-              	</td>
               	<td id="assignStationTd" colspan=2 >                 
                   <span id="assignstation">	
               	 	<bean:message key="colname.assigned_station"/>

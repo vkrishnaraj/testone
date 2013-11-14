@@ -8,6 +8,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
+   boolean wtEnabled=a.getStation().getCompany().getVariable().getWt_enabled()==1;
 %>
   
   <%@page import="com.bagnet.nettracer.reporting.ReportingConstants"%>
@@ -241,6 +242,15 @@ function updatePagination() {
                 </td>
                 
               </tr>
+              <% if(wtEnabled){ %>
+              <tr>
+              	<td colspan="3" >
+              		<bean:message key="colname.wt.id" />
+              		<br>
+              		<html:text property="wt_id" size="20" maxlength="13" styleClass="textfield" styleId="wt_id" />
+              	</td>
+              </tr>
+              <% } %>
               <tr>
                 <td colspan="3" align="center" valign="top">
                   <html:submit property="search" styleId="button">
@@ -357,7 +367,7 @@ function updatePagination() {
                     </b>
                   </td>
                   <%
-                	if(a.getStation().getCompany().getVariable().getWt_enabled()==1){
+                	if(wtEnabled){
                  %>
                   <td>
                   	<b>
@@ -474,7 +484,7 @@ function updatePagination() {
                       &nbsp;
                     </td>
                     <%
-                	if(a.getStation().getCompany().getVariable().getWt_enabled()==1){
+                	if(wtEnabled){
                     %>
                     <td>
                      	<logic:empty name="results" property="wt_id">
