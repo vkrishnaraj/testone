@@ -1276,7 +1276,7 @@ public class OhdBMO {
 
 			if (siDTO.getFlightnum().length() > 0) s.append(" and itinerary.flightnum like :flightnum");
 
-			if(siDTO.getRoutingstation().length()>0){
+			if(siDTO.getRoutingstation()!=null && siDTO.getRoutingstation().length()>0){
 				s.append(" and (itinerary.legfrom = :routingstation or itinerary.legto = :routingstation) ");
 			}
 			
@@ -1467,7 +1467,7 @@ public class OhdBMO {
 				q.setString("posId", siDTO.getPosId());
 			}
 
-			if (siDTO.getRoutingstation().length()>0) {
+			if (siDTO.getRoutingstation()!=null && siDTO.getRoutingstation().length()>0) {
 				q.setString("routingstation", siDTO.getRoutingstation());
 			}
 			
