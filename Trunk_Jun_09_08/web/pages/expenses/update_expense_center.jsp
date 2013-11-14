@@ -26,6 +26,9 @@
 			a);
 	boolean canPay = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_EXPENSE, a);
 	ExpensePayoutForm epf = (ExpensePayoutForm) request.getAttribute("expensePayoutForm");
+	String paytype = (String) request.getSession().getAttribute("paytype");
+
+	boolean submitOk = ((String) request.getSession().getAttribute("paytype")).equals(TracingConstants.ENUM_VOUCHER)? true :false; 
 
 	org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources) request
 			.getAttribute("org.apache.struts.action.MESSAGE");
@@ -54,6 +57,10 @@
         return true;
       }
       
+      function openPreviewWindow1(fileName) {
+    	  window.open("customerCommunications.do?preview_document="+fileName, '', 'width=600,height=800,resizable=yes');
+      }
+    	      
     </script>
 <html:form action="UpdateExpense.do" method="post" onsubmit="return validateExpense(this);">
 	<html:hidden name="expensePayoutForm" property="dateFormat" value="<%= a.getDateformat().getFormat() %>"/>
@@ -119,13 +126,23 @@
 				
 				<div id="maincontent">
 					<a name="editpayout"></a>
+					<% if (submitOk) { %>
+					<h1 class="green" align="center">
+						Successfully submitted!
+ 					</h1>
+ 					<a href="#" onclick="openPreviewWindow1('filename')"> 
+						<bean:message key="button.bdo_sendprint" />
+					</a>
+					<% } else { %>
 					<h1 class="green">
 						<bean:message key="header.edit_payout" />
 						<a href="#"
 							onclick="openHelp('pages/WebHelp/nettracerhelp.htm#lost_delayed_bag_reports/work_with_claim_payment.htm');return false;">
 							<img src="deployment/main/images/nettracer/button_help.gif"
 								width="20" height="21" border="0"> </a>
-					</h1>
+					</h1>					
+					<% } %>
+
 					<table class="form2" cellspacing="0" cellpadding="0">
 						<tr>
 							<td>
@@ -433,3 +450,10 @@
 				</div>
 	</fmt:timeZone>
 </html:form>
+	<logic:present name="receiptName" scope="request">
+	    <script language=javascript>
+	    	var fileName = '<%=(String) request.getAttribute("receiptName") %>';
+   			openPreviewWindow1(fileName);
+   			anyLossCodeChanges();
+	    </script>
+    </logic:present>

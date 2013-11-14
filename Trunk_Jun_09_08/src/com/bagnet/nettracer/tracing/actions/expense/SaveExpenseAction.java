@@ -49,7 +49,7 @@ public class SaveExpenseAction extends BaseExpenseAction {
 		Agent user = (Agent) request.getSession().getAttribute("user");
 		ExpensePayout ep = createNewPayout(expenseForm, user);
 		addComment(ep, user, "expense.comment.new", expenseForm.getNewComment());
-
+		String incidentId = ((IncidentForm) request.getSession().getAttribute("incidentForm")).getIncident_ID();
 		// set status to pending or approved
 		Status st = new Status();
 		st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED);
@@ -85,19 +85,22 @@ public class SaveExpenseAction extends BaseExpenseAction {
 				st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_PENDING);
 			}
 		}
+		//Include information into incident remark if payment type is LUV Voucher
+		if (expenseForm.getPaymentType().equals(TracingConstants.ENUM_VOUCHER)) {
+			String contents= "Voucher Issue Amount: $" + String.valueOf(expenseForm.getCheckamt()) + "\n" + 
+	                 "Agent Comments: " + expenseForm.getNewComment();
+			ibmo.insertRemark(contents,incidentId, user, TracingConstants.REMARK_REGULAR);
+			st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_PAID);
+			//return mapping.findForward("submit_success");
+		}
 		ep.setStatus(st);
-
-		String incidentId = ((IncidentForm) request.getSession().getAttribute("incidentForm")).getIncident_ID();
-		//Include information into incident remark
-		String contents= "Voucher Issue Amount: $" + String.valueOf(expenseForm.getCheckamt()) + "\n" + 
-		                 "Agent Comments: " + expenseForm.getNewComment();
-		ibmo.insertRemark(contents,incidentId, user, TracingConstants.REMARK_REGULAR);
 		ibmo.saveExpense(ep, incidentId, user);
 
 		request.getSession().setAttribute("getclaimfa", "1");
-//		request.getSession().setAttribute("incidentid", ep.getIncident().getIncident_ID());
+		request.getSession().setAttribute("paytype", expenseForm.getPaymentType());
 		request.getSession().setAttribute("incidentid", incidentId);
 		request.getSession().setAttribute("expense_id", ep.getExpensepayout_ID());
+
 		response.sendRedirect("EditExpense.do");
 		return null;
 //		return mapping.findForward("edit_success");
