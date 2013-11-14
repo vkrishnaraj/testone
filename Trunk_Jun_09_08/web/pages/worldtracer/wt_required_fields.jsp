@@ -296,7 +296,7 @@ ResourceBundle bundle = ResourceBundle.getBundle(
     
     for (var j=0; j < bagIndices.length; j++) {
       var index = bagIndices[j] * 20;
-      var contents = document.getElementById("inventoryList[" + index + "].description");
+      var contents = document.getElementById("inventorylist[" + index + "].description");
             
       if (!contents && reqContentFields) {
         alert("<%=(String) bundle.getString(

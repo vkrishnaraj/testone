@@ -6,7 +6,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
-<%@ page import="com.bagnet.nettracer.tracing.dto.TemplateOptionDTO"%>
+<%@ page import="com.bagnet.nettracer.tracing.dto.OptionDTO"%>
 <%@ page import="com.bagnet.nettracer.tracing.enums.TemplateType"%>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%@ page import="java.util.ResourceBundle" %>
@@ -34,28 +34,28 @@
 %>
 <script language="javascript" >
 
-	function loadTemplateList() {
-		if (document.getElementById("templateIdSelect").options.length > 1) return;
+	function loadList(selectId, url) {
+		if (document.getElementById(selectId).options.length > 1) return;
 
 		jQuery.ajax({
-			url:"customerCommunications.do?templateList=" + <%=String.valueOf(TemplateType.INCIDENT.ordinal()) %>,
+ 			url:url,
 			cache: false,
 			success: function(result) {
-				populateTemplateSelect(result);
+				populateSelect(selectId, result);
 			}
 		});	
 	}
 
-	function populateTemplateSelect(json) {
-		var templateSelect = document.getElementById("templateIdSelect");		
+	function populateSelect(selectId, json) {
+		var activitySelect = document.getElementById(selectId);		
 		for (var i = 0; i < json.length; ++i) {
-			templateSelect.options[templateSelect.options.length] = new Option(json[i].description, json[i].value);
+			activitySelect.options[activitySelect.options.length] = new Option(json[i].description, json[i].value);
 		}
 	}
 
-	function validateCustomerCommunications() {
-		var templateSelect = document.getElementById("templateIdSelect");
-		if (templateSelect.options[templateSelect.selectedIndex].value == 0) {
+	function validateIncidentActivity() {
+		var activitySelect = document.getElementById("activityIdSelect");
+		if (activitySelect.options[activitySelect.selectedIndex].value == 0) {
 			alert('<%=(String) bundle.getString( "communications.type") + " " + (String) bundle.getString("error.validation.isRequired")%>');
 			templateSelect.focus();
 			return false;
@@ -63,19 +63,64 @@
 		return true;
 	}
 
-	function goToCustomerCommunicationsPage() {
-		var templateSelect = document.getElementById("templateIdSelect");
-		var templateId = templateSelect.options[templateSelect.selectedIndex].value;
+	
+
+	function submitIncidentActivity() {
+		var activitySelect = document.getElementById("activityIdSelect");
+		var activityId = activitySelect.options[activitySelect.selectedIndex].value;
+		if (activityId == "<%=TracingConstants.ACTIVITY_CUSTOMER_COMMUNICATION %>") {
+			showTemplateSelectDialog();
+		} else {
+			submitRequest();
+		}
+	}
+
+	function submitRequest(templateId) {
 		var incidentId = document.getElementById("incident_ID").value;
-		window.location.href='customerCommunications.do?incident='+incidentId+'&templateId='+templateId;
+		var activitySelect = document.getElementById("activityIdSelect");
+		var activityId = activitySelect.options[activitySelect.selectedIndex].value;
+		var url = 'incidentActivity.do?command=<%=TracingConstants.COMMAND_CREATE %>&incident='+incidentId+'&activity='+activityId;
+		if (templateId && templateId != null) {
+			url = url + '&templateId='+templateId;
+		}		
+		window.location.href=url;
 	}
 
 	function verifyDelete() {
-		return confirm('<%=bundle.getString("message.confirm.delete") %>');
+		return confirm('<%=bundle.getString("message.incident.activity.delete") %>');
 	}
 
 	function openPreviewWindow(activityId) {
 		window.open("customerCommunications.do?view_sample_printout="+activityId, '', 'width=600,height=800,top=2600,resizable=yes');
+	}
+
+	function showTemplateSelectDialog() {
+		if (document.getElementById("templateSelect").options.length == 1) {
+			loadList("templateSelect", "customerCommunications.do?templateList=<%=String.valueOf(TemplateType.INCIDENT.getOrdinal()) %>")
+		}
+
+		var templateSelectDialog = jQuery("#templateSelectDiv").dialog({
+										height: 50,
+										width: 350,
+										title: '<bean:message key="message.customer.communications.dialog.title" />',
+										modal: true,
+										buttons: {
+											Ok: function() {
+												jQuery(this).dialog("close");
+												var templateSelect = document.getElementById("templateSelect");
+												templateId = templateSelect.options[templateSelect.selectedIndex].value;
+												if (templateId == "0") {
+													alert('You must select a document to send to the passenger.');
+													return;
+												}
+												submitRequest(templateId);												
+											},
+											Cancel: function() {
+												jQuery(this).dialog("close");
+											}
+										}
+									});
+		templateSelectDialog.dialog("open");
 	}
 
 </script>
@@ -84,9 +129,7 @@
 </h1>
 <span class="reqfield">*</span>
 <bean:message key="message.required" />
-<input type="hidden" name="customerCommunications" id="customerCommunications" value="false" />
 <input type="hidden" name="templateId" id="templateId" value="" />
-<input type="hidden" name="preview" id="preview" />
 	<table  class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
 		<tr>
 			<td class="header" style="width:25%">
@@ -130,37 +173,49 @@
 						<bean:write name="activity" property="description" />
 					</td>
 					<td>
-						<logic:notEqual name="activity" property="statusId" value="<%=String.valueOf(TracingConstants.STATUS_CUSTOMER_COMM_PUBLISHED) %>">
-							<% if (canEdit) { %>
-								<a href="customerCommunications.do?command=<%=TracingConstants.COMMAND_EDIT %>&communicationsId=<%=String.valueOf(activity.getId()) %>">
-									<bean:message key="customer.communication.action.edit" />
-								</a>
-								<br>
-							<% } %>
-							<% if (canDelete) { %>
-								<a href="customerCommunications.do?command=<%=TracingConstants.COMMAND_DELETE %>&communicationsId=<%=String.valueOf(activity.getId()) %>&incident=<bean:write name="incidentForm" property="incident_ID" />" onclick="return verifyDelete();" >
-									<bean:message key="customer.communication.action.delete" />
-								</a>
-								<br>
-							<% } %>
-							<% if (canEdit) { %>
-								<a href="#" onclick="openPreviewWindow('<%=activity.getId() %>')">
-									<bean:message key="customer.communication.action.preview" />
-								</a>
-							<% } %>
-							<% if (!canEdit && !canDelete) { %>
-								&nbsp;
-							<% } %>
+						<!-- Currently, customer communications are only identified from other activities by having a status id -->
+						<logic:notEqual name="activity" property="statusId" value="0" >
+							<logic:notEqual name="activity" property="statusId" value="<%=String.valueOf(TracingConstants.STATUS_CUSTOMER_COMM_PUBLISHED) %>">
+								<% if (canEdit) { %>
+									<a href="customerCommunications.do?command=<%=TracingConstants.COMMAND_EDIT %>&communicationsId=<%=String.valueOf(activity.getId()) %>">
+										<bean:message key="customer.communication.action.edit" />
+									</a>
+									<br>
+								<% } %>
+								<% if (canDelete) { %>
+									<a href="customerCommunications.do?command=<%=TracingConstants.COMMAND_DELETE %>&communicationsId=<%=String.valueOf(activity.getId()) %>&incident=<bean:write name="incidentForm" property="incident_ID" />" onclick="return verifyDelete();" >
+										<bean:message key="customer.communication.action.delete" />
+									</a>
+									<br>
+								<% } %>
+								<% if (canEdit) { %>
+									<a href="#" onclick="openPreviewWindow('<%=activity.getId() %>')">
+										<bean:message key="customer.communication.action.preview" />
+									</a>
+								<% } %>
+								<% if (!canEdit && !canDelete) { %>
+									&nbsp;
+								<% } %>
+							</logic:notEqual>
+							<logic:equal name="activity" property="statusId" value="<%=String.valueOf(TracingConstants.STATUS_CUSTOMER_COMM_PUBLISHED) %>">
+								<% if (canViewPublished) { %>
+									<a href="#" onclick="openPreviewWindow('<%=activity.getId() %>')">
+										<bean:message key="customer.communication.action.view" />
+									</a>
+									&nbsp;
+									(<bean:message key="<%="STATUS_KEY_" + activity.getCustCommId() %>" />)
+									<br>
+									<bean:message key="customer.communication.published" />&nbsp;<bean:write name="activity" property="dispPublishedDate" />
+								<% } else { %>
+									&nbsp;
+								<% } %>
+							</logic:equal>
 						</logic:notEqual>
-						<logic:equal name="activity" property="statusId" value="<%=String.valueOf(TracingConstants.STATUS_CUSTOMER_COMM_PUBLISHED) %>">
-							<% if (canViewPublished) { %>
-								<a href="#" onclick="openPreviewWindow('<%=activity.getId() %>')">
-									<bean:message key="customer.communication.action.view" />
+						<logic:equal name="activity" property="statusId" value="0" >
+							<% if (canDelete) { %>
+								<a href="incidentActivity.do?command=<%=TracingConstants.COMMAND_DELETE %>&activity=<%=String.valueOf(activity.getId()) %>&incident=<bean:write name="incidentForm" property="incident_ID" />" onclick="return verifyDelete();" >
+									<bean:message key="delete" />
 								</a>
-								&nbsp;
-								(<bean:message key="<%="STATUS_KEY_" + activity.getCustCommId() %>" />)
-								<br>
-								<bean:message key="customer.communication.published" />&nbsp;<bean:write name="activity" property="dispPublishedDate" />
 							<% } else { %>
 								&nbsp;
 							<% } %>
@@ -171,12 +226,13 @@
 		</table>
 	</logic:notEmpty>
 	<center>
-		<select id="templateIdSelect" class="dropdown" >
+		<select id="activityIdSelect" class="dropdown" >
 			<option value="0"><bean:message key="select.please_select" /></option>
 		</select>
 		&nbsp;&nbsp;
-		<input type="button" id="addCommButton" class="button" value="<bean:message key="button.add.action.communication" />" onclick="if (validateCustomerCommunications() && validatereqFields(this.form, '<%=formType %>')) { goToCustomerCommunicationsPage(); }" />
+		<input type="button" id="addCommButton" class="button" value="<bean:message key="button.add.action.communication" />" onclick="if (validateIncidentActivity() && validatereqFields(this.form, '<%=formType %>')) { submitIncidentActivity(); }" />
 	</center>
+	<a id="activities" />
 <br>
 <br>
 &nbsp;&nbsp;&uarr;
@@ -184,5 +240,18 @@
 <br>
 <br>
 <script language="javascript">
-	loadTemplateList();
+	loadList("activityIdSelect", "incidentActivity.do?activityList=1");
 </script>
+
+<div id="templateSelectDiv" style="display:none;" >
+	<table style="width:100%;">
+		<tr>
+			<td style="width:50%;text-align:right;">Select a Document:</td>
+			<td style="width:50%;text-align:left;">
+				<select id="templateSelect" style="	font-size:9px;border:1px solid #569ECD;margin:2px 0px 1px 0px;display:inline;" >
+					<option value="0"><bean:message key="select.please_select" /></option>
+				</select>
+			</td>
+		</tr>
+	</table>
+</div>

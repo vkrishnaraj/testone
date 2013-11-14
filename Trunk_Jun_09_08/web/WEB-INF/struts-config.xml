@@ -994,6 +994,7 @@
 		<action path="/ntlf_search_lost_found" type="com.bagnet.nettracer.tracing.actions.ntlf.SearchLostFoundAction" name="searchLostFoundForm" scope="request" validate="false"></action>	
 		
 		<action path="/customerCommunications" type="com.bagnet.nettracer.tracing.actions.communications.CustomerCommunicationsAction" name="customerCommunicationsForm" scope="request" validate="false" ></action>
+		<action path="/incidentActivity" type="com.bagnet.nettracer.tracing.actions.communications.IncidentActivityAction" scope="request" validate="false" ></action>
 
 	</action-mappings>
 

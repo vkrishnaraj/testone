@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.db.communications;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -13,13 +14,14 @@ public class Activity {
 	@GeneratedValue
 	private long id;
 	
-	private long code;
+	@Column(length=8)
+	private String code;
 	
 	private String description;
 	
 	public Activity() { }
 	
-	public Activity(int code) {
+	public Activity(String code) {
 		this.code = code;
 	}
 
@@ -30,12 +32,12 @@ public class Activity {
 	public void setId(long id) {
 		this.id = id;
 	}
-
-	public long getCode() {
+	
+	public String getCode() {
 		return code;
 	}
 
-	public void setCode(long code) {
+	public void setCode(String code) {
 		this.code = code;
 	}
 

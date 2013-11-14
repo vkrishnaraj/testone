@@ -8,7 +8,7 @@ import com.bagnet.nettracer.tracing.actions.templates.DocumentTemplateResult;
 import com.bagnet.nettracer.tracing.db.documents.templates.Template;
 import com.bagnet.nettracer.tracing.db.documents.templates.TemplateTypeMapping;
 import com.bagnet.nettracer.tracing.dto.TemplateDTO;
-import com.bagnet.nettracer.tracing.dto.TemplateOptionDTO;
+import com.bagnet.nettracer.tracing.dto.OptionDTO;
 import com.bagnet.nettracer.tracing.dto.TemplateSearchDTO;
 import com.bagnet.nettracer.tracing.enums.TemplateType;
 
@@ -91,5 +91,6 @@ public interface TemplateService {
 	 * @return a List of TemplateOptionDTOs containing the available list of template 
 	 * names for the given type
 	 */
-	public List<TemplateOptionDTO> getTemplateOptionsByType(TemplateType type);
+	public List<OptionDTO> getTemplateOptionsByType(TemplateType type);
+
 }

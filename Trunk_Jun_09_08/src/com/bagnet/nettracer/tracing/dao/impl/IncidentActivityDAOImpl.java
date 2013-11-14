@@ -1,9 +1,13 @@
 package com.bagnet.nettracer.tracing.dao.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
@@ -131,7 +135,50 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 		return success;
 	}
 	
-	private Activity getActivityByCode(long activityCode) {
+	/* (non-Javadoc)
+	 * @see com.bagnet.nettracer.tracing.dao.TemplateDAO#getActivities()
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Activity> getActivities() {
+		List<Activity> results = new ArrayList<Activity>();
+		Session session = null;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			Criteria criteria = session.createCriteria(Activity.class, "a");
+			criteria.addOrder(Order.asc("a.description"));
+			results = (List<Activity>) criteria.list();
+		} catch (Exception e) {
+			logger.error("Failed to load activities", e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return results;
+	}
+	
+	@Override
+	public Activity getActivity(String code) {
+		Activity activity = null;
+		Session session = null;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			Criteria criteria = session.createCriteria(Activity.class, "a");
+			criteria.add(Restrictions.eq("a.code", code));
+			activity = (Activity) criteria.uniqueResult();
+		} catch (Exception e) {
+			logger.error("Exception caught while attempting to load template with code: " + code, e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return activity;
+	}
+
+	
+	private Activity getActivityByCode(String activityCode) {
 		Activity activity = null;
 		Session session = null;
 		try {

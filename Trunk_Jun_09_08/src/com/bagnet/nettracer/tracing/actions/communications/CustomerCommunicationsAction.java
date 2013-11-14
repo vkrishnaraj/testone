@@ -1,9 +1,6 @@
 package com.bagnet.nettracer.tracing.actions.communications;
 
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,7 +24,6 @@ import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
 import com.bagnet.nettracer.tracing.db.documents.Document;
 import com.bagnet.nettracer.tracing.db.documents.templates.Template;
 import com.bagnet.nettracer.tracing.dto.TemplateAdapterDTO;
-import com.bagnet.nettracer.tracing.dto.TemplateOptionDTO;
 import com.bagnet.nettracer.tracing.enums.TemplateType;
 import com.bagnet.nettracer.tracing.exceptions.InsufficientInformationException;
 import com.bagnet.nettracer.tracing.exceptions.InvalidDocumentTypeException;
@@ -41,7 +37,6 @@ import com.bagnet.nettracer.tracing.utils.DomainUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class CustomerCommunicationsAction extends CheckedAction {
 
@@ -71,7 +66,7 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		if (request.getParameter("templateList") != null) {
 			try {
 				int ordinal = Integer.valueOf(request.getParameter("templateList"));
-				writeTemplateOptionsList(TemplateType.fromOrdinal(ordinal), response);
+				incidentActivityService.writeOptionsList(templateService.getTemplateOptionsByType(TemplateType.fromOrdinal(ordinal)), response);
 			} catch (NumberFormatException nfe) {
 				logger.error("Invalid value found for templateList", nfe);
 			}
@@ -124,7 +119,7 @@ public class CustomerCommunicationsAction extends CheckedAction {
 				logger.error("Failed to delete customer communication with id: " + request.getParameter("communicationsId"), nfe);
 				success = false;
 			}
-			response.sendRedirect("searchIncident.do?incident="+request.getParameter("incident"));
+			response.sendRedirect("searchIncident.do?incident="+request.getParameter("incident")+"#activities");
 			return null;
 		} else if (TracingConstants.COMMAND_CREATE.equals(ccf.getCommand())) {
 			success = saveCustomerCommunications(ccf, user, messages);
@@ -148,22 +143,6 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		}
 		
 		return mapping.findForward(TracingConstants.EDIT_COMMUNICATIONS);
-	}
-	
-	private void writeTemplateOptionsList(TemplateType type, HttpServletResponse response) {
-		List<TemplateOptionDTO> options = new ArrayList<TemplateOptionDTO>();
-		try {
-			options = templateService.getTemplateOptionsByType(type);
-			
-			ObjectMapper mapper = new ObjectMapper();
-			response.setContentType("text/x-json;charset=UTF-8");
-			
-			PrintWriter out = response.getWriter();
-			out.println(mapper.writeValueAsString(options));
-			out.flush();
-		} catch (Exception e) {
-			logger.error("Error caught trying to return the templateList", e);
-		}
 	}
 	
 	private boolean populateCustomerCommunicationsForm(String incidentId, String templateId, CustomerCommunicationsForm ccf, Agent user, ActionMessages messages) {
@@ -211,7 +190,7 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		ccf.setDocumentId(incidentActivity.getDocument().getId());
 		
 		boolean success = incidentActivityId != 0;
-		messages.add(ActionMessages.GLOBAL_MESSAGE, this.getActionMessage(TracingConstants.COMMAND_CREATE, success, ccf.getDocumentTitle()));
+		messages.add(ActionMessages.GLOBAL_MESSAGE, getActionMessage(TracingConstants.COMMAND_CREATE, success, ccf.getDocumentTitle()));
 		return success;
 	}
 
@@ -220,7 +199,7 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		incidentActivity.setAgent(user);
 		
 		boolean success = incidentActivityService.update(incidentActivity);
-		messages.add(ActionMessages.GLOBAL_MESSAGE, this.getActionMessage(TracingConstants.COMMAND_UPDATE, success, ccf.getDocumentTitle()));
+		messages.add(ActionMessages.GLOBAL_MESSAGE, getActionMessage(TracingConstants.COMMAND_UPDATE, success, ccf.getDocumentTitle()));
 		return success;
 	}
 	

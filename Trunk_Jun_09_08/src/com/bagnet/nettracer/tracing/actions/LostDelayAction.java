@@ -99,6 +99,7 @@ import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 public class LostDelayAction extends CheckedAction {
 	private static Logger logger = Logger.getLogger(LostDelayAction.class);
 	
+	@SuppressWarnings({ "rawtypes", "unchecked", "deprecation" })
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
 		HttpSession session = request.getSession();
@@ -175,7 +176,6 @@ public class LostDelayAction extends CheckedAction {
 		}
 
 		BagService bs = new BagService();
-		WorldTracerQueueUtils wq = new WorldTracerQueueUtils();
 
 		boolean checkLLC = false;
 		if(request.getAttribute("currentstatus") != null) {
@@ -277,13 +277,11 @@ public class LostDelayAction extends CheckedAction {
 		request.setAttribute("agentassignedlist", agentassignedlist);
 		String form_incident_id = null;
 		Dispute myDispute = null;
-		boolean isIncidentLocked = false;
 		
 		if(theform.getIncident_ID() != null) {
 			form_incident_id = theform.getIncident_ID();
 			request.setAttribute("incident", form_incident_id);
 			myDispute = DisputeUtils.getDisputeByIncidentId(form_incident_id);
-			isIncidentLocked = DisputeResolutionUtils.isIncidentLocked(form_incident_id);
 			IncidentBMO.fillFormWithExistingData(form_incident_id, theform);
 		}
 		
@@ -465,7 +463,6 @@ public class LostDelayAction extends CheckedAction {
 
 		if (itemindex >= 0 && photoindex >= 0) {
 			// don't remove photo for now.
-			Item_Photo thephoto = (Item_Photo) theform.getItem(itemindex, -1).getPhotolist().get(photoindex);
 			theform.getItem(itemindex, -1).getPhotolist().remove(photoindex);
 			request.setAttribute("upload", Integer.toString(itemindex));
 			request.setAttribute("markDirty", 1);
@@ -533,17 +530,6 @@ public class LostDelayAction extends CheckedAction {
 			handleDisputeFault(mapping, theform, request, response);
 		}
 		
-		String save = (String) request.getParameter("save");
-		String close = (String) request.getParameter("close");
-		String doclose = (String) request.getParameter("doclose");
-		String doclosewt = (String) request.getParameter("doclosewt");
-		String savetemp = (String) request.getParameter("savetemp");
-		String savetracing = (String) request.getParameter("savetracing");
-		String savetowt = (String) request.getParameter("savetowt");
-		String amendWT = (String) request.getParameter("amendWT");
-		String saveadditions = (String) request.getParameter("saveadditions");
-
-
 		// save incident
 		if(request.getParameter("save") != null || request.getParameter("close") != null
 				|| request.getParameter("doclose") != null || request.getParameter("doclosewt") != null
@@ -857,10 +843,10 @@ public class LostDelayAction extends CheckedAction {
 		return (mapping.findForward(TracingConstants.LD_MAIN));
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private String getReportFile(IncidentForm theform, Agent user, HttpServletRequest request) {
 
 		ServletContext sc = getServlet().getServletContext();
-		String reportpath = sc.getRealPath("/");
 
 		HashMap selections = new HashMap();
 
@@ -968,6 +954,7 @@ public class LostDelayAction extends CheckedAction {
 
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private static String createReport(HashMap selections, int type, ServletContext sc, String incident_ID, Agent user,
 			HttpServletRequest request) {
 
@@ -1271,6 +1258,7 @@ public class LostDelayAction extends CheckedAction {
 		}
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private static String buildTeletypeStyleHistoricalReport(Map parameters) {
 		//logger.error("printing the teletype style historical report below:");
 		StringBuilder historicalReport = new StringBuilder();
@@ -1677,8 +1665,6 @@ public class LostDelayAction extends CheckedAction {
 									historicalReport.append(newline);	
 								}								
 							}				
-						} else {
-							historicalReport.append("N/A" + newline);
 						}
 					}
 				}				
@@ -1770,12 +1756,6 @@ public class LostDelayAction extends CheckedAction {
 		//return historicalReport;
 		return result;
 	
-	}
-	private static String format(String input) {
-		if(input == null || input.equals("null"))
-			return "";
-		else
-			return input;
 	}
 	
 	private ActionForward handleDisputeFault(ActionMapping mapping, ActionForm form, HttpServletRequest request,

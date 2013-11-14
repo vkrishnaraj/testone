@@ -156,6 +156,16 @@ public class DomainUtils {
 		form.setCommand(null);
 	}
 	
+	public static IncidentActivity createIncidentActivity(Incident incident, Activity activity, Agent user) {
+		IncidentActivity ia = new IncidentActivity();
+		ia.setIncident(incident);
+		ia.setActivity(activity);
+		ia.setAgent(user);
+		ia.setCreateDate(DateUtils.convertToGMTDate(new Date()));
+		ia.setDescription(activity.getDescription());
+		return ia;
+	}
+	
 	public static TemplateAdapterDTO getTemplateAdapterDTO(Agent user, Template template) {
 		TemplateAdapterDTO dto = new TemplateAdapterDTO();
 		dto.setAgent(user);

@@ -29,7 +29,6 @@ import javax.servlet.http.HttpSession;
 
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
-import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -83,8 +82,8 @@ import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
  * @author Matt
  */
 public class MissingAction extends CheckedAction {
-	private static Logger logger = Logger.getLogger(MissingAction.class);
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		HttpSession session = request.getSession();
@@ -206,11 +205,9 @@ public class MissingAction extends CheckedAction {
 		if(!(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL, user) && PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES))){
 			
 			Dispute myDispute = null;
-			boolean isIncidentLocked = false;
 			
 			if(theform.getIncident_ID() != null) {
 				myDispute = DisputeUtils.getDisputeByIncidentId(form_incident_id);
-				isIncidentLocked = DisputeResolutionUtils.isIncidentLocked(form_incident_id);
 			}
 			
 			if (myDispute != null) {
@@ -354,7 +351,6 @@ public class MissingAction extends CheckedAction {
 
 		if (itemindex >= 0 && photoindex >= 0) {
 			// don't remove photo for now.
-			Item_Photo thephoto = (Item_Photo) theform.getItem(itemindex, -1).getPhotolist().get(photoindex);
 			theform.getItem(itemindex, -1).getPhotolist().remove(photoindex);
 			request.setAttribute("upload", Integer.toString(itemindex));
 			request.setAttribute("markDirty", 1);
@@ -612,10 +608,10 @@ public class MissingAction extends CheckedAction {
 		return (mapping.findForward(TracingConstants.MISSING_MAIN));
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private String getReportFile(IncidentForm theform, Agent user, HttpServletRequest request) {
 
 		ServletContext sc = getServlet().getServletContext();
-		String reportpath = sc.getRealPath("/");
 
 		HashMap selections = new HashMap();
 
@@ -696,6 +692,7 @@ public class MissingAction extends CheckedAction {
 
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private static String createReport(HashMap selections, int type, ServletContext sc, String incident_ID, Agent user, HttpServletRequest request) {
 
 		IncidentForm form = new IncidentForm();
@@ -941,13 +938,7 @@ public class MissingAction extends CheckedAction {
 		}
 	}
 
-	private static String format(String input) {
-		if (input == null || input.equals("null"))
-			return "";
-		else
-			return input;
-	}
-	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private static String buildTeletypeStyleHistoricalReport(Map parameters) {
 		StringBuilder historicalReport = new StringBuilder();
 		historicalReport.append(newline);

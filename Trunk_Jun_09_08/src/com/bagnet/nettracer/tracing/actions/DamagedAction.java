@@ -1,8 +1,6 @@
 /*
  * Created on Jul 9, 2004
  *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
  */
 package com.bagnet.nettracer.tracing.actions;
 
@@ -85,6 +83,7 @@ import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
 public class DamagedAction extends CheckedAction {
 	private static Logger logger = Logger.getLogger(DamagedAction.class);
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		HttpSession session = request.getSession();
 
@@ -226,10 +225,8 @@ public class DamagedAction extends CheckedAction {
 		if (!(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL, user) && PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES))){
 
 			Dispute myDispute = null;
-			boolean isIncidentLocked = false;
 			if(theform.getIncident_ID() != null) {
 				myDispute = DisputeUtils.getDisputeByIncidentId(form_incident_id);
-				isIncidentLocked = DisputeResolutionUtils.isIncidentLocked(form_incident_id);
 			}
 			
 			if (myDispute != null) {
@@ -371,14 +368,7 @@ public class DamagedAction extends CheckedAction {
 
 		if (itemindex >= 0 && photoindex >= 0) {
 			// don't remove photo for now.
-			Item_Photo thephoto = (Item_Photo) theform.getItem(itemindex, -1).getPhotolist().get(photoindex);
 			theform.getItem(itemindex, -1).getPhotolist().remove(photoindex);
-			//File pfile = new File(TracingConstants.IMAGE_STORE +
-			// thephoto.getPicpath());
-			//if (pfile.exists()) pfile.delete();
-			//pfile = new File(TracingConstants.IMAGE_STORE +
-			// thephoto.getThumbpath());
-			//if (pfile.exists()) pfile.delete();
 			request.setAttribute("upload", Integer.toString(itemindex));
 			request.setAttribute("markDirty", 1);
 			return (mapping.findForward(TracingConstants.DAMAGED_MAIN));
@@ -632,10 +622,10 @@ public class DamagedAction extends CheckedAction {
 		return (mapping.findForward(TracingConstants.DAMAGED_MAIN));
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private String getReportFile(IncidentForm theform, Agent user, HttpServletRequest request) {
 
 		ServletContext sc = getServlet().getServletContext();
-		String reportpath = sc.getRealPath("/");
 
 		HashMap selections = new HashMap();
 
@@ -709,6 +699,7 @@ public class DamagedAction extends CheckedAction {
 
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private static String createReport(HashMap selections, int type, ServletContext sc, String incident_ID, Agent user, HttpServletRequest request) {
 
 		IncidentForm form = new IncidentForm();
@@ -944,13 +935,7 @@ public class DamagedAction extends CheckedAction {
 		}
 	}
 
-	private static String format(String input) {
-		if (input == null || input.equals("null"))
-			return "";
-		else
-			return input;
-	}
-
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private static String buildTeletypeStyleHistoricalReport(Map parameters) {
 		//logger.error("printing the teletype style historical report below:");
 		StringBuilder historicalReport = new StringBuilder();

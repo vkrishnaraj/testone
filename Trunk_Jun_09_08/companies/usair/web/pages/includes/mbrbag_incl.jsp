@@ -615,9 +615,9 @@
 	                  <% }%>
 	                  <br> 
 						<% if (UserPermissions.hasIncidentSavePermission(a,theitem.getIncident()) || (canAddContents && inventorylist.getInventory_ID() == 0)) { %>
-							<html:text property="<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].description"%>" size="80" maxlength="255" styleClass="textfield" /> 
+							<html:text property="<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].description"%>" styleId="<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].description"%>" size="80" maxlength="255" styleClass="textfield" /> 
 						<%	} else { %>
-							<html:text disabled="true" property="<%="inventorylist[" + (i.intValue() * 20 + j.intValue()) + "].description"%>" size="80" maxlength="255" styleClass="textfield" /> 
+							<html:text disabled="true" property="<%="inventorylist[" + (i.intValue() * 20 + j.intValue()) + "].description"%>" styleId="<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].description"%>" size="80" maxlength="255" styleClass="textfield" /> 
 						<% } %>
 	                </td>
 	                <% if (!collectAddItemInfo || report_type != 0) { %>

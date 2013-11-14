@@ -1568,7 +1568,9 @@ public class BagService {
 			dto.setId(activity.getId());
 			dto.setCreateDate(activity.getCreateDate());
 			dto.setPublishedDate(activity.getPublishedDate());
-			dto.setStatusId(activity.getStatus().getStatus_ID());
+			if (activity.getStatus() != null) {
+				dto.setStatusId(activity.getStatus().getStatus_ID());
+			}
 			dto.setAgent(activity.getAgent().getUsername());
 			dto.setDescription(activity.getDescription());
 			dto.setCustCommId(activity.getCustCommId());
@@ -1720,7 +1722,9 @@ public class BagService {
 				dto.setId(activity.getId());
 				dto.setCreateDate(activity.getCreateDate());
 				dto.setPublishedDate(activity.getPublishedDate());
-				dto.setStatusId(activity.getStatus().getStatus_ID());
+				if (activity.getStatus() != null) {
+					dto.setStatusId(activity.getStatus().getStatus_ID());
+				}
 				dto.setAgent(activity.getAgent().getUsername());
 				dto.setDescription(activity.getDescription());
 				dto.setCustCommId(activity.getCustCommId());

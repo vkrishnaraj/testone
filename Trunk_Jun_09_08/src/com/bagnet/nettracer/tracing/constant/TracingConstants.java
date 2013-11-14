@@ -1405,7 +1405,8 @@ public class TracingConstants {
 	public static final int STATUS_CUSTOMER_COMM_DENIED = 1402;
 	public static final int STATUS_CUSTOMER_COMM_PUBLISHED = 1403;
 	
-	public static final int ACTIVITY_CUSTOMER_COMMUNICATION = 1500;
+	public static final String ACTIVITY_CUSTOMER_COMMUNICATION = "55";
+	public static final String ACTIVITY_ASSIGNED_TO = "AS";
 	
 	public static final String FILE_NOT_FOUND = "fileNotFound";
 	

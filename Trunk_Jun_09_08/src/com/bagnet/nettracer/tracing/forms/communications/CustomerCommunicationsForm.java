@@ -8,6 +8,7 @@ public class CustomerCommunicationsForm extends CommandForm {
 
 	private long id;
 	private String incidentId;
+	private long activityId;
 	private long templateId;
 	private String documentTitle;
 	private long documentId;
@@ -34,6 +35,14 @@ public class CustomerCommunicationsForm extends CommandForm {
 
 	public String getDocumentTitle() {
 		return documentTitle;
+	}
+
+	public long getActivityId() {
+		return activityId;
+	}
+
+	public void setActivityId(long activityId) {
+		this.activityId = activityId;
 	}
 
 	public long getTemplateId() {

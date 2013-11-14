@@ -69,9 +69,12 @@
         <div class="menu">
           <dl>
             <dd>
-              <a href='searchIncident.do?incident=<bean:write name="customerCommunicationsForm" property="incidentId" />'><span class="aa">&nbsp;
-                  <br />
-                  &nbsp;</span>
+              <a href='searchIncident.do?incident=<bean:write name="customerCommunicationsForm" property="incidentId" />#activities'>
+              	<span class="aa">
+              		&nbsp;
+              		<br />
+              		&nbsp;
+             	</span>
                 <span class="bb"><bean:message key="menu.incident_info" /></span>
                 <span class="cc">&nbsp;
                   <br />

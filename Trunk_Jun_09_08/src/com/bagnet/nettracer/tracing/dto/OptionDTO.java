@@ -1,22 +1,22 @@
 package com.bagnet.nettracer.tracing.dto;
 
-public class TemplateOptionDTO {
+public class OptionDTO {
 
-	private long value;
+	private String value;
 	private String description;
 	
-	public TemplateOptionDTO() { }
+	public OptionDTO() { }
 	
-	public TemplateOptionDTO(long value, String description) {
+	public OptionDTO(String value, String description) {
 		this.value = value;
 		this.description = description;
 	}
 	
-	public long getValue() {
+	public String getValue() {
 		return value;
 	}
 	
-	public void setValue(long value) {
+	public void setValue(String value) {
 		this.value = value;
 	}
 	
