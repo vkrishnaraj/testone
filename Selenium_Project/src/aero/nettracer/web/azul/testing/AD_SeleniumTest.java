@@ -19,7 +19,7 @@ public class AD_SeleniumTest extends DefaultSeleneseTestCase {
 	
 	protected static final String MENU_LD_SEARCH = "menucol_1.4";
 	protected static final String MENU_OHD_SEARCH = "menucol_4.4";
-	protected static final String MENU_ADMIN_AUDIT = "menucol_9.12";
+	protected static final String MENU_ADMIN_AUDIT = "menucol_9.11";
 	
 	protected static final String INCIDENT_TYPE_LOSTDELAY = "Lost/Delayed";
 	protected static final String INCIDENT_TYPE_MISSING = "Missing Articles";
