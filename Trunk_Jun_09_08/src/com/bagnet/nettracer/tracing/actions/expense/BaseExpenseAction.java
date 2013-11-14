@@ -165,6 +165,7 @@ public abstract class BaseExpenseAction extends CheckedAction {
 			
 			if (expenseForm.getPaymentType().equals(TracingConstants.ENUM_VOUCHER)) {
 				ep.setVoucheramt(expenseForm.getCheckamt());
+				ep.setDistributemethod(expenseForm.getDistributemethod());
 				ep.setCheckamt(0);
 			} else if (expenseForm.getPaymentType().equals(TracingConstants.ENUM_CCREF)) {
 				ep.setCreditCardRefund(expenseForm.getCheckamt());

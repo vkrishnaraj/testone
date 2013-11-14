@@ -67,7 +67,9 @@ public class ExpensePayout implements Serializable {
 	private BDO bdo;
 	private OHD ohd;
 	
+	private String distributemethod;
 	
+
 	//not part of the model
 	private String _DATEFORMAT;
 	private String _TIMEFORMAT;
@@ -277,6 +279,15 @@ public class ExpensePayout implements Serializable {
 
 	public void setPaycode(String paycode) {
 		this.paycode = paycode;
+	}
+	
+	@Column(length = 5)	
+	public String getDistributemethod() {
+		return distributemethod;
+	}
+
+	public void setDistributemethod(String distributemethod) {
+		this.distributemethod = distributemethod;
 	}
 
 

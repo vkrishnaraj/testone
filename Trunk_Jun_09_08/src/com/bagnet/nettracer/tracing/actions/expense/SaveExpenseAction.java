@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.actions.expense;
 
+import java.text.SimpleDateFormat;
 import java.util.Currency;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,11 +19,14 @@ import com.bagnet.nettracer.tracing.db.Comment;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.ExpenseType;
+import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.forms.ExpensePayoutForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 public class SaveExpenseAction extends BaseExpenseAction {
@@ -84,6 +88,10 @@ public class SaveExpenseAction extends BaseExpenseAction {
 		ep.setStatus(st);
 
 		String incidentId = ((IncidentForm) request.getSession().getAttribute("incidentForm")).getIncident_ID();
+		//Include information into incident remark
+		String contents= "Voucher Issue Amount: $" + String.valueOf(expenseForm.getCheckamt()) + "\n" + 
+		                 "Agent Comments: " + expenseForm.getNewComment();
+		ibmo.insertRemark(contents,incidentId, user, TracingConstants.REMARK_REGULAR);
 		ibmo.saveExpense(ep, incidentId, user);
 
 		request.getSession().setAttribute("getclaimfa", "1");

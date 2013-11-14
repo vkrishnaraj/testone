@@ -41,8 +41,8 @@ public class ExpensePayoutForm extends ActionForm {
 	private double creditCardRefund;
 	private String bdo_id;
 	private String bdo_ref;
-	
-	
+	private String distributemethod;
+
 	private String paymentType;
 	
 	//hidden
@@ -76,7 +76,7 @@ public class ExpensePayoutForm extends ActionForm {
 	private String dispApproval_date;
 	private String dispDraftreqdate;
 	private String dispVoucherExpirationDate;
-	
+
 	public String getIncident_ID() {
 		return incident_ID;
 	}
@@ -396,6 +396,12 @@ public class ExpensePayoutForm extends ActionForm {
 	public void setDraftpaiddate(Date draftpaiddate) {
 		this.draftpaiddate = draftpaiddate;
 	}
-
+	
+	public String getDistributemethod() {
+		return distributemethod;
+	}
+	public void setDistributemethod(String distributemethod) {
+		this.distributemethod = distributemethod;
+	}
 	
 }
