@@ -93,6 +93,7 @@
 						csTd.colSpan="1";
 					}
 				} else {
+					document.getElementById("wt_id").value="";
 					wtIdTd.style.display = "none";
 					if(csTd){
 						csTd.colSpan="2";
