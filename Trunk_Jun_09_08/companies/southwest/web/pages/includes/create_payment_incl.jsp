@@ -1,7 +1,42 @@
 <%@ page language="java" %>
-<%@ taglib uri="/tags/struts-html" prefix="html"%>
+<%@ page import="com.bagnet.nettracer.tracing.db.ExpensePayout"%>
+<%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
+<%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
+<%@page import="com.bagnet.nettracer.tracing.db.Agent"%>
+<%@page import="com.bagnet.nettracer.tracing.forms.ExpensePayoutForm"%>
+<%@page import="org.apache.struts.util.LabelValueBean"%>
 <%@ taglib uri="/tags/struts-bean" prefix="bean"%>
+<%@ taglib uri="/tags/struts-html" prefix="html"%>
+<%@ taglib uri="/tags/struts-logic" prefix="logic"%>
+<%@ taglib uri="/tags/struts-tiles" prefix="tiles"%>
 <script type="text/javascript">
+<%
+Agent a = (Agent) request.getSession().getAttribute("user");
+boolean canEdit = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_EXPENSE,a);
+boolean canApprove = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_APPROVE_EXPENSE,a);
+boolean canPay = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_EXPENSE, a);
+boolean hasImmFulfillPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_IMMEDIATE_FULFILLMENT, a);
+boolean hasEmailFulfillPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EMAIL_FULFILLMENT, a);
+boolean hasMailFulfillPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MAIL_FULFILLMENT, a);
+boolean hasCancelPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CANCEL_A_VOUCHER, a);
+%>
+function getStatusIds(type) {
+	if (type=='VOUCH') {
+			document.getElementById("amountColumn").innerHTML='<bean:message key="issue.amount"/>' +
+			'<br />' +
+			'<html:text property="checkamt" maxlength="20" styleClass="textfield"></html:text>';
+			document.getElementById("button").value='<bean:message key="button.issue.voucher"/>';
+			document.getElementById("distributedmethod").style.display= 'inline';
+			issue_voucher = true;
+		} else {
+			document.getElementById("amountColumn").innerHTML='<bean:message key="draft.amount"/>' +
+			'<br />' +
+			'<html:text property="checkamt" maxlength="20" styleClass="textfield"></html:text>';
+			document.getElementById("button").value='<bean:message key="button.request_for_approval"/>';
+			document.getElementById("distributedmethod").style.display= 'none';
+			issue_voucher = false;
+		}
+}
 
 function updatePaymentFields(newType) {
 	switch(newType) {
@@ -21,6 +56,7 @@ function updatePaymentFields(newType) {
 	default:
 		break;
 	}
+	getStatusIds(newType);
 }
 </script>
 <tr>
@@ -46,4 +82,33 @@ function updatePaymentFields(newType) {
             <html:options collection="currencylist" property="currency_ID" labelProperty="id_desc" />
         </html:select>
 	</td>
+</tr>
+<tr>
+	<td></td>
+	<td id="distributedmethod" style="display:none;">
+		<bean:message key="colname.distribution_method" />
+		<br />
+		<html:select property="distributemethod" styleClass="dropdown" disabled="disabled">
+			<html:option value="">
+				<bean:message key="select.please_select" />
+			</html:option>
+			<% if(hasImmFulfillPermission) { %>		
+			<html:option value="IMME">
+				<bean:message key="Immediate.fulfill" />
+			</html:option>
+			<% } %>
+			<% if(hasEmailFulfillPermission) { %>	
+			<html:option value="EMAIL">
+				<bean:message key="Email.fulfill" />
+			</html:option>
+			<% } %>
+			<% if(hasMailFulfillPermission) { %>
+			<html:option value="MAIL">
+				<bean:message key="Mail.fulfill" />
+			</html:option>
+			<% } %>
+		</html:select>
+        <br />	
+	</td>
+	<td ></td>
 </tr>
