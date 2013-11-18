@@ -162,7 +162,7 @@ public abstract class BaseExpenseAction extends CheckedAction {
 		
 		// If limited version of page (DEFAULT)
 		if (expenseForm.getPaymentType() != null) {
-			
+			ep.setPaytype(expenseForm.getPaymentType());
 			if (expenseForm.getPaymentType().equals(TracingConstants.ENUM_VOUCHER)) {
 				ep.setVoucheramt(expenseForm.getCheckamt());
 				ep.setDistributemethod(expenseForm.getDistributemethod());

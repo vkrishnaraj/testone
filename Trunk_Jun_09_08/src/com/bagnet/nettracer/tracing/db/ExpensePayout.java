@@ -68,8 +68,8 @@ public class ExpensePayout implements Serializable {
 	private OHD ohd;
 	
 	private String distributemethod;
+	private String paytype;
 	
-
 	//not part of the model
 	private String _DATEFORMAT;
 	private String _TIMEFORMAT;
@@ -289,7 +289,15 @@ public class ExpensePayout implements Serializable {
 	public void setDistributemethod(String distributemethod) {
 		this.distributemethod = distributemethod;
 	}
+	
+	@Column(length = 5)	
+	public String getPaytype() {
+		return paytype;
+	}
 
+	public void setPaytype(String paytype) {
+		this.paytype = paytype;
+	}
 
 	@Basic
 	public double getCheckamt() {
