@@ -4,6 +4,7 @@
 <%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%@page import="com.bagnet.nettracer.tracing.db.Agent"%>
 <%@page import="com.bagnet.nettracer.tracing.forms.ExpensePayoutForm"%>
+<%@page import="com.bagnet.nettracer.tracing.bmo.ExpensePayoutBMO"%>
 <%@page import="org.apache.struts.util.LabelValueBean"%>
 <%@ taglib uri="/tags/struts-bean" prefix="bean"%>
 <%@ taglib uri="/tags/struts-html" prefix="html"%>
@@ -26,10 +27,11 @@
 			a);
 	boolean canPay = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_EXPENSE, a);
 	ExpensePayoutForm epf = (ExpensePayoutForm) request.getAttribute("expensePayoutForm");
-	String paytype = (String) request.getSession().getAttribute("paytype");
-
-	boolean submitOk = ((String) request.getSession().getAttribute("paytype")).equals(TracingConstants.ENUM_VOUCHER)? true :false; 
-
+	ExpensePayoutBMO epbmo = new ExpensePayoutBMO();
+	ExpensePayout ep = epbmo.findExpensePayout(epf.getExpensepayout_ID());
+	 
+	boolean submitOk = (ep.getPaytype() !=null && ep.getPaytype().equals(TracingConstants.ENUM_VOUCHER))? true :false; 
+	//System.out.println("submitOk: "+ submitOk);
 	org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources) request
 			.getAttribute("org.apache.struts.action.MESSAGE");
 	java.util.Locale myLocale = (java.util.Locale) session
@@ -131,8 +133,14 @@
 						Successfully submitted!
  					</h1>
  					<a href="#" onclick="openPreviewWindow1('filename')"> 
+						Cancel
+					</a>
+
+ 					<a href="#" onclick="openPreviewWindow1('filename')"> 
 						<bean:message key="button.bdo_sendprint" />
 					</a>
+					&nbsp;&nbsp;
+				   
 					<% } else { %>
 					<h1 class="green">
 						<bean:message key="header.edit_payout" />
