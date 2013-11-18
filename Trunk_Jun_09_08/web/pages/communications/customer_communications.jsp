@@ -124,6 +124,7 @@
 	}
 
 </script>
+<a id="activities" ></a>
 <h1 class="green">
 	<bean:message key="header.customer.communications" />
 </h1>
@@ -232,14 +233,13 @@
 		&nbsp;&nbsp;
 		<input type="button" id="addCommButton" class="button" value="<bean:message key="button.add.action.communication" />" onclick="if (validateIncidentActivity() && validatereqFields(this.form, '<%=formType %>')) { submitIncidentActivity(); }" />
 	</center>
-	<a id="activities" />
 <br>
 <br>
 &nbsp;&nbsp;&uarr;
 <a href="#"><bean:message key="link.to_top" /></a>
 <br>
 <br>
-<script language="javascript">
+<script type="text/javascript">
 	loadList("activityIdSelect", "incidentActivity.do?activityList=1");
 </script>
 
