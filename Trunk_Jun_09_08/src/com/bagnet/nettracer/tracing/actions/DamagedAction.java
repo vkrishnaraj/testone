@@ -110,6 +110,7 @@ public class DamagedAction extends CheckedAction {
 				incident.setRxTimestamp(rxTimestamp);
 				if (iBmo.insertIncident(false, incident, null, user) == 1) {
 					theform.setRxTimestamp(rxTimestamp);
+					theform.setLastupdated(incident.getLastupdated());
 				} else {
 					request.setAttribute("error", "error.message.set.rx.timestamp.failed");
 					logger.error("An error occurred while trying to set the receive Date/Time for incident: " + incidentId);
