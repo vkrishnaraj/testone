@@ -1606,7 +1606,7 @@ public class MBRActionUtils {
 			if (!result.isSuccess()) return result;
 			
 			// 4. create the pdf
-			result = documentService.generatePdf(user, document);
+			result = documentService.generatePdf(user, document, PropertyBMO.getValue(PropertyBMO.DOCUMENT_LOCATION_RECEIPTS));
 			if (result.isSuccess()) {
 				document.setFileName((String)result.getPayload());
 				result.setPayload(document);
