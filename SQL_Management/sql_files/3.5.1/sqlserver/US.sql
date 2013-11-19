@@ -1,0 +1,1 @@
+insert into properties (keystr, valuestr) values ('res.ws.timeout','90000');

@@ -1,0 +1,1 @@
+update reservation set ccNumber = '';

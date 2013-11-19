@@ -1,0 +1,1 @@
+update properties set valuestr = 'portuguese,english,mandarin,spanish,french,arabic,other' where keystr = 'spoken.language.list';

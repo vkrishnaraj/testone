@@ -1,0 +1,6 @@
+insert into group_component_policy (component_id,group_id) VALUES (707,(select usergroup_id from agent where username = 'ntadmin' and companycode_id = 'B6'));#add new contents
+insert into group_component_policy (component_id,group_id) VALUES (708,(select usergroup_id from agent where username = 'ntadmin' and companycode_id = 'B6'));#delete bagtags
+insert into group_component_policy (component_id,group_id) VALUES (511,(select usergroup_id from agent where username = 'ntadmin' and companycode_id = 'B6'));#clone ohd
+
+CREATE DEFINER=`root`@`localhost` EVENT `b6prodautolockinc` ON SCHEDULE EVERY 1 MONTH STARTS '2013-08-08 12:00:00' ON COMPLETION NOT PRESERVE ENABLE DO update b6_production.incident i set i.locked = 1 where i.locked = 0 and i.createdate < DATE_FORMAT(NOW(),'%Y-%m-01');
+CREATE DEFINER=`root`@`localhost` EVENT `deletenullclaims` ON SCHEDULE EVERY 5 MINUTE STARTS '2013-07-12 10:37:38' ON COMPLETION NOT PRESERVE ENABLE DO delete from jetblue_prod.fsclaim where b6_production.fsclaim.file_id is null;
