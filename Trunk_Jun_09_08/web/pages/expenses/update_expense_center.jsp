@@ -27,11 +27,8 @@
 			a);
 	boolean canPay = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_EXPENSE, a);
 	ExpensePayoutForm epf = (ExpensePayoutForm) request.getAttribute("expensePayoutForm");
-	ExpensePayoutBMO epbmo = new ExpensePayoutBMO();
-	ExpensePayout ep = epbmo.findExpensePayout(epf.getExpensepayout_ID());
-	 
-	boolean submitOk = (ep.getPaytype() !=null && ep.getPaytype().equals(TracingConstants.ENUM_VOUCHER))? true :false; 
-	//System.out.println("submitOk: "+ submitOk);
+	boolean submitOk = (epf.getPaymentType() !=null && epf.getPaymentType().equals(TracingConstants.ENUM_VOUCHER))? true :false; 
+
 	org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources) request
 			.getAttribute("org.apache.struts.action.MESSAGE");
 	java.util.Locale myLocale = (java.util.Locale) session
@@ -62,7 +59,7 @@
       function openPreviewWindow1(fileName) {
     	  window.open("customerCommunications.do?preview_document="+fileName, '', 'width=600,height=800,resizable=yes');
       }
-    	      
+ 
     </script>
 <html:form action="UpdateExpense.do" method="post" onsubmit="return validateExpense(this);">
 	<html:hidden name="expensePayoutForm" property="dateFormat" value="<%= a.getDateformat().getFormat() %>"/>
@@ -132,15 +129,15 @@
 					<h1 class="green" align="center">
 						Successfully submitted!
  					</h1>
- 					<a href="#" onclick="openPreviewWindow1('filename')"> 
-						Cancel
-					</a>
 
  					<a href="#" onclick="openPreviewWindow1('filename')"> 
 						<bean:message key="button.bdo_sendprint" />
 					</a>
 					&nbsp;&nbsp;
-				   
+					<a href="#" onclick="openPreviewWindow1('filename')"> 
+						Cancel
+					</a>
+									   
 					<% } else { %>
 					<h1 class="green">
 						<bean:message key="header.edit_payout" />
@@ -444,7 +441,7 @@
 								<%
 									}
 											}
-								else if (canEdit || canPay || canApprove) {
+								else if (!submitOk && (canEdit || canPay || canApprove)) {
 								%>
 								<html:submit property="updateRemarkOnly" styleId="button">
 									<bean:message key="button.updateCommenOnly" />

@@ -141,6 +141,8 @@ public abstract class BaseExpenseAction extends CheckedAction {
 		epform.setOldComments(new ArrayList<Comment>(ep.getComments()));
 		epform.setStatus_id(ep.getStatus().getStatus_ID());
 		epform.setTz(user.getCurrenttimezone());
+		epform.setPaymentType(ep.getPaytype());
+		epform.setDistributemethod(ep.getDistributemethod());
 	}
 
 	protected ExpensePayout createNewPayout(ExpensePayoutForm expenseForm, Agent user) throws Exception {
