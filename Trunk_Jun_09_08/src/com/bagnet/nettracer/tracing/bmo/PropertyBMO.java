@@ -253,6 +253,10 @@ public class PropertyBMO {
 	
 	public static final String FOUND_ITEM_RECEIPT_TEMPLATE = "found.item.receipt.template";
 	
+	public static final String DOCUMENT_LOCATION_LETTERS = "document.location.letters";
+	public static final String DOCUMENT_LOCATION_RECEIPTS = "document.location.receipts";
+	public static final String DOCUMENT_LOCATION_TEMP = "document.location.temp";
+	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;
 		if(key != null && value != null){

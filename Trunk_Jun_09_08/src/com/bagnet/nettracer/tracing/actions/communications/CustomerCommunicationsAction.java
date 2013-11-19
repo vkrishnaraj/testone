@@ -17,6 +17,7 @@ import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.actions.templates.DocumentTemplateResult;
 import com.bagnet.nettracer.tracing.adapter.TemplateAdapter;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -75,7 +76,7 @@ public class CustomerCommunicationsAction extends CheckedAction {
 
 		// handles the case in which the user wants to preview the document
 		if (request.getParameter("preview_document") != null) {
-			DocumentTemplateResult result = documentService.previewFile(user, request.getParameter("preview_document"), response);
+			DocumentTemplateResult result = documentService.previewFile(user, request.getParameter("preview_document"), PropertyBMO.getValue(PropertyBMO.DOCUMENT_LOCATION_TEMP), response);
 			if (!result.isSuccess()) {
 				return mapping.findForward(TracingConstants.FILE_NOT_FOUND);
 			}
@@ -225,11 +226,6 @@ public class CustomerCommunicationsAction extends CheckedAction {
 
 			TemplateAdapter adapter = TemplateAdapterFactory.getTemplateAdapter(dto);
 			result = documentService.merge(document, adapter);
-			if (!result.isSuccess()) {
-				return result;
-			}
-			
-			result = documentService.generatePdf(user, document);
 			if (result.isSuccess()) {
 				result.setPayload(document);
 			}
@@ -254,7 +250,7 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		}
 		
 		try {
-			result = documentService.generatePdf(user, document);
+			result = documentService.generatePdf(user, document, PropertyBMO.getValue(PropertyBMO.DOCUMENT_LOCATION_TEMP));
 			if (result.isSuccess()) {
 				document.setFileName((String) result.getPayload());
 				result.setSuccess(documentService.update(document));
@@ -280,12 +276,13 @@ public class CustomerCommunicationsAction extends CheckedAction {
 			}
 
 			if (ia != null && ia.getDocument() != null) {
-				result = documentService.generatePdf(user, ia.getDocument());
+				String tempDir = PropertyBMO.getValue(PropertyBMO.DOCUMENT_LOCATION_TEMP);
+				result = documentService.generatePdf(user, ia.getDocument(), tempDir);
 				if (!result.isSuccess()) {
 					messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(result.getMessageKey()));
 				}
 				
-				result = documentService.previewFile(user, (String) result.getPayload(), response);
+				result = documentService.previewFile(user, (String) result.getPayload(), tempDir, response);
 				if (!result.isSuccess()) {
 					messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(result.getMessageKey()));
 				}

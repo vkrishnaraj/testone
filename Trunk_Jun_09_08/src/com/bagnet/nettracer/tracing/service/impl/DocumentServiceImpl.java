@@ -103,7 +103,7 @@ public class DocumentServiceImpl implements DocumentService {
 	 * @see com.bagnet.nettracer.tracing.service.DocumentService#generatePdf(com.bagnet.nettracer.tracing.db.documents.Document, java.lang.String)
 	 */
 	@Override
-	public DocumentTemplateResult generatePdf(Agent user, Document document) throws InsufficientInformationException {
+	public DocumentTemplateResult generatePdf(Agent user, Document document, String directory) throws InsufficientInformationException {
 		if (document.getTemplate() == null) {
 			throw new InsufficientInformationException(Template.class);
 		}
@@ -112,7 +112,11 @@ public class DocumentServiceImpl implements DocumentService {
 			throw new InsufficientInformationException(Agent.class);
 		}
 		
-		String rootPath = TracerProperties.get(user.getCompanycode_ID(),"document_store") + "temp\\";
+		if (directory == null || directory.isEmpty()) {
+			throw new InsufficientInformationException("directory");
+		}
+		
+		String rootPath = TracerProperties.get(user.getCompanycode_ID(),"document_store") + directory + "\\";
 		DocumentTemplateResult result = new DocumentTemplateResult();
 		try {
 			String fileName = this.generateFileName(document.getName());
@@ -140,8 +144,8 @@ public class DocumentServiceImpl implements DocumentService {
 	 * @see com.bagnet.nettracer.tracing.service.DocumentService#canPreviewFile(java.lang.String)
 	 */
 	@Override
-	public DocumentTemplateResult canPreviewFile(Agent user, String fileName) {
-		String fullPath = TracerProperties.get(user.getCompanycode_ID(),"document_store") + "temp\\" + fileName;
+	public DocumentTemplateResult canPreviewFile(Agent user, String fileName, String directory) {
+		String fullPath = TracerProperties.get(user.getCompanycode_ID(),"document_store") + directory + "\\" + fileName;
 		DocumentTemplateResult result = new DocumentTemplateResult();
 		File toPreview = new File(fullPath);
 		if (!toPreview.exists()) {
@@ -155,10 +159,10 @@ public class DocumentServiceImpl implements DocumentService {
 	 * @see com.bagnet.nettracer.tracing.service.DocumentService#previewFile(com.bagnet.nettracer.tracing.db.Agent, java.lang.String, javax.servlet.http.HttpServletResponse)
 	 */
 	@Override
-	public DocumentTemplateResult previewFile(Agent user, String fileName, HttpServletResponse response) {
+	public DocumentTemplateResult previewFile(Agent user, String fileName, String directory, HttpServletResponse response) {
 		DocumentTemplateResult result = new DocumentTemplateResult();
 		
-		String documentStorePath = TracerProperties.get(user.getCompanycode_ID(),"document_store") + "temp\\";
+		String documentStorePath = TracerProperties.get(user.getCompanycode_ID(),"document_store") + directory + "\\";
 		File toPreview = new File(documentStorePath + fileName);
 		if (!toPreview.exists()) {
 			result.setMessageKey("document.file.not.found");

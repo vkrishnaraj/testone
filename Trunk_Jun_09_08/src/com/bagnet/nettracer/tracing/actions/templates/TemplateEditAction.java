@@ -16,6 +16,7 @@ import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.adapter.TemplateAdapter;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.documents.Document;
@@ -61,7 +62,7 @@ public class TemplateEditAction extends CheckedAction {
 		}
 		
 		if (request.getParameter("preview_document") != null) {
-			DocumentTemplateResult result = documentService.previewFile(user, request.getParameter("preview_document"), response);
+			DocumentTemplateResult result = documentService.previewFile(user, request.getParameter("preview_document"), PropertyBMO.getValue(PropertyBMO.DOCUMENT_LOCATION_TEMP), response);
 			if (!result.isSuccess()) {
 				messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(result.getMessageKey(), result.getPayload() != null ? result.getPayload() : null));
 			}
@@ -175,7 +176,7 @@ public class TemplateEditAction extends CheckedAction {
 			}
 			
 			// 3. create the pdf file		
-			result = documentService.generatePdf(user, document);
+			result = documentService.generatePdf(user, document, PropertyBMO.getValue(PropertyBMO.DOCUMENT_LOCATION_TEMP));
 			
 		} catch (InvalidDocumentTypeException e) {
 			logger.error("Failed to create adapter for template type", e);

@@ -98,14 +98,15 @@ public class FoundItemAction extends CheckedAction {
 		if(found!=null){
 			if (request.getParameter("displayReceipt") != null) {
 				String fileName = request.getParameter("displayReceipt");
-				DocumentTemplateResult result = documentService.canPreviewFile(user, fileName);
+				String receiptsDir = PropertyBMO.getValue(PropertyBMO.DOCUMENT_LOCATION_RECEIPTS);
+				DocumentTemplateResult result = documentService.canPreviewFile(user, fileName, receiptsDir);
 				if (!result.isSuccess()) {
 					logger.error("Unable to generate receipt: " + fileName + " for found with id: " + found.getId());
 					request.setAttribute("fileName", fileName);
 					return mapping.findForward(TracingConstants.FILE_NOT_FOUND);
 				}
 				
-				result = documentService.previewFile(user, (String) request.getParameter("displayReceipt"), response);
+				result = documentService.previewFile(user, (String) request.getParameter("displayReceipt"), receiptsDir, response);
 				if (result.isSuccess()) {
 					return null;
 				}
@@ -349,7 +350,7 @@ public class FoundItemAction extends CheckedAction {
 			if (!result.isSuccess()) return result;
 			
 			// 4. create the pdf
-			result = documentService.generatePdf(user, document);
+			result = documentService.generatePdf(user, document, PropertyBMO.getValue(PropertyBMO.DOCUMENT_LOCATION_RECEIPTS));
 			
 		} catch (Exception e) {
 			logger.error("Failed to generate the found item receipt for LFFound with id: " + found.getId(), e);
