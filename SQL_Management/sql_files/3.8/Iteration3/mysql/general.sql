@@ -244,3 +244,8 @@ create table bagdrop (
 );
 
 alter table ExpensePayout add column paytype varchar(5);
+
+insert into properties (keyStr,valueStr) values
+('document.location.letters','letters'),
+('document.location.receipts','receipts'),
+('document.location.temp','temp');
