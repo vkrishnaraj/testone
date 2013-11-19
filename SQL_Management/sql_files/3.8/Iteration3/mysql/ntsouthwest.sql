@@ -128,3 +128,6 @@ insert into template (name,description,active,createDate,lastUpdated,data) value
 # To Be Inventoried
 update status set description='To Be Inventoried' where Status_ID=58 and table_ID=2;
 insert into properties (ID, keyStr, valueStr) VALUES (124,'to.be.inventoried',1);
+
+update systemcomponents set component_name='Links',component_desc='Links' where component_id=638;
+insert into links (description, link_address, image, companycode_id) values ('SWA Life',' https://www.swalife.com/','swalife.PNG','WN');
