@@ -186,18 +186,20 @@
 				          <html:options collection="faultstationlist" property="station_ID" labelProperty="stationcode" />
 				        </html:select>
 		          	</td>
-		          	
 	              </tr>
-	              <tr>
 	              
+	              <tr>
+	              	<% if(i!=0){ %>
 		          	<td align="center" style="vertical-align:middle;">&nbsp;<br>
-		          		<% if(i!=0){ %>
+		          	
 		            		<input type="button" name="sameAsPrevious_<%=i%>" value="<bean:message key="button.same_previous"/>" onclick="samePrevious(<%=i %>);" id="button">
-		            	<% } %>
+		            	
 		          	</td>
 		          	
 	              	<td colspan="3">&nbsp;<br></td>
+	              	<% } %>
 	              </tr>
+	              
               <% } %>
             </table>
           </logic:iterate>
