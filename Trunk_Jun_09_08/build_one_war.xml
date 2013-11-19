@@ -4379,6 +4379,7 @@
 
 		<!-- Build information to add DisplayTag.Properties so properties don't need to be set for all tables using DisplayTag --> 
 		<copy todir="${basedir}/src" file="${basedir}/companies/tracer/displaytag.properties" />
+		<copy todir="${basedir}/src/com/bagnet/nettracer/tracing/resources" file="companies/demonstration/ApplicationResources_es.properties" />
 			
 		<antcall target="fast_all" />
 		<antcall target="delete" />
