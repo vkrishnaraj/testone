@@ -194,7 +194,7 @@ public class AutoClose {
 					Calendar cal = Calendar.getInstance();
 					cal.add(Calendar.DATE, (-1 * vars.getAuto_close_ohd_days_back()));
 					String date = DateUtils.formatDate(cal.getTime(),TracingConstants.DB_DATEFORMAT,null,null);
-					String sql = "select OHD_ID from ohd where founddate < '" + date + "' and status_ID != " + TracingConstants.OHD_STATUS_CLOSED +" and holding_station_ID="+StationBMO.getStationByCode("LZ", companyCode).getStation_ID(); 
+					String sql = "select OHD_ID from ohd where founddate < '" + date + "' and status_ID != " + TracingConstants.OHD_STATUS_CLOSED +" and holding_station_ID="+vars.getOhd_lz(); 
 					
 					logger.debug("QUERY PREPARED: " + sql);
 					
@@ -225,6 +225,7 @@ public class AutoClose {
 						r.setRemarktext(remarkText != null ? remarkText.replace("{autoCloseDays}", String.valueOf(vars.getAuto_close_ohd_days_back())) : DEFAULT_REMARK);                
 						r.setOhd(ohd);
 						r.setRemarktype(TracingConstants.REMARK_REGULAR);
+						@SuppressWarnings("unchecked")
 						Set<Remark> remarks = ohd.getRemarks();
 						
 						remarks.add(r);
