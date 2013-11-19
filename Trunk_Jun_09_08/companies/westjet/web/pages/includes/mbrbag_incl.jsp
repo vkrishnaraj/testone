@@ -176,7 +176,7 @@
 	
 	  
 	  function openPreviewWindow2(fileName) {
-		  window.open("customerCommunications.do?preview_document="+fileName, '', 'width=600,height=800,resizable=yes');
+		  window.open("customerCommunications.do?preview_document="+fileName+"&receipt=1", '', 'width=600,height=800,resizable=yes');
 		}
 		
   </SCRIPT>

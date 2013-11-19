@@ -76,7 +76,8 @@ public class CustomerCommunicationsAction extends CheckedAction {
 
 		// handles the case in which the user wants to preview the document
 		if (request.getParameter("preview_document") != null) {
-			DocumentTemplateResult result = documentService.previewFile(user, request.getParameter("preview_document"), PropertyBMO.getValue(PropertyBMO.DOCUMENT_LOCATION_TEMP), response);
+			String directoryKey = request.getParameter("receipt") != null ? PropertyBMO.DOCUMENT_LOCATION_RECEIPTS : PropertyBMO.DOCUMENT_LOCATION_TEMP;
+			DocumentTemplateResult result = documentService.previewFile(user, request.getParameter("preview_document"), PropertyBMO.getValue(directoryKey), response);
 			if (!result.isSuccess()) {
 				return mapping.findForward(TracingConstants.FILE_NOT_FOUND);
 			}
