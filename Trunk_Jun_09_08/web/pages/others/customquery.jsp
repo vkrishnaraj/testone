@@ -51,7 +51,6 @@
 
 	function getStatusIds(type) {
 		if (currentStatusId == type) {
-	    	updateFields(currentStatusId);
 			return true;
 		} else {
 		    o = document.searchIncidentForm;
@@ -85,20 +84,7 @@
 			if (posIdTd){
 				posIdTd.style.display = "none";
 			} 
-			if(wtIdTd){
-				var selectList=document.getElementsByName("searchtype");
-				if(selectList[0].checked){
-					wtIdTd.style.display = "inline";
-					if(csTd){
-						csTd.colSpan="1";
-					}
-				} else {
-					wtIdTd.style.display = "none";
-					if(csTd){
-						csTd.colSpan="2";
-					}
-				}
-			}
+			
 			document.getElementById("ohdFields").style.display="none";
 		} else {
 
@@ -108,12 +94,7 @@
 				colspan=3;
 			}
 
-			if(wtIdTd){
-				wtIdTd.style.display = "inline";
-				if(csTd){
-					csTd.colSpan="1";
-				}
-			}
+			
 			document.getElementById("ohdFields").style.display="block";
 		}
 

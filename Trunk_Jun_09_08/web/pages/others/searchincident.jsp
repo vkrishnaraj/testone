@@ -55,23 +55,6 @@ function updatePagination() {
     return true;
 }
 
-function updateFields() {
-	var expTagNum = document.getElementById("expediteTagNum");
-
-	var itemTypeId = document.getElementById("itemType_ID");
-	if(expTagNum){
-		expTagNum.disabled = itemTypeId.options[itemTypeId.selectedIndex].value != 3;
-	}
-	
-	 var wtid=document.getElementById("wt_id");
-	  if(itemTypeId.value!=1){
-		  wtid.value="";
-		  wtid.disabled=true;
-	  } else{ 
-		  wtid.disabled=false;
-	  }
-}
-
 
   </script>
   <jsp:include page="/pages/includes/validation_search.jsp" />
@@ -122,7 +105,7 @@ function updateFields() {
                 <td width=33%>
                   <bean:message key="colname.report_type" />
                   <br>
-                  <html:select property="itemType_ID" styleClass="dropdown" styleId="itemType_ID" onchange="updateFields(); ">
+                  <html:select property="itemType_ID" styleClass="dropdown" styleId="itemType_ID" >
                     <html:option value="0">
                       <bean:message key="select.all" />
                     </html:option>
@@ -540,8 +523,4 @@ function updateFields() {
   				document.location.href="#result";
               </script>
             </logic:present>
-            
-              <script language=javascript>
-              	updateFields();
-              </script>
           </html:form>
