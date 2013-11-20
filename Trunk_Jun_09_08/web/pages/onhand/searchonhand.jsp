@@ -146,7 +146,7 @@ function sortSearchOhd(sortOrder) {
                     <html:options collection="companylistById" property="companyCode_ID" labelProperty="companyCode_ID" />
                   </html:select>
                   &nbsp;
-                  <html:text property="flightnum" size="20" maxlength="4" styleClass="textfield" />
+                  <html:text property="flightnum" size="4" maxlength="4" styleClass="textfield" />
                 </td>
 
               </tr>
@@ -164,7 +164,7 @@ function sortSearchOhd(sortOrder) {
                 <td colspan="2">
                   <bean:message key="colname.mid_initial" />
                   <br>
-                  <html:text property="middlename" size="25" maxlength="1" styleClass="textfield" />
+                  <html:text property="middlename" size="1" maxlength="1" styleClass="textfield" />
                 </td>
               </tr>
               <tr>
