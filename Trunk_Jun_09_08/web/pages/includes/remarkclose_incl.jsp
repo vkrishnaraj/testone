@@ -42,8 +42,9 @@
 				<bean:define id="agent" name="remark" property="agent"
 					type="com.bagnet.nettracer.tracing.db.Agent" />
 			</logic:present>
+			<a id='addremark<%= i %>' ></a>
 			<tr>
-				<td valign="top"><a name='addremark<%= i %>' /> <bean:message
+				<td valign="top"> <bean:message
 					key="colname.date" /> : <bean:write name="remark"
 					property="dispcreatetime" /></td>
 				<td><bean:message key="colname.station" /> : <logic:present
