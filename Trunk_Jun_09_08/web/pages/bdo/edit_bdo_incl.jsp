@@ -396,7 +396,7 @@ function toggledc(o) {
           </tr>
           
           <tr>
-            <td nowrap>
+            <td colspan="5">
               <bean:message key="colname.bdo.cost" />
               <br>
                 <html:select property="currency" styleClass="dropdown">
