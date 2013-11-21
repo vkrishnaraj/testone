@@ -115,7 +115,7 @@ alter table audit_ohd add column inventoryDate datetime default null;
 alter table wt_transaction add column agent_id int(11);
 
 insert into systemcomponents (component_id, component_name, component_desc, parent_component_id, component_action_link,display ,sort_order,sort_group) 
-VALUES (412, 'To Be Inventoried', 'To Be Inventoried', 15, 'toBeInventoried.do', 1, 4 , 2);
+VALUES (412, 'To Be Inventoried', 'To Be Inventoried', 15, 'toBeInventoried.do', 1, 7 , 2);
 
 ALTER TABLE ohd ADD INDEX (inventoryDate);
 ALTER TABLE ohd_itinerary ADD INDEX (legfrom);
