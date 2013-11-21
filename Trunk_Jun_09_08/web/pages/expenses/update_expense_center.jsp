@@ -60,6 +60,18 @@
       function openPreviewWindow1(fileName) {
     	  window.open("customerCommunications.do?preview_document="+fileName, '', 'width=600,height=800,resizable=yes');
       }
+      
+      
+      function rePrint() {
+    	  openReportWindow('reporting?print=<%=ReportingConstants.EXP_LUV %>&outputtype=0',800,600);
+ 	      var del=window.confirm("Did the Southwest LUV Voucher print correctly?");
+  	      if(del==true){
+  	    	document.getElementById("printrpt").style.display= 'none';
+          } else {
+  	    	document.write("false !");
+  	      }
+      }
+            
  
     </script>
 <html:form action="UpdateExpense.do" method="post" onsubmit="return validateExpense(this);">
@@ -125,21 +137,22 @@
 			<td id="middlecolumn">
 				
 				<div id="maincontent">
-					<a name="editpayout"></a>
+					
 					<% if (submitOk) { %>
 					<h1 class="green" align="center">
-						Successfully submitted!
+						Successfully Submitted!
  					</h1>
-
-					<a href='#' onclick="openReportWindow('reporting?print=<%=ReportingConstants.EXP_LUV %>&outputtype=0',800,600);return false">
+					<div align="right" width="100%" >
+					<a name="printrpt" href='#' onclick="rePrint()">
 					<bean:message key="button.bdo_sendprint" />
 					</a>
 					&nbsp;&nbsp;
 					<a href="#" onclick="openPreviewWindow1('filename')"> 
 						Cancel
 					</a>
-									   
+					</div>
 					<% } else { %>
+					<a name="editpayout"></a>
 					<h1 class="green">
 						<bean:message key="header.edit_payout" />
 						<a href="#"
