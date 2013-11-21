@@ -5,6 +5,7 @@
 <%@page import="com.bagnet.nettracer.tracing.db.Agent"%>
 <%@page import="com.bagnet.nettracer.tracing.forms.ExpensePayoutForm"%>
 <%@page import="com.bagnet.nettracer.tracing.bmo.ExpensePayoutBMO"%>
+<%@page import="com.bagnet.nettracer.reporting.ReportingConstants"%>
 <%@page import="org.apache.struts.util.LabelValueBean"%>
 <%@ taglib uri="/tags/struts-bean" prefix="bean"%>
 <%@ taglib uri="/tags/struts-html" prefix="html"%>
@@ -130,8 +131,8 @@
 						Successfully submitted!
  					</h1>
 
- 					<a href="#" onclick="openPreviewWindow1('filename')"> 
-						<bean:message key="button.bdo_sendprint" />
+					<a href='#' onclick="openReportWindow('reporting?print=<%=ReportingConstants.EXP_LUV %>&outputtype=0',800,600);return false">
+					<bean:message key="button.bdo_sendprint" />
 					</a>
 					&nbsp;&nbsp;
 					<a href="#" onclick="openPreviewWindow1('filename')"> 
@@ -251,12 +252,12 @@
      <logic:iterate id="passenger" name="incidentForm" property="passengerlist" indexId="i" type="com.bagnet.nettracer.tracing.db.Passenger">
 
           <tr>
-            <td nowrap colspan=2>
+            <td nowrap >
               <bean:message key="colname.last_name" />
               <br>
               <html:text name="passenger" property="lastname" size="20" maxlength="20" styleClass="textfield" />
             </td>
-            <td nowrap colspan=2>
+            <td nowrap >
               <bean:message key="colname.first_name" />
               <br>
               <html:text name="passenger" property="firstname" size="20" maxlength="20" styleClass="textfield" />
@@ -276,7 +277,7 @@
                   <br>
                   <html:text name="address" property="address1" size="45" maxlength="50" styleClass="textfield" />
                 </td>
-                <td colspan=3>
+                <td nowrap>
                   <bean:message key="colname.street_addr2" />
                   <br>
                   <html:text name="address" property="address2" size="45" maxlength="50" styleClass="textfield" />
@@ -333,7 +334,9 @@
                          </logic:notEqual>
                       </logic:notEqual>
                 </td>
-                <td>
+              </tr>
+              <tr>  
+                <td colspan=2>
                   <bean:message key="colname.zip" />
                   <br>
                   <html:text name="address" property="zip" size="15" maxlength="11" styleClass="textfield" />
@@ -349,50 +352,7 @@
                   </html:select>
                 </td>
               </tr>
- 
-              <tr>
-                 <logic:equal name="incidentForm" property="incident_ID" value="">
-                <td colspan="2" width="33%">
-                  <bean:message key="colname.email" />
-                  <br>
-                  <html:text name="address" property="email" size="42" maxlength="100" styleClass="textfield" />
-                  </logic:equal>
-                 <logic:notEqual name="incidentForm" property="incident_ID" value="">
-                <td colspan="3" width="50%">
-                  <bean:message key="colname.email" />
-                  <br>
-                  <html:text name="address" property="email" size="45" maxlength="100" styleClass="textfield" />
-                  </logic:notEqual>
-                  <logic:equal name="incidentForm" property="incident_ID" value="">
-<%
-                    if (i.intValue() == 0 && request.getAttribute("companyDoesntEmail") == null) {
-%>
-                      <br />
-                      <input type="checkbox" name="email_customer" value="1"
-                      <logic:equal name="incidentForm" property="email_customer" value="1">
-                        checked="checked"
-                      </logic:equal>
-                      >
-                      <b><bean:message key="colname.report_email_cus" /></b>
-                      </td>
-                      <td width="17%">
-                      <% String userLocale = a.getDefaultlocale();	%>
-                      <bean:message key="colname.email.language" />
-                      <br />
-                    <select name="language" class="dropdown">
-                      <logic:iterate id="locale" name="receiptLocaleList" scope="session">
-                        <option value='<bean:write name="locale" property="value"/>' <%=(((LabelValueBean)locale).getValue().equals(userLocale)? "selected" : "") %>>
-                        <bean:write name="locale" property="label" />
-                      </logic:iterate>
-                    </select>
-<%
-                    }
-%>
-                  </logic:equal>
-                </td>
-       
-              </tr>
-              
+               
             </logic:iterate>
           </logic:present>
       </logic:iterate> 

@@ -4002,6 +4002,8 @@
 		</copy>
 		<copy todir="${basedir}/web/reports" file="companies/southwest/ma_bag_info.jrxml" overwrite="true" />
 		<copy todir="${basedir}/web/reports" file="companies/southwest/station_onhand.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/southwest/VoucherReceipt_Mail.jrxml" overwrite="true" />
+		<copy todir="${basedir}/web/reports" file="companies/southwest/VoucherReceipt_Imme.jrxml" overwrite="true" />
 		
 		<antcall target="jasper_compile" />
 

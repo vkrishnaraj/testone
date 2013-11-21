@@ -7,9 +7,7 @@ package com.bagnet.nettracer.reporting;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 
 import javax.servlet.ServletContext;
@@ -23,12 +21,12 @@ import org.apache.log4j.Logger;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
-import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.forms.BDOForm;
 import com.bagnet.nettracer.tracing.forms.ClaimDeprecCalcForm;
 import com.bagnet.nettracer.tracing.forms.ClaimForm;
 import com.bagnet.nettracer.tracing.forms.ClaimProrateForm;
 import com.bagnet.nettracer.tracing.forms.ClaimSettlementForm;
+import com.bagnet.nettracer.tracing.forms.ExpensePayoutForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 
 /**
@@ -175,6 +173,13 @@ public class ReportOutputServlet extends HttpServlet {
 						case ReportingConstants.CRAP_SHEET:
 							iFile = getFile(CRAPReport.createReport(cform, sc, request, outputtype,language),sc);
 							break;
+						case ReportingConstants.EXP_LUV:
+							ExpensePayoutForm epform = (ExpensePayoutForm) request.getSession().getAttribute("expensepayoutform");
+							if (epform.getDistributemethod().equals(TracingConstants.DISTR_EMAIL) || epform.getDistributemethod().equals(TracingConstants.DISTR_MAIL)) 
+								iFile = getFile(LUVReceipt_Mail.createReport(epform, sc, request, outputtype,language),sc);
+							else if (epform.getDistributemethod().equals(TracingConstants.DISTR_IMME))
+								iFile = getFile(LUVReceipt_Imme.createReport(epform, sc, request, outputtype,language),sc);
+							break;
 						default:
 							break;
 					}
@@ -204,6 +209,7 @@ public class ReportOutputServlet extends HttpServlet {
 			else if (outputtype == TracingConstants.REPORT_OUTPUT_XML) response
 					.setContentType("text/xml");
 
+			@SuppressWarnings("unused")
 			int length = 0;
 			
 
@@ -221,12 +227,12 @@ public class ReportOutputServlet extends HttpServlet {
 
 			ouputStream.flush();
 			ouputStream.close();
-
+			is.close();
 		} catch (Exception e) {
 			logger.error("print report error:" + e);
 			e.printStackTrace();
 			response.sendRedirect("claim_payout.do?error=print");
-		}
+		} 
 	}
 
 

@@ -33,6 +33,7 @@ public class EditExpenseAction extends BaseExpenseAction {
 		Agent user = (Agent)request.getSession().getAttribute("user");
 		
 		populateForm(epform, ep, user, request);
+		request.getSession().setAttribute("expensepayoutform", epform);	
 		return mapping.findForward(EDIT_SUCCESS);
 	}
 
