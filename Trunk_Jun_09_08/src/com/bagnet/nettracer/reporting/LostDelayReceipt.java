@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.util.MessageResources;
 
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -30,11 +31,13 @@ import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
+import com.bagnet.nettracer.tracing.db.Item_Inventory;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
+import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
 /**
  * @author Matt
@@ -136,6 +139,7 @@ public class LostDelayReceipt {
 		parameters.put("city", (pa.getAddress(0).getCity() != null ? pa.getAddress(0).getCity() : ""));
 		parameters.put("state", (pa.getAddress(0).getState_ID() != null ? pa.getAddress(0).getState_ID() : (pa.getAddress(0).getProvince() != null ? pa.getAddress(0).getProvince() : "")));
 		parameters.put("zip", (pa.getAddress(0).getZip() != null ? pa.getAddress(0).getZip() : ""));
+		parameters.put("country", (pa.getAddress(0).getCountry() != null ? pa.getAddress(0).getCountry() : ""));
 		
 		if (pa.getAddress(0).isPermanent()) {
 			parameters.put("valid_until", "Permanent");
@@ -160,11 +164,14 @@ public class LostDelayReceipt {
 			}
 		}
 		
-		if (sb.length() > 0)
+		if (sb.length() > 0) {
 			parameters.put("claim_check_num", sb.toString().substring(0, sb.toString().length() - 1));
+			parameters.put("bag_description", sb.toString().substring(0, sb.toString().length() - 1));
+		}
 		
 		//new code - reconcile later
 		StringBuffer sbClaimCheckNumber = new StringBuffer();
+		StringBuffer sbArticles = new StringBuffer();
 		List<Item> myItemList = theform.getItemlist();
 		for (int i = 0; i < myItemList.size(); i++) {
 			String myClaimCheckNumber = ((Item) myItemList.get(i)).getClaimchecknum();
@@ -172,12 +179,26 @@ public class LostDelayReceipt {
 				sbClaimCheckNumber.append(myClaimCheckNumber.trim());
 				sbClaimCheckNumber.append(",");
 			}
+			Item item = myItemList.get(i);
+			if (item != null && item.getInventorylist() != null && item.getInventorylist().size() > 0) {
+				for (Item_Inventory inven : (List<Item_Inventory>) item.getInventorylist()) {
+					if (inven != null && inven.getDescription() != null && inven.getDescription().trim().length() > 0) {
+						sbArticles.append(",");
+						sbArticles.append(inven.getDescription().trim());
+					}
+				}
+			}
 		}
 		if (sbClaimCheckNumber.length() > 0) {
 			int claimCheckNumberLength = sbClaimCheckNumber.toString().length() - 1;
 			String claim_check_num = sbClaimCheckNumber.toString().substring(0, claimCheckNumberLength);
 			parameters.put("claim_check_num", claim_check_num);
+			parameters.put("bag_description", claim_check_num);
 			logger.info("claim_check_num:" + claim_check_num);
+		}
+		
+		if (sbArticles.length() > 0) {
+			parameters.put("articles", sbArticles.toString().substring(1));
 		}
 		
 		//end of new code
@@ -230,8 +251,8 @@ public class LostDelayReceipt {
 			
 			IncidentBMO ibmo = new IncidentBMO();
 			theform.setPrintedreceipt(ibmo.incrementPrintedReceipt(theform.getIncident_ID()));
-			
-			String filename = rbmo.getReportFileName(TracingConstants.LOST_DELAY, language);
+						
+			String filename = rbmo.getReportFileName(TracingConstants.LOST_DELAY, language, theform);
 			
 			return rbmo.getReportFile(theform.getClaimchecklist(), parameters, filename, sc.getRealPath("/"), outputtype);
 

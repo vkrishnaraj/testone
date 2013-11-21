@@ -84,7 +84,7 @@ public class MissingReceipt {
 			IncidentBMO ibmo = new IncidentBMO();
 			theform.setPrintedreceipt(ibmo.incrementPrintedReceipt(theform.getIncident_ID()));
 			
-			String filename = rbmo.getReportFileName(TracingConstants.MISSING_ARTICLES, language);
+			String filename = rbmo.getReportFileName(TracingConstants.MISSING_ARTICLES, language, theform);
 			
 			return rbmo.getReportFile(theform.getClaimchecklist(), parameters, filename, sc.getRealPath("/"), outputtype);
 

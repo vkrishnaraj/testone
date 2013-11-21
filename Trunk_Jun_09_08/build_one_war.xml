@@ -197,18 +197,13 @@
 		<delete file="${basedir}/src/hibernate_qa.cfg.xml" />
 		<delete file="${basedir}/src/hibernate_reporting.cfg.xml" />
 		<delete file="${basedir}/src/tracer.properties" />
-		<delete file="${basedir}/web/reports/LostDelayReceipt.jrxml" />
-		<delete file="${basedir}/web/reports/LostDelayReceipt.jasper" />
-		<delete file="${basedir}/web/reports/DamageReceipt.jrxml" />
-		<delete file="${basedir}/web/reports/DamageReceipt.jasper" />
-		<delete file="${basedir}/web/reports/MissingReceipt.jrxml" />
-		<delete file="${basedir}/web/reports/MissingReceipt.jasper" />
-		<delete file="${basedir}/web/reports/LostDelayReceipt_fr.jrxml" />
-		<delete file="${basedir}/web/reports/LostDelayReceipt_fr.jasper" />
-		<delete file="${basedir}/web/reports/DamageReceipt_fr.jrxml" />
-		<delete file="${basedir}/web/reports/DamageReceipt_fr.jasper" />
-		<delete file="${basedir}/web/reports/MissingReceipt_fr.jrxml" />
-		<delete file="${basedir}/web/reports/MissingReceipt_fr.jasper" />
+		<delete>
+			<fileset dir="${basedir}/web/reports">
+				<include name="LostDelayReceipt*"/>
+				<include name="DamageReceipt*"/>
+				<include name="MissingReceipt*"/>
+			</fileset>
+		</delete>
 	</target>
 	
 	<!-- COMPILE TARGETS -->
@@ -3946,9 +3941,13 @@
 		<!-- Build information to add DisplayTag.Properties so properties don't need to be set for all tables using DisplayTag --> 
 		<copy todir="${basedir}/src" file="${basedir}/companies/tracer/displaytag.properties" />
 		
-		<copy todir="${basedir}/web/reports" file="companies/tracer/LostDelayReceipt.jrxml" />
-		<copy todir="${basedir}/web/reports" file="companies/tracer/DamageReceipt.jrxml" />
-		<copy todir="${basedir}/web/reports" file="companies/tracer/MissingReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" >
+			<fileset dir="companies/southwest" >
+				<include name="LostDelayReceipt*.jrxml" />
+				<include name="DamageReceipt*.jrxml" />
+				<include name="MissingReceipt*.jrxml" />
+			</fileset>
+		</copy>
 		<copy todir="${basedir}/web/reports" file="companies/southwest/ma_bag_info.jrxml" overwrite="true" />
 		<copy todir="${basedir}/web/reports" file="companies/southwest/station_onhand.jrxml" overwrite="true" />
 		

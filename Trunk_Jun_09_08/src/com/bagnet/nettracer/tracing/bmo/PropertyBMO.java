@@ -257,6 +257,8 @@ public class PropertyBMO {
 	public static final String DOCUMENT_LOCATION_RECEIPTS = "document.location.receipts";
 	public static final String DOCUMENT_LOCATION_TEMP = "document.location.temp";
 	
+	public static final String RECEIPT_CUSTOM_TYPES = "receipt.custom.types";
+	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;
 		if(key != null && value != null){

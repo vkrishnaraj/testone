@@ -55,7 +55,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
-import org.hibernate.criterion.Expression;
 
 import aero.nettracer.selfservice.fraud.client.ClaimClientRemote;
 import ar.com.fdvs.dj.core.DynamicJasperHelper;
@@ -95,6 +94,7 @@ import com.bagnet.nettracer.reporting.SimpleReportRow;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.SalvageDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.Report;
 import com.bagnet.nettracer.tracing.db.Station;
@@ -111,6 +111,7 @@ import com.bagnet.nettracer.tracing.dto.StatReport_ExpDTO;
 import com.bagnet.nettracer.tracing.dto.StatReport_OHD_DTO;
 import com.bagnet.nettracer.tracing.dto.StatReport_RecoveryDTO;
 import com.bagnet.nettracer.tracing.dto.StatReport_TopFlightDTO;
+import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
@@ -6029,15 +6030,15 @@ public class ReportBMO {
 		}
 	}
 
-	@SuppressWarnings({ "deprecation", "unchecked" })
+	@SuppressWarnings({ "unchecked" })
 	public static Report getCustomReport(int number) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getDirtySession().openSession();
-			Criteria cri = sess.createCriteria(Report.class).add(
-					Expression.eq("number", new Integer(number)));
+			Query query = sess.createQuery("from Report where number = :num");
+			query.setParameter("num", number);
 
-			List<Report> list = cri.list();
+			List<Report> list = query.list();
 			if (list.size() == 1) {
 				return list.get(0);
 			} else {
@@ -6242,30 +6243,49 @@ public class ReportBMO {
 		return outfile;
 	}
 
-	public String getReportFileName(int incidentType, String reportLocale) {
+	public String getReportFileName(int incidentType, String reportLocale, IncidentForm theform) {
 		String customFiles = null;
 		String locale = "";
+		String customType = getCustomType(incidentType, theform);
 		switch (incidentType) {
 		case TracingConstants.LOST_DELAY:
-			customFiles = PropertyBMO
-					.getValue(PropertyBMO.CUSTOM_DELAY_RECEIPT_FILES);
+			customFiles = PropertyBMO.getValue(PropertyBMO.CUSTOM_DELAY_RECEIPT_FILES);
 			locale = customFileCheck(reportLocale, customFiles, locale);
-			return "LostDelayReceipt" + locale;
+			return "LostDelayReceipt" + customType + locale;
 
 		case TracingConstants.DAMAGED_BAG:
-			customFiles = PropertyBMO
-					.getValue(PropertyBMO.CUSTOM_DAMAGE_RECEIPT_FILES);
+			customFiles = PropertyBMO.getValue(PropertyBMO.CUSTOM_DAMAGE_RECEIPT_FILES);
 			locale = customFileCheck(reportLocale, customFiles, locale);
-			return "DamageReceipt" + locale;
+			return "DamageReceipt" + customType + locale;
 
 		case TracingConstants.MISSING_ARTICLES:
-			customFiles = PropertyBMO
-					.getValue(PropertyBMO.CUSTOM_MISSING_RECEIPT_FILES);
+			customFiles = PropertyBMO.getValue(PropertyBMO.CUSTOM_MISSING_RECEIPT_FILES);
 			locale = customFileCheck(reportLocale, customFiles, locale);
-			return "MissingReceipt" + locale;
+			return "MissingReceipt" + customType + locale;
 
 		}
 		return null;
+	}
+	
+	private String getCustomType(int incidentType, IncidentForm theform) {
+		String customType = "";
+		if (PropertyBMO.isTrue(PropertyBMO.RECEIPT_CUSTOM_TYPES) && theform != null) {
+			if (incidentType != TracingConstants.MISSING_ARTICLES && theform.getItemlist() != null && theform.getItemlist().size() > 0) {
+				for (Item item : theform.getItemlist()) {
+					if ("94".equals(item.getBagtype()) || "95".equals(item.getBagtype())) {
+						customType = "_assist";
+						break;
+					}
+				}
+			}
+			if (theform.getCourtesyreport() == 1) {
+				customType += "_courtesy";
+			}
+			if (customType.length() == 0 && theform.getNonrevenue() == 1) {
+				customType = "_nonrevenue";
+			}
+		}
+		return customType;
 	}
 
 	private String customFileCheck(String reportLocale, String customFiles,
@@ -6449,6 +6469,7 @@ public class ReportBMO {
 	 * @param reportPath - Path to where the temp report is stored and retrieved
 	 * @param sort - The Sort for the Results
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public String createIncomingIncidentReport(SearchIncidentForm daform,
 			HttpServletRequest request, int outputtype, String language,
 			String reportPath, String sort) {

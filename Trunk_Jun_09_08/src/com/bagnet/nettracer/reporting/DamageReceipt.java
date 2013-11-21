@@ -83,7 +83,7 @@ public class DamageReceipt {
 			IncidentBMO ibmo = new IncidentBMO();
 			theform.setPrintedreceipt(ibmo.incrementPrintedReceipt(theform.getIncident_ID()));
 			
-			String filename = rbmo.getReportFileName(TracingConstants.DAMAGED_BAG, language);
+			String filename = rbmo.getReportFileName(TracingConstants.DAMAGED_BAG, language, theform);
 			
 			return rbmo.getReportFile(theform.getClaimchecklist(), parameters, filename, sc.getRealPath("/"), outputtype);
 

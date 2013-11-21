@@ -131,3 +131,10 @@ insert into properties (ID, keyStr, valueStr) VALUES (124,'to.be.inventoried',1)
 
 update systemcomponents set component_name='Links',component_desc='Links' where component_id=638;
 insert into links (description, link_address, image, companycode_id) values ('SWA Life',' https://www.swalife.com/','swalife.PNG','WN');
+
+update properties set valueStr = 'es' where keyStr = 'custom.delay.receipt.files';
+update properties set valueStr = 'es' where keyStr = 'custom.damage.receipt.files';
+update properties set valueStr = 'es' where keyStr = 'custom.missing.receipt.files';
+insert into properties (keyStr, valueStr) VALUES ('receipt.custom.types',1);
+delete from localereceipt where locale_id <> 'en';
+insert into localereceipt values ('es', 'Espanol');
