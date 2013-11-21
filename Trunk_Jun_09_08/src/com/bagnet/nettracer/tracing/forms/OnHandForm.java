@@ -28,7 +28,8 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
  * onhands
  */
 public final class OnHandForm extends ValidatorForm {
-
+	private static final long serialVersionUID = -612610019210354510L;
+	
 	private Agent agent;
 	private String ohd_id;
 	private String dispBagArriveDate = "";
@@ -38,6 +39,7 @@ public final class OnHandForm extends ValidatorForm {
 	private String storage_location;
 	private String found_station;
 	private Date bagarrivedate;
+	private Date inventoryDate;
 	private Date warehouseReceivedDate;
 	private Date warehouseSentDate;
 	private String holding_company;
@@ -1084,6 +1086,17 @@ public final class OnHandForm extends ValidatorForm {
 	public String getDispModifiedDate() {
 		return DateUtils.formatDate(this.getModifiedDate(), _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
 	}
+
+	public Date getInventoryDate() {
+		return inventoryDate;
+	}
+	public void setInventoryDate(Date inventoryDate) {
+		this.inventoryDate = inventoryDate;
+	}
+	public String getDispInventoryDate() {
+		return DateUtils.formatDate(this.getInventoryDate(), _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
+	}
+	
 	public String getPosId() {
 		return posId;
 	}

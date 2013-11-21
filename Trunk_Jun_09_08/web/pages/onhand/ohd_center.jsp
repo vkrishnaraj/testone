@@ -38,7 +38,7 @@
 
 
 <logic:present name="prepopulate" scope="request">
-   <script language="javascript">
+   <script>
 
 	  function disableButton(aButton) {
 	   	aButton.disabled = true;
@@ -97,17 +97,18 @@
           <br />
         </html:messages>
       </logic:messagesPresent> </font> <br>
+      </div>
       <jsp:include page="/pages/includes/incident_population.jsp" />
   </html:form>
 </logic:present>
 
 <logic:notPresent name="prepopulate" scope="request">
 
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
-<SCRIPT LANGUAGE="JavaScript">
+<SCRIPT SRC="deployment/main/js/date.js"></SCRIPT>
+<SCRIPT SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
+<SCRIPT SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
+<SCRIPT SRC="deployment/main/js/popcalendar.js"></SCRIPT>
+<SCRIPT>
   
     var cal1xx = new CalendarPopup();    
 
@@ -124,7 +125,7 @@
 
   </SCRIPT>
 
-<script language="javascript">
+<script>
 	var disposeLocal=false;
 
 
@@ -206,7 +207,7 @@ function gotoHistoricalReport() {
 }
 
   </script>
-<SCRIPT LANGUAGE="JavaScript">
+<SCRIPT>
   function textCounter2(field, countfield, maxlimit) {
     if (field.value.length > maxlimit) {
     field.value = field.value.substring(0, maxlimit);
@@ -593,35 +594,57 @@ function gotoHistoricalReport() {
 
     <table class="form2_ohd" cellspacing="0" cellpadding="0">
       <tr>
-        <td><bean:message key="colname.on_hand_create_report_number" /> <br>
-        <html:text property="ohd_id" size="14" styleClass="textfield"
-          readonly="true" /></td>
-        <td><bean:message key="colname.found_date_time" /> <br>
-        <html:text property="dispFoundTime" size="14"
-          styleClass="textfield" /></td>
-        <td><bean:message key="colname.ohd_create_agent" /> <br>
-         <html:text property="agent_initials" size="10" readonly="true"           styleClass="textfield" disabled="true" /></td>
-        <td><bean:message key="colname.ohd_modified_date" /> <br> 
-        	<html:text property="dispModifiedDate" size="14" readonly="true" styleClass="textfield" /></td>
-        <td><bean:message key="colname.ohd_modified_agent"/> <br>
-          	<html:text property="modifiedAgent" size="10"
-          styleClass="textfield" disabled="true" /></td>
-        <td><bean:message key="colname.found_station_nobr" /> <br>
-        <input type="text" size="10" class="textfield"
-          value="<bean:write name="OnHandForm" property="found_company"/> <bean:write name="OnHandForm" property="found_station"/>"
-          disabled="disabled"></td>
-        <td><bean:message key="colname.holding_station_nobr" /> <br>
-        <input type="text" size="10" class="textfield"
-          value="<bean:write name="OnHandForm" property="holding_company"/> <bean:write name="OnHandForm" property="holding_station"/>"
-          disabled="disabled"></td>
+        <td>
+	        <bean:message key="colname.on_hand_create_report_number" /> <br>
+	        <html:text property="ohd_id" size="14" styleClass="textfield" readonly="true" />
+		</td>
+		
+        <td>
+	        <bean:message key="colname.found_date_time" /> <br>
+	        <html:text property="dispFoundTime" size="14" styleClass="textfield" />
+        </td>
+        <td>
+        	<bean:message key="colname.ohd_create_agent" /> <br>
+         	<html:text property="agent_initials" size="10" readonly="true" styleClass="textfield" disabled="true" />
+        </td>
+        <td>
+        	<bean:message key="colname.found_station_nobr" /> <br>
+        	<input type="text" size="10" class="textfield" disabled="disabled"
+        			value="<bean:write name="OnHandForm" property="found_company"/>
+        					<bean:write name="OnHandForm" property="found_station"/>"/>
+        </td>
+        <td>
+        	<bean:message key="colname.holding_station_nobr" /> <br>
+        	<input type="text" size="10" class="textfield" disabled="disabled"
+        		value="<bean:write name="OnHandForm" property="holding_company"/>
+        				<bean:write name="OnHandForm" property="holding_station"/>"/>
+        </td>
+        
+        <c:set var="form2_ohd_colspan" value="3" scope="request"/>
         <logic:notEmpty name="OnHandForm" property="status">
-          <logic:equal name="OnHandForm" property="status.status_ID"
-            value="<%="" + TracingConstants.OHD_STATUS_CLOSED%>">
-            <td><bean:message key="colname.file_close_date" /> <br>
-            <html:text property="dispCloseDate" size="15"
-              styleClass="textfield" disabled="true" /></td>
+          <logic:equal name="OnHandForm" property="status.status_ID" value="<%="" + TracingConstants.OHD_STATUS_CLOSED%>">
+            <td>
+            	<c:set var="form2_ohd_colspan" value="4" scope="request"/>
+            	<bean:message key="colname.file_close_date" /> <br>
+            	<html:text property="dispCloseDate" size="15" styleClass="textfield" disabled="true" />            	
+            </td>
           </logic:equal>
-        </logic:notEmpty>
+        </logic:notEmpty>      
+      </tr>
+      
+      <tr>
+        <td>
+        	<bean:message key="colname.ohd_modified_date" /> <br> 
+        	<html:text property="dispModifiedDate" size="14" readonly="true" styleClass="textfield" />
+        </td>
+        <td>
+        	<bean:message key="colname.ohd_modified_agent"/> <br>
+          	<html:text property="modifiedAgent" size="10" styleClass="textfield" disabled="true" />
+         </td>
+		 <td colspan="${form2_ohd_colspan}">
+        	<bean:message key="colname.ohd_inventory_date" /> <br> 
+        	<html:text property="dispModifiedDate" size="14" readonly="true" styleClass="textfield" />
+      	</td>
       </tr>
     </table>
     <table class="form2_ohd" cellspacing="0" cellpadding="0">
@@ -652,7 +675,7 @@ function gotoHistoricalReport() {
       		<bean:message key="colname.posId" /><br>
       		<html:text property="posId" size="8" maxlength="8" styleClass="textfield" />
       	</td>
-      	<td colspan=2>
+      	<td colspan="2">
       		<bean:message key="colname.latecheck" /><br>
       		<html:checkbox property="lateCheckValue" onclick="updateLateCheckValue();" />
       	</td>
@@ -1024,7 +1047,7 @@ function gotoHistoricalReport() {
     <br>
     <br>
     <a name="itinerary"></a>
-		  <script language="javaScript">
+		  <script>
 			  function swap(field, i, j) {
 
 				  var swap1 = document.getElementsByName('itinerarylist[' + i + '].' + field)[0];
@@ -1540,7 +1563,7 @@ function gotoHistoricalReport() {
       </logic:equal>
     </logic:equal>
 </html:form>
-<SCRIPT LANGUAGE="JavaScript">
+<SCRIPT>
     
 
 

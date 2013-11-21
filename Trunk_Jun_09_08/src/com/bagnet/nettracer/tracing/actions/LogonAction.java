@@ -7,7 +7,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Properties;
 
 import javax.naming.Context;
@@ -17,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -46,7 +44,6 @@ import com.bagnet.nettracer.tracing.db.ForwardNotice;
 import com.bagnet.nettracer.tracing.db.GroupComponentPolicy;
 import com.bagnet.nettracer.tracing.db.ProactiveNotification;
 import com.bagnet.nettracer.tracing.db.Station;
-import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.taskmanager.GeneralTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.MorningDutiesTask;
@@ -107,7 +104,6 @@ public class LogonAction extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		// Extract attributes we will need
-		Locale locale = getLocale(request);
 		Agent agent = null;
 		HttpSession session = request.getSession();
 		ActionMessages errors = new ActionMessages();
@@ -237,7 +233,8 @@ public class LogonAction extends Action {
 				session.removeAttribute(mapping.getAttribute());
 		}
 
-		LinkedHashMap map = UserPermissions.renderApplicationLinks(agent);
+		@SuppressWarnings("unchecked")
+		LinkedHashMap<String, LinkedHashMap<String, String>> map = UserPermissions.renderApplicationLinks(agent);
 		session.setAttribute("menu_links", map);
 		//Setup the activity list
 		if (map != null && map.get("Task Manager") != null) {
@@ -267,38 +264,7 @@ public class LogonAction extends Action {
 	private void taskManagerSetup(HttpSession session, HttpServletRequest request) {
 
 		Agent agent = (Agent) session.getAttribute("user");
-		
-		//Requirement that TBI will only be available for use in the LZ station;
-		String cbroStationID = StringUtils.stripToNull(request.getParameter("cbroStation"));
-		Station stationBMO = (cbroStationID == null) ? null : StationBMO.getStation(cbroStationID);
-		if (stationBMO != null) {
-			if (stationBMO.isThisOhdLz() && PropertyBMO.isTrue(PropertyBMO.PROPERTY_TO_BE_INVENTORIED)) {
-				if (session.getAttribute("ohdLZStatusList") != null) {
-					session.setAttribute("ohdStatusList", session.getAttribute("ohdLZStatusList"));
-					session.setAttribute("ohdLZStatusList", null); //reset
-				}
-			} else {
-				@SuppressWarnings("unchecked")
-				List<Status> ohdStatusList = (List<Status>)session.getAttribute("ohdStatusList");
-				List<Status> ohdStatusTBIList = null;
-				for (Status status : ohdStatusList) {
-					if (status.getStatus_ID() == TracingConstants.OHD_STATUS_TO_BE_INVENTORIED) {
-						if (ohdStatusTBIList == null) {
-							ohdStatusTBIList = new ArrayList<Status>();
-						}
-						
-						ohdStatusTBIList.add(status);
-					}
-				}
-				 
-				if (ohdStatusTBIList != null && !ohdStatusTBIList.isEmpty()) {
-					session.setAttribute("ohdLZStatusList", new ArrayList<Status>(ohdStatusList)); //save LZ statuses
-					ohdStatusList.removeAll(ohdStatusTBIList);
-					session.setAttribute("ohdStatusList", ohdStatusList);
-				}
-			}
-		}
-		
+		@SuppressWarnings("unchecked")
 		ArrayList<GroupComponentPolicy> taskList = (ArrayList<GroupComponentPolicy>) session.getAttribute("userTaskList");
 		if (taskList == null) {
 			taskList = UserPermissions.getTaskManagerComponents(agent);
@@ -334,7 +300,7 @@ public class LogonAction extends Action {
 		request.setAttribute("taskManagerStatusMessage", CompanyBMO.getTaskManagerStatusMessage(agent.getCompanycode_ID()));		
 
 		if (taskList != null && agent != null) {
-			ArrayList list = new ArrayList();
+			ArrayList<ActivityDTO> list = new ArrayList<ActivityDTO>();
 
 			Station s = null;
 			if (session.getAttribute("cbroStationID") != null) {
@@ -383,7 +349,7 @@ public class LogonAction extends Action {
 							if (x != -1)
 								entries = x;
 						} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_TO_BE_INVENTORIED)) {
-							if (!s.isThisOhdLz() || !PropertyBMO.isTrue(PropertyBMO.PROPERTY_TO_BE_INVENTORIED)) {
+							if (!PropertyBMO.isTrue(PropertyBMO.PROPERTY_TO_BE_INVENTORIED)) {
 								continue;
 							}
 							
@@ -460,7 +426,7 @@ public class LogonAction extends Action {
 															daform.setStatus_ID(TracingConstants.OHD_STATUS_TO_BE_DELIVERED);
 															daform.setCompanycode_ID(s.getCompany().getCompanyCode_ID());
 															daform.setStationassigned_ID(s.getStation_ID());
-															List resultlist = bs.findOnHandBagsBySearchCriteria(daform, agent, 0, 0, true, false, true);
+															List<?> resultlist = bs.findOnHandBagsBySearchCriteria(daform, agent, 0, 0, true, false, true);
 															if (resultlist != null && resultlist.size() > 0)
 																entries = ((Long) resultlist.get(0)).intValue();
 														} else {
@@ -469,7 +435,7 @@ public class LogonAction extends Action {
 																SearchIncidentForm daform = new SearchIncidentForm();
 																daform.setCompanycode_ID(s.getCompany().getCompanyCode_ID());
 																daform.setStationassigned_ID(s.getStation_ID());
-																List resultlist = bs.findOnHandBagsBySearchCriteria(daform, agent, 0, 0, true, true, true);
+																List<?> resultlist = bs.findOnHandBagsBySearchCriteria(daform, agent, 0, 0, true, true, true);
 																if (resultlist != null && resultlist.size() > 0)
 																	entries = ((Long) resultlist.get(0)).intValue();
 

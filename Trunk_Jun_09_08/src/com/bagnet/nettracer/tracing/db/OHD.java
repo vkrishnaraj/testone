@@ -13,10 +13,8 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TimeZone;
 
-import com.bagnet.nettracer.tracing.bmo.CategoryBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
-import com.bagnet.nettracer.tracing.utils.OHDUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 
@@ -31,7 +29,8 @@ import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
  * 			value="12"
  */
 public class OHD implements Serializable {
-
+	private static final long serialVersionUID = -6651594161173132503L;
+	
 	private String OHD_ID;
 	private Station foundAtStation;
 	private Station holdingStation;
@@ -158,6 +157,11 @@ public class OHD implements Serializable {
 	 */
 	public void setInventoryDate(Date inventoryDate) {
 		this.inventoryDate = inventoryDate;
+	}
+
+	public String getDispInventoryDate() {
+		String dispInventoryDate = DateUtils.formatDate(this.getInventoryDate(), _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
+		return dispInventoryDate != null && 0 < dispInventoryDate.lastIndexOf(' ') ? dispInventoryDate.substring(0, dispInventoryDate.lastIndexOf(' ')) : "";
 	}
 	
 	/**
