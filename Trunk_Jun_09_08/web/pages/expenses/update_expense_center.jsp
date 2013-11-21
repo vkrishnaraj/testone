@@ -67,9 +67,7 @@
  	      var del=window.confirm("Did the Southwest LUV Voucher print correctly?");
   	      if(del==true){
   	    	document.getElementById("printrpt").style.display= 'none';
-          } else {
-  	    	document.write("false !");
-  	      }
+          } 
       }
             
  
