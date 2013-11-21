@@ -68,6 +68,9 @@ public class AuditIssuanceItemInventory {
 	@Column(name="editdate", columnDefinition="DATETIME")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date editDate;
+	
+	@Column(name="verified_incident")
+	private boolean verifiedIncident;
 
 	public long getId() {
 		return id;
@@ -171,6 +174,14 @@ public class AuditIssuanceItemInventory {
 
 	public void setReason(String reason) {
 		this.reason = reason;
+	}
+
+	public boolean isVerifiedIncident() {
+		return verifiedIncident;
+	}
+
+	public void setVerifiedIncident(boolean verifiedIncident) {
+		this.verifiedIncident = verifiedIncident;
 	}
 	
 }

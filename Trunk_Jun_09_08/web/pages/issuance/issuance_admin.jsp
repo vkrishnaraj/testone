@@ -440,7 +440,11 @@
                 	<% boolean itemActive = (i_item.getIssuanceItem().getCategory().isActive() && i_item.getIssuanceItem().isActive()); %>
                   <tr>
 	                  <td>
-	                     <%=i_item.getIncidentID() %>
+	                  	 <% if (i_item.isVerifiedIncident()) { %>
+	                  	 	<a href="<%="searchIncident.do?incident=" + i_item.getIncidentID() %>" ><%=i_item.getIncidentID() %></a>
+	                     <% } else { %>
+	                     	<%=i_item.getIncidentID() %>
+	                     <% } %>
 	                  </td>
 	                  <% if (itemActive) { %>
 	                  <td>
@@ -519,7 +523,11 @@
                 	<% boolean itemActive = (i_item.getIssuanceItem().getCategory().isActive() && i_item.getIssuanceItem().isActive()); %>
                   <tr>
 	                  <td>
-	                     <%=i_item.getIncidentID() %>
+	                  	 <% if (i_item.isVerifiedIncident()) { %>
+	                  	 	<a href="<%="searchIncident.do?incident=" + i_item.getIncidentID() %>" ><%=i_item.getIncidentID() %></a>
+	                     <% } else { %>
+	                     	<%=i_item.getIncidentID() %>
+	                     <% } %>
 	                  </td>
 	                  <% if (itemActive) { %>
 	                  <td>

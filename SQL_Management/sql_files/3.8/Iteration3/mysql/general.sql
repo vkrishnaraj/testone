@@ -249,3 +249,7 @@ insert into properties (keyStr,valueStr) values
 ('document.location.letters','letters'),
 ('document.location.receipts','receipts'),
 ('document.location.temp','temp');
+
+alter table issuance_item_inventory add verified_incident tinyInt default 0;
+alter table audit_issuance_item_inventory add verified_incident tinyInt default 0;
+alter table audit_issuance_item_quantity add verified_incident tinyInt default 0;

@@ -55,6 +55,9 @@ public class AuditIssuanceItemQuantity {
 	@Column(name="editdate", columnDefinition="DATETIME")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date editDate;
+	
+	@Column(name="verified_incident")
+	private boolean verifiedIncident;
 
 	public long getId() {
 		return id;
@@ -134,6 +137,14 @@ public class AuditIssuanceItemQuantity {
 
 	public void setMinimuActiveQuantity(int minimuActiveQuantity) {
 		this.minimuActiveQuantity = minimuActiveQuantity;
+	}
+
+	public boolean isVerifiedIncident() {
+		return verifiedIncident;
+	}
+
+	public void setVerifiedIncident(boolean verifiedIncident) {
+		this.verifiedIncident = verifiedIncident;
 	}
 	
 }

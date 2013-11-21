@@ -54,6 +54,9 @@ public class IssuanceItemInventory {
 	@Column(name="issuedate", columnDefinition="DATETIME")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date issueDate;
+	
+	@Column(name="verified_incident")
+	private boolean verifiedIncident;
 
 	public long getId() {
 		return id;
@@ -125,6 +128,14 @@ public class IssuanceItemInventory {
 
 	public void setIssueDate(Date issueDate) {
 		this.issueDate = issueDate;
+	}
+
+	public boolean isVerifiedIncident() {
+		return verifiedIncident;
+	}
+
+	public void setVerifiedIncident(boolean verifiedIncident) {
+		this.verifiedIncident = verifiedIncident;
 	}
 	
 }

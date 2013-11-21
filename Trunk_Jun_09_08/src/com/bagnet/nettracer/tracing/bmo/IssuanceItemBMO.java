@@ -401,16 +401,20 @@ public class IssuanceItemBMO {
 				AuditIssuanceItemQuantity auditQItem = mapper.map(qItem, AuditIssuanceItemQuantity.class);
 				auditQItem.setEditAgent(user);
 				auditQItem.setEditDate(TracerDateTime.getGMTDate());
+				Incident inc = null;
 				if (incID != null && incID.length() > 0) {
 					auditQItem.setIncidentID(incID);
+					IncidentBMO bmo = new IncidentBMO();
+					inc = bmo.findIncidentByID(incID);
+					auditQItem.setVerifiedIncident(inc != null);
 				}
 				auditQItem.setQuantityChange(qItem.getQuantity() - oldQuant);
 				t = sess.beginTransaction();
 				sess.update(qItem);
 				sess.save(auditQItem);
 				t.commit();
-				if (fromAdmin && issued) {
-					if (!saveIssuanceItemIncident(qItem, null, user, incID)) {
+				if (fromAdmin && auditQItem.isVerifiedIncident() && issued) {
+					if (!saveIssuanceItemIncident(qItem, null, user, inc)) {
 						t.rollback();
 					}
 				}
@@ -558,6 +562,9 @@ public class IssuanceItemBMO {
 					} else {
 						iItem.setIssueDate(null);
 					}
+					IncidentBMO bmo = new IncidentBMO();
+					Incident inc = bmo.findIncidentByID(incID);
+					iItem.setVerifiedIncident(inc != null);
 					Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
 					AuditIssuanceItemInventory auditIItem = mapper.map(iItem, AuditIssuanceItemInventory.class);
 					auditIItem.setEditAgent(user);
@@ -567,12 +574,12 @@ public class IssuanceItemBMO {
 					sess.update(iItem);
 					sess.save(auditIItem);
 					t.commit();
-					if (fromAdmin && status_id != TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_DISCARDED) {
+					if (fromAdmin && iItem.isVerifiedIncident() && status_id != TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_DISCARDED) {
 						boolean success = true;
 						if (status_id == TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_AVAILABLE) {
 							success = updateIssuanceItemIncident(iItem, user, incID);
 						} else {
-							success = saveIssuanceItemIncident(null, iItem, user, incID);
+							success = saveIssuanceItemIncident(null, iItem, user, inc);
 						}
 						if (!success) {
 							t.rollback();
@@ -730,9 +737,7 @@ public class IssuanceItemBMO {
 		}
 	}
 	
-	private static boolean saveIssuanceItemIncident(IssuanceItemQuantity qItem, IssuanceItemInventory iItem, Agent user, String incident_ID) {
-		IncidentBMO bmo = new IncidentBMO();
-		Incident inc = bmo.findIncidentByID(incident_ID);
+	private static boolean saveIssuanceItemIncident(IssuanceItemQuantity qItem, IssuanceItemInventory iItem, Agent user, Incident inc) {
 		if (inc != null) {
 			IssuanceItemIncident iss_inc = new IssuanceItemIncident();
 			iss_inc.setIssueAgent(user);
@@ -748,6 +753,7 @@ public class IssuanceItemBMO {
 			inc.getIssuanceItemIncidents().add(iss_inc);
 			addIssuanceItemRemarks(inc, user);
 			try {
+				IncidentBMO bmo = new IncidentBMO();
 				bmo.saveAndAuditIncident(true, inc, user, null);
 			} catch (StaleStateException e) {
 				return false;

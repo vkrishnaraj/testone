@@ -139,7 +139,11 @@
 	                  </td>
 	                  <td>
 	                  	 <% String incID = (q_item.getIncidentID() != null ? q_item.getIncidentID() : ""); %>
-	                     <%=incID %>&nbsp;
+	                  	 <% if (q_item.isVerifiedIncident()) { %>
+	                  	 	<a href="<%="searchIncident.do?incident=" + incID %>" ><%=incID %></a>
+	                     <% } else { %>
+	                     	<%=incID %>
+	                     <% } %>&nbsp;
 	                  </td>
 	                  <td>
 	                     <%=q_item.getEditAgent().getUsername() %>
@@ -242,7 +246,11 @@
 	                  </td>
 	                  <td>
 	                  	 <% String incID = (i_item.getIncidentID() != null ? i_item.getIncidentID() : ""); %>
-	                     <%=incID %>&nbsp;
+	                  	 <% if (i_item.isVerifiedIncident()) { %>
+	                  	 	<a href="<%="searchIncident.do?incident=" + incID %>" ><%=incID %></a>
+	                     <% } else { %>
+	                     	<%=incID %>
+	                     <% } %>&nbsp;
 	                  </td>
 	                  <td>
 	                     <%=i_item.getEditAgent().getUsername() %>
