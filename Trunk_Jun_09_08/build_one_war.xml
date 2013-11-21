@@ -802,6 +802,15 @@
 		<property name="app.xml.location" value="metadata/virginamerica-fs/local" />		
 		<antcall target="donotrun-build-ear" />
 	</target>
+	
+	<target name="build-ear-local-aircanada" depends="delete-wars">
+		<property name="staging.project" value="aircanada-fs" />
+		<property name="staging.env" value="local" />
+		<property name="avis.service.includes" value="*.war" />
+		<antcall target="build-war-local-aircanada"/>
+		<property name="app.xml.location" value="metadata/aircanada-fs/local" />		
+		<antcall target="donotrun-build-ear" />
+	</target>
 
 	<target name="build-ear-local-webjet" depends="delete-wars">
 		<property name="staging.project" value="webjet" />
@@ -898,7 +907,7 @@
 		<antcall target="build-war-testing-avis"/>
 		<antcall target="build-war-testing-frontier"/>
 		<antcall target="build-war-testing-southwest"/>
-		<!--antcall target="build-war-testing-canadiannorth"/-->
+		<antcall target="build-war-testing-aircanada"/>
 		<antcall target="build-war-testing-flyafrica"/>
 		<property name="app.xml.location" value="metadata/testing/hosted2" />
 		<antcall target="donotrun-build-ear" />
@@ -953,6 +962,7 @@
 		<antcall target="build-war-hudson-lfc"/>
 		<antcall target="build-war-hudson-jetblue"/>
 		<antcall target="build-war-hudson-flyafrica"/>
+		<antcall target="build-war-hudson-aircanada"/>
 		<property name="app.xml.location" value="metadata/hudson/hosted2" />
 		<antcall target="donotrun-build-ear" />
 	</target>
@@ -1243,6 +1253,7 @@
 		<antcall target="build-war-training-frontier"/>
 		<antcall target="build-war-training-southwest"/>
 		<antcall target="build-war-training-flyafrica"/>
+		<antcall target="build-war-training-aircanada"/>
 		<antcall target="build-war-training-demonstration"/>
 		<property name="app.xml.location" value="metadata/training/hosted2" />
 		<antcall target="donotrun-build-ear" />
@@ -1429,6 +1440,7 @@
 		<antcall target="build-war-production-frontier"/>		
 		<antcall target="build-war-production-southwest"/>
 		<antcall target="build-war-production-flyafrica"/>
+		<antcall target="build-war-production-aircanada"/>
 		<property name="app.xml.location" value="metadata/production/hosted2" />
 		<antcall target="donotrun-build-ear" />
 	</target>
@@ -1698,6 +1710,14 @@
 		<antcall target="donotrun-build-virginamerica" />
 	</target>
 
+	<target name="build-war-testing-aircanada" depends="delete">
+		<property name="ant_project_name" value="aircanada-fs" />
+		<property name="ant_war_name" value="aircanada_testing" />
+		<property name="environment.name" value="test"/>
+		<property name="ac.init.complete" value="true" />
+		<antcall target="donotrun-build-aircanada" />
+	</target>
+
 	<target name="build-war-testing-alaska" depends="delete">
 		<property name="ant_project_name" value="alaska-fs" />
 		<property name="ant_war_name" value="alaska_testing" />
@@ -1869,6 +1889,14 @@
 		<antcall target="donotrun-build-virginamerica" />
 	</target>
 
+	<target name="build-war-hudson-aircanada" depends="delete">
+		<property name="ant_project_name" value="aircanada-fs" />
+		<property name="ant_war_name" value="aircanada_hudson" />
+		<property name="environment.name" value="hudson"/>
+		<property name="ac.init.complete" value="true" />
+		<antcall target="donotrun-build-aircanada" />
+	</target>
+
 	<target name="build-war-hudson-alaska" depends="delete">
 		<property name="ant_project_name" value="alaska-fs" />
 		<property name="ant_war_name" value="alaska_hudson" />
@@ -2022,6 +2050,14 @@
 		<property name="vx.init.complete" value="true" />
 		<antcall target="donotrun-build-virginamerica" />
 	</target>
+
+	<target name="build-war-production-aircanada" depends="delete">
+		<property name="ant_project_name" value="aircanada-fs" />
+		<property name="ant_war_name" value="aircanada_production" />
+		<property name="environment.name" value="prod"/>
+		<property name="ac.init.complete" value="true" />
+		<antcall target="donotrun-build-aircanada" />
+	</target>
 	
 	<target name="build-war-production-alaska" depends="delete">
 		<property name="ant_project_name" value="alaska-fs" />
@@ -2129,6 +2165,14 @@
 		<property name="environment.name" value="train"/>
 		<property name="vx.init.complete" value="true" />
 		<antcall target="donotrun-build-virginamerica" />
+	</target>
+
+	<target name="build-war-training-aircanada" depends="delete">
+		<property name="ant_project_name" value="aircanada-fs" />
+		<property name="ant_war_name" value="aircanada_training" />
+		<property name="environment.name" value="train"/>
+		<property name="ac.init.complete" value="true" />
+		<antcall target="donotrun-build-aircanada" />
 	</target>
 
 	<target name="build-war-training-alaska" depends="delete">
@@ -2279,6 +2323,14 @@
 		<property name="vx.init.complete" value="true" />
 		<property name="environment.name" value="local" />
 		<antcall target="donotrun-build-virginamerica" />
+	</target>
+
+	<target name="build-war-local-aircanada" depends="delete">
+		<property name="ant_project_name" value="aircanada-fs" />
+		<property name="ant_war_name" value="ac" />
+		<property name="ac.init.complete" value="true" />
+		<property name="environment.name" value="local" />
+		<antcall target="donotrun-build-aircanada" />
 	</target>
 	
 	<target name="build-war-local-alaska" depends="delete">
@@ -4259,6 +4311,38 @@
 
 		<!-- Build information to add DisplayTag.Properties so properties don't need to be set for all tables using DisplayTag --> 
 		<copy todir="${basedir}/src" file="${basedir}/companies/tracer/displaytag.properties" />
+
+		<antcall target="fast_all" />
+		<antcall target="delete" />
+	</target>
+	
+	<target name="donotrun-build-aircanada">		
+		<copy todir="${basedir}/src" file="companies/aircanada-fs/environment/${environment.name}/tracer.properties" />
+
+		<property name="hibernate_props_loc" value="companies/aircanada-fs/environment/${environment.name}" />
+		<property name="hibernate_dialect" value="mysql" />
+		<antcall target="generate-hibernate-xmls" />
+		
+		<copy todir="${basedir}/web/pages/login" file="companies/aircanada-fs/environment/${environment.name}/login/center.jsp" />
+		
+		<copy todir="${basedir}/web/reports" file="companies/tracer/bdo_receipt.jrxml" overwrite="true"/>
+
+		<antcall target="jasper_compile" />
+
+		<copy todir="${basedir}/src" file="companies/aircanada-fs/custom_ui.properties" />
+
+		<!-- Hibernate main dependent on environment -->
+
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
+			<property name="overrideResource" value="${basedir}/companies/aircanada-fs/ApplicationResources.properties" />
+			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		</ant>
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/aircanada-fs/environment/${environment.name}/tracer.properties" />
+			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
+		</ant>
 
 		<antcall target="fast_all" />
 		<antcall target="delete" />

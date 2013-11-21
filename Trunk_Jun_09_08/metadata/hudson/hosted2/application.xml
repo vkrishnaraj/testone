@@ -40,6 +40,12 @@
          <context-root>flyafrica</context-root>
      </web>
   </module>
+   <module>
+     <web>
+         <web-uri>aircanada_hudson.war</web-uri>
+         <context-root>aircanada</context-root>
+     </web>
+  </module>
  
    <module>
      <web>

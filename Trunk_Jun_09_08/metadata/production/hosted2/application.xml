@@ -27,6 +27,12 @@
   </module>
  <module>
      <web>
+         <web-uri>aircanada_production.war</web-uri>
+         <context-root>aircanada</context-root>
+     </web>
+  </module>
+ <module>
+     <web>
          <web-uri>lfc_production.war</web-uri>
          <context-root>lostandfound</context-root>
      </web>

@@ -46,6 +46,12 @@
   </module>
    <module>
      <web>
+         <web-uri>aircanada_training.war</web-uri>
+         <context-root>aircanada</context-root>
+     </web>
+  </module>
+   <module>
+     <web>
          <web-uri>demonstration_training.war</web-uri>
          <context-root>demonstration</context-root>
      </web>

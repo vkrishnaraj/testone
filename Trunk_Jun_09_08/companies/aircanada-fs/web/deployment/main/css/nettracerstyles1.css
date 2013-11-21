@@ -1,0 +1,508 @@
+/**************************************************/
+/*	GENERAL HTML TAGS							  */
+/**************************************************/
+a {
+	color:#369;
+}	
+a:hover, 
+a:active {
+	text-decoration: none;
+}
+body,td,input {
+	font-family:Arial, Helvetica, sans-serif;
+	color: #000000;
+}
+body {
+	background-color: #ffffff;
+	background-image:url(../images/nettracer/bodybg.jpg);
+	background-repeat:repeat-x;
+	
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+}
+img {
+	border:0px none;
+}
+p, h1, h2, div 
+{
+}
+h1 {
+	font-size: 1.5em;
+	color:#000;
+	font-weight:bold;
+	margin: 0px 0px 0px 0px;
+}
+h6 {
+	font-size: 1.0em;
+	color:#2758af;
+	font-weight:bold;
+	margin: 0px 0px 0px 0px;
+}
+h2, 
+h3, 
+h4, 
+h5{
+	font-size: 1.2em;
+	color:#666;
+	font-weight:bold;
+	margin: 20px 0px 0px 0px;
+}
+p {
+	margin: 10px 0px 0px 0px;
+}
+form {
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+}
+
+#stayarrow {
+	cursor: default;
+}
+
+/**************************************************/
+/*	LAYOUT DIVS AND TABLES						  */
+/**************************************************/
+
+/***** BODY *****/
+#bodytable {
+	background-color:#FFFFFF;
+	border-left:1px solid #000000;
+	border-right:1px solid #000000;
+	
+	height: 100%;
+	text-align:left;
+	margin-right: auto;
+	margin-left: auto;
+}
+#bodytable td{
+	padding: 0px;
+}
+#bodytable #topcell {
+	vertical-align:top;
+	background-color:#E0EDFB;
+}
+#bodytable #bottomcell {
+	background-color:#1F6390;
+	vertical-align:bottom;
+	border-top:1px solid #000000;
+}
+/***** TOP LAYOUT *****/
+#toplayouttable {
+	border: 0px none;
+	
+}
+
+/***** HEADER AND MENU *****/
+div.headerleft {
+	float:left;
+}
+
+div.headerright {
+	float:right;
+	text-align:right;
+}
+
+td#header {
+	height: 78px;
+	background-color: #FFF;
+}
+td#header.cssstandardthreecolumn { 
+	background-image:url(../images/nettracer/header_bg_noconf.gif);
+	background-repeat:no-repeat;
+	background-color: #063358;
+}
+div#headercontent {
+	float:right;
+	margin:3px;
+}
+table#headercontent td{
+	color:#FFFFFF;
+	text-align:right;
+}
+table#headercontent a{
+	color:#FFFFFF;
+	text-decoration:none;
+}
+table#headercontent a:hover{
+	color:#FFFFFF;
+	text-decoration:underline;
+}
+
+/* horizontal text links menu */
+td#headermenucell {
+	background-color:#1F6390;
+	vertical-align:middle;
+	height: 24px;
+	text-align:left;
+}
+table#headermenu td{
+	color:#ffffff;
+	white-space:nowrap;
+}
+
+table#headermenu a {
+	background-position:top;
+	font-size:12px;
+	text-align:left;
+	text-decoration:none;
+	padding:2px 2px;
+}
+/* added, chris lahey. for menu links to maintain "state" */
+a#nav
+{
+	background-position:top;
+	font-size:12px;
+	text-align:center;
+	padding:2px 2px;
+	text-decoration:none;
+	background-color:#ffffff;
+	color:#306790;
+}
+table#headermenu a:hover, 
+table#headermenu a:active {
+	text-decoration:none;
+}
+table#headermenu td {
+}
+
+/* page header/search */
+td#pageheadercell {
+	background-color:#fff;
+	border-top: 1px solid #569ECD;
+	vertical-align:middle;
+	height: 33px;
+}
+
+div#pageheaderleft {
+	float:left;
+	margin-left:5px;
+	width:725px;
+}
+div#pageheaderright {
+	float:right;
+	text-align:right;
+}
+table#pageheaderright td {
+	padding:0px;
+	text-align:left;
+}
+table#pageheaderright a {
+	background-position:top;
+	color: #2758AF;
+	font-size:1.0em;
+	font-weight:bold;
+	text-align:center;
+	text-decoration:none;
+	padding:0px 2px;
+}
+table#pageheaderright a:hover, 
+table#pageheaderright a:active {
+	text-decoration:underline;
+	color:#166AAE;
+}
+
+/* nav menu */
+td#navmenucell {
+	background-color:#FFFFFF;
+	height:34px;
+	vertical-align:middle;
+	text-align:center;
+	border-bottom: 2px solid #2758AF;
+	padding-top: 5px;
+}
+
+/* ---------------------- horizontal menu2 with working <br>---------------------------- */
+
+div.menu {
+}
+.menu dt {
+	display:none;
+}
+.menu dd {
+	margin:0; 
+	padding:0;
+}
+.menu .aa {
+	width:18px; 
+	float:left; 
+	padding:3px 0 3px 0; 
+	background:url(../images/nettracer/navmenu_bg_gray.jpg) no-repeat left top;  
+}
+.menu .bb { 
+	float:left; 
+	padding:3px 0 3px 0;  
+	text-align:left; 
+	vertical-align:middle;
+	background:url(../images/nettracer/navmenu_bg_gray_small.jpg) repeat-x left top;
+}
+.menu .cc {
+	width:19px;  
+	float:left; 
+	padding:3px 0 3px 0;  
+	background:url(../images/nettracer/navmenu_bg_gray_right.jpg) no-repeat right top;
+}
+.menu .aab
+{
+	width:18px; 
+	float:left; 
+	padding:3px 0 3px 0;  
+	background:url(../images/nettracer/navmenuroll_arrow.jpg) left top;
+	background-repeat:no-repeat;
+}
+.menu .bbb
+{
+	float:left;
+	padding:3px 0 3px 0;
+	text-align:left;
+	vertical-align:middle;
+	background:url(../images/nettracer/navmenuroll_bg_small.jpg) repeat-x left top;
+	color: #FFFFFF;
+		
+}
+.menu .ccb
+{
+	width:19px;  
+	float:left; 
+	padding:3px 0 3px 0;
+	background:url(../images/nettracer/navmenuroll_bg_right.jpg) no-repeat right top
+}
+
+.menu a, 
+.menu a:visited {
+	color:#222EA8;
+	text-decoration:none;
+	font-size:1em;
+	cursor:pointer;
+	cursor:hand;
+}
+.menu a:hover {
+	color:#fff; 
+	background:#fff;
+}
+.menu a:hover span.aa {
+	background:url(../images/nettracer/navmenuroll_arrow.jpg) left top;
+	background-repeat:no-repeat;
+}
+.menu a:hover span.bb
+{
+	background:url(../images/nettracer/navmenuroll_bg_small.jpg) left top; 
+	background-repeat:repeat-x;
+}
+.menu a:hover span.cc 
+{
+	background:url(../images/nettracer/navmenuroll_bg_right.jpg) right top; 
+	background-repeat:repeat-x
+}
+
+/***** COLUMNS (TD) *****/
+td#middlecolumn {
+	vertical-align:top;
+	text-align:center;
+	padding: 13px;
+	padding-left:20px;
+	padding-right:20px;
+	background-color:#E0EDFB;
+}
+
+/* main content  */
+div#maincontent {
+	width:95%;
+	height:80%;
+	padding:10px;
+	margin-left:auto;
+	margin-right:auto;
+	text-align:left;
+	background-color:#fff;
+	border:1px solid #92431D;
+}
+div#maincontent h1{
+	color:#000099;
+}
+div#maincontent table {
+	width:100%;
+	margin:10px 0px;
+}
+div#maincontent table td{
+	border:1px solid #fff;
+	padding:2px;
+	vertical-align:top;
+}
+div#maincontent table.form{
+	background-color:#E0E0A3;
+}
+
+div#maincontent table.form2{
+	background-color:#D1E4F1;
+}
+
+
+td.white{
+	background-color:#fff;
+	height:10px;
+}
+
+td.header{
+	background-color:#1F6390;
+	color:#fff;
+}
+
+div#maincontent table.form2_inc{
+	background-color:#D1E4F1;
+}
+
+div#maincontent table.form2_ld{
+	background-color:#D1E4F1;
+}
+
+div#maincontent table.form2_dam{
+	background-color:#5B8CE5;
+}
+div#maincontent table.form2_pil{
+	background-color:#D1E4F1;
+}
+
+div#maincontent table.form2_lf{
+	background-color:#D1E4F1;
+}
+div#maincontent table.form2_ohd{
+	background-color:#D1E4F1;
+}
+
+div#maincontent h1.blue{
+	color:#2E6D98;
+}
+div#maincontent td.login{
+	background-color: #E0EDFB;
+	padding: 15px;
+}
+div#maincontent table.blue{
+	background-color:#D1E4F1;
+}
+
+/* buttons area - content */
+div#buttons {
+	text-align:left;
+	padding:10px;
+}
+div#buttons_left{
+	text-align:left;
+	padding:10px;
+	float:left;
+}
+div#buttons_right{
+	text-align:right;
+	padding:10px;
+	float:right;
+}
+/***** MISC *****/
+div#copyright {
+	color:#fff;
+	font-size: 9px;
+	text-align:left;
+	margin: 0px 0px 0px 0px;
+}
+div#copyright a {
+	color:#fff;
+}
+span.reqfield {
+	color:#306790;
+}
+div.helplink {
+	float:right;
+}
+div.helplink a{
+	color:#306790;
+	text-decoration:none;
+}
+div.helplink a:hover,a:active{
+	color:#306790;
+	text-decoration:underline;
+}
+
+div#mainlogin table.login2 {
+	border-width: 0px;
+	border-style: none;
+	border-color: #E0EDFB;
+	border-collapse: collapse;
+	background-color: #E0EDFB;
+}
+
+
+div#mainlogin table.login2 td {
+	border-width: 0px;
+	padding: 2px;
+	border-style: none;
+	background-color: #E0EDFB;
+	
+}
+
+/**************************************************/
+/*	SPECIAL SPOT GRAPHICS						  */
+/**************************************************/
+
+.searchfield {
+	width:100px;
+	height:14px;
+	background-color:#f4f4f4;
+	border:1px solid #000099;
+ }
+.imgAlignBottom {
+	vertical-align: bottom;
+	margin-top: 60px;
+	margin-right: 20px;
+	margin-bottom: 0px;
+	margin-left: 610px;
+}
+div#maincontent li.loginlinks {
+	font-size: 16px;
+	font-weight: bold;
+	color: #333333;
+	list-style-type: none;
+}
+.bold {
+	font-weight: bold;
+}
+
+div#notablelines table td {
+	border:0px solid #fff;
+	padding:0px;
+	vertical-align:top;
+}
+
+.no_fraud {
+	margin: 0px;
+	padding: 0px;
+	background-color: #4ba047;
+}
+
+.suspected_fraud {
+	margin:	0px;
+	padding: 0px;
+	background-color: #FEFF82;
+}
+
+.known_fraud {
+	margin:	0px;
+	padding: 0px;
+	background-color: #FE8080;
+}
+
+td#printreceipt {
+	margin:10px;
+	padding:0px;	
+}
+
+#fraudcell {
+	margin:0px;
+	padding:0px;
+	border-width:2px;
+	border-color:black;
+	border-style:solid;
+}
+
+h2#fraudlink {
+	margin: 10px;
+	padding: 0px;
+	font-size: 1.2em;	
+}
