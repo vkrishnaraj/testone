@@ -352,7 +352,47 @@
                   </html:select>
                 </td>
               </tr>
-               
+ 			  <tr>
+                 <logic:equal name="incidentForm" property="incident_ID" value="">
+                <td colspan="2" width="33%">
+                  <bean:message key="colname.email" />
+                  <br>
+                  <html:text name="address" property="email" size="42" maxlength="100" styleClass="textfield" />
+                  </logic:equal>
+                 <logic:notEqual name="incidentForm" property="incident_ID" value="">
+                <td colspan="3" width="50%">
+                  <bean:message key="colname.email" />
+                  <br>
+                  <html:text name="address" property="email" size="45" maxlength="100" styleClass="textfield" />
+                  </logic:notEqual>
+                  <logic:equal name="incidentForm" property="incident_ID" value="">
+<%
+                    if (i.intValue() == 0 && request.getAttribute("companyDoesntEmail") == null) {
+%>
+                      <br />
+                      <input type="checkbox" name="email_customer" value="1"
+                      <logic:equal name="incidentForm" property="email_customer" value="1">
+                        checked="checked"
+                      </logic:equal>
+                      >
+                      <b><bean:message key="colname.report_email_cus" /></b>
+                      </td>
+                      <td width="17%">
+                      <% String userLocale = a.getDefaultlocale();	%>
+                      <bean:message key="colname.email.language" />
+                      <br />
+                    <select name="language" class="dropdown">
+                      <logic:iterate id="locale" name="receiptLocaleList" scope="session">
+                        <option value='<bean:write name="locale" property="value"/>' <%=(((LabelValueBean)locale).getValue().equals(userLocale)? "selected" : "") %>>
+                        <bean:write name="locale" property="label" />
+                      </logic:iterate>
+                    </select>
+<%
+                    }
+%>
+                  </logic:equal>
+                </td>
+               </tr>              
             </logic:iterate>
           </logic:present>
       </logic:iterate> 
