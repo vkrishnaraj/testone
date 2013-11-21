@@ -43,10 +43,13 @@
 
 	function collectReason(theButton) {
 		var reason = window.prompt("Please enter the reason for discarding this item.","Inactive");
-		if (reason != null && reason != "") {
+		if (reason != null && reason.trim() != "") {
 			theButton.form.discardreason.value = reason;
 			theButton.form.discardreason.disabled = false;
-		} 
+		} else {
+			window.alert("A reason for discarding must be provided.");
+			collectReason(theButton);
+		}
 	}
 
 </SCRIPT>
