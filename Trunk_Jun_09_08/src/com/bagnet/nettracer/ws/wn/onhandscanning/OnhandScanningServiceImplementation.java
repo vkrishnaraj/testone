@@ -84,7 +84,8 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 			ActionMessages errors = new ActionMessages();
 			agent = SecurityUtils.authUser(auth.getSystemName(), auth.getSystemPassword(), auth.getAirlineCode(), 0, errors);
 			if(!errors.isEmpty()){
-				Iterator i = errors.get();
+				@SuppressWarnings("unchecked")
+				Iterator<ActionMessage> i = errors.get();
 				while(i.hasNext()){
 					ActionMessage message = (ActionMessage)i.next();
 					if("error.user.lockedout".equals(message.getKey())){
@@ -132,10 +133,9 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 			return resDoc;
 		}
 
-		Agent agent = null;
 		com.bagnet.nettracer.ws.wn.pojo.xsd.Authentication auth = isValidUser.getIsValidUser().getAuthentication();
 		try {
-			agent = getAgent(auth);
+			getAgent(auth);
 		} catch (Exception e) {
 			serviceResponse.setSuccess(false);
 			serviceResponse.setValidUser(false);
@@ -238,10 +238,9 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
 		r.setRemarktype(TracingConstants.REMARK_CLOSING);
 		r.setRemarktext("Onhand has been returned");
-		ohd.getRemarks().add(r);
+		ohd.getRemarks().add(r);//unchecked type to be addressed in NT-1733
 		
 		if(obmo.insertOHD(ohd, ohd.getAgent())){
-			WSCoreOHDUtil util = new WSCoreOHDUtil();
 			try {
 				serviceResponse = ohdToWSOHD(OhdBMO.getOHDByID(ohd.getOHD_ID(),null), serviceResponse);
 				serviceResponse.setSuccess(true);
@@ -282,10 +281,9 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 			return resDoc;
 		}
 
-		Agent agent = null;
 		com.bagnet.nettracer.ws.wn.pojo.xsd.Authentication auth = saveBagDropTime.getSaveBagDropTime().getAuthentication();
 		try {
-			agent = getAgent(auth);
+			getAgent(auth);
 		} catch (Exception e) {
 			serviceResponse.setSuccess(false);
 			serviceResponse.setValidUser(false);
@@ -722,7 +720,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 	 */
 	private OHD handleLzDamagedList(String id, Agent agent){
 		IncidentBMO ibmo = new IncidentBMO();
-		Incident inc = ibmo.getIncidentByID(id, null);
+		Incident inc = IncidentBMO.getIncidentByID(id, null);
 		//TODO PND state (to be implemented in a later ticket)
 		//TODO Activity code 10 (to be implemented in a later ticket)
 		addIncidentUpdateRemark(inc, agent, REMARK_SCANNED);
@@ -746,7 +744,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 	 */
 	private OHD handleLzDamagedBagBSO(String id, Agent agent, Station holdingstation){
 		IncidentBMO ibmo = new IncidentBMO();
-		Incident inc = ibmo.getIncidentByID(id, null);
+		Incident inc = IncidentBMO.getIncidentByID(id, null);
 
 		//Assign to LZ and set damaged receive by LZ timestamp
 		inc.setStationassigned(holdingstation);
@@ -809,7 +807,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		r.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
 		r.setRemarktype(TracingConstants.REMARK_REGULAR);
 		r.setRemarktext(remarkText);
-		ohd.getRemarks().add(r);
+		ohd.getRemarks().add(r);//unchecked type to be addressed in NT-1733
 	}
 	
 	/**
@@ -964,15 +962,18 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		
 		//add/update ohd
 		if(wsohd.getOHDID() != null && wsohd.getOHDID().length() > 0){
-			ohd = obmo.getOHDByID(wsohd.getOHDID(), null);
+			ohd = OhdBMO.getOHDByID(wsohd.getOHDID(), null);
 			updateLzOHD(wsohd, ohd, agent, TBI);
+			serviceResponse.setCreateUpdateIndicator(STATUS_UPDATE);
 		} else if ((ohdId = OnhandScanningServiceUtil.lookupBagtag(wsohd.getBagtagnum(), holdingstation.getStation_ID())) != null){
-			ohd = obmo.getOHDByID(ohdId, null);
+			ohd = OhdBMO.getOHDByID(ohdId, null);
 			updateLzOHD(wsohd, ohd, agent, TBI);
+			serviceResponse.setCreateUpdateIndicator(STATUS_UPDATE);
 		} else if ((incomingOHD = OHDUtils.getBagTagNumberIncomingToStation(wsohd.getBagtagnum(),holdingstation)) != null){
 			util.properlyHandleForwardedOnHand(incomingOHD, agent, holdingstation);
-			ohd = obmo.getOHDByID(incomingOHD.getOHD_ID(), null);
+			ohd = OhdBMO.getOHDByID(incomingOHD.getOHD_ID(), null);
 			updateLzOHD(wsohd, ohd, agent, TBI);
+			serviceResponse.setCreateUpdateIndicator(STATUS_UPDATE);
 		} else {
 			populateMissingOHDFields(wsohd, agent);
 			if(!addOhdReqFields(wsohd, serviceResponse)){
@@ -985,6 +986,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 				ohd = wsohdToOHD(wsohd, posId, lateCheckInc);
 				handleTBI(ohd, TBI);
 				obmo.insertOHD(ohd, ohd.getAgent());
+				serviceResponse.setCreateUpdateIndicator(STATUS_CREATE);
 			} catch (Exception e) {
 				e.printStackTrace();
 				serviceResponse.setSuccess(false);

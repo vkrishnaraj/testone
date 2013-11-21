@@ -1,7 +1,6 @@
 package com.bagnet.nettracer.ws.wn.onhandscanning;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,7 +26,6 @@ import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.SecurityUtils;
-import com.bagnet.nettracer.ws.core.WSCoreOHDUtil;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSItinerary;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSPassenger;
@@ -210,8 +208,8 @@ public class OnhandScanningServiceTest {
 		String posId = "bin1";
 		closeOHD(bagtag, stationcode);
 
-		String ohdId = createOHD(bagtag, stationcode);
-
+		createOHD(bagtag, stationcode);
+		
 		// Now test updating the OHD we just created
 		doc = getBlankOhdDocuement();
 		WSOHD ohd = doc.getCreateUpdateOnhand().addNewOnhand();
@@ -311,7 +309,7 @@ public class OnhandScanningServiceTest {
 		assertTrue("Passenger Pick Up"
 				.equals(res.getOnhand().getDisposalStatus())
 				||
-				"Passenger Picked Up".equals(res.getOnhand().getDisposalStatus())
+				"Owner Picked Up".equals(res.getOnhand().getDisposalStatus())
 				);
 
 	}
@@ -495,7 +493,7 @@ public class OnhandScanningServiceTest {
 		closeOHD(bagtag, stationcode);
 		String ohdId = createOHD(bagtag, altStationcode);
 		OhdBMO obmo = new OhdBMO();
-		OHD ntohd = obmo.getOHDByID(ohdId, null);
+		OHD ntohd = OhdBMO.getOHDByID(ohdId, null);
 		Status status = new Status();
 		status.setStatus_ID(TracingConstants.OHD_STATUS_CLOSED);
 		ntohd.setStatus(status);
@@ -523,7 +521,7 @@ public class OnhandScanningServiceTest {
 		assertTrue(OnhandScanningServiceImplementation.STATUS_RETURN_UPDATE_SUCCESS
 				.equals(lzret.getReturn().getReturnStatus()));
 		assertTrue(lzret.getReturn().getOnhand().getHoldingStation().equals(stationcode));
-		assertTrue(lzret.getReturn().getOnhand().getStatus().equals("TBI"));
+		assertTrue(lzret.getReturn().getOnhand().getStatus().equals("To Be Inventoried"));
 		
 	}
 	
@@ -533,9 +531,9 @@ public class OnhandScanningServiceTest {
 		closeOHD(bagtag, stationcode);
 		String ohdId = createOHD(bagtag, stationcode);
 		OhdBMO obmo = new OhdBMO();
-		OHD ntohd = obmo.getOHDByID(ohdId, null);
+		OHD ntohd = OhdBMO.getOHDByID(ohdId, null);
 		Status status = new Status();
-		status.setStatus_ID(TracingConstants.OHD_STATUS_TBI);
+		status.setStatus_ID(TracingConstants.OHD_STATUS_TO_BE_INVENTORIED);
 		ntohd.setStatus(status);
 		obmo.updateOhdNoAudit(ntohd);
 		
@@ -557,7 +555,7 @@ public class OnhandScanningServiceTest {
 		assertTrue(OnhandScanningServiceImplementation.STATUS_RETURN_UPDATE_SUCCESS
 				.equals(lzret.getReturn().getReturnStatus()));
 		assertTrue(lzret.getReturn().getOnhand().getHoldingStation().equals(stationcode));
-		assertTrue(lzret.getReturn().getOnhand().getStatus().equals("TBI"));
+		assertTrue(lzret.getReturn().getOnhand().getStatus().equals("To Be Inventoried"));
 	}
 	
 	@Test
@@ -566,7 +564,7 @@ public class OnhandScanningServiceTest {
 		closeOHD(bagtag, stationcode);
 		String ohdId = createOHD(bagtag, altStationcode);
 		OhdBMO obmo = new OhdBMO();
-		OHD ntohd = obmo.getOHDByID(ohdId, null);
+		OHD ntohd = OhdBMO.getOHDByID(ohdId, null);
 		GregorianCalendar c = new GregorianCalendar();
 		c.setTime(DateUtils.convertToGMTDate(new Date()));
 		c.add(Calendar.DATE, -44);
@@ -620,10 +618,24 @@ public class OnhandScanningServiceTest {
 
 		assertTrue(response.getSuccess());
 		assertWSOHD(bagtag, response.getOnhand());
-		assertTrue(response.getOnhand().getStatus().equals("TBI"));
+		assertTrue(response.getOnhand().getStatus().equals("To Be Inventoried"));
 		assertTrue(response.getLateCheckIndicator() == true);
 		assertTrue(response.getPositionId().equals(posId));
 		assertTrue(response.getReturnStatus().equals("Successful Create/Update"));
+		assertTrue(response.getCreateUpdateIndicator().equals("CREATE"));
+		
+		//resubmitting request with the OHD ID so that we can test updating on existing OHD
+		addBagForLZDoc.getAddBagForLZ().getOnhand().setOHDID(ret.getAddBagForLZResponse().getReturn().getOnhand().getOHDID());
+		ret = service.addBagForLZ(addBagForLZDoc);
+		response = ret.getAddBagForLZResponse().getReturn();
+
+		assertTrue(response.getSuccess());
+		assertWSOHD(bagtag, response.getOnhand());
+		assertTrue(response.getOnhand().getStatus().equals("To Be Inventoried"));
+		assertTrue(response.getLateCheckIndicator() == true);
+		assertTrue(response.getPositionId().equals(posId));
+		assertTrue(response.getReturnStatus().equals("Successful Create/Update"));
+		assertTrue(response.getCreateUpdateIndicator().equals("UPDATE"));
 	}
 
 	@Test
