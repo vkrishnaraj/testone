@@ -76,7 +76,14 @@ public class ExpensePayoutForm extends ActionForm {
 	private String dispApproval_date;
 	private String dispDraftreqdate;
 	private String dispVoucherExpirationDate;
+	private String toremark;
 
+	public String getToremark() {
+		return toremark;
+	}
+	public void setToremark(String toremark) {
+		this.toremark = toremark;
+	}
 	public String getIncident_ID() {
 		return incident_ID;
 	}

@@ -67,7 +67,10 @@
  	      var del=window.confirm("Did the Southwest LUV Voucher print correctly?");
   	      if(del==true){
   	    	document.getElementById("printrpt").style.display= 'none';
-          } 
+          } else if(del==false){
+        	document.expensePayoutForm.toremark.value="yes";
+			document.expensePayoutForm.submit();
+          }
       }
             
  
@@ -77,6 +80,7 @@
 	<html:hidden name="expensePayoutForm" property="tz" value="<%= a.getCurrenttimezone() %>" />
 	<html:hidden name="expensePayoutForm" property="expensepayout_ID" />
 	<html:hidden name="expensePayoutForm" property="status_id" />
+	<html:hidden name="expensePayoutForm" property="toremark"  value="no"/>
 	<fmt:timeZone value="${expensePayoutForm.tz}">
 		<tr>
 			<td colspan="3" id="pageheadercell">

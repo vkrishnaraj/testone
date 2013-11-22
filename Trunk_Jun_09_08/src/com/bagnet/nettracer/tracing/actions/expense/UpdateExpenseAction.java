@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.actions.expense;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -12,12 +13,14 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import com.bagnet.nettracer.tracing.bmo.ExpensePayoutBMO;
+import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.forms.ExpensePayoutForm;
+import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
@@ -41,7 +44,7 @@ public class UpdateExpenseAction extends BaseExpenseAction {
 
 		// set status to pending or approved
 		Status st = new Status();
-
+		
 		if (expenseForm.getUpdateExpense() != null) {
 			st.setStatus_ID(expenseForm.getStatus_id());
 			if (expenseForm.getStatus_id() == TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED 
@@ -94,6 +97,17 @@ public class UpdateExpenseAction extends BaseExpenseAction {
 			else {
 				return mapping.findForward(ERROR);
 			}
+		} 
+		boolean addToRemark = expenseForm.getToremark().equals("yes");
+		if (addToRemark) {
+			String incidentId = ((IncidentForm) request.getSession().getAttribute("incidentForm")).getIncident_ID();
+			IncidentBMO ibmo = new IncidentBMO();
+	        SimpleDateFormat df2 = new SimpleDateFormat("MMM dd, yyyy hh:mm");
+	        String dateText = df2.format(new Date(System.currentTimeMillis()));
+			String contents= "User Name: " + user.getUsername() + "\n" + 
+	                 "LUV Voucher Printing Time: " + dateText;
+			ibmo.insertRemark(contents,incidentId, user, TracingConstants.REMARK_REGULAR);
+			st.setStatus_ID(expenseForm.getStatus_id());
 		}
 
 		ep.setStatus(st);
