@@ -430,7 +430,7 @@ public class NTReservationIntegrationImpl extends
 						}
 						theitem.setPosId(cc.getPosId());
 						if(cc.getPosId()!=null){
-							if(itemIndex>0){
+							if(posMap.size()>0){
 								if(posMap.get(cc.getPosId())==null){
 									diffPosIds=true;
 								}
