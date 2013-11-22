@@ -437,6 +437,9 @@ public class NTReservationIntegrationImpl extends
 							}
 							posMap.put(cc.getPosId(), cc.getPosId());
 						}
+						if (cc.getOverweight()) {
+							theitem.setSpecialCondition(TracingConstants.SPECIAL_CONDITION_OVERWEIGHT);
+						}
 						itemIndex++;
 					}
 				}
