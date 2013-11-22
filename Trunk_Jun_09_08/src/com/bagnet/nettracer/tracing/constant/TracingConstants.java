@@ -221,6 +221,7 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_BOX_COUNT = "Box Count";
 	public final static String SYSTEM_COMPONENT_NAME_CLAIM_DEPREC_CALCULATOR = "Claim Depreciation Calculator";
 	public final static String SYSTEM_COMPONENT_NAME_DEPREC_CALCULATOR_ADMIN = "Depreciation Calculator Administration";
+	public final static String SYSTEM_COMPONENT_NAME_BSO_PROCESS = "BSO Expense Process";
 	
 	public final static String SYSTEM_COMPONENT_FORWARD_PCN = "pcn";
 
@@ -1428,6 +1429,9 @@ public class TracingConstants {
 	public static final String EDIT_COMMUNICATIONS = "editCommunications";
 
 	public static final int CLAIM_CHECK = 3;
+	public static final int BAG_CHECKED_LOCATION = 4;
+
+	public static final String BAG_CHECK_MIXED = "8";
 	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {

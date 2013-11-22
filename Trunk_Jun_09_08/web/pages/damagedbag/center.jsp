@@ -23,53 +23,8 @@
 
 <%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
 
-<%@page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%><script language="javascript">
-    
-function gotoHistoricalReport() {
-  o = document.incidentForm;
-	o.historical_report.value = "1";
-	clearBeforeUnload(); 
-	o.submit();
-}
-function disableButton(aButton) {
-    	aButton.disabled = true;
-    	aButton.value= "<bean:message key='ajax.please_wait' />";
-    }
-    
-    function enableButton(aButton, label) {
-    	aButton.disabled = false;
-    	aButton.value=label;
-    }
-    
-     function disableButtons() {
-     	if(document.incidentForm.saveButton) {
- 	   disableButton(document.incidentForm.saveButton); 
-     	}
-     	if(document.incidentForm.wtbutton){
-     		disableButton(document.incidentForm.wtbutton);
-     	}
-     	if(document.incidentForm.saveremarkButton) {
- 	   disableButton(document.incidentForm.saveremarkButton); 
-     	}
-    }
-    
-    function enableButtons() {
-     if(document.incidentForm.saveButton) {
-
-      <logic:notEqual name="incidentForm" property="incident_ID" value="">
-        enableButton(document.incidentForm.saveButton, "<bean:message key='button.save' />");
-                </logic:notEqual>
-                <logic:equal name="incidentForm" property="incident_ID" value="">
-        enableButton(document.incidentForm.saveButton, "<bean:message key='button.saveincident' />");
-                </logic:equal>
-     	
-     }
-     if(document.incidentForm.saveremarkButton) {
-        enableButton(document.incidentForm.saveremarkButton, "<bean:message key='button.saveremark' />");
-     }
-    }
-
-  </script>
+<%@page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
+<jsp:include page="/pages/includes/incident_js_incl.jsp" />
 <logic:present name="prepopulate" scope="request">
 
   <script language="javascript">

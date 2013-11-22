@@ -1015,8 +1015,15 @@
 					styleClass="textfield" /></td>
 		</tr>
 		<tr>
-			<td><bean:message key="colname.bag_loc.req" /> <br> <jsp:include
-					page="/pages/includes/checkedlocation_incl.jsp" /></td>
+			<td><bean:message key="colname.bag_loc.req" /> <br>
+			
+				<html:select property="checkedlocation" styleClass="dropdown">
+					<html:option value="0">
+						<bean:message key="select.please_select" />
+					</html:option>
+					<html:options collection="bagchecklist" property="value" labelProperty="label"/>
+				</html:select>
+			</td>
 			
 
 

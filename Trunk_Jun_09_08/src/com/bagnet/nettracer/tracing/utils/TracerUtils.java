@@ -581,6 +581,50 @@ public class TracerUtils {
 		session.setAttribute("claimchecklist",
 				session.getAttribute("claimchecklist") != null ? session
 						.getAttribute("claimchecklist") : getClaimcheckValues());
+
+		session.setAttribute("bagchecklist",
+				session.getAttribute("bagchecklist") != null ? session
+						.getAttribute("bagchecklist") : getBagcheckValues());
+	}
+
+	/**
+	 * Method to get the Bag Checked Location values for the Bag Checked
+	 * Location field under Baggage Check Information section in Incidents
+	 * Mainly a SWA Specific Fields
+	 * 
+	 * @return list of labelBeanValues for filling the Bag Checked Location
+	 *  select dropdown
+	 */
+	@SuppressWarnings("unchecked")
+	private static Object getBagcheckValues() {
+		ArrayList<LabelValueBean> ccl = new ArrayList<LabelValueBean>();
+		List<Category> result = null;
+
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Category.class);
+			cri.add(Restrictions.eq("type", TracingConstants.BAG_CHECKED_LOCATION));
+			result = cri.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		if (result != null) {
+			for (Iterator<Category> i = result.iterator(); i.hasNext();) {
+				Category bagCheckValue= (Category) i.next();
+				ccl.add(new LabelValueBean(bagCheckValue.getDescription(),String.valueOf(bagCheckValue.getCategoryVal())));
+			}
+		}
+		return ccl;
 	}
 
 	private static List<LabelValueBean> getSpokenLanguageList(String locale){

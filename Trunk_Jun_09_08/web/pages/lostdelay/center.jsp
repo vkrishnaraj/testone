@@ -33,44 +33,9 @@
 <%@page import="com.bagnet.nettracer.tracing.db.Passenger"%>
 <%@page import="com.bagnet.nettracer.tracing.db.Station"%>
 <%@page import="com.bagnet.nettracer.tracing.bmo.StationBMO"%>
+<jsp:include page="/pages/includes/incident_js_incl.jsp" />
 <script language="javascript">
-    
-    function gotoHistoricalReport(form) {
-        o = document.incidentForm;
-    	o.historical_report.value = "1";
-    	clearBeforeUnload();  
-    	o.submit();
-    }
-    function disableButton(aButton) {
-    	aButton.disabled = true;
-    	aButton.value= "<bean:message key='ajax.please_wait' />";
-    }
-    
-    function enableButton(aButton, label) {
-    	aButton.disabled = false;
-    	aButton.value=label;
-    }
-    
-     function disableButtons() {
-     	if(document.incidentForm.saveButton) {
- 	   disableButton(document.incidentForm.saveButton); 
-     	}
-     	if(document.incidentForm.limitSaveButton){
-      	   disableButton(document.incidentForm.saveadditionsbutton); 
-     	}
-     	if(document.incidentForm.wtbutton){
-     		disableButton(document.incidentForm.wtbutton);
-     	}
-     	if(document.incidentForm.saveremarkButton) {
- 	   disableButton(document.incidentForm.saveremarkButton); 
-     	}
-     	if(document.incidentForm.savetracingButton) {
-      	   disableButton(document.incidentForm.savetracingButton); 
-        }
-     	
-    }
-
-     function confirmCarrierWt(){
+    function confirmCarrierWt(){
     	 <% if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_WT_OTHER_CARRIER, a) && request.getAttribute("lostdelay") != null){ %>
   		
     	 var wtAirline= document.getElementById("wtAirlineCode"); 
@@ -104,33 +69,7 @@
          <% } %>
      }
     
-    function enableButtons() {
-     if(document.incidentForm.saveButton) {
-
-      <logic:notEqual name="incidentForm" property="incident_ID" value="">
-        enableButton(document.incidentForm.saveButton, "<bean:message key='button.save' />");
-                </logic:notEqual>
-                <logic:equal name="incidentForm" property="incident_ID" value="">
-        enableButton(document.incidentForm.saveButton, "<bean:message key='button.saveincident' />");
-                </logic:equal>
-     	
-     }
-
-  	if(document.incidentForm.limitSaveButton){
-   	   enableButton(document.incidentForm.saveadditionsbutton, "<bean:message key='button.save' />"); 
-  	}
-     if(document.incidentForm.wtbutton){
-    	 enableButton(document.incidentForm.wtbutton);
-     }
-     if(document.incidentForm.saveremarkButton) {
-        enableButton(document.incidentForm.saveremarkButton, "<bean:message key='button.saveremark' />");
-     }
-     if(document.incidentForm.savetracingButton) {
-         enableButton(document.incidentForm.savetracingButton, "<bean:message key='button.savetracing' />");
-      }
-    }
-    
-    function deleteBag(bagtag_pos, isNew) {
+     function deleteBag(bagtag_pos, isNew) {
     	if(isNew=='true'){
 	    	var del=window.confirm("Delete the corresponding bag for this tag?");
 	    	if(del==true){

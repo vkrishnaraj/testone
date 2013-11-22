@@ -21,6 +21,7 @@ public class UserGroup implements Serializable {
 	private HashMap<String, GroupComponentPolicy> permissionLinkMap = null;
 	
 	private String companycode_ID;
+	private double bsoLimit;
 
 	/**
 	 * @hibernate.set cascade="all-delete-orphan" order-by="policy_id"
@@ -145,6 +146,23 @@ public class UserGroup implements Serializable {
 			}
 		}
 		return permissionLinkMap;	
+	}
+
+	/**
+	 * @return Returns the bsoLimit.
+	 * 
+	 * @hibernate.property type="double"
+	 */
+	public double getBsoLimit() {
+		return bsoLimit;
+	}
+
+	/**
+	 * @param bsoLimit
+	 *          The bsoLimit to set.
+	 */
+	public void setBsoLimit(double bsoLimit) {
+		this.bsoLimit = bsoLimit;
 	}
 
 	

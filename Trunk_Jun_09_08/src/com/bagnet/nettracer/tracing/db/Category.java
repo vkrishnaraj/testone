@@ -43,6 +43,13 @@ public class Category implements Serializable{
 		this.type = type;
 	}
 
+	public int getCategoryVal() {
+		return categoryVal;
+	}
+	public void setCategoryVal(int categoryVal) {
+		this.categoryVal = categoryVal;
+	}
+
 	@Id
 	@GeneratedValue
 	private long id;
@@ -57,4 +64,10 @@ public class Category implements Serializable{
 	 * What object the category pertains to
 	 */
 	private int type;
+	
+
+	/**
+	 * Value of Category (if existing prior
+	 */
+	private int categoryVal;
 }

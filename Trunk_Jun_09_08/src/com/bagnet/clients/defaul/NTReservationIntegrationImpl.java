@@ -3,6 +3,7 @@ package com.bagnet.clients.defaul;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +33,7 @@ import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
+import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
 
 public class NTReservationIntegrationImpl extends
@@ -39,7 +41,7 @@ public class NTReservationIntegrationImpl extends
 		ReservationIntegration {
 	
 	private static final Logger logger = Logger.getLogger(NTReservationIntegrationImpl.class);
-	private Reservation booking = null;
+	protected Reservation booking = null;
 	private DefaultFormFieldMapper fMap = new DefaultFormFieldMapper();
 	private final int HOURS_BACK_ITINERARY = PropertyBMO.getValueAsInt(PropertyBMO.RESERVATION_HOURS_BACK);
 	private final int HOURS_FORWARD_ITINERARY = PropertyBMO.getValueAsInt(PropertyBMO.RESERVATION_HOURS_FORWARD);
@@ -375,7 +377,7 @@ public class NTReservationIntegrationImpl extends
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void populateIncidentFormInner(IncidentForm form,
+	protected void populateIncidentFormInner(IncidentForm form,
 			int itemtype, HttpServletRequest request) {
 		
 		Agent user = (Agent) request.getSession().getAttribute("user");
@@ -395,6 +397,8 @@ public class NTReservationIntegrationImpl extends
 		if (booking.getClaimChecksArray() != null) {
 			boolean claimCheckAdded = false;
 			int itemIndex = 0;
+			boolean diffPosIds=false;
+			HashMap<String,String> posMap=new HashMap<String,String>();
 			for (ClaimCheck cc : booking.getClaimChecksArray()) {
 				if (cc.getTimeChecked() != null) {
 					Long checkedTime = (cc.getTimeChecked().getTime().getTime()) / 3600000;
@@ -425,9 +429,20 @@ public class NTReservationIntegrationImpl extends
 							theitem.setClaimchecknum(cc.getTagNumber());
 						}
 						theitem.setPosId(cc.getPosId());
+						if(cc.getPosId()!=null){
+							if(itemIndex>0){
+								if(posMap.get(cc.getPosId())==null){
+									diffPosIds=true;
+								}
+							}
+							posMap.put(cc.getPosId(), cc.getPosId());
+						}
 						itemIndex++;
 					}
 				}
+			}
+			if(diffPosIds && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_COLLECT_POS_ID, user)){
+				form.setCheckedlocation(TracingConstants.BAG_CHECK_MIXED);
 			}
 		}
 		
