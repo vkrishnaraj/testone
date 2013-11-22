@@ -19,14 +19,14 @@
   boolean noticePermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_FORWARD_NOTICES, a);
 %>
 
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
+  <SCRIPT SRC="deployment/main/js/date.js"></SCRIPT>
+  <SCRIPT SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
+  <SCRIPT SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
+  <SCRIPT SRC="deployment/main/js/popcalendar.js"></SCRIPT>
   
 <%@page import="com.mysql.jdbc.IterateBlock"%>
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/field_validation.js"></SCRIPT>
-  <SCRIPT LANGUAGE="JavaScript">
+<SCRIPT SRC="deployment/main/js/field_validation.js"></SCRIPT>
+  <SCRIPT>
     function textCounter(field, countfield, maxlimit) {
       if (field.value.length > maxlimit) {
         field.value = field.value.substring(0, maxlimit);
@@ -104,9 +104,9 @@
                   
                     <a href="addOnHandBag.do?ohd_ID=<bean:write name="ohd" property="label" />"><bean:write name="ohd" property="label" /></a>
                     &nbsp;
-                      <bean:message key="colname.expedite_number" />
+                      <bean:message key="colname.expedite_number" /> 
                       :
-                      <input type="text" name="ohdList[<%=i %>].value" class="textfield" value="<%=ohd.getValue() %>"/>
+                      <input type="text" name="ohdList[<%=i %>].value" class="textfield" value="<%=ohd.getValue() %>" size="10" maxlength="10"/>
 				     <hr style='clear:both; border:1px solid #fff;<%=(ohdMap == null || i < ohdMap.size()-1)?"":"visibility:hidden;"%>'/>
                   </logic:iterate>
                 </td>
