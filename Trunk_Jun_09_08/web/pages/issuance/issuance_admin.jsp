@@ -41,15 +41,22 @@
 		</logic:iterate>
 	}
 
-	function collectReason(theButton) {
+	function collectReason(theButton, theID) {
 		var reason = window.prompt("Please enter the reason for discarding this item.","Inactive");
-		if (reason != null && reason.trim() != "") {
-			theButton.form.discardreason.value = reason;
-			theButton.form.discardreason.disabled = false;
-		} else {
-			window.alert("A reason for discarding must be provided.");
-			collectReason(theButton);
+		if (reason !== null) {
+			if (reason.replace(/^\s+|\s+$/g, '') != "") {
+				theButton.form.discardreason.value = reason;
+				theButton.form.discardreason.disabled = false;
+				theButton.form.discardinventory.value = theID;
+				theButton.form.discardinventory.disabled = false;
+				return true;
+			} else { /* No valid text in prompt but OK was clicked */
+				window.alert("A reason for discarding must be provided.");
+				return collectReason(theButton, theID);
+			}
 		}
+		/* Prompt cancelled */
+		return false;
 	}
 
 </SCRIPT>
@@ -299,7 +306,7 @@
 	                  </td>
 	                  	<% } %>
 	                  <td>
-	                     <input type="submit" name="inventory_discard_<%=i_item.getId()%>" id="button" onclick="this.form.discardinventory.value = <%=i_item.getId()%>; this.form.discardinventory.disabled = false; collectReason(this);" 
+	                     <input type="submit" name="inventory_discard_<%=i_item.getId()%>" id="button" onclick="return collectReason(this, <%=i_item.getId()%>);" 
 							value="<bean:message key="issuance.item.button.discard" />" >
 						 </input>
 	                  </td>
@@ -460,7 +467,7 @@
 	                  <% } else { %>
 	                  <td colspan="2" >
 	                  	<bean:message key="issuance.item.inactive" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	                     <input type="submit" name="inventory_discard_<%=i_item.getId()%>" id="button" onclick="this.form.discardinventory.value = <%=i_item.getId()%>; this.form.discardinventory.disabled = false; collectReason(this);" 
+	                     <input type="submit" name="inventory_discard_<%=i_item.getId()%>" id="button" onclick="return collectReason(this, <%=i_item.getId()%>);" 
 							value="<bean:message key="issuance.item.button.discard" />" >
 						 </input>
 	                  </td>
