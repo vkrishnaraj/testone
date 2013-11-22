@@ -253,3 +253,20 @@ insert into properties (keyStr,valueStr) values
 alter table issuance_item_inventory add verified_incident tinyInt default 0;
 alter table audit_issuance_item_inventory add verified_incident tinyInt default 0;
 alter table audit_issuance_item_quantity add verified_incident tinyInt default 0;
+
+insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group) VALUES (680,'BSO Expense Process','Allows users to create Expense Payouts based on Established BSO Process',59,'',0,99,0);
+alter table usergroup add column bsoLimit double default 0;
+update usergroup set bsoLimit=0;
+
+alter table category drop column categoryVal; 
+alter table category add column categoryVal int default 0;
+update category set categoryVal=0;
+
+insert into category (description ,type,categoryVal) VALUES ('Curb Side',4,1);
+insert into category (description ,type,categoryVal) VALUES ('Ticket Counter',4,2);
+insert into category (description ,type,categoryVal) VALUES ('Gate',4,3);
+insert into category (description ,type,categoryVal) VALUES ('Remote',4,4);
+insert into category (description ,type,categoryVal) VALUES ('Plane-side',4,5);
+insert into category (description ,type,categoryVal) VALUES ('Unchecked',4,6);
+insert into category (description ,type,categoryVal) VALUES ('Kiosk',4,7);
+insert into category (description ,type,categoryVal) VALUES ('Mixed',4,8);
