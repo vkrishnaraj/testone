@@ -258,7 +258,6 @@ insert into systemcomponents (component_id,component_name,component_desc,parent_
 alter table usergroup add column bsoLimit double default 0;
 update usergroup set bsoLimit=0;
 
-alter table category drop column categoryVal; 
 alter table category add column categoryVal int default 0;
 update category set categoryVal=0;
 
