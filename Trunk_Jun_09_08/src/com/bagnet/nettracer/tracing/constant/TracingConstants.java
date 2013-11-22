@@ -336,10 +336,10 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_INCIDENT_COURTESY_REASON_COLLECT = "Incident_Courtesy_Reason_Collect";
 	public static final String SYSTEM_COMPONENT_NAME_ADDITIONAL_MISSING_ITEM_INFORMATION_COLLECT = "Additional_Missing_Item_Information_Collect";
 	public static final String SYSTEM_COMPONENT_NAME_DOCUMENT_TEMPLATES_MANAGE = "Document_Templates_Manage";
-	public static final String SYSTEM_COMPONENT_NAME_IMMEDIATE_FULFILLMENT = "Immediate Fulfillment";	
-	public static final String SYSTEM_COMPONENT_NAME_EMAIL_FULFILLMENT = "Email Fulfillment";	
-	public static final String SYSTEM_COMPONENT_NAME_MAIL_FULFILLMENT = "Mail Fulfillment";	
-	public static final String SYSTEM_COMPONENT_NAME_CANCEL_A_VOUCHER = "Cancel a Voucher";	
+	public static final String SYSTEM_COMPONENT_NAME_IMMEDIATE_FULFILLMENT = "LUV Immediate Fulfillment";	
+	public static final String SYSTEM_COMPONENT_NAME_EMAIL_FULFILLMENT = "LUV Email Fulfillment";	
+	public static final String SYSTEM_COMPONENT_NAME_MAIL_FULFILLMENT = "LUV Mail Fulfillment";	
+	public static final String SYSTEM_COMPONENT_NAME_CANCEL_A_VOUCHER = "LUV Cancel a Voucher";
 
 	public static final String SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_STATION_ADMIN = "Issuance_Item_Station_Admin";
 	public static final String SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_GLOBAL_ADMIN = "Issuance_Item_Global_Admin";

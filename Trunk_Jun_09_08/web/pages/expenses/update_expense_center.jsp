@@ -141,9 +141,9 @@
 				<div id="maincontent">
 					
 					<% if (submitOk) { %>
-					<h1 class="green" align="center">
-						Successfully Submitted!
- 					</h1>
+					<center><font color=green>
+            			Successfully Submitted!
+          			</font></center>
 					<div align="right" width="100%" >
 					<a name="printrpt" href='#' onclick="rePrint()">
 					<bean:message key="button.bdo_sendprint" />

@@ -19,7 +19,7 @@ boolean hasMailFulfillPermission = UserPermissions.hasPermission(TracingConstant
 boolean hasCancelPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CANCEL_A_VOUCHER, a);
 
 %>
-  
+
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
@@ -55,33 +55,20 @@ boolean hasCancelPermission = UserPermissions.hasPermission(TracingConstants.SYS
            <br />
            <html:text property="checkamt" size="11" maxlength="10" styleClass="textfield" />
            <br />
-        </td>
-        <td id="voucherAmount">
-            <bean:message key="issue.voucheramt" />
-            <br />
-			<html:text property="voucheramt" size="15" maxlength="10" styleClass="textfield" />
-		</td>
-        <td>
-            <bean:message key="colname.mileageamt" />
-            <br />
-            <html:text property="mileageamt" size="15" maxlength="10" styleClass="textfield" />
-        </td>                        
-     </tr>
-     <tr> 
-        <td> 
-           <bean:message key="colname.currency" />
+                     <bean:message key="colname.currency" />
            <br />
            <html:select property="currency_ID" styleClass="dropdown">
            		<html:options collection="currencylist" property="currency_ID" labelProperty="id_desc" />
            </html:select>
         </td>
-		<td id="distributedmethod" style="display:inline;">
-			<bean:message key="colname.distribution_method" />
+        <td id="voucherAmount">
+            <bean:message key="issue.voucheramt" />
+            <br />
+			<html:text property="voucheramt" size="15" maxlength="10" styleClass="textfield" />
+			<br />
+						<bean:message key="colname.distribution_method" />
 			<br />
 			<html:select property="distributemethod" styleClass="dropdown" disabled="disabled">
-			<html:option value="">
-				<bean:message key="select.please_select" />
-			</html:option>			
 			<% if(hasImmFulfillPermission) { %>		
 			<html:option value="IMME">
 				<bean:message key="Immediate.fulfill" />
@@ -98,6 +85,11 @@ boolean hasCancelPermission = UserPermissions.hasPermission(TracingConstants.SYS
 			</html:option>
 			<% } %>
 			</html:select>
-        	<br />				    			
-         </td>
-	 </tr>
+		</td>
+        <td>
+            <bean:message key="colname.mileageamt" />
+            <br />
+            <html:text property="mileageamt" size="15" maxlength="10" styleClass="textfield" />
+        </td>                        
+     </tr>
+
