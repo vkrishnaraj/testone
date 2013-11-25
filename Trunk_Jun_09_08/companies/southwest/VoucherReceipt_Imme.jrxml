@@ -31,7 +31,7 @@
 		<band/>
 	</title>
 	<pageHeader>
-		<band height="702">
+		<band height="705">
 			<staticText>
 				<reportElement x="2" y="7" width="548" height="16"/>
 				<textElement textAlignment="Center" lineSpacing="Single">
@@ -55,12 +55,12 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Arial" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{createdate1}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-11" mode="Opaque" x="2" y="65" width="114" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-11" mode="Opaque" x="2" y="64" width="114" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -68,12 +68,12 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Arial" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{pass_name}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-13" mode="Opaque" x="2" y="80" width="114" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-13" mode="Opaque" x="2" y="78" width="114" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -81,12 +81,12 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Arial" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{address1}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-15" mode="Opaque" x="2" y="95" width="114" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-15" mode="Opaque" x="2" y="91" width="114" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -94,12 +94,12 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Arial" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{city_st_zip}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-10" mode="Opaque" x="357" y="65" width="101" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-10" mode="Opaque" x="362" y="64" width="101" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -107,68 +107,68 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Arial" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{incident_num}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="2" y="136" width="548" height="16"/>
+				<reportElement x="2" y="133" width="548" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Please accept our sincere apologies for the baggage irregularity that you experienced. As settlement for the above-]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2" y="152" width="548" height="16"/>
+				<reportElement x="2" y="146" width="548" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[mentioned Report Number, and as a token of our regards for this unfortunate occurrence, we will be sending you]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2" y="168" width="548" height="16"/>
+				<reportElement x="2" y="159" width="548" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Southwest travel credit (under separate cover). We call these documents Southwest LUV Vouchers and we hope that you]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2" y="184" width="548" height="16"/>
+				<reportElement x="2" y="172" width="548" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[will accept them in the intended spirit, along with our heartfelt invitation to travel with us again.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2" y="259" width="548" height="16"/>
+				<reportElement x="2" y="234" width="548" height="14"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Sincerely,]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2" y="275" width="548" height="16"/>
+				<reportElement x="2" y="265" width="548" height="14"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[____________________________________]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2" y="291" width="548" height="16"/>
+				<reportElement x="2" y="279" width="548" height="14"/>
 				<textElement lineSpacing="Single">
 					<font size="10" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Southwest Airlines Co.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="4" y="307" width="548" height="16"/>
+				<reportElement x="2" y="293" width="548" height="14"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Baggage Service Office/DAL-3TC]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-8" mode="Opaque" x="80" y="395" width="114" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-8" mode="Opaque" x="91" y="394" width="114" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -176,12 +176,12 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Arial" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Arial" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{createdate}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-8" mode="Opaque" x="57" y="380" width="114" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-8" mode="Opaque" x="72" y="379" width="114" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -189,22 +189,26 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Arial" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Arial" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{createdate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="2" y="380" width="55" height="15"/>
-				<textElement lineSpacing="Single"/>
+				<reportElement x="2" y="379" width="70" height="15"/>
+				<textElement lineSpacing="Single">
+					<font size="11" isBold="true"/>
+				</textElement>
 				<text><![CDATA[Issue Date:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2" y="395" width="78" height="15"/>
-				<textElement lineSpacing="Single"/>
+				<reportElement x="2" y="394" width="89" height="15"/>
+				<textElement lineSpacing="Single">
+					<font size="11" isBold="true"/>
+				</textElement>
 				<text><![CDATA[Expiration Date:]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-11" mode="Opaque" x="281" y="410" width="114" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-11" mode="Opaque" x="303" y="409" width="114" height="25" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -212,29 +216,33 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Arial" size="14" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{amount}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="222" y="410" width="59" height="15"/>
+				<reportElement x="225" y="409" width="78" height="25"/>
 				<textElement lineSpacing="Single">
-					<font size="10" isBold="false"/>
+					<font size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Amount:  $]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="222" y="365" width="135" height="15"/>
-				<textElement lineSpacing="Single"/>
+				<reportElement x="225" y="364" width="151" height="15"/>
+				<textElement lineSpacing="Single">
+					<font size="11" isBold="true"/>
+				</textElement>
 				<text><![CDATA[Southwest LUV Voucher #:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2" y="365" width="70" height="15"/>
-				<textElement lineSpacing="Single"/>
-				<text><![CDATA[Order Number:]]></text>
+				<reportElement x="2" y="364" width="70" height="15"/>
+				<textElement lineSpacing="Single">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Order #:]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-11" mode="Opaque" x="72" y="365" width="114" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-11" mode="Opaque" x="72" y="364" width="114" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -242,48 +250,45 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Arial" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Arial" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{order_num}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="314" y="65" width="43" height="15"/>
+				<reportElement x="319" y="64" width="43" height="13"/>
 				<textElement lineSpacing="Single"/>
 				<text><![CDATA[Report#:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2" y="110" width="89" height="15"/>
-				<textElement lineSpacing="Single"/>
-				<text><![CDATA[UNITED STATES]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="2" y="211" width="548" height="16"/>
+				<reportElement x="2" y="195" width="548" height="14"/>
 				<textElement lineSpacing="Single">
-					<font isBold="true"/>
+					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Must be redeemed at the time reservations are made. All travel using this voucher must be completed by ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2" y="227" width="548" height="16"/>
+				<reportElement x="2" y="209" width="548" height="14"/>
 				<textElement lineSpacing="Single">
-					<font isBold="false"/>
+					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[expiration date.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2" y="333" width="548" height="16"/>
+				<reportElement x="2" y="323" width="548" height="16"/>
 				<textElement textAlignment="Center" lineSpacing="Single">
 					<font size="12" isBold="true" isUnderline="true"/>
 				</textElement>
 				<text><![CDATA[IMPORTANT VOUCHER INFORMATION]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="222" y="380" width="135" height="15"/>
-				<textElement lineSpacing="Single"/>
-				<text><![CDATA[Security Code                   :]]></text>
+				<reportElement x="225" y="379" width="151" height="15"/>
+				<textElement lineSpacing="Single">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Security Code                    :]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-11" mode="Opaque" x="357" y="365" width="114" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-11" mode="Opaque" x="376" y="364" width="114" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -291,12 +296,12 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Arial" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Arial" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{voucher_num}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-11" mode="Opaque" x="357" y="380" width="114" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-11" mode="Opaque" x="376" y="379" width="114" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -304,170 +309,183 @@
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
-					<font fontName="Arial" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Arial" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{sec_code}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="2" y="436" width="548" height="16"/>
+				<reportElement x="2" y="444" width="548" height="14"/>
 				<textElement textAlignment="Center" lineSpacing="Single">
-					<font isBold="true"/>
+					<font size="11" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Term and Conditions - Southwest LUV Voucher]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2" y="452" width="548" height="16"/>
+				<reportElement x="2" y="471" width="548" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Southwest LUV Vouchers and air fare paid with a Southwest  LUV Voucher(s) are subject to the applicable terms. Contract]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2" y="468" width="548" height="16"/>
+				<reportElement x="2" y="484" width="548" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[of Carriage, and rules and regulations of Southwest Airlines.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="4" y="495" width="548" height="16"/>
+				<reportElement x="2" y="506" width="548" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[You may redeem your Southwest LUV Voucher on a future Southwest Airlines flight by:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="25" y="511" width="527" height="16"/>
+				<reportElement x="21" y="530" width="527" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Booking Online at southwest.com]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="25" y="527" width="527" height="16"/>
+				<reportElement x="21" y="543" width="527" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Calling Reservations at 1-800-I-FLY-SWA (1-800-435-9792)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="25" y="543" width="527" height="16"/>
+				<reportElement x="21" y="556" width="527" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Visiting a Southwest Airline Ticket Counter]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2" y="559" width="548" height="16"/>
+				<reportElement x="2" y="577" width="548" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Keep in mind:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="25" y="575" width="527" height="16"/>
+				<reportElement x="21" y="600" width="527" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Your Southwest LUV Voucher must be redeemed at the time of purchase by providing the 16-digit number and four-]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="25" y="591" width="527" height="16"/>
+				<reportElement x="21" y="613" width="527" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[digit security code listed below.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="25" y="607" width="527" height="16"/>
+				<reportElement x="21" y="626" width="527" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Southwest LUV Vouchers may be used as payment toward future air fare only on Southwest Airlines - operated ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="25" y="623" width="527" height="16"/>
+				<reportElement x="21" y="639" width="527" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[flights.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="25" y="639" width="527" height="16"/>
+				<reportElement x="21" y="652" width="527" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Southwest LUV Vouchers are not redeemable as payment toward miscellaneous charges, goverment-imposed]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="25" y="655" width="527" height="16"/>
+				<reportElement x="21" y="665" width="527" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[taxes and fees, Southwest Airlines Vacations packages, or travel either wholly or in part on other air carriers.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="23" y="671" width="527" height="16"/>
+				<reportElement x="21" y="679" width="527" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Southwest LUV Vouchers are VOID if sold, altered, purchased, brokered, and/or bartered.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="25" y="686" width="527" height="16"/>
+				<reportElement x="21" y="692" width="527" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[See complete Terms and Conditions on southwest.com for use of your Southwest LUV Voucher.]]></text>
 			</staticText>
 			<ellipse>
-				<reportElement key="ellipse-2" mode="Opaque" x="9" y="511" width="6" height="6" forecolor="#000000" backcolor="#000000"/>
+				<reportElement key="ellipse-2" mode="Opaque" x="8" y="530" width="4" height="4" forecolor="#000000" backcolor="#000000"/>
 				<graphicElement fill="Solid">
 					<pen lineWidth="0.5" lineStyle="Solid"/>
 				</graphicElement>
 			</ellipse>
 			<ellipse>
-				<reportElement key="ellipse-2" mode="Opaque" x="9" y="543" width="6" height="6" forecolor="#000000" backcolor="#000000"/>
+				<reportElement key="ellipse-2" mode="Opaque" x="8" y="556" width="4" height="4" forecolor="#000000" backcolor="#000000"/>
 				<graphicElement fill="Solid">
 					<pen lineWidth="0.5" lineStyle="Solid"/>
 				</graphicElement>
 			</ellipse>
 			<ellipse>
-				<reportElement key="ellipse-2" mode="Opaque" x="9" y="527" width="6" height="6" forecolor="#000000" backcolor="#000000"/>
+				<reportElement key="ellipse-2" mode="Opaque" x="8" y="543" width="4" height="4" forecolor="#000000" backcolor="#000000"/>
 				<graphicElement fill="Solid">
 					<pen lineWidth="0.5" lineStyle="Solid"/>
 				</graphicElement>
 			</ellipse>
 			<ellipse>
-				<reportElement key="ellipse-2" mode="Opaque" x="9" y="575" width="6" height="6" forecolor="#000000" backcolor="#000000"/>
+				<reportElement key="ellipse-2" mode="Opaque" x="8" y="600" width="4" height="4" forecolor="#000000" backcolor="#000000"/>
 				<graphicElement fill="Solid">
 					<pen lineWidth="0.5" lineStyle="Solid"/>
 				</graphicElement>
 			</ellipse>
 			<ellipse>
-				<reportElement key="ellipse-2" mode="Opaque" x="9" y="607" width="6" height="6" forecolor="#000000" backcolor="#000000"/>
+				<reportElement key="ellipse-2" mode="Opaque" x="8" y="626" width="4" height="4" forecolor="#000000" backcolor="#000000"/>
 				<graphicElement fill="Solid">
 					<pen lineWidth="0.5" lineStyle="Solid"/>
 				</graphicElement>
 			</ellipse>
 			<ellipse>
-				<reportElement key="ellipse-2" mode="Opaque" x="9" y="639" width="6" height="6" forecolor="#000000" backcolor="#000000"/>
+				<reportElement key="ellipse-2" mode="Opaque" x="8" y="652" width="4" height="4" forecolor="#000000" backcolor="#000000"/>
 				<graphicElement fill="Solid">
 					<pen lineWidth="0.5" lineStyle="Solid"/>
 				</graphicElement>
 			</ellipse>
 			<ellipse>
-				<reportElement key="ellipse-2" mode="Opaque" x="9" y="671" width="6" height="6" forecolor="#000000" backcolor="#000000"/>
+				<reportElement key="ellipse-2" mode="Opaque" x="8" y="679" width="4" height="4" forecolor="#000000" backcolor="#000000"/>
 				<graphicElement fill="Solid">
 					<pen lineWidth="0.5" lineStyle="Solid"/>
 				</graphicElement>
 			</ellipse>
 			<ellipse>
-				<reportElement key="ellipse-2" mode="Opaque" x="9" y="687" width="6" height="6" forecolor="#000000" backcolor="#000000"/>
+				<reportElement key="ellipse-2" mode="Opaque" x="8" y="692" width="4" height="4" forecolor="#000000" backcolor="#000000"/>
 				<graphicElement fill="Solid">
 					<pen lineWidth="0.5" lineStyle="Solid"/>
 				</graphicElement>
 			</ellipse>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-11" mode="Opaque" x="2" y="104" width="114" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{country}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>

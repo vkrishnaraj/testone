@@ -71,6 +71,7 @@ public class LUVReceipt_Imme {
 				parameters.put("city_st_zip", (pa.getAddress(0).getCity() != null ? (pa.getAddress(0).getCity() + ", ") : "")
 						+ (pa.getAddress(0).getState_ID() != null ? (pa.getAddress(0).getState_ID() + " ") : (pa.getAddress(0).getProvince() != null ? (pa.getAddress(0).getProvince() + " ") : ""))
 						+ (pa.getAddress(0).getZip() != null ? pa.getAddress(0).getZip() : ""));
+				parameters.put("country", "UNITED STATES");
 				break;
 			}
 		}
