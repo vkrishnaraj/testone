@@ -138,3 +138,5 @@ update properties set valueStr = 'es' where keyStr = 'custom.missing.receipt.fil
 insert into properties (keyStr, valueStr) VALUES ('receipt.custom.types',1);
 delete from localereceipt where locale_id <> 'en';
 insert into localereceipt values ('es', 'Espanol');
+
+insert into properties (keyStr,valueStr) values ('bso.expense.process','1');
