@@ -55,6 +55,7 @@ import com.bagnet.nettracer.tracing.db.CountryCode;
 import com.bagnet.nettracer.tracing.db.DbLocale;
 import com.bagnet.nettracer.tracing.db.DeliveryInstructions;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.Itinerary;
@@ -258,6 +259,11 @@ public class TracerUtils {
 		// default weight unit related code here
 		i.setBag_weight_unit(myDefaultWeightUnit);
 		
+		
+		// set new claimcheck - Required to Create a Claim Check on creation
+		@SuppressWarnings("unused")
+		Incident_Claimcheck ic = theform.getClaimcheck(0);
+
 		// create new article
 		if (itemtype == TracingConstants.MISSING_ARTICLES) {
 			Articles a = theform.getArticle(0);

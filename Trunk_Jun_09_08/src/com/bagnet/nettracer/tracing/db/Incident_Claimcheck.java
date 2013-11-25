@@ -18,6 +18,10 @@ import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
  * @hibernate.class table="Incident_Claimcheck"
  */
 public class Incident_Claimcheck implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7863821205236377195L;
 	private int Claimcheck_ID;
 	private String claimchecknum="";
 	private String claimchecknum_leading;

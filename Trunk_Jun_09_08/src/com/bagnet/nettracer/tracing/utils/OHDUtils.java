@@ -1742,10 +1742,7 @@ public class OHDUtils {
 			else {
 				sess = HibernateWrapper.getSession().openSession();
 			}
-//			String sql = "select count(dispute.dispute_res_id)";
-//			sql += " from com.bagnet.nettracer.tracing.db.dr.Dispute dispute where 1=1";
-//			sql += " and dispute.status = :status";
-
+			
 			String sql = "select count(dispute.dispute_res_id)";
 			sql += " from com.bagnet.nettracer.tracing.db.dr.Dispute dispute where 1=1";
 			sql += " and dispute.status = :status";
@@ -1756,8 +1753,6 @@ public class OHDUtils {
 
 			q.setParameter("station", stationId);
 			q.setParameter("lz", lzId);
-			
-//			logger.error("getDisputeCount() : lzId = " + lzId + " and stationId = " + stationId);
 			
 			@SuppressWarnings("rawtypes")
 			List list = q.list();

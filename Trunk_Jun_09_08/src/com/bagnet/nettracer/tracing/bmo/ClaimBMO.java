@@ -233,7 +233,7 @@ public class ClaimBMO {
 			sess.saveOrUpdate(claimDeprec);
 			tx.commit();
 			sess.flush();
-			sess.close();
+			
 
 		} catch (Exception e){
 			logger.error("Error in get Claim Types: " + e);
