@@ -274,7 +274,7 @@ Boletos sin Costo]]></text>
 				<imageExpression class="java.lang.String"><![CDATA[$P{logo}]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement key="textField-48" positionType="Float" mode="Opaque" x="9" y="81" width="532" height="265" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-48" positionType="Float" mode="Opaque" x="9" y="81" width="532" height="272" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="styled">
 					<font fontName="Tahoma" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
@@ -304,7 +304,7 @@ Si usted cree que la Oficina de Servicio de Equipaje local ha llegado a una reso
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Tahoma" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{stationname}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{station}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement key="textField-55" mode="Opaque" x="438" y="520" width="66" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
@@ -362,25 +362,25 @@ Dallas, Texas 75235-1663]]></text>
 			<line>
 				<reportElement key="line-8" mode="Opaque" x="5" y="671" width="541" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
-					<pen lineWidth="2.0" lineStyle="Solid"/>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement key="line-8" mode="Opaque" x="5" y="481" width="541" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
-					<pen lineWidth="2.0" lineStyle="Solid"/>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement key="line-8" mode="Opaque" x="5" y="482" width="1" height="189" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
-					<pen lineWidth="2.0" lineStyle="Solid"/>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement key="line-8" mode="Opaque" x="545" y="482" width="1" height="189" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
-					<pen lineWidth="2.0" lineStyle="Solid"/>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<staticText>

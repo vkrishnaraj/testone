@@ -171,15 +171,22 @@ public class LostDelayReceipt {
 		
 		//new code - reconcile later
 		StringBuffer sbClaimCheckNumber = new StringBuffer();
+		StringBuffer sbBagDesc = new StringBuffer();
 		StringBuffer sbArticles = new StringBuffer();
 		List<Item> myItemList = theform.getItemlist();
 		for (int i = 0; i < myItemList.size(); i++) {
-			String myClaimCheckNumber = ((Item) myItemList.get(i)).getClaimchecknum();
+			Item item = myItemList.get(i);
+			String myClaimCheckNumber = item.getClaimchecknum();
 			if (!(myClaimCheckNumber == null || myClaimCheckNumber.equals(""))) {
 				sbClaimCheckNumber.append(myClaimCheckNumber.trim());
 				sbClaimCheckNumber.append(",");
+				sbBagDesc.append(",");
+				sbBagDesc.append(myClaimCheckNumber.trim());
+				if (item.getDamage() != null && item.getDamage().trim().length() > 0) {
+					sbBagDesc.append(": ");
+					sbBagDesc.append(item.getDamage());
+				}
 			}
-			Item item = myItemList.get(i);
 			if (item != null && item.getInventorylist() != null && item.getInventorylist().size() > 0) {
 				for (Item_Inventory inven : (List<Item_Inventory>) item.getInventorylist()) {
 					if (inven != null && inven.getDescription() != null && inven.getDescription().trim().length() > 0) {
@@ -193,8 +200,11 @@ public class LostDelayReceipt {
 			int claimCheckNumberLength = sbClaimCheckNumber.toString().length() - 1;
 			String claim_check_num = sbClaimCheckNumber.toString().substring(0, claimCheckNumberLength);
 			parameters.put("claim_check_num", claim_check_num);
-			parameters.put("bag_description", claim_check_num);
 			logger.info("claim_check_num:" + claim_check_num);
+		}
+
+		if (sbBagDesc.length() > 0) {
+			parameters.put("bag_description", sbBagDesc.toString().substring(1));
 		}
 		
 		if (sbArticles.length() > 0) {

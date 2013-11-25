@@ -303,7 +303,7 @@ If your property is not returned to you within five (5) days, and you believe we
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Tahoma" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{stationname}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{station}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement key="textField-55" mode="Opaque" x="438" y="553" width="66" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
@@ -359,33 +359,33 @@ Dallas, Texas 75235-1663]]></text>
 			<line>
 				<reportElement key="line-8" mode="Opaque" x="5" y="704" width="541" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
-					<pen lineWidth="2.0" lineStyle="Solid"/>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement key="line-8" mode="Opaque" x="5" y="514" width="541" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
-					<pen lineWidth="2.0" lineStyle="Solid"/>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement key="line-8" mode="Opaque" x="5" y="515" width="1" height="189" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
-					<pen lineWidth="2.0" lineStyle="Solid"/>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement key="line-8" mode="Opaque" x="545" y="515" width="1" height="189" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
-					<pen lineWidth="2.0" lineStyle="Solid"/>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<staticText>
 				<reportElement key="textField-22" mode="Opaque" x="27" y="520" width="437" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
-					<font fontName="Tahoma" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Tahoma" size="10" isBold="true" isItalic="false" isUnderline="true" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[Customer Baggage Report Information]]></text>
+				<text><![CDATA[Nonrevenue Customer Baggage Report Information]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="textField-22" mode="Opaque" x="27" y="539" width="496" height="14" forecolor="#000000" backcolor="#FFFFFF"/>

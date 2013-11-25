@@ -306,7 +306,7 @@ Si su propiedad no le es devuelta dentro de un plazo de cinco (5) días, y usted
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Tahoma" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{stationname}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{station}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement key="textField-55" mode="Opaque" x="438" y="456" width="66" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
@@ -362,25 +362,25 @@ Dallas, Texas 75235-1663]]></text>
 			<line>
 				<reportElement key="line-8" mode="Opaque" x="5" y="591" width="541" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
-					<pen lineWidth="2.0" lineStyle="Solid"/>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement key="line-8" mode="Opaque" x="5" y="420" width="541" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
-					<pen lineWidth="2.0" lineStyle="Solid"/>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement key="line-8" mode="Opaque" x="5" y="421" width="1" height="170" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
-					<pen lineWidth="2.0" lineStyle="Solid"/>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement key="line-8" mode="Opaque" x="545" y="421" width="1" height="170" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
-					<pen lineWidth="2.0" lineStyle="Solid"/>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<staticText>

@@ -283,7 +283,7 @@ Southwest Airlines would first like to apologize for the inconvenience that this
 
 The liability, if any, of Southwest Airlines for loss of, damage to, or delay in the delivery of checked or unchecked property is governed by both the terms and conditions contained in our Contract of Carriage and Company Policy provisions. You may view Southwest Airlines' Contract of Carriage by visiting www.southwest.com.
 
-If your property is not returned to you within five (5) days, please forward photocopies of the following <style isBold="true" pdfFontName="Helvetica-Bold">within 21 days</style> from the alleged date of occurrence:
+If your property is not returned to you within five (5) days, please forward photocopies of the following <style isUnderline="true" isBold="true" pdfFontName="Helvetica-Bold">within 21 days</style> from the alleged date of occurrence:
 <style isBold="true" pdfFontName="Helvetica-Bold">
   1.  Detailed description of missing property. Include model, manufacturer, serial number, color and any
        other descriptive info.
@@ -304,7 +304,7 @@ If your property is not returned to you within five (5) days, please forward pho
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Tahoma" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{stationname}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{station}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement key="textField-55" mode="Opaque" x="438" y="458" width="66" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
@@ -360,31 +360,31 @@ Dallas, Texas 75235-1663]]></text>
 			<line>
 				<reportElement key="line-8" mode="Opaque" x="5" y="592" width="541" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
-					<pen lineWidth="2.0" lineStyle="Solid"/>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement key="line-8" mode="Opaque" x="5" y="422" width="541" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
-					<pen lineWidth="2.0" lineStyle="Solid"/>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement key="line-8" mode="Opaque" x="5" y="423" width="1" height="169" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
-					<pen lineWidth="2.0" lineStyle="Solid"/>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<line>
 				<reportElement key="line-8" mode="Opaque" x="545" y="423" width="1" height="169" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
-					<pen lineWidth="2.0" lineStyle="Solid"/>
+					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
 			<staticText>
 				<reportElement key="textField-22" mode="Opaque" x="27" y="427" width="437" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
-					<font fontName="Tahoma" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<font fontName="Tahoma" size="9" isBold="true" isItalic="false" isUnderline="true" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Customer Baggage Report Information]]></text>
 			</staticText>
