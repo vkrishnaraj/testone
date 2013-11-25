@@ -24,6 +24,10 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
  * @hibernate.class table="OHD_Log"
  */
 public class OHD_Log implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1754832116819197388L;
 	public int OHDLog_ID;
 	public String expeditenum;
 	public String message;
@@ -32,7 +36,7 @@ public class OHD_Log implements Serializable {
 	public int destStationCode;
 	public int ohd_request_id;
 	public Date forward_time;
-	private Set itinerary;
+	private Set<OHD_Log_Itinerary> itinerary;
 	public int log_status;
 	private ProactiveNotification pcn;
 	
@@ -40,16 +44,16 @@ public class OHD_Log implements Serializable {
 	private String _TIMEFORMAT;
 	private TimeZone _TIMEZONE;
 
-	public List getItinerarylist() {
+	public List<OHD_Log_Itinerary> getItinerarylist() {
 		if (itinerary == null || itinerary.size() < 1) return null;
 
-		return new ArrayList(itinerary);
+		return new ArrayList<OHD_Log_Itinerary>(itinerary);
 	}
 
 	public JRBeanCollectionDataSource getItineraryReport() {
 		if (itinerary == null || itinerary.size() < 1) return null;
 
-		return new JRBeanCollectionDataSource(new ArrayList(itinerary));
+		return new JRBeanCollectionDataSource(new ArrayList<OHD_Log_Itinerary>(itinerary));
 	}
 
 	/**
@@ -122,7 +126,7 @@ public class OHD_Log implements Serializable {
 	 * 
 	 * @return Returns the itinerary.
 	 */
-	public Set getItinerary() {
+	public Set<OHD_Log_Itinerary> getItinerary() {
 		return itinerary;
 	}
 
@@ -130,7 +134,7 @@ public class OHD_Log implements Serializable {
 	 * @param itinerary
 	 *          The itinerary to set.
 	 */
-	public void setItinerary(Set itinerary) {
+	public void setItinerary(Set<OHD_Log_Itinerary> itinerary) {
 		this.itinerary = itinerary;
 	}
 

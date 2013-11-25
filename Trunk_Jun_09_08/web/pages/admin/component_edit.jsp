@@ -39,7 +39,6 @@
 
   }
   function updatePagination() {
-	  o = document.groupForm;
 	  o.edit.value="1";
 	  o.submit();
   }
@@ -117,6 +116,17 @@
                 <html:text styleClass="textfield" name="groupForm" property="companyCode" size="4" maxlength="3" readonly="true" />
               </td>
             </tr>
+            <% if(request.getAttribute("bsoProcess")!=null){ %>
+            <tr>
+              <td>
+                <bean:message key="header.bsoLimit" />
+                :
+              </td>
+              <td>
+                <html:text styleClass="textfield" name="groupForm" property="bsoLimit" size="10" maxlength="10" />
+              </td>
+            </tr>
+            <% } %>
             <tr>
               <td colspan="3" align="center">
                 <INPUT Id="button" type="button" value="Back" onClick="history.back()">

@@ -2,7 +2,6 @@ package com.bagnet.nettracer.tracing.db;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -13,14 +12,19 @@ import java.util.Set;
 
  */
 public class UserGroup implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -943540365618533114L;
 	private int UserGroup_ID;
 	private String description;
 	private String description2;
-	private Set componentPolicies;
+	private Set<GroupComponentPolicy> componentPolicies;
 	private HashMap<String, GroupComponentPolicy> permissionNameMap = null;
 	private HashMap<String, GroupComponentPolicy> permissionLinkMap = null;
 	
 	private String companycode_ID;
+	private double bsoLimit;
 
 	/**
 	 * @hibernate.set cascade="all-delete-orphan" order-by="policy_id"
@@ -29,7 +33,7 @@ public class UserGroup implements Serializable {
 	 * 
 	 * @return Returns the componentPolicies.
 	 */
-	public Set getComponentPolicies() {
+	public Set<GroupComponentPolicy> getComponentPolicies() {
 		return componentPolicies;
 	}
 
@@ -37,7 +41,7 @@ public class UserGroup implements Serializable {
 	 * @param componentPolicies
 	 *          The componentPolicies to set.
 	 */
-	public void setComponentPolicies(Set componentPolicies) {
+	public void setComponentPolicies(Set<GroupComponentPolicy> componentPolicies) {
 		this.componentPolicies = componentPolicies;
 	}
 
@@ -145,6 +149,23 @@ public class UserGroup implements Serializable {
 			}
 		}
 		return permissionLinkMap;	
+	}
+
+	/**
+	 * @return Returns the bsoLimit.
+	 * 
+	 * @hibernate.property type="double"
+	 */
+	public double getBsoLimit() {
+		return bsoLimit;
+	}
+
+	/**
+	 * @param bsoLimit
+	 *          The bsoLimit to set.
+	 */
+	public void setBsoLimit(double bsoLimit) {
+		this.bsoLimit = bsoLimit;
 	}
 
 	

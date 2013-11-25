@@ -29,6 +29,8 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.constant.TracingConstants.SortParam;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company;
+import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Lz;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Agent;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Station;
@@ -107,7 +109,7 @@ public final class ManageStation extends Action {
 
 			//check if adding agents to this group
 			if (request.getParameter("addAgents") != null) {
-				HashMap selectedAgents = new HashMap();
+				HashMap<String,String> selectedAgents = new HashMap<String,String>();
 
 				String[] agentsSelected = request.getParameterValues("agent_ID");
 				if (agentsSelected != null) {
@@ -145,13 +147,13 @@ public final class ManageStation extends Action {
 				int currpage = request.getParameter("currpage") != null ? Integer.parseInt(request
 						.getParameter("currpage")) : 0;
 				
-				List agents = null;
+				List<Agent> agents = null;
 				if (!station_id.equals("-1")) agents = AdminUtils.getAgentsByStation(station_id, sort,
 						null, rowsperpage, currpage);
 				else agents = AdminUtils.getAgents(station.getCompany().getCompanyCode_ID(), sort, null, rowsperpage,
 						currpage);
 
-				for (Iterator i = agents.iterator(); i.hasNext();) {
+				for (Iterator<Agent> i = agents.iterator(); i.hasNext();) {
 					Agent a = (Agent) i.next();
 					if (a.getStation().getStation_ID() == station.getStation_ID()) {
 						// If agent was selected, leave it alone.
@@ -173,7 +175,7 @@ public final class ManageStation extends Action {
 				}
 			}
 
-			List agents = AdminUtils.getAgentsByStation(stationId, sort, null, 0, 0);
+			List<Agent> agents = AdminUtils.getAgentsByStation(stationId, sort, null, 0, 0);
 			if (agents != null && agents.size() > 0) {
 				/** ************ pagination ************* */
 				int rowcount = -1;
@@ -205,7 +207,7 @@ public final class ManageStation extends Action {
 
 				if (currpage + 1 == totalpages) request.setAttribute("end", "1");
 				if (totalpages > 1) {
-					ArrayList al = new ArrayList();
+					ArrayList<String> al = new ArrayList<String>();
 					for (int i = 0; i < totalpages; i++) {
 						al.add(Integer.toString(i));
 					}
@@ -237,7 +239,7 @@ public final class ManageStation extends Action {
 		dForm.set("companyCode", companyCode);
 
 		if (request.getParameter("addNew") != null) {
-			List lzList = LzUtils.getIncidentLzStations(companyCode);
+			List<Lz> lzList = LzUtils.getIncidentLzStations(companyCode);
 			dForm.set("lz_id", "" + LzUtils.getDefaultLz(lzList));		
 			request.setAttribute("lzStations", LzUtils.getIncidentLzStationsBeans(companyCode));
 			return mapping.findForward(TracingConstants.EDIT_STATION);
@@ -247,12 +249,12 @@ public final class ManageStation extends Action {
 			Station station = StationBMO.getStation(request.getParameter("stationId"));
 
 			//Get the station List for the company.
-			List stationList = AdminUtils.getStations(dForm, station.getCompany().getCompanyCode_ID(), 0,
+			List<Station> stationList = AdminUtils.getStations(dForm, station.getCompany().getCompanyCode_ID(), 0,
 					0);
 			if (stationList != null) {
-				List x2 = new ArrayList();
+				List<LabelValueBean> x2 = new ArrayList<LabelValueBean>();
 				Station first = null;
-				for (Iterator i = stationList.iterator(); i.hasNext();) {
+				for (Iterator<Station> i = stationList.iterator(); i.hasNext();) {
 					Station station2 = (Station) i.next();
 					if (first == null) first = station2;
 					x2.add(new LabelValueBean(station2.getStationcode(), "" + station2.getStation_ID()));
@@ -273,7 +275,7 @@ public final class ManageStation extends Action {
 				}
 
 				if (station_id != null) {
-					List agents = null;
+					List<Agent> agents = null;
 
 					int path = -1;
 
@@ -321,7 +323,7 @@ public final class ManageStation extends Action {
 
 						if (currpage + 1 == totalpages) request.setAttribute("end", "1");
 						if (totalpages > 1) {
-							ArrayList al = new ArrayList();
+							ArrayList<String> al = new ArrayList<String>();
 							for (int i = 0; i < totalpages; i++) {
 								al.add(Integer.toString(i));
 							}
@@ -376,7 +378,7 @@ public final class ManageStation extends Action {
 
 			ActionMessage error = null;
 			if (TracerUtils.getAgentlist(station.getStation_ID()).size() > 0) error = new ActionMessage("error.deleting.station.agent");
-			List a = IncidentUtils.getStationAssignedList(station.getStation_ID(), false);
+			List<Incident> a = IncidentUtils.getStationAssignedList(station.getStation_ID(), false);
 			if (a.size() > 0)  error = new ActionMessage("error.deleting.station.incidentcreated");
 			if (OHDUtils.getHoldingStationList(station.getStation_ID(), false).size() > 0)  error = new ActionMessage("error.deleting.station.onhandcreated");
 			if (OHDUtils.getDestStationList(station.getStation_ID(), false).size() > 0)  error = new ActionMessage("error.deleting.station.onhandcreated");
@@ -468,7 +470,7 @@ public final class ManageStation extends Action {
 			}
 		}
 		
-		List stationList = null;
+		List<Station> stationList = null;
 		TracingConstants.AgentActiveStatus status;
 		if (request.getParameter("active") == null || request.getParameter("active").equals("-1") || request.getParameter("save") != null) {
 			dForm.set("active", null);
@@ -511,7 +513,7 @@ public final class ManageStation extends Action {
 
 			if (currpage + 1 == totalpages) request.setAttribute("end", "1");
 			if (totalpages > 1) {
-				ArrayList al = new ArrayList();
+				ArrayList<String> al = new ArrayList<String>();
 				for (int i = 0; i < totalpages; i++) {
 					al.add(Integer.toString(i));
 				}

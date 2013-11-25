@@ -46,6 +46,8 @@ public class PropertyBMO {
 	public static final String PROPERTY_PCN_ENABLED = "pcn.enabled";
 	public static final String PROPERTY_TELEX_PRINTER = "telex.printer";
 	public static final String PROPERTY_DEFAULT_REPORT_SEVEN = "default.report.seven";
+	
+	public static final String BSO_EXPENSE_PROCESS = "bso.expense.process";
 
 	public static final String PROPERTY_WT_CAPTCHA = "wt.captcha";
 	public static final String RESERVATION_HOURS_FORWARD = "reservation.hours.forward";
@@ -298,6 +300,7 @@ public class PropertyBMO {
 	 * @return String property value.
 	 * @throws HibernateException
 	 */
+	@SuppressWarnings("unchecked")
 	private static List<String> getValues(String keyVal) throws HibernateException {
 		if(propCache.containsKey(keyVal)) {
 			return (List<String>) propCache.get(keyVal);

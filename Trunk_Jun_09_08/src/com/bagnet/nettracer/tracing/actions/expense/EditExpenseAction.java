@@ -7,8 +7,11 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import com.bagnet.nettracer.tracing.bmo.ExpensePayoutBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
+import com.bagnet.nettracer.tracing.bmo.UsergroupBMO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
+import com.bagnet.nettracer.tracing.db.UserGroup;
 import com.bagnet.nettracer.tracing.forms.ExpensePayoutForm;
 
 public class EditExpenseAction extends BaseExpenseAction {
@@ -31,6 +34,13 @@ public class EditExpenseAction extends BaseExpenseAction {
 		ExpensePayout ep = ExpensePayoutBMO.findExpensePayout(epId);
 		ExpensePayoutForm epform = (ExpensePayoutForm) form;
 		Agent user = (Agent)request.getSession().getAttribute("user");
+		
+		if(PropertyBMO.getValue(PropertyBMO.BSO_EXPENSE_PROCESS)!=null){
+			UserGroup group=UsergroupBMO.getUsergroup(user.getUsergroup_id());
+			if(group!=null && group.getBsoLimit()>0){
+				request.setAttribute("bsoLimit", group.getBsoLimit());
+			}
+		}
 		
 		populateForm(epform, ep, user, request);
 		request.getSession().setAttribute("expensepayoutform", epform);	

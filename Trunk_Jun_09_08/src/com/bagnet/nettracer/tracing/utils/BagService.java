@@ -86,7 +86,6 @@ import com.bagnet.nettracer.tracing.db.Task;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Claim;
 import com.bagnet.nettracer.tracing.db.audit.Audit_ClaimProrate;
-import com.bagnet.nettracer.tracing.db.audit.Audit_ExpensePayout;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Prorate_Itinerary;
 import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemIncident;
@@ -180,9 +179,9 @@ public class BagService {
 			OHD_Log_Itinerary oli = null;
 			
 			ArrayList<String> notifyList = new ArrayList<String>();
-			Set ItinLogList=new HashSet();
+			Set<OHD_Log_Itinerary> ItinLogList=new HashSet<OHD_Log_Itinerary>();
 			if(log.getItinerary() != null) {
-				for(Iterator i = log.getItinerary().iterator(); i.hasNext();) {
+				for(Iterator<OHD_Log_Itinerary> i = log.getItinerary().iterator(); i.hasNext();) {
 					oli=new OHD_Log_Itinerary();
 					try {
 						BeanUtils.copyProperties(oli, (OHD_Log_Itinerary) i.next());
@@ -216,7 +215,7 @@ public class BagService {
 					+ station.getStationcode() + " station.");
 			r.setOhd(ohd);
 			// Add a remark to the OHD saying the bag is forwarded.
-			Set remarks = ohd.getRemarks();
+			Set<Remark> remarks = ohd.getRemarks();
 			remarks.add(r);
 
 			// Change the status to be Matched in transit in case of a matching
@@ -281,9 +280,9 @@ public class BagService {
 				// Update all requests that could potentially have this bag id
 				log.setDestStationCode(Integer.parseInt(form.getDestStation()));
 
-				List requests = OHDUtils.getRequests(log.getOhd().getOHD_ID(), 0, 0);
+				List<OHDRequest> requests = OHDUtils.getRequests(log.getOhd().getOHD_ID(), 0, 0);
 				if(requests != null) {
-					for(Iterator i = requests.iterator(); i.hasNext();) {
+					for(Iterator<OHDRequest> i = requests.iterator(); i.hasNext();) {
 						OHDRequest request = (OHDRequest) i.next();
 						s = new Status();
 						if(request.getRequestForStation().getStation_ID() == log.getDestStationCode())
@@ -306,7 +305,7 @@ public class BagService {
 
 			// update l/d bag status to in transit as well if forwarding station
 			// is the same as l/d assigned station
-			Item item = BDOUtils.findOHDfromMatchedLD(onhandnum);
+			Item item = BDOUtils.findOHDfromMatchedLD(onhandnum); /* Not sure what to replace this with*/
 			if(item != null) {
 				Status s2 = new Status();
 				s2.setStatus_ID(TracingConstants.ITEM_STATUS_IN_TRANSIT);
@@ -350,13 +349,12 @@ public class BagService {
 		oDTO.setClaimnum(TracerUtils.removeSpaces(form.getBag_tag()).toUpperCase());
 
 		Date x = TracerDateTime.getGMTDate();
-		String date = new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(x);
 
 		oDTO.setFoundtime(x);
 		oDTO.setFounddate(x);
 		oDTO.setFoundAtStation(oDTO.getAgent().getStation());
 		oDTO.setHoldingStation(oDTO.getAgent().getStation());
-		oDTO.setItinerary(new HashSet(form.getBagitinerarylist()));
+		oDTO.setItinerary(new HashSet<OHD_Itinerary>(form.getBagitinerarylist()));
 
 
 		if(form.getFaultStation() != null && !form.getFaultStation().equals("")) {
@@ -368,8 +366,8 @@ public class BagService {
 		if(!form.getLossCode().equals("0")) {
 			oDTO.setLoss_code(new Integer(form.getLossCode()).intValue());
 		}
-		Set ItinList=new HashSet();
-		for(Iterator i = oDTO.getItinerary().iterator(); i.hasNext();) {
+		Set<OHD_Itinerary> ItinList=new HashSet<OHD_Itinerary>();
+		for(Iterator<OHD_Itinerary> i = oDTO.getItinerary().iterator(); i.hasNext();) {
 			
 			OHD_Itinerary oo = new OHD_Itinerary();
 			try {
@@ -386,7 +384,7 @@ public class BagService {
 		}
 		oDTO.setItinerary(ItinList);
 		
-		Set RemList=new HashSet();
+		Set<Remark> RemList=new HashSet<Remark>();
 		Remark rem = new Remark();
 		if(form.getMessage()!=null && form.getMessage().length()>0){
 			rem.setRemarktext(form.getMessage());
@@ -429,15 +427,15 @@ public class BagService {
 		log.setForward_time(TracerDateTime.getGMTDate());
 		log.setMessage(form.getMessage());
 		log.setDestStationCode(Integer.parseInt(form.getDestStation()));
-		log.setItinerary(new HashSet(form.getForwarditinerarylist()));
+		log.setItinerary(new HashSet<OHD_Log_Itinerary>(form.getForwarditinerarylist()));
 		log.setLog_status(TracingConstants.LOG_NOT_RECEIVED);
 		OHD_Log_Itinerary oli = null;
 		
 		ArrayList<String> notifyList = new ArrayList<String>();
 
-		Set ItinLogList=new HashSet();
+		Set<OHD_Log_Itinerary> ItinLogList=new HashSet<OHD_Log_Itinerary>();
 		if(log.getItinerary() != null) {
-			List itinList = log.getItinerarylist();
+			List<OHD_Log_Itinerary> itinList = log.getItinerarylist();
 			for (int i = 0; itinList != null && i<itinList.size(); ++i) {
 				oli=new OHD_Log_Itinerary();
 				try {
@@ -532,7 +530,7 @@ public class BagService {
 		r.setOhd(ohd);
 
 		// Add a remark to the OHD saying the bag is forwarded.
-		Set remarks = ohd.getRemarks();
+		Set<Remark> remarks = ohd.getRemarks();
 		remarks.add(r);
 
 		Status s = new Status();
@@ -553,6 +551,7 @@ public class BagService {
 		return insertIncident(iDTO, theform, itemtype, realpath, mod_agent, false);
 	}
 
+	@SuppressWarnings("unchecked")
 	public ActionMessage insertIncident(Incident iDTO, IncidentForm theform, int itemtype, String realpath,
 			Agent mod_agent, boolean checkClosedStatus) {
 		try {
@@ -616,7 +615,7 @@ public class BagService {
 			iDTO.setItemtype(it);
 
 			if(itemtype == TracingConstants.MISSING_ARTICLES) {
-				iDTO.setArticles(new LinkedHashSet(theform.getArticlelist()));
+				iDTO.setArticles(new LinkedHashSet<Articles>(theform.getArticlelist()));
 				Articles art = null;
 				for(int i = 0; i < theform.getArticlelist().size(); i++) {
 					art = (Articles) theform.getArticlelist().get(i);
@@ -632,7 +631,6 @@ public class BagService {
 			// is entered
 			Item item = null;
 			Item oldItem=null;
-			Status itemstatus = null;
 			Item_Inventory ii = null;
 			if(iDTO.getItemlist() != null) {
 				for(int i = iDTO.getItemlist().size() - 1; i >= 0; i--) {
@@ -677,6 +675,9 @@ public class BagService {
 						if(item.getClaimchecknum() != null && item.getClaimchecknum().length() > 0) {
 							item.setClaimchecknum(TracerUtils.removeSpaces(item.getClaimchecknum().toUpperCase()));
 						}
+						
+						OHD o=null;
+
 						boolean hasPPU=(((UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP_LOSTDELAY, mod_agent) && item.getItemtype_ID()==TracingConstants.LOST_DELAY))
 								|| ((UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP_MISSING, mod_agent) && item.getItemtype_ID()==TracingConstants.MISSING_ARTICLES))
 								|| ((UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP_DAMAGE, mod_agent) && item.getItemtype_ID()==TracingConstants.DAMAGED_BAG)));
@@ -685,7 +686,7 @@ public class BagService {
 									&& oldItem!=null && oldItem.getStatus()!=null && oldItem.getStatus().getStatus_ID()==TracingConstants.ITEM_STATUS_PASSENGER_PICKED_UP){
 								if(item.getOHD_ID()!=null && !item.getOHD_ID().isEmpty()){
 									OhdBMO obmo=new OhdBMO();
-									OHD o=obmo.getOHDByID(item.getOHD_ID(), null);
+									o=OhdBMO.getOHDByID(item.getOHD_ID(), null);
 									if(o!=null){
 										Remark rem=new Remark();
 										rem.setRemarktype(TracingConstants.REMARK_REGULAR);
@@ -719,7 +720,7 @@ public class BagService {
 									&& (oldItem==null || (oldItem!=null && oldItem.getStatus().getStatus_ID()!=TracingConstants.ITEM_STATUS_PASSENGER_PICKED_UP))){
 								if(item.getOHD_ID()!=null && !item.getOHD_ID().isEmpty()){
 									OhdBMO obmo=new OhdBMO();
-									OHD o=obmo.getOHDByID(item.getOHD_ID(), null);
+									o=OhdBMO.getOHDByID(item.getOHD_ID(), null);
 									if(o!=null){
 										Status s=StatusBMO.getStatus(TracingConstants.OHD_STATUS_OWNER_PICKED_UP);
 										Status s2=StatusBMO.getStatus(TracingConstants.OHD_STATUS_CLOSED);
@@ -802,14 +803,14 @@ public class BagService {
 				}
 			}
 
-			iDTO.setClaimchecks(new LinkedHashSet(theform.getClaimchecklist()));
-			iDTO.setRemarks(new LinkedHashSet(theform.getRemarklist()));
-			iDTO.setItinerary(new LinkedHashSet(theform.getItinerarylist()));
+			iDTO.setClaimchecks(new LinkedHashSet<Incident_Claimcheck>(theform.getClaimchecklist()));
+			iDTO.setRemarks(new LinkedHashSet<Remark>(theform.getRemarklist()));
+			iDTO.setItinerary(new LinkedHashSet<Itinerary>(theform.getItinerarylist()));
 
-			iDTO.setPassengers(new LinkedHashSet(theform.getPassengerlist()));
+			iDTO.setPassengers(new LinkedHashSet<Passenger>(theform.getPassengerlist()));
 			Passenger pa = null;
 			if(iDTO.getPassengers() != null) {
-				for(Iterator i = iDTO.getPassengers().iterator(); i.hasNext();) {
+				for(Iterator<Passenger> i = iDTO.getPassengers().iterator(); i.hasNext();) {
 					pa = (Passenger) i.next();
 					pa.setIncident(iDTO);
 					if(pa.getMembership() != null) {
@@ -955,7 +956,7 @@ public class BagService {
 								currentLocale = iDTO.getAgent().getCurrentlocale();
 							}
 
-							ArrayList al = new ArrayList();
+							ArrayList<InternetAddress> al = new ArrayList<InternetAddress>();
 							al.add(new InternetAddress(toemail));
 							he.setTo(al);
 							String bcc = theform.getAgent().getStation().getCompany().getVariable().getBlindEmail();
@@ -972,7 +973,7 @@ public class BagService {
 							String tmpHtmlFileName = null;
 							boolean embedImage = true;
 							
-							HashMap h = new HashMap();
+							HashMap<String,String> h = new HashMap<String,String>();
 							h.put("PASS_NAME", passname);
 														
 							if(iDTO.getItemtype_ID() == TracingConstants.LOST_DELAY) {
@@ -1167,14 +1168,11 @@ public class BagService {
 			IncidentBMO iBMO = new IncidentBMO(); // init lostdelay pojo or ejb
 			// copy into incident bean
 			BeanUtils.copyProperties(iDTO, theform);
-			Incident oInc=iBMO.getIncidentByID(iDTO.getIncident_ID(), null);
+			Incident oInc=IncidentBMO.getIncidentByID(iDTO.getIncident_ID(), null);
 			
 			
 			if(iDTO.getAgentassigned() == null || iDTO.getAgentassigned().getAgent_ID() == 0)
 				iDTO.setAgentassigned(null);
-
-			String configpath = realpath + "/WEB-INF/classes/";
-			String imagepath = realpath + "/deployment/main/images/nettracer/";
 
 			// set itemtype to incident
 			ItemType it = new ItemType();
@@ -1182,7 +1180,7 @@ public class BagService {
 			iDTO.setItemtype(it);
 
 			if(itemtype == TracingConstants.MISSING_ARTICLES) {
-				iDTO.setArticles(new LinkedHashSet(theform.getArticlelist()));
+				iDTO.setArticles(new LinkedHashSet<Articles>(theform.getArticlelist()));
 				Articles art = null;
 				for(int i = 0; i < theform.getArticlelist().size(); i++) {
 					art = (Articles) theform.getArticlelist().get(i);
@@ -1197,7 +1195,6 @@ public class BagService {
 			// nothing
 			// is entered
 			Item item = null;
-			Status itemstatus = null;
 			Item_Inventory ii = null;
 			
 			if(iDTO.getItemlist() != null) {
@@ -1332,14 +1329,14 @@ public class BagService {
 					}
 				}
 
-				iDTO.setClaimchecks(new LinkedHashSet(oInc.getClaimcheck_list()));
+				iDTO.setClaimchecks(new LinkedHashSet<Incident_Claimcheck>(oInc.getClaimcheck_list()));
 				iDTO.setRemarks(oInc.getRemarks());
-				iDTO.setItinerary(new LinkedHashSet(oInc.getItinerary_list()));
+				iDTO.setItinerary(new LinkedHashSet<Itinerary>(oInc.getItinerary_list()));
 
-				iDTO.setPassengers(new LinkedHashSet(oInc.getPassenger_list()));
+				iDTO.setPassengers(new LinkedHashSet<Passenger> (oInc.getPassenger_list()));
 				Passenger pa = null;
 				if(iDTO.getPassengers() != null) {
-					for(Iterator i = iDTO.getPassengers().iterator(); i.hasNext();) {
+					for(Iterator<Passenger> i = iDTO.getPassengers().iterator(); i.hasNext();) {
 						pa = (Passenger) i.next();
 						pa.setIncident(iDTO);
 						if(pa.getMembership() != null) {
@@ -1493,7 +1490,7 @@ public class BagService {
 		}
 
 		if(itemtype == TracingConstants.MISSING_ARTICLES) {
-			ArrayList<Articles> al = new ArrayList(iDTO.getArticles());
+			ArrayList<Articles> al = new ArrayList<Articles>(iDTO.getArticles());
 			if(al.size() <= 0) {
 				theform.getArticle(0);
 			}
@@ -1506,7 +1503,7 @@ public class BagService {
 			}
 				
 		}
-		theform.setClaimchecklist(new ArrayList(iDTO.getClaimchecks()));
+		theform.setClaimchecklist(new ArrayList<Incident_Claimcheck>(iDTO.getClaimchecks()));
 		if(theform.getClaimchecklist().size() == 0) {
 			theform.getClaimcheck(0);
 		}
@@ -1515,10 +1512,9 @@ public class BagService {
 			theform.setDeliveryInstructions(iDTO.getDeliveryInstructions());
 		}
 
-		theform.setPassengerlist(new ArrayList(iDTO.getPassengers()));
+		theform.setPassengerlist(new ArrayList<Passenger>(iDTO.getPassengers()));
 		Passenger p = null;
 		Address addr = null;
-		AirlineMembership am = null;
 		for(int i = 0; i < theform.getPassengerlist().size(); i++) {
 			p = theform.getPassenger(i);
 			if(p.getMembership() == null) {
@@ -1532,9 +1528,9 @@ public class BagService {
 
 		// set datetime format
 		if (iDTO.getRemarks() == null) {
-			iDTO.setRemarks(new HashSet());
+			iDTO.setRemarks(new HashSet<Remark>());
 		}
-		theform.setRemarklist(new ArrayList(iDTO.getRemarks()));
+		theform.setRemarklist(new ArrayList<Remark>(iDTO.getRemarks()));
 		Remark remark = null;
 		for(int i = 0; i < theform.getRemarklist().size(); i++) {
 			remark = (Remark) theform.getRemarklist().get(i);
@@ -1548,9 +1544,9 @@ public class BagService {
 		}
 
 		if (iDTO.getItinerary() == null) {
-			iDTO.setItinerary(new HashSet());
+			iDTO.setItinerary(new HashSet<Itinerary>());
 		}
-		theform.setItinerarylist(new ArrayList(iDTO.getItinerary()));
+		theform.setItinerarylist(new ArrayList<Itinerary>(iDTO.getItinerary()));
 		Itinerary iti = null;
 
 		for(int i = 0; i < theform.getItinerarylist().size(); i++) {
@@ -1606,6 +1602,7 @@ public class BagService {
 		}
 
 		if (incident_ID != null) {
+			@SuppressWarnings("rawtypes")
 			ArrayList al = iBMO.getAssocReports(incident_ID);
 			Incident_Assoc ia = null;
 			if(al != null && al.size() > 0) {
@@ -1668,7 +1665,7 @@ public class BagService {
 				theform.setFaultcompany_id(iDTO.getFaultstation().getCompany().getCompanyCode_ID());
 			}
 
-			ArrayList al = new ArrayList(iDTO.getArticles());
+			ArrayList<Articles> al = new ArrayList<Articles>(iDTO.getArticles());
 			if(al.size() <= 0)
 				theform.getArticle(0);
 			else
@@ -1709,9 +1706,9 @@ public class BagService {
 				}
 			}
 
-			theform.setClaimchecklist(new ArrayList(iDTO.getClaimchecks()));
+			theform.setClaimchecklist(new ArrayList<Incident_Claimcheck>(iDTO.getClaimchecks()));
 
-			theform.setPassengerlist(new ArrayList(iDTO.getPassengers()));
+			theform.setPassengerlist(new ArrayList<Passenger>(iDTO.getPassengers()));
 			
 			List<IncidentActivityDTO> activities = new ArrayList<IncidentActivityDTO>();
 			for (IncidentActivity activity: iDTO.getActivities()) {
@@ -1736,7 +1733,6 @@ public class BagService {
 			theform.setActivityDtos(activities);
 
 			Passenger p = null;
-			AirlineMembership am = null;
 			Address addr = null;
 			for(int i = 0; i < theform.getPassengerlist().size(); i++) {
 				p = theform.getPassenger(i);
@@ -1750,10 +1746,10 @@ public class BagService {
 			}
 
 			// get bdo delivery addresses
-			ArrayList bp_list = new ArrayList();
+			ArrayList<BDO_Passenger> bp_list = new ArrayList<BDO_Passenger>();
+			@SuppressWarnings("rawtypes")
 			ArrayList bdolist = (ArrayList) iBMO.findBDOList(iDTO.getIncident_ID());
 			BDO bdo = null;
-			BDO_Passenger bp = null;
 			if(bdolist != null && bdolist.size() > 0) {
 				for(int i = 0; i < bdolist.size(); i++) {
 					bdo = (BDO) bdolist.get(i);
@@ -1763,7 +1759,7 @@ public class BagService {
 			theform.setBdo_passengerlist(bp_list);
 
 			// set datetime format
-			theform.setRemarklist(new ArrayList(iDTO.getRemarks()));
+			theform.setRemarklist(new ArrayList<Remark>(iDTO.getRemarks()));
 			Remark remark = null;
 			for(int i = 0; i < theform.getRemarklist().size(); i++) {
 				remark = (Remark) theform.getRemarklist().get(i);
@@ -1772,7 +1768,7 @@ public class BagService {
 
 			}
 
-			theform.setItinerarylist(new ArrayList(iDTO.getItinerary()));
+			theform.setItinerarylist(new ArrayList<Itinerary>(iDTO.getItinerary()));
 
 			Itinerary iti = null;
 
@@ -1794,7 +1790,8 @@ public class BagService {
 			theform.setReadonly(1);
 
 			// get associating reports
-			ArrayList al2 = iBMO.getAssocReports(incident_ID);
+			@SuppressWarnings("unchecked")
+			ArrayList<Incident_Assoc> al2 = iBMO.getAssocReports(incident_ID);
 			Incident_Assoc ia = null;
 			if(al2 != null && al2.size() > 0) {
 				for(int i = 0; i < al2.size(); i++) {
@@ -1819,10 +1816,12 @@ public class BagService {
 	}
 
 	
+	@SuppressWarnings("rawtypes")
 	public ArrayList findIncident(SearchIncidentForm daform, Agent user, int rowsperpage, int currpage, boolean iscount) {
 		return findIncident(daform, user, rowsperpage, currpage, iscount, false);
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public ArrayList findIncident(SearchIncidentForm daform, Agent user, int rowsperpage, int currpage, boolean iscount, boolean dirtyRead) { 
 		return findIncident(daform, user, rowsperpage, currpage, iscount, false, null);
 	}
@@ -1833,6 +1832,7 @@ public class BagService {
 	 *            used to search incident by different criterias
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	public ArrayList findIncident(SearchIncidentForm daform, Agent user, int rowsperpage, int currpage, boolean iscount, boolean dirtyRead, String sort) {
 		try {
 			IncidentBMO iBMO = new IncidentBMO();
@@ -1847,11 +1847,13 @@ public class BagService {
 		}
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public ArrayList customQuery(SearchIncidentForm daform, Agent user, int rowsperpage, int currpage, boolean iscount,
 			String searchtype) {
 		return customQuery(daform, user, rowsperpage, currpage, iscount, searchtype, false);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public ArrayList customQuery(SearchIncidentForm daform, Agent user, int rowsperpage, int currpage, boolean iscount,
 			String searchtype, boolean dirtyRead) {
 		daform.setIntelligentTagSearch(true);
@@ -1878,6 +1880,7 @@ public class BagService {
 	 * @param theform
 	 * @return @throws Exception
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean insertLostAndFound(LostFoundIncidentForm theform, Agent user) {
 
 		try {
@@ -1927,7 +1930,7 @@ public class BagService {
 			lost.setRemark(theform.getRemark());
 			lost.setReport_status(theform.getReport_status());
 			lost.setReport_type(theform.getReport_type());
-			lost.setPhotos(new LinkedHashSet(theform.getPhotoList()));
+			lost.setPhotos(new LinkedHashSet<LostAndFound_Photo>(theform.getPhotoList()));
 			lost.setCategory_id(theform.getCategory_id());
 			lost.setLanguageKey(theform.getLanguageKey());
 			lost.setLanguageFreeFlow(theform.getLanguageFreeFlow());
@@ -1936,7 +1939,7 @@ public class BagService {
 			if(lost.getDisposal_status() == null || lost.getDisposal_status().getStatus_ID() == 0)
 				lost.setDisposal_status(null);
 
-			for(Iterator i = lost.getPhotos().iterator(); i.hasNext();) {
+			for(Iterator<LostAndFound_Photo> i = lost.getPhotos().iterator(); i.hasNext();) {
 				LostAndFound_Photo oo = (LostAndFound_Photo) i.next();
 				oo.setLostandfoundincident(lost);
 			}
@@ -1954,6 +1957,7 @@ public class BagService {
 		}
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public boolean insertOnHand(OHD oDTO, OnHandForm theform, ArrayList list, Agent mod_agent) {
 		return insertOnHand(oDTO, theform, list, mod_agent, null, null, null);
 	}
@@ -1964,6 +1968,7 @@ public class BagService {
 	 * @param theform
 	 * @return @throws Exception
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public boolean insertOnHand(OHD oDTO, OnHandForm theform, ArrayList list, Agent mod_agent, String foundStation, String foundCompany, WorldTracerFile file) {
 		try {
 			boolean escape = false;
@@ -1998,7 +2003,6 @@ public class BagService {
 				oDTO.setPosId(theform.getPosId());
 				oDTO.setLateCheckInd(theform.getLateCheck());
 
-				// oDTO.setOHD_ID(theform.getOhd_id());
 				oDTO.setFoundtime(theform.getFoundTime());
 				oDTO.setFounddate(theform.getFoundDate());
 				
@@ -2121,7 +2125,7 @@ public class BagService {
 				if(hasPPULD || hasPPUMA || hasPPUDM) {
 					OHD oldohd=null;
 					if(theform.getOhd_id()!=null && !theform.getOhd_id().isEmpty())
-						oldohd=oBMO.getOHDByID(theform.getOhd_id(), null);
+						oldohd=OhdBMO.getOHDByID(theform.getOhd_id(), null);
 
 					if(oDTO.getDisposal_status()!=null && oDTO.getDisposal_status().getStatus_ID()!=TracingConstants.OHD_STATUS_OWNER_PICKED_UP &&
 						oldohd!=null && oldohd.getDisposal_status()!=null && oldohd.getDisposal_status().getStatus_ID()==TracingConstants.OHD_STATUS_OWNER_PICKED_UP){
@@ -2136,7 +2140,7 @@ public class BagService {
 						
 						if(oDTO.getMatched_incident()!=null && !oDTO.getMatched_incident().isEmpty()){
 							IncidentBMO iBMO=new IncidentBMO();
-							Incident inc=iBMO.getIncidentByID(oDTO.getMatched_incident(), null);
+							Incident inc=IncidentBMO.getIncidentByID(oDTO.getMatched_incident(), null);
 							if(inc!=null && inc.getItemlist()!=null){
 								Remark rem2=null;
 								int i=1;
@@ -2198,16 +2202,19 @@ public class BagService {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public List findOnHandBagsBySearchCriteria(SearchIncidentForm daform, Agent user, int rowsperpage, int currpage,
 			boolean isCount, boolean notClosed) {
 		return findOnHandBagsBySearchCriteria(daform, user, rowsperpage, currpage, isCount, notClosed, false, null);
 		
 	}
+	@SuppressWarnings("rawtypes")
 	public List findOnHandBagsBySearchCriteria(SearchIncidentForm daform, Agent user, int rowsperpage, int currpage,
 			boolean isCount, boolean notClosed, boolean dirtyRead) {
 		return findOnHandBagsBySearchCriteria(daform, user, rowsperpage, currpage, isCount, notClosed, dirtyRead, null);
 		
 	}
+	@SuppressWarnings("rawtypes")
 	public List findOnHandBagsBySearchCriteria(SearchIncidentForm daform, Agent user, int rowsperpage, int currpage,
 			boolean isCount, boolean notClosed, boolean dirtyRead, String sort) {
 		try {
@@ -2242,6 +2249,7 @@ public class BagService {
 		return oBMO.findOHDByID(ohd_ID);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public ArrayList findLostFound(SearchLostFoundForm daform, Agent user, int rowsperpage, int currpage,
 			boolean iscount) {
 		try {
@@ -2254,6 +2262,7 @@ public class BagService {
 		}
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public boolean findLostFoundByID(String file_ref_number, LostFoundIncidentForm theform, Agent user, boolean found,
 			HttpServletRequest request) throws Exception {
 
@@ -2310,6 +2319,7 @@ public class BagService {
 	}
 	
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void fillTheOhdForm(OHD iDTO, OnHandForm theform, Agent user, HttpServletRequest request	)
 			throws IllegalAccessException, InvocationTargetException {
 		
@@ -2473,12 +2483,12 @@ public class BagService {
 	 * 
 	 *         create date - Aug 3, 2004
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public boolean insertClaim(Claim cDTO, ClaimForm cform, HttpSession session, boolean isinterim, String incident_ID) {
 		try {
 			Agent user = (Agent) session.getAttribute("user");
 			ClaimBMO cBMO = new ClaimBMO(); // init claim pojo or ejb
 			Audit_Claim acDTO = null;
-			Audit_ExpensePayout aeDTO = null;
 
 			/** ******* update claim amount for main claim ******** */
 			BeanUtils.copyProperties(cDTO, cform);
@@ -2525,11 +2535,9 @@ public class BagService {
 		}
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public boolean insertClaimProrate(Set<Claim> cDTO, ClaimProrateForm cpform, HttpSession session, String incident_ID) {
 		try {
-			Agent user = (Agent) session.getAttribute("user");
-			ClaimBMO cBMO = new ClaimBMO();
-			IncidentForm theform = (IncidentForm) session.getAttribute("incidentForm");
 			ClaimProrate cp = new ClaimProrate();
 			BeanUtils.copyProperties(cp, cpform);
 			cp.setProrate_itineraries(new LinkedHashSet(cpform.getItinerarylist()));
@@ -2541,7 +2549,6 @@ public class BagService {
 			}
 			
 			Prorate_Itinerary pi = null;
-			ArrayList pilist = new ArrayList();
 			if(cp.getProrate_itineraries() != null) {
 				for(int i = 0; i < cp.getPi_list().size(); i++) {
 					pi = (Prorate_Itinerary) cp.getPi_list().get(i);

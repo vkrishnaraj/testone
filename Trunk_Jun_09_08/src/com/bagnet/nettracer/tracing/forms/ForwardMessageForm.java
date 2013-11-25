@@ -17,13 +17,17 @@ import com.bagnet.nettracer.tracing.db.OHD_Log_Itinerary;
  */
 public final class ForwardMessageForm extends ActionForm {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3932455278209837715L;
 	private String bag_tag; //baggage request
 	private String expediteNumber; //expedite number
 	private String destStation; //destination station
 	private String message; //message
 	private String companyCode; //company code
-	private List bagitinerarylist = new ArrayList();
-	private List forwarditinerarylist = new ArrayList();
+	private List<OHD_Itinerary> bagitinerarylist = new ArrayList<OHD_Itinerary>();
+	private List<OHD_Log_Itinerary> forwarditinerarylist = new ArrayList<OHD_Log_Itinerary>();
 	private List<TagNumber> taglist = new ArrayList<TagNumber>();
 	private String _DATEFORMAT; // current login agent's date format
 	private String _TIMEFORMAT; // current login agent's time format
@@ -37,7 +41,7 @@ public final class ForwardMessageForm extends ActionForm {
 	/**
 	 * @return Returns the bagitinerarylist.
 	 */
-	public List getBagitinerarylist() {
+	public List<OHD_Itinerary> getBagitinerarylist() {
 		return bagitinerarylist;
 	}
 
@@ -45,14 +49,14 @@ public final class ForwardMessageForm extends ActionForm {
 	 * @param bagitinerarylist
 	 *          The bagitinerarylist to set.
 	 */
-	public void setBagitinerarylist(List bagitinerarylist) {
+	public void setBagitinerarylist(List<OHD_Itinerary> bagitinerarylist) {
 		this.bagitinerarylist = bagitinerarylist;
 	}
 	
 	/**
 	 * @return Returns the taglist.
 	 */
-	public List getTaglist() {
+	public List<TagNumber> getTaglist() {
 		return taglist;
 	}
 
@@ -60,14 +64,14 @@ public final class ForwardMessageForm extends ActionForm {
 	 * @param taglist
 	 *          The taglist to set.
 	 */
-	public void setTaglist(List taglist) {
+	public void setTaglist(List<TagNumber> taglist) {
 		this.taglist = taglist;
 	}
 
 	/**
 	 * @return Returns the forwarditinerarylist.
 	 */
-	public List getForwarditinerarylist() {
+	public List<OHD_Log_Itinerary> getForwarditinerarylist() {
 		return forwarditinerarylist;
 	}
 
@@ -75,7 +79,7 @@ public final class ForwardMessageForm extends ActionForm {
 	 * @param forwarditinerarylist
 	 *          The forwarditinerarylist to set.
 	 */
-	public void setForwarditinerarylist(List forwarditinerarylist) {
+	public void setForwarditinerarylist(List<OHD_Log_Itinerary> forwarditinerarylist) {
 		this.forwarditinerarylist = forwarditinerarylist;
 	}
 
@@ -273,6 +277,30 @@ public final class ForwardMessageForm extends ActionForm {
 		this.specialInstructions = specialInstructions;
 	}
 	
+	public String get_TIMEFORMAT() {
+		return _TIMEFORMAT;
+	}
+
+	public void set_TIMEFORMAT(String _TIMEFORMAT) {
+		this._TIMEFORMAT = _TIMEFORMAT;
+	}
+
+	public String get_DATEFORMAT() {
+		return _DATEFORMAT;
+	}
+
+	public void set_DATEFORMAT(String _DATEFORMAT) {
+		this._DATEFORMAT = _DATEFORMAT;
+	}
+
+	public TimeZone get_TIMEZONE() {
+		return _TIMEZONE;
+	}
+
+	public void set_TIMEZONE(TimeZone _TIMEZONE) {
+		this._TIMEZONE = _TIMEZONE;
+	}
+
 	public class TagNumber {
 		private String bagTagNumber;
 		private String expediteNumber;

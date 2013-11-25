@@ -30,6 +30,7 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
+import com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code;
 import com.bagnet.nettracer.tracing.db.Lz;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.WTCompany;
@@ -85,18 +86,18 @@ public final class ManageCompany extends Action {
 				return null;
 			}
 		}
-		List fullStationList = AdminUtils.getStations(null, (String) request.getParameter("companyCode"), 0, 0);
+		List<Station> fullStationList = AdminUtils.getStations(null, (String) request.getParameter("companyCode"), 0, 0);
 	  request.setAttribute("fullStationList", fullStationList);
 		
-		List codes = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.LOST_DELAY, false, user);
+		List<Company_specific_irregularity_code> codes = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.LOST_DELAY, false, user);
 		//add to the loss codes
 		request.setAttribute("losscodes", codes);
 		
-		List codes_dam = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.DAMAGED_BAG, false, user);
+		List<Company_specific_irregularity_code> codes_dam = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.DAMAGED_BAG, false, user);
 		//add to the loss codes
 		request.setAttribute("losscodes_dam", codes_dam);
 		
-		List codes_pil = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.MISSING_ARTICLES, false, user);
+		List<Company_specific_irregularity_code> codes_pil = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), TracingConstants.MISSING_ARTICLES, false, user);
 		//add to the loss codes
 		request.setAttribute("losscodes_pil", codes_pil);
 		
@@ -622,11 +623,11 @@ public final class ManageCompany extends Action {
 				request.setAttribute("currpage", "0");
 			}
 
-			List companyList = AdminUtils.getCompanies(dForm, rowsperpage, currpage);
+			List<Company> companyList = AdminUtils.getCompanies(dForm, rowsperpage, currpage);
 
 			if (currpage + 1 == totalpages) request.setAttribute("end", "1");
 			if (totalpages > 1) {
-				ArrayList al = new ArrayList();
+				ArrayList<String> al = new ArrayList<String>();
 				for (int i = 0; i < totalpages; i++) {
 					al.add(Integer.toString(i));
 				}
@@ -650,10 +651,10 @@ public final class ManageCompany extends Action {
 	}
 	
 	public void populateLists(HttpServletRequest request, MaintainCompanyForm dForm){
-		List stationList = getStationList(request, dForm);
+		List<Station> stationList = getStationList(request, dForm);
 
-		List lzList = LzUtils.getIncidentLzStations(dForm.getCompanyCode());
-		HashMap<Integer,String> usedMap = new HashMap();
+		List<Lz> lzList = LzUtils.getIncidentLzStations(dForm.getCompanyCode());
+		HashMap<Integer,String> usedMap = new HashMap<Integer,String>();
 		
 		for (Iterator<Station> i = stationList.iterator(); i.hasNext();) {
 			usedMap.put(new Integer(i.next().getLz_ID()), "");
@@ -673,7 +674,7 @@ public final class ManageCompany extends Action {
 	
 	public static List<Station> getStationList(HttpServletRequest request, MaintainCompanyForm dForm) {
 		
-		List stationList = AdminUtils.getStations(null, (String) request.getParameter("companyCode"),
+		List<Station> stationList = AdminUtils.getStations(null, (String) request.getParameter("companyCode"),
 				0, 0);
 
 		
@@ -706,7 +707,7 @@ public final class ManageCompany extends Action {
 
 		if (currpage + 1 == totalpages) request.setAttribute("end", "1");
 		if (totalpages > 1) {
-			ArrayList al = new ArrayList();
+			ArrayList<String> al = new ArrayList<String>();
 			for (int i = 0; i < totalpages; i++) {
 				al.add(Integer.toString(i));
 			}

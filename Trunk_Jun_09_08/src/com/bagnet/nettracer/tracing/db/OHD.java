@@ -67,13 +67,13 @@ public class OHD implements Serializable {
 	private String externaldesc;
 	private int specialCondition;
 
-	private Set items;
-	private Set remarks;
-	private Set passengers;
-	private Set photos;
-	private Set tasks;
-	private Set controlLog;
-	private Set itinerary;
+	private Set<OHD_Inventory> items;
+	private Set<Remark> remarks;
+	private Set<OHD_Passenger> passengers;
+	private Set<OHD_Photo> photos;
+	private Set<Task> tasks;
+	private Set<ControlLog> controlLog;
+	private Set<OHD_Itinerary> itinerary;
 	private Date close_date;
 	private Date lastupdated;
 	
@@ -219,7 +219,7 @@ public class OHD implements Serializable {
 	 * 
 	 * @return Returns the itinerary.
 	 */
-	public Set getItinerary() {
+	public Set<OHD_Itinerary> getItinerary() {
 		return itinerary;
 	}
 
@@ -227,7 +227,7 @@ public class OHD implements Serializable {
 	 * @param itinerary
 	 *          The itinerary to set.
 	 */
-	public void setItinerary(Set itinerary) {
+	public void setItinerary(Set<OHD_Itinerary> itinerary) {
 		this.itinerary = itinerary;
 	}
 
@@ -272,7 +272,7 @@ public class OHD implements Serializable {
 	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.Task"
 	 * @return Returns the tasks.
 	 */
-	public Set getTasks() {
+	public Set<Task> getTasks() {
 		return tasks;
 	}
 
@@ -280,7 +280,7 @@ public class OHD implements Serializable {
 	 * @param tasks
 	 *          The tasks to set.
 	 */
-	public void setTasks(Set tasks) {
+	public void setTasks(Set<Task> tasks) {
 		this.tasks = tasks;
 	}
 
@@ -514,7 +514,7 @@ public class OHD implements Serializable {
 	 * 
 	 * @return Returns the items.
 	 */
-	public Set getItems() {
+	public Set<OHD_Inventory> getItems() {
 		return items;
 	}
 
@@ -522,7 +522,7 @@ public class OHD implements Serializable {
 	 * @param items
 	 *          The items to set.
 	 */
-	public void setItems(Set items) {
+	public void setItems(Set<OHD_Inventory> items) {
 		this.items = items;
 	}
 
@@ -550,7 +550,7 @@ public class OHD implements Serializable {
 	 * 
 	 * @return Returns the remarks.
 	 */
-	public Set getRemarks() {
+	public Set<Remark> getRemarks() {
 		return remarks;
 	}
 
@@ -558,7 +558,7 @@ public class OHD implements Serializable {
 	 * @param remarks
 	 *          The remarks to set.
 	 */
-	public void setRemarks(Set remarks) {
+	public void setRemarks(Set<Remark> remarks) {
 		this.remarks = remarks;
 	}
 
@@ -694,7 +694,7 @@ public class OHD implements Serializable {
 	}
 
 	public OHD_Passenger getPassenger() {
-		if (passengers != null && passengers.size() > 0) return (OHD_Passenger) (new ArrayList(
+		if (passengers != null && passengers.size() > 0) return (OHD_Passenger) (new ArrayList<OHD_Passenger>(
 				passengers)).get(0);
 		else {
 			OHD_Passenger pass = new OHD_Passenger();
@@ -744,7 +744,7 @@ public class OHD implements Serializable {
 	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.OHD_Passenger"
 	 * @return Returns the passengers.
 	 */
-	public Set getPassengers() {
+	public Set<OHD_Passenger> getPassengers() {
 		return passengers;
 	}
 
@@ -752,7 +752,7 @@ public class OHD implements Serializable {
 	 * @param passengers
 	 *          The passengers to set.
 	 */
-	public void setPassengers(Set passengers) {
+	public void setPassengers(Set<OHD_Passenger> passengers) {
 		this.passengers = passengers;
 	}
 
@@ -762,7 +762,7 @@ public class OHD implements Serializable {
 	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.OHD_Photo"
 	 * @return Returns the photos.
 	 */
-	public Set getPhotos() {
+	public Set<OHD_Photo> getPhotos() {
 		return photos;
 	}
 
@@ -770,7 +770,7 @@ public class OHD implements Serializable {
 	 * @param photos
 	 *          The photos to set.
 	 */
-	public void setPhotos(Set photos) {
+	public void setPhotos(Set<OHD_Photo> photos) {
 		this.photos = photos;
 	}
 
@@ -780,7 +780,7 @@ public class OHD implements Serializable {
 	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.ControlLog"
 	 * @return Returns the controlLog.
 	 */
-	public Set getControlLog() {
+	public Set<ControlLog> getControlLog() {
 		return controlLog;
 	}
 
@@ -788,7 +788,7 @@ public class OHD implements Serializable {
 	 * @param controlLog
 	 *          The controlLog to set.
 	 */
-	public void setControlLog(Set controlLog) {
+	public void setControlLog(Set<ControlLog> controlLog) {
 		this.controlLog = controlLog;
 	}
 
@@ -827,7 +827,7 @@ public class OHD implements Serializable {
 
 	public ControlLog getLastLog() {
 		if (this.getControlLog() != null) {
-			for (Iterator i = this.getControlLog().iterator(); i.hasNext();) {
+			for (Iterator<ControlLog> i = this.getControlLog().iterator(); i.hasNext();) {
 				ControlLog log = (ControlLog) i.next();
 				if (log.getEnd_date() == null || log.getEnd_date().equals("")) return log;
 			}

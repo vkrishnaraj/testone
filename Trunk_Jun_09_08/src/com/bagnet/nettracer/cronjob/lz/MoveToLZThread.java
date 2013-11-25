@@ -9,7 +9,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,7 +34,6 @@ import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.IncidentControl;
 import com.bagnet.nettracer.tracing.db.Lz;
-import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Incident;
@@ -81,7 +79,6 @@ public class MoveToLZThread {
 		try {
 			Configuration foo = HibernateWrapper.getConfig();
 			Properties properties = foo.getProperties();
-			Connection conn = null;
 			this.type = type;
 			
 			try {
@@ -109,7 +106,6 @@ public class MoveToLZThread {
 	
 	public MoveToLZThread(Properties properties,int type) {
 		try {
-			Connection conn = null;
 			this.type = type;
 			
 			try {
@@ -139,7 +135,6 @@ public class MoveToLZThread {
 	
 	public MoveToLZThread(String path,int type,String company) {
 		try {
-			Connection conn = null;
 			this.type = type;
 			this.company = company;
 			logger.info("Starting move to lz...");
@@ -172,6 +167,7 @@ public class MoveToLZThread {
 	}
 	
 
+	@SuppressWarnings("unchecked")
 	public void moveToLz() {
 		Session sess = null;
 		try {
@@ -195,7 +191,8 @@ public class MoveToLZThread {
 				SQLQuery q = sess.createSQLQuery(sql);
 //				ResultSet rs = st
 //						.executeQuery(sql);
-				List results=q.list();
+				@SuppressWarnings("unchecked")
+				List<Object[]> results=(List<Object[]>)q.list();
 
 				Object[] row;
 				//while (rs.next()) {
@@ -254,13 +251,6 @@ public class MoveToLZThread {
 		}
 	}
 
-	private void pause(double seconds) {
-		try {
-			Thread.sleep(Math.round(1000.0 * seconds));
-		} catch (InterruptedException ie) {
-		}
-	}
-
 	public synchronized void moveMBRToLZ(String companyCode) throws Exception {
 
 		// Get settings
@@ -271,7 +261,7 @@ public class MoveToLZThread {
 		long ma_days = csv.getMiss_to_lz_days();
 
 		// Get LZ Stations
-		List<Lz> lzList = (List<Lz>) LzUtils.getIncidentLzStations(companyCode);
+		List<Lz> lzList = LzUtils.getIncidentLzStations(companyCode);
 
 		if (ld_days + dg_days + ma_days > -3) {
 			
@@ -309,6 +299,7 @@ public class MoveToLZThread {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<Incident> getIncidentsToMove(String company, long datediff, int itemtype, Session sess, List<Lz> lzList) {
 		if (datediff == -1) {
 			return new ArrayList<Incident>();
@@ -427,10 +418,11 @@ public class MoveToLZThread {
 	}
 	
 
+	@SuppressWarnings("unchecked")
 	public static ArrayList<Bucket> assignmentDistribute(ArrayList<Incident> incidentList, List<Lz> lzList) {
 
-		HashMap<Lz, Bucket> buckets = new HashMap();
-		ArrayList<Bucket> retValue= new ArrayList();
+		HashMap<Lz, Bucket> buckets = new HashMap<Lz, Bucket>();
+		ArrayList<Bucket> retValue= new ArrayList<Bucket>();
 		Lz key = null;
 		
 		// Create buckets
@@ -462,17 +454,16 @@ public class MoveToLZThread {
 		return retValue;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static ArrayList<Bucket> percentDistribute(ArrayList<Incident> toSort, List<Lz> lzList) {
 
-		ArrayList buckets = new ArrayList();
+		ArrayList<Bucket> buckets = new ArrayList<Bucket>();
 		Lz key = null;
 		int initialSize = 0;
 		int toSortIndex = 0;
 		
-		double itemPercent = 100 / toSort.size();
-		
 		// Create buckets
-		Iterator iter = lzList.iterator();
+		Iterator<Lz> iter = lzList.iterator();
 		while (iter.hasNext()) {
 			key = (Lz) iter.next();
 			Bucket b = new Bucket();
@@ -510,6 +501,10 @@ public class MoveToLZThread {
 }
 
 class Bucket extends ArrayList {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8150811945279528887L;
 	private Object key;
 	private double percentOfWhole;
 	private int totalItems;

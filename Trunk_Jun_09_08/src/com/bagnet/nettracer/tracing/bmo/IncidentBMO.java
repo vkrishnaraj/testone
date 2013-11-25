@@ -38,6 +38,7 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants.SortParam;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Articles;
+import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.Comment;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -209,14 +210,7 @@ public class IncidentBMO {
 					com.bagnet.nettracer.tracing.bmo.PrecoderBMO.insert(iDTO.getIncident_ID(), precoderResult);
 				}
 			}
-		
-			// check to see if we opened the report, if we did, then open all
-			// matches
-			// if (iDTO.getStatus().getStatus_ID() ==
-			// TracingConstants.MBR_STATUS_OPEN) {
-			// MatchUtils.openMatches(iDTO.getIncident_ID(), null);
-			// }
-		
+			
 			// check to see if we closed the report, if we did, then close all
 			// matches
 			if (iDTO.getStatus().getStatus_ID() == TracingConstants.MBR_STATUS_CLOSED) {
@@ -231,6 +225,7 @@ public class IncidentBMO {
 			ia.setIncident_ID(iDTO.getIncident_ID());
 			ia.setItemtype_ID(iDTO.getItemtype().getItemType_ID());
 		
+			@SuppressWarnings("rawtypes")
 			List list = sess.createCriteria(Incident_Assoc.class).add(Example.create(ia)).list();
 		
 			if (list == null || list.size() == 0) {
@@ -491,13 +486,6 @@ public class IncidentBMO {
 
 			}
 
-			// check to see if we opened the report, if we did, then open all
-			// matches
-			// if (iDTO.getStatus().getStatus_ID() ==
-			// TracingConstants.MBR_STATUS_OPEN) {
-			// MatchUtils.openMatches(iDTO.getIncident_ID(), null);
-			// }
-
 			// check to see if we closed the report, if we did, then close all
 			// matches
 			if (iDTO.getStatus().getStatus_ID() == TracingConstants.MBR_STATUS_CLOSED) {
@@ -512,6 +500,7 @@ public class IncidentBMO {
 			ia.setIncident_ID(iDTO.getIncident_ID());
 			ia.setItemtype_ID(iDTO.getItemtype().getItemType_ID());
 
+			@SuppressWarnings("rawtypes")
 			List list = sess.createCriteria(Incident_Assoc.class).add(Example.create(ia)).list();
 
 			if (list == null || list.size() == 0) {
@@ -594,11 +583,11 @@ public class IncidentBMO {
 		return true;
 	}
 
-	public int updateRemarksOnly(String incident_id, Set remarks, Agent mod_agent) throws HibernateException {
+	public int updateRemarksOnly(String incident_id, Set<Remark> remarks, Agent mod_agent) throws HibernateException {
 		return updateRemarksAndLossCodeOnly(incident_id, remarks, mod_agent, -99);
 	}
 
-	public int updateRemarksAndLossCodeOnly(String incident_id, Set remarks, Agent mod_agent, int losscode) throws HibernateException {
+	public int updateRemarksAndLossCodeOnly(String incident_id, Set<Remark> remarks, Agent mod_agent, int losscode) throws HibernateException {
 		//do not check for stale states on remark only saves
 		Transaction t = null;
 		Session sess = HibernateWrapper.getSession().openSession();
@@ -620,7 +609,7 @@ public class IncidentBMO {
 
 				if (remarks != null) {
 					oldinc.setRemarks(remarks);
-					for (Iterator i = oldinc.getRemarks().iterator(); i.hasNext();) {
+					for (Iterator<Remark> i = oldinc.getRemarks().iterator(); i.hasNext();) {
 						Remark rm = (Remark) i.next();
 						rm.setIncident(oldinc);
 					}
@@ -793,6 +782,7 @@ public class IncidentBMO {
 				q.setParameter("fullTag", fullTag);
 			}
 
+			@SuppressWarnings("unchecked")
 			List<Incident> list = (List<Incident>) q.list();
 
 			if (list.size() == 0) {
@@ -824,21 +814,9 @@ public class IncidentBMO {
 				sess = HibernateWrapper.getSession().openSession();
 			}
 			return (Incident) sess.load(Incident.class, incident_ID);
-//			Query q = sess
-//					.createQuery("from com.bagnet.nettracer.tracing.db.Incident incident where incident.incident_ID= :incident_ID");
-//			q.setParameter("incident_ID", incident_ID);
-//			List list = q.list();
-//
-//			if (list.size() == 0) {
-//				logger.debug("unable to find incident: " + incident_ID);
-//				return null;
-//			}
-//			Incident iDTO = (Incident) list.get(0);
-//
-//			return iDTO;
 		} catch (Exception e) {
 			logger.error("unable to retrieve incident: " + e);
-//			e.printStackTrace();
+			e.printStackTrace();
 			return null;
 		} finally {
 			if (sess != null && sessionNull) {
@@ -853,37 +831,6 @@ public class IncidentBMO {
 
 	public Incident findIncidentByID(String incident_ID) {
 		return getIncidentByID(incident_ID, null);
-//		Session sess = null;
-//
-//		try {
-//			sess = HibernateWrapper.getSession().openSession();
-//			return (Incident) sess.load(Incident.class, incident_ID);
-
-//			Query q = sess
-//					.createQuery("from com.bagnet.nettracer.tracing.db.Incident incident where incident.incident_ID= :incident_ID");
-//			q.setParameter("incident_ID", incident_ID);
-//			List list = q.list();
-//
-//			if (list.size() == 0) {
-//				logger.debug("unable to find incident: " + incident_ID);
-//				return null;
-//			}
-//			Incident iDTO = (Incident) list.get(0);
-//
-//			return iDTO;
-//		} catch (Exception e) {
-//			logger.error("unable to retrieve incident: " + e);
-//			e.printStackTrace();
-//			return null;
-//		} finally {
-//			if (sess != null) {
-//				try {
-//					sess.close();
-//				} catch (Exception e) {
-//					logger.error("unable to close connection: " + e);
-//				}
-//			}
-//		}
 	}
 
 	public TraceIncident findTraceIncidentByID(String incident_ID) {
@@ -892,18 +839,6 @@ public class IncidentBMO {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			return (TraceIncident) sess.load(TraceIncident.class, incident_ID);
-//			Query q = sess
-//					.createQuery("from com.bagnet.nettracer.tracing.db.TraceIncident incident where incident.incident_ID= :incident_ID");
-//			q.setParameter("incident_ID", incident_ID);
-//			List list = q.list();
-//
-//			if (list.size() == 0) {
-//				logger.debug("unable to find incident: " + incident_ID);
-//				return null;
-//			}
-//			TraceIncident iDTO = (TraceIncident) list.get(0);
-//
-//			return iDTO;
 		} catch (Exception e) {
 			logger.error("unable to retrieve incident: " + e);
 			e.printStackTrace();
@@ -938,6 +873,7 @@ public class IncidentBMO {
 							+ " where incident.incident_ID= :incident_ID and (passenger.lastname like :name or passenger.firstname like :name)");
 			q.setString("incident_ID", incident_ID);
 			q.setString("name", name);
+			@SuppressWarnings("rawtypes")
 			List list = q.list();
 
 			if (list.size() == 0) {
@@ -1115,6 +1051,7 @@ public class IncidentBMO {
 	 *            company whose incidents are to be moved to wt
 	 * @return list of Incidents that need to be moved to world tracer
 	 */
+	@SuppressWarnings("unchecked")
 	public List<Incident> findMoveToWtInc(int hours, String companyCode) {
 		if (hours <= 0) {
 			return null;
@@ -1161,16 +1098,19 @@ public class IncidentBMO {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public List findIncident(SearchIncident_DTO siDTO, Agent user, int rowsperpage, int currpage, boolean iscount)
 			throws HibernateException {
 		return findIncident(siDTO, user, rowsperpage, currpage, iscount, false);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public List findIncident(SearchIncident_DTO siDTO, Agent user, int rowsperpage, int currpage, boolean iscount,
 			boolean dirtyRead) throws HibernateException {
 		return findIncident(siDTO, user, rowsperpage, currpage, iscount, false, null);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public List findIncident(SearchIncident_DTO siDTO, Agent user, int rowsperpage, int currpage, boolean iscount,
 			boolean dirtyRead, String sort) throws HibernateException {
 		Session sess = null;
@@ -1270,7 +1210,6 @@ public class IncidentBMO {
 			Date sdate1 = null, edate1 = null; // add one for timezone
 			Date stime = null; // time to compare (04:00 if eastern, for
 								// example)
-			String dateq = "";
 
 			ArrayList dateal = null;
 			if ((dateal = IncidentUtils.calculateDateDiff(siDTO.getS_createtime(), siDTO.getE_createtime(), tz, user)) == null) {
@@ -1297,7 +1236,6 @@ public class IncidentBMO {
 			// regarding station assignment date
 			Date sAssignedDate = null, eAssignedDate = null;
 			Date sAssignedDate1 = null, eAssignedDate1 = null; // add one for time zone
-			Date sAssignedTime = null; // time to compare (04:00 if eastern, for example)
 			ArrayList assignedDateList = IncidentUtils.calculateDateDiff(siDTO.getS_station_assignment_time(), 
 											siDTO.getE_station_assignment_time(), tz, user);
 			if (assignedDateList == null) {
@@ -1307,7 +1245,6 @@ public class IncidentBMO {
 			sAssignedDate1 = (Date) assignedDateList.get(1);
 			eAssignedDate = (Date) assignedDateList.get(2);
 			eAssignedDate1 = (Date) assignedDateList.get(3);
-			sAssignedTime = (Date) assignedDateList.get(4);
 			
 			if (sAssignedDate != null) {
 				if (eAssignedDate != null && sAssignedDate != eAssignedDate) {
@@ -1552,7 +1489,6 @@ public class IncidentBMO {
 
 	private void intelligentSearchProcessing(SearchIncident_DTO siDTO, StringBuffer s, boolean tagPresent){ //,HashMap<String, ArrayList<String>> eightDig,HashMap<String, ArrayList<String>> nineDig, HashMap<String, ArrayList<String>> tenDig) {
 		
-		String returnMe = null;
 		String tag=siDTO.getClaimchecknum();
     	if (tag != null && tag.length() > 0) {
     		if(!tag.contains("%")){
@@ -1725,7 +1661,8 @@ public class IncidentBMO {
 			Query q = sess
 					.createQuery("from com.bagnet.nettracer.tracing.db.Incident incident where incident.wtFile.wt_id= :wt_id");
 			q.setParameter("wt_id", wt_id);
-			List list = q.list();
+			@SuppressWarnings("unchecked")
+			List<Incident> list = q.list();
 
 			if (list.size() == 0) {
 				logger.debug("unable to find incident with wt_id: " + wt_id);
@@ -1754,6 +1691,7 @@ public class IncidentBMO {
 	 * 
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public String getIncidentID(Station stationcreated) throws HibernateException {
 		Session sess = HibernateWrapper.getSession().openSession();
 		// get highest num from Incident_Range table
@@ -1782,7 +1720,7 @@ public class IncidentBMO {
 
 			// get the last record with this companycode_ID;
 			Query q = null;
-			List list = null;
+			List<Incident> list = null;
 			
 			StringBuffer s = new StringBuffer();
 			s.append(stationcode);
@@ -1828,7 +1766,8 @@ public class IncidentBMO {
 					+ "where station.station_ID= :station_ID");
 			q.setParameter("station_ID", new Integer(station_ID));
 
-			List list = q.list();
+			@SuppressWarnings("unchecked")
+			List<Station> list = q.list();
 			if (list.size() == 0) {
 				logger.debug("unable to find station: " + station_ID);
 				return null;
@@ -1845,6 +1784,7 @@ public class IncidentBMO {
 		}
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ArrayList getAssocReports(String incident_ID) throws HibernateException {
 		Session sess = HibernateWrapper.getSession().openSession();
 
@@ -1852,7 +1792,7 @@ public class IncidentBMO {
 			Query q = sess.createQuery("from com.bagnet.nettracer.tracing.db.Incident_Assoc a "
 					+ "where a.incident_ID= :incident_ID");
 			q.setParameter("incident_ID", incident_ID);
-			List list = q.list();
+			List<Incident_Assoc> list = q.list();
 
 			if (list.size() == 0) {
 				logger.debug("unable to find association: " + incident_ID);
@@ -1878,6 +1818,7 @@ public class IncidentBMO {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public List customQuery(SearchIncidentForm siDTO, Agent user, int rowsperpage, int currpage, boolean iscount,
 			String searchType) throws HibernateException {
 		return customQuery(siDTO, user, rowsperpage, currpage, iscount, searchType, false);
@@ -1893,6 +1834,7 @@ public class IncidentBMO {
 	 * @param iscount
 	 * @return @throws HibernateException
 	 */
+	@SuppressWarnings("rawtypes")
 	public List customQuery(SearchIncidentForm siDTO, Agent user, int rowsperpage, int currpage, boolean iscount,
 			String searchType, boolean dirtyRead) throws HibernateException {
 		boolean tagPresent = false;
@@ -1956,7 +1898,6 @@ public class IncidentBMO {
 			Date sdate1 = null, edate1 = null; // add one for timezone
 			Date stime = null; // time to compare (04:00 if eastern, for
 								// example)
-			String dateq = "";
 
 			ArrayList dateal = null;
 			if ((dateal = IncidentUtils.calculateDateDiff(siDTO.getS_createtime(), siDTO.getE_createtime(), tz, user)) == null) {
@@ -2215,6 +2156,7 @@ public class IncidentBMO {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public List findBDOList(String incident_ID) {
 		Session sess = null;
 		try {
@@ -2223,7 +2165,8 @@ public class IncidentBMO {
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(query);
 			q.setString("incident_ID", incident_ID);
-			List list = q.list();
+			@SuppressWarnings("unchecked")
+			List<BDO> list = q.list();
 			if (list.size() == 0) {
 				logger.debug("unable to find bdo from incident_ID: " + incident_ID);
 				return null;
@@ -2258,7 +2201,8 @@ public class IncidentBMO {
 				}
 
 				if (o.getAddresses() != null && o.getAddresses().size() > 0) {
-					for (Iterator<Address> j = o.getAddresses().iterator(); j.hasNext();) {
+					for (@SuppressWarnings("unchecked")
+					Iterator<Address> j = o.getAddresses().iterator(); j.hasNext();) {
 						Address o2 = j.next();
 						o2.setAddress_ID(0);
 					}
@@ -2283,21 +2227,21 @@ public class IncidentBMO {
 				item.setItem_ID(0);
 
 				if (item.getInventory() != null && item.getInventory().size() > 0) {
-					for (Iterator j = item.getInventory().iterator(); j.hasNext();) {
+					for (Iterator<Item_Inventory> j = item.getInventory().iterator(); j.hasNext();) {
 						Item_Inventory o2 = (Item_Inventory) j.next();
 						o2.setInventory_ID(0);
 					}
 				}
 
 				if (item.getPhotoes() != null && item.getPhotoes().size() > 0) {
-					for (Iterator j = item.getPhotoes().iterator(); j.hasNext();) {
+					for (Iterator<Item_Photo> j = item.getPhotoes().iterator(); j.hasNext();) {
 						Item_Photo o2 = (Item_Photo) j.next();
 						o2.setPhoto_ID(0);
 					}
 				}
 				
 				if (item.getItem_bdo() != null && item.getItem_bdo().size() > 0) {
-					for (Iterator j = item.getItem_bdo().iterator(); j.hasNext();) {
+					for (Iterator<Item_BDO> j = item.getItem_bdo().iterator(); j.hasNext();) {
 						Item_BDO o2 = (Item_BDO) j.next();
 						o2.setId(0);
 					}
@@ -2342,6 +2286,7 @@ public class IncidentBMO {
 		return inc.getPrintedreceipt();
 	}
 
+	@SuppressWarnings("unchecked")
 	public static List<String> queryForFaultCode(ItemType iType, int faultStation, int lossCode) {
 
 		Session sess = null;
@@ -2376,6 +2321,7 @@ public class IncidentBMO {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Incident> findWtEarlyMove(int incEarlyHours, List<String> earlyMoveStations, String companyCode) {
 		if (incEarlyHours <= 0) {
 			return null;
@@ -2504,39 +2450,16 @@ public class IncidentBMO {
 		return null;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void auditClaim(Incident inc, String reasonForAudit, Agent user, Session sess) throws Exception {
-//		Set<Claim> clist=inc.getClaims();
-//
-//		for(Claim claim:clist){
 		Audit_Claim ac = new Audit_Claim();
 		ac.setExpenses(new HashSet());
 
-		//ClaimProrate cp = claim.getClaimprorate();
-//		if (cp != null) {
-//			Audit_ClaimProrate a_cp = new Audit_ClaimProrate();
-//			//BeanUtils.copyProperties(a_cp, cp);
-//			Prorate_Itinerary pi = null;
-//			Audit_Prorate_Itinerary a_pi = null;
-//			ArrayList pilist = new ArrayList();
-//			if (cp.getProrate_itineraries() != null) {
-//				for (int i = 0; i < cp.getPi_list().size(); i++) {
-//					pi = (Prorate_Itinerary) cp.getPi_list().get(i);
-//					a_pi = new Audit_Prorate_Itinerary();
-//					BeanUtils.copyProperties(a_pi, pi);
-//					pi.setClaimprorate(cp);
-//					a_pi.setAudit_claimprorate(a_cp);
-//					pilist.add(a_pi);
-//				}
-//				a_cp.setProrate_itineraries(new LinkedHashSet(pilist));
-//			}
-//			ac.setAudit_claimprorate(a_cp);
-//		}
+
 
 		ac.setModify_time(TracerDateTime.getGMTDate());
 		ac.setModify_agent(user);
 		ac.setModify_reason(reasonForAudit);
-//		ac.setClaim_ID(claim.getId());
-//		ac.setClaimamount(claim.getAmountClaimed());
 		
 		ac.setIncident(inc);
 
@@ -2568,6 +2491,7 @@ public class IncidentBMO {
 //		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	private Incident normalizePhoneNumbers(Incident iDTO) {
 		if (iDTO.getPassengers() != null) {
 			for (Passenger pass : iDTO.getPassengers()) {
@@ -2639,6 +2563,7 @@ public class IncidentBMO {
 			q.setParameter("lastXDate", lastXDate);
 			q.setParameter("pnr", pnr);
 			
+			@SuppressWarnings("unchecked")
 			List<Incident> ilist= (List<Incident>) q.list();
 			return ilist;
 		} catch (Exception e) {
@@ -2712,6 +2637,7 @@ public class IncidentBMO {
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(sql);
 			q.setParameter("incidentId", incident_id);
+			@SuppressWarnings("unchecked")
 			List<Remark> ilist= (List<Remark>) q.list();
 			return ilist;
 		} catch (Exception e) {

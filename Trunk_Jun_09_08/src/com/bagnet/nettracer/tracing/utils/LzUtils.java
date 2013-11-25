@@ -12,7 +12,7 @@ import org.apache.struts.util.LabelValueBean;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Expression;
+import org.hibernate.criterion.Restrictions;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
@@ -37,7 +37,7 @@ public class LzUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Lz.class);
-			cri.add(Expression.eq("lz_ID", key));
+			cri.add(Restrictions.eq("lz_ID", key));
 			return (Lz)cri.list().get(0);
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());
@@ -53,12 +53,13 @@ public class LzUtils {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static List<Station> getStationsForLz(int lz_ID) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Station.class);
-			cri.add(Expression.eq("lz_ID", lz_ID));
+			cri.add(Restrictions.eq("lz_ID", lz_ID));
 			return (List<Station>)cri.list();
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());
@@ -74,12 +75,12 @@ public class LzUtils {
 		}
 	}
 	
-	public static ArrayList getIncidentLzStationsBeans(String companyCode) {
-		ArrayList al = new ArrayList();
+	public static ArrayList<LabelValueBean> getIncidentLzStationsBeans(String companyCode) {
+		ArrayList<LabelValueBean> al = new ArrayList<LabelValueBean>();
 
-		List tmpList = getIncidentLzStations(companyCode);
+		List<Lz> tmpList = getIncidentLzStations(companyCode);
 
-		for (Iterator i = tmpList.iterator(); i.hasNext();) {
+		for (Iterator<Lz> i = tmpList.iterator(); i.hasNext();) {
 			Lz lz = (Lz) i.next();
 			String label = lz.getStation().getStationcode();
 			al.add(new LabelValueBean(label, new Integer(lz.getLz_ID()).toString()));
@@ -97,6 +98,7 @@ public class LzUtils {
 			
 			// Insure station does not already exist as an LZ
 			Criteria cri = sess.createCriteria(Lz.class);
+			@SuppressWarnings("unchecked")
 			List<Lz> lzList = cri.list();
 			
 			for (int i=0; i<lzList.size(); ++i) {
@@ -143,7 +145,8 @@ public class LzUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			
-			List<Station> stationList = (List)request.getAttribute("stationList");
+			@SuppressWarnings("unchecked")
+			List<Station> stationList = (List<Station>)request.getAttribute("stationList");
 			for (int i=0; i<stationList.size(); ++i) {
 				Station station = stationList.get(i);
 				Lz lz = LzUtils.getLz(station);
@@ -173,8 +176,9 @@ public class LzUtils {
 	public static boolean updateLzList(MaintainCompanyForm form, HttpServletRequest request, Agent user) {
 		Session sess = null;
 		Transaction t = null;
+		@SuppressWarnings("unchecked")
 		List<Lz> lzList = form.getLzStations();
-		ArrayList<Lz> deleteThese = new ArrayList();
+		ArrayList<Lz> deleteThese = new ArrayList<Lz>();
 		Lz defaultLz = null;
 		boolean needNewDefault = false;
 		boolean newDefaultAdded = false;
@@ -279,13 +283,14 @@ public class LzUtils {
 		return true;
 	}
 	
-	public static List getIncidentLzStations(String companyCode) {
+	@SuppressWarnings("unchecked")
+	public static List<Lz> getIncidentLzStations(String companyCode) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Lz.class);
-			cri.add(Expression.eq("companyCode_ID", companyCode));
-			return cri.list();
+			cri.add(Restrictions.eq("companyCode_ID", companyCode));
+			return (List<Lz>)cri.list();
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());
 			return null;
@@ -298,6 +303,22 @@ public class LzUtils {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Method to get the Incident LZ list controlled through the Move To LZ tab on Admin Page
+	 * 
+	 * @param companyCode - The code which the LZ Map belongs to
+	 */
+	public static HashMap<Integer,Lz> getIncidentLzStationMap(String companyCode) {
+		List<Lz> lzList=LzUtils.getIncidentLzStations(companyCode);
+		HashMap<Integer,Lz> lzmap=new HashMap<Integer,Lz>();
+		if(lzList!=null){
+			for(Lz lz:lzList) {
+				lzmap.put(lz.getStation().getStation_ID(), lz);
+			}
+		}
+		return lzmap;
 	}
 
 
@@ -317,16 +338,16 @@ public class LzUtils {
 		// Call distribution algorithm
 	}
 	
+	/* Method isn't used. Should it be deleted? */
+	@SuppressWarnings({ "rawtypes", "unused" })
 	private static ArrayList<Bucket> percentDistribute(ArrayList<Incident> toSort, HashMap criteria) {
 		
 		// Get Criteria in the form of STATION > DOUBLE ( PERCENTAGE )
 		
-		ArrayList buckets = new ArrayList();
+		ArrayList<Bucket> buckets = new ArrayList<Bucket>();
 		Object key = null;
 		int initialSize = 0;
 		int toSortIndex = 0;
-		
-		double itemPercent = 100 / toSort.size();
 		
 		Iterator iter = criteria.keySet().iterator();
 		while (iter.hasNext()) {
@@ -363,7 +384,12 @@ public class LzUtils {
 	}
 }
 
+@SuppressWarnings("rawtypes")
 class Bucket extends java.util.ArrayList {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7023637512772401174L;
 	Object key;
 	double percentOfWhole;
 	int totalItems;
@@ -389,6 +415,7 @@ class Bucket extends java.util.ArrayList {
 		return this.key;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public boolean add(Object o) {
 		return super.add(o);
 	}

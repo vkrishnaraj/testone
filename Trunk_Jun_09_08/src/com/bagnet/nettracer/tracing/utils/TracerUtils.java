@@ -12,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -33,7 +32,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
@@ -45,6 +43,7 @@ import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Airport;
 import com.bagnet.nettracer.tracing.db.Articles;
 import com.bagnet.nettracer.tracing.db.Category;
 import com.bagnet.nettracer.tracing.db.Claim;
@@ -56,7 +55,6 @@ import com.bagnet.nettracer.tracing.db.CountryCode;
 import com.bagnet.nettracer.tracing.db.DbLocale;
 import com.bagnet.nettracer.tracing.db.DeliveryInstructions;
 import com.bagnet.nettracer.tracing.db.Incident;
-import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.Itinerary;
@@ -76,7 +74,6 @@ import com.bagnet.nettracer.tracing.db.XDescElement;
 import com.bagnet.nettracer.tracing.db.i8n.KeyValueBean;
 import com.bagnet.nettracer.tracing.db.i8n.LocaleBasedObject;
 import com.bagnet.nettracer.tracing.db.lf.Subcompany;
-import com.bagnet.nettracer.tracing.db.lf.SubcompanyStation;
 import com.bagnet.nettracer.tracing.dto.RevenueCode;
 import com.bagnet.nettracer.tracing.forms.ClaimProrateForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
@@ -179,7 +176,6 @@ public class TracerUtils {
 		theform = new IncidentForm();
 
 		// theform = new IncidentForm();
-		IncidentBMO iBMO = new IncidentBMO();
 
 		theform.set_DATEFORMAT(user.getDateformat().getFormat());
 		theform.set_TIMEFORMAT(user.getTimeformat().getFormat());
@@ -199,7 +195,7 @@ public class TracerUtils {
 		theform.setStationcreated_ID(user.getStation().getStation_ID());
 		theform.setStationcreated(user.getStation());
 		theform.setStationassigned_ID(user.getStation().getStation_ID());
-		List agentassignedlist = TracerUtils.getAgentlist(theform
+		List<Agent> agentassignedlist = TracerUtils.getAgentlist(theform
 				.getStationassigned_ID());
 		request.setAttribute("agentassignedlist", agentassignedlist);
 
@@ -262,10 +258,6 @@ public class TracerUtils {
 		// default weight unit related code here
 		i.setBag_weight_unit(myDefaultWeightUnit);
 		
-		
-		// set new claimcheck
-		Incident_Claimcheck ic = theform.getClaimcheck(0);
-
 		// create new article
 		if (itemtype == TracingConstants.MISSING_ARTICLES) {
 			Articles a = theform.getArticle(0);
@@ -294,6 +286,7 @@ public class TracerUtils {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public static void populateOnHand(OnHandForm theform,
 			HttpServletRequest request) {
 		HttpSession session = request.getSession();
@@ -302,9 +295,6 @@ public class TracerUtils {
 		theform = new OnHandForm();
 
 		session.setAttribute("OnHandForm", theform);
-
-		OhdBMO bmo = new OhdBMO();
-		// theform.setOhd_id(bmo.getOHD_ID(user.getStation()));
 
 		Date x = TracerDateTime.getGMTDate();
 		String date = new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT)
@@ -627,6 +617,7 @@ public class TracerUtils {
 		return ccl;
 	}
 
+	@SuppressWarnings("unchecked")
 	private static List<LabelValueBean> getSpokenLanguageList(String locale){
 		List<String> langs = PropertyBMO.getSplitList(PropertyBMO.SPOKEN_LANGUAGE_LIST);
 		if(langs == null){
@@ -686,6 +677,7 @@ public class TracerUtils {
 		session.setAttribute("wtCompList", result);
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void populateClaimProrate(ClaimProrateForm cpform,
 			IncidentForm theform, HttpServletRequest request) {
 		try {
@@ -703,7 +695,7 @@ public class TracerUtils {
 					cpform = new ClaimProrateForm();
 					// create new itinerary list
 					List<Itinerary>	claimItinList = claim.getNtIncident().getItinerary_list();
-					ArrayList al = new ArrayList();					
+					ArrayList<Prorate_Itinerary> al = new ArrayList<Prorate_Itinerary>();					
 					Prorate_Itinerary pi = null;
 					if (claimItinList != null) {
 						int i = 0;
@@ -716,6 +708,7 @@ public class TracerUtils {
 								pi.setDepartdate(itin.getDepartdate());
 								pi.setLegfrom(itin.getLegfrom());
 								pi.setLegto(itin.getLegto());
+								pi.set_DATEFORMAT(itin.get_DATEFORMAT());
 								al.add(pi);
 							}
 							i++;
@@ -735,7 +728,7 @@ public class TracerUtils {
 				} else {
 					// copy itinerarylist from existing prorate
 					BeanUtils.copyProperties(cpform, cp);
-					ArrayList al = new ArrayList(cp.getProrate_itineraries());
+					ArrayList<Prorate_Itinerary> al = new ArrayList<Prorate_Itinerary>(cp.getProrate_itineraries());
 					// add dateformat to the list
 					for (int i = 0; i < al.size(); i++) {
 						Prorate_Itinerary pi = (Prorate_Itinerary) al.get(i);
@@ -814,7 +807,7 @@ public class TracerUtils {
 		return toReturn;
 	}
 	
-	public static ArrayList getSubcompList(String company, TracingConstants.AgentActiveStatus status) throws HibernateException {
+	public static ArrayList<Subcompany> getSubcompList(String company, TracingConstants.AgentActiveStatus status) throws HibernateException {
 
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
@@ -836,7 +829,8 @@ public class TracerUtils {
 			if (company != null)
 				q.setParameter("company", company);
 
-			List list = q.list();
+			@SuppressWarnings("unchecked")
+			List<Object[]> list = q.list();
 
 			if (list.size() == 0) {
 				logger.debug("unable to find station");
@@ -844,7 +838,7 @@ public class TracerUtils {
 			}
 
 			Subcompany subcomp = null;
-			ArrayList al = new ArrayList();
+			ArrayList<Subcompany> al = new ArrayList<Subcompany>();
 			Object[] o = null;
 			for (int i = 0; i < list.size(); i++) {
 				o = (Object[]) list.get(i);
@@ -864,7 +858,7 @@ public class TracerUtils {
 		}
 	}
 
-	public static ArrayList getStationList(String company, TracingConstants.AgentActiveStatus status) throws HibernateException {
+	public static ArrayList<Station> getStationList(String company, TracingConstants.AgentActiveStatus status) throws HibernateException {
 
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
@@ -895,7 +889,8 @@ public class TracerUtils {
 			if (company != null)
 				q.setParameter("company", company);
 
-			List list = q.list();
+			@SuppressWarnings("unchecked")
+			List<Object[]> list = q.list();
 
 			if (list.size() == 0) {
 				logger.debug("unable to find station");
@@ -903,7 +898,7 @@ public class TracerUtils {
 			}
 
 			Station station = null;
-			ArrayList al = new ArrayList();
+			ArrayList<Station> al = new ArrayList<Station>();
 			Object[] o = null;
 			for (int i = 0; i < list.size(); i++) {
 				o = (Object[]) list.get(i);
@@ -923,7 +918,7 @@ public class TracerUtils {
 		}
 	}
 
-	public static ArrayList getStationList(String company)
+	public static ArrayList<Station> getStationList(String company)
 			throws HibernateException {
 		return getStationList(company, TracingConstants.AgentActiveStatus.ACTIVE);
 	}
@@ -941,7 +936,8 @@ public class TracerUtils {
 
 			Query q = sess.createQuery(sql);
 
-			List list = q.list();
+			@SuppressWarnings("unchecked")
+			List<Object []> list = q.list();
 
 			if (list.size() == 0) {
 				logger.debug("unable to find company");
@@ -992,6 +988,7 @@ public class TracerUtils {
 		}
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@Deprecated
 	public static ArrayList retrieveRecords(String instr, String obj,
 			String tablename, String colname, String orderColumn)
@@ -1036,6 +1033,7 @@ public class TracerUtils {
 		}
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public static ArrayList retrieveBasicRecords(String obj,
 			String tablename, String orderColumn)
 			throws HibernateException {
@@ -1067,6 +1065,7 @@ public class TracerUtils {
 		}
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public static ArrayList retrieveLocaleBasedRecords(String obj,
 			String tablename, String orderColumn, String setLocale)
 			throws HibernateException {
@@ -1080,6 +1079,7 @@ public class TracerUtils {
 			}
 
 			q = sess.createQuery(sql);
+			@SuppressWarnings("unchecked")
 			List<LocaleBasedObject> list = q.list();
 
 			if (list == null || list.size() == 0) {
@@ -1103,15 +1103,16 @@ public class TracerUtils {
 
 
 
-	public static ArrayList getStatusList(int table_ID, String locale, String orderBy)
+	public static ArrayList<Status> getStatusList(int table_ID, String locale, String orderBy)
 			throws HibernateException {
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
 			Criteria cri = sess.createCriteria(Status.class).add(
-					Expression.eq("table_ID", new Integer(table_ID)));
+					Restrictions.eq("table_ID", new Integer(table_ID)));
 			if (orderBy != null) {
 				cri.addOrder(Order.asc(orderBy));
 			}
+			@SuppressWarnings("unchecked")
 			List<Status> list = cri.list();
 			
 			if (list == null || list.size() == 0) {
@@ -1122,7 +1123,7 @@ public class TracerUtils {
 					status.setLocale(locale);
 				}
 			}
-			return (ArrayList) list;
+			return (ArrayList<Status>) list;
 		} catch (Exception e) {
 			logger.error("unable to retrieve status list from database: " + e);
 			e.printStackTrace();
@@ -1132,6 +1133,7 @@ public class TracerUtils {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static ArrayList getStatusList(int table_ID, String locale)
 			throws HibernateException {
 		return getStatusList(table_ID, locale, null);
@@ -1199,6 +1201,7 @@ public class TracerUtils {
 	}
 
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static ArrayList getCategoryList(String locale) {
 
 		Session sess = null;
@@ -1231,13 +1234,9 @@ public class TracerUtils {
 				e.printStackTrace();
 			}
 		}
-		/*
-		 * ArrayList al = new ArrayList(); al.add(new LabelValueBean("Please
-		 * Select", "")); al.add(new LabelValueBean("Photo", "1")); return al;
-		 */
 	}
 
-	public static ArrayList getAirportList(String companycode) {
+	public static ArrayList<Airport> getAirportList(String companycode) {
 
 		Session sess = null;
 		try {
@@ -1254,12 +1253,13 @@ public class TracerUtils {
 			
 			q.setString("companycode", companycode);
 
-			List list = q.list();
+			@SuppressWarnings("unchecked")
+			List<Airport> list = q.list();
 
 			if (list.size() == 0) {
 				return null;
 			}
-			return (ArrayList) list;
+			return (ArrayList<Airport>) list;
 		} catch (Exception e) {
 			logger.error("unable to retrieve airports from database: " + e);
 			e.printStackTrace();
@@ -1279,12 +1279,13 @@ public class TracerUtils {
 	/**
 	 * @return Returns the localelist.
 	 */
-	public static ArrayList getReceiptLocaleList() {
-		ArrayList al = new ArrayList();
+	public static ArrayList<LabelValueBean> getReceiptLocaleList() {
+		ArrayList<LabelValueBean> al = new ArrayList<LabelValueBean>();
 
-		List localeList = HibernateUtils.retrieveAll(ReceiptDbLocale.class);
+		@SuppressWarnings("unchecked")
+		List<ReceiptDbLocale> localeList = HibernateUtils.retrieveAll(ReceiptDbLocale.class);
 
-		for (Iterator i = localeList.iterator(); i.hasNext();) {
+		for (Iterator<ReceiptDbLocale> i = localeList.iterator(); i.hasNext();) {
 			ReceiptDbLocale loc = (ReceiptDbLocale) i.next();
 			al.add(new LabelValueBean(loc.getLocale_description(), loc
 					.getLocale_id()));
@@ -1295,12 +1296,14 @@ public class TracerUtils {
 	/**
 	 * @return Returns the localelist.
 	 */
-	public static ArrayList getLocaleList() {
-		ArrayList al = new ArrayList();
+	public static ArrayList<LabelValueBean> getLocaleList() {
+		ArrayList<LabelValueBean> al = new ArrayList<LabelValueBean>();
 
+		@SuppressWarnings("rawtypes")
 		List localeList = HibernateUtils.retrieveAll(DbLocale.class);
 
-		for (Iterator i = localeList.iterator(); i.hasNext();) {
+		for (@SuppressWarnings("unchecked")
+		Iterator<DbLocale> i = localeList.iterator(); i.hasNext();) {
 			DbLocale loc = (DbLocale) i.next();
 			al.add(new LabelValueBean(loc.getLocale_description(), loc
 					.getLocale_id()));
@@ -1311,10 +1314,11 @@ public class TracerUtils {
 	/**
 	 * @return Returns the statelist.
 	 */
-	public static ArrayList getStatelist() {
+	@SuppressWarnings("unchecked")
+	public static ArrayList<LabelValueBean> getStatelist() {
 
-		ArrayList al = new ArrayList();
-		List retrieval = null;
+		ArrayList<LabelValueBean> al = new ArrayList<LabelValueBean>();
+		List<State> retrieval = null;
 
 		Session sess = null;
 		try {
@@ -1335,7 +1339,7 @@ public class TracerUtils {
 		}
 
 		if (retrieval != null) {
-			for (Iterator i = retrieval.iterator(); i.hasNext();) {
+			for (Iterator<State> i = retrieval.iterator(); i.hasNext();) {
 				State state = (State) i.next();
 				al
 						.add(new LabelValueBean(state.getState(), state
@@ -1350,9 +1354,10 @@ public class TracerUtils {
 	 * Mainly a SWA Specific Fields
 	 * @return list of labelBeanValues for filling the Claim Check select dropdown
 	 */
+	@SuppressWarnings("unchecked")
 	private static Object getClaimcheckValues() {
-		ArrayList ccl = new ArrayList();
-		List result = null;
+		ArrayList<LabelValueBean> ccl = new ArrayList<LabelValueBean>();
+		List<Category> result = null;
 
 		Session sess = null;
 		try {
@@ -1373,7 +1378,7 @@ public class TracerUtils {
 		}
 
 		if (result != null) {
-			for (Iterator i = result.iterator(); i.hasNext();) {
+			for (Iterator<Category> i = result.iterator(); i.hasNext();) {
 				Category claimCheckValue= (Category) i.next();
 				ccl.add(new LabelValueBean(claimCheckValue.getDescription(), claimCheckValue.getDescription()));
 			}
@@ -1396,9 +1401,10 @@ public class TracerUtils {
 		return cachedStates.containsKey(state.toUpperCase());
 	}
 
-	public static ArrayList getCountryList() {
-		ArrayList al = new ArrayList();
-		List retrieval = null;
+	@SuppressWarnings("unchecked")
+	public static ArrayList<LabelValueBean> getCountryList() {
+		ArrayList<LabelValueBean> al = new ArrayList<LabelValueBean>();
+		List<CountryCode> retrieval = null;
 
 		Session sess = null;
 		try {
@@ -1418,7 +1424,7 @@ public class TracerUtils {
 			}
 		}
 		if (retrieval != null) {
-			for (Iterator i = retrieval.iterator(); i.hasNext();) {
+			for (Iterator<CountryCode> i = retrieval.iterator(); i.hasNext();) {
 				CountryCode country = (CountryCode) i.next();
 				al.add(new LabelValueBean(country.getCountry(), country
 						.getCountryCode_ID()));
@@ -1503,7 +1509,7 @@ public class TracerUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Manufacturer.class).add(
-					Expression.eq("manufacturer_ID", new Integer(code)));
+					Restrictions.eq("manufacturer_ID", new Integer(code)));
 			return (Manufacturer) cri.list().get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1540,7 +1546,7 @@ public class TracerUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(XDescElement.class).add(
-					Expression.eq("XDesc_ID", new Integer(id)));
+					Restrictions.eq("XDesc_ID", new Integer(id)));
 			return (XDescElement) cri.list().get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1561,7 +1567,7 @@ public class TracerUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(CountryCode.class).add(
-					Expression.eq("countryCode_ID", code));
+					Restrictions.eq("countryCode_ID", code));
 			return (CountryCode) cri.list().get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1582,7 +1588,7 @@ public class TracerUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(State.class).add(
-					Expression.eq("state_ID", code));
+					Restrictions.eq("state_ID", code));
 			return (State) cri.list().get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1611,7 +1617,8 @@ public class TracerUtils {
 			q.setParameter("stationcode", stationcode);
 			q.setParameter("companycode_id", companycode_id);
 
-			List list = q.list();
+			@SuppressWarnings("unchecked")
+			List<Station> list = q.list();
 			if (list != null && list.size() > 0)
 				return (Station) list.get(0);
 			else
@@ -1643,7 +1650,8 @@ public class TracerUtils {
 			q.setParameter("stationcode", stationcode);
 			q.setParameter("companycode_id", companycode_id);
 
-			List list = q.list();
+			@SuppressWarnings("unchecked")
+			List<Station> list = q.list();
 			if (list != null && list.size() > 0)
 				return (Station) list.get(0);
 			else
@@ -1688,16 +1696,17 @@ public class TracerUtils {
 		}
 	}
 
-	public static List getAgentlist(int station_ID) {
+	@SuppressWarnings("unchecked")
+	public static List<Agent> getAgentlist(int station_ID) {
 		Session sess = null;
 		if (station_ID == 0)
-			return new ArrayList();
+			return new ArrayList<Agent>();
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Agent.class);
 			cri.createCriteria("station").add(
-					Expression.eq("station_ID", new Integer(station_ID)));
-			cri.add(Expression.eq("active", true));
+					Restrictions.eq("station_ID", new Integer(station_ID)));
+			cri.add(Restrictions.eq("active", true));
 			return cri.list();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1725,8 +1734,8 @@ public class TracerUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Agent.class);
-			cri.add(Expression.eq("username", username));
-			cri.add(Expression.eq("companycode_ID", companyCode));
+			cri.add(Restrictions.eq("username", username));
+			cri.add(Restrictions.eq("companycode_ID", companyCode));
 			return (Agent) cri.list().get(0);
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());
@@ -1755,6 +1764,7 @@ public class TracerUtils {
 		OHD ohd=ohdBMO.findOHDByID(fileReference);
 		return ohd;
 	}
+	@SuppressWarnings("rawtypes")
 	public static boolean madeSuspendWT_BAG_SELECTED(List list){
 		boolean flag=true;
 		Session session = null;
@@ -1787,7 +1797,8 @@ public class TracerUtils {
 		try {
 			Query query=session.createQuery("from com.bagnet.nettracer.tracing.db.Item as item where item.item_ID=?");
 			query.setParameter(0, itemID);
-			List list=query.list();
+			@SuppressWarnings("unchecked")
+			List<Item> list=query.list();
 			Item item=(Item)list.get(0);
 			return item;
 		} finally {
@@ -1842,6 +1853,7 @@ public class TracerUtils {
 	}
 
 	public static int getRowsPerPage(String key, HttpSession session) {
+		@SuppressWarnings("unchecked")
 		ConcurrentHashMap<String, Integer> rowMap = (ConcurrentHashMap<String, Integer>) session.getAttribute(TracingConstants.ROWSPERPAGE_MAP);
 		
 		if(rowMap == null) {
@@ -1857,6 +1869,7 @@ public class TracerUtils {
 	}
 
 	public static void updateRowsPerPage(String key, int rowsperpage, HttpSession session) {
+		@SuppressWarnings("unchecked")
 		ConcurrentHashMap<String, Integer> rowMap = (ConcurrentHashMap<String, Integer>) session.getAttribute(TracingConstants.ROWSPERPAGE_MAP);
 		if(rowMap == null) {
 			rowMap = new ConcurrentHashMap<String, Integer>();

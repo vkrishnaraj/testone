@@ -21,8 +21,8 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
@@ -61,6 +61,7 @@ import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 public class OHDUtils {
 	private static Logger logger = Logger.getLogger(OHDUtils.class);
 
+	@SuppressWarnings("rawtypes")
 	public static List getRequests(int station_id, ViewRequestForm form, String sort,
 			int rowsperpage, int currpage) {
 		Session sess = null;
@@ -162,6 +163,7 @@ public class OHDUtils {
 				q.setString("incident", form.getIncident_num());
 			}
 	
+			@SuppressWarnings("rawtypes")
 			List list = q.list();
 			if (list.size() > 0) {
 				return ((Long) list.get(0)).intValue();
@@ -182,12 +184,13 @@ public class OHDUtils {
 		}
 	}
 
-	public static List getOHDRequests(String ohd_id) {
+	@SuppressWarnings("unchecked")
+	public static List<OHDRequest> getOHDRequests(String ohd_id) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(OHDRequest.class);
-			cri.createCriteria("ohd").add(Expression.eq("OHD_ID", ohd_id));
+			cri.createCriteria("ohd").add(Restrictions.eq("OHD_ID", ohd_id));
 			cri.addOrder(Order.asc("ohd_request_id"));
 			return cri.list();
 		} catch (Exception e) {
@@ -204,14 +207,15 @@ public class OHDUtils {
 		}
 	}
 
-	public static List getRequests(String ohd_id, int rowsperpage, int currpage) {
+	@SuppressWarnings("unchecked")
+	public static List<OHDRequest> getRequests(String ohd_id, int rowsperpage, int currpage) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(OHDRequest.class);
 			cri.createCriteria("status").add(
-					Expression.eq("status_ID", new Integer(TracingConstants.OHD_STATUS_OPEN)));
-			cri.createCriteria("ohd").add(Expression.eq("OHD_ID", ohd_id));
+					Restrictions.eq("status_ID", new Integer(TracingConstants.OHD_STATUS_OPEN)));
+			cri.createCriteria("ohd").add(Restrictions.eq("OHD_ID", ohd_id));
 			if (rowsperpage > 0) {
 				int startnum = currpage * rowsperpage;
 				cri.setFirstResult(startnum);
@@ -232,12 +236,13 @@ public class OHDUtils {
 		}
 	}
 
-	public static List getIncidentRequests(String incident_id) {
+	@SuppressWarnings("unchecked")
+	public static List<OHDRequest> getIncidentRequests(String incident_id) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(OHDRequest.class).add(
-					Expression.eq("incident_ID", incident_id));
+					Restrictions.eq("incident_ID", incident_id));
 			cri.addOrder(Order.asc("ohd_request_id"));
 			return cri.list();
 		} catch (Exception e) {
@@ -254,7 +259,8 @@ public class OHDUtils {
 		}
 	}
 
-	public static List getCreatedRequests(Agent user, int rowsperpage, int currpage,
+	@SuppressWarnings("unchecked")
+	public static List<OHDRequest> getCreatedRequests(Agent user, int rowsperpage, int currpage,
 			ViewCreatedRequestForm form, Station agent_station) {
 		Session sess = null;
 		try {
@@ -268,25 +274,25 @@ public class OHDUtils {
 			String incident_ID = form.getIncident_ID();
 
 			if (status != null && !status.equals("") && !status.equals("-1")) {
-				cri.createCriteria("status").add(Expression.eq("status_ID", new Integer(status)));
+				cri.createCriteria("status").add(Restrictions.eq("status_ID", new Integer(status)));
 			}
 
 			if (s_time != null && !s_time.equals("")) {
 				if (e_time != null && !e_time.equals("")) {
-					if (s_time.equals(e_time)) cri.add(Expression.eq("requestTime", s_time));
-					else cri.add(Expression.between("requestTime", s_time, e_time));
+					if (s_time.equals(e_time)) cri.add(Restrictions.eq("requestTime", s_time));
+					else cri.add(Restrictions.between("requestTime", s_time, e_time));
 				} else {
-					cri.add(Expression.ge("requestTime", s_time));
+					cri.add(Restrictions.ge("requestTime", s_time));
 				}
 			}
 			if (ohd_num != null && ohd_num.length() > 0) {
-				cri.createCriteria("ohd").add(Expression.like("OHD_ID", ohd_num));
+				cri.createCriteria("ohd").add(Restrictions.like("OHD_ID", ohd_num));
 			}
 			if (incident_ID != null && incident_ID.length() > 0) {
-				cri.add(Expression.like("incident_ID", incident_ID));
+				cri.add(Restrictions.like("incident_ID", incident_ID));
 			}
 			cri.createCriteria("requestForStation").add(
-					Expression.eq("station_ID", new Integer(agent_station.getStation_ID())));
+					Restrictions.eq("station_ID", new Integer(agent_station.getStation_ID())));
 			cri.addOrder(Order.desc("requestTime"));
 			cri.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			if (rowsperpage > 0) {
@@ -309,13 +315,14 @@ public class OHDUtils {
 		}
 	}
 
-	public static List getCreatedRequests(int station_id, int rowsperpage, int currpage) {
+	@SuppressWarnings("unchecked")
+	public static List<OHDRequest> getCreatedRequests(int station_id, int rowsperpage, int currpage) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(OHDRequest.class);
 			cri.createCriteria("requestForStation").add(
-					Expression.eq("station_ID", new Integer(station_id)));
+					Restrictions.eq("station_ID", new Integer(station_id)));
 			cri.addOrder(Order.desc("requestTime"));
 			cri.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 			if (rowsperpage > 0) {
@@ -338,15 +345,16 @@ public class OHDUtils {
 		}
 	}
 	
-	public static List getCreatedRequestsForOHD(int station_id, String OHD_ID) {
+	@SuppressWarnings("unchecked")
+	public static List<OHDRequest> getCreatedRequestsForOHD(int station_id, String OHD_ID) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(OHDRequest.class);
 			cri.createCriteria("requestForStation").add(
-					Expression.eq("station_ID", new Integer(station_id)));
+					Restrictions.eq("station_ID", new Integer(station_id)));
 			
-			cri.createCriteria("ohd").add(Expression.eq("OHD_ID",OHD_ID));
+			cri.createCriteria("ohd").add(Restrictions.eq("OHD_ID",OHD_ID));
 			
 			cri.addOrder(Order.desc("requestTime"));
 
@@ -387,6 +395,7 @@ public class OHDUtils {
 			Query q = sess.createQuery(sql);
 			q.setInteger("station_ID", station_id);
 			q.setInteger("openStatus", TracingConstants.OHD_STATUS_OPEN);
+			@SuppressWarnings("rawtypes")
 			List list = q.list();
 			if (list.size() > 0) {
 				return ((Long) list.get(0)).intValue();
@@ -474,6 +483,7 @@ public class OHDUtils {
 			if (incident_ID != null && incident_ID.length() > 0) {
 				q.setString("incident_ID", incident_ID);
 			}
+			@SuppressWarnings("rawtypes")
 			List list = q.list();
 			if (list.size() > 0) {
 				return ((Long) list.get(0)).intValue();
@@ -494,11 +504,12 @@ public class OHDUtils {
 		}
 	}
 
-	public static List getBagsToLZed(int station_id, int rowsperpage, int currpage) {
+	@SuppressWarnings("unchecked")
+	public static List<OHD> getBagsToLZed(int station_id, int rowsperpage, int currpage) {
 		Session sess = null;
 		Station s = StationBMO.getStation("" + station_id);
 		if (s.getCompany().getVariable().getOhd_to_lz_days() <= 0) {
-			return new ArrayList();
+			return new ArrayList<OHD>();
 		}
 
 		try {
@@ -507,11 +518,11 @@ public class OHDUtils {
 			long xDaysAgo = tillNow
 					- (1000 * 60 * 60 * 24 * s.getCompany().getVariable().getOhd_to_lz_days());
 			Date xDaysPrior = new Date(xDaysAgo);
-			Criteria cri = sess.createCriteria(OHD.class).add(Expression.lt("founddate", xDaysPrior));
+			Criteria cri = sess.createCriteria(OHD.class).add(Restrictions.lt("founddate", xDaysPrior));
 			cri.createCriteria("holdingStation")
-					.add(Expression.eq("station_ID", new Integer(station_id)));
+					.add(Restrictions.eq("station_ID", new Integer(station_id)));
 			cri.createCriteria("status").add(
-					Expression.eq("status_ID", new Integer(TracingConstants.OHD_STATUS_OPEN)));
+					Restrictions.eq("status_ID", new Integer(TracingConstants.OHD_STATUS_OPEN)));
 			if (rowsperpage > 0) {
 				int startnum = currpage * rowsperpage;
 				cri.setFirstResult(startnum);
@@ -568,6 +579,7 @@ public class OHDUtils {
 			q.setInteger("station_ID", station_id);
 			q.setInteger("status_ID", TracingConstants.OHD_STATUS_OPEN);
 			q.setDate("xDaysprior", xDaysPrior);
+			@SuppressWarnings("rawtypes")
 			List list = q.list();
 			if (list.size() > 0) {
 				return ((Long) list.get(0)).intValue();
@@ -604,6 +616,7 @@ public class OHDUtils {
 			Query q = sess.createQuery("select distinct OHDLog_ID from OHD_Log where ohd.OHD_ID = :ohd_ID and log_status = :status");
 			q.setString("ohd_ID", ohd_id);
 			q.setInteger("status", TracingConstants.LOG_NOT_RECEIVED);		
+			@SuppressWarnings("unchecked")
 			List<Integer> logList = (List<Integer>) q.list();
 					
 			t = sess.beginTransaction();
@@ -655,7 +668,7 @@ public class OHDUtils {
 			r.setOhd(ohd);
 			
 			if (ohd.getRemarks() == null) 
-				ohd.setRemarks(new HashSet());
+				ohd.setRemarks(new HashSet<Remark>());
 			ohd.getRemarks().add(r);
 			
 			OhdBMO ohdBmo = new OhdBMO();
@@ -738,7 +751,8 @@ public class OHDUtils {
 	 * @param currpage
 	 * @return
 	 */
-	public static List getIncomingBags(int station_id, ViewIncomingRequestForm form, String sort,
+	@SuppressWarnings("unchecked")
+	public static List<OHD_Log> getIncomingBags(int station_id, ViewIncomingRequestForm form, String sort,
 			int rowsperpage, int currpage) {
 		Session sess = null;
 		try {
@@ -864,6 +878,7 @@ public class OHDUtils {
 				q.setString("claimnum", form.getBag_tag());
 			}
 
+			@SuppressWarnings("rawtypes")
 			List list = q.list();
 			if (list.size() > 0) {
 				return ((Long) list.get(0)).intValue();
@@ -910,6 +925,7 @@ public class OHDUtils {
 			q.setInteger("status_ID3", TracingConstants.MBR_STATUS_TEMP);
 
 
+			@SuppressWarnings("rawtypes")
 			List list = q.list();
 			if (list.size() > 0) {
 				return ((Long) list.get(0)).intValue();
@@ -955,6 +971,7 @@ public class OHDUtils {
 			q.setInteger("status_ID3", TracingConstants.MBR_STATUS_TEMP);
 
 
+			@SuppressWarnings("rawtypes")
 			List list = q.list();
 			if (list.size() > 0) {
 				return ((Long) list.get(0)).intValue();
@@ -1013,6 +1030,7 @@ public class OHDUtils {
 			q.setInteger("status_ID3", TracingConstants.MBR_STATUS_TEMP);
 
 
+			@SuppressWarnings("rawtypes")
 			List list = q.list();
 			if (list.size() > 0) {
 				return ((Long) list.get(0)).intValue();
@@ -1035,12 +1053,11 @@ public class OHDUtils {
 	
 
 	public static OHDRequest getRequest(String request_id) {
-		OHDRequest ret = null;
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria criteria = sess.createCriteria(OHDRequest.class).add(
-					Expression.eq("ohd_request_id", new Integer(request_id)));
+					Restrictions.eq("ohd_request_id", new Integer(request_id)));
 			return (OHDRequest) criteria.list().get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1056,14 +1073,15 @@ public class OHDUtils {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static List getOHDs(Agent user, String sort, ViewTemporaryOnHandsForm form,
 			String status_ID, String station_id, int rowsperpage, int currpage, boolean isCount) {
 		return getOHDs(user, sort, form, status_ID, station_id, rowsperpage, currpage, isCount, false);
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public static List getOHDs(Agent user, String sort, ViewTemporaryOnHandsForm form,
 			String status_ID, String station_id, int rowsperpage, int currpage, boolean isCount, boolean dirtyRead) {
-		OHD ret = null;
 		Session sess = null;
 		try {
 			
@@ -1093,7 +1111,6 @@ public class OHDUtils {
 			Date sdate = null, edate = null;
 			Date sdate1 = null, edate1 = null; // add one for timezone
 			Date stime = null; // time to compare (04:00 if eastern, for example)
-			String dateq = "";
 			
 			ArrayList dateal = null;
 			if ((dateal = IncidentUtils.calculateDateDiff(form.getS_time(),form.getE_time(),tz,user)) == null) {
@@ -1175,13 +1192,14 @@ public class OHDUtils {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static List getOHDsByTypeStatus(Agent user, String sort, String ohd_type,
 			ViewMassOnHandsForm form, String station_id, int rowsperpage, int currpage, boolean isCount) {
 		return getOHDsByTypeStatus(user, sort, ohd_type, form, station_id, rowsperpage, currpage, isCount, false);
 	}
+	@SuppressWarnings("rawtypes")
 	public static List getOHDsByTypeStatus(Agent user, String sort, String ohd_type,
 			ViewMassOnHandsForm form, String station_id, int rowsperpage, int currpage, boolean isCount, boolean dirtyRead) {
-		OHD ret = null;
 		Session sess = null;
 		try {
 			TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
@@ -1210,7 +1228,6 @@ public class OHDUtils {
 			Date sdate = null, edate = null;
 			Date sdate1 = null, edate1 = null; // add one for timezone
 			Date stime = null; // time to compare (04:00 if eastern, for example)
-			String dateq = "";
 			
 			ArrayList dateal = null;
 			if ((dateal = IncidentUtils.calculateDateDiff(form.getS_time(),form.getE_time(),tz,user)) == null) {
@@ -1298,8 +1315,9 @@ public class OHDUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria criteria = sess.createCriteria(OHD.class);
-			criteria.add(Expression.eq("OHD_ID", ohd_ID));
-			List results = criteria.list();
+			criteria.add(Restrictions.eq("OHD_ID", ohd_ID));
+			@SuppressWarnings("unchecked")
+			List<OHD> results = criteria.list();
 			if (results == null || results.size() < 1) {
 				return null;
 			} else {
@@ -1334,8 +1352,9 @@ public class OHDUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(OHD_Log.class);
-			cri.createCriteria("ohd").add(Expression.eq("OHD_ID", ohd_id));
-			List forwards = cri.list();
+			cri.createCriteria("ohd").add(Restrictions.eq("OHD_ID", ohd_id));
+			@SuppressWarnings("unchecked")
+			List<OHD_Log> forwards = cri.list();
 			if (forwards.size() <= 0) return "";
 
 			OHD_Log log = (OHD_Log) forwards.get(0);
@@ -1370,7 +1389,7 @@ public class OHDUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(OHD_Log.class).add(
-					Expression.eq("OHDLog_ID", new Integer(log_id)));
+					Restrictions.eq("OHDLog_ID", new Integer(log_id)));
 			return (OHD_Log) cri.list().get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1386,12 +1405,13 @@ public class OHDUtils {
 		}
 	}
 
-	public static List getForwardMessages(String ohd_id) {
+	@SuppressWarnings("unchecked")
+	public static List<OHD_Log> getForwardMessages(String ohd_id) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(OHD_Log.class);
-			cri.createCriteria("ohd").add(Expression.eq("OHD_ID", ohd_id));
+			cri.createCriteria("ohd").add(Restrictions.eq("OHD_ID", ohd_id));
 			cri.addOrder(Order.asc("OHDLog_ID"));
 			return cri.list();
 		} catch (Exception e) {
@@ -1413,9 +1433,10 @@ public class OHDUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(OHD_Log.class);
-			cri.createCriteria("ohd").add(Expression.eq("OHD_ID", ohd_id));
+			cri.createCriteria("ohd").add(Restrictions.eq("OHD_ID", ohd_id));
 			cri.addOrder(Order.desc("OHDLog_ID"));
-			List result = cri.list();
+			@SuppressWarnings("unchecked")
+			List<OHD_Log> result = cri.list();
 			System.out.println("!!!!!!!LOG LIST!!!! "+result);
 			if (result != null && result.size() > 0)
 				return (OHD_Log)result.get(0);
@@ -1440,8 +1461,9 @@ public class OHDUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(OHD.class);
-			cri.createCriteria("agent").add(Expression.eq("agent_ID", new Integer(agent_id)));
-			List results = cri.list();
+			cri.createCriteria("agent").add(Restrictions.eq("agent_ID", new Integer(agent_id)));
+			@SuppressWarnings("unchecked")
+			List<OHD> results = cri.list();
 			if (results != null && results.size() > 0) return true;
 			else return false;
 		} catch (Exception e) {
@@ -1463,6 +1485,7 @@ public class OHDUtils {
 	 * @param station_id
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	public static List getHoldingStationList(int station_id, boolean onlyOpenOhds) {
 		Session sess = null;
 		try {
@@ -1500,6 +1523,7 @@ public class OHDUtils {
 	 * @param station_id
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	public static List getDestStationList(int station_id, boolean onlyOpenOhds) {
 		Session sess = null;
 		try {
@@ -1533,6 +1557,7 @@ public class OHDUtils {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static OHD getExistingOnhandWithin24HoursAtStation(String bagTagNumber, Station foundAtStation) {
 
 		List<OHD> list = null;
@@ -1615,7 +1640,7 @@ public class OHDUtils {
 			r.setOhd(ohd);
 			
 			if (ohd.getRemarks() == null) 
-				ohd.setRemarks(new HashSet());
+				ohd.setRemarks(new HashSet<Remark>());
 			ohd.getRemarks().add(r);
 
 			sess.update(ohd);
@@ -1654,6 +1679,7 @@ public class OHDUtils {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static OHD getBagTagNumberIncomingToStation(String bagTagNumber, Station foundAtStation) {
 
 		OHD result = null;
@@ -1733,6 +1759,7 @@ public class OHDUtils {
 			
 //			logger.error("getDisputeCount() : lzId = " + lzId + " and stationId = " + stationId);
 			
+			@SuppressWarnings("rawtypes")
 			List list = q.list();
 			if (list.size() > 0) {
 				return ((Long) list.get(0)).intValue();
@@ -1759,7 +1786,6 @@ public class OHDUtils {
 		}
 		
 		OHD o=getOHD(ohd_id);
-		OHD co=new OHD();
 		if(o!=null){
 //			BeanUtils.copyProperties(o, co);
 //			co.setOHD_ID(null);
@@ -1772,6 +1798,7 @@ public class OHDUtils {
 				np.setFirstname(p.getFirstname());
 				np.setLastname(p.getLastname());
 				np.setMiddlename(p.getMiddlename());
+				@SuppressWarnings("unchecked")
 				Set<OHD_Address> oalist=(Set<OHD_Address>)p.getAddresses();
 				int j=0;
 				for(OHD_Address oa:oalist){
@@ -1837,6 +1864,7 @@ public class OHDUtils {
 	 * @param ohd - ohd to get currently existing information from
 	 * @param theform - the form to be populated
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void populateFormWithExistingData(OHD ohd, OnHandForm theform) {
 		if(ohd!=null){
 			if(ohd.getMatched_incident()!=null && !ohd.getMatched_incident().isEmpty()){

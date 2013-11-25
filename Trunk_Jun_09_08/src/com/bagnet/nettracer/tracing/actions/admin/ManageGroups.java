@@ -25,6 +25,7 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.LabelValueBean;
 import org.apache.struts.validator.DynaValidatorForm;
 
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.constant.TracingConstants.SortParam;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -74,6 +75,8 @@ public final class ManageGroups extends Action {
 		ActionMessages errors = new ActionMessages();
 		DynaValidatorForm dForm = (DynaValidatorForm) form;
 
+		request.setAttribute("bsoProcess", PropertyBMO.getValue(PropertyBMO.BSO_EXPENSE_PROCESS));
+		
 		String companyCode = "";
 		if ((request.getParameter("edit") != null && request.getParameter("edit").trim().length() > 0)
 				|| request.getParameter("addAgents") != null) {
@@ -83,10 +86,11 @@ public final class ManageGroups extends Action {
 			dForm.set("companyCode", group.getCompanycode_ID());
 			dForm.set("groupName", group.getDescription());
 			dForm.set("groupDesc", group.getDescription2());
+			dForm.set("bsoLimit", String.valueOf(group.getBsoLimit()));
 
 			// check if adding agents to this group
 			if (request.getParameter("addAgents") != null) {
-				HashMap selectedAgents = new HashMap();
+				HashMap<String,String> selectedAgents = new HashMap<String,String>();
 				String[] agentsSelected = request
 						.getParameterValues("agent_ID");
 				if (agentsSelected != null) {
@@ -121,7 +125,7 @@ public final class ManageGroups extends Action {
 						.parseInt(request.getParameter("currpage"))
 						: 0;
 
-				List agents = null;
+				List<Agent> agents = null;
 				if (!station_id.equals("-1"))
 					agents = AdminUtils.getAgentsByStation(station_id, sort,
 							null, rowsperpage, currpage);
@@ -132,7 +136,7 @@ public final class ManageGroups extends Action {
 				UserGroup guest = AdminUtils.getGuestGroup(group
 						.getCompanycode_ID());
 
-				for (Iterator i = agents.iterator(); i.hasNext();) {
+				for (Iterator<Agent> i = agents.iterator(); i.hasNext();) {
 					Agent a = (Agent) i.next();
 					if (a.getUsergroup_id() == group
 							.getUserGroup_ID()) {
@@ -156,7 +160,7 @@ public final class ManageGroups extends Action {
 			}
 
 			// get the list of the agents for the group.
-			List agents = AdminUtils.getAgentsByGroup(""
+			List<Agent> agents = AdminUtils.getAgentsByGroup(""
 					+ group.getUserGroup_ID(), sort, 0, 0);
 			if (agents != null && agents.size() > 0) {
 				/** ************ pagination ************* */
@@ -196,7 +200,7 @@ public final class ManageGroups extends Action {
 				if (currpage + 1 == totalpages)
 					request.setAttribute("end", "1");
 				if (totalpages > 1) {
-					ArrayList al = new ArrayList();
+					ArrayList<String> al = new ArrayList<String>();
 					for (int i = 0; i < totalpages; i++) {
 						al.add(Integer.toString(i));
 					}
@@ -241,12 +245,12 @@ public final class ManageGroups extends Action {
 			dForm.set("groupName", group.getDescription());
 
 			// Get the station List for the company.
-			List stationList = AdminUtils.getStations(null, group
+			List<Station> stationList = AdminUtils.getStations(null, group
 					.getCompanycode_ID(), 0, 0);
 			if (stationList != null) {
-				List x2 = new ArrayList();
+				List<LabelValueBean> x2 = new ArrayList<LabelValueBean>();
 				// Station first = null;
-				for (Iterator i = stationList.iterator(); i.hasNext();) {
+				for (Iterator<Station> i = stationList.iterator(); i.hasNext();) {
 					Station station = (Station) i.next();
 					// if (first == null)
 					// first = station;
@@ -265,7 +269,7 @@ public final class ManageGroups extends Action {
 				}
 
 				if (station_id != null) {
-					List agents = null;
+					List<Agent> agents = null;
 					int path = -1;
 					if (!station_id.equals("-1")) {
 						agents = AdminUtils.getAgentsByStation(station_id,
@@ -320,7 +324,7 @@ public final class ManageGroups extends Action {
 						if (currpage + 1 == totalpages)
 							request.setAttribute("end", "1");
 						if (totalpages > 1) {
-							ArrayList al = new ArrayList();
+							ArrayList<String> al = new ArrayList<String>();
 							for (int i = 0; i < totalpages; i++) {
 								al.add(Integer.toString(i));
 							}
@@ -397,7 +401,7 @@ public final class ManageGroups extends Action {
 						// Component policies need to recopied.
 						if (grp.getComponentPolicies() != null
 								&& grp.getComponentPolicies().size() > 0) {
-							for (Iterator i = grp.getComponentPolicies()
+							for (Iterator<GroupComponentPolicy> i = grp.getComponentPolicies()
 									.iterator(); i.hasNext();) {
 								GroupComponentPolicy policy = (GroupComponentPolicy) i
 										.next();
@@ -421,6 +425,8 @@ public final class ManageGroups extends Action {
 			String groupName = (String) dForm.get("groupName");
 			String groupDesc = (String) dForm.get("groupDesc");
 			
+			double bsoLimit = Double.parseDouble((String) dForm.get("bsoLimit"));
+			
 			if(groupName != null){
 				groupName = groupName.replaceAll(TracingConstants.FILTER_CHARACTERS, "");
 			}
@@ -431,6 +437,7 @@ public final class ManageGroups extends Action {
 			g.setDescription(groupName);
 			g.setDescription2(groupDesc);
 			g.setCompanycode_ID(companyCode);
+			g.setBsoLimit(bsoLimit);
 			try {
 				HibernateUtils.saveGroup(g, groupId, user);
 
@@ -453,7 +460,7 @@ public final class ManageGroups extends Action {
 					// Component policies need to recopied.
 					if (objRef.getComponentPolicies() != null
 							&& objRef.getComponentPolicies().size() > 0) {
-						for (Iterator i = objRef.getComponentPolicies()
+						for (Iterator<GroupComponentPolicy> i = objRef.getComponentPolicies()
 								.iterator(); i.hasNext();) {
 							GroupComponentPolicy policy = (GroupComponentPolicy) i
 									.next();
@@ -470,7 +477,7 @@ public final class ManageGroups extends Action {
 				saveMessages(request, errors);
 			}
 		}
-		List groupList = AdminUtils.getGroups(dForm, companyCode, 0, 0);
+		List<UserGroup> groupList = AdminUtils.getGroups(dForm, companyCode, 0, 0);
 		if (groupList != null && groupList.size() > 0) {
 			/** ************ pagination ************* */
 			int rowcount = -1;
@@ -507,7 +514,7 @@ public final class ManageGroups extends Action {
 			if (currpage + 1 == totalpages)
 				request.setAttribute("end", "1");
 			if (totalpages > 1) {
-				ArrayList al = new ArrayList();
+				ArrayList<String> al = new ArrayList<String>();
 				for (int i = 0; i < totalpages; i++) {
 					al.add(Integer.toString(i));
 				}

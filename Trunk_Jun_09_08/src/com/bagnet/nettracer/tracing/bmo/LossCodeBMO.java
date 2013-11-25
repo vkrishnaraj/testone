@@ -6,8 +6,8 @@ import org.apache.log4j.Logger;
 import org.apache.struts.validator.DynaValidatorForm;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -34,9 +34,10 @@ public class LossCodeBMO {
 				report_type = TracingConstants.LOST_DELAY;
 			}
 			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(Company_specific_irregularity_code.class).add(Expression.eq("loss_code", new Integer(loss_code))).add(
-					Expression.eq("report_type", new Integer(report_type))).add(Expression.eq("company", company));
-			List list = cri.list();
+			Criteria cri = sess.createCriteria(Company_specific_irregularity_code.class).add(Restrictions.eq("loss_code", new Integer(loss_code))).add(
+					Restrictions.eq("report_type", new Integer(report_type))).add(Restrictions.eq("company", company));
+			@SuppressWarnings("unchecked")
+			List<Company_specific_irregularity_code> list = cri.list();
 			if (list != null && list.size() > 0){
 				return (Company_specific_irregularity_code) cri.list().get(0);
 			}
@@ -65,7 +66,7 @@ public class LossCodeBMO {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(Company_specific_irregularity_code.class).add(Expression.eq("code_id", new Integer(code_id)));
+			Criteria cri = sess.createCriteria(Company_specific_irregularity_code.class).add(Restrictions.eq("code_id", new Integer(code_id)));
 			return (Company_specific_irregularity_code) cri.list().get(0);
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());
@@ -89,15 +90,16 @@ public class LossCodeBMO {
 	 * @param currpage
 	 * @return list of codes null in case of exception
 	 */
-	public static List getCodes(String companyCode, String report_type, DynaValidatorForm dForm, int rowsperpage, int currpage) {
+	@SuppressWarnings("unchecked")
+	public static List<Company_specific_irregularity_code> getCodes(String companyCode, String report_type, DynaValidatorForm dForm, int rowsperpage, int currpage) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Company_specific_irregularity_code.class);
-			cri.createCriteria("company").add(Expression.eq("companyCode_ID", companyCode));
+			cri.createCriteria("company").add(Restrictions.eq("companyCode_ID", companyCode));
 	
 			if (report_type.length() > 0) {
-				cri.add(Expression.eq("report_type", new Integer(report_type)));
+				cri.add(Restrictions.eq("report_type", new Integer(report_type)));
 			}
 	
 			String code = null;
@@ -116,7 +118,7 @@ public class LossCodeBMO {
 			}
 	
 			if (intCode != -1) {
-				cri.add(Expression.eq("loss_code", new Integer(intCode)));
+				cri.add(Restrictions.eq("loss_code", new Integer(intCode)));
 			}
 	
 			cri.addOrder(Order.asc("loss_code"));
@@ -148,7 +150,8 @@ public class LossCodeBMO {
 	 * @param currpage
 	 * @return list of codes null in case of exception
 	 */
-	public static List getIATACodes(int rowsperpage, int currpage) {
+	@SuppressWarnings("unchecked")
+	public static List<IATA_irregularity_code> getIATACodes(int rowsperpage, int currpage) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
@@ -186,6 +189,7 @@ public class LossCodeBMO {
 	 * @return the list of active company codes
 	 */
 	
+	@SuppressWarnings("unchecked")
 	public static List<Company_specific_irregularity_code> getCompanyCodes(String companyCode, int report_type, boolean limit, Agent user, boolean checkLLC, boolean active) {
 		Session sess = null;
 		boolean limitQuery = false;
@@ -198,22 +202,22 @@ public class LossCodeBMO {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Company_specific_irregularity_code.class);
-			cri.createCriteria("company").add(Expression.eq("companyCode_ID", companyCode));
+			cri.createCriteria("company").add(Restrictions.eq("companyCode_ID", companyCode));
 			if (report_type > 0) {
 				if(report_type == TracingConstants.OHD){
-					cri.add(Expression.eq("report_type", new Integer(TracingConstants.LOST_DELAY)));
+					cri.add(Restrictions.eq("report_type", new Integer(TracingConstants.LOST_DELAY)));
 				}
 				else {
-					cri.add(Expression.eq("report_type", new Integer(report_type)));
+					cri.add(Restrictions.eq("report_type", new Integer(report_type)));
 				}
 			}
 			
 			if (limitQuery) {
-				cri.add(Expression.eq("show_to_limited_users", true));
+				cri.add(Restrictions.eq("show_to_limited_users", true));
 			}
 			
 			if (active) {
-				cri.add(Expression.eq("active", true));
+				cri.add(Restrictions.eq("active", true));
 			}
 			
 			cri.addOrder(Order.asc("loss_code"));

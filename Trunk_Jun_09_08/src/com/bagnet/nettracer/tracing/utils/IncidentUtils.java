@@ -19,8 +19,8 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Disjunction;
-import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
@@ -55,7 +55,6 @@ public class IncidentUtils {
 			Date sdate = null, edate = null;
 			Date sdate1 = null, edate1 = null; // add one for timezone
 			Date stime = null; // time to compare (04:00 if eastern, for example)
-			String dateq = "";
 
 
 			StringBuffer sql = new StringBuffer();
@@ -148,7 +147,8 @@ public class IncidentUtils {
 		}
 	}
 
-	public static List retrieveItemTypes() {
+	@SuppressWarnings("unchecked")
+	public static List<ItemType> retrieveItemTypes() {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
@@ -173,8 +173,7 @@ public class IncidentUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(ItemType.class);
-			cri.add(Expression.eq("itemType_ID", new Integer(type_id)));
-//			cri.add(Expression.eq("locale", locale));
+			cri.add(Restrictions.eq("itemType_ID", new Integer(type_id)));
 			return (ItemType) cri.list().get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -201,37 +200,12 @@ public class IncidentUtils {
 			retVal.setItemType_ID(3);
 		}
 		return retVal;
-//		Session sess = null;
-//		try {
-//			sess = HibernateWrapper.getSession().openSession();
-//			Criteria cri = sess.createCriteria(ItemType.class);
-//			cri.add(Expression.like("description", desc));
-//			return (ItemType) cri.list().get(0);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			return null;
-//		} finally {
-//			if (sess != null) {
-//				try {
-//					sess.close();
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		}
 	}
 
 	/**
 	 * get report method id
 	 */
 	public static int getReportMethod(String val) {
-//		if (val == null || val.length() == 0) return 0;
-//		if (val.equals("In Person")) return 0;
-//		else if (val.equals("BSO Phone")) return 1;
-//		else if (val.equals("Call Center")) return 2;
-//		else if (val.equals("Internet")) return 3;
-//		else if (val.equals("Kiosk")) return 4;
-//		else return 0;
 		return ((ClientUtils) SpringUtils.getBean("clientUtils")).getReportMethodType(val);
 	}
 	
@@ -470,16 +444,16 @@ public class IncidentUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(IATA_irregularity_code.class).add(
-					Expression.eq("locale", locale));
+					Restrictions.eq("locale", locale));
 			if (incident_type == TracingConstants.LOST_DELAY
 					|| incident_type == TracingConstants.MISSING_ARTICLES) {
-				Disjunction desc = Expression.disjunction();
-				desc.add(Expression.lt("loss_code", new Integer(80)));
-				desc.add(Expression.gt("loss_code", new Integer(89)));
+				Disjunction desc = Restrictions.disjunction();
+				desc.add(Restrictions.lt("loss_code", new Integer(80)));
+				desc.add(Restrictions.gt("loss_code", new Integer(89)));
 				cri.add(desc);
 			}
 			if (incident_type == TracingConstants.DAMAGED_BAG) {
-				cri.add(Expression.lt("loss_code", new Integer(90)));
+				cri.add(Restrictions.lt("loss_code", new Integer(90)));
 			}
 			cri.addOrder(Order.asc("loss_code"));
 			return cri.list();
@@ -497,7 +471,7 @@ public class IncidentUtils {
 		}
 	}
 	
-	public static List getStationAssignedList(int station_id, boolean disabling) {
+	public static List<Incident> getStationAssignedList(int station_id, boolean disabling) {
 		Session sess = null;
 		try {
 
@@ -538,8 +512,8 @@ public class IncidentUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Incident.class).add(
-					Expression.eq("loss_code", new Integer(loss_code)));
-			cri.add(Expression.eq("itemtype.itemType_ID", new Integer(loss_code)));
+					Restrictions.eq("loss_code", new Integer(loss_code)));
+			cri.add(Restrictions.eq("itemtype.itemType_ID", new Integer(loss_code)));
 			List list = cri.list();
 			if (list != null && list.size() > 0) return true;
 			else return false;
@@ -562,7 +536,7 @@ public class IncidentUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Incident.class);
-			cri.createCriteria("agent").add(Expression.eq("agent_ID", new Integer(agent_id)));
+			cri.createCriteria("agent").add(Restrictions.eq("agent_ID", new Integer(agent_id)));
 			List results = cri.list();
 			if (results != null && results.size() > 0) return true;
 			else return false;

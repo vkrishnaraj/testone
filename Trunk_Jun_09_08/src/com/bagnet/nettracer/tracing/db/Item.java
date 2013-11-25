@@ -31,6 +31,10 @@ import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
  * @hibernate.class table="Item"
  */
 public class Item implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5712336990487032404L;
 	private int Item_ID;
 	private int bagnumber;
 	private int itemtype_ID;
@@ -70,11 +74,11 @@ public class Item implements Serializable {
 	private String _DATEFORMAT;
 	//private int categorytype_ID = 0;
 
-	private Set photoes;
-	private Set inventory;
+	private Set<Item_Photo> photoes;
+	private Set<Item_Inventory> inventory;
 
-	private List photolist;
-	private List inventorylist;
+	private List<Item_Photo> photolist;
+	private List<Item_Inventory> inventorylist;
 
 	private String OHD_ID; // ohd_id matched with (for mishandled only)
 	private String tempOHD_ID;
@@ -178,14 +182,14 @@ public class Item implements Serializable {
 		if (photoes == null || photoes.size() < 1)
 			return null;
 
-		return new JRBeanCollectionDataSource(new ArrayList(photoes));
+		return new JRBeanCollectionDataSource(new ArrayList<Item_Photo>(photoes));
 	}
 	
 	public JRBeanCollectionDataSource getInventoriesForReport() {
 		if (inventory == null || inventory.size() < 1)
 			return null;
 
-		return new JRBeanCollectionDataSource(new ArrayList(inventory));
+		return new JRBeanCollectionDataSource(new ArrayList<Item_Inventory>(inventory));
 	}
 
 
@@ -317,27 +321,27 @@ public class Item implements Serializable {
 	 * @hibernate.key column="item_ID" not-null="false"
 	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.Item_Photo"
 	 */
-	public Set getPhotoes() {
+	public Set<Item_Photo> getPhotoes() {
 		if (photolist == null)
 			return null;
-		return new LinkedHashSet(photolist);
+		return new LinkedHashSet<Item_Photo>(photolist);
 	}
 
 	/**
 	 * @param photoes
 	 *          The photoes to set.
 	 */
-	public void setPhotoes(Set photoes) {
+	public void setPhotoes(Set<Item_Photo> photoes) {
 		this.photoes = photoes;
-		if (photoes != null) this.photolist = new ArrayList(photoes);
+		if (photoes != null) this.photolist = new ArrayList<Item_Photo>(photoes);
 	}
 
 	/**
 	 * @return Returns the photolist.
 	 */
-	public List getPhotolist() {
+	public List<Item_Photo> getPhotolist() {
 		if (photolist == null)
-			photolist = new ArrayList();
+			photolist = new ArrayList<Item_Photo>();
 		return photolist;
 	}
 
@@ -345,7 +349,7 @@ public class Item implements Serializable {
 	 * @param photolist
 	 *          The photolist to set.
 	 */
-	public void setPhotolist(List photolist) {
+	public void setPhotolist(List<Item_Photo> photolist) {
 		this.photolist = photolist;
 	}
 
@@ -587,27 +591,27 @@ public class Item implements Serializable {
 	 * @return Returns the items.
 	 */
 	
-	public Set getInventory() {
+	public Set<Item_Inventory> getInventory() {
 		if (inventorylist == null)
 			return null;
-		return new LinkedHashSet(inventorylist);
+		return new LinkedHashSet<Item_Inventory>(inventorylist);
 	}
 
 	/**
 	 * @param items
 	 *          The items to set.
 	 */
-	public void setInventory(Set inventory) {
+	public void setInventory(Set<Item_Inventory> inventory) {
 		this.inventory = inventory;
-		if (inventory != null) this.inventorylist = new ArrayList(inventory);
+		if (inventory != null) this.inventorylist = new ArrayList<Item_Inventory>(inventory);
 	}
 
 	/**
 	 * @return Returns the inventorylist.
 	 */
-	public List getInventorylist() {
+	public List<Item_Inventory> getInventorylist() {
 		if (inventorylist == null)
-			inventorylist = new ArrayList();
+			inventorylist = new ArrayList<Item_Inventory>();
 		return inventorylist;
 	}
 
@@ -615,7 +619,7 @@ public class Item implements Serializable {
 	 * @param inventorylist
 	 *          The inventorylist to set.
 	 */
-	public void setInventorylist(List inventorylist) {
+	public void setInventorylist(List<Item_Inventory> inventorylist) {
 		this.inventorylist = inventorylist;
 	}
 	

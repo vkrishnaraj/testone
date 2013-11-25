@@ -7,18 +7,21 @@ import java.util.TimeZone;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.tracing.bmo.ExpensePayoutBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.UsergroupBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.UserGroup;
 import com.bagnet.nettracer.tracing.forms.ExpensePayoutForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
@@ -35,13 +38,16 @@ public class UpdateExpenseAction extends BaseExpenseAction {
 		if (fwd != mapping.findForward(SUCCESS)) {
 			return fwd;
 		}
+		ActionMessages errors = new ActionMessages();
 
 		ExpensePayoutForm expenseForm = (ExpensePayoutForm) form;
 		Agent user = (Agent) request.getSession().getAttribute("user");
 		ExpensePayout ep = getUpdatedPayout(expenseForm, user);
 		
 		request.getSession().setAttribute("expense_id", ep.getExpensepayout_ID());
-
+		
+		boolean cbsProcess=true;
+		request.setAttribute("swaCbsProcess", cbsProcess);
 		// set status to pending or approved
 		Status st = new Status();
 		
@@ -49,12 +55,28 @@ public class UpdateExpenseAction extends BaseExpenseAction {
 			st.setStatus_ID(expenseForm.getStatus_id());
 			if (expenseForm.getStatus_id() == TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED 
 					|| expenseForm.getStatus_id() == TracingConstants.EXPENSEPAYOUT_STATUS_PENDING) {
+
+				UserGroup group=UsergroupBMO.getUsergroup(user.getUsergroup_id());
+				double bsoLimit=0;
+				if(group!=null && group.getBsoLimit()>0){
+					bsoLimit=group.getBsoLimit();
+				}
+				
+				if(bsoLimit>0 && ep.getCheckamt()>bsoLimit && cbsProcess){
+					ActionMessage error = new ActionMessage("");
+					error = new ActionMessage("unable.create.over.bso.limit", new Object[]{bsoLimit});
+					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+					request.setAttribute("passBSOLimit", "1");
+					saveMessages(request, errors);
+					return mapping.findForward(UPDATE_SUCCESS);
+				}
 				
 				st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED);
 				Company_Specific_Variable csv = AdminUtils.getCompVariable(user.getCompanycode_ID());
 				if (Math.abs(ep.getCheckamt()) > 0.001) {
-					if (csv.getMin_interim_approval_check() >= -0.001
-							&& (csv.getMin_interim_approval_check() - Math.abs(ep.getCheckamt())) < -0.001) {
+					if ((csv.getMin_interim_approval_check() >= -0.001
+							&& (csv.getMin_interim_approval_check() - Math.abs(ep.getCheckamt())) < -0.001) 
+							&& (bsoLimit==0 || !cbsProcess)) {
 						st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_PENDING);
 					}
 				}

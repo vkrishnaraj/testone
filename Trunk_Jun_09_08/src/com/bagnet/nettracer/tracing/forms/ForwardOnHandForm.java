@@ -16,8 +16,10 @@ import com.bagnet.nettracer.tracing.db.OHD_Log_Itinerary;
  * This class represents the form that is used for forward functionality
  */
 public final class ForwardOnHandForm extends ActionForm {
-    
-
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5287123912640811860L;
 	private int lz = 0; //is this Forwarding for LZ.
 	private String bag_request_id; //baggage request
 	private String ohd_ID; //on-hand id
@@ -26,7 +28,7 @@ public final class ForwardOnHandForm extends ActionForm {
 	private String destStation; //destination station
 	private String message; //message
 	private String companyCode; //company code
-	private List itinerarylist = new ArrayList();
+	private List<OHD_Log_Itinerary> itinerarylist = new ArrayList<OHD_Log_Itinerary>();
 	private String _DATEFORMAT; // current login agent's date format
 	private String _TIMEFORMAT; // current login agent's time format
 	private TimeZone _TIMEZONE;
@@ -111,7 +113,7 @@ public final class ForwardOnHandForm extends ActionForm {
 	/**
 	 * @return Returns the itinerarylist.
 	 */
-	public List getItinerarylist() {
+	public List<OHD_Log_Itinerary> getItinerarylist() {
 		return itinerarylist;
 	}
 
@@ -119,7 +121,7 @@ public final class ForwardOnHandForm extends ActionForm {
 	 * @param itinerarylist
 	 *          The itinerarylist to set.
 	 */
-	public void setItinerarylist(List itinerarylist) {
+	public void setItinerarylist(List<OHD_Log_Itinerary> itinerarylist) {
 		this.itinerarylist = itinerarylist;
 	}
 
@@ -181,6 +183,30 @@ public final class ForwardOnHandForm extends ActionForm {
 
 	public void setOhdList(List<LabelValueBean> ohdList) {
 		this.ohdList = ohdList;
+	}
+
+	public String get_DATEFORMAT() {
+		return _DATEFORMAT;
+	}
+
+	public void set_DATEFORMAT(String _DATEFORMAT) {
+		this._DATEFORMAT = _DATEFORMAT;
+	}
+
+	public String get_TIMEFORMAT() {
+		return _TIMEFORMAT;
+	}
+
+	public void set_TIMEFORMAT(String _TIMEFORMAT) {
+		this._TIMEFORMAT = _TIMEFORMAT;
+	}
+
+	public TimeZone get_TIMEZONE() {
+		return _TIMEZONE;
+	}
+
+	public void set_TIMEZONE(TimeZone _TIMEZONE) {
+		this._TIMEZONE = _TIMEZONE;
 	}
 
 }

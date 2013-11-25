@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Expression;
+import org.hibernate.criterion.Restrictions;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
@@ -188,8 +188,9 @@ public class HibernateUtils {
 			//Figure out if new or old.
 			boolean isNew = false;
 			Criteria cri = sess.createCriteria(Company.class).add(
-					Expression.eq("companyCode_ID", obj.getCompanyCode_ID()));
-			List results = cri.list();
+					Restrictions.eq("companyCode_ID", obj.getCompanyCode_ID()));
+			@SuppressWarnings("unchecked")
+			List<Company> results = cri.list();
 			if (results == null || results.size() <= 0) isNew = true;
 			if (isNew) {
 				//create a new company with guest group and LZ station.
@@ -215,18 +216,18 @@ public class HibernateUtils {
 				g3.setDescription2("Default Admin group for " + obj.getCompanyCode_ID());
 
 				//Setup the company specific codes
-				List iata_codes = LossCodeBMO.getIATACodes(0, 0);
+				List<IATA_irregularity_code> iata_codes = LossCodeBMO.getIATACodes(0, 0);
 				
 				List<Company_specific_irregularity_code> comp_irr_codes = new ArrayList<Company_specific_irregularity_code>();
 				
 				if (iata_codes != null && iata_codes.size() > 0) {
-					for (Iterator i = iata_codes.iterator(); i.hasNext();) {
+					for (Iterator<IATA_irregularity_code> i = iata_codes.iterator(); i.hasNext();) {
 						IATA_irregularity_code code = (IATA_irregularity_code) i.next();
 
-						List itemTypes = IncidentUtils.retrieveItemTypes();
+						List<ItemType> itemTypes = IncidentUtils.retrieveItemTypes();
 
 						if (itemTypes != null && itemTypes.size() > 0) {
-							for (Iterator itemIter = itemTypes.iterator(); itemIter.hasNext();) {
+							for (Iterator<ItemType> itemIter = itemTypes.iterator(); itemIter.hasNext();) {
 
 								ItemType itemType = (ItemType) itemIter.next();
 								Company_specific_irregularity_code csCode = new Company_specific_irregularity_code();
@@ -562,11 +563,12 @@ public class HibernateUtils {
 			sess = HibernateWrapper.getSession().openSession();
 			
 			
-			Criteria cri = sess.createCriteria(DeliverCo_Station.class).add(Expression.eq("station_ID", 
-					obj.getStation_ID())).add(Expression.eq("delivercompany", 
+			Criteria cri = sess.createCriteria(DeliverCo_Station.class).add(Restrictions.eq("station_ID", 
+					obj.getStation_ID())).add(Restrictions.eq("delivercompany", 
 							obj.getDelivercompany()));
 					
-			List results = cri.list();
+			@SuppressWarnings("unchecked")
+			List<DeliverCo_Station> results = cri.list();
 			if (results == null || results.size() <= 0) {
 				sess.save(obj);
 				t = sess.beginTransaction();
@@ -614,9 +616,9 @@ public class HibernateUtils {
 			//Figure out if new or old.
 			boolean isNew = false;
 			Criteria cri = sess.createCriteria(Deliver_ServiceLevel.class).add(
-					Expression.eq("servicelevel_ID", obj.getServicelevel_ID()));
-					//Expression.eq("delivercompany_ID", obj.getDelivercompany().getDelivercompany_ID()));
-			List results = cri.list();
+					Restrictions.eq("servicelevel_ID", obj.getServicelevel_ID()));
+			@SuppressWarnings("unchecked")
+			List<Deliver_ServiceLevel> results = cri.list();
 			if (results == null || results.size() <= 0) isNew = true;
 
 			Deliver_ServiceLevel objRef = null;
@@ -666,8 +668,9 @@ public class HibernateUtils {
 			//Figure out if new or old.
 			boolean isNew = false;
 			Criteria cri = sess.createCriteria(DeliverCompany.class).add(
-					Expression.eq("delivercompany_ID", obj.getDelivercompany_ID()));
-			List results = cri.list();
+					Restrictions.eq("delivercompany_ID", obj.getDelivercompany_ID()));
+			@SuppressWarnings("unchecked")
+			List<DeliverCompany> results = cri.list();
 			if (results == null || results.size() <= 0) isNew = true;
 
 			DeliverCompany objRef = null;
@@ -719,11 +722,12 @@ public class HibernateUtils {
 			//Figure out if new or old.
 			boolean isNew = false;
 			Criteria cri = sess.createCriteria(Work_Shift.class).add(
-					Expression.eq("shift_code", obj.getShift_code())).add(
-					Expression.eq("locale", obj.getLocale()));
+					Restrictions.eq("shift_code", obj.getShift_code())).add(
+							Restrictions.eq("locale", obj.getLocale()));
 			cri.createCriteria("company").add(
-					Expression.eq("companyCode_ID", obj.getCompany().getCompanyCode_ID()));
-			List results = cri.list();
+					Restrictions.eq("companyCode_ID", obj.getCompany().getCompanyCode_ID()));
+			@SuppressWarnings("unchecked")
+			List<Work_Shift> results = cri.list();
 			Work_Shift objRef = null;
 
 			if (results == null || results.size() <= 0) isNew = true;
@@ -867,10 +871,11 @@ public class HibernateUtils {
 				sess.save(obj);
 			} else {
 				Criteria cri = sess.createCriteria(UserGroup.class).add(
-						Expression.eq("userGroup_ID", new Integer(groupId)));
+						Restrictions.eq("userGroup_ID", new Integer(groupId)));
 				UserGroup g = (UserGroup) cri.list().get(0);
 				g.setDescription(obj.getDescription());
 				g.setDescription2(obj.getDescription2());
+				g.setBsoLimit(obj.getBsoLimit());
 				sess.saveOrUpdate(g);
 			}
 			t.commit();
@@ -890,6 +895,7 @@ public class HibernateUtils {
 	 * @param cl
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	public static List retrieveAll(Class cl) {
 		Session sess = null;
 		try {

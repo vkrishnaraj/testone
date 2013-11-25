@@ -18,9 +18,9 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.UsergroupBMO;
@@ -259,7 +259,7 @@ public class AdminUtils {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(Company.class).add(Expression.eq("companyCode_ID", companyCode));
+			Criteria cri = sess.createCriteria(Company.class).add(Restrictions.eq("companyCode_ID", companyCode));
 			return (Company) cri.list().get(0);
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());
@@ -280,7 +280,7 @@ public class AdminUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(ItemType.class);
-			cri.add(Expression.eq("itemType_ID", new Integer(type_id)));
+			cri.add(Restrictions.eq("itemType_ID", new Integer(type_id)));
 			return ((ItemType) cri.list().get(0)).getDescription();
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());
@@ -337,7 +337,7 @@ public class AdminUtils {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(TimeZone.class).add(Expression.eq("id", new Integer(id)));
+			Criteria cri = sess.createCriteria(TimeZone.class).add(Restrictions.eq("id", new Integer(id)));
 			TimeZone retVal = (TimeZone) cri.list().get(0);
 			Cache.TIMEZONES.insert(id, retVal);
 			return retVal;
@@ -368,8 +368,8 @@ public class AdminUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(UserGroup.class);
-			cri.add(Expression.eq("userGroup_ID", new Integer(group_id)));
-			cri.add(Expression.eq("companycode_ID", TracingConstants.OWENS_GROUP));
+			cri.add(Restrictions.eq("userGroup_ID", new Integer(group_id)));
+			cri.add(Restrictions.eq("companycode_ID", TracingConstants.OWENS_GROUP));
 			List x = cri.list();
 			if (x != null && x.size() > 0)
 				return true;
@@ -404,8 +404,8 @@ public class AdminUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(GroupComponentPolicy.class);
-			cri.createCriteria("usergroup").add(Expression.eq("userGroup_ID", new Integer(group_id)));
-			cri.createCriteria("component").add(Expression.eq("component_ID", new Integer(component_id)));
+			cri.createCriteria("usergroup").add(Restrictions.eq("userGroup_ID", new Integer(group_id)));
+			cri.createCriteria("component").add(Restrictions.eq("component_ID", new Integer(component_id)));
 			List x = cri.list();
 			if (x != null && x.size() > 0)
 				return true;
@@ -436,7 +436,7 @@ public class AdminUtils {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(NTDateFormat.class).add(Expression.eq("dateformat_ID", new Integer(dateFormatID)));
+			Criteria cri = sess.createCriteria(NTDateFormat.class).add(Restrictions.eq("dateformat_ID", new Integer(dateFormatID)));
 			return (NTDateFormat) cri.list().get(0);
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());
@@ -463,7 +463,7 @@ public class AdminUtils {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(NTTimeFormat.class).add(Expression.eq("timeformat_ID", new Integer(timeFormatID)));
+			Criteria cri = sess.createCriteria(NTTimeFormat.class).add(Restrictions.eq("timeformat_ID", new Integer(timeFormatID)));
 			return (NTTimeFormat) cri.list().get(0);
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());
@@ -489,25 +489,6 @@ public class AdminUtils {
 	public static UserGroup getGroup(String groupId) {
 		return UsergroupBMO.getUsergroup(Integer.parseInt(groupId));
 	}
-//	public static UserGroup getGroup(String groupId) {
-//		Session sess = null;
-//		try {
-//			sess = HibernateWrapper.getSession().openSession();
-//			Criteria cri = sess.createCriteria(UserGroup.class).add(Expression.eq("userGroup_ID", new Integer(groupId)));
-//			return (UserGroup) cri.list().get(0);
-//		} catch (Exception e) {
-//			logger.fatal(e.getMessage());
-//			return null;
-//		} finally {
-//			if (sess != null) {
-//				try {
-//					sess.close();
-//				} catch (Exception e) {
-//					logger.fatal(e.getMessage());
-//				}
-//			}
-//		}
-//	}
 
 	/**
 	 * Retrieves the "Guest" group related to the companyCode
@@ -520,7 +501,7 @@ public class AdminUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(UserGroup.class);
-			cri.add(Expression.eq("companycode_ID", companyCode)).add(Expression.eq("description", "Guest"));
+			cri.add(Restrictions.eq("companycode_ID", companyCode)).add(Restrictions.eq("description", "Guest"));
 			return (UserGroup) cri.list().get(0);
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());
@@ -550,12 +531,13 @@ public class AdminUtils {
 	 * @param currpage
 	 * @return the list of all station based on criteria; null on exception
 	 */
-	public static List getStations(String companycode, int rowsperpage, int currpage) {
+	@SuppressWarnings("unchecked")
+	public static List<Station> getStations(String companycode, int rowsperpage, int currpage) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Station.class);
-			cri.createCriteria("company").add(Expression.eq("companyCode_ID", companycode));
+			cri.createCriteria("company").add(Restrictions.eq("companyCode_ID", companycode));
 			if (rowsperpage > 0) {
 				int startnum = currpage * rowsperpage;
 				cri.setFirstResult(startnum);
@@ -587,7 +569,7 @@ public class AdminUtils {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(Work_Shift.class).add(Expression.eq("shift_id", new Integer(shiftId)));
+			Criteria cri = sess.createCriteria(Work_Shift.class).add(Restrictions.eq("shift_id", new Integer(shiftId)));
 			return (Work_Shift) cri.list().get(0);
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());
@@ -614,7 +596,7 @@ public class AdminUtils {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(Airport.class).add(Expression.eq("id", new Integer(id)));
+			Criteria cri = sess.createCriteria(Airport.class).add(Restrictions.eq("id", new Integer(id)));
 			return (Airport) cri.list().get(0);
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());
@@ -643,9 +625,9 @@ public class AdminUtils {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(Airport.class).add(Expression.eq("companyCode_ID", companyCode));
-			cri.add(Expression.like("airport_code", airportCode));
-			cri.add(Expression.like("locale", locale));
+			Criteria cri = sess.createCriteria(Airport.class).add(Restrictions.eq("companyCode_ID", companyCode));
+			cri.add(Restrictions.like("airport_code", airportCode));
+			cri.add(Restrictions.like("locale", locale));
 			if (cri.list().size() > 0) {
 				return (Airport) cri.list().get(0);
 			} else {
@@ -670,8 +652,6 @@ public class AdminUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			return (Company_Specific_Variable) sess.load(Company_Specific_Variable.class, companycode);
-//			Criteria cri = sess.createCriteria(Company_Specific_Variable.class).add(Expression.eq("companyCode_ID", companycode));
-//			return (Company_Specific_Variable) cri.list().get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.fatal(e.getMessage());
@@ -694,7 +674,7 @@ public class AdminUtils {
 	 * @param currpage
 	 * @return list of companies or null if exception
 	 */
-	public static List getCompanies(MaintainCompanyForm dForm, int rowsperpage, int currpage) {
+	public static List<Company> getCompanies(MaintainCompanyForm dForm, int rowsperpage, int currpage) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
@@ -705,7 +685,7 @@ public class AdminUtils {
 				ccode = (String) dForm.getCompanySearchName();
 			}
 			if (ccode != null && ccode.length() > 0) {
-				cri.add(Expression.like("companyCode_ID", ccode));
+				cri.add(Restrictions.like("companyCode_ID", ccode));
 			}
 			cri.addOrder(Order.asc("companyCode_ID"));
 			if (rowsperpage > 0) {
@@ -739,7 +719,7 @@ public class AdminUtils {
 				ccode = (String) dForm.getCompanySearchName();
 			}
 			if (ccode != null && ccode.length() > 0) {
-				cri.add(Expression.like("companyCode_ID", ccode));
+				cri.add(Restrictions.like("companyCode_ID", ccode));
 			}
 			cri.setProjection(Projections.rowCount());
 			return ((Long)cri.list().get(0)).intValue();
@@ -805,12 +785,12 @@ public class AdminUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Work_Shift.class);
-			cri.createCriteria("company").add(Expression.eq("companyCode_ID", companyCode));
+			cri.createCriteria("company").add(Restrictions.eq("companyCode_ID", companyCode));
 			String shift = null;
 			if (form != null) {
 				shift = (String) form.get("shiftSearchName");
 				if (shift != null && shift.length() > 0) {
-					cri.add(Expression.like("shift_code", shift));
+					cri.add(Restrictions.like("shift_code", shift));
 				}
 			}
 			cri.addOrder(Order.asc("shift_description"));
@@ -845,7 +825,7 @@ public class AdminUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Link.class);
-			cri.createCriteria("company").add(Expression.eq("companyCode_ID", companyCode));
+			cri.createCriteria("company").add(Restrictions.eq("companyCode_ID", companyCode));
 			return cri.list();
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());
@@ -924,8 +904,8 @@ public class AdminUtils {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(IATA_irregularity_code.class).add(Expression.eq("locale", locale)).add(
-					Expression.eq("loss_code", new Integer(loss_code)));
+			Criteria cri = sess.createCriteria(IATA_irregularity_code.class).add(Restrictions.eq("locale", locale)).add(
+					Restrictions.eq("loss_code", new Integer(loss_code)));
 			cri.addOrder(Order.asc("loss_code"));
 			List results = cri.list();
 
@@ -960,10 +940,10 @@ public class AdminUtils {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(Work_Shift.class).add(Expression.eq("locale", locale));
+			Criteria cri = sess.createCriteria(Work_Shift.class).add(Restrictions.eq("locale", locale));
 			;
 			cri.addOrder(Order.asc("shift_description"));
-			cri.createCriteria("company").add(Expression.eq("companyCode_ID", companyCode));
+			cri.createCriteria("company").add(Restrictions.eq("companyCode_ID", companyCode));
 			if (rowsperpage > 0) {
 				int startnum = currpage * rowsperpage;
 				cri.setFirstResult(startnum);
@@ -997,14 +977,14 @@ public class AdminUtils {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(Airport.class).add(Expression.eq("companyCode_ID", companyCode));
+			Criteria cri = sess.createCriteria(Airport.class).add(Restrictions.eq("companyCode_ID", companyCode));
 
 			String acode = null;
 			if (dForm != null)
 				acode = (String) dForm.get("airportSearchName");
 
 			if (acode != null && acode.length() > 0) {
-				cri.add(Expression.like("airport_code", acode));
+				cri.add(Restrictions.like("airport_code", acode));
 			}
 			cri.addOrder(Order.asc("airport_code"));
 
@@ -1036,7 +1016,7 @@ public class AdminUtils {
 	 * @param currpage
 	 * @return list of stations
 	 */
-	public static List getStations(DynaValidatorForm form, String companyCode, int rowsperpage, int currpage) {
+	public static List<Station> getStations(DynaValidatorForm form, String companyCode, int rowsperpage, int currpage) {
 		return getCustomStations(form, companyCode, rowsperpage, currpage, TracingConstants.AgentActiveStatus.ACTIVE);
 	}
 	
@@ -1048,7 +1028,7 @@ public class AdminUtils {
 	 * @param currpage
 	 * @return list of stations
 	 */
-	public static List getSubcompanies(SubCompanyForm form, String companyCode, int rowsperpage, int currpage) {
+	public static List<Subcompany> getSubcompanies(SubCompanyForm form, String companyCode, int rowsperpage, int currpage) {
 		return getCustomSubCompanies(form, companyCode, rowsperpage, currpage);
 	}
 	
@@ -1061,17 +1041,18 @@ public class AdminUtils {
 	 * @param currpage
 	 * @return list of stations
 	 */
-	public static List getCustomStations(DynaValidatorForm form, String companyCode, int rowsperpage, int currpage, TracingConstants.AgentActiveStatus activeStatus) {
+	@SuppressWarnings("unchecked")
+	public static List<Station> getCustomStations(DynaValidatorForm form, String companyCode, int rowsperpage, int currpage, TracingConstants.AgentActiveStatus activeStatus) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Station.class);
-			cri.createCriteria("company").add(Expression.eq("companyCode_ID", companyCode));
+			cri.createCriteria("company").add(Restrictions.eq("companyCode_ID", companyCode));
 
 			if (activeStatus.equals(TracingConstants.AgentActiveStatus.ACTIVE)) {
-				cri.add(Expression.eq("active", true));
+				cri.add(Restrictions.eq("active", true));
 			} else if (activeStatus.equals(TracingConstants.AgentActiveStatus.INACTIVE)) {
-				cri.add(Expression.eq("active", false));
+				cri.add(Restrictions.eq("active", false));
 			}
 
 			String code = null;
@@ -1081,7 +1062,7 @@ public class AdminUtils {
 			}
 
 			if (code != null && code.length() > 0) {
-				cri.add(Expression.like("stationcode", code));
+				cri.add(Restrictions.like("stationcode", code));
 			}
 			cri.addOrder(Order.asc("stationcode"));
 			if (rowsperpage > 0) {
@@ -1089,7 +1070,7 @@ public class AdminUtils {
 				cri.setFirstResult(startnum);
 				cri.setMaxResults(rowsperpage);
 			}
-			return cri.list();
+			return (List<Station>)cri.list();
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());
 			return null;
@@ -1117,24 +1098,8 @@ public class AdminUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Station.class);
-			cri.createCriteria("subcompany").add(Expression.eq("subcompany_id", form.getId()));
-
-//			if (activeStatus.equals(TracingConstants.AgentActiveStatus.ACTIVE)) {
-//				cri.add(Expression.eq("active", true));
-//			} else if (activeStatus.equals(TracingConstants.AgentActiveStatus.INACTIVE)) {
-//				cri.add(Expression.eq("active", false));
-//			}
-
-//			String code = null;
-//
-//			if (form != null) {
-//				code = (String) form.get("stationSearchName");
-//			}
-//
-//			if (code != null && code.length() > 0) {
-//				cri.add(Expression.like("stationcode", code));
-//			}
-//			cri.addOrder(Order.asc("stationcode"));
+			cri.createCriteria("subcompany").add(Restrictions.eq("subcompany_id", form.getId()));
+			
 			if (rowsperpage > 0) {
 				int startnum = currpage * rowsperpage;
 				cri.setFirstResult(startnum);
@@ -1163,7 +1128,7 @@ public class AdminUtils {
 	 * @param currpage
 	 * @return list of stations
 	 */
-	public static List getCustomSubCompanies(SubCompanyForm form, String companyCode, int rowsperpage, int currpage) {
+	public static List<Subcompany> getCustomSubCompanies(SubCompanyForm form, String companyCode, int rowsperpage, int currpage) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
@@ -1200,8 +1165,8 @@ public class AdminUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(SubcompanyStation.class);
-			cri.createCriteria("subcompany").add(Expression.eq("id", subcompId));
-			cri.createCriteria("station").add(Expression.eq("station_ID", Integer.valueOf(String.valueOf(stationId))));
+			cri.createCriteria("subcompany").add(Restrictions.eq("id", subcompId));
+			cri.createCriteria("station").add(Restrictions.eq("station_ID", Integer.valueOf(String.valueOf(stationId))));
 			return (SubcompanyStation) cri.uniqueResult();
 			
 		} catch (Exception e) {
@@ -1218,14 +1183,14 @@ public class AdminUtils {
 		}
 	}
 	
-	public static List getSubcompanyStationsBySubcompany(long subcompId){
+	public static List<SubcompanyStation> getSubcompanyStationsBySubcompany(long subcompId){
 		Session sess = null;
 		try {
 			Subcompany sub = new Subcompany();
 			sub.setId(subcompId);
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(SubcompanyStation.class);
-			cri.add(Expression.eq("subcompany", sub));
+			cri.add(Restrictions.eq("subcompany", sub));
 			return cri.list();
 			
 		} catch (Exception e) {
@@ -1254,8 +1219,8 @@ public class AdminUtils {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(DeliverCompany.class).add(Expression.eq("active", true));
-			cri.add(Expression.eq("company", company));
+			Criteria cri = sess.createCriteria(DeliverCompany.class).add(Restrictions.eq("active", true));
+			cri.add(Restrictions.eq("company", company));
 
 			String companyName = null;
 
@@ -1264,7 +1229,7 @@ public class AdminUtils {
 			}
 
 			if (companyName != null && companyName.length() > 0) {
-				cri.add(Expression.like("name", companyName));
+				cri.add(Restrictions.like("name", companyName));
 			}
 			
 			cri.addOrder(Order.asc("name"));
@@ -1386,8 +1351,8 @@ public class AdminUtils {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(Agent.class).add(Expression.eq("username", username));
-			cri.createCriteria("station").createCriteria("company").add(Expression.eq("companyCode_ID", companyCode));
+			Criteria cri = sess.createCriteria(Agent.class).add(Restrictions.eq("username", username));
+			cri.createCriteria("station").createCriteria("company").add(Restrictions.eq("companyCode_ID", companyCode));
 			List ret = cri.list();
 			if (ret == null || ret.size() == 0)
 				return null;
@@ -1418,7 +1383,7 @@ public class AdminUtils {
 	 * @param currpage
 	 * @return
 	 */
-	public static List getAgents(String companyCode, String sort, DynaValidatorForm dForm, int rowsperpage, int currpage) {
+	public static List<Agent> getAgents(String companyCode, String sort, DynaValidatorForm dForm, int rowsperpage, int currpage) {
 		return getCustomAgents(null, companyCode, sort, dForm, rowsperpage, currpage, TracingConstants.AgentActiveStatus.ACTIVE);
 	}
 
@@ -1431,7 +1396,7 @@ public class AdminUtils {
 	 * @param currpage
 	 * @return
 	 */
-	public static List getAgentsByStation(String station_Id, String sort, DynaValidatorForm dForm, int rowsperpage, int currpage) {
+	public static List<Agent> getAgentsByStation(String station_Id, String sort, DynaValidatorForm dForm, int rowsperpage, int currpage) {
 		return getCustomAgents(station_Id, null, sort, dForm, rowsperpage, currpage, TracingConstants.AgentActiveStatus.ACTIVE);
 	}
 	
@@ -1444,17 +1409,12 @@ public class AdminUtils {
 	 * @param currpage
 	 * @return
 	 */
-	public static List getStationsBySubcompany(String subcompId, String companyCode, int rowsperpage, int currpage) {
+	public static List<Station> getStationsBySubcompany(String subcompId, String companyCode, int rowsperpage, int currpage) {
 		//return getCustomStations(subcomp_id, null, sort, form, rowsperpage, currpage, TracingConstants.AgentActiveStatus.ACTIVE);
 		Session sess = null;
 
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			
-			String username = null;
-			String fname = null;
-			String lname = null;
-			String agentType = null;
 			
 			StringBuffer sql = new StringBuffer(512);
 			sql.append("select distinct station from com.bagnet.nettracer.tracing.db.Station station, com.bagnet.nettracer.tracing.db.lf.SubcompanyStation scs where station.station_ID= scs.station.station_ID ");
@@ -1463,12 +1423,6 @@ public class AdminUtils {
 
 			if (companyCode != null && companyCode.length() > 0)
 				sql.append(" and station.company.companyCode_ID = :companyCode_ID ");
-
-//			if (activeStatus.equals(TracingConstants.AgentActiveStatus.ACTIVE))
-//				sql.append(" and station.active = 1 ");
-//
-//			if (activeStatus.equals(TracingConstants.AgentActiveStatus.INACTIVE)) 
-//				sql.append(" and station.active = 0 ");
 
 				sql.append(" order by station.stationcode asc ");
 			
@@ -1510,7 +1464,8 @@ public class AdminUtils {
 	 * @param currpage
 	 * @return
 	 */
-	public static List getCustomAgents(String stationId, String companyCode, String sort, DynaValidatorForm dForm, int rowsperpage, int currpage, TracingConstants.AgentActiveStatus activeStatus) {
+	@SuppressWarnings("unchecked")
+	public static List<Agent> getCustomAgents(String stationId, String companyCode, String sort, DynaValidatorForm dForm, int rowsperpage, int currpage, TracingConstants.AgentActiveStatus activeStatus) {
 		Session sess = null;
 
 		try {
@@ -1612,7 +1567,7 @@ public class AdminUtils {
 				q.setString("lname", lname);
 			}
 
-			return q.list();
+			return (List<Agent>)q.list();
 		} catch (Exception e) {
 			logger.fatal(e.getMessage());
 			return null;
@@ -1637,7 +1592,8 @@ public class AdminUtils {
 	 * @param currpage
 	 * @return
 	 */
-	public static List getAgentsByGroup(String groupId, String sort, int rowsperpage, int currpage) {
+	@SuppressWarnings("unchecked")
+	public static List<Agent> getAgentsByGroup(String groupId, String sort, int rowsperpage, int currpage) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
@@ -1695,18 +1651,18 @@ public class AdminUtils {
 	 * @param currpage
 	 * @return
 	 */
-	public static List getGroups(DynaValidatorForm form, String companyCode, int rowsperpage, int currpage) {
+	public static List<UserGroup> getGroups(DynaValidatorForm form, String companyCode, int rowsperpage, int currpage) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(UserGroup.class);
-			cri.add(Expression.eq("companycode_ID", companyCode));
+			cri.add(Restrictions.eq("companycode_ID", companyCode));
 			String groupName = null;
 			if (form != null) {
 				groupName = (String) form.get("groupSearchName");
 			}
 			if (groupName != null && groupName.length() > 0) {
-				cri.add(Expression.like("description", groupName));
+				cri.add(Restrictions.like("description", groupName));
 			}
 			cri.addOrder(Order.asc("description"));
 			if (rowsperpage > 0) {
@@ -1734,7 +1690,7 @@ public class AdminUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(UserGroup.class);
-			cri.add(Expression.eq("companycode_ID", companyCode));
+			cri.add(Restrictions.eq("companycode_ID", companyCode));
 			List list = cri.list();
 			
 			if (list.size() == 0) return null;

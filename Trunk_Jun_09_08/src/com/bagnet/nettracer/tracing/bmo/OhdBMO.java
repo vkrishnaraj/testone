@@ -22,6 +22,7 @@ import org.hibernate.StaleObjectStateException;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Expression;
+import org.hibernate.criterion.Restrictions;
 
 import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
@@ -494,7 +495,8 @@ public class OhdBMO {
 			}
 			Query q = sess.createQuery(query);
 			q.setString("ohd_ID", ohd_ID);
-			List list = q.list();
+			@SuppressWarnings("unchecked")
+			List<OHD> list = q.list();
 			if (list.size() == 0) {
 				logger.debug("unable to find ohd: " + ohd_ID);
 				return null;
@@ -743,7 +745,7 @@ public class OhdBMO {
 			//check if description is not empty
 			if (oDTO.getDescription() != null && !oDTO.getDescription().equals("")) {
 				String[] words = StringUtils.removePronouns(oDTO.getDescription()).replace(' ',',').split("\\,");
-				Disjunction desc = Expression.disjunction();
+				Disjunction desc = Restrictions.disjunction();
 				for (int x = 0; x < words.length; x++) {
 					if (x == 0) sql.append(" and (");
 					else sql.append(" or ");
@@ -980,7 +982,7 @@ public class OhdBMO {
 			//check if description is not empty
 			if (oDTO.getDescription() != null && !oDTO.getDescription().equals("")) {
 				String[] words = StringUtils.removePronouns(oDTO.getDescription()).replace(' ',',').split("\\,");
-				Disjunction desc = Expression.disjunction();
+				Disjunction desc = Restrictions.disjunction();
 				for (int x = 0; x < words.length; x++) {
 					q.setString("description" + x, "%" + words[x] + "%");
 				}

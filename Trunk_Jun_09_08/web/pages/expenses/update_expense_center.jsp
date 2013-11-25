@@ -5,6 +5,7 @@
 <%@page import="com.bagnet.nettracer.tracing.db.Agent"%>
 <%@page import="com.bagnet.nettracer.tracing.forms.ExpensePayoutForm"%>
 <%@page import="com.bagnet.nettracer.tracing.bmo.ExpensePayoutBMO"%>
+<%@page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
 <%@page import="com.bagnet.nettracer.reporting.ReportingConstants"%>
 <%@page import="org.apache.struts.util.LabelValueBean"%>
 <%@ taglib uri="/tags/struts-bean" prefix="bean"%>
@@ -30,6 +31,9 @@
 	ExpensePayoutForm epf = (ExpensePayoutForm) request.getAttribute("expensePayoutForm");
 	boolean submitOk = (epf.getPaymentType() !=null && epf.getPaymentType().equals(TracingConstants.ENUM_VOUCHER))? true :false; 
 
+	boolean swaBsoPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, a);
+	boolean swaIsInBSO=(epf!=null && a!=null && a.getStation()!=null && epf.getExpenselocation_ID()==a.getStation().getStation_ID());
+	
 	org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources) request
 			.getAttribute("org.apache.struts.action.MESSAGE");
 	java.util.Locale myLocale = (java.util.Locale) session
@@ -43,6 +47,19 @@
      var buttonSelected = ''; 
     
       function validateExpense() {
+    	  <% if(swaBsoPermission){ 
+    	  		double bsoLimit=0;
+ 	  			if(request.getAttribute("bsoLimit")!=null){
+ 	  				bsoLimit=(Double)request.getAttribute("bsoLimit"); 
+ 	  			} %>
+	    	  	var checkAmt=document.getElementById("checkAmt");
+	    	  	if(checkAmt!=null && <%=bsoLimit!=0%> && checkAmt.value><%=bsoLimit%>){
+
+	                alert('<%= (String) myMessages.getMessage(myLocale, "unable.create.over.bso.limit", new Object[]{bsoLimit})%>');
+	                return false;
+    	  		}
+    	  <% } %>
+    	  var check
         if (buttonSelected == '') {
           return true;
         } else if (buttonSelected = 'payExpense') {
@@ -139,6 +156,16 @@
 			<td id="middlecolumn">
 				
 				<div id="maincontent">
+					<logic:messagesPresent message="true">
+						<font color=red>
+					        <html:messages id="msg" message="true">
+					          <br />
+					          <bean:write name="msg" />
+					          <br />
+					        </html:messages>
+					    </font>
+						<br />
+				    </logic:messagesPresent>
 					
 					<% if (submitOk) { %>
 					<center><font color=green>
@@ -201,7 +228,7 @@
 								<br />
 
 								<html:select property="expensetype_id" styleClass="dropdown"
-									disabled="disabled">
+									disabled="<%=((swaBsoPermission&&swaIsInBSO) || !swaBsoPermission)?false:true %>">
 									<html:options collection="expensetypelist"
 										property="expensetype_ID" labelProperty="description" />
 								</html:select>
@@ -213,7 +240,7 @@
 								<bean:message key="colname.paycode" />
 								<br />
 								<html:select property="paycode" styleClass="dropdown"
-									disabled="disabled">
+									disabled="<%=((swaBsoPermission&&swaIsInBSO) || !swaBsoPermission)?false:true %>">
 									<html:option value="ADV">
 										<bean:message key="claim.interim" />
 									</html:option>
@@ -243,7 +270,14 @@
 							<td colspan="3">
 								<bean:message key="agent.comments" />
 								<br />
-								<textarea rows="6" cols="80" readonly="readonly"><c:forEach items="${expensePayoutForm.oldComments}" var="comment" varStatus="status"><c:out value="${comment.agent.username}" />&nbsp;<fmt:formatDate value="${comment.createDate}" />&#x0D;<c:out value="${comment.content}" /><c:if test="${!status.last }">&#x0D;&#x0D;</c:if></c:forEach></textarea>
+								<textarea rows="6" cols="80" readonly="readonly">
+									<c:forEach items="${expensePayoutForm.oldComments}" var="comment" varStatus="status">
+										<c:out value="${comment.agent.username}" />&nbsp;
+										<fmt:formatDate value="${comment.createDate}" />&#x0D;
+										<c:out value="${comment.content}" />
+										<c:if test="${!status.last }">&#x0D;&#x0D;</c:if>
+									</c:forEach>
+								</textarea>
 							</td>
 						</tr>
 					<% 
@@ -255,7 +289,8 @@
 								<br />
 								<html:textarea property="newComment" cols="80" rows="5"
 									onkeydown="textCounter(this,this,255);"
-									onkeyup="textCounter(this,this,255);" />
+									onkeyup="textCounter(this,this,255);" 
+									disabled="<%=((swaBsoPermission&&swaIsInBSO) || !swaBsoPermission)?false:true %>"/>
 								<input name='newComment' type="text" id='comments2' value="255"
 									size="4" maxlength="4" disabled="disabled" />
 							</td>
@@ -265,22 +300,22 @@
 					%>
 			
      <logic:iterate id="passenger" name="incidentForm" property="passengerlist" indexId="i" type="com.bagnet.nettracer.tracing.db.Passenger">
-
+		
           <tr>
             <td nowrap >
               <bean:message key="colname.last_name" />
               <br>
-              <html:text name="passenger" property="lastname" size="20" maxlength="20" styleClass="textfield" />
+              <html:text name="passenger" property="lastname" size="20" maxlength="20" styleClass="textfield" disabled="<%=((swaBsoPermission&&swaIsInBSO) || !swaBsoPermission)?false:true %>" />
             </td>
             <td nowrap >
               <bean:message key="colname.first_name" />
               <br>
-              <html:text name="passenger" property="firstname" size="20" maxlength="20" styleClass="textfield" />
+              <html:text name="passenger" property="firstname" size="20" maxlength="20" styleClass="textfield" disabled="<%=((swaBsoPermission&&swaIsInBSO) || !swaBsoPermission)?false:true %>" />
             </td>
             <td>
               <bean:message key="colname.mid_initial" />
               <br>
-              <html:text name="passenger" property="middlename" size="1" maxlength="1" styleClass="textfield" />
+              <html:text name="passenger" property="middlename" size="1" maxlength="1" styleClass="textfield" disabled="<%=((swaBsoPermission&&swaIsInBSO) || !swaBsoPermission)?false:true %>" />
             </td>
           </tr>
 
@@ -410,6 +445,12 @@
                </tr>              
             </logic:iterate>
           </logic:present>
+          
+		<% if(!((swaBsoPermission&&swaIsInBSO) || !swaBsoPermission)){ %>
+			<html:hidden name="passenger" property="lastname"/>
+			<html:hidden name="passenger" property="firstname"/>
+			<html:hidden name="passenger" property="middlename"/>
+		<% } %>
       </logic:iterate> 
 					
 					
@@ -448,7 +489,7 @@
 								
 								<%
 									}
-									if (canPay) {
+									if (canPay && !swaBsoPermission) {
 								%>
 								<html:submit property="payExpense" styleId="button" onclick="buttonSelected='payExpense';">
 									<bean:message key="button.payExpense" />
@@ -469,6 +510,13 @@
 					</table>
 				</div>
 	</fmt:timeZone>
+	<% if(!((swaBsoPermission&&swaIsInBSO) || !swaBsoPermission)){ %>
+		<html:hidden property="expensetype_id"/>
+		<html:hidden property="newComment"/>
+		<html:hidden property="paycode"/>
+		<html:hidden property="dispDraftpaiddate"/>
+		<html:hidden property="draft"/>
+	<% } %>
 </html:form>
 	<logic:present name="receiptName" scope="request">
 	    <script language=javascript>

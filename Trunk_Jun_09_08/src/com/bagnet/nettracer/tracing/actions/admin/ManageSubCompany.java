@@ -28,7 +28,6 @@ import com.bagnet.nettracer.tracing.dao.lf.SubCompanyDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.Station;
-import com.bagnet.nettracer.tracing.db.audit.Audit_Agent;
 import com.bagnet.nettracer.tracing.db.lf.Subcompany;
 import com.bagnet.nettracer.tracing.db.lf.SubcompanyStation;
 import com.bagnet.nettracer.tracing.forms.SubCompanyForm;
@@ -37,7 +36,6 @@ import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.LzUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
-import com.bagnet.nettracer.tracing.utils.audit.AuditAgentUtils;
 
 /**
  * Implementation of <strong>Action </strong> that is responsible for adding,
@@ -96,7 +94,7 @@ public final class ManageSubCompany extends Action {
 			
 			//check if adding agents to this group
 			if (request.getParameter("addStations") != null) {
-				HashMap selectedStations = new HashMap();
+				HashMap<String,String> selectedStations = new HashMap<String,String>();
 
 				String[] stationsSelected = request.getParameterValues("station_ID");
 				if (stationsSelected != null) {
@@ -112,15 +110,7 @@ public final class ManageSubCompany extends Action {
 	
 							//change association for the agent.
 							HibernateUtils.save(scs);
-							
-							//Make an entry into the audit table.
-//							if (s.getCompany().getVariable().getAudit_agent() == 1) {
-//								Audit_Agent audit_agent = AuditAgentUtils.getAuditAgent(a, user);
-//								if (audit_agent != null) {
-//									audit_agent.setReason_modified("Maintain Station: Station Assignment Changed");
-//									HibernateUtils.saveNew(audit_agent);
-//								}
-//							}
+
 						} else {
 							selectedStations.put("" + s.getStation_ID(), String.valueOf(subcomp.getId()));
 						}
@@ -137,42 +127,25 @@ public final class ManageSubCompany extends Action {
 				if (request.getParameter("id") != null) subcomp_id = request
 						.getParameter("id");
 
-				int rowsperpage = request.getParameter("rowsperpage") != null ? Integer.parseInt(request
-						.getParameter("rowsperpage")) : TracingConstants.ROWS_PER_PAGE;
-				int currpage = request.getParameter("currpage") != null ? Integer.parseInt(request
-						.getParameter("currpage")) : 0;
-				
-				List scslist = null;
+				List<SubcompanyStation> scslist = null;
 				if (!subcomp_id.equals("-1")) scslist = AdminUtils.getSubcompanyStationsBySubcompany(Long.valueOf(subcomp_id));
-						//getStationsBySubcompany(subcompId, subcomp.getCompany().getCompanyCode_ID(), sort, SCForm, rowsperpage, currpage, null);
-				//else scslist = AdminUtils.getStations(subcomp.getCompany().getCompanyCode_ID(), rowsperpage, currpage);
 						
 				if(scslist!=null && scslist.size()>0){
-					for (Iterator i = scslist.iterator(); i.hasNext();) {
+					for (Iterator<SubcompanyStation> i = scslist.iterator(); i.hasNext();) {
 						SubcompanyStation scs = (SubcompanyStation) i.next();
 						if (scs.getSubcompany().getId() == subcomp.getId()) {
 							// If agent was selected, leave it alone.
 							if (selectedStations.get("" + scs.getStation().getStation_ID()) == null) {
 								// If agent was displayed but not selected, deactivate it.
 								HibernateUtils.delete(scs);
-								
-								//Make an entry into the audit table.
-	//							if (s.getCompany().getVariable().getAudit_agent() == 1) {
-	//								Audit_Agent audit_agent = AuditAgentUtils.getAuditAgent(a, user);
-	//								if (audit_agent != null) {
-	//									audit_agent.setReason_modified("Maintain Station: Deactivated User");
-	//									HibernateUtils.saveNew(audit_agent);
-	//								}
-	//							}
 							}
-						//}
 						}
 					}
 				}
 			}
 
-			List stations = AdminUtils.getStationsBySubcompany(subcompId, null, 0, 0);
-					//getAgentsByStation(stationId, sort, null, 0, 0);
+			List<Station> stations = AdminUtils.getStationsBySubcompany(subcompId, null, 0, 0);
+			
 			if (stations != null && stations.size() > 0) {
 				/** ************ pagination ************* */
 				int rowcount = -1;
@@ -200,13 +173,11 @@ public final class ManageSubCompany extends Action {
 					request.setAttribute("currpage", "0");
 				}
 
-				stations = AdminUtils.getStationsBySubcompany(subcompId, null, rowsperpage, currpage);// AdminUtils.getStations(subcomp.getCompany().getCompanyCode_ID(), rowsperpage, currpage);
-//						getStations(subcompId, sort, null, rowsperpage, currpage);
-						//getAgentsByStation(stationId, sort, null, rowsperpage, currpage);
+				stations = AdminUtils.getStationsBySubcompany(subcompId, null, rowsperpage, currpage);
 
 				if (currpage + 1 == totalpages) request.setAttribute("end", "1");
 				if (totalpages > 1) {
-					ArrayList al = new ArrayList();
+					ArrayList<String> al = new ArrayList<String>();
 					for (int i = 0; i < totalpages; i++) {
 						al.add(Integer.toString(i));
 					}
@@ -235,9 +206,7 @@ public final class ManageSubCompany extends Action {
 		}
 		SCForm.setCompanyCode(companyCode);
 
-		if (request.getParameter("addNew") != null) {
-			List lzList = LzUtils.getIncidentLzStations(companyCode);
-			//SCForm.set("lz_id", "" + LzUtils.getDefaultLz(lzList));		
+		if (request.getParameter("addNew") != null) {	
 			request.setAttribute("lzStations", LzUtils.getIncidentLzStationsBeans(companyCode));
 			return mapping.findForward(TracingConstants.EDIT_SUBCOMPANY);
 		}
@@ -246,12 +215,12 @@ public final class ManageSubCompany extends Action {
 			Subcompany subcomp = SubCompanyDAO.loadSubcompany(Long.valueOf(request.getParameter("id")));
 
 			//Get the station List for the company.
-			List subCompList = AdminUtils.getSubcompanies(SCForm, subcomp.getCompany().getCompanyCode_ID(), 0,
+			List<Subcompany> subCompList = AdminUtils.getSubcompanies(SCForm, subcomp.getCompany().getCompanyCode_ID(), 0,
 					0);
 			if (subCompList != null) {
-				List x2 = new ArrayList();
+				List<LabelValueBean> x2 = new ArrayList<LabelValueBean>();
 				Subcompany first = null;
-				for (Iterator i = subCompList.iterator(); i.hasNext();) {
+				for (Iterator<Subcompany> i = subCompList.iterator(); i.hasNext();) {
 					Subcompany subcomp2 = (Subcompany) i.next();
 					if (first == null) first = subcomp2;
 					x2.add(new LabelValueBean(subcomp2.getSubcompanyCode(), "" + subcomp2.getId()));
@@ -271,18 +240,10 @@ public final class ManageSubCompany extends Action {
 				if (subcomp_id != null) {
 					List<Station> stations = null;
 					List<SubcompanyStation> subcompstations=null;
-					int path = -1;
+					
+					stations = AdminUtils.getStations(subcomp.getCompany().getCompanyCode_ID(), 0, 0); //sort, SCForm,
+					subcompstations=AdminUtils.getSubcompanyStationsBySubcompany(Long.valueOf(subcomp_id));
 
-//					if (!subcomp_id.equals("-1")) {
-//						path = 0;
-						//station = AdminUtils.getStation(station_id);
-						//stations = AdminUtils.getStationsBySubcompany(subcomp_id, sort, null, 0, 0);
-//					} else {
-						path = 1;
-						//use the root station id to retrieve the company.
-						stations = AdminUtils.getStations(subcomp.getCompany().getCompanyCode_ID(), 0, 0); //sort, SCForm,
-						subcompstations=AdminUtils.getSubcompanyStationsBySubcompany(Long.valueOf(subcomp_id));
-//					}
 					HashMap<String,String> SCSMap=new HashMap<String,String>();
 					for(SubcompanyStation scs:subcompstations){
 						SCSMap.put(String.valueOf(scs.getStation().getStation_ID()), String.valueOf(scs.getSubcompany().getId()));
@@ -317,15 +278,11 @@ public final class ManageSubCompany extends Action {
 							request.setAttribute("currpage", "0");
 						}
 
-//						if (path == 0) stations = AdminUtils.getStationsBySubcompany(subcomp_id, sort, null,
-//								rowsperpage, currpage);
-//						else 
-							stations = AdminUtils.getStations(subcomp.getCompany().getCompanyCode_ID(), //"", SCForm,
-								0, 0);
+						stations = AdminUtils.getStations(subcomp.getCompany().getCompanyCode_ID(),	0, 0);
 							
 						if (currpage + 1 == totalpages) request.setAttribute("end", "1");
 						if (totalpages > 1) {
-							ArrayList al = new ArrayList();
+							ArrayList<String> al = new ArrayList<String>();
 							for (int i = 0; i < totalpages; i++) {
 								al.add(Integer.toString(i));
 							}
@@ -372,25 +329,11 @@ public final class ManageSubCompany extends Action {
 
 			ActionMessage error = null;
 			
-			if (error != null) {
+			companyCode = subComp.getCompany().getCompanyCode_ID();
+			if (!HibernateUtils.delete(subComp)) {
+				error = new ActionMessage("error.deleting.station");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
-			} else {
-				companyCode = subComp.getCompany().getCompanyCode_ID();
-				if (!HibernateUtils.delete(subComp)) {
-					error = new ActionMessage("error.deleting.station");
-					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-					saveMessages(request, errors);
-				} else {
-
-//					if (user.getStation().getCompany().getVariable().getAudit_station() == 1) {
-//						Audit_Station audit_station = AuditStationUtils.getAuditStation(station, user);
-//						if (audit_station != null) {
-//							audit_station.setReason_modified("Deleted");
-//							HibernateUtils.saveNew(audit_station);
-//						}
-//					}
-				}
 			}
 		}
 
@@ -430,22 +373,10 @@ public final class ManageSubCompany extends Action {
 			}
 		}
 		
-		List subCompList = null;
-		List stationList = null;
-//		TracingConstants.AgentActiveStatus status;
-//		if (request.getParameter("active") == null || request.getParameter("active").equals("-1") || request.getParameter("save") != null) {
-//			dForm.set("active", null);
-//			status = TracingConstants.AgentActiveStatus.ALL;
-			subCompList = AdminUtils.getCustomSubCompanies(SCForm, companyCode, 0, 0);
-			//stationList = AdminUtils.getCustomStations(SCForm, companyCode, 0, 0, TracingConstants.AgentActiveStatus.ACTIVE);
-//		} else if (request.getParameter("active").equals("true")) {
-//			status = TracingConstants.AgentActiveStatus.ACTIVE;
-//			stationList = AdminUtils.getCustomStations(dForm, companyCode, 0, 0, TracingConstants.AgentActiveStatus.ACTIVE);
-//		} else {
-//			status = TracingConstants.AgentActiveStatus.INACTIVE;
-//			stationList = AdminUtils.getCustomStations(dForm, companyCode, 0, 0, TracingConstants.AgentActiveStatus.INACTIVE);
-//		}
+		List<Subcompany> subCompList = null;
 
+		subCompList = AdminUtils.getCustomSubCompanies(SCForm, companyCode, 0, 0);
+		
 		if (subCompList != null && subCompList.size() > 0) {
 			/** ************ pagination ************* */
 			int rowcount = -1;
@@ -475,7 +406,7 @@ public final class ManageSubCompany extends Action {
 
 			if (currpage + 1 == totalpages) request.setAttribute("end", "1");
 			if (totalpages > 1) {
-				ArrayList al = new ArrayList();
+				ArrayList<String> al = new ArrayList<String>();
 				for (int i = 0; i < totalpages; i++) {
 					al.add(Integer.toString(i));
 				}

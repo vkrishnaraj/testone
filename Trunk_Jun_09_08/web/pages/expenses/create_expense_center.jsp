@@ -114,7 +114,14 @@
 			
 			<td id="middlecolumn">
 				
-				<div id="maincontent">
+				<div id="maincontent"><font color=red>
+				      <logic:messagesPresent message="true">
+				        <html:messages id="msg" message="true">
+				          <br />
+				          <bean:write name="msg" />
+				          <br />
+				        </html:messages>
+				      </logic:messagesPresent> </font>
 					<br />
 					<a name="editpayout"></a>
 					<h1 class="green">

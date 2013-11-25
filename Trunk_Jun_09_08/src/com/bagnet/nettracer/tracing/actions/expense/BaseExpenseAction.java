@@ -1,22 +1,18 @@
 package com.bagnet.nettracer.tracing.actions.expense;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessages;
 import org.springframework.beans.BeanUtils;
 
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
@@ -28,9 +24,7 @@ import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.ExpenseType;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.forms.ExpensePayoutForm;
-import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.SearchExpenseForm;
-import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
@@ -53,16 +47,12 @@ public abstract class BaseExpenseAction extends CheckedAction {
 		// check session
 		TracerUtils.checkSession(session);
 
-		ActionMessages errors = new ActionMessages();
-
 		if (session.getAttribute("user") == null || form == null) {
 			response.sendRedirect("logoff.do");
 			return null;
 		}
 
 		Agent user = (Agent) session.getAttribute("user");
-		
-		
 
 		if ("Create".equals(mapping.getParameter())) {
 			if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_EXPENSE, user)) {
