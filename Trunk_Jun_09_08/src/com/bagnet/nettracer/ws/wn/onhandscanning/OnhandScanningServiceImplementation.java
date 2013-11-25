@@ -346,6 +346,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		WSOHD wsohd = createUpdateOnhand.getCreateUpdateOnhand().getOnhand();
 		String posId = createUpdateOnhand.getCreateUpdateOnhand().getPositionId();
 		boolean lateCheckInc = createUpdateOnhand.getCreateUpdateOnhand().getLateCheckIndicator();
+		boolean hasLateCheckInc = createUpdateOnhand.getCreateUpdateOnhand().isSetLateCheckIndicator();
 		
 		//Populated default information that is required by NetTracer but not required by SWA
 		populateMissingOHDFields(wsohd, agent);
@@ -376,7 +377,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 			wsohd.setOHDID(ohdId);
 			try {
 				OHD ntohd = wsohdToOHD(wsohd, posId, lateCheckInc);
-				if(updateExistingOhd(ntohd)){
+				if(updateExistingOhd(ntohd, hasLateCheckInc)){
 					serviceResponse = ohdToWSOHD(OhdBMO.getOHDByID(ntohd.getOHD_ID(),null), serviceResponse);
 					serviceResponse.setSuccess(true);
 					serviceResponse.setCreateUpdateIndicator(STATUS_UPDATE);
@@ -394,7 +395,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 			WSCoreOHDUtil util = new WSCoreOHDUtil();
 			try {
 				OHD ntohd = wsohdToOHD(wsohd, posId, lateCheckInc);
-				if(updateExistingOhd(ntohd)){
+				if(updateExistingOhd(ntohd, hasLateCheckInc)){
 					util.properlyHandleForwardedOnHand(incomingOHD, agent, holdingstation);
 					serviceResponse = ohdToWSOHD(OhdBMO.getOHDByID(ntohd.getOHD_ID(),null), serviceResponse);
 					serviceResponse.setSuccess(true);
@@ -538,33 +539,72 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 	/**
 	 * Updates an existing OHD.
 	 * 
-	 * When updating an existing OHD for SWA, regardless of the values passed in from the web service,
-	 * the following fields are to persist their original values:
-	 *   status - my understanding of SWA, status can only be updated at LZ which has its own scanner service
-	 *   xdescelement
-	 *   creationMethod
-	 *   foundDate
-	 *   foundTime
-	 *   foundStation
+	 * When updating an existing OHD for SWA, only update the following fields if provided:
+	 *   color
+	 *   type
+	 *   claimnum
+	 *   storage location
+	 *   first name
+	 *   last name
+	 *   record locator
+	 *   lateCheckInd
+	 *   posId
+	 *   itinerary
+	 *   
 	 * 
 	 * @param ohd
+	 * @param updateLateCheck - since lateCheckInd is a boolean, 
+	 * 							we have to pass in the hasLateCheckIndicator value from the web service
 	 * @return
 	 */
-	private boolean updateExistingOhd(OHD ohd){
+	private boolean updateExistingOhd(OHD ohd, boolean updateLateCheck){
 		OhdBMO obmo = new OhdBMO();
 		OHD oldohd = obmo.findOHDByID(ohd.getOHD_ID());
-		if(oldohd != null){
-			ohd.setStatus(oldohd.getStatus());
-			ohd.setXdescelement_ID_1(oldohd.getXdescelement_ID_1());
-			ohd.setXdescelement_ID_2(oldohd.getXdescelement_ID_2());
-			ohd.setXdescelement_ID_3(oldohd.getXdescelement_ID_3());
-			ohd.setCreationMethod(oldohd.getCreationMethod());
-			ohd.setFounddate(oldohd.getFounddate());
-			ohd.setFoundtime(oldohd.getFoundtime());
-			ohd.setFoundAtStation(oldohd.getFoundAtStation());
+		
+		if(oldohd != null && ohd!= null){
+			if(ohd.getColor() != null && ohd.getColor().length() > 0){
+				oldohd.setColor(ohd.getColor());
+			}
+			if(ohd.getStorage_location() != null && ohd.getStorage_location().length() > 0){
+				oldohd.setStorage_location(ohd.getStorage_location());
+			}
+			if(ohd.getClaimnum() != null && ohd.getClaimnum().length() > 0){
+				oldohd.setClaimnum(ohd.getClaimnum());
+			}
+			if(ohd.getType() != null && ohd.getType().length() > 0){
+				oldohd.setType(ohd.getType());
+			}
+			if(ohd.getFirstname() != null && ohd.getFirstname().length() > 0){
+				oldohd.setFirstname(ohd.getFirstname());
+			}
+			if(ohd.getLastname() != null && ohd.getLastname().length() > 0){
+				oldohd.setLastname(ohd.getLastname());
+			}
+			if(ohd.getRecord_locator() != null && ohd.getRecord_locator().length() > 0){
+				oldohd.setRecord_locator(ohd.getRecord_locator());
+			}
+			if(ohd.getItinerary() != null && ohd.getItinerary().size() > 0){
+				oldohd.setItinerary(ohd.getItinerary());
+				Iterator<OHD_Itinerary> i = oldohd.getItinerary().iterator();
+				while(i.hasNext()){
+					OHD_Itinerary itin = (OHD_Itinerary) i.next();
+					itin.setOhd(oldohd);
+				}
+			}
+			if(updateLateCheck){
+				oldohd.setLateCheckInd(ohd.getLateCheckInd());
+			}
+			
+			if(ohd.getPosId() != null && ohd.getPosId().length() > 0){
+				oldohd.setPosId(ohd.getPosId());
+			}
+			
+			return obmo.insertOHD(oldohd, ohd.getAgent());
+		} else {
+			return false;
 		}
 		
-		return obmo.insertOHD(ohd, ohd.getAgent());
+
 	}
 
 
@@ -1035,9 +1075,10 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		if(ohd != null){
 			OhdBMO obmo = new OhdBMO();
 			try {
-				wsohd.getItinerariesArray();
-				WSCoreOHDUtil util = new WSCoreOHDUtil();
-				util.WStoOHDItinMapping(wsohd, ohd);
+				if(wsohd.getItinerariesArray() != null && wsohd.getItinerariesArray().length > 0){
+					WSCoreOHDUtil util = new WSCoreOHDUtil();
+					util.WStoOHDItinMapping(wsohd, ohd);
+				}
 				handleTBI(ohd, TBI);
 				addOHDUpdateRemark(ohd, agent, REMARK_SCANNED);
 				obmo.insertOHD(ohd, agent);

@@ -215,6 +215,14 @@ public class OnhandScanningServiceTest {
 		WSOHD ohd = doc.getCreateUpdateOnhand().addNewOnhand();
 		ohd.setBagtagnum(bagtag);
 		ohd.setHoldingStation(stationcode);
+		ohd.setRecordLocator("newpnr");
+		ohd.setFirstname("Thomas");
+		ohd.setLastname("Anderson");
+		ohd.setColor("WT");
+		ohd.setType("1");
+		WSItinerary itin = ohd.addNewItineraries();
+		itin.setLegto("XAX");
+		itin.setLegfrom("AXA");
 		
 		doc.getCreateUpdateOnhand().setLateCheckIndicator(true);
 		doc.getCreateUpdateOnhand().setPositionId(posId);
@@ -232,7 +240,14 @@ public class OnhandScanningServiceTest {
 		
 		assertTrue(ret.getLateCheckIndicator() == true);
 		assertTrue(ret.getPositionId().equals(posId));
-
+		assertTrue(ret.getOnhand().getRecordLocator().equals("newpnr"));
+		assertTrue(ret.getOnhand().getFirstname().equals("Thomas"));
+		assertTrue(ret.getOnhand().getLastname().equals("Anderson"));
+		assertTrue(ret.getOnhand().getType().equals("1"));
+		assertTrue(ret.getOnhand().getColor().equals("WT"));
+		assertTrue(ret.getOnhand().getItinerariesArray(0).getLegfrom().equals("AXA"));
+		assertTrue(ret.getOnhand().getItinerariesArray(0).getLegto().equals("XAX"));
+		
 		// verify that fields that are not to be alter are in fact not altered.
 		WSOHD retohd = ret.getOnhand();
 		assertTrue("X".equals(retohd.getXdescelement1()));
@@ -277,6 +292,92 @@ public class OnhandScanningServiceTest {
 		closeOHD(bagtag, altStationcode);
 	}
 
+	@Test
+	public void updateOnhandNullFieldsTest() {
+		// First create a new OHD to test with
+		CreateUpdateOnhandDocument doc = getBlankOhdDocuement();
+
+		String bagtag = "WN000009";
+		String posId = "bin1";
+		closeOHD(bagtag, stationcode);
+
+		createOHD(bagtag, stationcode);
+		
+		// Now test updating the OHD we just created
+		doc = getBlankOhdDocuement();
+		WSOHD ohd = doc.getCreateUpdateOnhand().addNewOnhand();
+		ohd.setBagtagnum(bagtag);
+		ohd.setHoldingStation(stationcode);
+		
+//		doc.getCreateUpdateOnhand().setLateCheckIndicator(true);
+//		doc.getCreateUpdateOnhand().setPositionId(posId);
+		
+		CreateUpdateOnhandResponseDocument response = service.createUpdateOnhand(doc);
+		ServiceResponse ret = response.getCreateUpdateOnhandResponse().getReturn();
+		if (ret.getErrorArray() != null) {
+			for (String error : ret.getErrorArray()) {
+				System.out.println(error);
+			}
+		}
+		assertTrue(ret.getSuccess());
+		assertTrue(OnhandScanningServiceImplementation.STATUS_UPDATE.equals(ret
+				.getCreateUpdateIndicator()));
+		
+		assertTrue(ret.getLateCheckIndicator() == false);
+		assertTrue(ret.getPositionId() == null);
+		assertTrue(ret.getOnhand().getItinerariesArray(0).getLegfrom().equals("ATL"));
+		assertTrue(ret.getOnhand().getItinerariesArray(0).getLegto().equals("LAX"));
+		assertTrue(ret.getOnhand().getColor().equals("BK"));
+		assertTrue(ret.getOnhand().getType().equals("21"));
+		assertTrue(ret.getOnhand().getFirstname().equals("Bill"));
+		assertTrue(ret.getOnhand().getLastname().equals("Nettracer"));
+		assertTrue(ret.getOnhand().getRecordLocator().equals("nttest"));
+		
+		
+		// verify that fields that are not to be alter are in fact not altered.
+		WSOHD retohd = ret.getOnhand();
+		assertTrue("X".equals(retohd.getXdescelement1()));
+		assertTrue("X".equals(retohd.getXdescelement2()));
+		assertTrue("X".equals(retohd.getXdescelement3()));
+
+		/*
+		 * if running locally, make sure you have the
+		 * ApplicationResource.properties copied into
+		 * src.com.bagent.nettracer.tracing.resources, otherwise it will not be
+		 * able to label and this assert will fail
+		 */
+		assertTrue("Open".equals(retohd.getStatus()));
+
+		// testing the service to handling incoming OHD
+		// first, forward the OHD to the alternate station
+		OHD toRecieve = OhdBMO.getOHDByID(retohd.getOHDID(), null);
+		Agent agent = AdminUtils.getAgentBasedOnUsername(username, companycode);
+		assertTrue(forwardOHD(agent, toRecieve));
+
+		toRecieve = OhdBMO.getOHDByID(retohd.getOHDID(), null);
+
+		// now create a new web service request for the alternate station
+		doc = getBlankOhdDocuement();
+		ohd = doc.getCreateUpdateOnhand().addNewOnhand();
+		ohd.setBagtagnum(bagtag);
+		ohd.setFoundAtStation(altStationcode);
+		ohd.setHoldingStation(altStationcode);
+		response = service.createUpdateOnhand(doc);
+		ret = response.getCreateUpdateOnhandResponse().getReturn();
+		if (ret.getErrorArray() != null) {
+			for (String error : ret.getErrorArray()) {
+				System.out.println(error);
+			}
+		}
+		// assert the bag was received and updated
+		assertTrue(ret.getSuccess());
+		assertTrue(OnhandScanningServiceImplementation.STATUS_UPDATE.equals(ret
+				.getCreateUpdateIndicator()));
+
+		// closing ohd
+		closeOHD(bagtag, altStationcode);
+	}
+	
 	@Test
 	public void returnOhdTest() {
 		String bagtag = "WN000010";
@@ -656,6 +757,8 @@ public class OnhandScanningServiceTest {
 
 		WSOHD ohd = addBagForLZ.addNewOnhand();
 		populateWSOHDObject(ohd, bagtag);
+		ohd.getItinerariesArray(0).setLegfrom("XAX");
+		ohd.getItinerariesArray(0).setLegto("AXA");
 
 		addBagForLZ.setTBI(false);
 		addBagForLZ.setPositionId(posId);
@@ -665,13 +768,14 @@ public class OnhandScanningServiceTest {
 		ServiceResponse responseLZ = retLZ.getAddBagForLZResponse().getReturn();
 
 		assertTrue(responseLZ.getSuccess());
-		assertWSOHD(bagtag, responseLZ.getOnhand());
 		assertTrue(responseLZ.getOnhand().getStatus().equals("Closed"));
 		assertTrue(responseLZ.getReturnStatus().equals("Successful Create/Update"));
 		
 		//for updates, we only update the itinerary and TBI status
 		assertTrue(responseLZ.getLateCheckIndicator() == false);
 		assertTrue(responseLZ.getPositionId() == null);
+		assertTrue(responseLZ.getOnhand().getItinerariesArray(0).getLegfrom().equals("XAX"));
+		assertTrue(responseLZ.getOnhand().getItinerariesArray(0).getLegto().equals("AXA"));
 	}
 
 	private void closeOHD(String bagtag, String foundStation) {
