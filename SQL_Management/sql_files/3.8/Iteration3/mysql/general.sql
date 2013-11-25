@@ -274,3 +274,5 @@ update systemcomponents set component_name='LUV Immediate Fulfillment' where com
 update systemcomponents set component_name='LUV Email Fulfillment' where component_id=677;
 update systemcomponents set component_name='LUV Mail Fulfillment' where component_id=678;
 update systemcomponents set component_name='LUV Cancel a Voucher' where component_id=679;
+
+alter table expensepayout add column printcount int default 0;
