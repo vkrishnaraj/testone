@@ -190,6 +190,7 @@ public class PermissionsUtil {
 	public static final String VIEW_FRAUD_RESULTS = "604";
 	public static final String SHARED_ATTACHMENTS = "605";
 	public static final String CLAIM_SETTLEMENT = "214";
+	public static final String BSO_PROCESS = "680";
 	public static final String APPROVE_EXPENSE = "313";
 	
 	// TRACING SECTION

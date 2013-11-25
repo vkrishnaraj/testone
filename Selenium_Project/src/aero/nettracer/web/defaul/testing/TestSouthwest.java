@@ -10,6 +10,7 @@ import org.junit.runners.Suite.SuiteClasses;
 import aero.nettracer.web.southwest.testing.actions.nt.core.WN_Login;
 import aero.nettracer.web.southwest.testing.actions.nt.incidents.communications.WN_CustomerCommunications;
 import aero.nettracer.web.southwest.testing.actions.nt.incidents.damaged.WN_CreateDamaged;
+import aero.nettracer.web.southwest.testing.actions.nt.incidents.expensepayouts.WN_ExpensePayouts;
 import aero.nettracer.web.southwest.testing.actions.nt.incidents.lostdelay.WN_CloseLD;
 import aero.nettracer.web.southwest.testing.actions.nt.incidents.lostdelay.WN_CreateLD_VerifyRequiredFields;
 import aero.nettracer.web.southwest.testing.actions.nt.incidents.missing.WN_CreateMissing;
@@ -23,6 +24,7 @@ import aero.nettracer.web.utility.Settings;
 @SuiteClasses({
 	WN_Login.class
 	, WN_CreateLD_VerifyRequiredFields.class
+	, WN_ExpensePayouts.class
 	, WN_CreateOhd.class
 	, WN_OHD_Sort_Search.class
 	, WN_ViewStationOhds.class
