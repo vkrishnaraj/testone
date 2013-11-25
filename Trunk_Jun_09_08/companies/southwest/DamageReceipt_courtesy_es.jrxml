@@ -274,7 +274,7 @@ Reporte de Cortesía ]]></text>
 				<imageExpression class="java.lang.String"><![CDATA[$P{logo}]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement key="textField-48" positionType="Float" mode="Opaque" x="9" y="89" width="532" height="231" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-48" positionType="Float" mode="Opaque" x="9" y="89" width="532" height="263" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="styled">
 					<font fontName="Tahoma" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
