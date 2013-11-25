@@ -10,7 +10,7 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 
 	@Test
 	public void testSetBSOLimit(){
-		clickMenu("menucol_9.3");
+		clickMenu("menucol_10.3");
 
 		if (checkNoErrorPage()) {
 			click(By.xpath("(//a[contains(text(),'Admin')])[3]"));
