@@ -22,6 +22,7 @@ boolean hasCancelPermission = UserPermissions.hasPermission(TracingConstants.SYS
 %>
 function getStatusIds(type) {
 	if (type=='VOUCH') {
+		if (<%=hasImmFulfillPermission%> || <%=hasEmailFulfillPermission%> || <%=hasMailFulfillPermission%> ){
 			document.getElementById("amountColumn").innerHTML='<bean:message key="issue.amount"/>' +
 			'<br />' +
 			'<html:text property="checkamt" maxlength="20" styleClass="textfield"></html:text>';
@@ -29,13 +30,17 @@ function getStatusIds(type) {
 			document.getElementById("distributedmethod").style.display= 'inline';
 			issue_voucher = true;
 		} else {
+			window.alert("NO PERMISSION");
+			issue_voucher = false;
+		}
+	} else if (type!='VOUCH'){
 			document.getElementById("amountColumn").innerHTML='<bean:message key="draft.amount"/>' +
 			'<br />' +
 			'<html:text property="checkamt" maxlength="20" styleClass="textfield"></html:text>';
 			document.getElementById("button").value='<bean:message key="button.request_for_approval"/>';
 			document.getElementById("distributedmethod").style.display= 'none';
 			issue_voucher = false;
-		}
+	}
 }
 
 function updatePaymentFields(newType) {
@@ -83,6 +88,7 @@ function updatePaymentFields(newType) {
         </html:select>
 	</td>
 </tr>
+<% if(hasImmFulfillPermission || hasEmailFulfillPermission || hasMailFulfillPermission) { %>	
 <tr>
 	<td></td>
 	<td id="distributedmethod" style="display:none;">
@@ -109,3 +115,4 @@ function updatePaymentFields(newType) {
 	</td>
 	<td ></td>
 </tr>
+<% } %>

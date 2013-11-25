@@ -29,8 +29,9 @@
 			a);
 	boolean canPay = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_EXPENSE, a);
 	ExpensePayoutForm epf = (ExpensePayoutForm) request.getAttribute("expensePayoutForm");
+	ExpensePayout ep = ExpensePayoutBMO.findExpensePayout(epf.getExpensepayout_ID());
 	boolean submitOk = (epf.getPaymentType() !=null && epf.getPaymentType().equals(TracingConstants.ENUM_VOUCHER))? true :false; 
-
+	boolean showprint = ep.getPrintcount() == 0 ? true : false;
 	boolean swaBsoPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, a);
 	boolean swaIsInBSO=(epf!=null && a!=null && a.getStation()!=null && epf.getExpenselocation_ID()==a.getStation().getStation_ID());
 	
@@ -84,6 +85,8 @@
  	      var del=window.confirm("Did the Southwest LUV Voucher print correctly?");
   	      if(del==true){
   	    	document.getElementById("printrpt").style.display= 'none';
+  	    	document.expensePayoutForm.printcount.value="1";
+  	    	document.expensePayoutForm.submit();
           } else if(del==false){
         	document.expensePayoutForm.toremark.value="yes";
 			document.expensePayoutForm.submit();
@@ -98,6 +101,7 @@
 	<html:hidden name="expensePayoutForm" property="expensepayout_ID" />
 	<html:hidden name="expensePayoutForm" property="status_id" />
 	<html:hidden name="expensePayoutForm" property="toremark"  value="no"/>
+	<html:hidden name="expensePayoutForm" property="printcount"  value="<%= Integer.toString(ep.getPrintcount()) %>"/>	
 	<fmt:timeZone value="${expensePayoutForm.tz}">
 		<tr>
 			<td colspan="3" id="pageheadercell">
@@ -172,13 +176,15 @@
             			Successfully Submitted!
           			</font></center>
 					<div align="right" width="100%" >
-					<a name="printrpt" href='#' onclick="rePrint()">
-					<bean:message key="button.bdo_sendprint" />
-					</a>
-					&nbsp;&nbsp;
-					<a href="#" onclick="openPreviewWindow1('filename')"> 
-						Cancel
-					</a>
+					<% if (showprint) { %>
+						<a name="printrpt" href='#' onclick="rePrint()">
+						<bean:message key="button.bdo_sendprint" />
+						</a>
+						&nbsp;&nbsp;
+						<a href="#" onclick="openPreviewWindow1('filename')"> 
+							Cancel
+						</a>
+					<% } %>	
 					</div>
 					<% } else { %>
 					<a name="editpayout"></a>

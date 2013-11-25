@@ -48,8 +48,8 @@ public class ExpensePayoutForm extends ActionForm {
 	//hidden
 	private int expensepayout_ID;
 	private int status_id;
-	
-	
+	private int printcount;
+
 	//displayed - need conversion
 	private String incident_ID;
 	private String createUser;
@@ -78,6 +78,12 @@ public class ExpensePayoutForm extends ActionForm {
 	private String dispVoucherExpirationDate;
 	private String toremark;
 
+	public int getPrintcount() {
+		return printcount;
+	}
+	public void setPrintcount(int printcount) {
+		this.printcount = printcount;
+	}
 	public String getToremark() {
 		return toremark;
 	}

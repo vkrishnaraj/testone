@@ -72,6 +72,7 @@ boolean voucherValue =epf.getVoucheramt()>0;
             <br />
 			<html:text property="voucheramt" size="15" maxlength="10" styleClass="textfield" disabled="<%=((!voucherValue && swaBsoPermission && swaIsInBSO) || !swaBsoPermission)?false:true %>" />
 			<br />
+			<% if(hasImmFulfillPermission || hasEmailFulfillPermission || hasMailFulfillPermission) { %>			
 						<bean:message key="colname.distribution_method" />
 			<br />
 			<html:select property="distributemethod" styleClass="dropdown" disabled="disabled">
@@ -91,6 +92,7 @@ boolean voucherValue =epf.getVoucheramt()>0;
 			</html:option>
 			<% } %>
 			</html:select>
+			<% } %>
 		</td>
         <td>
             <bean:message key="colname.mileageamt" />

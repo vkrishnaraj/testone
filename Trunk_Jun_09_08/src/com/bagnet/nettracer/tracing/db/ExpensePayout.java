@@ -69,7 +69,8 @@ public class ExpensePayout implements Serializable {
 	
 	private String distributemethod;
 	private String paytype;
-	
+	private int printcount;
+
 	//not part of the model
 	private String _DATEFORMAT;
 	private String _TIMEFORMAT;
@@ -297,6 +298,15 @@ public class ExpensePayout implements Serializable {
 
 	public void setPaytype(String paytype) {
 		this.paytype = paytype;
+	}
+	
+	@Basic
+	public int getPrintcount() {
+		return printcount;
+	}
+
+	public void setPrintcount(int printcount) {
+		this.printcount = printcount;
 	}
 
 	@Basic
