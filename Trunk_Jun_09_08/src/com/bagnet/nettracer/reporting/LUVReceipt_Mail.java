@@ -56,7 +56,7 @@ public class LUVReceipt_Mail {
 		}
 		
 		String incident_id = theform.getIncident_ID();
-		parameters.put("amount", String.valueOf(theform.getVoucheramt()));
+		parameters.put("amount", String.format("%.2f", theform.getVoucheramt()));
 		parameters.put("incident_num", incident_id);
 		parameters.put("createdate1", new SimpleDateFormat("MMM dd, yyyy").format(theform.getCreatedate()));
 		parameters.put("createdate", new SimpleDateFormat("MM/dd/yyyy").format(theform.getCreatedate()));

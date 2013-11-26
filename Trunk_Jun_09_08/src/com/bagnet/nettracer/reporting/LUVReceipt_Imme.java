@@ -18,6 +18,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.util.MessageResources;
 
@@ -57,7 +58,7 @@ public class LUVReceipt_Imme {
 		}
 		
 		String incident_id = theform.getIncident_ID();
-		parameters.put("amount", String.valueOf(theform.getVoucheramt()));
+		parameters.put("amount", String.format("%.2f", theform.getVoucheramt()));
 		parameters.put("incident_num", incident_id);
 		parameters.put("createdate1", new SimpleDateFormat("MMM dd, yyyy").format(theform.getCreatedate()));
 		parameters.put("createdate", new SimpleDateFormat("MM/dd/yyyy").format(theform.getCreatedate()));

@@ -76,17 +76,17 @@ boolean voucherValue =epf.getVoucheramt()>0;
 						<bean:message key="colname.distribution_method" />
 			<br />
 			<html:select property="distributemethod" styleClass="dropdown" disabled="disabled">
-			<% if(hasImmFulfillPermission) { %>		
+			<% if(epf.getDistributemethod().equals(TracingConstants.DISTR_IMME)) { %>		
 			<html:option value="IMME">
 				<bean:message key="Immediate.fulfill" />
 			</html:option>
 			<% } %>
-			<% if(hasEmailFulfillPermission) { %>	
+			<% if(epf.getDistributemethod().equals(TracingConstants.DISTR_EMAIL)) { %>	
 			<html:option value="EMAIL">
 				<bean:message key="Email.fulfill" />
 			</html:option>
 			<% } %>
-			<% if(hasMailFulfillPermission) { %>
+			<% if(epf.getDistributemethod().equals(TracingConstants.DISTR_MAIL)) { %>
 			<html:option value="MAIL">
 				<bean:message key="Mail.fulfill" />
 			</html:option>

@@ -73,7 +73,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{pass_name}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-13" mode="Opaque" x="2" y="78" width="114" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-13" mode="Opaque" x="2" y="77" width="114" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -86,7 +86,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{address1}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-15" mode="Opaque" x="2" y="91" width="114" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-15" mode="Opaque" x="2" y="90" width="114" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -342,21 +342,21 @@
 				<text><![CDATA[You may redeem your Southwest LUV Voucher on a future Southwest Airlines flight by:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="21" y="530" width="527" height="13"/>
+				<reportElement x="21" y="526" width="527" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Booking Online at southwest.com]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="21" y="543" width="527" height="13"/>
+				<reportElement x="21" y="539" width="527" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Calling Reservations at 1-800-I-FLY-SWA (1-800-435-9792)]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="21" y="556" width="527" height="13"/>
+				<reportElement x="21" y="552" width="527" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
@@ -370,56 +370,56 @@
 				<text><![CDATA[Keep in mind:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="21" y="600" width="527" height="13"/>
+				<reportElement x="21" y="596" width="527" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Your Southwest LUV Voucher must be redeemed at the time of purchase by providing the 16-digit number and four-]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="21" y="613" width="527" height="13"/>
+				<reportElement x="21" y="609" width="527" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[digit security code listed below.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="21" y="626" width="527" height="13"/>
+				<reportElement x="21" y="622" width="527" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Southwest LUV Vouchers may be used as payment toward future air fare only on Southwest Airlines - operated ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="21" y="639" width="527" height="13"/>
+				<reportElement x="21" y="635" width="527" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[flights.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="21" y="652" width="527" height="13"/>
+				<reportElement x="21" y="648" width="527" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Southwest LUV Vouchers are not redeemable as payment toward miscellaneous charges, goverment-imposed]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="21" y="665" width="527" height="13"/>
+				<reportElement x="21" y="661" width="527" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[taxes and fees, Southwest Airlines Vacations packages, or travel either wholly or in part on other air carriers.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="21" y="679" width="527" height="13"/>
+				<reportElement x="21" y="675" width="527" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
 				<text><![CDATA[Southwest LUV Vouchers are VOID if sold, altered, purchased, brokered, and/or bartered.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="21" y="692" width="527" height="13"/>
+				<reportElement x="21" y="688" width="527" height="13"/>
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
@@ -474,7 +474,7 @@
 				</graphicElement>
 			</ellipse>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-11" mode="Opaque" x="2" y="104" width="114" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-11" mode="Opaque" x="2" y="103" width="114" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
