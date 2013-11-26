@@ -97,7 +97,7 @@ if (hasPermission) {
 					    var formData = jQueryform.serialize();
 					    var startData = jQueryform.data('ays-form');
 					    var checkSave=true;
-					    if (startData!=undefined && formData != startData) {
+					    if (startData && formData != startData) {
 					    	checkSave=confirm("You have made changes to the Incident. Do you want to continue?");
 					    }
 					    remarkElement.value=taskRemark;
