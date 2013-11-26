@@ -88,9 +88,20 @@ if (hasPermission) {
 		        var dateString = formatDate(todayDate,"<%=a.getDateformat().getFormat() %>");
 
 				function closeTask(type) {
-					var taskRemark = document.getElementById("taskRemark").value.replace(/^\s+|\s+$/g, '');
+					var remarkElement=document.getElementById("taskRemark");
+					var taskRemark = remarkElement.value.replace(/^\s+|\s+$/g, '');
 					if (taskRemark.length > 0) {
-						if (confirm("Have you saved any changes to the incident?")) {
+
+						remarkElement.value="";
+						jQueryform = jQuery("#dirtyCheck-form");
+					    var formData = jQueryform.serialize();
+					    var startData = jQueryform.data('ays-form');
+					    var checkSave=true;
+					    if (startData!=undefined && formData != startData) {
+					    	checkSave=confirm("You have made changes to the Incident. Do you want to continue?");
+					    }
+					    remarkElement.value=taskRemark;
+						if (checkSave) {
 							if ((type == 'abort' || type == 'complete')) {
 								clearBeforeUnload();
 								document.location.href="css_calls.do?" + type + "=1&taskRemark=" + escape(taskRemark);
