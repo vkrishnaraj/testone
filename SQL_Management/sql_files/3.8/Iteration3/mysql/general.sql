@@ -268,7 +268,6 @@ insert into category (description ,type,categoryVal) VALUES ('Remote',4,4);
 insert into category (description ,type,categoryVal) VALUES ('Plane-side',4,5);
 insert into category (description ,type,categoryVal) VALUES ('Unchecked',4,6);
 insert into category (description ,type,categoryVal) VALUES ('Kiosk',4,7);
-insert into category (description ,type,categoryVal) VALUES ('Mixed',4,8);
 
 update systemcomponents set component_name='LUV Immediate Fulfillment' where component_id=676;
 update systemcomponents set component_name='LUV Email Fulfillment' where component_id=677;
