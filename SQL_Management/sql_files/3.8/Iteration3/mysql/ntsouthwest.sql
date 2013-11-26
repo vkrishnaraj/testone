@@ -140,3 +140,6 @@ delete from localereceipt where locale_id <> 'en';
 insert into localereceipt values ('es', 'Espanol');
 
 insert into properties (keyStr,valueStr) values ('bso.expense.process','1');
+
+
+insert into category (description ,type,categoryVal) VALUES ('Mixed',4,8);
