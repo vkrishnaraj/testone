@@ -91,7 +91,7 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 
 		if (checkNoErrorPage()) {
 			verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-			click(By.linkText("Modify"));
+			click(By.xpath("(//a[contains(text(),'Modify')])[3]"));
 		} else {
 			System.out.println("!!!!!!!!!!! ERROR - Changing Station  !!!!!!!!!");
 		}
