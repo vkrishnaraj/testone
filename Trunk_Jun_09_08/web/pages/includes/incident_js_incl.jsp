@@ -43,7 +43,7 @@
 	function enableButtons() {
 
 		if (document.incidentForm.saveButton) {
-			var incId=document.getElementByID("incident_ID");
+			var incId=document.getElementById("incident_ID");
 			if(incId && incId.value!=""){
 				enableButton(document.incidentForm.saveButton,
 					"<bean:message key='button.save' />");
