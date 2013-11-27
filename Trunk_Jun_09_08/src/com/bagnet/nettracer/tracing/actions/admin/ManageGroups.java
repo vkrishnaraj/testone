@@ -74,8 +74,10 @@ public final class ManageGroups extends Action {
 
 		ActionMessages errors = new ActionMessages();
 		DynaValidatorForm dForm = (DynaValidatorForm) form;
-
-		request.setAttribute("bsoProcess", PropertyBMO.getValue(PropertyBMO.BSO_EXPENSE_PROCESS));
+		String bsoProcess=PropertyBMO.getValue(PropertyBMO.BSO_EXPENSE_PROCESS);
+		if(bsoProcess!=null && bsoProcess.equals("1")){
+			request.setAttribute("bsoProcess", bsoProcess);
+		}
 		
 		String companyCode = "";
 		if ((request.getParameter("edit") != null && request.getParameter("edit").trim().length() > 0)
@@ -424,8 +426,10 @@ public final class ManageGroups extends Action {
 			UserGroup g = new UserGroup();
 			String groupName = (String) dForm.get("groupName");
 			String groupDesc = (String) dForm.get("groupDesc");
-			
-			double bsoLimit = Double.parseDouble((String) dForm.get("bsoLimit"));
+			double bsoLimit =0;
+			if(dForm.get("bsoLimit")!=null && !((String)dForm.get("bsoLimit")).isEmpty()){
+				bsoLimit = Double.parseDouble((String) dForm.get("bsoLimit"));
+			}
 			
 			if(groupName != null){
 				groupName = groupName.replaceAll(TracingConstants.FILTER_CHARACTERS, "");
