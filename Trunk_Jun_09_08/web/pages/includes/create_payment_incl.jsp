@@ -23,7 +23,7 @@ function updatePaymentFields(newType) {
 </script>
 <tr>
 	<td>
-		<bean:message key="payment.type"/>
+		<bean:message key="colname.expense_type"/>
 		<br />
 		<html:select property="paymentType" onchange="updatePaymentFields(this.options[this.selectedIndex].value);" styleClass="dropdown">
 			<html:optionsCollection name="paymentTypeList"/>

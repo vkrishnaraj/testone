@@ -648,6 +648,10 @@ public class TracerUtils {
 		result.add(new LabelValueBean(messages.getMessage(new Locale(locale), "payment.voucher"), "VOUCH"));
 		result.add(new LabelValueBean(messages.getMessage(new Locale(locale), "payment.mileage"), "MILE"));
 		
+		if(PropertyBMO.isTrue(PropertyBMO.BSO_EXPENSE_PROCESS)){
+			result.add(new LabelValueBean(messages.getMessage(new Locale(locale), "payment.invoice"), "INVOICE"));
+		}
+		
 		String m = messages.getMessage(new Locale(locale), "payment.incidental");
 		if (m != null && m.length() > 0) {
 			result.add(new LabelValueBean(m, "INC"));

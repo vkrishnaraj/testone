@@ -133,7 +133,7 @@
 								</html:select>
 							</td>
 							<td>
-								<bean:message key="colname.expense_type" />
+								<bean:message key="payment.type" />
 								<br />
 
 								<html:select property="expensetype_id" styleClass="dropdown"
