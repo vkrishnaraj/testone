@@ -29,9 +29,9 @@
 			a);
 	boolean canPay = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_EXPENSE, a);
 	ExpensePayoutForm epf = (ExpensePayoutForm) request.getAttribute("expensePayoutForm");
-	ExpensePayout ep = ExpensePayoutBMO.findExpensePayout(epf.getExpensepayout_ID());
+	
 	boolean submitOk = (epf.getPaymentType() !=null && epf.getPaymentType().equals(TracingConstants.ENUM_VOUCHER))? true :false; 
-	boolean showprint = ep.getPrintcount() == 0 ? true : false;
+	boolean showprint = epf.getPrintcount() == 0 ? true : false;
 	boolean swaBsoPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, a);
 	boolean swaIsInBSO=(epf!=null && a!=null && a.getStation()!=null && epf.getExpenselocation_ID()==a.getStation().getStation_ID());
 	
@@ -101,7 +101,7 @@
 	<html:hidden name="expensePayoutForm" property="expensepayout_ID" />
 	<html:hidden name="expensePayoutForm" property="status_id" />
 	<html:hidden name="expensePayoutForm" property="toremark"  value="no"/>
-	<html:hidden name="expensePayoutForm" property="printcount"  value="<%= Integer.toString(ep.getPrintcount()) %>"/>	
+	<html:hidden name="expensePayoutForm" property="printcount"  value="0"/>	
 	<fmt:timeZone value="${expensePayoutForm.tz}">
 		<tr>
 			<td colspan="3" id="pageheadercell">
