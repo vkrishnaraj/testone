@@ -143,3 +143,22 @@ insert into properties (keyStr,valueStr) values ('bso.expense.process','1');
 
 
 insert into category (description ,type,categoryVal) VALUES ('Mixed',4,8);
+
+delete from expensetype;
+insert into expensetype (expensetype_id,description,companycode_ID) VALUES 
+(1,'Damaged Articles','WN'),
+(2,'Delivery','WN'),
+(3,'Interim Expense','WN'),
+(4,'Goodwill','WN'),
+(5,'Lost Baggage','WN'),
+(6,'Missing Article','WN'),
+(7,'Unchecked L & F','WN'),
+(8,'Other','WN'),
+(9,'Additional Settlement','WN'),
+(10,'Customer Inconvenience','WN'),
+(11,'Damage Bag','WN'),
+(12,'Dragged Bag','WN'),
+(13,'Fish Smell','WN'),
+(14,'Stop Payment','WN'),
+(15,'Water Damage','WN'),
+(16,'Cruise-Line Interim Expense','WN');

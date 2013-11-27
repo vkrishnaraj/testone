@@ -275,3 +275,5 @@ update systemcomponents set component_name='LUV Mail Fulfillment' where componen
 update systemcomponents set component_name='LUV Cancel a Voucher' where component_id=679;
 
 alter table expensepayout add column printcount int default 0;
+
+alter table expensetype modify description varchar(30); 
