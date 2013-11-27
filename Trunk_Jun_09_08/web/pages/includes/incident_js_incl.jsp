@@ -1,12 +1,8 @@
 <%@ page language="java"%>
 <%@ taglib uri="/tags/struts-bean" prefix="bean"%>
-<%@ taglib uri="/tags/struts-html" prefix="html"%>
-<%@ taglib uri="/tags/struts-logic" prefix="logic"%>
-<%@ taglib uri="/tags/struts-tiles" prefix="tiles"%>
-<%@ taglib uri="/tags/struts-nested" prefix="nested"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<script language="javascript">
+<script>
     
     function gotoHistoricalReport(form) {
         o = document.incidentForm;
@@ -47,15 +43,14 @@
 	function enableButtons() {
 
 		if (document.incidentForm.saveButton) {
-			<logic:notEqual name="incidentForm" property="incident_ID" value="">
-			enableButton(document.incidentForm.saveButton,
+			var incId=document.getElementByID("incident_ID");
+			if(incId && incId.value!=""){
+				enableButton(document.incidentForm.saveButton,
 					"<bean:message key='button.save' />");
-			</logic:notEqual>
-			<logic:equal name="incidentForm" property="incident_ID" value="">
-			enableButton(document.incidentForm.saveButton,
+			} else {
+				enableButton(document.incidentForm.saveButton,
 					"<bean:message key='button.saveincident' />");
-			</logic:equal>
-
+			}
 		}
 
 		if (document.incidentForm.limitSaveButton) {
