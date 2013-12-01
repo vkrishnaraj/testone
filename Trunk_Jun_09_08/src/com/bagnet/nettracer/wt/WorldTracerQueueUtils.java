@@ -2,6 +2,7 @@ package com.bagnet.nettracer.wt;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -171,6 +172,7 @@ public class WorldTracerQueueUtils {
 			q.setParameter("status", WtqStatus.PENDING);
 			q.setParameter("ntIncident", ntIncident);
 			q.setMaxResults(1);
+			@SuppressWarnings("unchecked")
 			List<WtqIncidentAction> result = q.list();
 			if(result != null && result.size() > 0) {
 				return result.get(0);
@@ -185,6 +187,7 @@ public class WorldTracerQueueUtils {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static WorldTracerQueue findPendingOhdAction(String ntOHD) {
 		Session sess = null;
 		try {
@@ -226,6 +229,7 @@ public class WorldTracerQueueUtils {
 	 *            wt_queue object that is checked for existence
 	 * @return queue object if it already is in db, or null if not there
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private static List<WorldTracerQueue> alreadyQueued(WorldTracerQueue wtq, Session sess) {
 		Query q = sess.createQuery(wtq.getExistsQuery());
 		Object[] params = wtq.getExistsParameters();
@@ -311,14 +315,34 @@ public class WorldTracerQueueUtils {
 			sess = HibernateWrapper.getSession().openSession();
 			
 			List<WorldTracerQueue> oldEntries = alreadyQueued(entry, sess);
-			if(oldEntries != null && oldEntries.size() > 0) {
-				return false;
+			if(oldEntries!=null && oldEntries.size() > 0){
+				HashMap<String,String> oldEntryMap=new HashMap<String,String>();
+				Object [] arrQoh=oldEntries.toArray();
+				for(int i=0;i<oldEntries.size();i++){
+					Object[] qohArray=(Object[]) arrQoh[i];
+					OHD qoh=null;
+					if(qohArray!=null){
+						qoh=(OHD)qohArray[1];
+					}
+					if(qoh!=null){
+						oldEntryMap.put(qoh.getOHD_ID(),"1");
+					}
+				}
+				List<OHD> initialList=new ArrayList<OHD>();
+				for(OHD ohd:entry.getOhdTags()){
+					initialList.add(ohd);
+				}
+				for (OHD ohd: initialList) {
+					if(oldEntryMap.get(ohd.getOHD_ID())!=null){
+						entry.getOhdTags().remove(ohd);
+					}
+				}
 			}
-			else {
-				t = sess.beginTransaction();
-				sess.save(entry);
-				t.commit();
-			}
+			
+			t = sess.beginTransaction();
+			sess.save(entry);
+			t.commit();
+			
 			return true;
 		} catch (Exception e) {
 			logger.error(e);
@@ -369,6 +393,7 @@ public class WorldTracerQueueUtils {
 		q.setParameter("qStatus", WtqStatus.PENDING);
 		q.setTimestamp("lastUpdated", entry.getIncident().getLastupdated());
 		q.setMaxResults(1);
+		@SuppressWarnings("unchecked")
 		List<WorldTracerQueue> result = q.list();
 		if(result.size() > 0) {
 			return true;
@@ -387,6 +412,7 @@ public class WorldTracerQueueUtils {
 		q.setParameter("qStatus", WtqStatus.PENDING);
 		q.setTimestamp("lastUpdated", entry.getOhd().getLastupdated());
 		q.setMaxResults(1);
+		@SuppressWarnings("unchecked")
 		List<WorldTracerQueue> result = q.list();
 		if(result.size() > 0) {
 			return true;
