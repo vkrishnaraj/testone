@@ -338,10 +338,14 @@ public class WorldTracerQueueUtils {
 					}
 				}
 			}
+			if(entry.getOhdTags().size()>0){
+				t = sess.beginTransaction();
+				sess.save(entry);
+				t.commit();
+			} else {
+				return false;
+			}
 			
-			t = sess.beginTransaction();
-			sess.save(entry);
-			t.commit();
 			
 			return true;
 		} catch (Exception e) {
