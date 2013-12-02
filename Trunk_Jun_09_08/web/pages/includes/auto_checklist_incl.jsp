@@ -60,7 +60,7 @@
     <bean:message key="header.additional.functions" />
   </h1>
       
-      <div id="pax_0">
+      <div id="auto_checklist">
         <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
           <tr>
 		 <td align="center"> 
