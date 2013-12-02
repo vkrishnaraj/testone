@@ -164,6 +164,9 @@
 					<br/>
 					<logic:notEmpty name="passenger" property="address">
 						<bean:write name="passenger" property="address.address1" />
+						
+						<br/> 
+						<bean:write name="passenger" property="address.countryCode" />
 						<%
 						Address addr = res.getPax()[i.intValue()].getAddress();
 						String a = "";

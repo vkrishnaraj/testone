@@ -170,12 +170,10 @@
 					<bean:write name="passenger" property="lastname" />
 					<br/>
 					<logic:notEmpty name="passenger" property="address">
-				<bean:write name="passenger" property="address.address1" />
-<!--				<bean:write name="passenger" property="address.address2" />-->
-<!--				<br/>-->
-<!--				<bean:write name="passenger" property="address.city" />-->
-<!--				<bean:write name="passenger" property="address.state" />-->
-<!--				<bean:write name="passenger" property="address.zip" />-->
+					<bean:write name="passenger" property="address.address1" />
+					
+					<br/> 
+					<bean:write name="passenger" property="address.countryCode" />
 				<%
 				Address addr = res.getPax()[i.intValue()].getAddress();
 				String a = "";
