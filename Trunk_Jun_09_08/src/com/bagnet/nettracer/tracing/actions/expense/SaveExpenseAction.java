@@ -44,7 +44,7 @@ public class SaveExpenseAction extends BaseExpenseAction {
 		addComment(ep, user, "expense.comment.new", expenseForm.getNewComment());
 		String incidentId = ((IncidentForm) request.getSession().getAttribute("incidentForm")).getIncident_ID();
 		
-		boolean cbsProcess=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, user); 
+		boolean cbsProcess=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, user) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN, user); 
 		// set status to pending or approved
 		Status st = new Status();
 		st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED);

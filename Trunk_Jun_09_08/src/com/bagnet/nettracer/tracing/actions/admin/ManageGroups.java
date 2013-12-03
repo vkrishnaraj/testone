@@ -74,10 +74,6 @@ public final class ManageGroups extends Action {
 
 		ActionMessages errors = new ActionMessages();
 		DynaValidatorForm dForm = (DynaValidatorForm) form;
-		String bsoProcess=PropertyBMO.getValue(PropertyBMO.BSO_EXPENSE_PROCESS);
-		if(bsoProcess!=null && bsoProcess.equals("1")){
-			request.setAttribute("bsoProcess", bsoProcess);
-		}
 		
 		String companyCode = "";
 		if ((request.getParameter("edit") != null && request.getParameter("edit").trim().length() > 0)

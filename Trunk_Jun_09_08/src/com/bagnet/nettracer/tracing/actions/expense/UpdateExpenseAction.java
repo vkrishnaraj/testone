@@ -28,6 +28,7 @@ import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
+import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
 public class UpdateExpenseAction extends BaseExpenseAction {
 
@@ -46,7 +47,7 @@ public class UpdateExpenseAction extends BaseExpenseAction {
 		
 		request.getSession().setAttribute("expense_id", ep.getExpensepayout_ID());
 		
-		boolean cbsProcess=true;
+		boolean cbsProcess=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, user) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN, user); 
 		request.setAttribute("swaCbsProcess", cbsProcess);
 		// set status to pending or approved
 		Status st = new Status();

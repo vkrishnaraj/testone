@@ -11,6 +11,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
+  boolean bsoAdmin = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN, a);
 %>
   <script language="javascript">
     
@@ -116,7 +117,7 @@
                 <html:text styleClass="textfield" name="groupForm" property="companyCode" size="4" maxlength="3" readonly="true" />
               </td>
             </tr>
-            <% if(request.getAttribute("bsoProcess")!=null){ %>
+            <% if(bsoAdmin){ %>
             <tr>
               <td>
                 <bean:message key="header.bsoLimit" />

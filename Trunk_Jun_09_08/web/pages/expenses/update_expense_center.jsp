@@ -32,7 +32,7 @@
 	
 	boolean submitOk = (epf.getPaymentType() !=null && epf.getPaymentType().equals(TracingConstants.ENUM_VOUCHER))? true :false; 
 	boolean showprint = epf.getPrintcount() == 0 ? true : false;
-	boolean swaBsoPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, a);
+	boolean swaBsoPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, a) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN,a);
 	boolean swaIsInBSO=(epf!=null && a!=null && a.getStation()!=null && epf.getExpenselocation_ID()==a.getStation().getStation_ID());
 	
 	org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources) request
@@ -224,7 +224,7 @@
 								<bean:message key="colname.expense_loc" />
 								<br />
 								<html:select property="expenselocation_ID" styleClass="dropdown"
-									disabled="disabled">
+									disabled="<%=swaBsoPermission %>">
 									<html:options collection="stationlist" property="station_ID"
 										labelProperty="stationcode" />
 								</html:select>
@@ -246,7 +246,7 @@
 								<bean:message key="colname.paycode" />
 								<br />
 								<html:select property="paycode" styleClass="dropdown"
-									disabled="<%=((swaBsoPermission&&swaIsInBSO) || !swaBsoPermission)?false:true %>">
+									disabled="<%=swaBsoPermission %>">
 									<html:option value="ADV">
 										<bean:message key="claim.interim" />
 									</html:option>
@@ -276,14 +276,7 @@
 							<td colspan="3">
 								<bean:message key="agent.comments" />
 								<br />
-								<textarea rows="6" cols="80" readonly="readonly">
-									<c:forEach items="${expensePayoutForm.oldComments}" var="comment" varStatus="status">
-										<c:out value="${comment.agent.username}" />&nbsp;
-										<fmt:formatDate value="${comment.createDate}" />&#x0D;
-										<c:out value="${comment.content}" />
-										<c:if test="${!status.last }">&#x0D;&#x0D;</c:if>
-									</c:forEach>
-								</textarea>
+								<textarea rows="6" cols="80" readonly="readonly"><c:forEach items="${expensePayoutForm.oldComments}" var="comment" varStatus="status"><c:out value="${comment.agent.username}" />&nbsp;<fmt:formatDate value="${comment.createDate}" />&#x0D;<c:out value="${comment.content}" /><c:if test="${!status.last }">&#x0D;&#x0D;</c:if></c:forEach></textarea>
 							</td>
 						</tr>
 					<% 
@@ -331,25 +324,25 @@
                 <td colspan=2>
                   <bean:message key="colname.street_addr1" />
                   <br>
-                  <html:text name="address" property="address1" size="45" maxlength="50" styleClass="textfield" />
+                  <html:text name="address" property="address1" size="45" maxlength="50" styleClass="textfield" disabled="<%=swaBsoPermission %>" />
                 </td>
                 <td nowrap>
                   <bean:message key="colname.street_addr2" />
                   <br>
-                  <html:text name="address" property="address2" size="45" maxlength="50" styleClass="textfield" />
+                  <html:text name="address" property="address2" size="45" maxlength="50" styleClass="textfield" disabled="<%=swaBsoPermission %>" />
                 </td>
               </tr>
               <tr>
                 <td>
                   <bean:message key="colname.city" />
                   <br>
-                  <html:text name="address" property="city" size="15" maxlength="50" styleClass="textfield" />
+                  <html:text name="address" property="city" size="15" maxlength="50" styleClass="textfield" disabled="<%=swaBsoPermission %>" />
                 </td>
                 <td>
                   <bean:message key="colname.state" />
                   <br />
                   <logic:equal name="address" property="countrycode_ID" value="US">
-                    <html:select name="address" property="state_ID" styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'countrycode_ID', 'province');" >
+                    <html:select name="address" property="state_ID" styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'countrycode_ID', 'province');"  disabled="<%=swaBsoPermission %>" >
                       <html:option value="">
                         <bean:message key="select.none" />
                       </html:option>
@@ -357,7 +350,7 @@
                     </html:select>
                   </logic:equal>
                   <logic:equal name="address" property="countrycode_ID" value="">
-                    <html:select name="address" property="state_ID" styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'countrycode_ID', 'province');" >
+                    <html:select name="address" property="state_ID" styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'countrycode_ID', 'province');" disabled="<%=swaBsoPermission %>" >
                       <html:option value="">
                         <bean:message key="select.none" />
                       </html:option>
@@ -382,11 +375,11 @@
                   <html:text name="address" property="province" size="15" maxlength="100" styleClass="disabledtextfield" disabled="true" />
                       </logic:equal>
                       <logic:equal name="address" property="countrycode_ID" value="">
-                  <html:text name="address" property="province" size="15" maxlength="100" styleClass="textfield" />
+                  <html:text name="address" property="province" size="15" maxlength="100" styleClass="textfield" disabled="<%=swaBsoPermission %>" />
                       </logic:equal>
                       <logic:notEqual name="address" property="countrycode_ID" value="">
                         <logic:notEqual name="address" property="countrycode_ID" value="US">
-                  <html:text name="address" property="province" size="15" maxlength="100" styleClass="textfield" />
+                  <html:text name="address" property="province" size="15" maxlength="100" styleClass="textfield" disabled="<%=swaBsoPermission %>" />
                          </logic:notEqual>
                       </logic:notEqual>
                 </td>
@@ -395,12 +388,12 @@
                 <td colspan=2>
                   <bean:message key="colname.zip" />
                   <br>
-                  <html:text name="address" property="zip" size="15" maxlength="11" styleClass="textfield" />
+                  <html:text name="address" property="zip" size="15" maxlength="11" styleClass="textfield" disabled="<%=swaBsoPermission %>" />
                 </td>
                 <td>
                   <bean:message key="colname.country" />
                   <br>
-                  <html:select name="address" property="countrycode_ID" styleClass="dropdown" onchange="checkstate(this,this.form,'state_ID', 'province');">
+                  <html:select name="address" property="countrycode_ID" styleClass="dropdown" onchange="checkstate(this,this.form,'state_ID', 'province');"  disabled="<%=swaBsoPermission %>">
                     <html:option value="">
                       <bean:message key="select.none" />
                     </html:option>
@@ -413,13 +406,13 @@
                 <td colspan="2" width="33%">
                   <bean:message key="colname.email" />
                   <br>
-                  <html:text name="address" property="email" size="42" maxlength="100" styleClass="textfield" />
+                  <html:text name="address" property="email" size="42" maxlength="100" styleClass="textfield" disabled="<%=swaBsoPermission %>" />
                   </logic:equal>
                  <logic:notEqual name="incidentForm" property="incident_ID" value="">
                 <td colspan="3" width="50%">
                   <bean:message key="colname.email" />
                   <br>
-                  <html:text name="address" property="email" size="45" maxlength="100" styleClass="textfield" />
+                  <html:text name="address" property="email" size="45" maxlength="100" styleClass="textfield" disabled="<%=swaBsoPermission %>" />
                   </logic:notEqual>
                   <logic:equal name="incidentForm" property="incident_ID" value="">
 <%
@@ -448,14 +441,27 @@
 %>
                   </logic:equal>
                 </td>
-               </tr>              
+               </tr>       
+               
+		<% if(swaBsoPermission){ %>
+        	<html:hidden name="address" property="email"/>
+			<html:hidden name="address" property="countrycode_ID"/>
+			<html:hidden name="address" property="state_ID"/>
+			<html:hidden name="address" property="address2"/>
+			<html:hidden name="address" property="address1"/>
+			<html:hidden name="address" property="province"/>
+			<html:hidden name="address" property="city"/>
+			<html:hidden name="address" property="zip"/>
+		<% } %>       
             </logic:iterate>
           </logic:present>
           
-		<% if(!((swaBsoPermission&&swaIsInBSO) || !swaBsoPermission)){ %>
+		<% if(swaBsoPermission){ 
+        	if(!swaIsInBSO){%>
 			<html:hidden name="passenger" property="lastname"/>
 			<html:hidden name="passenger" property="firstname"/>
 			<html:hidden name="passenger" property="middlename"/>
+			<% } %>
 		<% } %>
       </logic:iterate> 
 					
@@ -516,13 +522,16 @@
 					</table>
 				</div>
 	</fmt:timeZone>
-	<% if(!((swaBsoPermission&&swaIsInBSO) || !swaBsoPermission)){ %>
-		<html:hidden property="expensetype_id"/>
-		<html:hidden property="newComment"/>
-		<html:hidden property="paycode"/>
-		<html:hidden property="dispDraftpaiddate"/>
-		<html:hidden property="draft"/>
-	<% } %>
+	<% if(swaBsoPermission){ 
+        	if(!swaIsInBSO){%>
+        	
+        		<html:hidden property="expensetype_id"/>
+				<html:hidden property="newComment"/>
+        	<% } %>
+        
+        	<html:hidden property="paycode" />
+        	<html:hidden property="expenselocation_ID" />
+    <% } %>
 </html:form>
 	<logic:present name="receiptName" scope="request">
 	    <script language=javascript>

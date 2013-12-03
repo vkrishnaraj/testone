@@ -18,19 +18,17 @@ boolean hasImmFulfillPermission = UserPermissions.hasPermission(TracingConstants
 boolean hasEmailFulfillPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EMAIL_FULFILLMENT, a);
 boolean hasMailFulfillPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MAIL_FULFILLMENT, a);
 boolean hasCancelPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CANCEL_A_VOUCHER, a);
-
-boolean swaBsoPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, a);
+boolean swaBsoPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, a) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN,a);
 boolean swaIsInBSO=(epf!=null && a!=null && a.getStation()!=null && epf.getExpenselocation_ID()==a.getStation().getStation_ID());
-boolean voucherValue =epf.getVoucheramt()>0;
 
 
 %>
 
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
-  <SCRIPT LANGUAGE="JavaScript">
+  <SCRIPT SRC="deployment/main/js/date.js"></SCRIPT>
+  <SCRIPT SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
+  <SCRIPT SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
+  <SCRIPT SRC="deployment/main/js/popcalendar.js"></SCRIPT>
+  <SCRIPT>
 
 	var cal1xx = new CalendarPopup();	
 
@@ -46,7 +44,7 @@ boolean voucherValue =epf.getVoucheramt()>0;
             <bean:message key="colname.draftreqdate" />
             (<%= a.getDateformat().getFormat() %>)
             <br />
-            <html:text property="dispDraftreqdate"  size="15" maxlength="10" styleClass="textfield" />
+            <html:text property="dispDraftreqdate"  size="15" maxlength="10" styleClass="textfield" disabled="<%=swaBsoPermission %>"/>
             <img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.expensePayoutForm.dispDraftreqdate,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">
         </td>
         <td>
@@ -63,14 +61,14 @@ boolean voucherValue =epf.getVoucheramt()>0;
            <br />
                      <bean:message key="colname.currency" />
            <br />
-           <html:select property="currency_ID" styleClass="dropdown">
+           <html:select property="currency_ID" styleClass="dropdown" disabled="<%=((swaBsoPermission&&swaIsInBSO) || !swaBsoPermission)?false:true %>">
            		<html:options collection="currencylist" property="currency_ID" labelProperty="id_desc" />
            </html:select>
         </td>
         <td id="voucherAmount">
             <bean:message key="issue.voucheramt" />
             <br />
-			<html:text property="voucheramt" size="15" maxlength="10" styleClass="textfield" disabled="<%=((!voucherValue && swaBsoPermission && swaIsInBSO) || !swaBsoPermission)?false:true %>" />
+			<html:text property="voucheramt" size="15" maxlength="10" styleClass="textfield" disabled="<%=swaBsoPermission%>" />
 			<br />
 			<% if(hasImmFulfillPermission || hasEmailFulfillPermission || hasMailFulfillPermission) { %>			
 						<bean:message key="colname.distribution_method" />
@@ -97,11 +95,21 @@ boolean voucherValue =epf.getVoucheramt()>0;
         <td>
             <bean:message key="colname.mileageamt" />
             <br />
-            <html:text property="mileageamt" size="15" maxlength="10" styleClass="textfield" />
+            <html:text property="mileageamt" size="15" maxlength="10" styleClass="textfield" disabled="<%=swaBsoPermission %>"/>
         </td>                        
      </tr>
 
 	 
-        <% if(voucherValue && swaBsoPermission){ %>
+        <% if(swaBsoPermission){ 
+        	if(!swaIsInBSO){%>
+        	
+        		<html:hidden property="checkamt" />
+        		<html:hidden property="dispDraftpaiddate" />
+        		<html:hidden property="draft" />
+        		<html:hidden property="currency_ID"/>
+        	<% } %>
+        
         	<html:hidden property="voucheramt" />
+        	<html:hidden property="dispDraftreqdate" />
+        	<html:hidden property="mileageamt" />
         <% } %>
