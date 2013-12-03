@@ -156,7 +156,7 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 	
 	@Test
 	public void resetPermissions(){
-		verifyTrue(setPermissions(new String[] { "680","681"}, new boolean[] { true,false}));
+		verifyTrue(setPermissions(new String[] { "680","681"}, new boolean[] { true,true}));
 	}
 	
 }
