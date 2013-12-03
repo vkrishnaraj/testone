@@ -255,6 +255,7 @@ alter table audit_issuance_item_inventory add verified_incident tinyInt default 
 alter table audit_issuance_item_quantity add verified_incident tinyInt default 0;
 
 insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group) VALUES (680,'BSO Expense Process','Allows users to create Expense Payouts based on Established BSO Process',59,'',0,99,0);
+insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group) VALUES (681,'BSO Expense Admin','Marks Usergroup as a Administrator to not be limited by BSO Process',39,'',0,99,0);
 alter table usergroup add column bsoLimit double default 0;
 update usergroup set bsoLimit=0;
 
