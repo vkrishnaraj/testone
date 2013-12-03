@@ -10,7 +10,8 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 
 	@Test
 	public void testSetBSOLimit(){
-		clickMenu("menucol_10.3");
+		verifyTrue(setPermissions(new String[] { "681"}, new boolean[] { true}));
+		clickMenu("menucol_9.3");
 
 		if (checkNoErrorPage()) {
 			click(By.xpath("(//a[contains(text(),'Admin')])[3]"));
@@ -44,7 +45,7 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 	
 	@Test
 	public void testCreateBSOExpensePayouts(){
-		verifyTrue(setPermissions(new String[] { "680"}, new boolean[] { true}));
+		verifyTrue(setPermissions(new String[] { "680", "681"}, new boolean[] { true,false}));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		click(By.name("addnewexpense"));
 
@@ -68,7 +69,6 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 			verifyTrue(isEditable(By.name("draft")));
 			verifyTrue(isEditable(By.name("dispDraftpaiddate")));
 			verifyTrue(isEditable(By.name("checkamt")));
-			verifyTrue(isEditable(By.name("voucheramt")));
 			verifyTrue(isEditable(By.name("newComment")));
 			verifyTrue(isEditable(By.name("lastname")));
 			verifyTrue(isEditable(By.name("firstname")));
@@ -100,7 +100,6 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 			verifyFalse(isEditable(By.name("draft")));
 			verifyFalse(isEditable(By.name("dispDraftpaiddate")));
 			verifyFalse(isEditable(By.name("checkamt")));
-			verifyFalse(isEditable(By.name("voucheramt")));
 			verifyFalse(isEditable(By.name("newComment")));
 			verifyFalse(isEditable(By.name("lastname")));
 			verifyFalse(isEditable(By.name("firstname")));
@@ -117,27 +116,11 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 		} else {
 			System.out.println("!!!!!!!!!!! ERROR - Changing Station  !!!!!!!!!");
 		}
-
-		if (checkNoErrorPage()) {
-			verifyTrue(isEditable(By.name("voucheramt")));
-		    type(By.name("voucheramt"),"151");
-		    click(By.id("button"));
-			
-		} else {
-			System.out.println("!!!!!!!!!!! ERROR - Entering Existing Expense Payout  !!!!!!!!!");
-		}
-		
-		if (checkNoErrorPage()) {
-			verifyFalse(isEditable(By.name("voucheramt")));
-		    goToTaskManager();			
-		} else {
-			System.out.println("!!!!!!!!!!! ERROR - Updating Voucher on Expense Payout  !!!!!!!!!");
-		}
 	}
 
 	@Test
-	public void testCreateNonBSOExpensePayouts(){
-		verifyTrue(setPermissions(new String[] { "680"}, new boolean[] { false}));
+	public void testCreateAdminBSOExpensePayouts(){
+		verifyTrue(setPermissions(new String[] { "681"}, new boolean[] { true}));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		click(By.name("addnewexpense"));
 
@@ -153,7 +136,6 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 			verifyTrue(isEditable(By.name("draft")));
 			verifyTrue(isEditable(By.name("dispDraftpaiddate")));
 			verifyTrue(isEditable(By.name("checkamt")));
-			verifyTrue(isEditable(By.name("voucheramt")));
 			verifyTrue(isEditable(By.name("newComment")));
 			verifyTrue(isEditable(By.name("lastname")));
 			verifyTrue(isEditable(By.name("firstname")));
@@ -170,6 +152,11 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 		} else {
 			System.out.println("!!!!!!!!!!! ERROR - Updating Expense Payout  !!!!!!!!!");
 		}
+	}
+	
+	@Test
+	public void resetPermissions(){
+		verifyTrue(setPermissions(new String[] { "680","681"}, new boolean[] { true,false}));
 	}
 	
 }
