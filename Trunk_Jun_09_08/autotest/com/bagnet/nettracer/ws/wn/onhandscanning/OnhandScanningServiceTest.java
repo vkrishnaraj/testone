@@ -31,6 +31,7 @@ import com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSPassenger;
 import com.bagnet.nettracer.ws.wn.onhandscanning.AddBagForLZDocument.AddBagForLZ;
 import com.bagnet.nettracer.ws.wn.onhandscanning.CreateUpdateOnhandDocument.CreateUpdateOnhand;
+import com.bagnet.nettracer.ws.wn.onhandscanning.CreateUpdateOnhandResponseDocument.CreateUpdateOnhandResponse;
 import com.bagnet.nettracer.ws.wn.onhandscanning.LookupOnhandLZDocument.LookupOnhandLZ;
 import com.bagnet.nettracer.ws.wn.onhandscanning.LookupOnhandLZResponseDocument.LookupOnhandLZResponse;
 import com.bagnet.nettracer.ws.wn.onhandscanning.LookupOnhandReturnDocument.LookupOnhandReturn;
@@ -221,6 +222,7 @@ public class OnhandScanningServiceTest {
 		ohd.setColor("WT");
 		ohd.setType("1");
 		WSItinerary itin = ohd.addNewItineraries();
+		itin.setFlightnum("456");//2D tag
 		itin.setLegto("XAX");
 		itin.setLegfrom("AXA");
 		
@@ -245,6 +247,7 @@ public class OnhandScanningServiceTest {
 		assertTrue(ret.getOnhand().getLastname().equals("Anderson"));
 		assertTrue(ret.getOnhand().getType().equals("1"));
 		assertTrue(ret.getOnhand().getColor().equals("WT"));
+		assertTrue(ret.getOnhand().getItinerariesArray(0).getFlightnum().equals("456"));
 		assertTrue(ret.getOnhand().getItinerariesArray(0).getLegfrom().equals("AXA"));
 		assertTrue(ret.getOnhand().getItinerariesArray(0).getLegto().equals("XAX"));
 		
@@ -298,7 +301,6 @@ public class OnhandScanningServiceTest {
 		CreateUpdateOnhandDocument doc = getBlankOhdDocuement();
 
 		String bagtag = "WN000009";
-		String posId = "bin1";
 		closeOHD(bagtag, stationcode);
 
 		createOHD(bagtag, stationcode);
@@ -308,6 +310,7 @@ public class OnhandScanningServiceTest {
 		WSOHD ohd = doc.getCreateUpdateOnhand().addNewOnhand();
 		ohd.setBagtagnum(bagtag);
 		ohd.setHoldingStation(stationcode);
+		ohd.addNewItineraries().setLegto("XAX");//testing the update of a 1D tag
 		
 //		doc.getCreateUpdateOnhand().setLateCheckIndicator(true);
 //		doc.getCreateUpdateOnhand().setPositionId(posId);
@@ -325,8 +328,9 @@ public class OnhandScanningServiceTest {
 		
 		assertTrue(ret.getLateCheckIndicator() == false);
 		assertTrue(ret.getPositionId() == null);
+		assertTrue(ret.getOnhand().getItinerariesArray(0).getFlightnum().equals("123"));
 		assertTrue(ret.getOnhand().getItinerariesArray(0).getLegfrom().equals("ATL"));
-		assertTrue(ret.getOnhand().getItinerariesArray(0).getLegto().equals("LAX"));
+		assertTrue(ret.getOnhand().getItinerariesArray(0).getLegto().equals("XAX"));
 		assertTrue(ret.getOnhand().getColor().equals("BK"));
 		assertTrue(ret.getOnhand().getType().equals("21"));
 		assertTrue(ret.getOnhand().getFirstname().equals("Bill"));
@@ -778,6 +782,86 @@ public class OnhandScanningServiceTest {
 		assertTrue(responseLZ.getOnhand().getItinerariesArray(0).getLegto().equals("AXA"));
 	}
 
+	@Test
+	public void requiredFields1d2dTest(){
+		CreateUpdateOnhandDocument doc = getBlankOhdDocuement();
+		CreateUpdateOnhandResponseDocument resDoc = CreateUpdateOnhandResponseDocument.Factory.newInstance();
+		CreateUpdateOnhandResponse res = resDoc.addNewCreateUpdateOnhandResponse();
+		ServiceResponse serviceResponse = res.addNewReturn();
+		
+		//Testing required fields to 2D tag
+		WSOHD ohd = doc.getCreateUpdateOnhand().addNewOnhand();
+		ohd.addNewItineraries().setFlightnum("123");
+		service.addOhdReqFields(ohd, serviceResponse);
+		String [] errors = serviceResponse.getErrorArray();
+		boolean firstname=false;
+		boolean lastname=false;
+		boolean holdingstation=false;
+		boolean tag=false;
+		boolean color=false;
+		boolean type=false;
+		for(int i = 0; i < errors.length; i++){
+			if(errors[i].equals(OnhandScanningServiceImplementation.ERROR_REQ_BAGTAG)){
+				tag=true;
+			}
+			if(errors[i].equals(OnhandScanningServiceImplementation.ERROR_REQ_HOLDINGSTATION)){
+				holdingstation=true;
+			}
+			if(errors[i].equals(OnhandScanningServiceImplementation.ERROR_REQ_FIRSTNAME)){
+				firstname=true;
+			}
+			if(errors[i].equals(OnhandScanningServiceImplementation.ERROR_REQ_LASTNAME)){
+				lastname=true;
+			}
+			if(errors[i].equals(OnhandScanningServiceImplementation.ERROR_REQ_COLOR)){
+				color=true;
+			}
+			if(errors[i].equals(OnhandScanningServiceImplementation.ERROR_REQ_TYPE)){
+				type=true;
+			}
+		}
+		assertTrue(firstname && lastname && holdingstation && tag && !color && !type);
+		
+		//Testing required fields to 1D tag
+		doc = getBlankOhdDocuement();
+		resDoc = CreateUpdateOnhandResponseDocument.Factory.newInstance();
+		res = resDoc.addNewCreateUpdateOnhandResponse();
+		serviceResponse = res.addNewReturn();
+		ohd = doc.getCreateUpdateOnhand().addNewOnhand();
+		service.addOhdReqFields(ohd, serviceResponse);
+		errors = serviceResponse.getErrorArray();
+		firstname=false;
+		lastname=false;
+		holdingstation=false;
+		tag=false;
+		color=false;
+		type=false;
+		
+		for(int i = 0; i < errors.length; i++){
+			if(errors[i].equals(OnhandScanningServiceImplementation.ERROR_REQ_BAGTAG)){
+				tag=true;
+			}
+			if(errors[i].equals(OnhandScanningServiceImplementation.ERROR_REQ_HOLDINGSTATION)){
+				holdingstation=true;
+			}
+			if(errors[i].equals(OnhandScanningServiceImplementation.ERROR_REQ_FIRSTNAME)){
+				firstname=true;
+			}
+			if(errors[i].equals(OnhandScanningServiceImplementation.ERROR_REQ_LASTNAME)){
+				lastname=true;
+			}
+			if(errors[i].equals(OnhandScanningServiceImplementation.ERROR_REQ_COLOR)){
+				color=true;
+			}
+			if(errors[i].equals(OnhandScanningServiceImplementation.ERROR_REQ_TYPE)){
+				type=true;
+			}
+		}
+		assertTrue(!firstname && !lastname && holdingstation && tag && color && type);
+		
+		
+	}
+	
 	private void closeOHD(String bagtag, String foundStation) {
 		Station foundstation = StationBMO.getStationByCode(foundStation,
 				companycode);

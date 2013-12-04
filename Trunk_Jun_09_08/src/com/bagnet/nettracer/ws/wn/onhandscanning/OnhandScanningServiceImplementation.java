@@ -26,6 +26,7 @@ import com.bagnet.nettracer.tracing.utils.OHDUtils;
 import com.bagnet.nettracer.tracing.utils.SecurityUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.ws.core.WSCoreOHDUtil;
+import com.bagnet.nettracer.ws.core.pojo.xsd.WSItinerary;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD;
 import com.bagnet.nettracer.ws.wn.onhandscanning.AddBagForLZResponseDocument.AddBagForLZResponse;
 import com.bagnet.nettracer.ws.wn.onhandscanning.CreateUpdateOnhandResponseDocument.CreateUpdateOnhandResponse;
@@ -444,15 +445,27 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 	
 	
 	/**
-	 * Checks the required field for creating an OHD.  The set of required fields will differ based on the presents an itinerary.
+	 * Checks the required field for creating an OHD.  
+	 * The set of required fields will differ based on the presents of an itinerary segment with a flight number.
 	 * 
 	 * @param wsohd
 	 * @param response
 	 * @return
 	 */
-	private boolean addOhdReqFields(WSOHD wsohd, ServiceResponse response){
+	protected boolean addOhdReqFields(WSOHD wsohd, ServiceResponse response){
 		boolean success = true;
+		boolean hasFlightNumber = false;
 		if(wsohd != null && wsohd.getItinerariesArray() != null && wsohd.getItinerariesArray().length > 0){
+			WSItinerary[] itinArray = wsohd.getItinerariesArray();
+			for(int i = 0; i < itinArray.length; i++){
+				if(itinArray[i] != null && itinArray[i].getFlightnum() != null && itinArray[i].getFlightnum().length() > 0){
+					hasFlightNumber = true;
+					break;
+				}
+			}
+		}
+		
+		if(hasFlightNumber){//SWA defines this as a 2D tag
 			if(wsohd.getBagtagnum() == null || wsohd.getBagtagnum().length() == 0){
 				response.addError(ERROR_REQ_BAGTAG);
 				success = false;
@@ -469,7 +482,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 				response.addError(ERROR_REQ_LASTNAME);
 				success = false;
 			}
-		} else if (wsohd != null){
+		} else if (wsohd != null){//SWA defines this as a 1D tag
 			if(wsohd.getBagtagnum() == null || wsohd.getBagtagnum().length() == 0){
 				response.addError(ERROR_REQ_BAGTAG);
 				success = false;
@@ -549,8 +562,13 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 	 *   record locator
 	 *   lateCheckInd
 	 *   posId
-	 *   itinerary
+	 *   itinerary - 2D tag is defined as an one or more itinerary segments with a flight number.
+	 *   	if the provided itinerary has a flight number (2D tag), replace the existing itinerary with the one provided.
 	 *   
+	 *   	A 1D tag is defined as single itinerary segment with no flight number (only dest station). 
+	 *   	If 1D tag is provided, update the existing itinerary's last segment's dst station with the one provided.  In the case of updating an existing
+	 *   	ohd with no segments, create a new segment with destination only. 
+	 *   	
 	 * 
 	 * @param ohd
 	 * @param updateLateCheck - since lateCheckInd is a boolean, 
@@ -584,11 +602,35 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 				oldohd.setRecord_locator(ohd.getRecord_locator());
 			}
 			if(ohd.getItinerary() != null && ohd.getItinerary().size() > 0){
-				oldohd.setItinerary(ohd.getItinerary());
-				Iterator<OHD_Itinerary> i = oldohd.getItinerary().iterator();
-				while(i.hasNext()){
-					OHD_Itinerary itin = (OHD_Itinerary) i.next();
-					itin.setOhd(oldohd);
+				//check if the itinerary provide contains a single segment with no flight number (1D)
+				boolean oneDTag = false;
+				boolean hasExistingItinerary = oldohd.getItinerary() != null && oldohd.getItinerary().size() > 0;
+				OHD_Itinerary segment = null;
+				if(ohd.getItinerary().size() == 1){
+					segment = ohd.getItinerary().iterator().next();
+					if(segment != null && (segment.getFlightnum() == null || segment.getFlightnum().length() == 0)){
+						oneDTag = true;
+					}
+				} 
+
+				if(oneDTag && hasExistingItinerary){
+					//has existing itin, update final segment with provided dest
+					Iterator<OHD_Itinerary> i = oldohd.getItinerary().iterator();
+					while(i.hasNext()){
+						OHD_Itinerary itin = (OHD_Itinerary) i.next();
+						if(!i.hasNext()){
+							//final segment
+							itin.setLegto(segment.getLegto());
+						}
+					} 
+				} else {
+					//2D tag or 1D tag with no existing itin to update, replace the itinerary with one provided
+					oldohd.setItinerary(ohd.getItinerary());
+					Iterator<OHD_Itinerary> i = oldohd.getItinerary().iterator();
+					while(i.hasNext()){
+						OHD_Itinerary itin = (OHD_Itinerary) i.next();
+						itin.setOhd(oldohd);
+					}
 				}
 			}
 			if(updateLateCheck){
