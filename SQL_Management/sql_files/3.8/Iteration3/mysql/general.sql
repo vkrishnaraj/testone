@@ -283,3 +283,7 @@ insert into systemcomponents (component_id,component_name,component_desc,parent_
    1102,'Cust_Comm_Rejection_Queue','Manage rejection queue for customer communiations.',15,'customerCommunicationsRejected.do',1,100,3);
 
 alter table task add incidentActivityId bigint default null; 
+
+alter table expensepayout add column ordernum varchar(10);
+alter table expensepayout modify column paytype varchar(10);
+alter table expensepayout add column cancelreason varchar(10);
