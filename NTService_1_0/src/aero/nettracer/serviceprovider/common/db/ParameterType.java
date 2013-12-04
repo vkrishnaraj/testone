@@ -1,7 +1,9 @@
 package aero.nettracer.serviceprovider.common.db;
 
 public enum ParameterType {
-	RESERVATION_SYSTEM_TYPE, TEST, 
+	RESERVATION_SYSTEM_TYPE,
+	VOUCHER_SYSTEM_TYPE,
+	TEST, 
 	WTSM_GET_AHL,
 	WTSM_CREATE_AHL,
 	WTSM_AMEND_AHL,

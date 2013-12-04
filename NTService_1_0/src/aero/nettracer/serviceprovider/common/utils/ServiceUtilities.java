@@ -24,6 +24,7 @@ import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 import aero.nettracer.serviceprovider.ws_1_0.res.FlightServiceInterface;
 import aero.nettracer.serviceprovider.ws_1_0.res.ReservationInterface;
 import aero.nettracer.serviceprovider.ws_1_0.res.sabre.Reservation;
+import aero.nettracer.serviceprovider.ws_1_0.res.VoucherServiceInterface;
 
 public class ServiceUtilities {
 
@@ -116,6 +117,33 @@ public class ServiceUtilities {
 			if (value.equals(ReservationSystemType.CEBS.name())) {
 				// TODO: Change to singleton? Use spring?
 				return new aero.nettracer.serviceprovider.ws_1_0.res.cebs.FlightService();
+			}
+		}
+		throw new ConfigurationException();
+	}
+	
+	/**
+	 * Returns VoucherService implementation based on the voucher/reservation system specified by the user profile
+	 * 
+	 * Currently SWA is the only implementation, they handle vouchers through their res system.  For any future voucher
+	 * integrations that is not part of a reservation system, consider creating and mapping the implementation class to the
+	 * aero.nettracer.serviceprovider.ws_1_0.voucher package.  Alternately, consider abstracting the res package.
+	 * 
+	 * TODO - consider using Spring injection (jiri NT-1292)
+	 * 
+	 * @param user
+	 * @return
+	 * @throws ConfigurationException
+	 */
+	public static VoucherServiceInterface getVoucherService(User user) throws ConfigurationException {
+		Map<ParameterType, String> parameters = user.getProfile()
+				.getParameters();
+		if (parameters.containsKey(ParameterType.VOUCHER_SYSTEM_TYPE)) {
+			String value = parameters
+					.get(ParameterType.VOUCHER_SYSTEM_TYPE);
+			if (value.equals(ReservationSystemType.CEBS.name())) {
+				// TODO: Change to singleton? Use spring?
+				return new aero.nettracer.serviceprovider.ws_1_0.res.cebs.VoucherService();
 			}
 		}
 		throw new ConfigurationException();

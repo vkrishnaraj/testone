@@ -21,6 +21,10 @@
             <actionMapping>urn:getReservationData</actionMapping>
             <outputActionMapping>urn:getReservationDataResponse</outputActionMapping>
         </operation>
+        <operation name="submitVoucher" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://ws_1_0.serviceprovider.nettracer.aero">
+            <actionMapping>urn:submitVoucher</actionMapping>
+            <outputActionMapping>urn:submitVoucherResponse</outputActionMapping>
+        </operation>
         <operation name="getFlightData" mep="http://www.w3.org/ns/wsdl/in-out" namespace="http://ws_1_0.serviceprovider.nettracer.aero">
             <actionMapping>urn:getFlightData</actionMapping>
             <outputActionMapping>urn:getFlightDataResponse</outputActionMapping>

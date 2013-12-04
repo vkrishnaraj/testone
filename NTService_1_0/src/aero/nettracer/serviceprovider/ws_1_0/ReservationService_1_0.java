@@ -3,11 +3,13 @@ package aero.nettracer.serviceprovider.ws_1_0;
 import java.util.Calendar;
 
 import aero.nettracer.serviceprovider.ws_1_0.common.RequestHeader;
+import aero.nettracer.serviceprovider.ws_1_0.common.Voucher;
 import aero.nettracer.serviceprovider.ws_1_0.response.EnplanementResponse;
 import aero.nettracer.serviceprovider.ws_1_0.response.FlightDataResponse;
 import aero.nettracer.serviceprovider.ws_1_0.response.OsiResponse;
 import aero.nettracer.serviceprovider.ws_1_0.response.RemarkResponse;
 import aero.nettracer.serviceprovider.ws_1_0.response.ReservationResponse;
+import aero.nettracer.serviceprovider.ws_1_0.response.VoucherResponse;
 
 public class ReservationService_1_0 {
 
@@ -31,4 +33,7 @@ public class ReservationService_1_0 {
 		return null;
 	}
 	
+	public VoucherResponse submitVoucher(RequestHeader header, Voucher voucher){
+		return null;
+	}
 }

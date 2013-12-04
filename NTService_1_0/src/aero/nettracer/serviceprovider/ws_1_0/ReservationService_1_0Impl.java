@@ -17,14 +17,18 @@ import aero.nettracer.serviceprovider.common.exceptions.UserNotAuthorizedExcepti
 import aero.nettracer.serviceprovider.common.utils.ServiceUtilities;
 import aero.nettracer.serviceprovider.ws_1_0.GetFlightDataResponseDocument.GetFlightDataResponse;
 import aero.nettracer.serviceprovider.ws_1_0.GetReservationDataResponseDocument.GetReservationDataResponse;
+import aero.nettracer.serviceprovider.ws_1_0.SubmitVoucherResponseDocument.SubmitVoucherResponse;
 import aero.nettracer.serviceprovider.ws_1_0.WriteRemarkResponseDocument.WriteRemarkResponse;
 import aero.nettracer.serviceprovider.ws_1_0.common.xsd.RequestHeader;
+import aero.nettracer.serviceprovider.ws_1_0.common.xsd.Voucher;
 import aero.nettracer.serviceprovider.ws_1_0.common.xsd.WebServiceError;
 import aero.nettracer.serviceprovider.ws_1_0.res.FlightServiceInterface;
 import aero.nettracer.serviceprovider.ws_1_0.res.ReservationInterface;
+import aero.nettracer.serviceprovider.ws_1_0.res.VoucherServiceInterface;
 import aero.nettracer.serviceprovider.ws_1_0.response.xsd.FlightDataResponse;
 import aero.nettracer.serviceprovider.ws_1_0.response.xsd.RemarkResponse;
 import aero.nettracer.serviceprovider.ws_1_0.response.xsd.ReservationResponse;
+import aero.nettracer.serviceprovider.ws_1_0.response.xsd.VoucherResponse;
 
 /**
  * ReservationService_1_0Skeleton java skeleton for the axisService
@@ -149,7 +153,6 @@ public class ReservationService_1_0Impl extends ReservationService_1_0Skeleton{
 	 * 
 	 * @param getFlightData
 	 */
-
 	public aero.nettracer.serviceprovider.ws_1_0.GetFlightDataResponseDocument getFlightData(
 			aero.nettracer.serviceprovider.ws_1_0.GetFlightDataDocument getFlightData){
 		
@@ -190,5 +193,46 @@ public class ReservationService_1_0Impl extends ReservationService_1_0Skeleton{
 		
 		return doc;
 		
+	}
+	
+	/**
+	 * Service implementation for submitting vouchers
+	 * 
+	 * @param submitVoucher
+	 */
+	public aero.nettracer.serviceprovider.ws_1_0.SubmitVoucherResponseDocument submitVoucher(
+			aero.nettracer.serviceprovider.ws_1_0.SubmitVoucherDocument submitVoucher){
+		SubmitVoucherResponseDocument doc = SubmitVoucherResponseDocument.Factory.newInstance();
+		SubmitVoucherResponse res = doc.addNewSubmitVoucherResponse();
+		VoucherResponse ret = res.addNewReturn();
+		
+		RequestHeader header = submitVoucher.getSubmitVoucher().getHeader();
+		String username = header.getUsername();
+		String password = header.getPassword();
+		
+		try {
+			//Auth user
+			User user = ServiceUtilities.getAndAuthorizeUser(username,
+					password, PermissionType.VOUCHER);
+			VoucherServiceInterface service = ServiceUtilities.getVoucherService(user);
+			
+			
+			//map request parameters
+			Voucher voucher = submitVoucher.getSubmitVoucher().getVoucher();
+			
+			//submit request and return
+			ret = service.submitVoucher(user, voucher);
+			res.setReturn(ret);
+		} catch (UserNotAuthorizedException e) {
+			WebServiceError error = ret.addNewError();
+			error.setDescription(ServiceConstants.USER_NOT_AUTHORIZED);
+			return doc;
+		} catch (ConfigurationException e) {
+			WebServiceError error = ret.addNewError();
+			error.setDescription(ServiceConstants.CONFIGURATION_ERROR);
+			return doc;
+		} 
+		
+		return doc;
 	}
 }

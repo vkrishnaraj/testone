@@ -20,6 +20,21 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+            <xs:element name="submitVoucher">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="header" nillable="true" type="ax22:RequestHeader"/>
+                        <xs:element minOccurs="0" name="voucher" nillable="true" type="ax22:Voucher"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="submitVoucherResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax23:VoucherResponse"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
             <xs:element name="getReservationData">
                 <xs:complexType>
                     <xs:sequence>
@@ -97,6 +112,22 @@
                     </xs:extension>
                 </xs:complexContent>
             </xs:complexType>
+            <xs:complexType name="VoucherResponse">
+                <xs:complexContent>
+                    <xs:extension base="ax23:GenericResponse">
+                        <xs:sequence>
+                            <xs:element minOccurs="0" name="cancelDate" nillable="true" type="xs:dateTime"/>
+                            <xs:element minOccurs="0" name="issueDate" nillable="true" type="xs:dateTime"/>
+                            <xs:element minOccurs="0" name="message" nillable="true" type="xs:string"/>
+                            <xs:element minOccurs="0" name="orderNumber" nillable="true" type="xs:string"/>
+                            <xs:element minOccurs="0" name="returnCode" type="xs:int"/>
+                            <xs:element minOccurs="0" name="securityCode" nillable="true" type="xs:string"/>
+                            <xs:element minOccurs="0" name="status" nillable="true" type="xs:string"/>
+                            <xs:element minOccurs="0" name="voucherId" nillable="true" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
             <xs:complexType name="ReservationResponse">
                 <xs:complexContent>
                     <xs:extension base="ax23:GenericResponse">
@@ -154,6 +185,50 @@
                     <xs:element minOccurs="0" name="systemResponse" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
+            <xs:complexType name="Voucher">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="agentUserName" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="amount" type="xs:double"/>
+                    <xs:element minOccurs="0" name="department" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="distributionMethod" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="ntIncidentId" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="passenger" nillable="true" type="ax21:Passenger"/>
+                    <xs:element minOccurs="0" name="pnr" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="remark" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="station" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="status" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="voucherId" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Passenger">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="addresses" nillable="true" type="ax21:Address"/>
+                    <xs:element minOccurs="0" name="ffAirline" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="ffNumber" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="ffStatus" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="firstname" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="lastname" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="middlename" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="salutation" type="xs:int"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Address">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="address1" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="address2" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="altPhone" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="city" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="country" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="emailAddress" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="homePhone" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="mobilePhone" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="pagerNumber" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="province" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="state" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="workPhone" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="zip" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
             <xs:complexType name="Reservation">
                 <xs:sequence>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="bagItinerary" nillable="true" type="ax21:Itinerary"/>
@@ -194,35 +269,6 @@
                     <xs:element minOccurs="0" name="timeChecked" nillable="true" type="xs:dateTime"/>
                 </xs:sequence>
             </xs:complexType>
-            <xs:complexType name="Passenger">
-                <xs:sequence>
-                    <xs:element minOccurs="0" name="addresses" nillable="true" type="ax21:Address"/>
-                    <xs:element minOccurs="0" name="ffAirline" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="ffNumber" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="ffStatus" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="firstname" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="lastname" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="middlename" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="salutation" type="xs:int"/>
-                </xs:sequence>
-            </xs:complexType>
-            <xs:complexType name="Address">
-                <xs:sequence>
-                    <xs:element minOccurs="0" name="address1" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="address2" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="altPhone" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="city" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="country" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="emailAddress" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="homePhone" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="mobilePhone" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="pagerNumber" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="province" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="state" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="workPhone" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="zip" nillable="true" type="xs:string"/>
-                </xs:sequence>
-            </xs:complexType>
         </xs:schema>
     </wsdl:types>
     <wsdl:message name="getOsiContentsRequest">
@@ -236,6 +282,12 @@
     </wsdl:message>
     <wsdl:message name="writeRemarkResponse">
         <wsdl:part name="parameters" element="ns:writeRemarkResponse"/>
+    </wsdl:message>
+    <wsdl:message name="submitVoucherRequest">
+        <wsdl:part name="parameters" element="ns:submitVoucher"/>
+    </wsdl:message>
+    <wsdl:message name="submitVoucherResponse">
+        <wsdl:part name="parameters" element="ns:submitVoucherResponse"/>
     </wsdl:message>
     <wsdl:message name="getFlightDataRequest">
         <wsdl:part name="parameters" element="ns:getFlightData"/>
@@ -264,6 +316,10 @@
             <wsdl:input message="ns:writeRemarkRequest" wsaw:Action="urn:writeRemark"/>
             <wsdl:output message="ns:writeRemarkResponse" wsaw:Action="urn:writeRemarkResponse"/>
         </wsdl:operation>
+        <wsdl:operation name="submitVoucher">
+            <wsdl:input message="ns:submitVoucherRequest" wsaw:Action="urn:submitVoucher"/>
+            <wsdl:output message="ns:submitVoucherResponse" wsaw:Action="urn:submitVoucherResponse"/>
+        </wsdl:operation>
         <wsdl:operation name="getFlightData">
             <wsdl:input message="ns:getFlightDataRequest" wsaw:Action="urn:getFlightData"/>
             <wsdl:output message="ns:getFlightDataResponse" wsaw:Action="urn:getFlightDataResponse"/>
@@ -281,6 +337,15 @@
         <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
         <wsdl:operation name="getOsiContents">
             <soap:operation soapAction="urn:getOsiContents" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="submitVoucher">
+            <soap:operation soapAction="urn:submitVoucher" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -336,6 +401,15 @@
                 <soap12:body use="literal"/>
             </wsdl:output>
         </wsdl:operation>
+        <wsdl:operation name="submitVoucher">
+            <soap12:operation soapAction="urn:submitVoucher" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
         <wsdl:operation name="writeRemark">
             <soap12:operation soapAction="urn:writeRemark" style="document"/>
             <wsdl:input>
@@ -382,6 +456,15 @@
             </wsdl:input>
             <wsdl:output>
                 <mime:content type="text/xml" part="getOsiContents"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="submitVoucher">
+            <http:operation location="ReservationService_1_0/submitVoucher"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="submitVoucher"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="submitVoucher"/>
             </wsdl:output>
         </wsdl:operation>
         <wsdl:operation name="writeRemark">
