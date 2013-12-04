@@ -7,7 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 
+
+
 import com.bagnet.nettracer.tracing.db.BagDrop;
+import com.bagnet.nettracer.tracing.forms.ExpensePayoutForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
@@ -94,5 +97,10 @@ public class ReservationIntegrationImpl implements
 	public ArrayList<BagDrop> getFlightInfo(String stationcode, Calendar date) {
 		// TODO Auto-generated method stub
 		return target.getFlightInfo(stationcode, date);
+	}
+	
+	@Override
+	public ArrayList<String> submitVoucher (com.bagnet.nettracer.tracing.db.Incident inc, String status, ExpensePayoutForm epf){
+		return target.submitVoucher(inc, status, epf);
 	}
 }

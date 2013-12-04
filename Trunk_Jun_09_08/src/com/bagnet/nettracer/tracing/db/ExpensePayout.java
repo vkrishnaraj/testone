@@ -70,6 +70,8 @@ public class ExpensePayout implements Serializable {
 	private String distributemethod;
 	private String paytype;
 	private int printcount;
+	private String ordernum;
+	private String cancelreason;
 
 	//not part of the model
 	private String _DATEFORMAT;
@@ -291,13 +293,31 @@ public class ExpensePayout implements Serializable {
 		this.distributemethod = distributemethod;
 	}
 	
-	@Column(length = 5)	
+	@Column(length = 10)
+	public String getCancelreason() {
+		return cancelreason;
+	}
+
+	public void setCancelreason(String cancelreason) {
+		this.cancelreason = cancelreason;
+	}
+	
+	@Column(length = 10)	
 	public String getPaytype() {
 		return paytype;
 	}
 
 	public void setPaytype(String paytype) {
 		this.paytype = paytype;
+	}
+	
+	@Column(length = 10)	
+	public String getOrdernum() {
+		return ordernum;
+	}
+
+	public void setOrdernum(String ordernum) {
+		this.ordernum = ordernum;
 	}
 	
 	@Basic

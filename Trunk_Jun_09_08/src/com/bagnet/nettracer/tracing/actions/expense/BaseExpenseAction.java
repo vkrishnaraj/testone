@@ -133,6 +133,11 @@ public abstract class BaseExpenseAction extends CheckedAction {
 		epform.setTz(user.getCurrenttimezone());
 		epform.setPaymentType(ep.getPaytype());
 		epform.setDistributemethod(ep.getDistributemethod());
+		epform.setCancelreason(ep.getCancelreason());
+		epform.setOrdernum((String)request.getSession().getAttribute("ordernum"));
+		epform.setSlvnum((String)request.getSession().getAttribute("slvnum"));
+		epform.setSeccode((String)request.getSession().getAttribute("seccode"));
+		epform.setWssubmit((String)request.getSession().getAttribute("wssubmit"));
 	}
 
 	protected ExpensePayout createNewPayout(ExpensePayoutForm expenseForm, Agent user) throws Exception {

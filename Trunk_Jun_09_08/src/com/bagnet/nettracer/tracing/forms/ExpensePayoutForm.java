@@ -42,6 +42,7 @@ public class ExpensePayoutForm extends ActionForm {
 	private String bdo_id;
 	private String bdo_ref;
 	private String distributemethod;
+	private String cancelreason;
 
 	private String paymentType;
 	
@@ -49,6 +50,11 @@ public class ExpensePayoutForm extends ActionForm {
 	private int expensepayout_ID;
 	private int status_id;
 	private int printcount;
+	private String ordernum;
+	private String slvnum;
+	private String seccode;
+	private String wssubmit;
+	private int cancelcount;
 
 	//displayed - need conversion
 	private String incident_ID;
@@ -78,6 +84,42 @@ public class ExpensePayoutForm extends ActionForm {
 	private String dispVoucherExpirationDate;
 	private String toremark;
 
+	public String getCancelreason() {
+		return cancelreason;
+	}
+	public void setCancelreason(String cancelreason) {
+		this.cancelreason = cancelreason;
+	}
+	public int getCancelcount() {
+		return cancelcount;
+	}
+	public void setCancelcount(int cancelcount) {
+		this.cancelcount = cancelcount;
+	}
+	public String getWssubmit() {
+		return wssubmit;
+	}
+	public void setWssubmit(String wssubmit) {
+		this.wssubmit = wssubmit;
+	}
+	public String getOrdernum() {
+		return ordernum;
+	}
+	public void setOrdernum(String ordernum) {
+		this.ordernum = ordernum;
+	}
+	public String getSlvnum() {
+		return slvnum;
+	}
+	public void setSlvnum(String slvnum) {
+		this.slvnum = slvnum;
+	}
+	public String getSeccode() {
+		return seccode;
+	}
+	public void setSeccode(String seccode) {
+		this.seccode = seccode;
+	}	
 	public int getPrintcount() {
 		return printcount;
 	}

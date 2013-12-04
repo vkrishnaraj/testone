@@ -1,5 +1,6 @@
 <%@ page language="java"%>
 <%@ page import="com.bagnet.nettracer.tracing.db.ExpensePayout"%>
+<%@page import="com.bagnet.nettracer.tracing.forms.ExpensePayoutForm"%>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
 <%@page import="com.bagnet.nettracer.tracing.db.Agent"%>
 <%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
@@ -45,6 +46,11 @@
 	                        }
 	                    });
 	    };
+	    
+	    function ReSubmitWS() {
+	    	window.alert("WS Failed. Please Resubmit or Call Administrator for connection issue. ");	
+	    };
+	    
   </SCRIPT>
 
 
@@ -54,7 +60,8 @@
 	boolean canApprove = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_APPROVE_EXPENSE, a);
 	boolean canPay = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_EXPENSE, a);
 	boolean swaBsoPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, a) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN,a);
-	
+	ExpensePayoutForm epf = (ExpensePayoutForm) request.getAttribute("expensePayoutForm");
+	System.out.println("Wssubmit: "+epf.getWssubmit());	
 
 %>
 <html:form action="SaveExpense.do" method="post" onsubmit="if (issue_voucher) { return window.confirm('Are you sure you want to Issue this LUV Voucher?'); }">
@@ -397,4 +404,10 @@
 				</div>
 	</fmt:timeZone>
 </html:form>
-
+ <script type="text/javascript">
+var selectlist = document.getElementById('getpaymenttype');
+updatePaymentFields(selectlist.options[selectlist.selectedIndex].value);
+</script >	
+<c:if test="${expensePayoutForm.wssubmit == 'no'}">
+    <script type="text/javascript">ReSubmitWS();</script>
+ </c:if>

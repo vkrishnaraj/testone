@@ -29,6 +29,7 @@ import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.OHD_Address;
 import com.bagnet.nettracer.tracing.db.OHD_Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD_Passenger;
+import com.bagnet.nettracer.tracing.forms.ExpensePayoutForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
@@ -535,5 +536,10 @@ public class NTReservationIntegrationImpl extends
 	public ArrayList<BagDrop> getFlightInfo(String stationcode, Calendar date) {
 		NTIntegrationWrapper wrapper = new NTIntegrationWrapper();
 		return wrapper.getFlightInfo(stationcode, date);
+	}
+	
+	public ArrayList<String> submitVoucher(com.bagnet.nettracer.tracing.db.Incident inc, String status, ExpensePayoutForm epf){
+		NTIntegrationWrapper wrapper = new NTIntegrationWrapper();
+		return wrapper.submitVoucher(inc, status, epf);
 	}
 }

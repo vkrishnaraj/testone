@@ -18,9 +18,10 @@ boolean hasImmFulfillPermission = UserPermissions.hasPermission(TracingConstants
 boolean hasEmailFulfillPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EMAIL_FULFILLMENT, a);
 boolean hasMailFulfillPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MAIL_FULFILLMENT, a);
 boolean hasCancelPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CANCEL_A_VOUCHER, a);
+boolean showDistribute = epf.getPaymentType().equals(TracingConstants.ENUM_VOUCHER);
+System.out.println("showDistribute: "+showDistribute);	
 boolean swaBsoPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, a) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN,a);
 boolean swaIsInBSO=(epf!=null && a!=null && a.getStation()!=null && epf.getExpenselocation_ID()==a.getStation().getStation_ID());
-
 
 %>
 
@@ -70,7 +71,7 @@ boolean swaIsInBSO=(epf!=null && a!=null && a.getStation()!=null && epf.getExpen
             <br />
 			<html:text property="voucheramt" size="15" maxlength="10" styleClass="textfield" disabled="<%=swaBsoPermission%>" />
 			<br />
-			<% if(hasImmFulfillPermission || hasEmailFulfillPermission || hasMailFulfillPermission) { %>			
+			<% if(showDistribute && (hasImmFulfillPermission || hasEmailFulfillPermission || hasMailFulfillPermission)) { %>			
 						<bean:message key="colname.distribution_method" />
 			<br />
 			<html:select property="distributemethod" styleClass="dropdown" disabled="disabled">

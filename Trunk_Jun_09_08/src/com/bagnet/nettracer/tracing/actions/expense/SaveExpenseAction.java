@@ -1,5 +1,7 @@
 package com.bagnet.nettracer.tracing.actions.expense;
 
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,6 +22,7 @@ import com.bagnet.nettracer.tracing.db.UserGroup;
 import com.bagnet.nettracer.tracing.forms.ExpensePayoutForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
 public class SaveExpenseAction extends BaseExpenseAction {
@@ -96,24 +99,42 @@ public class SaveExpenseAction extends BaseExpenseAction {
 				st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_PENDING);
 			}
 		}
-		//Include information into incident remark if payment type is LUV Voucher
+		//payment type is LUV Voucher
 		if (expenseForm.getPaymentType().equals(TracingConstants.ENUM_VOUCHER)) {
-			String contents= "Voucher Issue Amount: $" + String.valueOf(expenseForm.getCheckamt()) + "\n" + 
-	                 "Agent Comments: " + expenseForm.getNewComment();
-			ibmo.insertRemark(contents,incidentId, user, TracingConstants.REMARK_REGULAR);
-			st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_PAID);
-			//return mapping.findForward("submit_success");
+			//WS submit
+			com.bagnet.nettracer.tracing.db.Incident inc = (com.bagnet.nettracer.tracing.db.Incident)ibmo.findIncidentByID(incidentId);
+			ArrayList<String> ret = SpringUtils.getReservationIntegration().submitVoucher(inc, "open",expenseForm); 
+			boolean ws_submit_ok = (ret.get(0) != null) ? true : false ;
+			if (ws_submit_ok) {
+				request.getSession().setAttribute("ordernum", ret.get(0));
+				ep.setOrdernum(ret.get(0));
+				request.getSession().setAttribute("slvnum", ret.get(1));
+				request.getSession().setAttribute("seccode", ret.get(2));
+				request.getSession().setAttribute("wssubmit", "yes");
+				String contents= "Voucher Issue Amount: $" + String.valueOf(expenseForm.getCheckamt()) + "\n" + 
+		                 "Agent Comments: " + expenseForm.getNewComment();
+				ibmo.insertRemark(contents,incidentId, user, TracingConstants.REMARK_REGULAR);
+				st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_PAID);
+			} else {
+				expenseForm.setWssubmit("no");
+				expenseForm.setIncident_ID(incidentId);
+				expenseForm.setCreateStation(ep.getStation().getStationcode());
+				expenseForm.setCreateUser(ep.getAgent().getUsername());
+				expenseForm.setCreatedate(ep.getCreatedate());
+				expenseForm.setPaymentType(ep.getPaytype());
+//				request.getSession().setAttribute("expensepayoutform", expenseForm);	
+				return mapping.findForward(CREATE_SUCCESS);
+			}				
 		}
+
 		ep.setStatus(st);
 		ibmo.saveExpense(ep, incidentId, user);
-
 		request.getSession().setAttribute("getclaimfa", "1");
 		request.getSession().setAttribute("incidentid", incidentId);
 		request.getSession().setAttribute("expense_id", ep.getExpensepayout_ID());
-
 		response.sendRedirect("EditExpense.do");
 		return null;
-
+		
 	}
 
 }

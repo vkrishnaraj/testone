@@ -8,6 +8,9 @@
 <%@page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
 <%@page import="com.bagnet.nettracer.reporting.ReportingConstants"%>
 <%@page import="org.apache.struts.util.LabelValueBean"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Calendar"%>
+<%@page import="com.bagnet.nettracer.tracing.enums.TemplateType"%>
 <%@ taglib uri="/tags/struts-bean" prefix="bean"%>
 <%@ taglib uri="/tags/struts-html" prefix="html"%>
 <%@ taglib uri="/tags/struts-logic" prefix="logic"%>
@@ -28,10 +31,20 @@
 	boolean canApprove = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_APPROVE_EXPENSE,
 			a);
 	boolean canPay = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_EXPENSE, a);
+	boolean hasCancelPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CANCEL_A_VOUCHER, a);
+//	System.out.println("hasCancelPermission: "+hasCancelPermission);
 	ExpensePayoutForm epf = (ExpensePayoutForm) request.getAttribute("expensePayoutForm");
-	
 	boolean submitOk = (epf.getPaymentType() !=null && epf.getPaymentType().equals(TracingConstants.ENUM_VOUCHER))? true :false; 
 	boolean showprint = epf.getPrintcount() == 0 ? true : false;
+	String today = new SimpleDateFormat("MM/dd/yyyy").format(Calendar.getInstance().getTime());
+//	System.out.println("today: "+today);
+	String createdate = new SimpleDateFormat("MM/dd/yyyy").format(epf.getCreatedate());
+//	System.out.println("epf.getCreatedate(): "+createdate);
+	System.out.println("epf.getCancelreason: "+epf.getCancelreason());
+	
+	boolean showcancel = (today.equals(createdate) && epf.getCancelcount() == 0 ) ? true : false;
+	System.out.println("showcancel: " + showcancel);
+	System.out.println("Wssubmit: "+epf.getWssubmit());	
 	boolean swaBsoPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, a) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN,a);
 	boolean swaIsInBSO=(epf!=null && a!=null && a.getStation()!=null && epf.getExpenselocation_ID()==a.getStation().getStation_ID());
 	
@@ -74,11 +87,56 @@
         }
         return true;
       }
-      
-      function openPreviewWindow1(fileName) {
-    	  window.open("customerCommunications.do?preview_document="+fileName, '', 'width=600,height=800,resizable=yes');
-      }
-      
+
+    	function loadList(selectId, url) {
+    		if (document.getElementById(selectId).options.length > 1) return;
+
+    		jQuery.ajax({
+     			url:url,
+    			cache: false,
+    			success: function(result) {
+    				populateSelect(selectId, result);
+    			}
+    		});	
+    	}
+
+    	function populateSelect(selectId, json) {
+    		var activitySelect = document.getElementById(selectId);		
+    		for (var i = 0; i < json.length; ++i) {
+    			activitySelect.options[activitySelect.options.length] = new Option(json[i].description, json[i].value);
+    		}
+    	}
+    	
+      function showTemplateSelectDialog() {
+    		if (document.getElementById("templateSelect").options.length == 1) {
+    			loadList("templateSelect", "customerCommunications.do?templateList=<%=String.valueOf(TemplateType.INCIDENT.getOrdinal()) %>");
+    		}
+
+   		var templateSelectDialog = jQuery("#templateSelectDiv").dialog({
+    										height: 50,
+    										width: 350,
+    										title: 'Select Cancel Reason',
+    										modal: true,
+    										buttons: {
+    											Ok: function() {
+    												jQuery(this).dialog("close");
+    												var templateSelect = document.getElementById("templateSelect");
+    												templateId = templateSelect.options[templateSelect.selectedIndex].value;
+    												if (templateId == "") {
+    													alert('You must select a cancel reason.');
+    													return;
+    												}
+//    												submitRequest(templateId);
+    												document.expensePayoutForm.cancelreason.value=templateId;
+    												document.expensePayoutForm.submit();
+    											},
+    											Cancel: function() {
+    												jQuery(this).dialog("close");
+    											}
+    										}
+    									});
+    		templateSelectDialog.dialog("open");
+    	}
       
       function rePrint() {
     	  openReportWindow('reporting?print=<%=ReportingConstants.EXP_LUV %>&outputtype=0',800,600);
@@ -92,7 +150,10 @@
 			document.expensePayoutForm.submit();
           }
       }
-            
+	    
+	    function ReSubmitWS() {
+	    	window.alert("WS Failed. Please Resubmit or Call Administrator for connection issue. ");	
+	    };            
  
     </script>
 <html:form action="UpdateExpense.do" method="post" onsubmit="return validateExpense(this);">
@@ -101,7 +162,9 @@
 	<html:hidden name="expensePayoutForm" property="expensepayout_ID" />
 	<html:hidden name="expensePayoutForm" property="status_id" />
 	<html:hidden name="expensePayoutForm" property="toremark"  value="no"/>
-	<html:hidden name="expensePayoutForm" property="printcount"  value="0"/>	
+	<html:hidden name="expensePayoutForm" property="printcount"  value="0"/>
+	<html:hidden name="expensePayoutForm" property="cancelcount"  value="0"/>
+	<html:hidden name="expensePayoutForm" property="cancelreason" styleId="cancelreason" value="" />	
 	<fmt:timeZone value="${expensePayoutForm.tz}">
 		<tr>
 			<td colspan="3" id="pageheadercell">
@@ -181,11 +244,27 @@
 						<bean:message key="button.bdo_sendprint" />
 						</a>
 						&nbsp;&nbsp;
-						<a href="#" onclick="openPreviewWindow1('filename')"> 
+					<% } %>	
+					<% if (hasCancelPermission && showcancel) { %>
+						<a href="#" onclick="showTemplateSelectDialog(); "> 
 							Cancel
 						</a>
-					<% } %>	
+					<% } %>		
 					</div>
+<div id="templateSelectDiv" style="display:none;" >
+	<table style="width:100%;">
+		<tr>
+			<td style="width:50%;text-align:right;">Select a Cancel Reason:</td>
+			<td style="width:50%;text-align:left;">
+				<select id="templateSelect" style="	font-size:9px;border:1px solid #569ECD;margin:2px 0px 1px 0px;display:inline;" >
+					<option value="INCAMT">INCORRECT AMOUNT</option>
+					<option value="INCNAME">INCORRECT NAME</option>
+					<option value="INCQNT">INCORRECT QUANTITY</option>
+				</select>
+			</td>
+		</tr>
+	</table>
+</div>				
 					<% } else { %>
 					<a name="editpayout"></a>
 					<h1 class="green">
@@ -533,10 +612,6 @@
         	<html:hidden property="expenselocation_ID" />
     <% } %>
 </html:form>
-	<logic:present name="receiptName" scope="request">
-	    <script language=javascript>
-	    	var fileName = '<%=(String) request.getAttribute("receiptName") %>';
-   			openPreviewWindow1(fileName);
-   			anyLossCodeChanges();
-	    </script>
-    </logic:present>
+<c:if test="${expensePayoutForm.wssubmit == 'no'}">
+    <script type="text/javascript">ReSubmitWS();</script>
+ </c:if>

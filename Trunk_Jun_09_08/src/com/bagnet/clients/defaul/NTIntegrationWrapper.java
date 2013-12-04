@@ -15,19 +15,30 @@ import aero.nettracer.serviceprovider.ws_1_0.GetFlightDataDocument.GetFlightData
 import aero.nettracer.serviceprovider.ws_1_0.GetReservationDataDocument;
 import aero.nettracer.serviceprovider.ws_1_0.GetReservationDataResponseDocument;
 import aero.nettracer.serviceprovider.ws_1_0.ReservationService_1_0Stub;
+import aero.nettracer.serviceprovider.ws_1_0.SubmitVoucherDocument.SubmitVoucher;
 import aero.nettracer.serviceprovider.ws_1_0.WriteRemarkDocument;
 import aero.nettracer.serviceprovider.ws_1_0.GetReservationDataDocument.GetReservationData;
 import aero.nettracer.serviceprovider.ws_1_0.WriteRemarkDocument.WriteRemark;
+import aero.nettracer.serviceprovider.ws_1_0.common.xsd.Address;
 import aero.nettracer.serviceprovider.ws_1_0.common.xsd.Itinerary;
+import aero.nettracer.serviceprovider.ws_1_0.common.xsd.Passenger;
 import aero.nettracer.serviceprovider.ws_1_0.common.xsd.RequestHeader;
 import aero.nettracer.serviceprovider.ws_1_0.common.xsd.Reservation;
+import aero.nettracer.serviceprovider.ws_1_0.common.xsd.Voucher;
 import aero.nettracer.serviceprovider.ws_1_0.response.xsd.FlightDataResponse;
 import aero.nettracer.serviceprovider.ws_1_0.GetFlightDataResponseDocument;
+import aero.nettracer.serviceprovider.ws_1_0.SubmitVoucherDocument;
+import aero.nettracer.serviceprovider.ws_1_0.SubmitVoucherResponseDocument;
 
 import com.bagnet.nettracer.exceptions.BagtagException;
+import com.bagnet.nettracer.tracing.bmo.ExpensePayoutBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.BagDrop;
+import com.bagnet.nettracer.tracing.db.ExpensePayout;
+import com.bagnet.nettracer.tracing.db.Station;
+import com.bagnet.nettracer.tracing.forms.ExpensePayoutForm;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
@@ -138,6 +149,78 @@ public class NTIntegrationWrapper extends IntegrationWrapper {
 
 	}
 
+	public ArrayList<String> submitVoucher(com.bagnet.nettracer.tracing.db.Incident inc, String status, ExpensePayoutForm epf){
+		try {
+			//create service stub
+			ReservationService_1_0Stub stub = new ReservationService_1_0Stub(endpoint);
+			ServiceClient sc = stub._getServiceClient();
+			Options opts = sc.getOptions();
+			opts.setTimeOutInMilliSeconds(60*1000);
+			
+			SubmitVoucherDocument doc = SubmitVoucherDocument.Factory.newInstance();
+			SubmitVoucher voucherDoc = doc.addNewSubmitVoucher();
+			
+			Voucher voucher = voucherDoc.addNewVoucher();
+
+			voucher.setPnr((inc.getRecordlocator() != null) ? inc.getRecordlocator() : null);//ntvoucher.getPnr();
+			String stationId = inc.getStation_ID() + "";
+			Station station = StationBMO.getStation(stationId);
+
+			voucher.setStation((station.getStationcode() != null) ? station.getStationcode() : null);
+			voucher.setStatus(status);
+			voucher.setAgentUserName((inc.getAgent_username() != null) ? inc.getAgent_username() : null);
+			voucher.setAmount((epf.getVoucheramt() != 0) ? epf.getVoucheramt() : 0);
+//			voucher.setDepartment(null);//ignore
+			voucher.setDistributionMethod((epf.getDistributemethod() != null) ? epf.getDistributemethod() : null);
+			voucher.setNtIncidentId((inc.getIncident_ID() != null) ? inc.getIncident_ID() : null);
+			if (status.equals("cancel"))
+				voucher.setRemark((epf.getCancelreason() != null) ? epf.getCancelreason() : null);//cancel reason for cancel status
+			Passenger pax = voucher.addNewPassenger();
+			if (inc.getPassengers() != null && inc.getPassengers().size() > 0) {
+				for (com.bagnet.nettracer.tracing.db.Passenger pa : inc.getPassengers()) {
+					pa.setPassenger_ID(0);
+/*					parameters.put("pass_name", (pa.getLastname() != null ? (pa.getLastname() + ", ") : "") + (pa.getFirstname() != null ? pa.getFirstname() : ""));
+					parameters.put("address1", (pa.getAddress(0).getAddress1() != null ? pa.getAddress(0).getAddress1() : ""));
+					parameters.put("city_st_zip", (pa.getAddress(0).getCity() != null ? (pa.getAddress(0).getCity() + ", ") : "")
+							+ (pa.getAddress(0).getState_ID() != null ? (pa.getAddress(0).getState_ID() + " ") : (pa.getAddress(0).getProvince() != null ? (pa.getAddress(0).getProvince() + " ") : ""))
+							+ (pa.getAddress(0).getZip() != null ? pa.getAddress(0).getZip() : ""));
+					parameters.put("country", "UNITED STATES");*/
+
+					
+					pax.setFirstname((pa.getFirstname() != null) ? pa.getFirstname() : null);
+					pax.setLastname((pa.getLastname() != null) ? pa.getLastname() : null);
+					Address addr = pax.addNewAddresses();
+					addr.setAddress1((pa.getAddress(0).getAddress1() != null) ? pa.getAddress(0).getAddress1() : null);
+					addr.setAddress2((pa.getAddress(0).getAddress2() != null) ? pa.getAddress(0).getAddress2() : null);
+					addr.setCity((pa.getAddress(0).getCity() != null) ? pa.getAddress(0).getCity() : null);
+					addr.setState((pa.getAddress(0).getState_ID() != null) ? pa.getAddress(0).getState_ID() : null);
+					addr.setZip((pa.getAddress(0).getZip() != null) ? pa.getAddress(0).getZip() : null);
+					addr.setCountry((pa.getAddress(0).getCountry() != null) ? pa.getAddress(0).getCountry() : null);
+					addr.setHomePhone((pa.getAddress(0).getHomephone_norm() != null) ? pa.getAddress(0).getHomephone_norm() : null);
+					addr.setEmailAddress((pa.getAddress(0).getEmail() != null) ? pa.getAddress(0).getEmail() : null);
+					
+					break;
+				}
+			}			
+			
+
+			//System.out.println(doc);
+			SubmitVoucherResponseDocument response = stub.submitVoucher(doc);
+			//System.out.println(response);
+			ArrayList<String> ret = new ArrayList<String>();
+			ret.add(response.getSubmitVoucherResponse().getReturn().getOrderNumber());
+			ret.add(response.getSubmitVoucherResponse().getReturn().getVoucherId());
+			ret.add(response.getSubmitVoucherResponse().getReturn().getSecurityCode());
+			
+			return ret;
+		} catch (Exception e){
+			e.printStackTrace();
+			setErrorMessage("Error calling webservice: " + e.toString());
+			return null;
+		}
+
+	}
+	
 	/**
 	 * Service integration - retrieves flight information from client integrations via central service
 	 * 
