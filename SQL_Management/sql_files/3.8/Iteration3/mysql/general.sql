@@ -278,3 +278,8 @@ update systemcomponents set component_name='LUV Cancel a Voucher' where componen
 alter table expensepayout add column printcount int default 0;
 
 alter table expensetype modify description varchar(30); 
+
+insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group) VALUES (
+   1102,'Cust_Comm_Rejection_Queue','Manage rejection queue for customer communiations.',15,'customerCommunicationsRejected.do',1,100,3);
+
+alter table task add incidentActivityId bigint default null; 
