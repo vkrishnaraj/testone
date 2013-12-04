@@ -76,9 +76,9 @@ public class LUVReceipt_Imme {
 				break;
 			}
 		}
-		parameters.put("order_num", "5008628");
-		parameters.put("voucher_num", "9182470044578025");
-		parameters.put("sec_code", "7326");
+		parameters.put("order_num", (theform.getOrdernum() != null ? theform.getOrdernum() : ""));
+		parameters.put("voucher_num", (theform.getSlvnum() != null ? theform.getSlvnum() : ""));
+		parameters.put("sec_code", (theform.getSeccode() != null ? theform.getSeccode() : ""));
 		return parameters;
 	}
 

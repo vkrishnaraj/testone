@@ -74,7 +74,7 @@ public class LUVReceipt_Mail {
 				break;
 			}
 		}
-		parameters.put("order_num", "5008628");
+		parameters.put("order_num", (theform.getOrdernum() != null ? theform.getOrdernum() : ""));
 		return parameters;
 	}
 
