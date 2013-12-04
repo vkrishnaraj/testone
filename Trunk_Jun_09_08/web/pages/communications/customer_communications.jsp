@@ -32,7 +32,7 @@
    		cssFormClass = "form2_dam";   		
   	}
 %>
-<script language="javascript" >
+<script type="text/javascript">
 
 	function loadList(selectId, url) {
 		if (document.getElementById(selectId).options.length > 1) return;

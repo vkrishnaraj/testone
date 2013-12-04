@@ -24,6 +24,7 @@ import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
 import com.bagnet.nettracer.tracing.db.documents.Document;
 import com.bagnet.nettracer.tracing.db.documents.templates.Template;
+import com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask;
 import com.bagnet.nettracer.tracing.dto.TemplateAdapterDTO;
 import com.bagnet.nettracer.tracing.enums.TemplateType;
 import com.bagnet.nettracer.tracing.exceptions.InsufficientInformationException;
@@ -33,6 +34,7 @@ import com.bagnet.nettracer.tracing.forms.communications.CustomerCommunicationsF
 import com.bagnet.nettracer.tracing.service.DocumentService;
 import com.bagnet.nettracer.tracing.service.IncidentActivityService;
 import com.bagnet.nettracer.tracing.service.TemplateService;
+import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.DomainUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
@@ -121,7 +123,13 @@ public class CustomerCommunicationsAction extends CheckedAction {
 				logger.error("Failed to delete customer communication with id: " + request.getParameter("communicationsId"), nfe);
 				success = false;
 			}
-			response.sendRedirect("searchIncident.do?incident="+request.getParameter("incident")+"#activities");
+			
+			String anchor = "#activities";
+			if (!success) {
+				session.setAttribute("redirectMessageKey", "customer.communications.delete.failure");
+				anchor = "";
+			}
+			response.sendRedirect("searchIncident.do?incident="+request.getParameter("incident")+anchor);
 			return null;
 		} else if (TracingConstants.COMMAND_CREATE.equals(ccf.getCommand())) {
 			success = saveCustomerCommunications(ccf, user, messages);
@@ -193,6 +201,11 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		
 		boolean success = incidentActivityId != 0;
 		messages.add(ActionMessages.GLOBAL_MESSAGE, getActionMessage(TracingConstants.COMMAND_CREATE, success, ccf.getDocumentTitle()));
+		if (success) {
+			if (!createTask(incidentActivity, user)) {
+				logger.error("Failed to create a task for IncidentActivity with id: " + incidentActivityId);
+			}
+		}
 		return success;
 	}
 
@@ -202,7 +215,21 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		
 		boolean success = incidentActivityService.update(incidentActivity);
 		messages.add(ActionMessages.GLOBAL_MESSAGE, getActionMessage(TracingConstants.COMMAND_UPDATE, success, ccf.getDocumentTitle()));
+		if (success) {
+			if (!createTask(incidentActivity, user)) {
+				logger.error("Failed to create a task for IncidentActivity with id: " + incidentActivity.getId());
+			}
+		}
 		return success;
+	}
+	
+	private boolean createTask(IncidentActivity incidentActivity, Agent user) {
+		if (!incidentActivityService.hasIncidentActivityTask(incidentActivity)) {
+			IncidentActivityTask iat = DomainUtils.createIncidentActivityTask(incidentActivity);
+			iat.setAssigned_agent(AdminUtils.getAgentBasedOnUsername("ntadmin", user.getCompanycode_ID()));
+			return incidentActivityService.saveTask(iat) != 0;
+		}
+		return true;
 	}
 	
 	private DocumentTemplateResult generateDocument(long templateId, Incident incident, Agent user) {

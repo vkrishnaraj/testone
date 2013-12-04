@@ -1054,5 +1054,13 @@
     <definition name="editCommunications" extends="user_menu" >
     	<put name="center" value="/pages/communications/edit_communications.jsp" />
     </definition>
+
+    <definition name="customerCommunicationsPending" extends="user_menu" >
+    	<put name="center" value="/pages/communications/customer_communications_pending.jsp" />
+    </definition>
+
+    <definition name="customerCommunicationsRejected" extends="user_menu" >
+    	<put name="center" value="/pages/communications/customer_communications_rejected.jsp" />
+    </definition>
 	
  </tiles-definitions>

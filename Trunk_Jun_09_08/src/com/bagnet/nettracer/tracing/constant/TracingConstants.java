@@ -359,6 +359,8 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_CUST_COMM_DELETE = "Customer_Communications_Delete";
 	public static final String SYSTEM_COMPONENT_NAME_CUST_COMM_VIEW_PUBLISHED = "Customer_Communications_View_Published";
 	public static final String SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL = "Customer_Communications_Approval";
+	public static final String SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL_QUEUE = "Cust_Comm_Approval_Queue";
+	public static final String SYSTEM_COMPONENT_NAME_CUST_COMM_REJECTION_QUEUE = "Cust_Comm_Rejection_Queue";
 	
 	//Table numbers for status
 	public final static int AJAX_STATUS_INC = 1;
@@ -1384,6 +1386,7 @@ public class TracingConstants {
 	public static final int ACTIVE_SEARCH_INACTIVE = 1202;
 
 	public static final String TABLE_ID_TEMPLATES = "templates";
+	public static final String TABLE_ID_CUST_COMM_REJECTED = "customerCommunicationsRejected";
 	
 	public static final String SORT_ASCENDING = "1";
 	public static final String SORT_DESCENDING = "2";
@@ -1427,6 +1430,8 @@ public class TracingConstants {
 	public static final String FILE_NOT_FOUND = "fileNotFound";
 	
 	public static final String CUSTOMER_COMMUNICATIONS = "customerCommunications";
+	public static final String CUSTOMER_COMMUNICATIONS_PENDING = "customerCommunicationsPending";
+	public static final String CUSTOMER_COMMUNICATIONS_REJECTED = "customerCommunicationsRejected";
 	public static final String EDIT_COMMUNICATIONS = "editCommunications";
 
 	public static final int CLAIM_CHECK = 3;

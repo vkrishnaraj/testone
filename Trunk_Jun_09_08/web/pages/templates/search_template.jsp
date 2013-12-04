@@ -22,11 +22,11 @@
 	}
 %>
   
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
-<SCRIPT LANGUAGE="JavaScript">
+<SCRIPT type="text/javascript" SRC="deployment/main/js/date.js"></SCRIPT>
+<SCRIPT type="text/javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
+<SCRIPT type="text/javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
+<SCRIPT type="text/javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
+<SCRIPT type="text/javascript" >
    
 	var cal1xx = new CalendarPopup();	
 
@@ -143,7 +143,7 @@
             	<h1 class="green">
                 	<bean:message key="header.search_result" />
              	</h1>
-              	<a name="result"></a>
+              	<a id="result"></a>
               	<display:table requestURI="/searchTemplate.do" name="requestScope.results" sort="external" class="form2" cellspacing="0" cellpadding="0" id="<%=TracingConstants.TABLE_ID_TEMPLATES %>" defaultsort="1" >
           			<display:column titleKey="colname.template.id" property="id" href="editTemplate.do" paramId="template_id" paramProperty="id" sortable="true" sortName="id" />
           			<display:column titleKey="colname.template.name" property="name" href="editTemplate.do" paramId="template_id" paramProperty="id" sortable="true" sortName="name" />
@@ -158,7 +158,7 @@
 		              	</tr>
 	              	</display:footer>
           		</display:table>
-              	<script language=javascript>
+              	<script type="text/javascript" >
  			 		document.location.href="#result";
               	</script>
            	</logic:present>

@@ -1,23 +1,43 @@
 package com.bagnet.nettracer.tracing.dao.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.IncidentActivityDAO;
+import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.communications.Activity;
 import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
+import com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask;
+import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskSearchDTO;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 
 	private static Logger logger = Logger.getLogger(IncidentActivityDAOImpl.class);
+	
+	private static Map<String, String> map = new LinkedHashMap<String, String>();
+	
+	static {		
+		map.put("id", 			"iat.task_id");
+		map.put("incidentId", 	"i.incident_ID");
+		map.put("agent", 		"ia.approvalAgent");
+		map.put("date",			"iat.generic_timestamp");
+	}
 	
 	@Override
 	public IncidentActivity load(long incidentActivityId) {
@@ -27,7 +47,7 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 			session = HibernateWrapper.getSession().openSession();
 			incidentActivity = (IncidentActivity) session.get(IncidentActivity.class, incidentActivityId);			
 		} catch (Exception e) {
-			logger.error("Exception caught while attempting to load template with id: " + incidentActivityId, e);
+			logger.error("Exception caught while attempting to load incident activity with id: " + incidentActivityId, e);
 		} finally {
 			if (session != null) {
 				session.close();
@@ -135,6 +155,138 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 		return success;
 	}
 	
+	@Override
+	public IncidentActivityTask loadTask(long incidentActivityTaskId) {
+		IncidentActivityTask incidentActivityTask = null;
+		Session session = null;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			incidentActivityTask = (IncidentActivityTask) session.get(IncidentActivityTask.class, incidentActivityTaskId);			
+		} catch (Exception e) {
+			logger.error("Exception caught while attempting to load template with id: " + incidentActivityTaskId, e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return incidentActivityTask;
+	}
+
+	@Override
+	public long saveTask(IncidentActivityTask incidentActivityTask) {
+		long id = 0;
+		if (incidentActivityTask == null) {
+			return id;
+		}
+		Session session = null;
+		Transaction transaction = null;
+		
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			transaction = session.beginTransaction();	
+			session.save(incidentActivityTask);
+			transaction.commit();
+			id = incidentActivityTask.getTask_id();
+		} catch (Exception e) {
+			logger.error("Failed to save incident activity task.", e);
+			if (transaction != null) {
+				transaction.rollback();
+			}
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return id;
+	}
+
+	@Override
+	public boolean updateTask(IncidentActivityTask incidentActivityTask) {
+		boolean success = false;
+		if (incidentActivityTask == null) {
+			return success;
+		}
+		Session session = null;
+		Transaction transaction = null;
+		
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			transaction = session.beginTransaction();
+			incidentActivityTask.setOpened_timestamp(DateUtils.convertToGMTDate(new Date()));
+			transaction.commit();
+			success = true;
+		} catch (Exception e) {
+			logger.error("Failed to update incident activity task with id: " + incidentActivityTask.getTask_id(), e);
+			if (transaction != null) {
+				transaction.rollback();
+			}
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return success;
+	}
+
+	@Override
+	public boolean deleteTask(long incidentActivityTaskId) {
+		boolean success = false;
+		if (incidentActivityTaskId <= 0) return success;
+		
+		Session session = null;
+		Transaction transaction = null;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			transaction = session.beginTransaction();
+			IncidentActivityTask incidentActivityTask = (IncidentActivityTask) session.createCriteria(IncidentActivityTask.class, "iat").add(Restrictions.eq("ia.id", incidentActivityTaskId)).uniqueResult();
+			session.delete(incidentActivityTask);
+			transaction.commit();
+			success = true;
+		} catch (Exception e) {
+			logger.error("Failed to delete incident activity task with id: " + incidentActivityTaskId, e);
+			if (transaction != null) {
+				transaction.rollback();
+			}
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return success;
+	}
+
+	@Override
+	public boolean hasTask(IncidentActivity incidentActivity, Status... statuses) {
+		if (incidentActivity == null || statuses == null || statuses.length == 0) return false;
+
+		boolean hasTask = false;
+		Session session = null;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			Criteria criteria = session.createCriteria(IncidentActivityTask.class, "iat");
+			criteria.add(Restrictions.eq("iat.incidentActivity", incidentActivity));
+			criteria.add(Restrictions.in("iat.status", statuses));
+			criteria.setProjection(Projections.countDistinct("iat.task_id"));
+			Long taskCount = (Long) criteria.uniqueResult();
+			if (taskCount != null && taskCount.longValue() != 0) {
+				hasTask = true;
+			}
+		} catch (Exception e) {
+			logger.error("Could not determine if incident activity with id: " + incidentActivity.getId() + " has an active task.", e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return hasTask;
+	}
+	
+	@Override
+	public boolean hasTask(long incidentActivityId, Status... statuses) {
+		if (incidentActivityId <= 0) return false;
+		return hasTask(load(incidentActivityId), statuses);
+	}
+	
 	/* (non-Javadoc)
 	 * @see com.bagnet.nettracer.tracing.dao.TemplateDAO#getActivities()
 	 */
@@ -176,7 +328,92 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 		}
 		return activity;
 	}
+	
+	@Override
+	public int getIncidentActivityCount(Status status) {
+		return this.getIncidentActivityCountByUser(null, status);
+	}
 
+	@Override
+	public int getIncidentActivityCountByUser(Agent agent, Status status) {
+		Session session = null;
+		int result = 0;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			Criteria criteria = session.createCriteria(IncidentActivityTask.class, "iat");
+			criteria.add(Restrictions.eq("iat.status", status));
+			
+			if (agent != null) {
+				criteria.add(Restrictions.eq("iat.assigned_agent", agent));
+			}
+			
+			criteria.setProjection(Projections.countDistinct("iat.task_id"));
+			Long count = (Long) criteria.uniqueResult();
+			if (count != null) {
+				result = count.intValue();
+			}			
+		} catch (Exception e) {
+			logger.error("Exception caught while attempting to retrieve count of incident activity tasks with status: " + status.getStatus_ID(), e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public int getIncidentActivityTaskCount(IncidentActivityTaskSearchDTO dto) {
+		Session session = null;
+		int count = 0;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			Criteria criteria = getCriteriaFromDto(session, dto);
+			criteria.setProjection(Projections.rowCount());
+			Object result = criteria.uniqueResult();
+			if (result != null) {
+				count = ((Long) result).intValue();
+			} else {
+				logger.error("Received null result for count in IncidentActivityDAOImpl.getIncidentActivityTaskCount");
+			}
+		} catch (Exception e) {
+			logger.error("An error occurred while attempting to retrieve the incident activity task count", e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return count;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<IncidentActivityTask> listIncidentActivityTasks(IncidentActivityTaskSearchDTO dto) {
+		List<IncidentActivityTask> results = new ArrayList<IncidentActivityTask>();
+		Session session = null;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			Criteria criteria = getCriteriaFromDto(session, dto);
+			applyOrder(dto, criteria);
+			criteria.setProjection(Projections.projectionList()
+					.add(Projections.groupProperty("iat.task_id").as("task_id"))
+					.add(Projections.property("iat.opened_timestamp").as("opened_timestamp"))
+					.add(Projections.property("iat.closed_timestamp").as("closed_timestamp"))
+					.add(Projections.property("iat.assigned_agent").as("assigned_agent"))
+					.add(Projections.property("iat.status").as("status"))
+					.add(Projections.property("iat.generic_timestamp").as("generic_timestamp"))
+					.add(Projections.property("iat.incidentActivity").as("incidentActivity")));
+			criteria.setResultTransformer(Transformers.aliasToBean(IncidentActivityTask.class));
+			results = (List<IncidentActivityTask>) criteria.list();
+		} catch (Exception e) {
+			logger.error("An error occurred while attempting to get a list of incident activity tasks", e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return results;
+	}
 	
 	private Activity getActivityByCode(String activityCode) {
 		Activity activity = null;
@@ -194,6 +431,43 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 			}
 		}
 		return activity;
+	}
+
+	private Criteria getCriteriaFromDto(Session session, IncidentActivityTaskSearchDTO dto) {
+		Criteria criteria = session.createCriteria(IncidentActivityTask.class, "iat");
+		criteria.createAlias("iat.incidentActivity", "ia");
+		criteria.createAlias("ia.incident", "i");
+		
+		if (dto.getAgent() != null) {
+			criteria.add(Restrictions.eq("iat.assigned_agent", dto.getAgent()));
+		}
+		
+		if (dto.getStatus() != null) {
+			criteria.add(Restrictions.eq("iat.status", dto.getStatus()));
+		}
+		
+		if (dto.getRowsPerPage() > 0) {
+			criteria.setFirstResult(dto.getCurrentPage() * dto.getRowsPerPage());
+			criteria.setMaxResults(dto.getRowsPerPage());
+		}
+		
+		return criteria;
+	}
+	
+	private void applyOrder(IncidentActivityTaskSearchDTO dto, Criteria criteria) {
+		String orderVar = IncidentActivityDAOImpl.map.get(dto.getSort());
+		if (orderVar == null) {
+			orderVar = "iat.task_id";
+			logger.warn("Illegal sort value found for incident activity tasks: " + dto.getSort());
+		}
+		
+		String dir = dto.getDir();
+		if (!TracingConstants.SORT_ASCENDING.equals(dir) && !TracingConstants.SORT_DESCENDING.equals(dir)) {
+			dir = TracingConstants.SORT_ASCENDING;
+			logger.warn("Illegal sort direction value found for incident activity tasks: " + dto.getDir());
+		}
+		
+		criteria.addOrder(TracingConstants.SORT_ASCENDING.equals(dir) ? Order.asc(orderVar) : Order.desc(orderVar));
 	}
 
 }

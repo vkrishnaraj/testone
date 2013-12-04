@@ -70,12 +70,18 @@ public class SearchIncidentAction extends Action {
 
 		// check session
 		TracerUtils.checkSession(session);
-
 		Agent user = (Agent) session.getAttribute("user");
 		if (user == null || form == null) {
 			response.sendRedirect("logoff.do");
 			return null;
 		}
+		if (session.getAttribute("redirectMessageKey") != null) {
+			ActionMessages messages = getMessages(request);
+			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage((String) session.getAttribute("redirectMessageKey")));
+			saveMessages(request, messages);
+			session.removeAttribute("redirectMessageKey");
+		}
+		
 		// user clicked on a incident after search result has returned
 		String incident = request.getParameter("incident");
 		if (incident != null) {

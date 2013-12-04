@@ -22,7 +22,7 @@
 	}
   
 %>
-<script language="javascript" >
+<script>
 
 	function saveOrUpdate() {
 		var id = document.getElementById('documentId');

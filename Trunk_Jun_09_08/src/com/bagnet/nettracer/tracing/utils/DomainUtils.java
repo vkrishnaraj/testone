@@ -32,10 +32,13 @@ import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFPerson;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
+import com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask;
+import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskSearchDTO;
 import com.bagnet.nettracer.tracing.dto.TemplateAdapterDTO;
 import com.bagnet.nettracer.tracing.dto.TemplateSearchDTO;
 import com.bagnet.nettracer.tracing.enums.TemplateType;
 import com.bagnet.nettracer.tracing.forms.communications.CustomerCommunicationsForm;
+import com.bagnet.nettracer.tracing.forms.communications.CustomerCommunicationsTaskForm;
 import com.bagnet.nettracer.tracing.forms.templates.TemplateEditForm;
 import com.bagnet.nettracer.tracing.forms.templates.TemplateSearchForm;
 /**
@@ -118,6 +121,11 @@ public class DomainUtils {
 		return dto;
 	}
 	
+	public static IncidentActivityTaskSearchDTO fromForm(CustomerCommunicationsTaskForm cctf) {
+		// TODO: implement this
+		return new IncidentActivityTaskSearchDTO();
+	}
+	
 	public static IncidentActivity fromForm(CustomerCommunicationsForm ccf, Agent user) {
 		IncidentActivity ia = new IncidentActivity();
 		
@@ -156,6 +164,12 @@ public class DomainUtils {
 		form.setCommand(null);
 	}
 	
+	public static void resetSearchForm(CustomerCommunicationsTaskForm form) {
+		form.setS_createtime(null);
+		form.setE_createtime(null);
+		form.setCommand(null);
+	}
+	
 	public static IncidentActivity createIncidentActivity(Incident incident, Activity activity, Agent user) {
 		IncidentActivity ia = new IncidentActivity();
 		ia.setIncident(incident);
@@ -164,6 +178,13 @@ public class DomainUtils {
 		ia.setCreateDate(DateUtils.convertToGMTDate(new Date()));
 		ia.setDescription(activity.getDescription());
 		return ia;
+	}
+	
+	public static IncidentActivityTask createIncidentActivityTask(IncidentActivity incidentActivity) {
+		IncidentActivityTask iat = new IncidentActivityTask();
+		iat.setIncidentActivity(incidentActivity);
+		iat.setStatus(incidentActivity.getStatus());
+		return iat;
 	}
 	
 	public static TemplateAdapterDTO getTemplateAdapterDTO(Agent user, Template template) {

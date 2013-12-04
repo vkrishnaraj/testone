@@ -13,11 +13,16 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.DocumentDAO;
 import com.bagnet.nettracer.tracing.dao.IncidentActivityDAO;
 import com.bagnet.nettracer.tracing.dao.TemplateDAO;
+import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.communications.Activity;
 import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
 import com.bagnet.nettracer.tracing.db.documents.Document;
 import com.bagnet.nettracer.tracing.db.documents.templates.Template;
+import com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask;
+import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskDTO;
+import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskSearchDTO;
 import com.bagnet.nettracer.tracing.dto.OptionDTO;
 import com.bagnet.nettracer.tracing.service.IncidentActivityService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,6 +34,9 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 	private DocumentDAO documentDao;
 	private IncidentActivityDAO incidentActivityDao;
 	private TemplateDAO templateDao;
+	
+	private Status STATUS_PENDING = new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING);
+	private Status STATUS_DENIED = new Status(TracingConstants.STATUS_CUSTOMER_COMM_DENIED);
 	
 	@Override
 	public IncidentActivity load(long incidentActivityId) {
@@ -73,7 +81,28 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 
 	@Override
 	public boolean delete(long incidentActivityId) {
+		if (incidentActivityDao.hasTask(incidentActivityId, STATUS_PENDING, STATUS_DENIED)) return false;		
 		return incidentActivityDao.delete(incidentActivityId);
+	}
+	
+	@Override
+	public IncidentActivityTask loadTask(long incidentActivityTaskId) {
+		return incidentActivityDao.loadTask(incidentActivityTaskId);
+	}
+
+	@Override
+	public long saveTask(IncidentActivityTask incidentActivityTask) {
+		return incidentActivityDao.saveTask(incidentActivityTask);
+	}
+
+	@Override
+	public boolean updateTask(IncidentActivityTask incidentActivityTask) {
+		return incidentActivityDao.updateTask(incidentActivityTask);
+	}
+
+	@Override
+	public boolean deleteTask(long incidentActivityTaskId) {
+		return incidentActivityDao.deleteTask(incidentActivityTaskId);
 	}
 	
 	@Override
@@ -115,6 +144,46 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 		return incidentId.equals(ia.getIncident().getIncident_ID());
 	}
 	
+	@Override
+	public int getIncidentActivityAwaitingApprovalCount() {
+		return incidentActivityDao.getIncidentActivityCount(STATUS_PENDING);
+	}
+
+	@Override
+	public int getIncidentActivityRejectionCount(Agent agent) {
+		return incidentActivityDao.getIncidentActivityCountByUser(agent, STATUS_DENIED);
+	}
+
+	@Override
+	public boolean hasIncidentActivityTask(IncidentActivity incidentActivity) {
+		if (incidentActivity == null) return false;		
+		return incidentActivityDao.hasTask(incidentActivity, STATUS_PENDING);
+	}
+	
+	@Override
+	public int getIncidentActivityTaskCount(IncidentActivityTaskSearchDTO dto) {
+		return incidentActivityDao.getIncidentActivityTaskCount(dto);
+	}
+	
+	@Override
+	public List<IncidentActivityTaskDTO> listIncidentActivityTasks(IncidentActivityTaskSearchDTO dto) {
+		List<IncidentActivityTaskDTO> tasks = new ArrayList<IncidentActivityTaskDTO>();
+		List<IncidentActivityTask> fromDb = incidentActivityDao.listIncidentActivityTasks(dto);
+		for (IncidentActivityTask iat: fromDb) {
+			IncidentActivityTaskDTO iatdto = new IncidentActivityTaskDTO();
+			iatdto.set_DATEFORMAT(dto.get_DATEFORMAT());
+			iatdto.set_TIMEFORMAT(dto.get_TIMEFORMAT());
+			iatdto.set_TIMEZONE(dto.get_TIMEZONE());
+			iatdto.setId(iat.getIncidentActivity().getId());
+			iatdto.setIncidentId(iat.getIncidentActivity().getIncident().getIncident_ID());
+			iatdto.setDescription(iat.getIncidentActivity().getDescription());
+			iatdto.setAgent(iat.getIncidentActivity().getApprovalAgent().getUsername());
+			iatdto.setTaskDate(iat.getGeneric_timestamp());
+			tasks.add(iatdto);
+		}
+		return tasks;
+	}
+
 	public DocumentDAO getDocumentDao() {
 		return documentDao;
 	}

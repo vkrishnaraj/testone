@@ -61,6 +61,7 @@ import com.bagnet.nettracer.tracing.forms.ViewRequestForm;
 import com.bagnet.nettracer.tracing.forms.ViewTemporaryOnHandsForm;
 import com.bagnet.nettracer.tracing.forms.ViewTemporaryReportsForm;
 import com.bagnet.nettracer.tracing.history.HistoryContainer;
+import com.bagnet.nettracer.tracing.service.IncidentActivityService;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.ExpenseUtils;
@@ -69,6 +70,7 @@ import com.bagnet.nettracer.tracing.utils.MatchUtils;
 import com.bagnet.nettracer.tracing.utils.MessageUtils;
 import com.bagnet.nettracer.tracing.utils.OHDUtils;
 import com.bagnet.nettracer.tracing.utils.SecurityUtils;
+import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TaskUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
@@ -80,6 +82,8 @@ import com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesUtil;
 
 public class LogonAction extends Action {
 
+	private IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
+	
 	private String foobar;
 	private final Logger authenlog = Logger.getLogger("authentication");
 	/**
@@ -626,7 +630,13 @@ public class LogonAction extends Action {
 																					if (x > 0) {
 																						entries = x;
 																					}
-																				}
+																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL_QUEUE) &&
+																						UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL, agent)) {
+																					entries = incidentActivityService.getIncidentActivityAwaitingApprovalCount();
+																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_REJECTION_QUEUE) &&
+																						UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_CREATE, agent)) {
+																					entries = incidentActivityService.getIncidentActivityRejectionCount(agent);
+																				} 
 																			}
 																		}
 																	}
