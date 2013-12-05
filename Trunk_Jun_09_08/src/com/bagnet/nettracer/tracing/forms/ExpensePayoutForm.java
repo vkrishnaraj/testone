@@ -55,6 +55,7 @@ public class ExpensePayoutForm extends ActionForm {
 	private String seccode;
 	private String wssubmit;
 	private int cancelcount;
+	private String errormsg;
 
 	//displayed - need conversion
 	private String incident_ID;
@@ -84,6 +85,12 @@ public class ExpensePayoutForm extends ActionForm {
 	private String dispVoucherExpirationDate;
 	private String toremark;
 
+	public String getErrormsg() {
+		return errormsg;
+	}
+	public void setErrormsg(String errormsg) {
+		this.errormsg = errormsg;
+	}
 	public String getCancelreason() {
 		return cancelreason;
 	}

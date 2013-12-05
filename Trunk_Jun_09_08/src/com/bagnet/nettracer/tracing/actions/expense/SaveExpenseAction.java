@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.bagnet.nettracer.tracing.actions.communications.CustomerCommunicationsAction;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.UsergroupBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -26,7 +28,7 @@ import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
 public class SaveExpenseAction extends BaseExpenseAction {
-
+	private Logger logger = Logger.getLogger(SaveExpenseAction.class);
 	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -103,13 +105,18 @@ public class SaveExpenseAction extends BaseExpenseAction {
 		if (expenseForm.getPaymentType().equals(TracingConstants.ENUM_VOUCHER)) {
 			//WS submit
 			com.bagnet.nettracer.tracing.db.Incident inc = (com.bagnet.nettracer.tracing.db.Incident)ibmo.findIncidentByID(incidentId);
-			ArrayList<String> ret = SpringUtils.getReservationIntegration().submitVoucher(inc, "open",expenseForm); 
-			boolean ws_submit_ok = (ret.get(0) != null) ? true : false ;
+			ArrayList<String> ret= null;
+			try{
+				ret = SpringUtils.getReservationIntegration().submitVoucher(inc, "open",expenseForm);
+			}catch(Exception e){
+				logger.error("Failed to submit Voucher!!! " +  e);
+			}
+			boolean ws_submit_ok = (ret != null && ret.get(1) != null) ? true : false ;
 			if (ws_submit_ok) {
-				request.getSession().setAttribute("ordernum", ret.get(0));
+				request.getSession().setAttribute("ordernum", ret.get(1));
 				ep.setOrdernum(ret.get(0));
-				request.getSession().setAttribute("slvnum", ret.get(1));
-				request.getSession().setAttribute("seccode", ret.get(2));
+				request.getSession().setAttribute("slvnum", ret.get(2));
+				request.getSession().setAttribute("seccode", ret.get(3));
 				request.getSession().setAttribute("wssubmit", "yes");
 				String contents= "Voucher Issue Amount: $" + String.valueOf(expenseForm.getCheckamt()) + "\n" + 
 		                 "Agent Comments: " + expenseForm.getNewComment();
@@ -122,6 +129,7 @@ public class SaveExpenseAction extends BaseExpenseAction {
 				expenseForm.setCreateUser(ep.getAgent().getUsername());
 				expenseForm.setCreatedate(ep.getCreatedate());
 				expenseForm.setPaymentType(ep.getPaytype());
+				expenseForm.setErrormsg((ret != null) ? ret.get(4) : "NO CONNECTION!!");
 //				request.getSession().setAttribute("expensepayoutform", expenseForm);	
 				return mapping.findForward(CREATE_SUCCESS);
 			}				

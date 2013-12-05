@@ -43,6 +43,7 @@
 	System.out.println("epf.getCancelreason: "+epf.getCancelreason());
 	
 	boolean showcancel = (today.equals(createdate) && epf.getCancelcount() == 0 ) ? true : false;
+	System.out.println("epf.getCancelcount(): " + epf.getCancelcount());
 	System.out.println("showcancel: " + showcancel);
 	System.out.println("Wssubmit: "+epf.getWssubmit());	
 	boolean swaBsoPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, a) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN,a);
@@ -118,7 +119,7 @@
     										title: 'Select Cancel Reason',
     										modal: true,
     										buttons: {
-    											Ok: function() {
+    											Submit: function() {
     												jQuery(this).dialog("close");
     												var templateSelect = document.getElementById("templateSelect");
     												templateId = templateSelect.options[templateSelect.selectedIndex].value;
@@ -129,9 +130,6 @@
 //    												submitRequest(templateId);
     												document.expensePayoutForm.cancelreason.value=templateId;
     												document.expensePayoutForm.submit();
-    											},
-    											Cancel: function() {
-    												jQuery(this).dialog("close");
     											}
     										}
     									});
@@ -151,9 +149,9 @@
           }
       }
 	    
-	    function ReSubmitWS() {
-	    	window.alert("WS Failed. Please Resubmit or Call Administrator for connection issue. ");	
-	    };            
+	    function ReSubmitWS(wserrormsg) {
+	    	alert('WS Failed due to ' + wserrormsg + '. Please Resubmit or Call Administrator for connection issue.');
+	    };           
  
     </script>
 <html:form action="UpdateExpense.do" method="post" onsubmit="return validateExpense(this);">
@@ -613,5 +611,5 @@
     <% } %>
 </html:form>
 <c:if test="${expensePayoutForm.wssubmit == 'no'}">
-    <script type="text/javascript">ReSubmitWS();</script>
+    <script type="text/javascript">ReSubmitWS('<c:out value="${expensePayoutForm.errormsg}" />');</script>
  </c:if>

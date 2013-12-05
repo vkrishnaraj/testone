@@ -169,7 +169,7 @@ public class NTIntegrationWrapper extends IntegrationWrapper {
 			voucher.setStation((station.getStationcode() != null) ? station.getStationcode() : null);
 			voucher.setStatus(status);
 			voucher.setAgentUserName((inc.getAgent_username() != null) ? inc.getAgent_username() : null);
-			voucher.setAmount((epf.getVoucheramt() != 0) ? epf.getVoucheramt() : 0);
+			voucher.setAmount((epf.getCheckamt() != 0) ? epf.getCheckamt() : 0);
 //			voucher.setDepartment(null);//ignore
 			voucher.setDistributionMethod((epf.getDistributemethod() != null) ? epf.getDistributemethod() : null);
 			voucher.setNtIncidentId((inc.getIncident_ID() != null) ? inc.getIncident_ID() : null);
@@ -204,13 +204,16 @@ public class NTIntegrationWrapper extends IntegrationWrapper {
 			}			
 			
 
-			//System.out.println(doc);
+			System.out.println(doc);
 			SubmitVoucherResponseDocument response = stub.submitVoucher(doc);
-			//System.out.println(response);
+			System.out.println(response);
 			ArrayList<String> ret = new ArrayList<String>();
+			ret.add(response.getSubmitVoucherResponse().getReturn().getStatus());
 			ret.add(response.getSubmitVoucherResponse().getReturn().getOrderNumber());
 			ret.add(response.getSubmitVoucherResponse().getReturn().getVoucherId());
 			ret.add(response.getSubmitVoucherResponse().getReturn().getSecurityCode());
+		    ret.add(response.getSubmitVoucherResponse().getReturn().getError().getDescription());
+			
 			
 			return ret;
 		} catch (Exception e){

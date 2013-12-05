@@ -135,8 +135,8 @@ public abstract class BaseExpenseAction extends CheckedAction {
 		epform.setDistributemethod(ep.getDistributemethod());
 		epform.setCancelreason(ep.getCancelreason());
 		epform.setOrdernum((String)request.getSession().getAttribute("ordernum"));
-		epform.setSlvnum((String)request.getSession().getAttribute("slvnum"));
-		epform.setSeccode((String)request.getSession().getAttribute("seccode"));
+		//epform.setSlvnum((String)request.getSession().getAttribute("slvnum"));
+		//epform.setSeccode((String)request.getSession().getAttribute("seccode"));
 		epform.setWssubmit((String)request.getSession().getAttribute("wssubmit"));
 	}
 

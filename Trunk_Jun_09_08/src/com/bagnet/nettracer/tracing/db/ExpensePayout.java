@@ -72,6 +72,7 @@ public class ExpensePayout implements Serializable {
 	private int printcount;
 	private String ordernum;
 	private String cancelreason;
+	private int cancelcount;
 
 	//not part of the model
 	private String _DATEFORMAT;
@@ -327,6 +328,15 @@ public class ExpensePayout implements Serializable {
 
 	public void setPrintcount(int printcount) {
 		this.printcount = printcount;
+	}
+	
+	@Basic
+	public int getCancelcount() {
+		return cancelcount;
+	}
+
+	public void setCancelcount(int cancelcount) {
+		this.cancelcount = cancelcount;
 	}
 
 	@Basic

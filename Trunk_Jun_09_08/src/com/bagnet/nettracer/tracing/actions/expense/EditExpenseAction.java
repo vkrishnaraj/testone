@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -23,7 +24,7 @@ import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 
 public class EditExpenseAction extends BaseExpenseAction {
-
+	private Logger logger = Logger.getLogger(EditExpenseAction.class);
 	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -58,19 +59,29 @@ public class EditExpenseAction extends BaseExpenseAction {
 			Status st = new Status();			
 			//WS submit
 			com.bagnet.nettracer.tracing.db.Incident inc = (com.bagnet.nettracer.tracing.db.Incident)ibmo.findIncidentByID(incidentId);
-			ArrayList<String> ret = SpringUtils.getReservationIntegration().submitVoucher(inc, "cancel",epform); 
-			boolean ws_submit_ok = (ret.get(0) != null) ? true : false ;
+			ArrayList<String> ret= null;
+			try{
+				ret = SpringUtils.getReservationIntegration().submitVoucher(inc, "cancel",epform);
+			}catch(Exception e){
+				logger.error("Failed to submit Voucher!!! " +  e);
+			}
+			boolean ws_submit_ok = (ret != null && ret.get(1) != null) ? true : false ;
 			if (ws_submit_ok) {
-//				request.getSession().setAttribute("ordernum", ret.get(0));
+//				request.getSession().setAttribute("ordernum", ret.get(1));
 //				ep.setOrdernum(ret.get(0));
-//				request.getSession().setAttribute("slvnum", ret.get(1));
-//				request.getSession().setAttribute("seccode", ret.get(2));
+//				request.getSession().setAttribute("slvnum", ret.get(2));
+//				request.getSession().setAttribute("seccode", ret.get(3));
 //				request.getSession().setAttribute("wssubmit", "yes");
-				String contents= "The Southwest LUV Voucher has been cancelled. Order Number: " + ret.get(0);
+				epform.setCancelcount(1);
+				String contents= "The Southwest LUV Voucher has been cancelled. Order Number: " + ret.get(1);
 				ibmo.insertRemark(contents,incidentId, user, TracingConstants.REMARK_REGULAR);
+				
 //				st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_PAID);
 			} else {
 				epform.setWssubmit("no");
+				epform.setErrormsg((ret != null) ? ret.get(4) : "NO CONNECTION!!");
+				epform.setCancelreason("");
+				epform.setCancelcount(0);
 //				epform.setIncident_ID(incidentId);
 //				epform.setCreateStation(ep.getStation().getStationcode());
 //				epform.setCreateUser(ep.getAgent().getUsername());

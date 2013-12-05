@@ -122,8 +122,10 @@ public class UpdateExpenseAction extends BaseExpenseAction {
 			}
 		} else if (expenseForm.getStatus_id() == TracingConstants.EXPENSEPAYOUT_STATUS_PAID) {
 			st.setStatus_ID(expenseForm.getStatus_id());
-			ep.setPrintcount(expenseForm.getPrintcount());
-			ep.setCancelreason(expenseForm.getCancelreason());
+			if (expenseForm.getPrintcount() > 0 ) 
+				ep.setPrintcount(expenseForm.getPrintcount());
+			if (expenseForm.getCancelreason().length() > 0)
+				ep.setCancelreason(expenseForm.getCancelreason());
 			//Added to remark when print status is "No"
 			if (expenseForm.getToremark().equals("yes")) {
 				String incidentId = ((IncidentForm) request.getSession().getAttribute("incidentForm")).getIncident_ID();
