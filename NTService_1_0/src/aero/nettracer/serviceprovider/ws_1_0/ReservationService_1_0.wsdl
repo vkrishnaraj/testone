@@ -103,6 +103,7 @@
             <xs:complexType name="GenericResponse">
                 <xs:sequence>
                     <xs:element minOccurs="0" name="error" nillable="true" type="ax21:WebServiceError"/>
+                    <xs:element minOccurs="0" name="success" type="xs:boolean"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="RemarkResponse">
