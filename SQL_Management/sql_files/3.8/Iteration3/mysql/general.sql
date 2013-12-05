@@ -287,3 +287,17 @@ alter table task add incidentActivityId bigint default null;
 alter table expensepayout add column ordernum varchar(10);
 alter table expensepayout modify column paytype varchar(10);
 alter table expensepayout add column cancelreason varchar(10);
+
+#Label Queue
+insert into properties (ID, keyStr, valueStr) VALUES (140,'label.queue',1);
+insert into systemcomponents (component_id, component_name, component_desc, parent_component_id, component_action_link,display ,sort_order,sort_group) 
+VALUES (1500, 'Label Queue', 'Label Queue', 15, 'label.do', 1, 100, 4);
+
+create table label (
+  id bigint(20) not null auto_increment,
+  agent_id int(11) not null,
+  text varchar(100) not null,
+  lastUpdate timestamp not null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  primary key (id),
+  constraint fk_label_agent foreign key (agent_id) references agent (Agent_ID)
+);
