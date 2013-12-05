@@ -44,6 +44,7 @@ import com.bagnet.nettracer.tracing.db.ForwardNotice;
 import com.bagnet.nettracer.tracing.db.GroupComponentPolicy;
 import com.bagnet.nettracer.tracing.db.ProactiveNotification;
 import com.bagnet.nettracer.tracing.db.Station;
+import com.bagnet.nettracer.tracing.db.Label;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.taskmanager.GeneralTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.MorningDutiesTask;
@@ -356,8 +357,8 @@ public class LogonAction extends Action {
 							if (x != -1)
 								entries = x;
 						} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_LABEL_QUEUE)) {
-							List<?> resultlist = labelService.getLabels(agent.getAgent_ID());
-							entries = (resultlist == null) ? 0 : resultlist.size();							
+							List<Label> labelList = labelService.getLabels(agent.getAgent_ID());
+							entries = (labelList == null) ? 0 : labelList.size();							
 						} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_TO_BE_INVENTORIED)) {
 							if (!PropertyBMO.isTrue(PropertyBMO.PROPERTY_TO_BE_INVENTORIED)) {
 								continue;
