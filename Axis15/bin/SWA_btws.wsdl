@@ -1,19 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions name="BTWS"
-	targetNamespace="http://services.swacorp.com/BTWS/wsdl/v1" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://services.swacorp.com/BTWS/wsdl/v1"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:sch="http://services.swacorp.com/BTWS/v1">
-
-	<wsdl:documentation>
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://services.swacorp.com/BTWS/wsdl/v1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:sch="http://services.swacorp.com/BTWS/v1" name="BTWS" targetNamespace="http://services.swacorp.com/BTWS/wsdl/v1">
+<wsdl:documentation>
 		A webservice interface for BTWS.
 		Version:
 		1.0
 	</wsdl:documentation>
-
-	<wsdl:types>
-		<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-			xmlns="http://services.swacorp.com/BTWS/v1" targetNamespace="http://services.swacorp.com/BTWS/v1"
-			elementFormDefault="qualified">
+  <wsdl:types>
+<xs:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://services.swacorp.com/BTWS/wsdl/v1" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:sch="http://services.swacorp.com/BTWS/v1" xmlns="http://services.swacorp.com/BTWS/v1" elementFormDefault="qualified" targetNamespace="http://services.swacorp.com/BTWS/v1">
 
 			<xs:annotation>
 				<xs:appinfo>bagsTracingwebservice</xs:appinfo>
@@ -27,13 +20,13 @@
 			</xs:annotation>
 
 			<xs:simpleType name="ContentType">
-				<xs:restriction base="xs:token" />
+				<xs:restriction base="xs:token"/>
 			</xs:simpleType>
 
 			<xs:element name="getPNRRequest">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="PNR" type="xs:string" />
+						<xs:element name="PNR" type="xs:string"/>
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
@@ -41,27 +34,22 @@
 			<xs:element name="getPNRResponse">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="PNR" type="xs:string" />
+						<xs:element name="PNR" type="xs:string"/>
 						<xs:element name="Passenger">
 							<xs:complexType>
 								<xs:sequence>
 									<xs:element name="NameList">
 										<xs:complexType>
 											<xs:sequence>
-												<xs:element name="Name" maxOccurs="unbounded"
-													minOccurs="1">
+												<xs:element maxOccurs="unbounded" minOccurs="1" name="Name">
 													<xs:complexType>
 														<xs:sequence>
-															<xs:element name="FirstName" type="xs:string" />
-															<xs:element name="LastName" type="xs:string" />
-															<xs:element name="Title" type="xs:string"
-																minOccurs="0" />
-															<xs:element name="RapidReward" type="xs:string"
-																minOccurs="0" />
-															<xs:element name="Passport" type="xs:string"
-																minOccurs="0" />
-															<xs:element name="Nonrev" type="xs:string"
-																minOccurs="0" />
+															<xs:element name="FirstName" type="xs:string"/>
+															<xs:element name="LastName" type="xs:string"/>
+															<xs:element minOccurs="0" name="Title" type="xs:string"/>
+															<xs:element minOccurs="0" name="RapidReward" type="xs:string"/>
+															<xs:element minOccurs="0" name="Passport" type="xs:string"/>
+															<xs:element minOccurs="0" name="Nonrev" type="xs:string"/>
 														</xs:sequence>
 													</xs:complexType>
 												</xs:element>
@@ -71,26 +59,17 @@
 									<xs:element name="AddressList">
 										<xs:complexType>
 											<xs:sequence>
-												<xs:element name="Address" maxOccurs="unbounded"
-													minOccurs="1">
+												<xs:element maxOccurs="unbounded" minOccurs="1" name="Address">
 													<xs:complexType>
 														<xs:sequence>
-															<xs:element name="AddressLine1" type="xs:string"
-																minOccurs="0" />
-															<xs:element name="AddressLine2" type="xs:string"
-																minOccurs="0" />
-															<xs:element name="City" type="xs:string"
-																minOccurs="0" />
-															<xs:element name="CountryCode" type="xs:string"
-																minOccurs="0" />
-															<xs:element name="PostalCode" type="xs:string"
-																minOccurs="0" />
-															<xs:element name="State" type="xs:string"
-																minOccurs="0" />
-															<xs:element name="Province" type="xs:string"
-																minOccurs="0" />
-															<xs:element name="Email" type="xs:string"
-																minOccurs="0" />
+															<xs:element minOccurs="0" name="AddressLine1" type="xs:string"/>
+															<xs:element minOccurs="0" name="AddressLine2" type="xs:string"/>
+															<xs:element minOccurs="0" name="City" type="xs:string"/>
+															<xs:element minOccurs="0" name="CountryCode" type="xs:string"/>
+															<xs:element minOccurs="0" name="PostalCode" type="xs:string"/>
+															<xs:element minOccurs="0" name="State" type="xs:string"/>
+															<xs:element minOccurs="0" name="Province" type="xs:string"/>
+															<xs:element minOccurs="0" name="Email" type="xs:string"/>
 														</xs:sequence>
 													</xs:complexType>
 												</xs:element>
@@ -100,45 +79,32 @@
 									<xs:element name="PhoneList">
 										<xs:complexType>
 											<xs:sequence>
-												<xs:element name="Phone" maxOccurs="unbounded"
-													minOccurs="1">
+												<xs:element maxOccurs="unbounded" minOccurs="1" name="Phone">
 													<xs:complexType>
 														<xs:sequence>
-															<xs:element name="AreaCode" type="xs:string"
-																minOccurs="0" />
-															<xs:element name="CountryCode" type="xs:string"
-																minOccurs="0" />
-															<xs:element name="ExchangeNumber" type="xs:string"
-																minOccurs="0" />
-															<xs:element name="ExtensionNumber" type="xs:string"
-																minOccurs="0" />
-															<xs:element name="LineNumber" type="xs:string"
-																minOccurs="0" />
-															<xs:element name="PhoneType" type="xs:string"
-																minOccurs="0" />
+															<xs:element minOccurs="0" name="AreaCode" type="xs:string"/>
+															<xs:element minOccurs="0" name="CountryCode" type="xs:string"/>
+															<xs:element minOccurs="0" name="ExchangeNumber" type="xs:string"/>
+															<xs:element minOccurs="0" name="ExtensionNumber" type="xs:string"/>
+															<xs:element minOccurs="0" name="LineNumber" type="xs:string"/>
+															<xs:element minOccurs="0" name="PhoneType" type="xs:string"/>
 														</xs:sequence>
 													</xs:complexType>
 												</xs:element>
 											</xs:sequence>
 										</xs:complexType>
 									</xs:element>
-									<xs:element name="FlightList" minOccurs="0">
+									<xs:element minOccurs="0" name="FlightList">
 										<xs:complexType>
 											<xs:sequence>
-												<xs:element name="Flight" maxOccurs="unbounded"
-													minOccurs="1">
+												<xs:element maxOccurs="unbounded" minOccurs="1" name="Flight">
 													<xs:complexType>
 														<xs:sequence>
-															<xs:element name="FlightNum" type="xs:string"
-																minOccurs="0" />
-															<xs:element name="Origin" type="xs:string"
-																minOccurs="0" />
-															<xs:element name="Destination" type="xs:string"
-																minOccurs="0" />
-															<xs:element name="DepartureDate" type="xs:date"
-																minOccurs="0" />
-															<xs:element name="Airline" type="xs:string"
-																minOccurs="0" />
+															<xs:element minOccurs="0" name="FlightNum" type="xs:string"/>
+															<xs:element minOccurs="0" name="Origin" type="xs:string"/>
+															<xs:element minOccurs="0" name="Destination" type="xs:string"/>
+															<xs:element minOccurs="0" name="DepartureDate" type="xs:date"/>
+															<xs:element minOccurs="0" name="Airline" type="xs:string"/>
 														</xs:sequence>
 													</xs:complexType>
 												</xs:element>
@@ -155,7 +121,7 @@
 			<xs:element name="getPNRFault">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="code" type="xs:string" />
+						<xs:element name="code" type="xs:string"/>
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
@@ -163,7 +129,7 @@
 			<xs:element name="getBagsRequest">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="PNR" type="xs:string" />
+						<xs:element name="PNR" type="xs:string"/>
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
@@ -171,14 +137,13 @@
 			<xs:element name="getBagsResponse">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="PNR" type="xs:string" />
-						<xs:element name="Bag" maxOccurs="unbounded" minOccurs="1">
+						<xs:element name="PNR" type="xs:string"/>
+						<xs:element maxOccurs="unbounded" minOccurs="1" name="Bag">
 							<xs:complexType>
 								<xs:sequence>
-									<xs:element name="Bagtag" type="xs:string" />
-									<xs:element name="PositionId" type="xs:string"
-										minOccurs="0" />
-									<xs:element name="Overweight" type="xs:boolean" />
+									<xs:element name="Bagtag" type="xs:string"/>
+									<xs:element minOccurs="0" name="PositionId" type="xs:string"/>
+									<xs:element name="Overweight" type="xs:boolean"/>
 								</xs:sequence>
 							</xs:complexType>
 						</xs:element>
@@ -189,7 +154,7 @@
 			<xs:element name="getBagsFault">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="code" type="xs:string" />
+						<xs:element name="code" type="xs:string"/>
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
@@ -197,8 +162,8 @@
 			<xs:element name="getFlightListRequest">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="Station" type="xs:string" />
-						<xs:element name="Date" type="xs:date"></xs:element>
+						<xs:element name="Station" type="xs:string"/>
+						<xs:element name="Date" type="xs:date"/>
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
@@ -206,25 +171,18 @@
 			<xs:element name="getFlightListResponse">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="FlightList" minOccurs="0">
+						<xs:element minOccurs="0" name="FlightList">
 							<xs:complexType>
 								<xs:sequence>
-									<xs:element name="Flight" maxOccurs="unbounded"
-										minOccurs="1">
+									<xs:element maxOccurs="unbounded" minOccurs="1" name="Flight">
 										<xs:complexType>
 											<xs:sequence>
-												<xs:element name="OriginCity" type="xs:string"
-													minOccurs="0" />
-												<xs:element name="AirlineCode" type="xs:string"
-													minOccurs="0" />
-												<xs:element name="Flight" type="xs:string"
-													minOccurs="0" />
-												<xs:element name="ScheduleArrival" type="xs:dateTime"
-													minOccurs="0" />
-												<xs:element name="ActualArrival" type="xs:dateTime"
-													minOccurs="0" />
-												<xs:element name="ArrivalCity" type="xs:string"
-													minOccurs="0" />
+												<xs:element minOccurs="0" name="OriginCity" type="xs:string"/>
+												<xs:element minOccurs="0" name="AirlineCode" type="xs:string"/>
+												<xs:element minOccurs="0" name="Flight" type="xs:string"/>
+												<xs:element minOccurs="0" name="ScheduleArrival" type="xs:dateTime"/>
+												<xs:element minOccurs="0" name="ActualArrival" type="xs:dateTime"/>
+												<xs:element minOccurs="0" name="ArrivalCity" type="xs:string"/>
 											</xs:sequence>
 										</xs:complexType>
 									</xs:element>
@@ -238,7 +196,7 @@
 			<xs:element name="getFlightListFault">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="code" type="xs:string" />
+						<xs:element name="code" type="xs:string"/>
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
@@ -247,45 +205,42 @@
 			<xs:element name="issueLuvVoucherRequest">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="PNR" type="xs:string" />
-						<xs:element name="Incident" type="xs:string" />
-						<xs:element name="FirstName" type="xs:string" />
-						<xs:element name="LastName" type="xs:string" />
-						<xs:element name="Address" minOccurs="0">
+						<xs:element name="PNR" type="xs:string"/>
+						<xs:element name="Incident" type="xs:string"/>
+						<xs:element name="FirstName" type="xs:string"/>
+						<xs:element name="LastName" type="xs:string"/>
+						<xs:element minOccurs="0" name="Address">
 							<xs:complexType>
 								<xs:sequence>
-									<xs:element name="AddressLine1" type="xs:string"
-										minOccurs="0" />
-									<xs:element name="AddressLine2" type="xs:string"
-										minOccurs="0" />
-									<xs:element name="City" type="xs:string" minOccurs="0" />
-									<xs:element name="CountryCode" type="xs:string"
-										minOccurs="0" />
-									<xs:element name="PostalCode" type="xs:string"
-										minOccurs="0" />
-									<xs:element name="State" type="xs:string" minOccurs="0" />
-									<xs:element name="Province" type="xs:string"
-										minOccurs="0" />
-									<xs:element name="Email" type="xs:string" minOccurs="0" />
+									<xs:element minOccurs="0" name="AddressLine1" type="xs:string"/>
+									<xs:element minOccurs="0" name="AddressLine2" type="xs:string"/>
+									<xs:element minOccurs="0" name="City" type="xs:string"/>
+									<xs:element minOccurs="0" name="CountryCode" type="xs:string"/>
+									<xs:element minOccurs="0" name="PostalCode" type="xs:string"/>
+									<xs:element minOccurs="0" name="State" type="xs:string"/>
+									<xs:element minOccurs="0" name="Province" type="xs:string"/>
+									<xs:element minOccurs="0" name="Email" type="xs:string"/>
 								</xs:sequence>
 							</xs:complexType>
 						</xs:element>
-						<xs:element name="AreaCode" type="xs:string" minOccurs="0" />
-						<xs:element name="ExchangeNumber" type="xs:string"
-							minOccurs="0" />
-						<xs:element name="LineNumber" type="xs:string"
-							minOccurs="0" />
-						<xs:element name="CountryCallingCode" type="xs:string" />
-						<xs:element name="IntlPhoneNumber" type="xs:string"
-							minOccurs="0" />
-						<xs:element name="DistributionMethod" type="xs:string" />
-						<xs:element name="Reason" type="xs:string" />
-						<xs:element name="Department" type="xs:string" />
-						<xs:element name="CustomMessage" type="xs:string" />
-						<xs:element name="PayCode" type="xs:string" />
-						<xs:element name="Amount" type="xs:float" />
-						<xs:element name="AgentId" type="xs:string" />
-						<xs:element name="StationCode" type="xs:string" />
+						<xs:element minOccurs="0" name="AreaCode" type="xs:string"/>
+						<xs:element minOccurs="0" name="ExchangeNumber" type="xs:string"/>
+						<xs:element minOccurs="0" name="LineNumber" type="xs:string"/>
+						<xs:element name="CountryCallingCode" type="xs:string"/>
+						<xs:element minOccurs="0" name="IntlPhoneNumber" type="xs:string"/>
+						<xs:element name="DistributionMethod">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="USPS"/>
+									<xs:enumeration value="IMMEDIATE"/>
+									<xs:enumeration value="EMAIL"/>
+									<xs:enumeration value="HOLD_FOR_PICKUP"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+						<xs:element name="Amount" type="xs:float"/>
+						<xs:element name="AgentId" type="xs:string"/>
+						<xs:element name="StationCode" type="xs:string"/>
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
@@ -293,12 +248,12 @@
 			<xs:element name="issueLuvVoucherResponse">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="ReturnCode" type="xs:integer" />
-						<xs:element name="Message" type="xs:string" />
-						<xs:element name="OrderNumber" type="xs:string" />
-						<xs:element name="CardNumber" type="xs:string" />
-						<xs:element name="SecurityCode" type="xs:string" />
-						<xs:element name="TransactionDate" type="xs:date" />
+						<xs:element name="ReturnCode" type="xs:integer"/>
+						<xs:element name="Message" type="xs:string"/>
+						<xs:element name="OrderNumber" type="xs:string"/>
+						<xs:element name="CardNumber" type="xs:string"/>
+						<xs:element name="SecurityCode" type="xs:string"/>
+						<xs:element name="TransactionDate" type="xs:date"/>
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
@@ -306,7 +261,7 @@
 			<xs:element name="issueLuvVoucherFault">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="code" type="xs:string" />
+						<xs:element name="code" type="xs:string"/>
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
@@ -314,8 +269,10 @@
 			<xs:element name="cancelLuvVoucherRequest">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="OrderNumber" type="xs:string" />
-						<xs:element name="Reason" type="xs:string" />
+						<xs:element name="OrderNumber" type="xs:string"/>
+						<xs:element name="Reason" type="xs:string"/>
+						<xs:element name="AgentId" type="xs:string"/>
+						<xs:element name="StationCode" type="xs:string"/>
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
@@ -323,8 +280,8 @@
 			<xs:element name="cancelLuvVoucherResponse">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="CancelDate" type="xs:date" />
-						<xs:element name="CancelStatus" type="xs:string" />
+						<xs:element name="CancelDate" type="xs:date"/>
+						<xs:element name="CancelStatus" type="xs:string"/>
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
@@ -332,191 +289,181 @@
 			<xs:element name="cancelLuvVoucherFault">
 				<xs:complexType>
 					<xs:sequence>
-						<xs:element name="code" type="xs:string" />
+						<xs:element name="code" type="xs:string"/>
 					</xs:sequence>
 				</xs:complexType>
 			</xs:element>
 
 		</xs:schema>
-	</wsdl:types>
-
-	<wsdl:message name="GetPNRRequestMessage">
-		<wsdl:part name="parameters" element="sch:getPNRRequest"></wsdl:part>
-	</wsdl:message>
-
-	<wsdl:message name="GetBagsRequestMessage">
-		<wsdl:part name="parameters" element="sch:getBagsRequest"></wsdl:part>
-	</wsdl:message>
-
-	<wsdl:message name="GetFlightListRequestMessage">
-		<wsdl:part name="parameters" element="sch:getFlightListRequest"></wsdl:part>
-	</wsdl:message>
-
-	<wsdl:message name="IssueLuvVoucherRequestMessage">
-		<wsdl:part name="parameters" element="sch:issueLuvVoucherRequest"></wsdl:part>
-	</wsdl:message>
-
-	<wsdl:message name="CancelLuvVoucherRequestMessage">
-		<wsdl:part name="parameters" element="sch:cancelLuvVoucherRequest"></wsdl:part>
-	</wsdl:message>
-
-	<wsdl:message name="GetPNRResponseMessage">
-		<wsdl:part name="parameters" element="sch:getPNRResponse"></wsdl:part>
-	</wsdl:message>
-
-	<wsdl:message name="GetBagsResponseMessage">
-		<wsdl:part name="parameters" element="sch:getBagsResponse"></wsdl:part>
-	</wsdl:message>
-
-	<wsdl:message name="GetFlightListResponseMessage">
-		<wsdl:part name="parameters" element="sch:getFlightListResponse"></wsdl:part>
-	</wsdl:message>
-
-	<wsdl:message name="IssueLuvVoucherResponseMessage">
-		<wsdl:part name="parameters" element="sch:issueLuvVoucherResponse"></wsdl:part>
-	</wsdl:message>
-
-	<wsdl:message name="CancelLuvVoucherResponseMessage">
-		<wsdl:part name="parameters" element="sch:cancelLuvVoucherResponse"></wsdl:part>
-	</wsdl:message>
-
-	<wsdl:message name="getPNRError">
-		<wsdl:part name="parameters" element="sch:getPNRFault"></wsdl:part>
-	</wsdl:message>
-
-	<wsdl:message name="getBagsError">
-		<wsdl:part name="parameters" element="sch:getBagsFault"></wsdl:part>
-	</wsdl:message>
-
-	<wsdl:message name="getFlightListError">
-		<wsdl:part name="parameters" element="sch:getFlightListFault"></wsdl:part>
-	</wsdl:message>
-
-	<wsdl:message name="IssueLuvVoucherError">
-		<wsdl:part name="parameters" element="sch:issueLuvVoucherFault"></wsdl:part>
-	</wsdl:message>
-
-	<wsdl:message name="CancelLuvVoucherError">
-		<wsdl:part name="parameters" element="sch:cancelLuvVoucherFault"></wsdl:part>
-	</wsdl:message>
-
-	<wsdl:portType name="BTWSPortType">
-		<wsdl:operation name="getPNR">
-			<wsdl:input name="GetPNRRequestMessage" message="tns:GetPNRRequestMessage" />
-			<wsdl:output name="GetPNRResponseMessage" message="tns:GetPNRResponseMessage" />
-			<wsdl:fault name="getPNRError" message="tns:getPNRError" />
-		</wsdl:operation>
-
-		<wsdl:operation name="getBags">
-			<wsdl:input name="GetBagsRequestMessage" message="tns:GetBagsRequestMessage" />
-			<wsdl:output name="GetBagsResponseMessage" message="tns:GetBagsResponseMessage" />
-			<wsdl:fault name="getBagsError" message="tns:getBagsError" />
-		</wsdl:operation>
-
-		<wsdl:operation name="getFlightList">
-			<wsdl:input name="GetFlightListRequestMessage" message="tns:GetFlightListRequestMessage" />
-			<wsdl:output name="GetFlightListResponseMessage" message="tns:GetFlightListResponseMessage" />
-			<wsdl:fault name="getFlightListError" message="tns:getFlightListError" />
-		</wsdl:operation>
-
-		<wsdl:operation name="issueLuvVoucher">
-			<wsdl:input name="IssueLuvVoucherRequestMessage" message="tns:IssueLuvVoucherRequestMessage" />
-			<wsdl:output name="IssueLuvVoucherResponseMessage"
-				message="tns:IssueLuvVoucherResponseMessage" />
-			<wsdl:fault name="IssueLuvVoucherError" message="tns:IssueLuvVoucherError" />
-		</wsdl:operation>
-
-		<wsdl:operation name="cancelLuvVoucher">
-			<wsdl:input name="CancelLuvVoucherRequestMessage" message="tns:CancelLuvVoucherRequestMessage" />
-			<wsdl:output name="CancelLuvVoucherResponseMessage"
-				message="tns:CancelLuvVoucherResponseMessage" />
-			<wsdl:fault name="CancelLuvVoucherError" message="tns:CancelLuvVoucherError" />
-		</wsdl:operation>
-
-	</wsdl:portType>
-
-	<wsdl:binding name="BTWSSoapBinding" type="tns:BTWSPortType">
-		<soap:binding style="document"
-			transport="http://schemas.xmlsoap.org/soap/http" />
-
-		<wsdl:operation name="getPNR">
-			<soap:operation soapAction="http://services.swacorp.com/BTWS/wsdl/v1/getPNR"
-				style="document" />
-			<wsdl:input name="GetPNRRequestMessage">
-				<soap:body use="literal" parts="parameters" />
-			</wsdl:input>
-			<wsdl:output name="GetPNRResponseMessage">
-				<soap:body use="literal" parts="parameters" />
-			</wsdl:output>
-			<wsdl:fault name="getPNRError">
-				<soap:fault use="literal" name="getPNRError" />
-			</wsdl:fault>
-		</wsdl:operation>
-
-		<wsdl:operation name="getBags">
-			<soap:operation soapAction="http://services.swacorp.com/BTWS/wsdl/v1/getBags"
-				style="document" />
-			<wsdl:input name="GetBagsRequestMessage">
-				<soap:body use="literal" parts="parameters" />
-			</wsdl:input>
-			<wsdl:output name="GetBagsResponseMessage">
-				<soap:body use="literal" parts="parameters" />
-			</wsdl:output>
-			<wsdl:fault name="getBagsError">
-				<soap:fault use="literal" name="getBagsError" />
-			</wsdl:fault>
-		</wsdl:operation>
-
-		<wsdl:operation name="getFlightList">
-			<soap:operation
-				soapAction="http://services.swacorp.com/BTWS/wsdl/v1/getFlightList"
-				style="document" />
-			<wsdl:input name="GetFlightListRequestMessage">
-				<soap:body use="literal" parts="parameters" />
-			</wsdl:input>
-			<wsdl:output name="GetFlightListResponseMessage">
-				<soap:body use="literal" parts="parameters" />
-			</wsdl:output>
-			<wsdl:fault name="getFlightListError">
-				<soap:fault use="literal" name="getFlightListError" />
-			</wsdl:fault>
-		</wsdl:operation>
-
-		<wsdl:operation name="issueLuvVoucher">
-			<soap:operation
-				soapAction="http://services.swacorp.com/BTWS/wsdl/v1/issueLuvVoucher"
-				style="document" />
-			<wsdl:input name="IssueLuvVoucherRequestMessage">
-				<soap:body use="literal" parts="parameters" />
-			</wsdl:input>
-			<wsdl:output name="IssueLuvVoucherResponseMessage">
-				<soap:body use="literal" parts="parameters" />
-			</wsdl:output>
-			<wsdl:fault name="IssueLuvVoucherError">
-				<soap:fault use="literal" name="IssueLuvVoucherError" />
-			</wsdl:fault>
-		</wsdl:operation>
-
-		<wsdl:operation name="cancelLuvVoucher">
-			<soap:operation
-				soapAction="http://services.swacorp.com/BTWS/wsdl/v1/cancelLuvVoucher"
-				style="document" />
-			<wsdl:input name="CancelLuvVoucherRequestMessage">
-				<soap:body use="literal" parts="parameters" />
-			</wsdl:input>
-			<wsdl:output name="CancelLuvVoucherResponseMessage">
-				<soap:body use="literal" parts="parameters" />
-			</wsdl:output>
-			<wsdl:fault name="CancelLuvVoucherError">
-				<soap:fault use="literal" name="CancelLuvVoucherError" />
-			</wsdl:fault>
-		</wsdl:operation>
-
-	</wsdl:binding>
-
-	<wsdl:service name="BTWS">
-		<wsdl:port name="BTWSPort" binding="tns:BTWSSoapBinding">
-			<soap:address location="http://replacedAtRuntime" />
-		</wsdl:port>
-	</wsdl:service>
+  </wsdl:types>
+  <wsdl:message name="IssueLuvVoucherResponseMessage">
+    <wsdl:part element="sch:issueLuvVoucherResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetBagsRequestMessage">
+    <wsdl:part element="sch:getBagsRequest" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetPNRResponseMessage">
+    <wsdl:part element="sch:getPNRResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CancelLuvVoucherResponseMessage">
+    <wsdl:part element="sch:cancelLuvVoucherResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CancelLuvVoucherRequestMessage">
+    <wsdl:part element="sch:cancelLuvVoucherRequest" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="IssueLuvVoucherRequestMessage">
+    <wsdl:part element="sch:issueLuvVoucherRequest" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getFlightListError">
+    <wsdl:part element="sch:getFlightListFault" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getPNRError">
+    <wsdl:part element="sch:getPNRFault" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetFlightListRequestMessage">
+    <wsdl:part element="sch:getFlightListRequest" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetFlightListResponseMessage">
+    <wsdl:part element="sch:getFlightListResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getBagsError">
+    <wsdl:part element="sch:getBagsFault" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CancelLuvVoucherError">
+    <wsdl:part element="sch:cancelLuvVoucherFault" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetPNRRequestMessage">
+    <wsdl:part element="sch:getPNRRequest" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetBagsResponseMessage">
+    <wsdl:part element="sch:getBagsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="IssueLuvVoucherError">
+    <wsdl:part element="sch:issueLuvVoucherFault" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="BTWSPortType">
+    <wsdl:operation name="getPNR">
+      <wsdl:input message="tns:GetPNRRequestMessage" name="GetPNRRequestMessage">
+    </wsdl:input>
+      <wsdl:output message="tns:GetPNRResponseMessage" name="GetPNRResponseMessage">
+    </wsdl:output>
+      <wsdl:fault message="tns:getPNRError" name="getPNRError">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getBags">
+      <wsdl:input message="tns:GetBagsRequestMessage" name="GetBagsRequestMessage">
+    </wsdl:input>
+      <wsdl:output message="tns:GetBagsResponseMessage" name="GetBagsResponseMessage">
+    </wsdl:output>
+      <wsdl:fault message="tns:getBagsError" name="getBagsError">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getFlightList">
+      <wsdl:input message="tns:GetFlightListRequestMessage" name="GetFlightListRequestMessage">
+    </wsdl:input>
+      <wsdl:output message="tns:GetFlightListResponseMessage" name="GetFlightListResponseMessage">
+    </wsdl:output>
+      <wsdl:fault message="tns:getFlightListError" name="getFlightListError">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="issueLuvVoucher">
+      <wsdl:input message="tns:IssueLuvVoucherRequestMessage" name="IssueLuvVoucherRequestMessage">
+    </wsdl:input>
+      <wsdl:output message="tns:IssueLuvVoucherResponseMessage" name="IssueLuvVoucherResponseMessage">
+    </wsdl:output>
+      <wsdl:fault message="tns:IssueLuvVoucherError" name="IssueLuvVoucherError">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="cancelLuvVoucher">
+      <wsdl:input message="tns:CancelLuvVoucherRequestMessage" name="CancelLuvVoucherRequestMessage">
+    </wsdl:input>
+      <wsdl:output message="tns:CancelLuvVoucherResponseMessage" name="CancelLuvVoucherResponseMessage">
+    </wsdl:output>
+      <wsdl:fault message="tns:CancelLuvVoucherError" name="CancelLuvVoucherError">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="BTWSSoapBinding" type="tns:BTWSPortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getPNR">
+      <soap:operation soapAction="http://services.swacorp.com/BTWS/wsdl/v1/getPNR" style="document"/>
+      <wsdl:input name="GetPNRRequestMessage">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="GetPNRResponseMessage">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="getPNRError">
+        <soap:fault name="getPNRError" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getBags">
+      <soap:operation soapAction="http://services.swacorp.com/BTWS/wsdl/v1/getBags" style="document"/>
+      <wsdl:input name="GetBagsRequestMessage">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="GetBagsResponseMessage">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="getBagsError">
+        <soap:fault name="getBagsError" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getFlightList">
+      <soap:operation soapAction="http://services.swacorp.com/BTWS/wsdl/v1/getFlightList" style="document"/>
+      <wsdl:input name="GetFlightListRequestMessage">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="GetFlightListResponseMessage">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="getFlightListError">
+        <soap:fault name="getFlightListError" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="issueLuvVoucher">
+      <soap:operation soapAction="http://services.swacorp.com/BTWS/wsdl/v1/issueLuvVoucher" style="document"/>
+      <wsdl:input name="IssueLuvVoucherRequestMessage">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="IssueLuvVoucherResponseMessage">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="IssueLuvVoucherError">
+        <soap:fault name="IssueLuvVoucherError" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="cancelLuvVoucher">
+      <soap:operation soapAction="http://services.swacorp.com/BTWS/wsdl/v1/cancelLuvVoucher" style="document"/>
+      <wsdl:input name="CancelLuvVoucherRequestMessage">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="CancelLuvVoucherResponseMessage">
+        <soap:body parts="parameters" use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="CancelLuvVoucherError">
+        <soap:fault name="CancelLuvVoucherError" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="BTWS">
+    <wsdl:port binding="tns:BTWSSoapBinding" name="BTWSPort">
+      <soap:address location="http://webservices.swab2bqa.com/v1/BTWS"/>
+    </wsdl:port>
+  </wsdl:service>
 </wsdl:definitions>
