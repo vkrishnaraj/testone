@@ -125,11 +125,16 @@
 	</bean>
 	
 	<!-- DAO definitions -->
+	<bean id="labelDao" class="com.bagnet.nettracer.tracing.dao.label.LabelDaoImpl" />
 	<bean id="templateDao" class="com.bagnet.nettracer.tracing.dao.impl.TemplateDAOImpl" />
 	<bean id="incidentActivityDao" class="com.bagnet.nettracer.tracing.dao.impl.IncidentActivityDAOImpl" />
 	<bean id="documentDao" class="com.bagnet.nettracer.tracing.dao.impl.DocumentDAOImpl" />
 	
 	<!-- Service definitions -->
+	<bean id="labelService" class="com.bagnet.nettracer.tracing.service.label.LabelServiceImpl">
+		<property name="dao" ref="labelDao" />
+	</bean>
+	
 	<bean id="templateService" class="com.bagnet.nettracer.tracing.service.impl.TemplateServiceImpl" >
 		<property name="dao" ref="templateDao" />
 	</bean>

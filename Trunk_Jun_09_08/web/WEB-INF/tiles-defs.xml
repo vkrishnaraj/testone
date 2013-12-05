@@ -288,6 +288,10 @@
         <put name="center" value="/pages/onhand/request_on_hand_success.jsp"/>
     </definition>
     
+  	<definition name="label_list" extends="user_menu">
+    	<put name="center" value="/pages/label/label.jsp"/>
+    </definition>
+    
     <definition name="report_options" extends="user_menu">
         <put name="center"   value="/pages/reports/report_options.jsp"/>
     </definition>

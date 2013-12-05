@@ -33,7 +33,7 @@
   	}
 %>
 <script type="text/javascript">
-
+<!--
 	function loadList(selectId, url) {
 		if (document.getElementById(selectId).options.length > 1) return;
 
@@ -123,13 +123,46 @@
 		templateSelectDialog.dialog("open");
 	}
 
+	//label
+	function generateLabel(field) {
+		if (field.value.length < 1) {
+			return false;
+		}
+		
+		field.disabled = true;
+		
+		var incidentId = document.getElementById("incident_ID").value;
+		jQuery.ajax({
+ 			url: "label.do?incidentId="+ incidentId,
+			cache: false,
+			success: function(result) {
+				alert('<%=bundle.getString("label.created.success") %>');
+			},
+			error: function(result) {
+				field.disabled = false;
+				alert('<%=bundle.getString("error.failed.to.save") %>');
+			}
+		});	 
+		
+		return true;
+	}
+//-->
 </script>
-<a id="activities" ></a>
-<h1 class="green">
-	<bean:message key="header.customer.communications" />
-</h1>
-<span class="reqfield">*</span>
-<bean:message key="message.required" />
+
+<div style="float:right">
+	<input type="button" id="generateLabelButton" class="button"
+		value="<bean:message key="button.label.generate" />" onclick="return generateLabel(this);"/>
+</div>
+
+<div>
+	<a id="activities" ></a>
+	<h1 class="green">
+		<bean:message key="header.customer.communications" />
+	</h1>
+	<span class="reqfield">*</span>
+	<bean:message key="message.required" />
+</div>
+
 <input type="hidden" name="templateId" id="templateId" value="" />
 	<table  class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
 		<tr>

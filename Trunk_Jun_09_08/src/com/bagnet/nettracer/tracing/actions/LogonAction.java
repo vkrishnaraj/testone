@@ -61,6 +61,7 @@ import com.bagnet.nettracer.tracing.forms.ViewRequestForm;
 import com.bagnet.nettracer.tracing.forms.ViewTemporaryOnHandsForm;
 import com.bagnet.nettracer.tracing.forms.ViewTemporaryReportsForm;
 import com.bagnet.nettracer.tracing.history.HistoryContainer;
+import com.bagnet.nettracer.tracing.service.label.LabelService;
 import com.bagnet.nettracer.tracing.service.IncidentActivityService;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
@@ -86,6 +87,8 @@ public class LogonAction extends Action {
 	
 	private String foobar;
 	private final Logger authenlog = Logger.getLogger("authentication");
+	private LabelService labelService = (LabelService) SpringUtils.getBean(TracingConstants.LABEL_SERVICE_BEAN);
+	
 	/**
 	 * Process the specified HTTP request, and create the corresponding HTTP
 	 * response (or forward to another web component that will create it). Return
@@ -352,6 +355,9 @@ public class LogonAction extends Action {
 							int x = OHDUtils.getIncomingBagsCount(s.getStation_ID(), new ViewIncomingRequestForm(), true);
 							if (x != -1)
 								entries = x;
+						} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_LABEL_QUEUE)) {
+							List<?> resultlist = labelService.getLabels(agent.getAgent_ID());
+							entries = (resultlist == null) ? 0 : resultlist.size();							
 						} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_TO_BE_INVENTORIED)) {
 							if (!PropertyBMO.isTrue(PropertyBMO.PROPERTY_TO_BE_INVENTORIED)) {
 								continue;

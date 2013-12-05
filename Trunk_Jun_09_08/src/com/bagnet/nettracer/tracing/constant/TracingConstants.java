@@ -163,6 +163,7 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_MAINTAIN_AGENTS = "Maintain Agents";
 	public final static String SYSTEM_COMPONENT_NAME_MAINTAIN_WEB_SERVICE_AGENTS = "Maintain Web Service Agents";
 	public final static String SYSTEM_COMPONENT_NAME_INCOMING_BAGS = "Incoming Bags";
+	public final static String SYSTEM_COMPONENT_NAME_LABEL_QUEUE = "Label Queue";
 	public final static String SYSTEM_COMPONENT_NAME_TO_BE_INVENTORIED = "To Be Inventoried";
 	public final static String SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS = "Incoming Incidents";
 	public final static String SYSTEM_COMPONENT_NAME_SHARED_ATTACHMENTS = "Shared Attachments";
@@ -765,6 +766,9 @@ public class TracingConstants {
 	public final static String DELIVERY_LIST = "deliveryList";
 	public final static String ONHAND_LIST = "onhandList";
 	public final static String TO_BE_INVENTORIED_LIST = "to_be_inventoriedList";
+	
+	public final static int LABELS_PER_PAGE = 30;
+	public final static String LABEL_LIST = "labelList";
 	
 	// integration prepopulate page
 	public final static String PREPOPULATE_INCIDENT = "prepopulateincident";
@@ -1380,6 +1384,7 @@ public class TracingConstants {
 	public static final String COMMAND_EDIT = "edit";
 	public static final String COMMAND_CLEAR = "clear";
 	public static final String COMMAND_SEARCH = "search";
+	public static final String COMMAND_PRINT = "print";  
 	
 	public static final int ACTIVE_SEARCH_BOTH = 1200;
 	public static final int ACTIVE_SEARCH_ACTIVE = 1201;
@@ -1394,6 +1399,7 @@ public class TracingConstants {
 	public static final String DOCUMENT_SERVICE_BEAN = "documentService";
 	public static final String INCIDENT_ACTIVITY_SERVICE_BEAN = "incidentActivityService";
 	public static final String TEMPLATE_SERVICE_BEAN = "templateService";
+	public static final String LABEL_SERVICE_BEAN = "labelService";
 	
 	public static final int ACTUAL_CASH_VALUE=1;
 	public static final int DEFINED_RATE=2;

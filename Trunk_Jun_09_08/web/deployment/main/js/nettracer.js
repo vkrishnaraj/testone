@@ -340,3 +340,12 @@ function switchLocation() {
 		slideUpContainerState = 0;
 	}
 }
+
+function checkAllCheckboxes(checkboxName) {	    
+	var checkboxes = document.getElementsByName(checkboxName);
+	for (i = 0; i < checkboxes.length; i++) {
+		checkboxes[i].checked = true;
+	}
+	
+	return true;
+}

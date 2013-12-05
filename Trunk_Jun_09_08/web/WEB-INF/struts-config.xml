@@ -23,6 +23,9 @@
 			<form-property name="newStatus" type="java.lang.String" />
 		</form-bean>
 		
+		<form-bean name="labelForm" type="org.apache.struts.action.DynaActionForm">
+			<form-property name="label" type="java.lang.String" />
+		</form-bean>
 		
 		<form-bean name="toggleForm" type="org.apache.struts.action.DynaActionForm">
 			<form-property name="toggleType" type="java.lang.Integer" />
@@ -457,6 +460,7 @@
 		<forward name="deliveryList" path="delivery_list" />
 		<forward name="onhandList" path="onhand_list" />
 		<forward name="to_be_inventoriedList" path="to_be_inventoried_list" />
+		<forward name="labelList" path="label_list" />
 		<forward name="viewtempohd" path="viewtemp_ohd" />
 		<forward name="viewtempreports" path="viewtemp_reports" />
 		<forward name="viewmassohd" path="viewmass_ohd" />
@@ -868,6 +872,8 @@
 		<action path="/deliver" type="com.bagnet.nettracer.tracing.actions.ViewDeliveryLog" name="deliverForm" scope="request" validate="false"></action>
 
 		<action path="/onhands" type="com.bagnet.nettracer.tracing.actions.ViewOnhands" name="deliverForm" scope="request" validate="false"></action>
+
+		<action path="/label" type="com.bagnet.nettracer.tracing.actions.LabelAction" name="labelForm" scope="request" validate="false"></action>
 
 		<action path="/toBeInventoried" type="com.bagnet.nettracer.tracing.actions.ToBeInventoriedAction" name="deliverForm" scope="request" validate="false"></action>
 
