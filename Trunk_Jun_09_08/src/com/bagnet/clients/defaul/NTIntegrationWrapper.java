@@ -173,20 +173,14 @@ public class NTIntegrationWrapper extends IntegrationWrapper {
 //			voucher.setDepartment(null);//ignore
 			voucher.setDistributionMethod((epf.getDistributemethod() != null) ? epf.getDistributemethod() : null);
 			voucher.setNtIncidentId((inc.getIncident_ID() != null) ? inc.getIncident_ID() : null);
-			if (status.equals("cancel"))
+			if (status.equals("cancel")){
 				voucher.setRemark((epf.getCancelreason() != null) ? epf.getCancelreason() : null);//cancel reason for cancel status
+				voucher.setOrderNumber((epf.getOrdernum() != null) ? epf.getOrdernum() : null);
+			}
 			Passenger pax = voucher.addNewPassenger();
 			if (inc.getPassengers() != null && inc.getPassengers().size() > 0) {
 				for (com.bagnet.nettracer.tracing.db.Passenger pa : inc.getPassengers()) {
 					pa.setPassenger_ID(0);
-/*					parameters.put("pass_name", (pa.getLastname() != null ? (pa.getLastname() + ", ") : "") + (pa.getFirstname() != null ? pa.getFirstname() : ""));
-					parameters.put("address1", (pa.getAddress(0).getAddress1() != null ? pa.getAddress(0).getAddress1() : ""));
-					parameters.put("city_st_zip", (pa.getAddress(0).getCity() != null ? (pa.getAddress(0).getCity() + ", ") : "")
-							+ (pa.getAddress(0).getState_ID() != null ? (pa.getAddress(0).getState_ID() + " ") : (pa.getAddress(0).getProvince() != null ? (pa.getAddress(0).getProvince() + " ") : ""))
-							+ (pa.getAddress(0).getZip() != null ? pa.getAddress(0).getZip() : ""));
-					parameters.put("country", "UNITED STATES");*/
-
-					
 					pax.setFirstname((pa.getFirstname() != null) ? pa.getFirstname() : null);
 					pax.setLastname((pa.getLastname() != null) ? pa.getLastname() : null);
 					Address addr = pax.addNewAddresses();
@@ -208,9 +202,10 @@ public class NTIntegrationWrapper extends IntegrationWrapper {
 			SubmitVoucherResponseDocument response = stub.submitVoucher(doc);
 			System.out.println(response);
 			ArrayList<String> ret = new ArrayList<String>();
-			ret.add(response.getSubmitVoucherResponse().getReturn().getStatus());
+			String success = (response.getSubmitVoucherResponse().getReturn().getSuccess()) ? "true" : "false" ;
+			ret.add(success);
 			ret.add(response.getSubmitVoucherResponse().getReturn().getOrderNumber());
-			ret.add(response.getSubmitVoucherResponse().getReturn().getVoucherId());
+			ret.add(response.getSubmitVoucherResponse().getReturn().getCardNumber());
 			ret.add(response.getSubmitVoucherResponse().getReturn().getSecurityCode());
 		    ret.add(response.getSubmitVoucherResponse().getReturn().getError().getDescription());
 			

@@ -117,10 +117,10 @@ public class SaveExpenseAction extends BaseExpenseAction {
 			}catch(Exception e){
 				logger.error("Failed to submit Voucher!!! " +  e);
 			}
-			boolean ws_submit_ok = (ret != null && ret.get(1) != null) ? true : false ;
+			boolean ws_submit_ok = (ret != null && ret.get(0).equals("true") ) ? true : false ;
 			if (ws_submit_ok) {
 				request.getSession().setAttribute("ordernum", ret.get(1));
-				ep.setOrdernum(ret.get(0));
+				ep.setOrdernum(ret.get(1));
 				request.getSession().setAttribute("slvnum", ret.get(2));
 				request.getSession().setAttribute("seccode", ret.get(3));
 				request.getSession().setAttribute("wssubmit", "yes");
