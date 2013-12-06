@@ -225,7 +225,7 @@ public class NTIntegrationWrapper extends IntegrationWrapper {
 				} else {
 					ret.add("");
 				}
-				if (response.getSubmitVoucherResponse().getReturn().getError().getDescription() !=null ) {
+				if (response.getSubmitVoucherResponse().getReturn().getError() !=null && response.getSubmitVoucherResponse().getReturn().getError().getDescription() != null ) {
 					ret.add(response.getSubmitVoucherResponse().getReturn().getError().getDescription());					
 				} else {
 					ret.add("");
