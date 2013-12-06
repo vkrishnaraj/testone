@@ -81,7 +81,7 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 
 	@Override
 	public boolean delete(long incidentActivityId) {
-		if (incidentActivityDao.hasTask(incidentActivityId, STATUS_PENDING, STATUS_DENIED)) return false;		
+//		if (incidentActivityDao.hasTask(incidentActivityId, STATUS_PENDING, STATUS_DENIED)) return false;		
 		return incidentActivityDao.delete(incidentActivityId);
 	}
 	
@@ -174,14 +174,24 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 			iatdto.set_DATEFORMAT(dto.get_DATEFORMAT());
 			iatdto.set_TIMEFORMAT(dto.get_TIMEFORMAT());
 			iatdto.set_TIMEZONE(dto.get_TIMEZONE());
-			iatdto.setId(iat.getIncidentActivity().getId());
+			iatdto.setTaskId(iat.getTask_id());
+			iatdto.setIncidentActivityId(iat.getIncidentActivity().getId());
 			iatdto.setIncidentId(iat.getIncidentActivity().getIncident().getIncident_ID());
 			iatdto.setDescription(iat.getIncidentActivity().getDescription());
-			iatdto.setAgent(iat.getIncidentActivity().getApprovalAgent().getUsername());
 			iatdto.setTaskDate(iat.getGeneric_timestamp());
+			if (iat.getIncidentActivity().getApprovalAgent() != null) {
+				iatdto.setAgent(iat.getIncidentActivity().getApprovalAgent().getUsername());
+			}
 			tasks.add(iatdto);
 		}
 		return tasks;
+	}
+	
+	@Override
+	public boolean deleteRejectedTask(long taskId) {
+		IncidentActivityTask toDelete = incidentActivityDao.loadTask(taskId);
+		if (toDelete == null || toDelete.getStatus().getStatus_ID() != TracingConstants.STATUS_CUSTOMER_COMM_DENIED) return true;
+		return incidentActivityDao.deleteTask(toDelete);
 	}
 
 	public DocumentDAO getDocumentDao() {

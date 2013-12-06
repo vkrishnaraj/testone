@@ -98,6 +98,14 @@ public class CustomerCommunicationsAction extends CheckedAction {
 
 		boolean success = true;
 		CustomerCommunicationsForm ccf = (CustomerCommunicationsForm) form;
+		if (request.getParameter("taskId") != null) {
+			String taskIdParam = (String) request.getParameter("taskId");
+			try {
+				ccf.setTaskId(Long.valueOf(taskIdParam));
+			} catch (NumberFormatException nfe) {
+				logger.error("Invalid task id: " + taskIdParam, nfe);
+			}
+		}
 		
 		if (request.getParameter("templateId") != null && request.getParameter("incident") != null) {
 			success = populateCustomerCommunicationsForm(request.getParameter("incident"), request.getParameter("templateId"), ccf, user, messages);			
@@ -107,7 +115,7 @@ public class CustomerCommunicationsAction extends CheckedAction {
 				long id = Long.valueOf(request.getParameter("communicationsId"));
 				IncidentActivity ia = incidentActivityService.load(id);
 				if (ia != null) {
-					DomainUtils.toForm(ia, ccf);
+					DomainUtils.toForm(ia, ccf, user);
 					success = true;
 				}
 			} catch (NumberFormatException nfe) {
@@ -201,11 +209,11 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		
 		boolean success = incidentActivityId != 0;
 		messages.add(ActionMessages.GLOBAL_MESSAGE, getActionMessage(TracingConstants.COMMAND_CREATE, success, ccf.getDocumentTitle()));
-		if (success) {
-			if (!createTask(incidentActivity, user)) {
-				logger.error("Failed to create a task for IncidentActivity with id: " + incidentActivityId);
-			}
-		}
+//		if (success && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL_QUEUE, user)) {
+//			if (!createTask(incidentActivity, user)) {
+//				logger.error("Failed to create a task for IncidentActivity with id: " + incidentActivityId);
+//			}
+//		}
 		return success;
 	}
 
@@ -215,22 +223,28 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		
 		boolean success = incidentActivityService.update(incidentActivity);
 		messages.add(ActionMessages.GLOBAL_MESSAGE, getActionMessage(TracingConstants.COMMAND_UPDATE, success, ccf.getDocumentTitle()));
-		if (success) {
-			if (!createTask(incidentActivity, user)) {
-				logger.error("Failed to create a task for IncidentActivity with id: " + incidentActivity.getId());
-			}
-		}
+//		if (success && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL_QUEUE, user)) {
+//			if (ccf.getTaskId() > 0 && !incidentActivityService.deleteTask(ccf.getTaskId())) {
+//				logger.error("Failed to delete the rejected task for IncidentActivity with id: " + incidentActivity.getId());
+//			}
+//			
+//			if (!createTask(incidentActivity, user)) {
+//				logger.error("Failed to create a task for IncidentActivity with id: " + incidentActivity.getId());
+//			}
+//		}
+		
+		DomainUtils.toForm(incidentActivityService.load(incidentActivity.getId()), ccf, user);
 		return success;
 	}
 	
-	private boolean createTask(IncidentActivity incidentActivity, Agent user) {
-		if (!incidentActivityService.hasIncidentActivityTask(incidentActivity)) {
-			IncidentActivityTask iat = DomainUtils.createIncidentActivityTask(incidentActivity);
-			iat.setAssigned_agent(AdminUtils.getAgentBasedOnUsername("ntadmin", user.getCompanycode_ID()));
-			return incidentActivityService.saveTask(iat) != 0;
-		}
-		return true;
-	}
+//	private boolean createTask(IncidentActivity incidentActivity, Agent user) {
+//		if (!incidentActivityService.hasIncidentActivityTask(incidentActivity)) {
+//			IncidentActivityTask iat = DomainUtils.createIncidentActivityTask(incidentActivity);
+//			iat.setAssigned_agent(AdminUtils.getAgentBasedOnUsername("ntadmin", user.getCompanycode_ID()));
+//			return incidentActivityService.saveTask(iat) != 0;
+//		}
+//		return true;
+//	}
 	
 	private DocumentTemplateResult generateDocument(long templateId, Incident incident, Agent user) {
 		DocumentTemplateResult result = new DocumentTemplateResult();
