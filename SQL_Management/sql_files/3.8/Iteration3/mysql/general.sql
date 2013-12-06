@@ -302,3 +302,12 @@ create table label (
   primary key (id),
   constraint fk_label_agent foreign key (agent_id) references agent (Agent_ID)
 );
+
+create table incident_activity_remark (
+  id bigint auto_increment not null,
+  agent bigint not null,
+  createDate timestamp not null,
+  remarkText varchar(255),
+  incidentActivity bigint not null,
+  primary key (id)
+)
