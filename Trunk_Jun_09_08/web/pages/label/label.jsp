@@ -149,20 +149,20 @@
 		    	  </div>
 		    	  
                   <c:if test="${not empty labellist}">
-		          	<display:table id="label" name="requestScope.labellist" requestURI="/label.do" sort="external" 
+		          	<display:table id="thisLabel" name="requestScope.labellist" requestURI="/label.do" sort="external" 
 		          		size="<%=NumberUtils.toInt((String)request.getAttribute("rowcount"))%>" pagesize="<%=NumberUtils.toInt((String)request.getAttribute("rowsperpage"))%>"
 		          		class="form2" cellspacing="0" cellpadding="0" partialList="true">
 		          		 
 		          		<display:column titleKey="colname.select" headerClass="header">
-		          			<input type="checkbox" name="label_id" value="<bean:write name="label" property="id"/>"/>
+		          			<input type="checkbox" name="label_id" value="<bean:write name="thisLabel" property="id"/>"/>
 		          		</display:column>
 		          		
 		          		<display:column titleKey="colname.label" property="htmlFormatedText" headerClass="header"/>
 		
 						<display:column titleKey="header.action" headerClass="header">
-		          			<a href="label.do?label_id=<bean:write name="label" property="id"/>&action=edit" ><bean:message key="edit" /></a>
+		          			<a href="label.do?label_id=<bean:write name="thisLabel" property="id"/>&action=edit" ><bean:message key="edit" /></a>
 		          			|
-		          			<a href="label.do?label_id=<bean:write name="label" property="id"/>&action=delete" ><bean:message key="delete" /></a>
+		          			<a href="label.do?label_id=<bean:write name="thisLabel" property="id"/>&action=delete" ><bean:message key="delete" /></a>
 			          	</display:column>
 		            </display:table>
 		          </c:if>
