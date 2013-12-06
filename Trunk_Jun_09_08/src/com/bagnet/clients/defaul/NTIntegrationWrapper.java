@@ -205,18 +205,36 @@ public class NTIntegrationWrapper extends IntegrationWrapper {
 			}			
 			
 
-			System.out.println(doc);
+			//System.out.println(doc);
 			SubmitVoucherResponseDocument response = stub.submitVoucher(doc);
-			System.out.println(response);
+			//System.out.println(response);
 			ArrayList<String> ret = new ArrayList<String>();
-			String success = (response.getSubmitVoucherResponse().getReturn().getSuccess()) ? "true" : "false" ;
-			ret.add(success);
-			ret.add(response.getSubmitVoucherResponse().getReturn().getOrderNumber());
-			ret.add(response.getSubmitVoucherResponse().getReturn().getCardNumber());
-			ret.add(response.getSubmitVoucherResponse().getReturn().getSecurityCode());
-		    ret.add(response.getSubmitVoucherResponse().getReturn().getError().getDescription());
-			
-			
+			if (response != null && response.getSubmitVoucherResponse() != null && response.getSubmitVoucherResponse().getReturn() != null) {
+				String success = (response.getSubmitVoucherResponse().getReturn().getSuccess()) ? "true" : "false" ;
+				ret.add(success);
+				if (response.getSubmitVoucherResponse().getReturn().getOrderNumber() !=null ) {
+					ret.add(response.getSubmitVoucherResponse().getReturn().getOrderNumber());					
+				} else {
+					ret.add("");
+				}
+				if (response.getSubmitVoucherResponse().getReturn().getCardNumber() != null) {
+					ret.add(response.getSubmitVoucherResponse().getReturn().getCardNumber());					
+				} else {
+					ret.add("");
+				}
+				if (response.getSubmitVoucherResponse().getReturn().getSecurityCode() !=null ) {
+					ret.add(response.getSubmitVoucherResponse().getReturn().getSecurityCode());					
+				} else {
+					ret.add("");
+				}
+				if (response.getSubmitVoucherResponse().getReturn().getError().getDescription() !=null ) {
+					ret.add(response.getSubmitVoucherResponse().getReturn().getError().getDescription());					
+				} else {
+					ret.add("");
+				}				
+			} else 
+				ret=null;
+
 			return ret;
 		} catch (Exception e){
 			e.printStackTrace();
