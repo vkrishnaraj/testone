@@ -45,7 +45,7 @@ boolean swaIsInBSO=(epf!=null && a!=null && a.getStation()!=null && epf.getExpen
             <bean:message key="colname.draftreqdate" />
             (<%= a.getDateformat().getFormat() %>)
             <br />
-            <html:text property="dispDraftreqdate"  size="15" maxlength="10" styleClass="textfield" disabled="<%=swaBsoPermission %>"/>
+            <html:text property="dispDraftreqdate"  size="15" maxlength="10" styleClass="textfield" disabled="<%=((swaBsoPermission&&swaIsInBSO) || !swaBsoPermission)?false:true %>"/>
             <img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.expensePayoutForm.dispDraftreqdate,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">
         </td>
         <td>

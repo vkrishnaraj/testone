@@ -55,6 +55,12 @@ public class SaveExpenseAction extends BaseExpenseAction {
 		st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED);
 		Company_Specific_Variable csv = AdminUtils.getCompVariable(user.getCompanycode_ID());
 		if (Math.abs(ep.getCheckamt()) > 0.001) {
+			/**
+			 * If the user is part of a usergroup that has a BSO Limit and
+			 * is subject to the BSO Expense Process, then verify that the
+			 * check amount entered is not greater than the BSO Limit. If it
+			 * is then do not save the expense payout
+			 */
 			UserGroup group=UsergroupBMO.getUsergroup(user.getUsergroup_id());
 			double bsoLimit=0;
 			if(group!=null && group.getBsoLimit()>0){

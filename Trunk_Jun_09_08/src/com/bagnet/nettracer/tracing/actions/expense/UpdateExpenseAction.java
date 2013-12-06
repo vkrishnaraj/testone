@@ -57,6 +57,12 @@ public class UpdateExpenseAction extends BaseExpenseAction {
 			if (expenseForm.getStatus_id() == TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED 
 					|| expenseForm.getStatus_id() == TracingConstants.EXPENSEPAYOUT_STATUS_PENDING) {
 
+				/**
+				 * If the user is part of a usergroup that has a BSO Limit and
+				 * is subject to the BSO Expense Process, then verify that the
+				 * check amount entered is not greater than the BSO Limit. If it
+				 * is then do not save the expense payout
+				 */
 				UserGroup group=UsergroupBMO.getUsergroup(user.getUsergroup_id());
 				double bsoLimit=0;
 				if(group!=null && group.getBsoLimit()>0){

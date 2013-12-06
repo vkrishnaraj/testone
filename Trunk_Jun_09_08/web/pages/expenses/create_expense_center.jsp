@@ -207,6 +207,27 @@
 								</html:select>
 							</td>
 						</tr>
+						<% if(swaBsoPermission){ %>
+					 	<tr>
+					    	<td>
+					        	<bean:message key="colname.draft" />
+					            <br />
+					            <html:text property="draft" size="15" maxlength="10" styleClass="textfield" />
+					        </td>
+					        <td>
+					            <bean:message key="colname.draftreqdate" />
+					            (<%= a.getDateformat().getFormat() %>)
+					            <br />
+					            <html:text property="dispDraftreqdate"  size="15" maxlength="10" styleClass="textfield" />
+					            <img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.expensePayoutForm.dispDraftreqdate,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">
+					        </td>
+					        <td>
+					            <bean:message key="colname.draftpaiddate" />
+					            (<%= a.getDateformat().getFormat() %>)
+					            <br />
+					            <html:text property="dispDraftpaiddate" size="15" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.expensePayoutForm.dispDraftpaiddate,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;"></td>
+					    </tr>
+					    <% } %>
 						<jsp:include page="/pages/includes/create_payment_incl.jsp" />
 						<tr>
 							<td colspan="3">
@@ -381,8 +402,8 @@
       
 	<% if(swaBsoPermission){  %>
         
-        	<html:hidden property="paycode" />
-        	<html:hidden property="expenselocation_ID" />
+        	<html:hidden property="paycode" name="expensePayoutForm" value="ADV"/> <!-- Default value, will save as blank otherwise -->
+        	<html:hidden property="expenselocation_ID" name="expensePayoutForm"/>
     <% } %>
 
 				
