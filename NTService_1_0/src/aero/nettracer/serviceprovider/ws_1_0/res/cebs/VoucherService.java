@@ -1,8 +1,6 @@
 package aero.nettracer.serviceprovider.ws_1_0.res.cebs;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -16,6 +14,7 @@ import com.swacorp.services.btws.v1.CancelLuvVoucherRequestDocument.CancelLuvVou
 import com.swacorp.services.btws.v1.IssueLuvVoucherRequestDocument;
 import com.swacorp.services.btws.v1.IssueLuvVoucherRequestDocument.IssueLuvVoucherRequest;
 import com.swacorp.services.btws.v1.IssueLuvVoucherRequestDocument.IssueLuvVoucherRequest.Address;
+import com.swacorp.services.btws.v1.IssueLuvVoucherRequestDocument.IssueLuvVoucherRequest.DistributionMethod.Enum;
 import com.swacorp.services.btws.v1.IssueLuvVoucherResponseDocument;
 import com.swacorp.services.btws.v1.CancelLuvVoucherRequestDocument;
 import com.swacorp.services.btws.v1.CancelLuvVoucherResponseDocument;
@@ -50,10 +49,15 @@ public class VoucherService implements VoucherServiceInterface {
 	
 
 	/**
+	 * Maps Voucher to the IssuLuvVoucherRequestDocument.
+	 * 
+	 * For mocking testing purposes, the IssueLuvVoucherRequestDocument can be set in advance
+	 * 
+	 * 
 	 * @param voucher
 	 * @return
 	 */
-	public IssueLuvVoucherRequestDocument getIssueRequestDoc(Voucher voucher, List<String> errors) {
+	public IssueLuvVoucherRequestDocument getIssueRequestDoc(Voucher voucher) {
 		if(issueRequestDoc == null){
 			IssueLuvVoucherRequestDocument doc = IssueLuvVoucherRequestDocument.Factory.newInstance();
 			IssueLuvVoucherRequest request = doc.addNewIssueLuvVoucherRequest();
@@ -95,75 +99,37 @@ public class VoucherService implements VoucherServiceInterface {
 						}
 						if(voucher.getPassenger().getAddresses().getHomePhone() != null &&
 								voucher.getPassenger().getAddresses().getHomePhone().length() > 0){
-							mapPhone(voucher.getPassenger().getAddresses().getHomePhone(), request);//consider check other phones
+							mapPhone(voucher.getPassenger().getAddresses().getHomePhone(), request);
 						} 
-//						else {
-//							if(voucher.getDistributionMethod() != null && voucher.getDistributionMethod().equals(ISSUE_METHOD_MAIL)){
-//								errors.add("Home phone is required");
-//							}
-//						}
 					} 
-//					else {
-//						errors.add("Address is required");
-//					}
 					
 					if(voucher.getPassenger().getFirstname() != null && voucher.getPassenger().getFirstname().length() > 0){
 						request.setFirstName(voucher.getPassenger().getFirstname());	
 					} 
-//					else {
-//						errors.add("First name is required");
-//					}
 					if(voucher.getPassenger().getLastname() != null && voucher.getPassenger().getLastname().length() > 0){
 						request.setLastName(voucher.getPassenger().getLastname());
 					} 
-//					else {
-//						errors.add("Last name is required");
-//					}
 				} 
-//				else {
-//					errors.add("Passenger is required");
-//				}
 				if(voucher.getAgentUserName() != null){
 					request.setAgentId(voucher.getAgentUserName());
 				}
 				request.setAmount((float)voucher.getAmount());
-				if(voucher.getRemark() != null && voucher.getRemark().length() > 0){
-					request.setCustomMessage(voucher.getRemark());
-				}
-				if(voucher.getDepartment() != null && voucher.getDepartment().length() > 0){
-					request.setDepartment(voucher.getDepartment());
-				}
-//				if(voucher.getDistributionMethod() != null && voucher.getDistributionMethod().length() > 0 &&
-//						(voucher.getDistributionMethod().equals(ISSUE_METHOD_EMAIL)||
-//						 voucher.getDistributionMethod().equals(ISSUE_METHOD_HOLD_FOR_PICKUP) ||
-//						 voucher.getDistributionMethod().equals(ISSUE_METHOD_IMMEDIATE) ||
-//						 voucher.getDistributionMethod().equals(ISSUE_METHOD_MAIL))){
 				if(voucher.getDistributionMethod() != null && voucher.getDistributionMethod().length() > 0) {
-					request.setDistributionMethod(voucher.getDistributionMethod());
+					request.setDistributionMethod(Enum.forString(voucher.getDistributionMethod()));
 				} 
-//				else {
-//					errors.add("Distribution method must be one of the following: "
-//							+ ISSUE_METHOD_EMAIL + ", " + ISSUE_METHOD_HOLD_FOR_PICKUP + ", "
-//							+ ISSUE_METHOD_IMMEDIATE + ", " + ISSUE_METHOD_MAIL);
-//				}
 				if(voucher.getPnr() != null && voucher.getPnr().length() > 0){
 					request.setPNR(voucher.getPnr());
 				} 
-//				else {
-//					errors.add("PNR is required");
-//				}
 				if(voucher.getStation() != null && voucher.getStation().length() > 0){
 					request.setStationCode(voucher.getStation());
 				}
 				if(voucher.getNtIncidentId() != null && voucher.getNtIncidentId().length() > 0){
 					request.setIncident(voucher.getNtIncidentId());
 				} 
-//				else {
-//					errors.add("NtIncidentId is required");
-//				}
 			}
 			return doc;
 		} else {
+			//returning mock request for junit test
 			return issueRequestDoc;
 		}
 	}
@@ -211,6 +177,8 @@ public class VoucherService implements VoucherServiceInterface {
 	
 
 	/**
+	 * Maps Voucher to the CancelLuvVoucherRequestDocument
+	 * 
 	 * @param voucher
 	 * @return
 	 */
@@ -219,12 +187,14 @@ public class VoucherService implements VoucherServiceInterface {
 			CancelLuvVoucherRequestDocument doc = CancelLuvVoucherRequestDocument.Factory.newInstance();
 			CancelLuvVoucherRequest request = doc.addNewCancelLuvVoucherRequest();
 			if(voucher != null){
-				request.setOrderNumber(voucher.getVoucherId());
+				request.setOrderNumber(voucher.getOrderNumber());
 				request.setReason(voucher.getRemark());
-				voucher.getVoucherId();
+				request.setAgentId(voucher.getAgentUserName());
+				request.setStationCode(voucher.getStation());
 			}
 			return doc;
 		} else {
+			//returning mock request for junit test
 			return cancelRequestDoc;
 		}
 	}
@@ -247,33 +217,38 @@ public class VoucherService implements VoucherServiceInterface {
 		this.btwsStub = btwsStub;
 	}
 	
+	/* (non-Javadoc)
+	 * @see aero.nettracer.serviceprovider.ws_1_0.res.VoucherServiceInterface#submitVoucher(aero.nettracer.serviceprovider.common.db.User, aero.nettracer.serviceprovider.ws_1_0.common.xsd.Voucher)
+	 * 
+	 * SWA provides two voucher methods, issue and cancel.  Depending on the status of the voucher, this service will sumbmit either a issue or cancel request
+	 */
 	@Override
 	public VoucherResponse submitVoucher(User user, Voucher voucher) {
 		if(voucher != null && voucher.getStatus() != null){
 			if(voucher.getStatus().equals(STATUS_OPEN)){
 				return issueVoucher(user,voucher);
-			} else if (voucher.getStatus().equals(STATUS_OPEN)){
+			} else if (voucher.getStatus().equals(STATUS_CANCEL)){
 				return cancelVoucher(user,voucher);
 			} 
 		}
 		VoucherResponse ret = VoucherResponse.Factory.newInstance();
 		ret.addNewError().setDescription("Voucher status must be either " + STATUS_OPEN + " or " + STATUS_CANCEL);
+		ret.setSuccess(false);
 		return ret;
 	}
 		
 	
+	/**
+	 * Submits an issueVoucher and maps the response
+	 * 
+	 * @param user
+	 * @param voucher
+	 * @return
+	 */
 	private VoucherResponse issueVoucher(User user, Voucher voucher){
 		VoucherResponse ret = VoucherResponse.Factory.newInstance();
-		ArrayList<String> errors = new ArrayList<String>();
-		IssueLuvVoucherRequestDocument doc= getIssueRequestDoc(voucher, errors);
-		
-		if(errors != null && errors.size() > 0){
-			for(String error:errors){
-				System.out.println(error);
-				ret.addNewError().setDescription(error);
-			}
-			return ret;
-		}
+		IssueLuvVoucherRequestDocument doc= getIssueRequestDoc(voucher);
+		ret.setSuccess(true);
 		
 		try {
 			BTWSStub stub = ConnectionUtil.getStub(btwsStub, user);
@@ -285,7 +260,7 @@ public class VoucherService implements VoucherServiceInterface {
 			if(response != null && response.getIssueLuvVoucherResponse() != null){
 				//map response for return to ntcore
 				ret.setIssueDate(response.getIssueLuvVoucherResponse().getTransactionDate());
-				ret.setVoucherId(response.getIssueLuvVoucherResponse().getCardNumber());
+				ret.setCardNumber(response.getIssueLuvVoucherResponse().getCardNumber());
 				ret.setMessage(response.getIssueLuvVoucherResponse().getMessage());
 				ret.setSecurityCode(response.getIssueLuvVoucherResponse().getSecurityCode());
 				if(response.getIssueLuvVoucherResponse().getReturnCode() != null){
@@ -293,24 +268,36 @@ public class VoucherService implements VoucherServiceInterface {
 				}
 				ret.setOrderNumber(response.getIssueLuvVoucherResponse().getOrderNumber());
 			} else {
+				ret.setSuccess(false);
 				ret.addNewError().setDescription(ServiceConstants.VOUCHER_DATA_EXCEPTION);
 			}
 		} catch (RemoteException e) {
 			e.printStackTrace();
-			ret.addNewError().setDescription(ServiceConstants.REMOTE_EXCEPTION);
+			ret.setSuccess(false);
+			ret.addNewError().setDescription(ServiceConstants.REMOTE_EXCEPTION + ": " + e.getMessage());
 		} catch (IssueLuvVoucherError e) {
 			e.printStackTrace();
-			ret.addNewError().setDescription(ServiceConstants.VOUCHER_DATA_EXCEPTION);//TODO provide more meaningful error message
+			ret.setSuccess(false);
+			ret.addNewError().setDescription(ServiceConstants.VOUCHER_DATA_EXCEPTION + ": " + e.getMessage());
 		} catch (Exception e){
 			e.printStackTrace();
-			ret.addNewError().setDescription(ServiceConstants.UNEXPECTED_EXCEPTION);
+			ret.setSuccess(false);
+			ret.addNewError().setDescription(ServiceConstants.UNEXPECTED_EXCEPTION + ": " + e.getMessage());
 		}
 		return ret;
 	}
 	
+	/**
+	 * Submits a cancel voucher request and maps the response
+	 * 
+	 * @param user
+	 * @param voucher
+	 * @return
+	 */
 	private VoucherResponse cancelVoucher(User user, Voucher voucher){
 		CancelLuvVoucherRequestDocument doc= getCancelRequestDoc(voucher);
 		VoucherResponse ret = VoucherResponse.Factory.newInstance();
+		ret.setSuccess(true);
 		try {
 			BTWSStub stub = ConnectionUtil.getStub(btwsStub, user);
 			
@@ -323,17 +310,21 @@ public class VoucherService implements VoucherServiceInterface {
 				ret.setCancelDate(response.getCancelLuvVoucherResponse().getCancelDate());
 				ret.setStatus(response.getCancelLuvVoucherResponse().getCancelStatus());
 			} else {
+				ret.setSuccess(false);
 				ret.addNewError().setDescription(ServiceConstants.VOUCHER_DATA_EXCEPTION);
 			}
 		} catch (RemoteException e) {
 			e.printStackTrace();
-			ret.addNewError().setDescription(ServiceConstants.REMOTE_EXCEPTION);
+			ret.setSuccess(false);
+			ret.addNewError().setDescription(ServiceConstants.REMOTE_EXCEPTION + ": " + e.getMessage());
 		} catch (CancelLuvVoucherError e) {
 			e.printStackTrace();
-			ret.addNewError().setDescription(ServiceConstants.VOUCHER_DATA_EXCEPTION);//TODO provide more meaningful error message
+			ret.setSuccess(false);
+			ret.addNewError().setDescription(ServiceConstants.VOUCHER_DATA_EXCEPTION + ": " + e.getMessage());
 		} catch (Exception e){
 			e.printStackTrace();
-			ret.addNewError().setDescription(ServiceConstants.UNEXPECTED_EXCEPTION);
+			ret.setSuccess(false);
+			ret.addNewError().setDescription(ServiceConstants.UNEXPECTED_EXCEPTION + ": " + e.getMessage());
 		}
 		return ret;
 	}

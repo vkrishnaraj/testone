@@ -118,6 +118,7 @@
                     <xs:extension base="ax23:GenericResponse">
                         <xs:sequence>
                             <xs:element minOccurs="0" name="cancelDate" nillable="true" type="xs:dateTime"/>
+                            <xs:element minOccurs="0" name="cardNumber" nillable="true" type="xs:string"/>
                             <xs:element minOccurs="0" name="issueDate" nillable="true" type="xs:dateTime"/>
                             <xs:element minOccurs="0" name="message" nillable="true" type="xs:string"/>
                             <xs:element minOccurs="0" name="orderNumber" nillable="true" type="xs:string"/>
@@ -190,9 +191,11 @@
                 <xs:sequence>
                     <xs:element minOccurs="0" name="agentUserName" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="amount" type="xs:double"/>
+                    <xs:element minOccurs="0" name="cardNumber" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="department" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="distributionMethod" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="ntIncidentId" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="orderNumber" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="passenger" nillable="true" type="ax21:Passenger"/>
                     <xs:element minOccurs="0" name="pnr" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="remark" nillable="true" type="xs:string"/>
