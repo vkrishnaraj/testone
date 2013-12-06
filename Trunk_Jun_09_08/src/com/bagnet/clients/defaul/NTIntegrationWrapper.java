@@ -174,7 +174,11 @@ public class NTIntegrationWrapper extends IntegrationWrapper {
 			voucher.setAgentUserName((inc.getAgent_username() != null) ? inc.getAgent_username() : null);
 			voucher.setAmount((epf.getCheckamt() != 0) ? epf.getCheckamt() : 0);
 //			voucher.setDepartment(null);//ignore
-			voucher.setDistributionMethod((epf.getDistributemethod() != null) ? epf.getDistributemethod() : null);
+			String distributemethod = (epf.getDistributemethod() != null) ? epf.getDistributemethod() : "" ;
+			if (distributemethod.equals("IMME")) distributemethod = "IMMEDIATE";
+			if (distributemethod.equals("MAIL")) distributemethod = "USPS";
+
+			voucher.setDistributionMethod(distributemethod);
 			voucher.setNtIncidentId((inc.getIncident_ID() != null) ? inc.getIncident_ID() : null);
 			if (status.equals("cancel")){
 				voucher.setRemark((epf.getCancelreason() != null) ? epf.getCancelreason() : null);//cancel reason for cancel status

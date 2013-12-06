@@ -47,8 +47,8 @@
 	                    });
 	    };
 	    
-	    function ReSubmitWS(wserrormsg) {
-	    	alert('WS Failed due to ' + wserrormsg + '. Please Resubmit or Call Administrator for connection issue.');
+	    function ReSubmitWS() {
+	    	alert('Error in submitting Web Service. Please Resubmit or Call Administrator for connection issue.');
 	    };
 	    
   </SCRIPT>
@@ -431,5 +431,5 @@ var selectlist = document.getElementById('getpaymenttype');
 updatePaymentFields(selectlist.options[selectlist.selectedIndex].value);
 </script >	
 <c:if test="${expensePayoutForm.wssubmit == 'no'}">
-    <script type="text/javascript">ReSubmitWS('<c:out value="${expensePayoutForm.errormsg}" />');</script>
+    <script type="text/javascript">ReSubmitWS();</script>
  </c:if>

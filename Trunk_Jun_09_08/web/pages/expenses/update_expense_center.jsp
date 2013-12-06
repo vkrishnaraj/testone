@@ -149,8 +149,8 @@
           }
       }
 	    
-	    function ReSubmitWS(wserrormsg) {
-	    	alert('WS Failed due to ' + wserrormsg + '. Please Resubmit or Call Administrator for connection issue.');
+	    function ReSubmitWS() {
+	    	alert('Error in submitting Web Service. Please Resubmit or Call Administrator for connection issue.');
 	    };           
  
     </script>
@@ -611,5 +611,5 @@
     <% } %>
 </html:form>
 <c:if test="${expensePayoutForm.wssubmit == 'no'}">
-    <script type="text/javascript">ReSubmitWS('<c:out value="${expensePayoutForm.errormsg}" />');</script>
+    <script type="text/javascript">ReSubmitWS();</script>
  </c:if>
