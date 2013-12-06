@@ -31,12 +31,10 @@ import aero.nettracer.serviceprovider.ws_1_0.SubmitVoucherDocument;
 import aero.nettracer.serviceprovider.ws_1_0.SubmitVoucherResponseDocument;
 
 import com.bagnet.nettracer.exceptions.BagtagException;
-import com.bagnet.nettracer.tracing.bmo.ExpensePayoutBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.BagDrop;
-import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.forms.ExpensePayoutForm;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
