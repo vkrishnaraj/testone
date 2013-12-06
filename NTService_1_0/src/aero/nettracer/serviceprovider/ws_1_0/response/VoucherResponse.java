@@ -11,6 +11,7 @@ public class VoucherResponse extends GenericResponse {
 	private Calendar cancelDate;
 	private int returnCode;
 	private String orderNumber;
+	private String cardNumber;
 	
 	
 	public String getStatus() {
@@ -60,5 +61,11 @@ public class VoucherResponse extends GenericResponse {
 	}
 	public void setOrderNumber(String orderNumber) {
 		this.orderNumber = orderNumber;
+	}
+	public String getCardNumber() {
+		return cardNumber;
+	}
+	public void setCardNumber(String cardNumber) {
+		this.cardNumber = cardNumber;
 	}
 }

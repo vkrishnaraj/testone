@@ -5,6 +5,8 @@ public class Voucher {
 	
 	private String ntIncidentId;
 	private String voucherId;
+	private String orderNumber;
+	private String cardNumber;
 	private String pnr;
 	private String station;
 	private String department;
@@ -105,6 +107,22 @@ public class Voucher {
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public String getOrderNumber() {
+		return orderNumber;
+	}
+
+	public void setOrderNumber(String orderNumber) {
+		this.orderNumber = orderNumber;
+	}
+
+	public String getCardNumber() {
+		return cardNumber;
+	}
+
+	public void setCardNumber(String cardNumber) {
+		this.cardNumber = cardNumber;
 	}
 
 
