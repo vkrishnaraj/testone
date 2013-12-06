@@ -19,6 +19,7 @@ public interface IncidentActivityDAO {
 	public long saveTask(IncidentActivityTask incidentActivityTask);
 	public boolean updateTask(IncidentActivityTask incidentActivityTask);
 	public boolean deleteTask(long incidentActivityTaskId);
+	public boolean deleteTask(IncidentActivityTask incidentActivityTask);
 	
 	public List<Activity> getActivities();
 	public Activity getActivity(String code);

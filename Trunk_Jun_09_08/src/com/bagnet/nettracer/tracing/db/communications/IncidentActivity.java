@@ -1,13 +1,16 @@
 package com.bagnet.nettracer.tracing.db.communications;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -60,6 +63,11 @@ public class IncidentActivity {
 	@ManyToOne
 	@JoinColumn(name = "activity")
 	private Activity activity;
+	
+	@OneToMany(mappedBy = "incidentActivity", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@org.hibernate.annotations.OrderBy(clause="createDate")
+	@Fetch(FetchMode.SELECT)
+	private List<IncidentActivityRemark> remarks;
 	
 	private String description;
 	
@@ -151,6 +159,14 @@ public class IncidentActivity {
 
 	public void setCustCommId(long custCommId) {
 		this.custCommId = custCommId;
+	}
+
+	public List<IncidentActivityRemark> getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(List<IncidentActivityRemark> remarks) {
+		this.remarks = remarks;
 	}
 	
 }

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -18,6 +19,7 @@ import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskDTO;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskSearchDTO;
 import com.bagnet.nettracer.tracing.forms.communications.CustomerCommunicationsTaskForm;
@@ -29,6 +31,8 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
 public class CustomerCommunicationsRejectedAction extends CheckedAction {
+	
+	private Logger logger = Logger.getLogger(CustomerCommunicationsRejectedAction.class);
 	
 	private IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
 
@@ -44,6 +48,19 @@ public class CustomerCommunicationsRejectedAction extends CheckedAction {
 		
 		if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_CREATE, user))
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
+		
+		if (request.getParameter("taskId") != null) {
+			String taskIdParam = request.getParameter("taskId");
+			try {
+				IncidentActivityTask iat = incidentActivityService.loadTask(Long.valueOf(taskIdParam));
+				if (iat != null) {
+					response.sendRedirect("customerCommunications.do?command=" + TracingConstants.COMMAND_EDIT + "&communicationsId=" + iat.getIncidentActivity().getId() + "&taskId=" + iat.getTask_id());
+					return null;					
+				}
+			} catch (NumberFormatException nfe) {
+				logger.error("Invalid task id: " + taskIdParam, nfe);
+			}
+		}
 		
 		CustomerCommunicationsTaskForm cctf = (CustomerCommunicationsTaskForm) form;
 		
@@ -110,7 +127,7 @@ public class CustomerCommunicationsRejectedAction extends CheckedAction {
 	private void getSortCriteria(IncidentActivityTaskSearchDTO dto, HttpServletRequest request) {
 		ParamEncoder encoder = new ParamEncoder(TracingConstants.TABLE_ID_CUST_COMM_REJECTED);
 		String sort = request.getParameter(encoder.encodeParameterName(TableTagParameters.PARAMETER_SORT));
-		dto.setSort(sort != null ? sort : "incidentId");
+		dto.setSort(sort != null ? sort : "id");
 		
 		String dir = request.getParameter(encoder.encodeParameterName(TableTagParameters.PARAMETER_ORDER));
 		dto.setDir(dir != null ? dir : TracingConstants.SORT_ASCENDING);		

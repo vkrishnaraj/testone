@@ -64,7 +64,7 @@
 		       	</logic:notPresent>
 		       	<logic:present name="results" scope="request">
 	              	<display:table requestURI="/customerCommunicationsRejected.do" name="requestScope.results" sort="external" class="form2" cellspacing="0" cellpadding="0" id="<%=TracingConstants.TABLE_ID_CUST_COMM_REJECTED %>" defaultsort="1" >
-	          			<display:column titleKey="colname.cust.comm.id" property="id" href="customerCommunications.do?command=edit&" paramId="communicationsId" paramProperty="id" sortable="true" sortName="id" />
+	          			<display:column titleKey="colname.cust.comm.id" property="taskId" href="customerCommunicationsRejected.do" paramId="taskId" paramProperty="taskId" sortable="true" sortName="id" />
 	          			<display:column titleKey="colname.cust.comm.incident.id" property="incidentId" href="searchIncident.do" paramId="incident" paramProperty="incidentId" sortable="true" sortName="incidentId" />
 	          			<display:column titleKey="colname.cust.comm.description" property="description" sortable="false" style="width:35%;" />
 	          			<display:column titleKey="colname.cust.comm.rejected.by" property="agent" sortable="true" sortName="agent" />

@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -33,7 +34,7 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 	private static Map<String, String> map = new LinkedHashMap<String, String>();
 	
 	static {		
-		map.put("id", 			"iat.task_id");
+		map.put("id", 			"d.id");
 		map.put("incidentId", 	"i.incident_ID");
 		map.put("agent", 		"ia.approvalAgent");
 		map.put("date",			"iat.generic_timestamp");
@@ -213,6 +214,7 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 			session = HibernateWrapper.getSession().openSession();
 			transaction = session.beginTransaction();
 			incidentActivityTask.setOpened_timestamp(DateUtils.convertToGMTDate(new Date()));
+			session.merge(incidentActivityTask);
 			transaction.commit();
 			success = true;
 		} catch (Exception e) {
@@ -230,20 +232,25 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 
 	@Override
 	public boolean deleteTask(long incidentActivityTaskId) {
+		if (incidentActivityTaskId <= 0) return true;
+		return deleteTask(loadTask(incidentActivityTaskId));
+	}
+	
+	@Override
+	public boolean deleteTask(IncidentActivityTask incidentActivityTask) {
 		boolean success = false;
-		if (incidentActivityTaskId <= 0) return success;
+		if (incidentActivityTask == null) return success;
 		
 		Session session = null;
 		Transaction transaction = null;
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			transaction = session.beginTransaction();
-			IncidentActivityTask incidentActivityTask = (IncidentActivityTask) session.createCriteria(IncidentActivityTask.class, "iat").add(Restrictions.eq("ia.id", incidentActivityTaskId)).uniqueResult();
 			session.delete(incidentActivityTask);
 			transaction.commit();
 			success = true;
 		} catch (Exception e) {
-			logger.error("Failed to delete incident activity task with id: " + incidentActivityTaskId, e);
+			logger.error("Failed to delete incident activity task with id: " + incidentActivityTask.getTask_id(), e);
 			if (transaction != null) {
 				transaction.rollback();
 			}
@@ -254,6 +261,32 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 		}
 		return success;
 	}
+
+//	@Override
+//	@SuppressWarnings("unchecked")
+//	public IncidentActivityTask loadTaskForIncidentActivity(IncidentActivity incidentActivity, Status withStatus) {
+//		IncidentActivityTask toReturn = null;
+//		Session session = null;
+//		try {
+//			session = HibernateWrapper.getSession().openSession();
+//			Criteria criteria = session.createCriteria(IncidentActivityTask.class, "iat");
+//			Conjunction and = Restrictions.conjunction();
+//			and.add(Restrictions.eq("iat.incidentActivity", incidentActivity));
+//			and.add(Restrictions.eq("iat.status", withStatus));
+//			criteria.add(and);
+//			List<IncidentActivityTask> results = (List<IncidentActivityTask>) criteria.list();
+//			if (results != null && !results.isEmpty()) {
+//				toReturn = results.get(0);
+//			}
+//		} catch (Exception e) {
+//			logger.error("Failed to load an incident activity task for incidennt activity with id: " + incidentActivity.getId() + " having status: " + withStatus.getStatus_ID(), e);
+//		} finally {
+//			if (session != null) {
+//				session.close();
+//			}
+//		}
+//		return toReturn;
+//	}
 
 	@Override
 	public boolean hasTask(IncidentActivity incidentActivity, Status... statuses) {
@@ -437,6 +470,7 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 		Criteria criteria = session.createCriteria(IncidentActivityTask.class, "iat");
 		criteria.createAlias("iat.incidentActivity", "ia");
 		criteria.createAlias("ia.incident", "i");
+		criteria.createAlias("ia.document", "d");
 		
 		if (dto.getAgent() != null) {
 			criteria.add(Restrictions.eq("iat.assigned_agent", dto.getAgent()));

@@ -30,6 +30,8 @@ public interface IncidentActivityService {
 	public boolean updateTask(IncidentActivityTask incidentActivityTask);
 	public boolean deleteTask(long incidentActivityTaskId);
 	
+	public boolean deleteRejectedTask(long taskId);
+	
 	public List<OptionDTO> getActivityOptions();
 	public Activity getActivity(String code);
 	public void writeOptionsList(List<OptionDTO> options, HttpServletResponse response);

@@ -7,6 +7,13 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 
+<style>
+legend {
+ 	font-size:1em;
+ 	font-weight:bold;
+}
+</style>
+
 <script type="text/javascript" src="deployment/main/js/ckeditor/ckeditor.js"></script>
 <%
 	Agent a = (Agent)session.getAttribute("user");
@@ -23,6 +30,14 @@
   
 %>
 <script>
+
+	function textCounter(field, countfield, maxlimit) {
+    	if (field.value.length > maxlimit) {
+    		field.value = field.value.substring(0, maxlimit);
+    	} else {
+    		countfield.value = maxlimit - field.value.length;
+    	}
+	}
 
 	function saveOrUpdate() {
 		var id = document.getElementById('documentId');
@@ -55,6 +70,7 @@
 <html:hidden property="incidentId" styleId="incidentId" />
 <html:hidden property="templateId" styleId="templateId" />
 <html:hidden property="fileName" styleId="fileName" />
+<html:hidden property="taskId" styleId="taskId" />
 	<tr>
 		<td colspan="3" id="pageheadercell">
 			<div id="pageheaderleft">
@@ -104,7 +120,7 @@
 				<table id="pageheaderright" cellspacing="0" cellpadding="0" >
 					<tr>
 						<td>
-							<h1 class="green">
+							<h1>
 								<logic:equal name="customerCommunicationsForm" property="documentId" value="0">
 									<bean:message key="header.create" />
 								</logic:equal>
@@ -171,6 +187,64 @@
 					&nbsp;&nbsp;
 					<input id="savePreviewButton" type="button" class="button" value='<bean:message key="button.save.preview" />' onclick="saveAndPreview();">
 				</div>
+				<logic:notEmpty name="customerCommunicationsForm" property="remarks" >
+					<br>
+					<h1><bean:message key="colname.remarks" /></h1>
+					<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" >
+						<tr>
+							<td class="header" style="width:15%;">
+								<bean:message key="colname.create_agent" />
+							</td>
+							<td class="header" style="width:20%;">
+								<bean:message key="colname.date_time" />
+							</td>
+							<td class="header" style="width:65%;">
+								<bean:message key="colname.cust.comm.remark" />
+							</td>
+						</tr>
+						<logic:iterate id="remark" name="customerCommunicationsForm" property="remarks" type="com.bagnet.nettracer.tracing.dto.IncidentActivityRemarkDTO" >
+							<tr>
+								<td>
+									<bean:write name="remark" property="agent" />
+								</td>
+								<td>
+									<bean:write name="remark" property="dispCreateDate" />
+								</td>
+								<td>
+									<bean:write name="remark" property="remarkText" />
+								</td>
+							</tr>
+						</logic:iterate>
+					</table>
+				</logic:notEmpty>
+				<logic:notEqual name="customerCommunicationsForm" property="taskId" value="0" >
+					<fieldset style="border: 1px solid #000000;text-align:center;">
+						<legend><bean:message key="colname.cust.comm.approval" /></legend>
+						<div style="width:90%;">
+						<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" >
+							<tr>
+								<td class="header"><bean:message key="colname.remark" /></td>
+								<td>
+									<textarea id="taskRemark" rows="4" cols="50" maxlength="255" styleClass="textfield"           
+										onkeydown="textCounter(taskRemark, counter, 255);" 
+         								onkeyup="textCounter(taskRemark, counter, 255);"></textarea>
+									<input id="counter" value="255" size="4" disabled />
+								</td>
+							</tr>
+							<tr>
+								<td colspan=2 style="text-align:center;" >
+									<input type="button" class="button" value="<bean:message key="cust.comm.approve" />" />
+									&nbsp;
+									<input type="button" class="button" value="<bean:message key="cust.comm.reject" />" />
+								</td>
+							</tr>
+						</table>
+						</div>
+						<div style="text-align:center;" >
+						</div> 
+					</fieldset>
+					<br>
+				</logic:notEqual>
 			</div>
 		</td>
 	</tr>

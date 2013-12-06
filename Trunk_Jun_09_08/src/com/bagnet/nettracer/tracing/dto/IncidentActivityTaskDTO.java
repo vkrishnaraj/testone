@@ -11,7 +11,8 @@ public class IncidentActivityTaskDTO {
 	private String _TIMEFORMAT;
 	private TimeZone _TIMEZONE;
 	
-	private long id;
+	private long taskId;
+	private long incidentActivityId;
 	private String incidentId;
 	private String description;
 	private String agent;
@@ -41,14 +42,22 @@ public class IncidentActivityTaskDTO {
 		this._TIMEZONE = _TIMEZONE;
 	}
 
-	public long getId() {
-		return id;
+	public long getTaskId() {
+		return taskId;
 	}
-	
-	public void setId(long id) {
-		this.id = id;
+
+	public void setTaskId(long taskId) {
+		this.taskId = taskId;
 	}
-	
+
+	public long getIncidentActivityId() {
+		return incidentActivityId;
+	}
+
+	public void setIncidentActivityId(long incidentActivityId) {
+		this.incidentActivityId = incidentActivityId;
+	}
+
 	public String getIncidentId() {
 		return incidentId;
 	}
@@ -66,7 +75,7 @@ public class IncidentActivityTaskDTO {
 	}
 	
 	public String getAgent() {
-		return agent;
+		return agent != null ? agent : "";
 	}
 	
 	public void setAgent(String agent) {

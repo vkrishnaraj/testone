@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.TimeZone;
 
 import org.springframework.beans.BeanUtils;
 
@@ -24,6 +25,7 @@ import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.communications.Activity;
 import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
+import com.bagnet.nettracer.tracing.db.communications.IncidentActivityRemark;
 import com.bagnet.nettracer.tracing.db.documents.Document;
 import com.bagnet.nettracer.tracing.db.documents.templates.Template;
 import com.bagnet.nettracer.tracing.db.documents.templates.TemplateTypeMapping;
@@ -33,6 +35,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFPerson;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
 import com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask;
+import com.bagnet.nettracer.tracing.dto.IncidentActivityRemarkDTO;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskSearchDTO;
 import com.bagnet.nettracer.tracing.dto.TemplateAdapterDTO;
 import com.bagnet.nettracer.tracing.dto.TemplateSearchDTO;
@@ -74,7 +77,7 @@ public class DomainUtils {
 		ccf.setData(document.getContent());
 	}
 	
-	public static void toForm(IncidentActivity ia, CustomerCommunicationsForm ccf) {
+	public static void toForm(IncidentActivity ia, CustomerCommunicationsForm ccf, Agent user) {
 		ccf.setCommand(TracingConstants.COMMAND_UPDATE);
 		ccf.setId(ia.getId());
 
@@ -88,6 +91,10 @@ public class DomainUtils {
 			ccf.setDocumentTitle(ia.getDocument().getTitle());
 			ccf.setData(ia.getDocument().getContent());
 			ccf.setTemplateId(ia.getDocument().getTemplate().getId());
+		}
+		
+		if (ia.getRemarks() != null && !ia.getRemarks().isEmpty()) {
+			ccf.setRemarks(fromRemarks(ia.getRemarks(), user));
 		}
 		
 	}
@@ -216,6 +223,22 @@ public class DomainUtils {
 		dto.setTypes(types);
 		
 		return dto;
+	}
+	
+	private static List<IncidentActivityRemarkDTO> fromRemarks(List<IncidentActivityRemark> remarks, Agent user) {
+		List<IncidentActivityRemarkDTO> dtos = new ArrayList<IncidentActivityRemarkDTO>();
+		TimeZone timeZone = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
+		for (IncidentActivityRemark remark: remarks) {
+			IncidentActivityRemarkDTO dto = new IncidentActivityRemarkDTO();
+			dto.set_DATEFORMAT(user.getDateformat().getFormat());
+			dto.set_TIMEFORMAT(user.getTimeformat().getFormat());
+			dto.set_TIMEZONE(timeZone);
+			dto.setAgent(remark.getAgent().getUsername());
+			dto.setCreateDate(remark.getCreateDate());
+			dto.setRemarkText(remark.getRemarkText());
+			dtos.add(dto);
+		}
+		return dtos;
 	}
 	
 	private static LFFound getDummyFoundItem() {

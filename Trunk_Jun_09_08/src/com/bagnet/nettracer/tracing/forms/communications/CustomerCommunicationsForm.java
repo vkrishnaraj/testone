@@ -1,5 +1,8 @@
 package com.bagnet.nettracer.tracing.forms.communications;
 
+import java.util.List;
+
+import com.bagnet.nettracer.tracing.dto.IncidentActivityRemarkDTO;
 import com.bagnet.nettracer.tracing.forms.templates.CommandForm;
 
 public class CustomerCommunicationsForm extends CommandForm {
@@ -16,6 +19,9 @@ public class CustomerCommunicationsForm extends CommandForm {
 	private String fileName;
 	private long custCommId;
 	private boolean preview;
+	private long taskId;
+	
+	private List<IncidentActivityRemarkDTO> remarks;
 
 	public long getId() {
 		return id;
@@ -95,6 +101,22 @@ public class CustomerCommunicationsForm extends CommandForm {
 
 	public void setPreview(boolean preview) {
 		this.preview = preview;
+	}
+
+	public List<IncidentActivityRemarkDTO> getRemarks() {
+		return remarks;
+	}
+
+	public void setRemarks(List<IncidentActivityRemarkDTO> remarks) {
+		this.remarks = remarks;
+	}
+
+	public long getTaskId() {
+		return taskId;
+	}
+
+	public void setTaskId(long taskId) {
+		this.taskId = taskId;
 	}
 
 }
