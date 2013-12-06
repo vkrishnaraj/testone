@@ -160,6 +160,9 @@ public class NTIntegrationWrapper extends IntegrationWrapper {
 			SubmitVoucherDocument doc = SubmitVoucherDocument.Factory.newInstance();
 			SubmitVoucher voucherDoc = doc.addNewSubmitVoucher();
 			
+			voucherDoc.setHeader(createHeader());
+
+			
 			Voucher voucher = voucherDoc.addNewVoucher();
 
 			voucher.setPnr((inc.getRecordlocator() != null) ? inc.getRecordlocator() : null);//ntvoucher.getPnr();
