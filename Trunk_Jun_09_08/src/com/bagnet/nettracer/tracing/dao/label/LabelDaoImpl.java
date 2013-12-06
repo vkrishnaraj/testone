@@ -11,6 +11,7 @@ import org.apache.commons.collections.ListUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
@@ -162,6 +163,7 @@ public class LabelDaoImpl implements LabelDao {
 			session = HibernateWrapper.getSession().openSession();
 			Criteria criteria = session.createCriteria(Label.class, "l");
 			criteria.add(Restrictions.eq("l.agent.agent_ID", agentId));
+			criteria.addOrder(Order.desc("l.lastUpdate"));
 			labels = criteria.list();
 		} catch (Exception e) {
 			log.error("Failed loading labels by agentId = {}", agentId, e);

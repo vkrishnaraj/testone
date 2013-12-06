@@ -191,9 +191,8 @@ public class LabelAction extends Action {
 		}
 		
 		List<Label> labelList = labelService.getLabels(agent.getAgent_ID());
-		String labelRowsperpage = (request.getParameter("rowsperpage") == null) ? String.valueOf(TracingConstants.LABELS_PER_PAGE) : request.getParameter("rowsperpage");
 		if (labelList == null || labelList.isEmpty()) {
-			int rowsperpage = TracerUtils.manageRowsPerPage(labelRowsperpage, TracingConstants.ROWS_SEARCH_PAGES, session);
+			int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_SEARCH_PAGES, session);
 			request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
 
 			Integer currpage = NumberUtils.toInt(request.getParameter("currpage"));
@@ -268,8 +267,12 @@ public class LabelAction extends Action {
 				}
 			}
 		}
-
-		Integer rowsperpage = TracerUtils.manageRowsPerPage(labelRowsperpage, TracingConstants.ROWS_SEARCH_PAGES, session);
+		
+		// get row count
+		Integer rowcount = labelList.size();
+		request.setAttribute("rowcount", rowcount.toString());
+		
+		Integer rowsperpage = TracerUtils.manageRowsPerPage(rowcount.toString(), TracingConstants.ROWS_SEARCH_PAGES, session);
 		request.setAttribute("rowsperpage", rowsperpage.toString());
 
 		Integer currpage = NumberUtils.toInt(request.getParameter("currpage"));
@@ -280,14 +283,6 @@ public class LabelAction extends Action {
 			currpage--;
 		}
 		request.setAttribute("currpage", currpage.toString());
-		
-		// get row count
-		Integer rowcount = TracingConstants.LABELS_PER_PAGE;
-		if(rowcount != 0) {
-			request.setAttribute("rowcount", rowcount.toString());
-		} else {
-			request.setAttribute("rowcount", "0");
-		}
 		
 		// find out total pages
 		int totalpages = (int) Math.ceil((double) rowcount / (double) rowsperpage);
