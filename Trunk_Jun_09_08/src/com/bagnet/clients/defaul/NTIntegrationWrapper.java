@@ -203,9 +203,9 @@ public class NTIntegrationWrapper extends IntegrationWrapper {
 			}			
 			
 
-			//System.out.println(doc);
+			System.out.println(doc);
 			SubmitVoucherResponseDocument response = stub.submitVoucher(doc);
-			//System.out.println(response);
+			System.out.println(response);
 			ArrayList<String> ret = new ArrayList<String>();
 			if (response != null && response.getSubmitVoucherResponse() != null && response.getSubmitVoucherResponse().getReturn() != null) {
 				String success = (response.getSubmitVoucherResponse().getReturn().getSuccess()) ? "true" : "false" ;

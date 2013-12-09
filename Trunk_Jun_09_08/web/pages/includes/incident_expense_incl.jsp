@@ -84,7 +84,8 @@
 								if (lastcurrency == "") lastcurrency = expenselist.getCurrency_ID();
 								if (!lastcurrency.equals(expenselist.getCurrency_ID())) samecurrency = false;
 								
-                vouchertotal += expenselist.getVoucheramt();
+                if (expenselist.getStatus().getStatus_ID() == TracingConstants.EXPENSEPAYOUT_STATUS_PAID ) 
+                  vouchertotal += expenselist.getVoucheramt();
                 mileagetotal += expenselist.getMileageamt();
                 }
 %>
