@@ -579,6 +579,7 @@ public class TracingConstants {
 	public final static int EXPENSEPAYOUT_STATUS_APPROVED = 53;
 	public final static int EXPENSEPAYOUT_STATUS_DENIED = 54;
 	public final static int EXPENSEPAYOUT_STATUS_PAID = 55;
+	public final static int EXPENSEPAYOUT_STATUS_CANCEL = 94;
 
 	// bag status
 	public final static int ITEM_STATUS_DISPOSED_LOCALLY = 46;
