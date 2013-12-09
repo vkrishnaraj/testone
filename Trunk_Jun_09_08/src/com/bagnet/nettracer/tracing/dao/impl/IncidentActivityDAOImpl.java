@@ -213,7 +213,7 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			transaction = session.beginTransaction();
-			incidentActivityTask.setOpened_timestamp(DateUtils.convertToGMTDate(new Date()));
+			incidentActivityTask.setGeneric_timestamp(DateUtils.convertToGMTDate(new Date()));
 			session.merge(incidentActivityTask);
 			transaction.commit();
 			success = true;
@@ -299,6 +299,7 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 			Criteria criteria = session.createCriteria(IncidentActivityTask.class, "iat");
 			criteria.add(Restrictions.eq("iat.incidentActivity", incidentActivity));
 			criteria.add(Restrictions.in("iat.status", statuses));
+			criteria.add(Restrictions.eq("iat.active", true));
 			criteria.setProjection(Projections.countDistinct("iat.task_id"));
 			Long taskCount = (Long) criteria.uniqueResult();
 			if (taskCount != null && taskCount.longValue() != 0) {

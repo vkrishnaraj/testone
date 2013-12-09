@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.db.taskmanager;
 
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,6 +16,7 @@ import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
 @Proxy(lazy = true)
 public class IncidentActivityTask extends GeneralTask {
 
+	private boolean active;
 	private IncidentActivity incidentActivity;
 	
 	@ManyToOne(targetEntity = IncidentActivity.class, fetch = FetchType.EAGER)
@@ -25,6 +27,15 @@ public class IncidentActivityTask extends GeneralTask {
 	
 	public void setIncidentActivity(IncidentActivity incidentActivity) {
 		this.incidentActivity = incidentActivity;
+	}
+
+	@Column(name = "active")
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 }

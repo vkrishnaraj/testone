@@ -191,6 +191,7 @@ public class DomainUtils {
 		IncidentActivityTask iat = new IncidentActivityTask();
 		iat.setIncidentActivity(incidentActivity);
 		iat.setStatus(incidentActivity.getStatus());
+		iat.setActive(true);
 		return iat;
 	}
 	

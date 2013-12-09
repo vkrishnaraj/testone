@@ -30,7 +30,7 @@ public interface IncidentActivityService {
 	public boolean updateTask(IncidentActivityTask incidentActivityTask);
 	public boolean deleteTask(long incidentActivityTaskId);
 	
-	public boolean deleteRejectedTask(long taskId);
+	public boolean closeTask(long incidentActivityTaskId);
 	
 	public List<OptionDTO> getActivityOptions();
 	public Activity getActivity(String code);

@@ -188,10 +188,11 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 	}
 	
 	@Override
-	public boolean deleteRejectedTask(long taskId) {
-		IncidentActivityTask toDelete = incidentActivityDao.loadTask(taskId);
-		if (toDelete == null || toDelete.getStatus().getStatus_ID() != TracingConstants.STATUS_CUSTOMER_COMM_DENIED) return true;
-		return incidentActivityDao.deleteTask(toDelete);
+	public boolean closeTask(long taskId) {
+		IncidentActivityTask toClose = incidentActivityDao.loadTask(taskId);
+		if (toClose == null) return true;
+		toClose.setActive(false);
+		return incidentActivityDao.updateTask(toClose);
 	}
 
 	public DocumentDAO getDocumentDao() {
