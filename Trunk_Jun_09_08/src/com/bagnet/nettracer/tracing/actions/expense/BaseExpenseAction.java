@@ -134,10 +134,13 @@ public abstract class BaseExpenseAction extends CheckedAction {
 		epform.setPaymentType(ep.getPaytype());
 		epform.setDistributemethod(ep.getDistributemethod());
 		epform.setCancelreason(ep.getCancelreason());
+		epform.setCancelcount(ep.getCancelcount());
+		epform.setOrdernum(ep.getOrdernum());
 		epform.setOrdernum((String)request.getSession().getAttribute("ordernum"));
-		//epform.setSlvnum((String)request.getSession().getAttribute("slvnum"));
-		//epform.setSeccode((String)request.getSession().getAttribute("seccode"));
+		epform.setSlvnum((String)request.getSession().getAttribute("slvnum"));
+		epform.setSeccode((String)request.getSession().getAttribute("seccode"));
 		epform.setWssubmit((String)request.getSession().getAttribute("wssubmit"));
+		epform.setErrormsg((String)request.getSession().getAttribute("errormsg"));
 	}
 
 	protected ExpensePayout createNewPayout(ExpensePayoutForm expenseForm, Agent user) throws Exception {

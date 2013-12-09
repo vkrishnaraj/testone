@@ -40,10 +40,12 @@
 //	System.out.println("today: "+today);
 	String createdate = new SimpleDateFormat("MM/dd/yyyy").format(epf.getCreatedate());
 //	System.out.println("epf.getCreatedate(): "+createdate);
-	System.out.println("epf.getCancelreason: "+epf.getCancelreason());
+	
 	
 	boolean showcancel = (today.equals(createdate) && epf.getCancelcount() == 0 ) ? true : false;
-	System.out.println("epf.getCancelcount(): " + epf.getCancelcount());
+	System.out.println("epf.getPrintcount: " + epf.getPrintcount());
+	System.out.println("showprint: " + showprint);
+	System.out.println("epf.getCancelcount: " + epf.getCancelcount());
 	System.out.println("showcancel: " + showcancel);
 	System.out.println("Wssubmit: "+epf.getWssubmit());	
 	boolean swaBsoPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, a) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN,a);
@@ -88,7 +90,7 @@
         }
         return true;
       }
-
+/* 
     	function loadList(selectId, url) {
     		if (document.getElementById(selectId).options.length > 1) return;
 
@@ -107,12 +109,12 @@
     			activitySelect.options[activitySelect.options.length] = new Option(json[i].description, json[i].value);
     		}
     	}
-    	
+    	 */
       function showTemplateSelectDialog() {
-    		if (document.getElementById("templateSelect").options.length == 1) {
-    			loadList("templateSelect", "customerCommunications.do?templateList=<%=String.valueOf(TemplateType.INCIDENT.getOrdinal()) %>");
-    		}
-
+//    		if (document.getElementById("templateSelect").options.length == 1) {
+//    			loadList("templateSelect", "customerCommunications.do?templateList=<%=String.valueOf(TemplateType.INCIDENT.getOrdinal()) %>");
+//    		}
+    	alert('Please choose a reason for cancelling the Southwest LUV Voucher.');
    		var templateSelectDialog = jQuery("#templateSelectDiv").dialog({
     										height: 50,
     										width: 350,
@@ -151,7 +153,12 @@
 	    
 	    function ReSubmitWS() {
 	    	alert('Error in submitting Web Service. Please Resubmit or Call Administrator for connection issue.');
-	    };           
+	    };  
+	    
+	    
+	    function SubmitOK(ordernum) {
+	    	alert('The Southwest LUV Voucher has been cancelled. Order Number: '+ ordernum);
+	    };   	    
  
     </script>
 <html:form action="UpdateExpense.do" method="post" onsubmit="return validateExpense(this);">
@@ -237,13 +244,13 @@
             			Successfully Submitted!
           			</font></center>
 					<div align="right" width="100%" >
-					<% if (showprint) { %>
+					<% if (showprint && showcancel) { %>
 						<a name="printrpt" href='#' onclick="rePrint()">
 						<bean:message key="button.bdo_sendprint" />
 						</a>
 						&nbsp;&nbsp;
 					<% } %>	
-					<% if (hasCancelPermission && showcancel) { %>
+					<% if (hasCancelPermission && showcancel && showprint) { %>
 						<a href="#" onclick="showTemplateSelectDialog(); "> 
 							Cancel
 						</a>
@@ -612,4 +619,7 @@
 </html:form>
 <c:if test="${expensePayoutForm.wssubmit == 'no'}">
     <script type="text/javascript">ReSubmitWS();</script>
+ </c:if>
+ <c:if test="${expensePayoutForm.wssubmit == 'yes' and expensePayoutForm.cancelcount == 1}">
+    <script type="text/javascript">SubmitOK('<c:out value="${expensePayoutForm.ordernum}" />');</script>
  </c:if>

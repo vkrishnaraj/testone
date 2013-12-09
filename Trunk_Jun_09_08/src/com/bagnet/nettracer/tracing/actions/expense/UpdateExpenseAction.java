@@ -1,12 +1,14 @@
 package com.bagnet.nettracer.tracing.actions.expense;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -31,7 +33,7 @@ import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
 public class UpdateExpenseAction extends BaseExpenseAction {
-
+	private Logger logger = Logger.getLogger(UpdateExpenseAction.class);
 	@Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -127,11 +129,39 @@ public class UpdateExpenseAction extends BaseExpenseAction {
 				return mapping.findForward(ERROR);
 			}
 		} else if (expenseForm.getStatus_id() == TracingConstants.EXPENSEPAYOUT_STATUS_PAID) {
+			//For Cancel link
+			if (expenseForm.getCancelcount() == 0 && expenseForm.getCancelreason() != null && expenseForm.getCancelreason().length() > 0 ) {
+				IncidentBMO ibmo = new IncidentBMO();
+				String incidentId = ((IncidentForm) request.getSession().getAttribute("incidentForm")).getIncident_ID();
+				//WS submit
+				com.bagnet.nettracer.tracing.db.Incident inc = (com.bagnet.nettracer.tracing.db.Incident)ibmo.findIncidentByID(incidentId);
+				ArrayList<String> ret= null;
+				try{
+					ret = SpringUtils.getReservationIntegration().submitVoucher(inc, "cancel",expenseForm);
+				}catch(Exception e){
+					logger.error("Failed to submit Voucher!!! " +  e);
+				}
+				boolean ws_submit_ok = (ret != null && ret.get(0).equals("true")) ? true : false ;
+				if (ws_submit_ok) {
+					request.getSession().setAttribute("wssubmit", "yes");
+					ep.setCancelreason(expenseForm.getCancelreason());
+					ep.setCancelcount(1);
+					expenseForm.setCancelcount(1);
+					String contents= "The Southwest LUV Voucher has been cancelled. Order Number: " + ret.get(1);
+					ibmo.insertRemark(contents,incidentId, user, TracingConstants.REMARK_REGULAR);
+				} else {
+					request.getSession().setAttribute("wssubmit", "no");
+					request.getSession().setAttribute("errormsg", (ret != null) ? ret.get(4) : "NO CONNECTION!!");
+					expenseForm.setWssubmit("no");
+					expenseForm.setErrormsg((ret != null) ? ret.get(4) : "NO CONNECTION!!");
+					ep.setCancelreason("");
+					ep.setCancelcount(0);
+
+				}				
+			}			
 			st.setStatus_ID(expenseForm.getStatus_id());
 			if (expenseForm.getPrintcount() > 0 ) 
 				ep.setPrintcount(expenseForm.getPrintcount());
-			if (expenseForm.getCancelreason().length() > 0)
-				ep.setCancelreason(expenseForm.getCancelreason());
 			//Added to remark when print status is "No"
 			if (expenseForm.getToremark().equals("yes")) {
 				String incidentId = ((IncidentForm) request.getSession().getAttribute("incidentForm")).getIncident_ID();
