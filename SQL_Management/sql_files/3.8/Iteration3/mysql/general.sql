@@ -288,6 +288,7 @@ alter table expensepayout add column ordernum varchar(10);
 alter table expensepayout modify column paytype varchar(10);
 alter table expensepayout add column cancelreason varchar(10);
 alter table expensepayout add column cancelcount int default 0;
+insert into status (Status_ID,description,table_ID) VALUES (94,'Cancelled',11);
 
 #Label Queue
 insert into properties (ID, keyStr, valueStr) VALUES (140,'label.queue',1);
