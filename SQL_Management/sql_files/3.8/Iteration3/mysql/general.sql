@@ -282,7 +282,8 @@ alter table expensetype modify description varchar(30);
 insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group) VALUES (
    1102,'Cust_Comm_Rejection_Queue','Manage rejection queue for customer communiations.',15,'customerCommunicationsRejected.do',1,100,3);
 
-alter table task add incidentActivityId bigint default null; 
+alter table task add incidentActivityId bigint default null;
+alter table task add active bit default 1;
 
 alter table expensepayout add column ordernum varchar(10);
 alter table expensepayout modify column paytype varchar(10);
