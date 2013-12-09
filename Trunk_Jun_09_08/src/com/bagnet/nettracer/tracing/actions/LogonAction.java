@@ -45,6 +45,8 @@ import com.bagnet.nettracer.tracing.db.GroupComponentPolicy;
 import com.bagnet.nettracer.tracing.db.ProactiveNotification;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Label;
+import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.taskmanager.GeneralTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.MorningDutiesTask;
@@ -83,12 +85,9 @@ import com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesUtil;
 
 
 public class LogonAction extends Action {
-
-	private IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
 	
 	private String foobar;
 	private final Logger authenlog = Logger.getLogger("authentication");
-	private LabelService labelService = (LabelService) SpringUtils.getBean(TracingConstants.LABEL_SERVICE_BEAN);
 	
 	/**
 	 * Process the specified HTTP request, and create the corresponding HTTP
@@ -357,6 +356,7 @@ public class LogonAction extends Action {
 							if (x != -1)
 								entries = x;
 						} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_LABEL_QUEUE)) {
+							LabelService labelService = (LabelService) SpringUtils.getBean(TracingConstants.LABEL_SERVICE_BEAN);
 							List<Label> labelList = labelService.getLabels(agent.getAgent_ID());
 							entries = (labelList == null) ? 0 : labelList.size();							
 						} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_TO_BE_INVENTORIED)) {
@@ -639,9 +639,11 @@ public class LogonAction extends Action {
 																					}
 																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL_QUEUE) &&
 																						UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL, agent)) {
+																					IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
 																					entries = incidentActivityService.getIncidentActivityAwaitingApprovalCount();
 																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_REJECTION_QUEUE) &&
 																						UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_CREATE, agent)) {
+																					IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
 																					entries = incidentActivityService.getIncidentActivityRejectionCount(agent);
 																				} 
 																			}

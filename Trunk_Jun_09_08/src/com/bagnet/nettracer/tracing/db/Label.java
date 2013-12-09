@@ -30,7 +30,7 @@ public class Label implements Serializable {
 	private Date lastUpdate;
 
 	@ManyToOne
-	@JoinColumn(name = "agent_id")
+	@JoinColumn(name = "agent_id", nullable = false)
 	private Agent agent;
 
 	public long getId() {
