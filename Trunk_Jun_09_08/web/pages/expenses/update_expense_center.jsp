@@ -37,17 +37,13 @@
 	boolean submitOk = (epf.getPaymentType() !=null && epf.getPaymentType().equals(TracingConstants.ENUM_VOUCHER))? true :false; 
 	boolean showprint = epf.getPrintcount() == 0 ? true : false;
 	String today = new SimpleDateFormat("MM/dd/yyyy").format(Calendar.getInstance().getTime());
-//	System.out.println("today: "+today);
 	String createdate = new SimpleDateFormat("MM/dd/yyyy").format(epf.getCreatedate());
-//	System.out.println("epf.getCreatedate(): "+createdate);
-	
-	
 	boolean showcancel = (today.equals(createdate) && epf.getCancelcount() == 0 ) ? true : false;
 	System.out.println("epf.getPrintcount: " + epf.getPrintcount());
 	System.out.println("showprint: " + showprint);
 	System.out.println("epf.getCancelcount: " + epf.getCancelcount());
 	System.out.println("showcancel: " + showcancel);
-	System.out.println("Wssubmit: "+epf.getWssubmit());	
+	System.out.println("Wssubmitc: "+epf.getWssubmitc());	
 	boolean swaBsoPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, a) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN,a);
 	boolean swaIsInBSO=(epf!=null && a!=null && a.getStation()!=null && epf.getExpenselocation_ID()==a.getStation().getStation_ID());
 	
@@ -90,30 +86,8 @@
         }
         return true;
       }
-/* 
-    	function loadList(selectId, url) {
-    		if (document.getElementById(selectId).options.length > 1) return;
 
-    		jQuery.ajax({
-     			url:url,
-    			cache: false,
-    			success: function(result) {
-    				populateSelect(selectId, result);
-    			}
-    		});	
-    	}
-
-    	function populateSelect(selectId, json) {
-    		var activitySelect = document.getElementById(selectId);		
-    		for (var i = 0; i < json.length; ++i) {
-    			activitySelect.options[activitySelect.options.length] = new Option(json[i].description, json[i].value);
-    		}
-    	}
-    	 */
       function showTemplateSelectDialog() {
-//    		if (document.getElementById("templateSelect").options.length == 1) {
-//    			loadList("templateSelect", "customerCommunications.do?templateList=<%=String.valueOf(TemplateType.INCIDENT.getOrdinal()) %>");
-//    		}
     	alert('Please choose a reason for cancelling the Southwest LUV Voucher.');
    		var templateSelectDialog = jQuery("#templateSelectDiv").dialog({
     										height: 50,
@@ -129,7 +103,6 @@
     													alert('You must select a cancel reason.');
     													return;
     												}
-//    												submitRequest(templateId);
     												document.expensePayoutForm.cancelreason.value=templateId;
     												document.expensePayoutForm.submit();
     											}
@@ -154,7 +127,6 @@
 	    function ReSubmitWS() {
 	    	alert('Error in submitting Web Service. Please Resubmit or Call Administrator for connection issue.');
 	    };  
-	    
 	    
 	    function SubmitOK(ordernum) {
 	    	alert('The Southwest LUV Voucher has been cancelled. Order Number: '+ ordernum);
@@ -617,9 +589,9 @@
         	<html:hidden property="expenselocation_ID" />
     <% } %>
 </html:form>
-<c:if test="${expensePayoutForm.wssubmit == 'no'}">
+<c:if test="${expensePayoutForm.wssubmitc == 'no'}">
     <script type="text/javascript">ReSubmitWS();</script>
  </c:if>
- <c:if test="${expensePayoutForm.wssubmit == 'yes' and expensePayoutForm.cancelcount == 1}">
+ <c:if test="${expensePayoutForm.wssubmitc == 'yes' and expensePayoutForm.cancelcount == 1}">
     <script type="text/javascript">SubmitOK('<c:out value="${expensePayoutForm.ordernum}" />');</script>
  </c:if>

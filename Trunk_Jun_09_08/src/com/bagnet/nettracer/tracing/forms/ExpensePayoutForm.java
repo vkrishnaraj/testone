@@ -53,7 +53,8 @@ public class ExpensePayoutForm extends ActionForm {
 	private String ordernum;
 	private String slvnum;
 	private String seccode;
-	private String wssubmit;
+	private String wssubmitp;//for print submit
+	private String wssubmitc;//for cancel submit
 	private int cancelcount;
 	private String errormsg;
 
@@ -103,12 +104,18 @@ public class ExpensePayoutForm extends ActionForm {
 	public void setCancelcount(int cancelcount) {
 		this.cancelcount = cancelcount;
 	}
-	public String getWssubmit() {
-		return wssubmit;
+	public String getWssubmitp() {
+		return wssubmitp;
 	}
-	public void setWssubmit(String wssubmit) {
-		this.wssubmit = wssubmit;
+	public void setWssubmitp(String wssubmitp) {
+		this.wssubmitp = wssubmitp;
 	}
+	public String getWssubmitc() {
+		return wssubmitc;
+	}
+	public void setWssubmitc(String wssubmitc) {
+		this.wssubmitc = wssubmitc;
+	}	
 	public String getOrdernum() {
 		return ordernum;
 	}

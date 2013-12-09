@@ -61,7 +61,7 @@
 	boolean canPay = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_EXPENSE, a);
 	boolean swaBsoPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, a) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN,a);
 	ExpensePayoutForm epf = (ExpensePayoutForm) request.getAttribute("expensePayoutForm");
-//	System.out.println("Wssubmit: "+epf.getWssubmit());
+	System.out.println("Wssubmitp: "+epf.getWssubmitp());
 //	System.out.println("wserrormsg: "+epf.getErrormsg());
 
 %>
@@ -430,6 +430,6 @@
 var selectlist = document.getElementById('getpaymenttype');
 updatePaymentFields(selectlist.options[selectlist.selectedIndex].value);
 </script >	
-<c:if test="${expensePayoutForm.wssubmit == 'no'}">
+<c:if test="${expensePayoutForm.wssubmitp == 'no'}">
     <script type="text/javascript">ReSubmitWS();</script>
  </c:if>

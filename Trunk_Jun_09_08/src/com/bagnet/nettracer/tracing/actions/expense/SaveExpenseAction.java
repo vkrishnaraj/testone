@@ -123,13 +123,15 @@ public class SaveExpenseAction extends BaseExpenseAction {
 				ep.setOrdernum(ret.get(1));
 				request.getSession().setAttribute("slvnum", ret.get(2));
 				request.getSession().setAttribute("seccode", ret.get(3));
-				request.getSession().setAttribute("wssubmit", "yes");
+				request.getSession().setAttribute("wssubmitp", "yes");
+				expenseForm.setWssubmitp("yes");
 				String contents= "Voucher Issue Amount: $" + String.valueOf(expenseForm.getCheckamt()) + "\n" + 
 		                 "Agent Comments: " + expenseForm.getNewComment();
 				ibmo.insertRemark(contents,incidentId, user, TracingConstants.REMARK_REGULAR);
 				st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_PAID);
 			} else {
-				expenseForm.setWssubmit("no");
+				request.getSession().setAttribute("wssubmitp", "no");
+				expenseForm.setWssubmitp("no");
 				expenseForm.setIncident_ID(incidentId);
 				expenseForm.setCreateStation(ep.getStation().getStationcode());
 				expenseForm.setCreateUser(ep.getAgent().getUsername());

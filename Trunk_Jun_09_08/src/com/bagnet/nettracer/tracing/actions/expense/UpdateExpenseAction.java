@@ -143,7 +143,8 @@ public class UpdateExpenseAction extends BaseExpenseAction {
 				}
 				boolean ws_submit_ok = (ret != null && ret.get(0).equals("true")) ? true : false ;
 				if (ws_submit_ok) {
-					request.getSession().setAttribute("wssubmit", "yes");
+					request.getSession().setAttribute("wssubmitc", "yes");
+					expenseForm.setWssubmitc("yes");
 					ep.setCancelreason(expenseForm.getCancelreason());
 					ep.setCancelcount(1);
 					expenseForm.setCancelcount(1);
@@ -151,9 +152,9 @@ public class UpdateExpenseAction extends BaseExpenseAction {
 					String contents= "The Southwest LUV Voucher has been cancelled. Order Number: " + ret.get(1);
 					ibmo.insertRemark(contents,incidentId, user, TracingConstants.REMARK_REGULAR);
 				} else {
-					request.getSession().setAttribute("wssubmit", "no");
+					request.getSession().setAttribute("wssubmitc", "no");
+					expenseForm.setWssubmitc("no");
 					request.getSession().setAttribute("errormsg", (ret != null) ? ret.get(4) : "NO CONNECTION!!");
-					expenseForm.setWssubmit("no");
 					expenseForm.setErrormsg((ret != null) ? ret.get(4) : "NO CONNECTION!!");
 					ep.setCancelreason("");
 					ep.setCancelcount(0);
