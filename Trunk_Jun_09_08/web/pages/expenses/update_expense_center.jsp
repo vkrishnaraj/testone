@@ -113,6 +113,7 @@
       
       function rePrint() {
     	  openReportWindow('reporting?print=<%=ReportingConstants.EXP_LUV %>&outputtype=0',800,600);
+
  	      var del=window.confirm("Did the Southwest LUV Voucher print correctly?");
   	      if(del==true){
   	    	document.getElementById("printrpt").style.display= 'none';
@@ -131,7 +132,33 @@
 	    function SubmitOK(ordernum) {
 	    	alert('The Southwest LUV Voucher has been cancelled. Order Number: '+ ordernum);
 	    };   	    
- 
+		
+		function DoPrint(message){
+	    	openReportWindow('reporting?print=<%=ReportingConstants.EXP_LUV %>&outputtype=0',800,600);
+		    jQuery('<div></div>').appendTo('body')
+		                    .html('<div><h6>'+message+'?</h6></div>')
+		                    .dialog({
+								height: 50,
+								width: 350,
+//								title: 'Select Cancel Reason',
+								modal: true,
+		                        buttons: {
+		                            Yes: function () {
+		                                jQuery(this).dialog("close");
+		                     	    	document.getElementById("printrpt").style.display= 'none';
+		                      	    	document.expensePayoutForm.printcount.value="1";
+		                      	    	document.expensePayoutForm.submit();
+		                            },
+		                            No: function () {
+		                            	jQuery(this).dialog("close");
+		                            	document.expensePayoutForm.toremark.value="yes";
+		                    			document.expensePayoutForm.submit();
+		                            }
+		                        }
+
+		                    });
+		    };
+		    
     </script>
 <html:form action="UpdateExpense.do" method="post" onsubmit="return validateExpense(this);">
 	<html:hidden name="expensePayoutForm" property="dateFormat" value="<%= a.getDateformat().getFormat() %>"/>
@@ -217,7 +244,7 @@
           			</font></center>
 					<div align="right" width="100%" >
 					<% if (showprint && showcancel) { %>
-						<a name="printrpt" href='#' onclick="rePrint()">
+						<a name="printrpt" href='#' onclick="DoPrint('Did the Southwest LUV Voucher print correctly')">
 						<bean:message key="button.bdo_sendprint" />
 						</a>
 						&nbsp;&nbsp;

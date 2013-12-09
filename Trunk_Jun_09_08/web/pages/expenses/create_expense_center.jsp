@@ -23,30 +23,7 @@
    
     var issue_voucher = false;
 	var cal1xx = new CalendarPopup();
-	
-	function ConfirmDialog(message){
-	    jQuery('<div></div>').appendTo('body')
-	                    .html('<div><h6>'+message+'?</h6></div>')
-	                    .dialog({
-	                        modal: true, title: 'Delete message', zIndex: 10000, autoOpen: true,
-	                        width: 'auto', resizable: false,
-	                        buttons: {
-	                            Yes: function () {
-	                                // $(obj).removeAttr('onclick');                                
-	                                // $(obj).parents('.Parent').remove();
 
-	                                jQuery(this).dialog("close");
-	                            },
-	                            No: function () {
-	                            	jQuery(this).dialog("close");
-	                            }
-	                        },
-	                        close: function (event, ui) {
-	                        	jQuery(this).remove();
-	                        }
-	                    });
-	    };
-	    
 	    function ReSubmitWS() {
 	    	alert('Error in submitting Web Service. Please Resubmit or Call Administrator for connection issue.');
 	    };
