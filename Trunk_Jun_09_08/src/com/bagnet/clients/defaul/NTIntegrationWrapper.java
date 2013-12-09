@@ -31,10 +31,12 @@ import aero.nettracer.serviceprovider.ws_1_0.SubmitVoucherDocument;
 import aero.nettracer.serviceprovider.ws_1_0.SubmitVoucherResponseDocument;
 
 import com.bagnet.nettracer.exceptions.BagtagException;
+import com.bagnet.nettracer.tracing.bmo.ExpensePayoutBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.BagDrop;
+import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.forms.ExpensePayoutForm;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
@@ -180,7 +182,8 @@ public class NTIntegrationWrapper extends IntegrationWrapper {
 			voucher.setNtIncidentId((inc.getIncident_ID() != null) ? inc.getIncident_ID() : null);
 			if (status.equals("cancel")){
 				voucher.setRemark((epf.getCancelreason() != null) ? epf.getCancelreason() : null);//cancel reason for cancel status
-				voucher.setOrderNumber((epf.getOrdernum() != null) ? epf.getOrdernum() : null);
+				ExpensePayout ep = ExpensePayoutBMO.findExpensePayout(epf.getExpensepayout_ID());
+				voucher.setOrderNumber((ep.getOrdernum() != null) ? ep.getOrdernum() : null);
 			}
 			Passenger pax = voucher.addNewPassenger();
 			if (inc.getPassengers() != null && inc.getPassengers().size() > 0) {
