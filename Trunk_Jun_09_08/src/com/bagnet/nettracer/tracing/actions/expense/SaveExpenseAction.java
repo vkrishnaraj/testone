@@ -12,7 +12,6 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
-import com.bagnet.nettracer.tracing.actions.communications.CustomerCommunicationsAction;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.UsergroupBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -69,9 +68,7 @@ public class SaveExpenseAction extends BaseExpenseAction {
 			}
 			
 			if(bsoLimit>0 && ep.getCheckamt()>bsoLimit && cbsProcess){
-				ActionMessage error = new ActionMessage("");
-				error = new ActionMessage("unable.create.over.bso.limit", new Object[]{bsoLimit});
-				messages.add(ActionMessages.GLOBAL_MESSAGE, error);
+				messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("unable.create.over.bso.limit", new Object[]{bsoLimit}));
 				saveMessages(request, messages);
 				return mapping.findForward(CREATE_SUCCESS);
 			}

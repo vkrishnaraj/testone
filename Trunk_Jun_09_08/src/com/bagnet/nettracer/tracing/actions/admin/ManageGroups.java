@@ -25,7 +25,6 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.util.LabelValueBean;
 import org.apache.struts.validator.DynaValidatorForm;
 
-import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.constant.TracingConstants.SortParam;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -424,7 +423,11 @@ public final class ManageGroups extends Action {
 			String groupDesc = (String) dForm.get("groupDesc");
 			double bsoLimit =0;
 			if(dForm.get("bsoLimit")!=null && !((String)dForm.get("bsoLimit")).isEmpty()){
-				bsoLimit = Double.parseDouble((String) dForm.get("bsoLimit"));
+				try{
+					bsoLimit = Double.parseDouble((String) dForm.get("bsoLimit"));
+				} catch (NumberFormatException nfe){
+					nfe.printStackTrace();
+				}
 			}
 			
 			if(groupName != null){

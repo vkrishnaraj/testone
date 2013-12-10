@@ -72,10 +72,7 @@ public class UpdateExpenseAction extends BaseExpenseAction {
 				}
 				
 				if(bsoLimit>0 && ep.getCheckamt()>bsoLimit && cbsProcess){
-					ActionMessage error = new ActionMessage("");
-					error = new ActionMessage("unable.create.over.bso.limit", new Object[]{bsoLimit});
-					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-					request.setAttribute("passBSOLimit", "1");
+					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("unable.create.over.bso.limit", new Object[]{bsoLimit}));
 					saveMessages(request, errors);
 					return mapping.findForward(UPDATE_SUCCESS);
 				}
