@@ -71,6 +71,8 @@ public class ExpensePayout implements Serializable {
 	private String paytype;
 	private int printcount;
 	private String ordernum;
+	private String slvnum;
+	private String seccode;
 	private String cancelreason;
 	private int cancelcount;
 
@@ -319,6 +321,24 @@ public class ExpensePayout implements Serializable {
 
 	public void setOrdernum(String ordernum) {
 		this.ordernum = ordernum;
+	}
+	
+	@Column(length = 20)
+	public String getSlvnum() {
+		return slvnum;
+	}
+
+	public void setSlvnum(String slvnum) {
+		this.slvnum = slvnum;
+	}
+	
+	@Column(length = 10)
+	public String getSeccode() {
+		return seccode;
+	}
+
+	public void setSeccode(String seccode) {
+		this.seccode = seccode;
 	}
 	
 	@Basic

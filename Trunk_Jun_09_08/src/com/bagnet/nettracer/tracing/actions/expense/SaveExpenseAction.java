@@ -119,11 +119,13 @@ public class SaveExpenseAction extends BaseExpenseAction {
 			}
 			boolean ws_submit_ok = (ret != null && ret.get(0).equals("true") ) ? true : false ;
 			if (ws_submit_ok) {
-				request.getSession().setAttribute("ordernum", ret.get(1));
-				ep.setOrdernum(ret.get(1));
-				request.getSession().setAttribute("slvnum", ret.get(2));
-				request.getSession().setAttribute("seccode", ret.get(3));
+//				request.getSession().setAttribute("ordernum", ret.get(1));
+//				request.getSession().setAttribute("slvnum", ret.get(2));
+//				request.getSession().setAttribute("seccode", ret.get(3));
 				request.getSession().setAttribute("wssubmitp", "yes");
+				ep.setOrdernum(ret.get(1));
+				ep.setSlvnum(ret.get(2));
+				ep.setSeccode(ret.get(3));
 				expenseForm.setWssubmitp("yes");
 				String contents= "Voucher Issue Amount: $" + String.valueOf(expenseForm.getCheckamt()) + "\n" + 
 		                 "Agent Comments: " + expenseForm.getNewComment();
@@ -138,7 +140,7 @@ public class SaveExpenseAction extends BaseExpenseAction {
 				expenseForm.setCreatedate(ep.getCreatedate());
 				expenseForm.setPaymentType(ep.getPaytype());
 				expenseForm.setErrormsg((ret != null) ? ret.get(4) : "NO CONNECTION!!");
-//				request.getSession().setAttribute("expensepayoutform", expenseForm);	
+
 				return mapping.findForward(CREATE_SUCCESS);
 			}				
 		}

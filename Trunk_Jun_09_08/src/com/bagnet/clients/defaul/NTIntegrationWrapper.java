@@ -165,13 +165,13 @@ public class NTIntegrationWrapper extends IntegrationWrapper {
 			
 			Voucher voucher = voucherDoc.addNewVoucher();
 
-			voucher.setPnr((inc.getRecordlocator() != null) ? inc.getRecordlocator() : null);//ntvoucher.getPnr();
+			voucher.setPnr((inc.getRecordlocator() != null) ? inc.getRecordlocator() : "");//ntvoucher.getPnr();
 			String stationId = inc.getStation_ID() + "";
 			Station station = StationBMO.getStation(stationId);
 
-			voucher.setStation((station.getStationcode() != null) ? station.getStationcode() : null);
+			voucher.setStation((station.getStationcode() != null) ? station.getStationcode() : "");
 			voucher.setStatus(status);
-			voucher.setAgentUserName((inc.getAgent_username() != null) ? inc.getAgent_username() : null);
+			voucher.setAgentUserName((inc.getAgent_username() != null) ? inc.getAgent_username() : "");
 			voucher.setAmount((epf.getCheckamt() != 0) ? epf.getCheckamt() : 0);
 //			voucher.setDepartment(null);//ignore
 			String distributemethod = (epf.getDistributemethod() != null) ? epf.getDistributemethod() : "" ;
@@ -179,27 +179,27 @@ public class NTIntegrationWrapper extends IntegrationWrapper {
 			if (distributemethod.equals("MAIL")) distributemethod = "USPS";
 
 			voucher.setDistributionMethod(distributemethod);
-			voucher.setNtIncidentId((inc.getIncident_ID() != null) ? inc.getIncident_ID() : null);
+			voucher.setNtIncidentId((inc.getIncident_ID() != null) ? inc.getIncident_ID() : "");
 			if (status.equals("cancel")){
-				voucher.setRemark((epf.getCancelreason() != null) ? epf.getCancelreason() : null);//cancel reason for cancel status
+				voucher.setRemark((epf.getCancelreason() != null) ? epf.getCancelreason() : "");//cancel reason for cancel status
 				ExpensePayout ep = ExpensePayoutBMO.findExpensePayout(epf.getExpensepayout_ID());
-				voucher.setOrderNumber((ep.getOrdernum() != null) ? ep.getOrdernum() : null);
+				voucher.setOrderNumber((ep.getOrdernum() != null) ? ep.getOrdernum() : "");
 			}
 			Passenger pax = voucher.addNewPassenger();
 			if (inc.getPassengers() != null && inc.getPassengers().size() > 0) {
 				for (com.bagnet.nettracer.tracing.db.Passenger pa : inc.getPassengers()) {
 					pa.setPassenger_ID(0);
-					pax.setFirstname((pa.getFirstname() != null) ? pa.getFirstname() : null);
-					pax.setLastname((pa.getLastname() != null) ? pa.getLastname() : null);
+					pax.setFirstname((pa.getFirstname() != null) ? pa.getFirstname() : "");
+					pax.setLastname((pa.getLastname() != null) ? pa.getLastname() : "");
 					Address addr = pax.addNewAddresses();
-					addr.setAddress1((pa.getAddress(0).getAddress1() != null) ? pa.getAddress(0).getAddress1() : null);
-					addr.setAddress2((pa.getAddress(0).getAddress2() != null) ? pa.getAddress(0).getAddress2() : null);
-					addr.setCity((pa.getAddress(0).getCity() != null) ? pa.getAddress(0).getCity() : null);
-					addr.setState((pa.getAddress(0).getState_ID() != null) ? pa.getAddress(0).getState_ID() : null);
-					addr.setZip((pa.getAddress(0).getZip() != null) ? pa.getAddress(0).getZip() : null);
-					addr.setCountry((pa.getAddress(0).getCountry() != null) ? pa.getAddress(0).getCountry() : null);
-					addr.setHomePhone((pa.getAddress(0).getHomephone_norm() != null) ? pa.getAddress(0).getHomephone_norm() : null);
-					addr.setEmailAddress((pa.getAddress(0).getEmail() != null) ? pa.getAddress(0).getEmail() : null);
+					addr.setAddress1((pa.getAddress(0).getAddress1() != null) ? pa.getAddress(0).getAddress1() : "");
+					addr.setAddress2((pa.getAddress(0).getAddress2() != null) ? pa.getAddress(0).getAddress2() : "");
+					addr.setCity((pa.getAddress(0).getCity() != null) ? pa.getAddress(0).getCity() : "");
+					addr.setState((pa.getAddress(0).getState_ID() != null) ? pa.getAddress(0).getState_ID() : "");
+					addr.setZip((pa.getAddress(0).getZip() != null) ? pa.getAddress(0).getZip() : "");
+					addr.setCountry((pa.getAddress(0).getCountrycode_ID() != null) ? pa.getAddress(0).getCountrycode_ID() : "");
+					addr.setHomePhone((pa.getAddress(0).getHomephone_norm() != null) ? pa.getAddress(0).getHomephone_norm() : "");
+					addr.setEmailAddress((pa.getAddress(0).getEmail() != null) ? pa.getAddress(0).getEmail() : "");
 					
 					break;
 				}
