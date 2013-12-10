@@ -18,7 +18,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.util.MessageResources;
 
@@ -76,9 +75,6 @@ public class LUVReceipt_Imme {
 				break;
 			}
 		}
-		System.out.println("=== Order Number: " + theform.getOrdernum());
-		System.out.println("=== voucher_num: " + theform.getSlvnum());
-		System.out.println("=== sec_code: " + theform.getSeccode());
 		parameters.put("order_num", (theform.getOrdernum() != null ? theform.getOrdernum() : ""));
 		parameters.put("voucher_num", (theform.getSlvnum() != null ? theform.getSlvnum() : ""));
 		parameters.put("sec_code", (theform.getSeccode() != null ? theform.getSeccode() : ""));
