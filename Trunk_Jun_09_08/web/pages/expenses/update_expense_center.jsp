@@ -44,6 +44,9 @@
 	System.out.println("epf.getCancelcount: " + epf.getCancelcount());
 	System.out.println("showcancel: " + showcancel);
 	System.out.println("Wssubmitc: "+epf.getWssubmitc());	
+	System.out.println("epf.getOrdernum: " + epf.getOrdernum());
+	System.out.println("epf.getSlvnum: " + epf.getSlvnum());
+	System.out.println("epf.getSeccode: " + epf.getSeccode());
 	boolean swaBsoPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, a) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN,a);
 	boolean swaIsInBSO=(epf!=null && a!=null && a.getStation()!=null && epf.getExpenselocation_ID()==a.getStation().getStation_ID());
 	

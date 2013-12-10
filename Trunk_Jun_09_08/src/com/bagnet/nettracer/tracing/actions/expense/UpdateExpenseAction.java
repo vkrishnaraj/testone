@@ -150,6 +150,8 @@ public class UpdateExpenseAction extends BaseExpenseAction {
 					expenseForm.setCancelcount(1);
 					expenseForm.setStatus_id(TracingConstants.EXPENSEPAYOUT_STATUS_CANCEL);
 					String contents= "The Southwest LUV Voucher has been cancelled. Order Number: " + ret.get(1);
+					System.out.println("****LUV Order Number:(ret) " + ret.get(1));
+					System.out.println("****LUV Order Number:(form) " + expenseForm.getOrdernum());
 					ibmo.insertRemark(contents,incidentId, user, TracingConstants.REMARK_REGULAR);
 				} else {
 					request.getSession().setAttribute("wssubmitc", "no");
