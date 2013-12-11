@@ -49,7 +49,9 @@ public class SaveExpenseAction extends BaseExpenseAction {
 		String incidentId = ((IncidentForm) request.getSession().getAttribute("incidentForm")).getIncident_ID();
 		
 		boolean cbsProcess=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, user) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN, user);
-		boolean luvProcess=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LUV_PROCESS, user); 
+		boolean luvProcess=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_IMMEDIATE_FULFILLMENT, user)
+				          || UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EMAIL_FULFILLMENT, user)
+				          || UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MAIL_FULFILLMENT, user); 
 		// set status to pending or approved
 		Status st = new Status();
 		st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED);
