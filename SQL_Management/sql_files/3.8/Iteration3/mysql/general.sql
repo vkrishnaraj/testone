@@ -314,4 +314,7 @@ create table incident_activity_remark (
   remarkText varchar(255),
   incidentActivity bigint not null,
   primary key (id)
-)
+);
+
+alter table incident_activity drop foreign key fk_activity_status;
+alter table incident_activity drop column status;
