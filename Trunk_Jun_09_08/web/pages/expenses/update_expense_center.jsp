@@ -32,21 +32,12 @@
 			a);
 	boolean canPay = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_EXPENSE, a);
 	boolean hasCancelPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CANCEL_A_VOUCHER, a);
-//	System.out.println("hasCancelPermission: "+hasCancelPermission);
 	ExpensePayoutForm epf = (ExpensePayoutForm) request.getAttribute("expensePayoutForm");
 	boolean submitOk = (epf.getPaymentType() !=null && epf.getPaymentType().equals(TracingConstants.ENUM_VOUCHER))? true :false; 
 	boolean showprint = epf.getPrintcount() == 0 ? true : false;
 	String today = new SimpleDateFormat("MM/dd/yyyy").format(Calendar.getInstance().getTime());
 	String createdate = new SimpleDateFormat("MM/dd/yyyy").format(epf.getCreatedate());
 	boolean showcancel = (today.equals(createdate) && epf.getCancelcount() == 0 ) ? true : false;
-	System.out.println("epf.getPrintcount: " + epf.getPrintcount());
-	System.out.println("showprint: " + showprint);
-	System.out.println("epf.getCancelcount: " + epf.getCancelcount());
-	System.out.println("showcancel: " + showcancel);
-	System.out.println("Wssubmitc: "+epf.getWssubmitc());	
-	System.out.println("epf.getOrdernum: " + epf.getOrdernum());
-	System.out.println("epf.getSlvnum: " + epf.getSlvnum());
-	System.out.println("epf.getSeccode: " + epf.getSeccode());
 	boolean swaBsoPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, a) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN,a);
 	boolean swaIsInBSO=(epf!=null && a!=null && a.getStation()!=null && epf.getExpenselocation_ID()==a.getStation().getStation_ID());
 	
@@ -143,7 +134,6 @@
 		                    .dialog({
 								height: 50,
 								width: 350,
-//								title: 'Select Cancel Reason',
 								modal: true,
 		                        buttons: {
 		                            Yes: function () {

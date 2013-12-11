@@ -84,6 +84,7 @@ public final class ManageGroups extends Action {
 			dForm.set("groupName", group.getDescription());
 			dForm.set("groupDesc", group.getDescription2());
 			dForm.set("bsoLimit", String.valueOf(group.getBsoLimit()));
+			dForm.set("luvLimit", String.valueOf(group.getLuvLimit()));
 
 			// check if adding agents to this group
 			if (request.getParameter("addAgents") != null) {
@@ -430,6 +431,15 @@ public final class ManageGroups extends Action {
 				}
 			}
 			
+			double luvLimit =0;
+			if(dForm.get("luvLimit")!=null && !((String)dForm.get("luvLimit")).isEmpty()){
+				try{
+					luvLimit = Double.parseDouble((String) dForm.get("luvLimit"));
+				} catch (NumberFormatException nfe){
+					nfe.printStackTrace();
+				}
+			}			
+			
 			if(groupName != null){
 				groupName = groupName.replaceAll(TracingConstants.FILTER_CHARACTERS, "");
 			}
@@ -441,6 +451,7 @@ public final class ManageGroups extends Action {
 			g.setDescription2(groupDesc);
 			g.setCompanycode_ID(companyCode);
 			g.setBsoLimit(bsoLimit);
+			g.setLuvLimit(luvLimit);
 			try {
 				HibernateUtils.saveGroup(g, groupId, user);
 

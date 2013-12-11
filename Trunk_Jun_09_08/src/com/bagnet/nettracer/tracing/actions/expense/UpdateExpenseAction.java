@@ -166,7 +166,7 @@ public class UpdateExpenseAction extends BaseExpenseAction {
 		        SimpleDateFormat df2 = new SimpleDateFormat("MMM dd, yyyy hh:mm");
 		        String dateText = df2.format(new Date(System.currentTimeMillis()));
 				String contents= "User Name: " + user.getUsername() + "\n" + 
-		                 "LUV Voucher Printing Time: " + dateText;
+		                 "LUV Voucher Reprinted at " + dateText;
 				ibmo.insertRemark(contents,incidentId, user, TracingConstants.REMARK_REGULAR);
 			}
 		}

@@ -12,6 +12,9 @@
 <%
   Agent a = (Agent)session.getAttribute("user");
   boolean bsoAdmin = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN, a);
+  boolean hasImmFulfillPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_IMMEDIATE_FULFILLMENT, a);
+  boolean hasEmailFulfillPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EMAIL_FULFILLMENT, a);
+  boolean hasMailFulfillPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_MAIL_FULFILLMENT, a);
 %>
   <script language="javascript">
     
@@ -128,6 +131,17 @@
               </td>
             </tr>
             <% } %>
+            <% if(hasImmFulfillPermission || hasEmailFulfillPermission || hasMailFulfillPermission){ %>
+            <tr>
+              <td>
+                <bean:message key="header.luvLimit" />
+                :
+              </td>
+              <td>
+                <html:text styleClass="textfield" name="groupForm" property="luvLimit" size="10" maxlength="10" />
+              </td>
+            </tr>
+            <% } %>            
             <tr>
               <td colspan="3" align="center">
                 <INPUT Id="button" type="button" value="Back" onClick="history.back()">

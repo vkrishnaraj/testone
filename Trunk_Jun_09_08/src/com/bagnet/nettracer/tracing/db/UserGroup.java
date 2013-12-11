@@ -25,6 +25,7 @@ public class UserGroup implements Serializable {
 	
 	private String companycode_ID;
 	private double bsoLimit;
+	private double luvLimit;
 
 	/**
 	 * @hibernate.set cascade="all-delete-orphan" order-by="policy_id"
@@ -168,5 +169,22 @@ public class UserGroup implements Serializable {
 		this.bsoLimit = bsoLimit;
 	}
 
+	/**
+	 * @return Returns the luvLimit.
+	 * 
+	 * @hibernate.property type="double"
+	 */
+	public double getLuvLimit() {
+		return luvLimit;
+	}
+
+	/**
+	 * @param luvLimit
+	 *          The luvLimit to set.
+	 */	
+	public void setLuvLimit(double luvLimit) {
+		this.luvLimit = luvLimit;
+	}
+	
 	
 }

@@ -152,6 +152,7 @@
 			<form-property name="groupDesc" type="java.lang.String" />
 			<form-property name="companyCode" type="java.lang.String" />
 			<form-property name="bsoLimit" type="java.lang.String" />
+			<form-property name="luvLimit" type="java.lang.String" />			
 		</form-bean>
 		<form-bean name="componentForm" type="org.apache.struts.validator.DynaValidatorForm" />
 		<form-bean name="stationForm" type="org.apache.struts.validator.DynaValidatorForm">

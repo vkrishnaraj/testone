@@ -876,6 +876,7 @@ public class HibernateUtils {
 				g.setDescription(obj.getDescription());
 				g.setDescription2(obj.getDescription2());
 				g.setBsoLimit(obj.getBsoLimit());
+				g.setLuvLimit(obj.getLuvLimit());
 				sess.saveOrUpdate(g);
 			}
 			t.commit();

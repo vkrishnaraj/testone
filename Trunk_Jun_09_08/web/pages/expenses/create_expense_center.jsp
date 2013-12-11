@@ -38,9 +38,6 @@
 	boolean canPay = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_EXPENSE, a);
 	boolean swaBsoPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, a) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN,a);
 	ExpensePayoutForm epf = (ExpensePayoutForm) request.getAttribute("expensePayoutForm");
-	System.out.println("Wssubmitp: "+epf.getWssubmitp());
-//	System.out.println("wserrormsg: "+epf.getErrormsg());
-
 %>
 <html:form action="SaveExpense.do" method="post" onsubmit="if (issue_voucher) { return window.confirm('Are you sure you want to Issue this LUV Voucher?'); }">
 	
