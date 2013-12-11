@@ -48,7 +48,8 @@ public class SaveExpenseAction extends BaseExpenseAction {
 		addComment(ep, user, "expense.comment.new", expenseForm.getNewComment());
 		String incidentId = ((IncidentForm) request.getSession().getAttribute("incidentForm")).getIncident_ID();
 		
-		boolean cbsProcess=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, user) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN, user); 
+		boolean cbsProcess=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, user) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN, user);
+		boolean luvProcess=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LUV_PROCESS, user); 
 		// set status to pending or approved
 		Status st = new Status();
 		st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED);
@@ -86,8 +87,27 @@ public class SaveExpenseAction extends BaseExpenseAction {
 			}
 		}
 		if (Math.abs(ep.getVoucheramt()) > 0.001) {
-			if (csv.getMin_interim_approval_voucher() >= -0.001
-					&& (csv.getMin_interim_approval_voucher() - Math.abs(ep.getVoucheramt())) < -0.001) {
+			/**
+			 * If the user is part of a usergroup that has a LUV Limit and
+			 * is subject to the LUV Expense Process, then verify that the
+			 * check amount entered is not greater than the LUV Limit. If it
+			 * is then do not save the expense payout
+			 */
+			UserGroup group=UsergroupBMO.getUsergroup(user.getUsergroup_id());
+			double luvLimit=0;
+			if(group!=null && group.getLuvLimit()>0){
+				luvLimit=group.getLuvLimit();
+				request.setAttribute("luvLimit", luvLimit);
+			}
+			
+			if(luvLimit>0 && ep.getVoucheramt()>luvLimit && luvProcess){
+				messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("unable.create.over.luv.limit", new Object[]{luvLimit}));
+				saveMessages(request, messages);
+				return mapping.findForward(CREATE_SUCCESS);
+			}			
+			if ((csv.getMin_interim_approval_voucher() >= -0.001
+					&& (csv.getMin_interim_approval_voucher() - Math.abs(ep.getVoucheramt())) < -0.001) 
+					&& (luvLimit==0 || !luvProcess)) {					
 				st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_PENDING);
 			}
 		}
