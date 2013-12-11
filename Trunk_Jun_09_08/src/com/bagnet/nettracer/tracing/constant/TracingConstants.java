@@ -224,7 +224,7 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_DEPREC_CALCULATOR_ADMIN = "Depreciation Calculator Administration";
 	public final static String SYSTEM_COMPONENT_NAME_BSO_PROCESS = "BSO Expense Process";
 	public final static String SYSTEM_COMPONENT_NAME_BSO_ADMIN = "BSO Expense Admin";
-	
+	public final static String SYSTEM_COMPONENT_NAME_LUV_PROCESS = "LUV Expense Process";
 	public final static String SYSTEM_COMPONENT_FORWARD_PCN = "pcn";
 
 	public final static String FORWARD_SCANNER_DATA = "scannerData";
