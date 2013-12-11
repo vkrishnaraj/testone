@@ -91,7 +91,7 @@ public class SaveExpenseAction extends BaseExpenseAction {
 		if (Math.abs(ep.getVoucheramt()) > 0.001) {
 			/**
 			 * If the user is part of a usergroup that has a LUV Limit and
-			 * is subject to the LUV Expense Process, then verify that the
+			 * is subject to the LUV Permission, then verify that the
 			 * check amount entered is not greater than the LUV Limit. If it
 			 * is then do not save the expense payout
 			 */

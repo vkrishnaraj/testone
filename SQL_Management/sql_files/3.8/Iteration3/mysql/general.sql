@@ -319,8 +319,6 @@ create table incident_activity_remark (
 alter table incident_activity drop foreign key fk_activity_status;
 alter table incident_activity drop column status;
 
-insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group) VALUES 
-(682,'LUV Expense Process','Allows users to create Expense Payouts based on Established LUV Process',1100,'',0,99,0);
 alter table usergroup add column luvLimit double default 0;
 update usergroup set luvLimit=0;
 
