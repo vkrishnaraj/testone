@@ -20,6 +20,7 @@ public class CustomerCommunicationsForm extends CommandForm {
 	private long custCommId;
 	private boolean preview;
 	private long taskId;
+	private int taskStatus;
 	
 	private List<IncidentActivityRemarkDTO> remarks;
 
@@ -117,6 +118,14 @@ public class CustomerCommunicationsForm extends CommandForm {
 
 	public void setTaskId(long taskId) {
 		this.taskId = taskId;
+	}
+
+	public int getTaskStatus() {
+		return taskStatus;
+	}
+
+	public void setTaskStatus(int taskStatus) {
+		this.taskStatus = taskStatus;
 	}
 
 }

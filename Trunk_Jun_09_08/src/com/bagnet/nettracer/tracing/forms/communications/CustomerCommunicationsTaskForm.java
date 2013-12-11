@@ -15,6 +15,8 @@ public class CustomerCommunicationsTaskForm extends CommandForm {
 	private String s_createtime = "";
 	private String e_createtime = "";
 	
+	private boolean active;
+	
 	public String getCurrpage() {
 		return currpage;
 	}
@@ -69,6 +71,14 @@ public class CustomerCommunicationsTaskForm extends CommandForm {
 	
 	public void setE_createtime(String e_createtime) {
 		this.e_createtime = e_createtime;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 }

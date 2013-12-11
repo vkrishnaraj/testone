@@ -18,6 +18,7 @@ public class IncidentActivityDTO {
 	private int statusId;
 	private String fileName;
 	private long custCommId;
+	private boolean isCustomerCommunication;
 	
 	public String get_DATEFORMAT() {
 		return _DATEFORMAT;
@@ -113,6 +114,14 @@ public class IncidentActivityDTO {
 
 	public String getDispPublishedDate() {
 		return DateUtils.formatDate(getPublishedDate(), _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
+	}
+
+	public boolean getIsCustomerCommunication() {
+		return isCustomerCommunication;
+	}
+
+	public void setCustomerCommunication(boolean isCustomerCommunication) {
+		this.isCustomerCommunication = isCustomerCommunication;
 	}
 	
 }

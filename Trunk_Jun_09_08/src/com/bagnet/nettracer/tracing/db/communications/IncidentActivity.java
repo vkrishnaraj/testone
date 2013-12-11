@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.db.communications;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.documents.Document;
+import com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask;
 
 @Entity
 @Table(name = "incident_activity")
@@ -57,10 +59,6 @@ public class IncidentActivity {
 	private Document document;
 	
 	@ManyToOne
-	@JoinColumn(name = "status")
-	private Status status;
-	
-	@ManyToOne
 	@JoinColumn(name = "activity")
 	private Activity activity;
 	
@@ -68,6 +66,11 @@ public class IncidentActivity {
 	@org.hibernate.annotations.OrderBy(clause="createDate")
 	@Fetch(FetchMode.SELECT)
 	private List<IncidentActivityRemark> remarks;
+	
+	@OneToMany(mappedBy = "incidentActivity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@org.hibernate.annotations.OrderBy(clause="opened_timestamp")
+	@Fetch(FetchMode.SELECT)
+	private List<IncidentActivityTask> tasks;
 	
 	private String description;
 	
@@ -129,14 +132,6 @@ public class IncidentActivity {
 		this.document = document;
 	}
 
-	public Status getStatus() {
-		return status;
-	}
-
-	public void setStatus(Status status) {
-		this.status = status;
-	}
-
 	public Activity getActivity() {
 		return activity;
 	}
@@ -167,6 +162,22 @@ public class IncidentActivity {
 
 	public void setRemarks(List<IncidentActivityRemark> remarks) {
 		this.remarks = remarks;
+	}
+
+	public List<IncidentActivityTask> getTasks() {
+		if (tasks == null) {
+			tasks = new ArrayList<IncidentActivityTask>();
+		}
+		return tasks;
+	}
+
+	public void setTasks(List<IncidentActivityTask> tasks) {
+		this.tasks = tasks;
+	}
+	
+	public Status getLastStatus() {
+		if (tasks == null || tasks.isEmpty()) return null;
+		return tasks.get(tasks.size() - 1).getStatus();
 	}
 	
 }

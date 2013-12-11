@@ -32,4 +32,6 @@ public interface IncidentActivityDAO {
 	
 	public int getIncidentActivityTaskCount(IncidentActivityTaskSearchDTO dto);
 	public List<IncidentActivityTask> listIncidentActivityTasks(IncidentActivityTaskSearchDTO dto);
+	
+	public IncidentActivityTask loadTaskForIncidentActivity(IncidentActivity incidentActivity, Status withStatus);
 }

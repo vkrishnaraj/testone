@@ -6,17 +6,21 @@
 
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
+<%@ page import="java.util.ResourceBundle" %>
+<%@ page import="java.util.Locale" %>
 
 <style>
 legend {
  	font-size:1em;
  	font-weight:bold;
+ 	color:#000099;
 }
 </style>
 
 <script type="text/javascript" src="deployment/main/js/ckeditor/ckeditor.js"></script>
 <%
 	Agent a = (Agent)session.getAttribute("user");
+	ResourceBundle bundle = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
 
 	String cssFormClass = "";
 
@@ -61,6 +65,30 @@ legend {
 	function openPreviewWindow(fileName) {
 		window.open("customerCommunications.do?preview_document="+fileName, '', 'width=600,height=800,resizable=yes');
 	}
+
+	function approveCommunication() {
+		submitTask('<%=String.valueOf(TracingConstants.STATUS_CUSTOMER_COMM_APPROVED) %>')
+	}
+
+	function rejectCommunication() {
+		if (!verifyRemark()) {
+			alert('<%=bundle.getString("message.cust.comm.task.enter.remark") %>');
+			document.getElementById("taskRemark").focus();
+		} else {
+			submitTask('<%=String.valueOf(TracingConstants.STATUS_CUSTOMER_COMM_DENIED) %>');
+		}
+	}
+
+	function verifyRemark() {
+		var remark = document.getElementById("taskRemark");
+		return remark.value != null && remark.value.length > 0;
+	}
+
+	function submitTask(status) {
+		var taskId = document.getElementById("taskId").value;
+		var remark = document.getElementById("taskRemark").value;
+		window.location="customerCommunicationsTasks.do?taskId="+taskId+"&taskStatus="+status+"&remark="+encodeURIComponent(remark);
+	}
 	
 </script>
 <html:form action="customerCommunications.do" focus="documentTitle" method="post" >
@@ -71,6 +99,7 @@ legend {
 <html:hidden property="templateId" styleId="templateId" />
 <html:hidden property="fileName" styleId="fileName" />
 <html:hidden property="taskId" styleId="taskId" />
+<html:hidden property="taskStatus" styleId="taskStatus" />
 	<tr>
 		<td colspan="3" id="pageheadercell">
 			<div id="pageheaderleft">
@@ -218,32 +247,35 @@ legend {
 					</table>
 				</logic:notEmpty>
 				<logic:notEqual name="customerCommunicationsForm" property="taskId" value="0" >
-					<fieldset style="border: 1px solid #000000;text-align:center;">
-						<legend><bean:message key="colname.cust.comm.approval" /></legend>
-						<div style="width:90%;">
-						<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" >
-							<tr>
-								<td class="header"><bean:message key="colname.remark" /></td>
-								<td>
-									<textarea id="taskRemark" rows="4" cols="50" maxlength="255" styleClass="textfield"           
-										onkeydown="textCounter(taskRemark, counter, 255);" 
-         								onkeyup="textCounter(taskRemark, counter, 255);"></textarea>
-									<input id="counter" value="255" size="4" disabled />
-								</td>
-							</tr>
-							<tr>
-								<td colspan=2 style="text-align:center;" >
-									<input type="button" class="button" value="<bean:message key="cust.comm.approve" />" />
-									&nbsp;
-									<input type="button" class="button" value="<bean:message key="cust.comm.reject" />" />
-								</td>
-							</tr>
-						</table>
-						</div>
-						<div style="text-align:center;" >
-						</div> 
-					</fieldset>
+					<logic:equal name="customerCommunicationsForm" property="taskStatus" value="<%=String.valueOf(TracingConstants.STATUS_CUSTOMER_COMM_PENDING) %>" >
+						<br>
+						<fieldset style="border: 1px solid #000000;text-align:center;">
+							<legend><bean:message key="colname.cust.comm.approval" /></legend>
+							<div style="width:90%;">
+							<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0" >
+								<tr>
+									<td class="header"><bean:message key="colname.remark" /></td>
+									<td>
+										<textarea id="taskRemark" rows="4" cols="50" maxlength="255" styleClass="textfield"           
+											onkeydown="textCounter(taskRemark, counter, 255);" 
+	         								onkeyup="textCounter(taskRemark, counter, 255);"></textarea>
+										<input id="counter" value="255" size="4" disabled />
+									</td>
+								</tr>
+								<tr>
+									<td colspan=2 style="text-align:center;" >
+										<input type="button" class="button" value="<bean:message key="cust.comm.approve" />" onclick="approveCommunication();" />
+										&nbsp;
+										<input type="button" class="button" value="<bean:message key="cust.comm.reject" />" onclick="rejectCommunication();" />
+									</td>
+								</tr>
+							</table>
+							</div>
+							<div style="text-align:center;" >
+							</div> 
+						</fieldset>
 					<br>
+					</logic:equal>
 				</logic:notEqual>
 			</div>
 		</td>

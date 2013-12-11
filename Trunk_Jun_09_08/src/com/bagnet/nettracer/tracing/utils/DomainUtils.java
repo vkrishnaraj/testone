@@ -130,7 +130,9 @@ public class DomainUtils {
 	
 	public static IncidentActivityTaskSearchDTO fromForm(CustomerCommunicationsTaskForm cctf) {
 		// TODO: implement this
-		return new IncidentActivityTaskSearchDTO();
+		IncidentActivityTaskSearchDTO dto = new IncidentActivityTaskSearchDTO();
+		dto.setActive(cctf.isActive());
+		return dto;
 	}
 	
 	public static IncidentActivity fromForm(CustomerCommunicationsForm ccf, Agent user) {
@@ -153,7 +155,6 @@ public class DomainUtils {
 		ia.setCustCommId(ccf.getCustCommId());
 		ia.setIncident(incident);
 		ia.setDocument(document);
-		ia.setStatus(new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING));
 		ia.setActivity(new Activity(TracingConstants.ACTIVITY_CUSTOMER_COMMUNICATION));	
 		
 		ResourceBundle bundle = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
@@ -187,10 +188,12 @@ public class DomainUtils {
 		return ia;
 	}
 	
-	public static IncidentActivityTask createIncidentActivityTask(IncidentActivity incidentActivity) {
+	public static IncidentActivityTask createIncidentActivityTask(IncidentActivity incidentActivity, Status withStatus) {
 		IncidentActivityTask iat = new IncidentActivityTask();
+		iat.setAssigned_agent(AdminUtils.getAgentBasedOnUsername("ogadmin", "OW"));
+		iat.setOpened_timestamp(DateUtils.convertToGMTDate(new Date()));
 		iat.setIncidentActivity(incidentActivity);
-		iat.setStatus(incidentActivity.getStatus());
+		iat.setStatus(withStatus);
 		iat.setActive(true);
 		return iat;
 	}

@@ -1393,6 +1393,7 @@ public class TracingConstants {
 
 	public static final String TABLE_ID_TEMPLATES = "templates";
 	public static final String TABLE_ID_CUST_COMM_REJECTED = "customerCommunicationsRejected";
+	public static final String TABLE_ID_CUST_COMM_PENDING_APPROVAL = "customerCommunicationsPendingApproval";
 	
 	public static final String SORT_ASCENDING = "1";
 	public static final String SORT_DESCENDING = "2";
@@ -1430,6 +1431,8 @@ public class TracingConstants {
 	public static final int STATUS_CUSTOMER_COMM_APPROVED = 1401;
 	public static final int STATUS_CUSTOMER_COMM_DENIED = 1402;
 	public static final int STATUS_CUSTOMER_COMM_PUBLISHED = 1403;
+	public static final int STATUS_CUSTOMER_COMM_PENDING_PRINT = 1404;
+	public static final int STATUS_CUSTOMER_COMM_PENDING_WP = 1405;
 	
 	public static final String ACTIVITY_CUSTOMER_COMMUNICATION = "55";
 	public static final String ACTIVITY_ASSIGNED_TO = "AS";
@@ -1440,6 +1443,7 @@ public class TracingConstants {
 	public static final String CUSTOMER_COMMUNICATIONS_PENDING = "customerCommunicationsPending";
 	public static final String CUSTOMER_COMMUNICATIONS_REJECTED = "customerCommunicationsRejected";
 	public static final String EDIT_COMMUNICATIONS = "editCommunications";
+//	public static final String CUSTOMER_COMMUNICATIONS_TASKS = "customerCommunicationsTasks";
 
 	public static final int CLAIM_CHECK = 3;
 	public static final int BAG_CHECKED_LOCATION = 4;

@@ -23,6 +23,8 @@ public class IncidentActivityTaskSearchDTO {
 	
 	private String name;
 	
+	private boolean active;
+	
 	private Date startCreateDate;
 	
 	private Date endCreateDate;
@@ -141,6 +143,14 @@ public class IncidentActivityTaskSearchDTO {
 
 	public void setRowsPerPage(int rowsPerPage) {
 		this.rowsPerPage = rowsPerPage;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 	
 }

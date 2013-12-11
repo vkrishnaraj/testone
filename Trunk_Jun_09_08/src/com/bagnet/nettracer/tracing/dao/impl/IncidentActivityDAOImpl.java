@@ -34,7 +34,7 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 	private static Map<String, String> map = new LinkedHashMap<String, String>();
 	
 	static {		
-		map.put("id", 			"d.id");
+		map.put("id", 			"iat.id");
 		map.put("incidentId", 	"i.incident_ID");
 		map.put("agent", 		"ia.approvalAgent");
 		map.put("date",			"iat.generic_timestamp");
@@ -262,31 +262,32 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 		return success;
 	}
 
-//	@Override
-//	@SuppressWarnings("unchecked")
-//	public IncidentActivityTask loadTaskForIncidentActivity(IncidentActivity incidentActivity, Status withStatus) {
-//		IncidentActivityTask toReturn = null;
-//		Session session = null;
-//		try {
-//			session = HibernateWrapper.getSession().openSession();
-//			Criteria criteria = session.createCriteria(IncidentActivityTask.class, "iat");
-//			Conjunction and = Restrictions.conjunction();
-//			and.add(Restrictions.eq("iat.incidentActivity", incidentActivity));
-//			and.add(Restrictions.eq("iat.status", withStatus));
-//			criteria.add(and);
-//			List<IncidentActivityTask> results = (List<IncidentActivityTask>) criteria.list();
-//			if (results != null && !results.isEmpty()) {
-//				toReturn = results.get(0);
-//			}
-//		} catch (Exception e) {
-//			logger.error("Failed to load an incident activity task for incidennt activity with id: " + incidentActivity.getId() + " having status: " + withStatus.getStatus_ID(), e);
-//		} finally {
-//			if (session != null) {
-//				session.close();
-//			}
-//		}
-//		return toReturn;
-//	}
+	@Override
+	@SuppressWarnings("unchecked")
+	public IncidentActivityTask loadTaskForIncidentActivity(IncidentActivity incidentActivity, Status withStatus) {
+		IncidentActivityTask toReturn = null;
+		Session session = null;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			Criteria criteria = session.createCriteria(IncidentActivityTask.class, "iat");
+			Conjunction and = Restrictions.conjunction();
+			and.add(Restrictions.eq("iat.incidentActivity", incidentActivity));
+			and.add(Restrictions.eq("iat.status", withStatus));
+			and.add(Restrictions.eq("iat.active", true));
+			criteria.add(and);
+			List<IncidentActivityTask> results = (List<IncidentActivityTask>) criteria.list();
+			if (results != null && !results.isEmpty()) {
+				toReturn = results.get(0);
+			}
+		} catch (Exception e) {
+			logger.error("Failed to load an incident activity task for incident activity with id: " + incidentActivity.getId() + " having status: " + withStatus.getStatus_ID(), e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return toReturn;
+	}
 
 	@Override
 	public boolean hasTask(IncidentActivity incidentActivity, Status... statuses) {
@@ -376,6 +377,7 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 			session = HibernateWrapper.getSession().openSession();
 			Criteria criteria = session.createCriteria(IncidentActivityTask.class, "iat");
 			criteria.add(Restrictions.eq("iat.status", status));
+			criteria.add(Restrictions.eq("iat.active", true));
 			
 			if (agent != null) {
 				criteria.add(Restrictions.eq("iat.assigned_agent", agent));
@@ -436,7 +438,8 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 					.add(Projections.property("iat.assigned_agent").as("assigned_agent"))
 					.add(Projections.property("iat.status").as("status"))
 					.add(Projections.property("iat.generic_timestamp").as("generic_timestamp"))
-					.add(Projections.property("iat.incidentActivity").as("incidentActivity")));
+					.add(Projections.property("iat.incidentActivity").as("incidentActivity"))
+					.add(Projections.property("iat.active").as("active")));
 			criteria.setResultTransformer(Transformers.aliasToBean(IncidentActivityTask.class));
 			results = (List<IncidentActivityTask>) criteria.list();
 		} catch (Exception e) {
@@ -486,6 +489,7 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 			criteria.setMaxResults(dto.getRowsPerPage());
 		}
 		
+		criteria.add(Restrictions.eq("iat.active", dto.isActive()));
 		return criteria;
 	}
 	

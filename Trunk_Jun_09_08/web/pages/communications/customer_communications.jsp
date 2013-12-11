@@ -63,8 +63,6 @@
 		return true;
 	}
 
-	
-
 	function submitIncidentActivity() {
 		var activitySelect = document.getElementById("activityIdSelect");
 		var activityId = activitySelect.options[activitySelect.selectedIndex].value;
@@ -208,7 +206,7 @@
 					</td>
 					<td>
 						<!-- Currently, customer communications are only identified from other activities by having a status id -->
-						<logic:notEqual name="activity" property="statusId" value="0" >
+						<logic:equal name="activity" property="isCustomerCommunication" value="true" >
 							<logic:notEqual name="activity" property="statusId" value="<%=String.valueOf(TracingConstants.STATUS_CUSTOMER_COMM_PUBLISHED) %>">
 								<% if (canEdit) { %>
 									<a href="customerCommunications.do?command=<%=TracingConstants.COMMAND_EDIT %>&communicationsId=<%=String.valueOf(activity.getId()) %>">
@@ -244,7 +242,7 @@
 									&nbsp;
 								<% } %>
 							</logic:equal>
-						</logic:notEqual>
+						</logic:equal>
 						<logic:equal name="activity" property="statusId" value="0" >
 							<% if (canDelete) { %>
 								<a href="incidentActivity.do?command=<%=TracingConstants.COMMAND_DELETE %>&activity=<%=String.valueOf(activity.getId()) %>&incident=<bean:write name="incidentForm" property="incident_ID" />" onclick="return verifyDelete();" >

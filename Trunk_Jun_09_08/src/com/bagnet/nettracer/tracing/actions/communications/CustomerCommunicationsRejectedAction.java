@@ -63,6 +63,7 @@ public class CustomerCommunicationsRejectedAction extends CheckedAction {
 		}
 		
 		CustomerCommunicationsTaskForm cctf = (CustomerCommunicationsTaskForm) form;
+		cctf.setActive(true);
 		
 		List<IncidentActivityTaskDTO> results = new ArrayList<IncidentActivityTaskDTO>();
 		IncidentActivityTaskSearchDTO dto = DomainUtils.fromForm(cctf);
@@ -104,7 +105,7 @@ public class CustomerCommunicationsRejectedAction extends CheckedAction {
 				request.setAttribute("pages", al);
 			}
 			
-			results = incidentActivityService.listIncidentActivityTasks(dto);
+			results = incidentActivityService.listRejectedIncidentActivityTasks(dto);
 			
 			request.setAttribute("results", results);
 		}

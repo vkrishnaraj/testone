@@ -166,15 +166,20 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 	}
 	
 	@Override
-	public List<IncidentActivityTaskDTO> listIncidentActivityTasks(IncidentActivityTaskSearchDTO dto) {
+	public boolean closeTask(long taskId) {
+		IncidentActivityTask toClose = incidentActivityDao.loadTask(taskId);
+		if (toClose == null) return true;
+		toClose.setActive(false);
+		return incidentActivityDao.updateTask(toClose);
+	}
+	
+	@Override
+	public List<IncidentActivityTaskDTO> listRejectedIncidentActivityTasks(IncidentActivityTaskSearchDTO dto) {
 		List<IncidentActivityTaskDTO> tasks = new ArrayList<IncidentActivityTaskDTO>();
 		List<IncidentActivityTask> fromDb = incidentActivityDao.listIncidentActivityTasks(dto);
 		for (IncidentActivityTask iat: fromDb) {
-			IncidentActivityTaskDTO iatdto = new IncidentActivityTaskDTO();
-			iatdto.set_DATEFORMAT(dto.get_DATEFORMAT());
-			iatdto.set_TIMEFORMAT(dto.get_TIMEFORMAT());
-			iatdto.set_TIMEZONE(dto.get_TIMEZONE());
-			iatdto.setTaskId(iat.getTask_id());
+			IncidentActivityTaskDTO iatdto = createIncidentActivityTaskDTO(dto);
+			iatdto.setId(iat.getTask_id());
 			iatdto.setIncidentActivityId(iat.getIncidentActivity().getId());
 			iatdto.setIncidentId(iat.getIncidentActivity().getIncident().getIncident_ID());
 			iatdto.setDescription(iat.getIncidentActivity().getDescription());
@@ -188,13 +193,35 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 	}
 	
 	@Override
-	public boolean closeTask(long taskId) {
-		IncidentActivityTask toClose = incidentActivityDao.loadTask(taskId);
-		if (toClose == null) return true;
-		toClose.setActive(false);
-		return incidentActivityDao.updateTask(toClose);
+	public List<IncidentActivityTaskDTO> listPendingIncidentActivityTasks(IncidentActivityTaskSearchDTO dto) {
+		List<IncidentActivityTaskDTO> tasks = new ArrayList<IncidentActivityTaskDTO>();
+		List<IncidentActivityTask> fromDb = incidentActivityDao.listIncidentActivityTasks(dto);
+		for (IncidentActivityTask iat: fromDb) {
+			IncidentActivityTaskDTO iatdto = createIncidentActivityTaskDTO(dto);
+			iatdto.setId(iat.getIncidentActivity().getId());
+			iatdto.setIncidentId(iat.getIncidentActivity().getIncident().getIncident_ID());
+			iatdto.setDescription(iat.getIncidentActivity().getDescription());
+			iatdto.setTaskDate(iat.getOpened_timestamp());
+			iatdto.setAgent(iat.getIncidentActivity().getAgent().getUsername());
+			tasks.add(iatdto);
+		}
+		return tasks;
 	}
-
+	
+	@Override
+	public IncidentActivityTask loadTaskForIncidentActivity(IncidentActivity incidentActivity, Status withStatus) {
+		if (incidentActivity == null || withStatus == null) return null;
+		return incidentActivityDao.loadTaskForIncidentActivity(incidentActivity, withStatus);
+	}
+	
+	private IncidentActivityTaskDTO createIncidentActivityTaskDTO(IncidentActivityTaskSearchDTO dto) {
+		IncidentActivityTaskDTO toReturn = new IncidentActivityTaskDTO();
+		toReturn.set_DATEFORMAT(dto.get_DATEFORMAT());
+		toReturn.set_TIMEFORMAT(dto.get_TIMEFORMAT());
+		toReturn.set_TIMEZONE(dto.get_TIMEZONE());
+		return toReturn;
+	}
+	
 	public DocumentDAO getDocumentDao() {
 		return documentDao;
 	}

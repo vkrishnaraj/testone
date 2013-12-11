@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.communications.Activity;
 import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
 import com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask;
@@ -43,5 +44,10 @@ public interface IncidentActivityService {
 	public boolean hasIncidentActivityTask(IncidentActivity incidentActivity);
 	
 	public int getIncidentActivityTaskCount(IncidentActivityTaskSearchDTO dto);
-	public List<IncidentActivityTaskDTO> listIncidentActivityTasks(IncidentActivityTaskSearchDTO dto);
+	
+	public List<IncidentActivityTaskDTO> listPendingIncidentActivityTasks(IncidentActivityTaskSearchDTO dto);
+	public List<IncidentActivityTaskDTO> listRejectedIncidentActivityTasks(IncidentActivityTaskSearchDTO dto);
+	
+	public IncidentActivityTask loadTaskForIncidentActivity(IncidentActivity incidentActivity, Status withStatus);
+	
 }

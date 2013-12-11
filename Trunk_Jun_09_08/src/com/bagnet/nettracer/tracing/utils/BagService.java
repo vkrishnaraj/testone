@@ -1564,8 +1564,8 @@ public class BagService {
 			dto.setId(activity.getId());
 			dto.setCreateDate(activity.getCreateDate());
 			dto.setPublishedDate(activity.getPublishedDate());
-			if (activity.getStatus() != null) {
-				dto.setStatusId(activity.getStatus().getStatus_ID());
+			if (activity.getLastStatus() != null) {
+				dto.setStatusId(activity.getLastStatus().getStatus_ID());
 			}
 			dto.setAgent(activity.getAgent().getUsername());
 			dto.setDescription(activity.getDescription());
@@ -1573,6 +1573,7 @@ public class BagService {
 			if (activity.getDocument() != null) {
 				dto.setFileName(activity.getDocument().getFileName());
 			}
+			dto.setCustomerCommunication(activity.getActivity().getCode().equals(TracingConstants.ACTIVITY_CUSTOMER_COMMUNICATION));
 			activities.add(dto);
 		}
 		theform.setActivityDtos(activities);
@@ -1719,8 +1720,8 @@ public class BagService {
 				dto.setId(activity.getId());
 				dto.setCreateDate(activity.getCreateDate());
 				dto.setPublishedDate(activity.getPublishedDate());
-				if (activity.getStatus() != null) {
-					dto.setStatusId(activity.getStatus().getStatus_ID());
+				if (activity.getLastStatus() != null) {
+					dto.setStatusId(activity.getLastStatus().getStatus_ID());
 				}
 				dto.setAgent(activity.getAgent().getUsername());
 				dto.setDescription(activity.getDescription());
@@ -1728,6 +1729,7 @@ public class BagService {
 				if (activity.getDocument() != null) {
 					dto.setFileName(activity.getDocument().getFileName());
 				}
+				dto.setCustomerCommunication(activity.getActivity().getCode().equals(TracingConstants.ACTIVITY_CUSTOMER_COMMUNICATION));
 				activities.add(dto);
 			}
 			theform.setActivityDtos(activities);

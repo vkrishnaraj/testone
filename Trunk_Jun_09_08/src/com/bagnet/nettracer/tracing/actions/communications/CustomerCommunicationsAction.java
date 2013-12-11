@@ -21,6 +21,7 @@ import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
 import com.bagnet.nettracer.tracing.db.documents.Document;
 import com.bagnet.nettracer.tracing.db.documents.templates.Template;
@@ -34,7 +35,6 @@ import com.bagnet.nettracer.tracing.forms.communications.CustomerCommunicationsF
 import com.bagnet.nettracer.tracing.service.DocumentService;
 import com.bagnet.nettracer.tracing.service.IncidentActivityService;
 import com.bagnet.nettracer.tracing.service.TemplateService;
-import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.DomainUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
@@ -43,6 +43,10 @@ import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
 public class CustomerCommunicationsAction extends CheckedAction {
 
+	private final String REQUEST_TEMPLATE_LIST = "templateList";
+	private final String REQUEST_PREVIEW_DOCUMENT = "preview_document";
+	private final String REQUEST_VIEW_SAMPLE_PRINTOUT = "view_sample_printout";
+	
 	private Logger logger = Logger.getLogger(CustomerCommunicationsAction.class);
 	
 	private DocumentService documentService = (DocumentService) SpringUtils.getBean(TracingConstants.DOCUMENT_SERVICE_BEAN);
@@ -53,7 +57,6 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		HttpSession session = request.getSession();
 		TracerUtils.checkSession(session);
 		ActionMessages messages = new ActionMessages();
-
 		Agent user = (Agent) session.getAttribute("user");
 
 		if (user == null || form == null) {
@@ -65,43 +68,21 @@ public class CustomerCommunicationsAction extends CheckedAction {
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
 		}
 		
-		// handles ajax call for the list of available templates
-		if (request.getParameter("templateList") != null) {
-			try {
-				int ordinal = Integer.valueOf(request.getParameter("templateList"));
-				incidentActivityService.writeOptionsList(templateService.getTemplateOptionsByType(TemplateType.fromOrdinal(ordinal)), response);
-			} catch (NumberFormatException nfe) {
-				logger.error("Invalid value found for templateList", nfe);
-			}
-			return null;
-		}
-
-		// handles the case in which the user wants to preview the document
-		if (request.getParameter("preview_document") != null) {
-			String directoryKey = request.getParameter("receipt") != null ? PropertyBMO.DOCUMENT_LOCATION_RECEIPTS : PropertyBMO.DOCUMENT_LOCATION_TEMP;
-			DocumentTemplateResult result = documentService.previewFile(user, request.getParameter("preview_document"), PropertyBMO.getValue(directoryKey), response);
-			if (!result.isSuccess()) {
-				return mapping.findForward(TracingConstants.FILE_NOT_FOUND);
-			}
-			return null;
-		}
-		
-		// handles the case in which the user wants to preview the document
-		if (request.getParameter("view_sample_printout") != null) {
-			String incidentId = (String) request.getParameter("view_sample_printout");
-			DocumentTemplateResult result = viewSamplePrintout(incidentId, user, response, messages);
-			if (!result.isSuccess()) {
-				return mapping.findForward(TracingConstants.FILE_NOT_FOUND);
-			}
-			return null;
+		if (isAjaxRequest(request)) {
+			return handleAjaxRequest(user, request, response, mapping);
 		}
 
 		boolean success = true;
 		CustomerCommunicationsForm ccf = (CustomerCommunicationsForm) form;
+		
 		if (request.getParameter("taskId") != null) {
 			String taskIdParam = (String) request.getParameter("taskId");
 			try {
-				ccf.setTaskId(Long.valueOf(taskIdParam));
+				IncidentActivityTask task = incidentActivityService.loadTask(Long.valueOf(taskIdParam));
+				if (task != null) {
+					ccf.setTaskId(task.getTask_id());
+					ccf.setTaskStatus(task.getStatus().getStatus_ID());
+				}
 			} catch (NumberFormatException nfe) {
 				logger.error("Invalid task id: " + taskIdParam, nfe);
 			}
@@ -116,6 +97,13 @@ public class CustomerCommunicationsAction extends CheckedAction {
 				IncidentActivity ia = incidentActivityService.load(id);
 				if (ia != null) {
 					DomainUtils.toForm(ia, ccf, user);
+					if (request.getParameter("approvalTask") != null && TracingConstants.TRUE.equalsIgnoreCase((String) request.getParameter("approvalTask"))) {
+						IncidentActivityTask iat = incidentActivityService.loadTaskForIncidentActivity(ia, new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING));
+						if (iat != null) {
+							ccf.setTaskId(iat.getTask_id());
+							ccf.setTaskStatus(iat.getStatus().getStatus_ID());
+						}
+					}
 					success = true;
 				}
 			} catch (NumberFormatException nfe) {
@@ -161,6 +149,47 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		}
 		
 		return mapping.findForward(TracingConstants.EDIT_COMMUNICATIONS);
+	}
+	
+	private boolean isAjaxRequest(HttpServletRequest request) {
+		return request.getParameter(REQUEST_TEMPLATE_LIST) != null 
+				|| request.getParameter(REQUEST_PREVIEW_DOCUMENT) != null 
+				|| request.getParameter(REQUEST_VIEW_SAMPLE_PRINTOUT) != null;
+	}
+	
+	private ActionForward handleAjaxRequest(Agent user, HttpServletRequest request, HttpServletResponse response, ActionMapping mapping) {
+		// handles ajax call for the list of available templates
+		if (request.getParameter(REQUEST_TEMPLATE_LIST) != null) {
+			try {
+				int ordinal = Integer.valueOf(request.getParameter("templateList"));
+				incidentActivityService.writeOptionsList(templateService.getTemplateOptionsByType(TemplateType.fromOrdinal(ordinal)), response);
+			} catch (NumberFormatException nfe) {
+				logger.error("Invalid value found for templateList", nfe);
+			}
+			return null;
+		}
+
+		// handles the case in which the user wants to preview the document
+		if (request.getParameter(REQUEST_PREVIEW_DOCUMENT) != null) {
+			String directoryKey = request.getParameter("receipt") != null ? PropertyBMO.DOCUMENT_LOCATION_RECEIPTS : PropertyBMO.DOCUMENT_LOCATION_TEMP;
+			DocumentTemplateResult result = documentService.previewFile(user, request.getParameter("preview_document"), PropertyBMO.getValue(directoryKey), response);
+			if (!result.isSuccess()) {
+				return mapping.findForward(TracingConstants.FILE_NOT_FOUND);
+			}
+			return null;
+		}
+		
+		// handles the case in which the user wants to preview the document
+		if (request.getParameter(REQUEST_VIEW_SAMPLE_PRINTOUT) != null) {
+			String incidentId = (String) request.getParameter("view_sample_printout");
+			DocumentTemplateResult result = viewSamplePrintout(incidentId, user, response, new ActionMessages());
+			if (!result.isSuccess()) {
+				return mapping.findForward(TracingConstants.FILE_NOT_FOUND);
+			}
+			return null;
+		}
+		
+		return null;
 	}
 	
 	private boolean populateCustomerCommunicationsForm(String incidentId, String templateId, CustomerCommunicationsForm ccf, Agent user, ActionMessages messages) {
@@ -209,11 +238,11 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		
 		boolean success = incidentActivityId != 0;
 		messages.add(ActionMessages.GLOBAL_MESSAGE, getActionMessage(TracingConstants.COMMAND_CREATE, success, ccf.getDocumentTitle()));
-//		if (success && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL_QUEUE, user)) {
-//			if (!createTask(incidentActivity, user)) {
-//				logger.error("Failed to create a task for IncidentActivity with id: " + incidentActivityId);
-//			}
-//		}
+		if (success && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL, user)) {
+			if (!createTask(incidentActivity)) {
+				logger.error("Failed to create a task for IncidentActivity with id: " + incidentActivityId);
+			}
+		}
 		return success;
 	}
 
@@ -223,28 +252,29 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		
 		boolean success = incidentActivityService.update(incidentActivity);
 		messages.add(ActionMessages.GLOBAL_MESSAGE, getActionMessage(TracingConstants.COMMAND_UPDATE, success, ccf.getDocumentTitle()));
-//		if (success && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL_QUEUE, user)) {
-//			if (ccf.getTaskId() > 0 && !incidentActivityService.deleteTask(ccf.getTaskId())) {
-//				logger.error("Failed to delete the rejected task for IncidentActivity with id: " + incidentActivity.getId());
-//			}
-//			
-//			if (!createTask(incidentActivity, user)) {
-//				logger.error("Failed to create a task for IncidentActivity with id: " + incidentActivity.getId());
-//			}
-//		}
+		if (success && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL, user)) {
+			if (ccf.getTaskId() > 0 && !incidentActivityService.closeTask(ccf.getTaskId())) {
+				logger.error("Failed to delete the rejected task for IncidentActivity with id: " + incidentActivity.getId());
+			}
+			
+			if (!createTask(incidentActivity)) {
+				logger.error("Failed to create a task for IncidentActivity with id: " + incidentActivity.getId());
+			}
+		}
 		
 		DomainUtils.toForm(incidentActivityService.load(incidentActivity.getId()), ccf, user);
 		return success;
 	}
 	
-//	private boolean createTask(IncidentActivity incidentActivity, Agent user) {
-//		if (!incidentActivityService.hasIncidentActivityTask(incidentActivity)) {
-//			IncidentActivityTask iat = DomainUtils.createIncidentActivityTask(incidentActivity);
-//			iat.setAssigned_agent(AdminUtils.getAgentBasedOnUsername("ntadmin", user.getCompanycode_ID()));
-//			return incidentActivityService.saveTask(iat) != 0;
-//		}
-//		return true;
-//	}
+	private boolean createTask(IncidentActivity incidentActivity) {
+		if (!incidentActivityService.hasIncidentActivityTask(incidentActivity)) {
+			IncidentActivityTask iat = DomainUtils.createIncidentActivityTask(incidentActivity, new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING));
+			boolean success = incidentActivityService.saveTask(iat) != 0;
+			incidentActivity.getTasks().add(iat);
+			return success;
+		}
+		return true;
+	}
 	
 	private DocumentTemplateResult generateDocument(long templateId, Incident incident, Agent user) {
 		DocumentTemplateResult result = new DocumentTemplateResult();
