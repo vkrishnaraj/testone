@@ -128,7 +128,7 @@
 	    };   	    
 		
 		function DoPrint(message){
-	    	openReportWindow('reporting?print=<%=ReportingConstants.EXP_LUV %>&outputtype=0',800,600);
+	    	
 		    jQuery('<div></div>').appendTo('body')
 		                    .html('<div><h6>'+message+'?</h6></div>')
 		                    .dialog({
@@ -150,6 +150,7 @@
 		                        }
 
 		                    });
+		    openReportWindow('reporting?print=<%=ReportingConstants.EXP_LUV %>&outputtype=0',800,600);
 		    };
 		    
     </script>
