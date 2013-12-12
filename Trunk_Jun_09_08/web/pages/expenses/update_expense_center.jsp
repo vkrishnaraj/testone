@@ -243,7 +243,7 @@
 						</a>
 						&nbsp;&nbsp;
 					<% } %>	
-					<% if (hasCancelPermission && showcancel && showprint) { %>
+					<% if (hasCancelPermission && showcancel ) { %>
 						<a href="#" onclick="showTemplateSelectDialog(); "> 
 							Cancel
 						</a>
