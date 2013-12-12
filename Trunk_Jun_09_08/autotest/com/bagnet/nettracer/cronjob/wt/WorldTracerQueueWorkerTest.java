@@ -65,7 +65,7 @@ public class WorldTracerQueueWorkerTest {
 		Mockito.doNothing().when(wtQueueBmo).updateQueue(queue);
 
 		try {
-			when(wtService.insertIncident(incident, null)).thenThrow(new WorldTracerException("test"));
+			when(wtService.insertIncident(agent,incident, null)).thenThrow(new WorldTracerException("test"));
 		} catch (Exception e) {
 		}
 		
@@ -94,7 +94,7 @@ public class WorldTracerQueueWorkerTest {
 		Mockito.doNothing().when(wtQueueBmo).updateQueue(queue);
 
 		try {
-			when(wtService.amendAhl(incident, null)).thenThrow(new WorldTracerException("test"));
+			when(wtService.amendAhl(agent,incident, null)).thenThrow(new WorldTracerException("test"));
 		} catch (Exception e) {
 		}
 		
@@ -123,7 +123,7 @@ public class WorldTracerQueueWorkerTest {
 		Mockito.doNothing().when(wtQueueBmo).updateQueue(queue);
 
 		try {
-			when(wtService.closeIncident(incident, null)).thenThrow(new WorldTracerException("test"));
+			when(wtService.closeIncident(agent,incident, null)).thenThrow(new WorldTracerException("test"));
 		} catch (Exception e) {
 		}
 		
@@ -152,7 +152,7 @@ public class WorldTracerQueueWorkerTest {
 		Mockito.doNothing().when(wtQueueBmo).updateQueue(queue);
 
 		try {
-			when(wtService.suspendIncident(incident, null)).thenThrow(new WorldTracerException("test"));
+			when(wtService.suspendIncident(agent,incident, null)).thenThrow(new WorldTracerException("test"));
 		} catch (Exception e) {
 		}
 		
@@ -181,7 +181,7 @@ public class WorldTracerQueueWorkerTest {
 		Mockito.doNothing().when(wtQueueBmo).updateQueue(queue);
 
 		try {
-			when(wtService.reinstateIncident(incident, null)).thenThrow(new WorldTracerException("test"));
+			when(wtService.reinstateIncident(agent,incident, null)).thenThrow(new WorldTracerException("test"));
 		} catch (Exception e) {
 		}
 		
@@ -210,7 +210,7 @@ public class WorldTracerQueueWorkerTest {
 		Mockito.doNothing().when(wtQueueBmo).updateQueue(queue);
 
 		try {
-			when(wtService.insertOhd(ohd, null)).thenThrow(new WorldTracerException("test"));
+			when(wtService.insertOhd(agent,ohd, null)).thenThrow(new WorldTracerException("test"));
 		} catch (Exception e) {
 		}
 		
@@ -239,7 +239,7 @@ public class WorldTracerQueueWorkerTest {
 		Mockito.doNothing().when(wtQueueBmo).updateQueue(queue);
 
 		try {
-			when(wtService.closeOHD(ohd, null)).thenThrow(new WorldTracerException("test"));
+			when(wtService.closeOHD(agent,ohd, null)).thenThrow(new WorldTracerException("test"));
 		} catch (Exception e) {
 		}
 		
@@ -268,7 +268,7 @@ public class WorldTracerQueueWorkerTest {
 		Mockito.doNothing().when(wtQueueBmo).updateQueue(queue);
 
 		try {
-			when(wtService.amendOhd(ohd, null)).thenThrow(new WorldTracerException("test"));
+			when(wtService.amendOhd(agent,ohd, null)).thenThrow(new WorldTracerException("test"));
 		} catch (Exception e) {
 		}
 		
@@ -297,7 +297,7 @@ public class WorldTracerQueueWorkerTest {
 		Mockito.doNothing().when(wtQueueBmo).updateQueue(queue);
 
 		try {
-			when(wtService.suspendOhd(ohd, null)).thenThrow(new WorldTracerException("test"));
+			when(wtService.suspendOhd(agent,ohd, null)).thenThrow(new WorldTracerException("test"));
 		} catch (Exception e) {
 		}
 		
@@ -326,7 +326,7 @@ public class WorldTracerQueueWorkerTest {
 		Mockito.doNothing().when(wtQueueBmo).updateQueue(queue);
 
 		try {
-			when(wtService.reinstateOhd(ohd, null)).thenThrow(new WorldTracerException("test"));
+			when(wtService.reinstateOhd(agent,ohd, null)).thenThrow(new WorldTracerException("test"));
 		} catch (Exception e) {
 		}
 		
