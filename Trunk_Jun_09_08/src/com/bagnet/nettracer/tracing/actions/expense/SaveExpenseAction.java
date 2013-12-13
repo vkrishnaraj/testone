@@ -142,7 +142,7 @@ public class SaveExpenseAction extends BaseExpenseAction {
 				ep.setOrdernum(ret.get(1));
 				ep.setSlvnum(ret.get(2));
 				ep.setSeccode(ret.get(3));
-				expenseForm.setWssubmitp("yes");
+				ep.setWssubmitp("yes");
 				String contents= "Voucher Issue Amount: $" + String.valueOf(expenseForm.getCheckamt()) + "\n" + 
 		                 "Agent Comments: " + expenseForm.getNewComment();
 				ibmo.insertRemark(contents,incidentId, user, TracingConstants.REMARK_REGULAR);
