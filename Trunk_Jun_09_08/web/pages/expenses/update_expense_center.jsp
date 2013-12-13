@@ -33,7 +33,8 @@
 	boolean canPay = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_EXPENSE, a);
 	boolean hasCancelPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CANCEL_A_VOUCHER, a);
 	ExpensePayoutForm epf = (ExpensePayoutForm) request.getAttribute("expensePayoutForm");
-	boolean submitOk = (epf.getPaymentType() !=null && epf.getPaymentType().equals(TracingConstants.ENUM_VOUCHER))? true :false; 
+	System.out.println("Wssubmitp: "+epf.getWssubmitp());
+	boolean submitOk = (epf.getPaymentType() !=null && epf.getPaymentType().equals(TracingConstants.ENUM_VOUCHER)) && epf.getWssubmitp().equals("yes")? true :false; 
 	boolean showprint = epf.getPrintcount() == 0 ? true : false;
 	String today = new SimpleDateFormat("MM/dd/yyyy").format(Calendar.getInstance().getTime());
 	String createdate = new SimpleDateFormat("MM/dd/yyyy").format(epf.getCreatedate());
@@ -232,7 +233,7 @@
 						<br />
 				    </logic:messagesPresent>
 					
-					<% if (submitOk) { %>
+					<% if (submitOk ) { %>
 					<center><font color=green>
             			Successfully Submitted!
           			</font></center>
