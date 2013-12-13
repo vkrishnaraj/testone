@@ -74,7 +74,6 @@ public class ExpensePayout implements Serializable {
 	private String slvnum;
 	private String seccode;
 	private String cancelreason;
-	private String wssubmitp;
 	private int cancelcount;
 
 	//not part of the model
@@ -305,16 +304,6 @@ public class ExpensePayout implements Serializable {
 	public void setCancelreason(String cancelreason) {
 		this.cancelreason = cancelreason;
 	}
-	
-	@Column(length = 5)
-	public String getWssubmitp() {
-		return wssubmitp;
-	}
-
-	public void setWssubmitp(String wssubmitp) {
-		this.wssubmitp = wssubmitp;
-	}
-
 		
 	@Column(length = 10)	
 	public String getPaytype() {

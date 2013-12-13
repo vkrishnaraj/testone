@@ -22,8 +22,10 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Comment;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.ExpenseType;
+import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.forms.ExpensePayoutForm;
+import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.SearchExpenseForm;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
@@ -132,21 +134,31 @@ public abstract class BaseExpenseAction extends CheckedAction {
 		epform.setStatus_id(ep.getStatus().getStatus_ID());
 		epform.setTz(user.getCurrenttimezone());
 		epform.setPaymentType(ep.getPaytype());
-		epform.setDistributemethod(ep.getDistributemethod());
-		epform.setCancelreason(ep.getCancelreason());
-		epform.setCancelcount(ep.getCancelcount());
-		epform.setOrdernum(ep.getOrdernum());
-		epform.setSlvnum(ep.getSlvnum());
-		epform.setSeccode(ep.getSeccode());
-		epform.setWssubmitp(ep.getWssubmitp());
-		epform.setWssubmitc((String)request.getSession().getAttribute("wssubmitc"));
-		epform.setErrormsg((String)request.getSession().getAttribute("errormsg"));
+		if (ep.getPaytype().equals(TracingConstants.ENUM_VOUCHER)) {
+			epform.setDistributemethod(ep.getDistributemethod());
+			epform.setCancelreason(ep.getCancelreason());
+			epform.setCancelcount(ep.getCancelcount());
+			epform.setOrdernum(ep.getOrdernum());
+			epform.setSlvnum(ep.getSlvnum());
+			epform.setSeccode(ep.getSeccode());
+			epform.setWssubmitp((String)request.getSession().getAttribute("wssubmitp"));
+			epform.setWssubmitc((String)request.getSession().getAttribute("wssubmitc"));
+			epform.setErrormsg((String)request.getSession().getAttribute("errormsg"));			
+		}
+		if(ep.getIncident()!=null){
+			IncidentForm incform =new IncidentForm();
+			BeanUtils.copyProperties(ep.getIncident(), incform);
+
+			incform.setPassengerlist(new ArrayList<Passenger>(ep.getIncident().getPassengers()));
+			request.setAttribute("incidentForm", incform);
+		}
+
 	}
 
 	protected ExpensePayout createNewPayout(ExpensePayoutForm expenseForm, Agent user) throws Exception {
 		ExpensePayout ep = new ExpensePayout();
 		BeanUtils.copyProperties(expenseForm, ep);
-
+		ep.setDistributemethod("");
 		ep.setAgent(user);
 
 		ep.setCurrency(Currency.getInstance(expenseForm.getCurrency_ID()));

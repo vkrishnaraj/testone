@@ -293,8 +293,6 @@ alter table expensepayout add column slvnum varchar(20);
 alter table expensepayout add column seccode varchar(10);
 insert into status (Status_ID,description,table_ID) VALUES (94,'Cancelled',11);
 update  expensepayout set distributemethod='',paytype='' where distributemethod is null and paytype is null;
-alter table expensepayout add column wssubmitp varchar(5) default '';
-
 
 #Label Queue
 insert into properties (ID, keyStr, valueStr) VALUES (140,'label.queue',1);
