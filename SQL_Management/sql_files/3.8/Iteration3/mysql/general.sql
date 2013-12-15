@@ -323,3 +323,21 @@ alter table incident_activity drop column status;
 alter table usergroup add column luvLimit double default 0;
 update usergroup set luvLimit=0;
 
+create table audit_bagdrop (
+  id bigint auto_increment not null,
+  bagdrop_id bigint not null,
+  entryDate datetime not null,
+  entryMethod int,
+  bagDropTime datetime,
+  schArrivalDate datetime,
+  actArrivalDate datetime,
+  modifyAgent_ID int,
+  primary key (id)
+);
+
+ALTER TABLE audit_bagdrop ADD INDEX bagdrop_id (bagdrop_id);
+
+insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group) VALUES (
+   750,'Bag Drop','View and update Bag Drops',39,'bagDrop.do',1,99,0);
+insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group) VALUES (
+   751,'Bag Drop Admin','Bag Drop Admin',39,null,0,99,0);
