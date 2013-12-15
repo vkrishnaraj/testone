@@ -65,19 +65,24 @@ public class BagDropDTO {
 		this.endScheduleArrivalDate = endScheduleArrivalDate;
 	}
 	public String getDispStartScheduleArrivalDate(){
-		return DateUtils.formatDate(getStartScheduleArrivalDate(), _DATEFORMAT, null, _TIMEZONE);
+		return DateUtils.formatDate(getStartScheduleArrivalDate(), _DATEFORMAT, null, null);
 	}
 	public void setDispStartScheduleArrivalDate(String date){
-		
+		Date start = DateUtils.convertToDate(date, _DATEFORMAT, null, null);
+		if(start != null){
+			setStartScheduleArrivalDate(start);
+		}
 	}
-	//TODO setter
+
 	public String getDispEndScheduleArrivalDate(){
-		return DateUtils.formatDate(getEndScheduleArrivalDate(), _DATEFORMAT, null, _TIMEZONE);
+		return DateUtils.formatDate(getEndScheduleArrivalDate(), _DATEFORMAT, null, null);
 	}
 	public void setDispEndScheduleArrivalDate(String date){
-		
+		Date end = DateUtils.convertToDate(date, _DATEFORMAT, null, null);
+		if(end != null){
+			setEndScheduleArrivalDate(end);
+		}
 	}
-	//TODO setter
 	
 	public int getStartIndex() {
 		return startIndex;

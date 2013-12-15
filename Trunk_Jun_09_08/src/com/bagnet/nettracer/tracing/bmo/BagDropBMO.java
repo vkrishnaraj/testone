@@ -1,6 +1,8 @@
 package com.bagnet.nettracer.tracing.bmo;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -193,10 +195,14 @@ public class BagDropBMO {
 			}
 			if(dto.getEndScheduleArrivalDate() != null){
 				sql += "and b.schArrivalDate <= :endSchArrivalDate ";
-				params.put("endSchArrivalDate", dto.getEndScheduleArrivalDate());
+				//adding one day to allow the search to be inclusive of the provided end date
+				Calendar cal = GregorianCalendar.getInstance();
+				cal.setTime(dto.getEndScheduleArrivalDate());
+				cal.add(Calendar.DATE, 1);
+				params.put("endSchArrivalDate", cal.getTime());
 			}
 			if(dto.getFlightNumber() != null && dto.getFlightNumber().trim().length() > 0){
-				sql += "and b.flight = :flight ";
+				sql += "and b.flight like :flight ";
 				params.put("flight", dto.getFlightNumber().trim());
 			}
 			if(dto.getArrivalStation() != null && dto.getArrivalStation().trim().length() > 0){

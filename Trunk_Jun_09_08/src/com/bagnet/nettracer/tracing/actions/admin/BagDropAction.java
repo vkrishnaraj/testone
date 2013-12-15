@@ -117,8 +117,12 @@ public class BagDropAction extends Action{
 			}
 		}
 		
-		//first time loading page, create new dto with default values
-		dto = initDTO(dto,user);
+		if (request.getParameter("reset") != null){
+			//first time loading page, create new dto with default values
+			dto = initDTO(dto,user);
+			request.setAttribute("reset", null);
+		}
+
 		bdform.setDto(dto);
 		bdform.setBagDropList(getPaginatedList(request,bdform,user,dto));
 		return mapping.findForward(TracingConstants.BAGDROP);

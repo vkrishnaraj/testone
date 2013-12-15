@@ -67,7 +67,7 @@ public class BagDropUtil {
 					wsbagdrop.getAirlineCode(), 
 					wsbagdrop.getFlightNumber(), 
 					wsbagdrop.getArrivalStationCode(), 
-					wsbagdrop.getScheduleArrivalDatetime()!=null?wsbagdrop.getScheduleArrivalDatetime().getTime():null);
+					wsbagdrop.getScheduleArrivalDatetime()!=null?DateUtils.convertToGMTDate(wsbagdrop.getScheduleArrivalDatetime().getTime()):null);
 			if(bagDropId > 0){
 				//update existing bagdrop
 				ntbagdrop = BagDropUtils.getBagDropById(agent, bagDropId);

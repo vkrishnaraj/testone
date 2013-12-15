@@ -66,6 +66,11 @@ public class BagDropUtils {
 	/**
 	 * Determines if a bag drop exists for the given airline, flight number, arrival station and scheduled arrival date
 	 * 
+	 * The schedule arrival date range is defined as the beginning of the specified day to the beginning of the next day
+	 * Assumes that the date provided has already been converted to GMT (currently the only two methods for creating a new
+	 * BagDrop is the scanner implementation and reservation implementation, both of which converts to GMT before invoking 
+	 * this method)
+	 * 
 	 * @param companycode
 	 * @param flightNum
 	 * @param stationcode
@@ -77,14 +82,20 @@ public class BagDropUtils {
 			throw new MissingRequiredFieldsException();
 		}
 		
-		//TODO determine date range
 		GregorianCalendar start = new GregorianCalendar();
 		start.setTime(date);
-		start.add(Calendar.DATE, -1);
+		start.set(Calendar.HOUR_OF_DAY, 0);
+		start.set(Calendar.MINUTE, 0);
+		start.set(Calendar.SECOND, 0);
+		start.set(Calendar.MILLISECOND, 0);
 		
 		GregorianCalendar end = new GregorianCalendar();
 		end.setTime(date);
 		end.add(Calendar.DATE, 1);
+		end.set(Calendar.HOUR_OF_DAY, 0);
+		end.set(Calendar.MINUTE, 0);
+		end.set(Calendar.SECOND, 0);
+		end.set(Calendar.MILLISECOND, 0);
 		
 		return getBagDropBMO().getBagDropID(companycode, flightNum, stationcode, start.getTime(), end.getTime());
 	}
@@ -143,11 +154,16 @@ public class BagDropUtils {
 		if(!canUpdate(agent, bagdrop.getCreateDate())){
 			throw new InvalidDateRangeException();
 		}
+
+		/**Do not overwrite original createAgent**/
+		BagDrop old = getBagDropBMO().getBagDropByID(bagdrop.getId());
+		bagdrop.setCreateAgent(old.getCreateAgent());
+		
 		/**Do not overwrite bagdrop time with null when refreshing flight info**/
 		if(bagdrop.getBagDropTime() == null){
-			BagDrop old = getBagDropBMO().getBagDropByID(bagdrop.getId());
 			bagdrop.setBagDropTime(old.getBagDropTime());
 		}
+
 		return getBagDropBMO().insertBagDrop(bagdrop, agent);
 	}
 	
