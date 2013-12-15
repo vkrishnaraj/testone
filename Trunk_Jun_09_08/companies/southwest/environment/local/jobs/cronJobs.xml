@@ -19,9 +19,20 @@
 		<property name="concurrent" value="false"/>
 	</bean>
 	
+	<bean id="bagDropFlightInfoJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetBeanName" value="CronUtils" />
+		<property name="targetMethod" value="bagDropFlightInfo" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
 	<bean id="cronDataFeedTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="dataFeedJob" />
 		<property name="cronExpression" value="${data.feed.cron}" />
+	</bean>
+	
+	<bean id="bagDropFlightInfoTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="bagDropFlightInfoJob" />
+		<property name="cronExpression" value="${bagDropFlightInfo}" />
 	</bean>
 	
 	<!--  The bean that manages all the scheduled jobs and their threads -->
@@ -33,6 +44,7 @@
 				<ref bean="AutoCloseOhdTrigger" />
 				<ref bean="cssExpireTrigger" />
 				<ref bean="cssCreateTrigger" />
+				<ref bean="bagDropFlightInfoTrigger" />
 			</list>
 		</property>
 	</bean>

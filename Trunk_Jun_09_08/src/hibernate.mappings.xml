@@ -326,7 +326,8 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.documents.templates.TemplateVarDependency" />		
 		<mapping class="com.bagnet.nettracer.tracing.db.documents.Document" />		
 		
-		<mapping class="com.bagnet.nettracer.tracing.db.BagDrop" />		
+		<mapping class="com.bagnet.nettracer.tracing.db.BagDrop" />
+		<mapping class="com.bagnet.nettracer.tracing.db.audit.Audit_BagDrop" />	
 
 		<mapping class="com.bagnet.nettracer.tracing.db.Label" />
 		<mapping class="com.bagnet.nettracer.tracing.db.communications.Activity" />		

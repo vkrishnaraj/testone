@@ -37,6 +37,7 @@ import com.bagnet.nettracer.tracing.db.wtq.WorldTracerQueue;
 import com.bagnet.nettracer.tracing.dto.BillingDTO;
 import com.bagnet.nettracer.tracing.forms.BillingForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.BagDropUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.SmsEmailService;
@@ -115,6 +116,7 @@ public class CronUtils {
 
 		query.addScalar("OHD_ID", StandardBasicTypes.STRING);
 		
+		@SuppressWarnings("unchecked")
 		List<String> list = (List<String>) query.list();
 		logger.info("OHDs to close: " + list.size());
 		
@@ -156,6 +158,7 @@ public class CronUtils {
 
 		query.addScalar("OHD_ID", StandardBasicTypes.STRING);
 		
+		@SuppressWarnings("unchecked")
 		List<String> list = (List<String>) query.list();
 		logger.info("OHDs to close: " + list.size());
 		
@@ -262,7 +265,7 @@ public class CronUtils {
 			he.setHostName(company.getVariable().getEmail_host());
 			he.setSmtpPort(company.getVariable().getEmail_port());
 			he.setFrom("support@nettracer.aero");
-			ArrayList toList = new ArrayList();
+			ArrayList <InternetAddress>toList = new ArrayList<InternetAddress>();
 			toList.add(new InternetAddress("support@nettracer.aero"));
 			he.setTo(toList);
 			he.setSubject(messageHeader);
@@ -343,7 +346,7 @@ public class CronUtils {
 				he.setHostName(company.getVariable().getEmail_host());
 				he.setSmtpPort(company.getVariable().getEmail_port());
 				he.setFrom("support@nettracer.aero");
-				ArrayList toList = new ArrayList();
+				ArrayList<InternetAddress> toList = new ArrayList<InternetAddress>();
 				String toString = PropertyBMO.getValue("ALERT_SMS_EMAILS");
 				toList.add(new InternetAddress("support@nettracer.aero"));
 				if (toString != null){
@@ -374,6 +377,7 @@ public class CronUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			SQLQuery query = sess.createSQLQuery(sql);
+			@SuppressWarnings("unchecked")
 			List<Integer> list = (List<Integer>) query.list();
 			return ((Integer)list.get(0)).intValue();
 		} finally {
@@ -392,6 +396,7 @@ public class CronUtils {
 			SQLQuery query = sess.createSQLQuery(sql);
 			query.addScalar("wtq_status", StandardBasicTypes.STRING);
 			
+			@SuppressWarnings("unchecked")
 			List<String> list = (List<String>) query.list();
 			
 			int sequentialFails = 0;
@@ -417,6 +422,7 @@ public class CronUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			SQLQuery query = sess.createSQLQuery(sql);
+			@SuppressWarnings("unchecked")
 			List<Integer> list = (List<Integer>) query.list();
 			return ((Integer)list.get(0)).intValue();
 		} finally {
@@ -445,6 +451,7 @@ public class CronUtils {
 				query.setDate("date1", d1);
 				query.setDate("date2", d2);
 		
+				@SuppressWarnings("unchecked")
 				List<Object[]> list = (List<Object[]>) query.list();
 				
 				output.append("<b>WorldTracer Transactions: " + d1.toString() + " to " + d2.toString() + "</b><br />");
@@ -470,7 +477,7 @@ public class CronUtils {
 				he.setHostName(company.getVariable().getEmail_host());
 				he.setSmtpPort(company.getVariable().getEmail_port());
 				he.setFrom("support@nettracer.aero");
-				ArrayList toList = new ArrayList();
+				ArrayList<InternetAddress> toList = new ArrayList<InternetAddress>();
 				toList.add(new InternetAddress("support@nettracer.aero"));
 				he.setTo(toList);
 				he.setSubject("Daily WT Status Report: " + companyCode);
@@ -535,6 +542,7 @@ public class CronUtils {
 
 		query.addScalar("OHD_ID", StandardBasicTypes.STRING);
 		
+		@SuppressWarnings("unchecked")
 		List<String> list = (List<String>) query.list();
 		logger.info("OHDs to close: " + list.size());
 		
@@ -580,6 +588,7 @@ public class CronUtils {
 			q.setTime("incTimeCutoff", incCutoff);
 			q.setInteger("openStatus", TracingConstants.MBR_STATUS_OPEN);
 	
+			@SuppressWarnings("unchecked")
 			List<String> results = (List<String>) q.list();
 	
 			logger.info("Total files ready to send to CRM: " + results.size());
@@ -691,7 +700,8 @@ public class CronUtils {
 				// execute query, and return
 				List myList = hibQuery.list();
 
-				Iterator itr = myList.iterator();
+				@SuppressWarnings("unchecked")
+				Iterator<Incident> itr = myList.iterator();
 				while (itr.hasNext()) {
 					Incident myItem = (Incident) itr.next();
 
@@ -733,6 +743,25 @@ public class CronUtils {
 
 		} catch (Exception e) {
 			logger.error("Error processing 24 hour emails: ", e);
+		}
+	}
+	
+	/**
+	 * Updates flight information for SWA BagDrop for all stations for current day and previous day
+	 */
+	public void bagDropFlightInfo(){
+		logger.info("Updating bagdrop flight information for " + companyCode);
+		String admin = "ntadmin";                                                               
+		Agent agent = AdminUtils.getAgentBasedOnUsername(admin, companyCode);
+		Calendar today = GregorianCalendar.getInstance();
+		Calendar yesturday = GregorianCalendar.getInstance();
+		yesturday.add(Calendar.DATE, -1);
+		try{
+			BagDropUtils.refreshFlightInfo(agent, yesturday.getTime());
+			BagDropUtils.refreshFlightInfo(agent, today.getTime());
+		} catch (Exception e){
+			logger.error(e.getMessage());
+			e.printStackTrace();
 		}
 	}
 }

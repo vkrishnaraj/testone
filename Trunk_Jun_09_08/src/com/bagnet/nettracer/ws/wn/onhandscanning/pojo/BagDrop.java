@@ -1,6 +1,6 @@
 package com.bagnet.nettracer.ws.wn.onhandscanning.pojo;
 
-import java.util.Date;
+import java.util.Calendar;
 
 public class BagDrop {
 	public String getAirlineCode() {
@@ -15,10 +15,10 @@ public class BagDrop {
 	public void setArrivalStationCode(String arrivalStationCode) {
 		this.arrivalStationCode = arrivalStationCode;
 	}
-	public Date getBagDropDatetime() {
+	public Calendar getBagDropDatetime() {
 		return bagDropDatetime;
 	}
-	public void setBagDropDatetime(Date bagDropDatetime) {
+	public void setBagDropDatetime(Calendar bagDropDatetime) {
 		this.bagDropDatetime = bagDropDatetime;
 	}
 	public String getFlightNumber() {
@@ -33,17 +33,17 @@ public class BagDrop {
 	public void setPreviouslyEnteredFlag(boolean previouslyEnteredFlag) {
 		this.previouslyEnteredFlag = previouslyEnteredFlag;
 	}
-	public Date getScheduleArrivalDatetime() {
+	public Calendar getScheduleArrivalDatetime() {
 		return scheduleArrivalDatetime;
 	}
-	public void setScheduleArrivalDatetime(Date scheduleArrivalDatetime) {
+	public void setScheduleArrivalDatetime(Calendar scheduleArrivalDatetime) {
 		this.scheduleArrivalDatetime = scheduleArrivalDatetime;
 	}
 	
 	private String airlineCode;
 	private String arrivalStationCode;
-	private Date bagDropDatetime;
+	private Calendar bagDropDatetime;
 	private String flightNumber;
 	private boolean previouslyEnteredFlag;
-	private Date scheduleArrivalDatetime;
+	private Calendar scheduleArrivalDatetime;
 }

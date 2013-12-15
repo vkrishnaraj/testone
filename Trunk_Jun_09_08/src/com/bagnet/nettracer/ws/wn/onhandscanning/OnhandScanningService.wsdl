@@ -244,10 +244,10 @@
                 <xs:sequence>
                     <xs:element minOccurs="0" name="airlineCode" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="arrivalStationCode" nillable="true" type="xs:string"/>
-                    <xs:element minOccurs="0" name="bagDropDatetime" nillable="true" type="xs:date"/>
+                    <xs:element minOccurs="0" name="bagDropDatetime" nillable="true" type="xs:dateTime"/>
                     <xs:element minOccurs="0" name="flightNumber" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="previouslyEnteredFlag" type="xs:boolean"/>
-                    <xs:element minOccurs="0" name="scheduleArrivalDatetime" nillable="true" type="xs:date"/>
+                    <xs:element minOccurs="0" name="scheduleArrivalDatetime" nillable="true" type="xs:dateTime"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="ServiceResponse">

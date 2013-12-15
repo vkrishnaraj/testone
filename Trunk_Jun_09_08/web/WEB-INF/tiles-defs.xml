@@ -1052,6 +1052,14 @@
     </definition>
 
 	<definition name="fileNotFound" path="/pages/includes/file_not_found.jsp"></definition>
+
+    <definition name="bagDrop" extends="user_menu">
+        <put name="center"   value="/pages/admin/bagDrop.jsp"/>
+    </definition>
+    <definition name="bagDropEdit" extends="user_menu">
+        <put name="center"   value="/pages/admin/bagDropEdit.jsp"/>
+    </definition>
+
 	
     <definition name="customerCommunications" path="/pages/communications/customer_communications.jsp"></definition>
     

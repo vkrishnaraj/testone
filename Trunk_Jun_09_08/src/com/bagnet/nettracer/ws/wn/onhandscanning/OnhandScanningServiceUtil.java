@@ -3,20 +3,70 @@ package com.bagnet.nettracer.ws.wn.onhandscanning;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
+import com.bagnet.nettracer.tracing.utils.SecurityUtils;
 import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 
 public class OnhandScanningServiceUtil {
 	
 	private static Logger logger = Logger.getLogger(OnhandScanningServiceUtil.class);
+	
+	/**
+	 * returns agent if properly authorized as by the following criteria:
+	 *   Has valid username, password and companycode
+	 *   Is a webservice user
+	 *   Ignores account locks
+	 * 
+	 * @param auth
+	 * @return
+	 * @throws Exception
+	 */
+	protected static Agent getAgent(com.bagnet.nettracer.ws.wn.pojo.xsd.Authentication auth) throws Exception{
+		if(auth == null || auth.getSystemName() == null || auth.getSystemName().length() == 0 ||
+				auth.getSystemPassword() == null || auth.getSystemPassword().length() == 0 ||
+				auth.getAirlineCode() == null ||  auth.getAirlineCode().length() == 0){
+			throw new Exception("Must provide username, password and airline code");
+		} else {
+			Agent agent = null;
+			ActionMessages errors = new ActionMessages();
+			agent = SecurityUtils.authUser(auth.getSystemName(), auth.getSystemPassword(), auth.getAirlineCode(), 0, errors);
+			if(!errors.isEmpty()){
+				Iterator i = errors.get();
+				while(i.hasNext()){
+					ActionMessage message = (ActionMessage)i.next();
+					if("error.user.lockedout".equals(message.getKey())){
+						//As per Southwest requirements, account locks are not to be considered, skip and continue
+						continue;
+					} else {
+						throw new Exception("Invalid username/password");
+					}
+				}
+			}
+			
+			if(agent == null){
+				throw new Exception("unable to authenticate user, please contact NetTracer");
+			} else {
+				if(agent.isWs_enabled()){
+					return agent;
+				} else {
+					throw new Exception("user is not authorized for web services");
+				}
+			}
+		}
+	}
+	
 	
 	/**
 	 * Returns the OHD_ID of any OHD that was closed in any SWA station in the previous 5 days

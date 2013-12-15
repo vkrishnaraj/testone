@@ -6,8 +6,6 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
@@ -23,7 +21,6 @@ import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.OHDUtils;
-import com.bagnet.nettracer.tracing.utils.SecurityUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.ws.core.WSCoreOHDUtil;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSItinerary;
@@ -35,7 +32,6 @@ import com.bagnet.nettracer.ws.wn.onhandscanning.IsValidUserResponseDocument.IsV
 import com.bagnet.nettracer.ws.wn.onhandscanning.LookupOnhandLZResponseDocument.LookupOnhandLZResponse;
 import com.bagnet.nettracer.ws.wn.onhandscanning.LookupOnhandReturnResponseDocument.LookupOnhandReturnResponse;
 import com.bagnet.nettracer.ws.wn.onhandscanning.ReturnOnhandResponseDocument.ReturnOnhandResponse;
-import com.bagnet.nettracer.ws.wn.onhandscanning.SaveBagDropTimeResponseDocument.SaveBagDropTimeResponse;
 import com.bagnet.nettracer.ws.wn.onhandscanning.pojo.xsd.ServiceResponse;
 
 public class OnhandScanningServiceImplementation extends OnhandScanningServiceSkeleton{
@@ -65,51 +61,6 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 	public static String REMARK_SCANNED = "Item Scanned";
 	public static String REMARK_IMPROPER_FOWARD = "Item Improperly Forwarded";
 	
-	/**
-	 * returns agent if properly authorized as by the following criteria:
-	 *   Has valid username, password and companycode
-	 *   Is a webservice user
-	 *   Ignores account locks
-	 * 
-	 * @param auth
-	 * @return
-	 * @throws Exception
-	 */
-	protected Agent getAgent(com.bagnet.nettracer.ws.wn.pojo.xsd.Authentication auth) throws Exception{
-		if(auth == null || auth.getSystemName() == null || auth.getSystemName().length() == 0 ||
-				auth.getSystemPassword() == null || auth.getSystemPassword().length() == 0 ||
-				auth.getAirlineCode() == null ||  auth.getAirlineCode().length() == 0){
-			throw new Exception("Must provide username, password and airline code");
-		} else {
-			Agent agent = null;
-			ActionMessages errors = new ActionMessages();
-			agent = SecurityUtils.authUser(auth.getSystemName(), auth.getSystemPassword(), auth.getAirlineCode(), 0, errors);
-			if(!errors.isEmpty()){
-				@SuppressWarnings("unchecked")
-				Iterator<ActionMessage> i = errors.get();
-				while(i.hasNext()){
-					ActionMessage message = (ActionMessage)i.next();
-					if("error.user.lockedout".equals(message.getKey())){
-						//As per Southwest requirements, account locks are not to be considered, skip and continue
-						continue;
-					} else {
-						throw new Exception("Invalid username/password");
-					}
-				}
-			}
-			
-			if(agent == null){
-				throw new Exception("unable to authenticate user, please contact NetTracer");
-			} else {
-				if(agent.isWs_enabled()){
-					return agent;
-				} else {
-					throw new Exception("user is not authorized for web services");
-				}
-			}
-		}
-	}
-	
 	
 	/**
 	 * returns agent if properly authorized as by the following criteria:
@@ -136,7 +87,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 
 		com.bagnet.nettracer.ws.wn.pojo.xsd.Authentication auth = isValidUser.getIsValidUser().getAuthentication();
 		try {
-			getAgent(auth);
+			OnhandScanningServiceUtil.getAgent(auth);
 		} catch (Exception e) {
 			serviceResponse.setSuccess(false);
 			serviceResponse.setValidUser(false);
@@ -191,7 +142,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		Agent agent = null;
 		com.bagnet.nettracer.ws.wn.pojo.xsd.Authentication auth = returnOnhand.getReturnOnhand().getAuthentication();
 		try {
-			agent = getAgent(auth);
+			agent = OnhandScanningServiceUtil.getAgent(auth);
 		} catch (Exception e) {
 			serviceResponse.setSuccess(false);
 			serviceResponse.setValidUser(false);
@@ -262,44 +213,14 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 
 
 	/**
-	 * BagDrop feature to be implemented in later iteration
+	 * Save/Updates BagDrop
 	 * 
 	 * @param saveBagDropTime
 	 */
 
 	public com.bagnet.nettracer.ws.wn.onhandscanning.SaveBagDropTimeResponseDocument saveBagDropTime(com.bagnet.nettracer.ws.wn.onhandscanning.SaveBagDropTimeDocument saveBagDropTime)
 	{
-		logger.info(saveBagDropTime);
-		SaveBagDropTimeResponseDocument resDoc = SaveBagDropTimeResponseDocument.Factory.newInstance();
-		SaveBagDropTimeResponse res = resDoc.addNewSaveBagDropTimeResponse();
-		com.bagnet.nettracer.ws.wn.onhandscanning.pojo.xsd.ServiceResponse serviceResponse = res.addNewReturn();
-		
-		if(saveBagDropTime == null || saveBagDropTime.getSaveBagDropTime() == null || saveBagDropTime.getSaveBagDropTime().getBagDrop() == null){
-			serviceResponse.setSuccess(false);
-			serviceResponse.setValidUser(false);
-			serviceResponse.addError("bagdrop request empty");
-			logger.info(resDoc);
-			return resDoc;
-		}
-
-		com.bagnet.nettracer.ws.wn.pojo.xsd.Authentication auth = saveBagDropTime.getSaveBagDropTime().getAuthentication();
-		try {
-			getAgent(auth);
-		} catch (Exception e) {
-			serviceResponse.setSuccess(false);
-			serviceResponse.setValidUser(false);
-			serviceResponse.addError(e.getMessage());
-			logger.info(resDoc);
-			return resDoc;
-		}
-		serviceResponse.setValidUser(true);
-		
-		//TODO BagDrop is to be implemented in a later iteration.  In meantime, echo back request
-		serviceResponse.setBagDrop(saveBagDropTime.getSaveBagDropTime().getBagDrop());
-		serviceResponse.setSuccess(true);
-		
-		logger.info(resDoc);
-		return resDoc;
+		return BagDropUtil.saveBagDropTime(saveBagDropTime);
 	}
 
 
@@ -334,7 +255,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		Agent agent = null;
 		com.bagnet.nettracer.ws.wn.pojo.xsd.Authentication auth = createUpdateOnhand.getCreateUpdateOnhand().getAuthentication();
 		try {
-			agent = getAgent(auth);
+			agent = OnhandScanningServiceUtil.getAgent(auth);
 			serviceResponse.setValidUser(true);
 		} catch (Exception e) {
 			serviceResponse.setSuccess(false);
@@ -676,7 +597,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		Agent agent = null;
 		com.bagnet.nettracer.ws.wn.pojo.xsd.Authentication auth = lookupOnhandLZ.getLookupOnhandLZ().getAuthentication();
 		try {
-			agent = getAgent(auth);
+			agent = OnhandScanningServiceUtil.getAgent(auth);
 			serviceResponse.setValidUser(true);
 		} catch (Exception e) {
 			serviceResponse.setSuccess(false);
@@ -1000,7 +921,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		Agent agent = null;
 		com.bagnet.nettracer.ws.wn.pojo.xsd.Authentication auth = addBagForLZ.getAddBagForLZ().getAuthentication();
 		try {
-			agent = getAgent(auth);
+			agent = OnhandScanningServiceUtil.getAgent(auth);
 			serviceResponse.setValidUser(true);
 		} catch (Exception e) {
 			serviceResponse.setSuccess(false);
@@ -1162,7 +1083,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		Agent agent = null;
 		com.bagnet.nettracer.ws.wn.pojo.xsd.Authentication auth = lookupOnhandReturn.getLookupOnhandReturn().getAuthentication();
 		try {
-			agent = getAgent(auth);
+			agent = OnhandScanningServiceUtil.getAgent(auth);
 			serviceResponse.setValidUser(true);
 		} catch (Exception e) {
 			serviceResponse.setSuccess(false);

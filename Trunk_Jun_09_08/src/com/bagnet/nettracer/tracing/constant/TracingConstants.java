@@ -362,6 +362,9 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL_QUEUE = "Cust_Comm_Approval_Queue";
 	public static final String SYSTEM_COMPONENT_NAME_CUST_COMM_REJECTION_QUEUE = "Cust_Comm_Rejection_Queue";
 	
+	public static final String SYSTEM_COMPONENT_NAME_BAG_DROP = "Bag Drop";
+	public static final String SYSTEM_COMPONENT_NAME_BAG_DROP_ADMIN = "Bag Drop Admin";
+	
 	//Table numbers for status
 	public final static int AJAX_STATUS_INC = 1;
 	public final static int AJAX_STATUS_OHD = 2;
@@ -1005,6 +1008,7 @@ public class TracingConstants {
 	public final static String CLAIM_DEPREC_CALC = "claim_deprec_calc";
 	
 	public final static String BAGDROP = "bagDrop";
+	public final static String BAGDROPEDIT = "bagDropEdit";
 	
 	public final static String EDIT_AIRPORT = "editairport";
 	public final static String VIEW_AIRPORTS = "viewairports";
@@ -1393,6 +1397,7 @@ public class TracingConstants {
 	public static final String TABLE_ID_TEMPLATES = "templates";
 	public static final String TABLE_ID_CUST_COMM_REJECTED = "customerCommunicationsRejected";
 	public static final String TABLE_ID_CUST_COMM_PENDING_APPROVAL = "customerCommunicationsPendingApproval";
+	public static final String TABLE_ID_BAG_DROP = "bagDrop";
 	
 	public static final String SORT_ASCENDING = "1";
 	public static final String SORT_DESCENDING = "2";

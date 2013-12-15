@@ -300,6 +300,8 @@
 
 		<form-bean name="templateEditForm" type="com.bagnet.nettracer.tracing.forms.templates.TemplateEditForm" />	
 		<form-bean name="templateSearchForm" type="com.bagnet.nettracer.tracing.forms.templates.TemplateSearchForm" />	
+		
+		<form-bean name="bagDropForm" type="com.bagnet.nettracer.tracing.forms.BagDropForm" />
 
 		<form-bean name="customerCommunicationsForm" type="com.bagnet.nettracer.tracing.forms.communications.CustomerCommunicationsForm" />	
 		<form-bean name="customerCommunicationsTaskForm" type="com.bagnet.nettracer.tracing.forms.communications.CustomerCommunicationsTaskForm" />	
@@ -624,6 +626,9 @@
 		<forward name="editCommunications" path="editCommunications" />
 		<forward name="customerCommunicationsPending" path="customerCommunicationsPending" />
 		<forward name="customerCommunicationsRejected" path="customerCommunicationsRejected" />
+		
+		<forward name="bagDrop" path="bagDrop" />
+		<forward name="bagDropEdit" path="bagDropEdit" />
 		
 	</global-forwards>
 
@@ -1007,7 +1012,10 @@
 		
 		<action path="/customerCommunications" type="com.bagnet.nettracer.tracing.actions.communications.CustomerCommunicationsAction" name="customerCommunicationsForm" scope="request" validate="false" ></action>
 		<action path="/incidentActivity" type="com.bagnet.nettracer.tracing.actions.communications.IncidentActivityAction" scope="request" validate="false" ></action>
-
+		
+		<action path="/bagDrop" type="com.bagnet.nettracer.tracing.actions.admin.BagDropAction" name="bagDropForm" scope="session" validate="false"></action>
+		<action path="/bagDropEdit" type="com.bagnet.nettracer.tracing.actions.admin.BagDropAction" name="bagDropForm" scope="session" validate="false"></action>	
+		
 		<action path="/customerCommunicationsApp" type="com.bagnet.nettracer.tracing.actions.communications.CustomerCommunicationsApprovalAction" name="customerCommunicationsTaskForm" scope="request" validate="false" ></action>
 		<action path="/customerCommunicationsRejected" type="com.bagnet.nettracer.tracing.actions.communications.CustomerCommunicationsRejectedAction" name="customerCommunicationsTaskForm" scope="request" validate="false" ></action>
 

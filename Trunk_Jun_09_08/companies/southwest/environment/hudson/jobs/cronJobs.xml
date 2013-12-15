@@ -5,6 +5,18 @@
 		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
 	
+	
+	<bean id="bagDropFlightInfoJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetBeanName" value="CronUtils" />
+		<property name="targetMethod" value="bagDropFlightInfo" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="bagDropFlightInfoTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="bagDropFlightInfoJob" />
+		<property name="cronExpression" value="${bagDropFlightInfo}" />
+	</bean>
+	
 	<!--  The bean that manages all the scheduled jobs and their threads -->
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
@@ -17,6 +29,7 @@
 				<ref bean="cssExpireTrigger" />
 				<ref bean="cssCreateTrigger" />
 				<ref bean="cronWtQueueTrigger" /> 
+				<ref bean="bagDropFlightInfoTrigger" />
 			</list>
 		</property>
 	</bean>
