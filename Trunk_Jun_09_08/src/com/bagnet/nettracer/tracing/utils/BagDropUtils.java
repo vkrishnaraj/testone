@@ -151,13 +151,14 @@ public class BagDropUtils {
 		if(agent == null || bagdrop == null){
 			throw new MissingRequiredFieldsException();
 		}
-		if(!canUpdate(agent, bagdrop.getCreateDate())){
+		if(!canUpdate(agent, bagdrop.getSchArrivalDate())){
 			throw new InvalidDateRangeException();
 		}
 
-		/**Do not overwrite original createAgent**/
+		/**Do not overwrite original createAgent and createDate**/
 		BagDrop old = getBagDropBMO().getBagDropByID(bagdrop.getId());
 		bagdrop.setCreateAgent(old.getCreateAgent());
+		bagdrop.setCreateDate(old.getCreateDate());
 		
 		/**Do not overwrite bagdrop time with null when refreshing flight info**/
 		if(bagdrop.getBagDropTime() == null){

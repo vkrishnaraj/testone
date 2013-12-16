@@ -754,10 +754,23 @@ public class CronUtils {
 		String admin = "ntadmin";                                                               
 		Agent agent = AdminUtils.getAgentBasedOnUsername(admin, companyCode);
 		Calendar today = GregorianCalendar.getInstance();
-		Calendar yesturday = GregorianCalendar.getInstance();
-		yesturday.add(Calendar.DATE, -1);
+		Calendar todayMinus1 = GregorianCalendar.getInstance();
+		todayMinus1.add(Calendar.DATE, -1);
+		Calendar todayMinus2 = GregorianCalendar.getInstance();
+		todayMinus2.add(Calendar.DATE, -2);
 		try{
-			BagDropUtils.refreshFlightInfo(agent, yesturday.getTime());
+			BagDropUtils.refreshFlightInfo(agent, todayMinus2.getTime());
+		} catch (Exception e){
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}
+		try{
+			BagDropUtils.refreshFlightInfo(agent, todayMinus1.getTime());
+		} catch (Exception e){
+				logger.error(e.getMessage());
+				e.printStackTrace();
+		}
+		try{
 			BagDropUtils.refreshFlightInfo(agent, today.getTime());
 		} catch (Exception e){
 			logger.error(e.getMessage());
