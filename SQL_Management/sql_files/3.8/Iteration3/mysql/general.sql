@@ -341,3 +341,9 @@ insert into systemcomponents (component_id,component_name,component_desc,parent_
    750,'Bag Drop','View and update Bag Drops',39,'bagDrop.do?reset=1',1,99,0);
 insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group) VALUES (
    751,'Bag Drop Admin','Bag Drop Admin',39,null,0,99,0);
+   
+alter table ohd modify column storage_location varchar(125);
+alter table ohd modify column firstname varchar(25);
+alter table ohd modify column lastname varchar(25);
+alter table ohd_passenger modify column firstname varchar(25);
+alter table ohd_passenger modify column lastname varchar(25);

@@ -683,11 +683,11 @@ function gotoHistoricalReport() {
       <% } %>
       <tr>
         <td><bean:message key="colname.last_name_onbag" /> <br>
-        <html:text name="OnHandForm" property="lastname" size="20"
-          maxlength="20" styleClass="textfield" /></td>
+        <html:text name="OnHandForm" property="lastname" size="25"
+          maxlength="25" styleClass="textfield" /></td>
         <td><bean:message key="colname.first_name_onbag" /> <br>
-        <html:text name="OnHandForm" property="firstname" size="20"
-          maxlength="20" styleClass="textfield" /></td>
+        <html:text name="OnHandForm" property="firstname" size="25"
+          maxlength="25" styleClass="textfield" /></td>
         <td><bean:message key="colname.mid_initial_onbag" /> <br>
         <html:text name="OnHandForm" property="middlename" size="4"
           maxlength="1" styleClass="textfield" /></td>
@@ -701,9 +701,9 @@ function gotoHistoricalReport() {
           styleClass="textfield" /></td>
         <td><bean:message key="colname.storage_location" /> <br>
         <html:textarea name="OnHandForm" styleId="commentBox" property="storage_location" rows="3" cols="40" 
-          onkeydown="textCounter2(commentBox, commentCount, 100);" 
-          onkeyup="textCounter2(commentBox, commentCount, 100);" styleClass="textfield" />  
-          <input name="comment2" id="commentCount" type="text" value="100" size="4" maxlength="4" disabled="true" />  </td>
+          onkeydown="textCounter2(commentBox, commentCount, 125);" 
+          onkeyup="textCounter2(commentBox, commentCount, 125);" styleClass="textfield" />  
+          <input name="comment2" id="commentCount" type="text" value="125" size="4" maxlength="4" disabled="true" />  </td>
       </tr>
       <tr>
         <td><bean:message key="colname.airline_membership" /> <br>
@@ -835,12 +835,12 @@ function gotoHistoricalReport() {
         </tr>
         <tr>
           <td colspan="2"><bean:message key="colname.last_name" /> <br>
-          <html:text name="passenger" property="lastname" size="20"
-            maxlength="20" indexed="true" styleClass="textfield" /></td>
+          <html:text name="passenger" property="lastname" size="25"
+            maxlength="25" indexed="true" styleClass="textfield" /></td>
           <td colspan="2"><bean:message key="colname.first_name" />
           <br>
-          <html:text name="passenger" property="firstname" size="20"
-            maxlength="20" indexed="true" styleClass="textfield" /></td>
+          <html:text name="passenger" property="firstname" size="25"
+            maxlength="25" indexed="true" styleClass="textfield" /></td>
           <td><bean:message key="colname.mid_initial" /> <br>
           <html:text name="passenger" property="middlename" size="1"
             maxlength="1" indexed="true" styleClass="textfield" /></td>
