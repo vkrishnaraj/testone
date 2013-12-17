@@ -199,6 +199,8 @@ public class NTIntegrationWrapper extends IntegrationWrapper {
 					addr.setZip((pa.getAddress(0).getZip() != null) ? pa.getAddress(0).getZip() : "");
 					addr.setCountry((pa.getAddress(0).getCountrycode_ID() != null) ? pa.getAddress(0).getCountrycode_ID() : "");
 					addr.setHomePhone((pa.getAddress(0).getHomephone_norm() != null) ? pa.getAddress(0).getHomephone_norm() : "");
+					addr.setWorkPhone((pa.getAddress(0).getWorkphone_norm() != null) ? pa.getAddress(0).getWorkphone_norm() : "");
+					addr.setMobilePhone((pa.getAddress(0).getMobile_norm() != null) ? pa.getAddress(0).getMobile_norm() : "");
 					addr.setEmailAddress((pa.getAddress(0).getEmail() != null) ? pa.getAddress(0).getEmail() : "");
 					
 					break;
