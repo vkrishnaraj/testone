@@ -9,6 +9,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.Set;
 
@@ -191,7 +192,7 @@ public class WSCoreOHDUtil {
 			int numdays = 5;
 			//numdays = csv.getdaysToWT();
 			OhdBMO oBMO = new OhdBMO();
-			ArrayList al = (ArrayList)oBMO.findOHDforWT(numdays, companycode);
+			ArrayList<OHD> al = (ArrayList)oBMO.findOHDforWT(numdays, companycode);//TODO Fix warnings in OhdBMO NT-1842
 			if (al != null && al.size() > 0) {
 				int numohds = al.size();
 				com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD[] ohds = new com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD[numohds];
@@ -264,8 +265,7 @@ public class WSCoreOHDUtil {
 		if (oDTO.getItems() != null) {
 			com.bagnet.nettracer.ws.core.pojo.xsd.WSInventory oiarr = null;
 			
-			for (Iterator i = oDTO.getItems().iterator(); i.hasNext();) {
-
+			for (Iterator <OHD_Inventory> i = oDTO.getItems().iterator(); i.hasNext();) {
 				oiarr = so.addNewInventories();
 				inv = (OHD_Inventory) i.next();
 				oiarr.setCategory(inv.getCategory());
@@ -280,7 +280,7 @@ public class WSCoreOHDUtil {
 		if (oDTO.getItinerary() != null) {
 			com.bagnet.nettracer.ws.core.pojo.xsd.WSItinerary itiarr = null;
 			c = 0;
-			for (Iterator i = oDTO.getItinerary().iterator(); i.hasNext();) {
+			for (Iterator<OHD_Itinerary> i = oDTO.getItinerary().iterator(); i.hasNext();) {
 				itiarr = so.addNewItineraries();
 				iti = (OHD_Itinerary) i.next();
 				itiarr.setItineraryID(iti.getItinerary_ID());
@@ -304,7 +304,6 @@ public class WSCoreOHDUtil {
 
 		}
 		
-		OHD_Passenger paxs = null;
 		if(oDTO.getPassengers() != null){
 			for(OHD_Passenger pax:(Set<OHD_Passenger>)oDTO.getPassengers()){
 				com.bagnet.nettracer.ws.core.pojo.xsd.WSPassenger wspax = so.addNewPassengers();
@@ -458,8 +457,8 @@ public class WSCoreOHDUtil {
  		ohd.setClose_date(thedate);
  		
  		// passengers
-		HashSet<OHD_Passenger> pahash = new HashSet<OHD_Passenger>();
-		HashSet<OHD_Address> addrhash = null;
+		LinkedHashSet<OHD_Passenger> pahash = new LinkedHashSet<OHD_Passenger>();
+		LinkedHashSet<OHD_Address> addrhash = null;
 		
 		WSPassenger wp = null;
 		OHD_Address addr = null;
@@ -476,7 +475,7 @@ public class WSCoreOHDUtil {
 					pa.setLastname(wp.getLastname());
 					pa.setMiddlename(wp.getMiddlename());
 					
-					addrhash = new HashSet<OHD_Address>();
+					addrhash = new LinkedHashSet<OHD_Address>();
 					addr = new OHD_Address();
 					addr.setOhd_passenger(pa);
 					addr.setAddress1(wp.getAddress1());
@@ -502,7 +501,7 @@ public class WSCoreOHDUtil {
 		
  		// contents
 		
-		HashSet<OHD_Inventory> ii_set = new HashSet<OHD_Inventory>();
+		LinkedHashSet<OHD_Inventory> ii_set = new LinkedHashSet<OHD_Inventory>();
 		
 		OHD_Inventory ii = null;
 		WSInventory wi = null;
@@ -525,7 +524,7 @@ public class WSCoreOHDUtil {
 
  	public OHD WStoOHDItinMapping(WSOHD wsohd, OHD ohd){
  		// itinerary
-		HashSet<OHD_Itinerary> oi_set = new HashSet<OHD_Itinerary>();
+		LinkedHashSet<OHD_Itinerary> oi_set = new LinkedHashSet<OHD_Itinerary>();
 		String datetimestr = null;
  		Date thedate = null;
 		
@@ -772,7 +771,7 @@ public class WSCoreOHDUtil {
 	r.setRemarktype(TracingConstants.REMARK_REGULAR);
 	r.setOhd(ohd);
 	
-	if (ohd.getRemarks() == null) ohd.setRemarks(new HashSet());
+	if (ohd.getRemarks() == null) ohd.setRemarks(new HashSet<Remark>());
 	ohd.getRemarks().add(r);
 	
 	//HibernateUtils.save(ohd);
@@ -780,7 +779,7 @@ public class WSCoreOHDUtil {
 	ohdBmo.insertOHD(ohd, user);
 	
 	// update l/d bag status to to be delivered as well if forwarding station is the same as l/d assigned station
-	Item item = BDOUtils.findOHDfromMatchedLD(ohd.getOHD_ID());
+	Item item = BDOUtils.findOHDfromMatchedLD(ohd.getOHD_ID());//TODO fix warning BDOUtils NT-1843
 	if (item != null) {
 		if (ohd.getHoldingStation().getStation_ID() == item.getIncident().getStationassigned().getStation_ID()) {
 			// only do this if forwarded station = station assigned for incident
@@ -794,7 +793,7 @@ public class WSCoreOHDUtil {
 	// update request if there was one
 	OHDRequest forRequest = null;
 	Status s = null;
-	ArrayList listofrequest = (ArrayList)OHDUtils.getCreatedRequestsForOHD(foundAtStation.getStation_ID(),ohd.getOHD_ID());
+	ArrayList<OHDRequest> listofrequest = (ArrayList<OHDRequest>)OHDUtils.getCreatedRequestsForOHD(foundAtStation.getStation_ID(),ohd.getOHD_ID());
 	if (listofrequest != null && listofrequest.size() > 0) {
 		for (int i = 0; i<listofrequest.size();i++) {
 			// close all these requests
@@ -810,7 +809,6 @@ public class WSCoreOHDUtil {
   public com.bagnet.nettracer.ws.core.BulkBeornOHDResponseDocument bulkBeornOHD(
 	      com.bagnet.nettracer.ws.core.BulkBeornOHDDocument beornOHDList) {
 	  Date start = new Date();
-	  WSBEORN[] b = beornOHDList.getBulkBeornOHD().getSiArray();
 	  
 	  	logger.info("Start Web Service Response... bulkBeorn");
 	  	String errorMsg = "BEORN Failed: ";
@@ -836,7 +834,7 @@ public class WSCoreOHDUtil {
 	  	
 	  	ArrayList<WSOhdResponse> soList = new ArrayList<WSOhdResponse>();
 	  	int i = 0;
-	  	HashMap stationMap = new HashMap();
+	  	HashMap<String,Station> stationMap = new HashMap<String,Station>();
 	  	if(insertFields.getSiArray() != null){
 	  		for(i = 0; i < insertFields.getSiArray().length; i++){
 	  			WSOhdResponse so = processBeorn(agent, insertFields.getSiArray(i), stationMap);
@@ -882,7 +880,7 @@ public class WSCoreOHDUtil {
   	
   	Date end = new Date();
 
-  	WSOhdResponse ret = processBeorn(agent, insertFields.getSi(), new HashMap());
+  	WSOhdResponse ret = processBeorn(agent, insertFields.getSi(), new HashMap<String,Station>());
   	
   	logger.info("Stop Web Service Response...");
   	com.bagnet.nettracer.tracing.utils.general.Logger.logTelex(ret.getOhdId(), "BEORN webserivce auth", start, end);
@@ -891,7 +889,7 @@ public class WSCoreOHDUtil {
   	return resDoc;
   }
   
-  private static Station getStation(String stationcode, String companycode, HashMap map){
+  private static Station getStation(String stationcode, String companycode, HashMap<String,Station> map){
 	  if(map != null && map.containsKey(stationcode+companycode)){
 		  return (Station)map.get(stationcode+companycode);
 	  } else {
@@ -901,7 +899,7 @@ public class WSCoreOHDUtil {
 	  }
   }
   
-  private static Station getStationById(int id, HashMap map){
+  private static Station getStationById(int id, HashMap<String,Station> map){
 	  if(map != null){
 		  for(Station station:(Collection<Station>)map.values()){
 			  if(station.getStation_ID() == id){
@@ -917,7 +915,7 @@ public class WSCoreOHDUtil {
   }
   
   
-  private static WSOhdResponse processBeorn(Agent agent, WSBEORN si, HashMap stationMap){
+  private static WSOhdResponse processBeorn(Agent agent, WSBEORN si, HashMap<String,Station> stationMap){
 	  Date loadstart = new Date();
 	  
 	  	WSOhdResponse so = WSOhdResponse.Factory.newInstance();	
@@ -992,7 +990,7 @@ public class WSCoreOHDUtil {
 		  		if (onhandIsNew) {
 		  			if (si.getBaggageItineraryArray().length > 0) {
 				  		// Set bag itinerary
-				  		HashSet itinerary = new HashSet();
+				  		HashSet<OHD_Itinerary> itinerary = new HashSet<OHD_Itinerary>();
 				  		onhand.setItinerary(itinerary);
 
 				  		for (int i=0; i < si.getBaggageItineraryArray().length; ++i) {
@@ -1049,7 +1047,7 @@ public class WSCoreOHDUtil {
 		  		log.setLog_status(TracingConstants.LOG_NOT_RECEIVED);
 		  		
 		  		if (si.getForwardItineraryArray().length > 0) {
-			  		HashSet forwardItin = new HashSet();
+			  		HashSet<OHD_Log_Itinerary> forwardItin = new HashSet<OHD_Log_Itinerary>();
 			  		log.setItinerary(forwardItin);
 			
 			  		// Set forward itinerary
@@ -1104,10 +1102,10 @@ public class WSCoreOHDUtil {
 							+ messages.getMessage(new Locale(agent.getCurrentlocale()), "aposS") + " " + station.getStationcode() + " station.");
 					r.setOhd(onhand);
 					//Add a remark to the OHD saying the bag is forwarded.
-					Set remarks = onhand.getRemarks();
+					Set<Remark> remarks = onhand.getRemarks();
 					
 					if (remarks == null) {
-						HashSet newRemarks = new HashSet();
+						HashSet<Remark> newRemarks = new HashSet<Remark>();
 						newRemarks.add(r);
 						onhand.setRemarks(newRemarks);
 					} else {

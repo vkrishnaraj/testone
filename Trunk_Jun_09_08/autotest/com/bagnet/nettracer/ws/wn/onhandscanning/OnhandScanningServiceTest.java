@@ -328,9 +328,9 @@ public class OnhandScanningServiceTest {
 		
 		assertTrue(ret.getLateCheckIndicator() == false);
 		assertTrue(ret.getPositionId() == null);
-		assertTrue(ret.getOnhand().getItinerariesArray(0).getFlightnum().equals("123"));
-		assertTrue(ret.getOnhand().getItinerariesArray(0).getLegfrom().equals("ATL"));
-		assertTrue(ret.getOnhand().getItinerariesArray(0).getLegto().equals("XAX"));
+		assertTrue(ret.getOnhand().getItinerariesArray(1).getFlightnum().equals("123"));
+		assertTrue(ret.getOnhand().getItinerariesArray(1).getLegfrom().equals("FLL"));
+		assertTrue(ret.getOnhand().getItinerariesArray(1).getLegto().equals("XAX"));
 		assertTrue(ret.getOnhand().getColor().equals("BK"));
 		assertTrue(ret.getOnhand().getType().equals("21"));
 		assertTrue(ret.getOnhand().getFirstname().equals("Bill"));
@@ -905,6 +905,14 @@ public class OnhandScanningServiceTest {
 		itin.setFlightnum("123");
 		itin.setDepartdate("2013-07-16T08:47:35.000-05:00");
 		itin.setArrivedate("2013-07-16T08:47:35.000-05:00");
+		
+		WSItinerary itin2 = ohd.addNewItineraries();
+		itin2.setLegfrom("FLL");
+		itin2.setLegto("DAL");
+		itin2.setAirline("WN");
+		itin2.setFlightnum("123");
+		itin2.setDepartdate("2013-07-16T08:47:35.000-05:00");
+		itin2.setArrivedate("2013-07-16T08:47:35.000-05:00");
 
 		WSPassenger pax = ohd.addNewPassengers();
 		pax.setAddress1("2675 Paces Ferry Rd");
@@ -915,6 +923,16 @@ public class OnhandScanningServiceTest {
 		pax.setFirstname("John");
 		pax.setLastname("Doe");
 		pax.setHomephone("555-555-5555");
+		
+		WSPassenger pax2 = ohd.addNewPassengers();
+		pax2.setAddress1("123 Test St.");
+		pax2.setAddress2("Suite 240");
+		pax2.setCity("Atlanta");
+		pax2.setStateID("GA");
+		pax2.setZip("30339");
+		pax2.setFirstname("Jane");
+		pax2.setLastname("Doe");
+		pax2.setHomephone("666-555-5555");
 	}
 
 	private void assertWSOHD(String bagtag, WSOHD retohd) {
@@ -936,6 +954,14 @@ public class OnhandScanningServiceTest {
 		assertTrue("123".equals(retitin.getFlightnum()));
 		assertTrue("2013-07-16".equals(retitin.getDepartdate()));
 		assertTrue("2013-07-16".equals(retitin.getArrivedate()));
+		
+		WSItinerary retitin2 = retohd.getItinerariesArray(1);
+		assertTrue("FLL".equals(retitin2.getLegfrom()));
+		assertTrue("DAL".equals(retitin2.getLegto()));
+		assertTrue("WN".equals(retitin2.getAirline()));
+		assertTrue("123".equals(retitin2.getFlightnum()));
+		assertTrue("2013-07-16".equals(retitin2.getDepartdate()));
+		assertTrue("2013-07-16".equals(retitin2.getArrivedate()));
 
 		WSPassenger retpax = retohd.getPassengersArray(0);
 		assertTrue("2675 Paces Ferry Rd".equals(retpax.getAddress1()));
@@ -946,6 +972,16 @@ public class OnhandScanningServiceTest {
 		assertTrue("John".equals(retpax.getFirstname()));
 		assertTrue("Doe".equals(retpax.getLastname()));
 		assertTrue("555-555-5555".equals(retpax.getHomephone()));
+		
+		WSPassenger retpax2 = retohd.getPassengersArray(1);
+		assertTrue("123 Test St.".equals(retpax2.getAddress1()));
+		assertTrue("Suite 240".equals(retpax2.getAddress2()));
+		assertTrue("Atlanta".equals(retpax2.getCity()));
+		assertTrue("GA".equals(retpax2.getStateID()));
+		assertTrue("30339".equals(retpax2.getZip()));
+		assertTrue("Jane".equals(retpax2.getFirstname()));
+		assertTrue("Doe".equals(retpax2.getLastname()));
+		assertTrue("666-555-5555".equals(retpax2.getHomephone()));
 	}
 
 	private boolean forwardOHD(Agent user, OHD ohd) {
