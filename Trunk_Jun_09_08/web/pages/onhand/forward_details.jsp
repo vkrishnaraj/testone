@@ -46,7 +46,7 @@
                 :
               </td>
               <td>
-                <html:text name="forwardOnHandForm" property="expediteNumber" size="20" maxlength="10" disabled="true" />
+                <html:text name="forwardOnHandForm" property="expediteNumber" size="20" maxlength="12" disabled="true" />
               </td>
             </tr>
             <tr>

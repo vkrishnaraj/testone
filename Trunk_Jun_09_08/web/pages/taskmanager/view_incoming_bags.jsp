@@ -144,7 +144,7 @@ function sortIncomingBags(sortOrder) {
                 :
               </td>
               <td>
-                <html:text property="expedite" size="12" maxlength="10" styleClass="textfield" />
+                <html:text property="expedite" size="12" maxlength="12" styleClass="textfield" />
               </td>
             </tr>
             <tr>

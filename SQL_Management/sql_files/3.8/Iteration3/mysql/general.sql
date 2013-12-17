@@ -349,3 +349,6 @@ alter table ohd modify column firstname varchar(25);
 alter table ohd modify column lastname varchar(25);
 alter table ohd_passenger modify column firstname varchar(25);
 alter table ohd_passenger modify column lastname varchar(25);
+
+alter table ohd modify column claimchecknum_bagnumber varchar(12);
+alter table incident_claimcheck modify column claimchecknum_bagnumber varchar(12);

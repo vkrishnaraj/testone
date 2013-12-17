@@ -249,7 +249,7 @@ function updatePagination() {
               	<td colspan="<%=wtEnabled?"1":"3"%>">
               		<bean:message key="colname.expedite.tagnum" />
               		<br>
-              		<html:text property="expediteTagNum" size="11" maxlength="10" styleClass="textfield" styleId="expediteTagNum" />
+              		<html:text property="expediteTagNum" size="13" maxlength="12" styleClass="textfield" styleId="expediteTagNum" />
               	</td>
               	<% } %>
               	

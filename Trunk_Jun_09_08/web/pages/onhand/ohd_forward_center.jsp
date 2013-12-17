@@ -106,7 +106,7 @@
                     &nbsp;
                       <bean:message key="colname.expedite_number" /> 
                       :
-                      <input type="text" name="ohdList[<%=i %>].value" class="textfield" value="<%=ohd.getValue() %>" size="10" maxlength="10"/>
+                      <input type="text" name="ohdList[<%=i %>].value" class="textfield" value="<%=ohd.getValue() %>" size="12" maxlength="12"/>
 				     <hr style='clear:both; border:1px solid #fff;<%=(ohdMap == null || i < ohdMap.size()-1)?"":"visibility:hidden;"%>'/>
                   </logic:iterate>
                 </td>

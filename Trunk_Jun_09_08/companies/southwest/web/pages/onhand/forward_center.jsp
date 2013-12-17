@@ -121,7 +121,7 @@
 	                  <html:text name="tagNumber" property="bagTagNumber" styleId='<%=btprop %>' size="14" maxlength="13" style="textfield" indexed="true"/>
 	                </td>
 	                <td>
-	                  <html:text name="tagNumber" property="expediteNumber" styleId='<%=enprop %>' size="20" maxlength="10" indexed="true" onkeydown="clearSticker(this)"/>
+	                  <html:text name="tagNumber" property="expediteNumber" styleId='<%=enprop %>' size="20" maxlength="12" indexed="true" onkeydown="clearSticker(this)"/>
 	                </td>
 	                <td>
 	                  <html:checkbox name="tagNumber" property="expediteSticker" styleId='<%=esprop %>' onclick="updateExpedite(this)"/>
