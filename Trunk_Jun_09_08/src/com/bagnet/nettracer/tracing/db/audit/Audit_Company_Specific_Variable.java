@@ -14,7 +14,9 @@ import java.io.Serializable;
  * @hibernate.class table="Audit_company_specific_variable"
  */
 public class Audit_Company_Specific_Variable implements Serializable {
-
+	
+	private static final long serialVersionUID = 4117915546129100198L;
+	
 	private int id;
 	private int total_threads;
 	private int seconds_wait;
@@ -88,6 +90,9 @@ public class Audit_Company_Specific_Variable implements Serializable {
 
 	//incident locking
 	private int incident_lock_mins;
+	
+	//bagdrop
+	private int bagdrop_autorefresh_mins;
 	
 
 	/**
@@ -1043,6 +1048,17 @@ public class Audit_Company_Specific_Variable implements Serializable {
 	 */
 	public void setStatus_message(String status_message) {
 		this.status_message = status_message;
+	}
+	
+	/**
+	 * @return the bagdrop_autorefresh_mins
+	 * @hibernate.property type="integer"
+	 */
+	public int getBagdrop_autorefresh_mins() {
+		return bagdrop_autorefresh_mins;
+	}
+	public void setBagdrop_autorefresh_mins(int bagdrop_autorefresh_mins) {
+		this.bagdrop_autorefresh_mins = bagdrop_autorefresh_mins;
 	}
 		
 	

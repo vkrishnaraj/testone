@@ -10,8 +10,10 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.type.StandardBasicTypes;
 
 import com.bagnet.nettracer.exceptions.MissingRequiredFieldsException;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
@@ -309,6 +311,43 @@ public class BagDropBMO {
 			@SuppressWarnings("unchecked")
 			List<Audit_BagDrop> results = query.list(); 
 			return results;
+		} catch (Exception e){
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Returns the most recent Audit_BagDrop entry date based on station and entryMethod
+	 * 
+	 * @param station
+	 * @param entryMethod
+	 * @return
+	 */
+	public Date getLastUpdateDate(String station, String companycode, int entryMethod){
+		Session sess = null;
+		try {
+			String sql = "select max(abd.entryDate) entrydate from bagdrop bd left outer join audit_bagdrop abd on bd.id = abd.bagdrop_id " +
+					"where bd.arrivalStationCode = :station " +
+					"and bd.airline = :companycode " +
+					"and abd.entryMethod = :entryMethod";
+			sess = HibernateWrapper.getSession().openSession();
+			SQLQuery query = sess.createSQLQuery(sql);
+			query.setParameter("station", station);
+			query.setParameter("companycode", companycode);
+			query.setParameter("entryMethod", entryMethod);
+			query.addScalar("entrydate", StandardBasicTypes.TIMESTAMP);
+			
+			Date result = (Date)query.uniqueResult();
+			return result;
 		} catch (Exception e){
 			e.printStackTrace();
 			return null;

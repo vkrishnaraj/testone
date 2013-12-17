@@ -171,6 +171,8 @@ public final class ManageCompany extends Action {
 					dForm.setIssuanceitemxdaysback(cmpny.getVariable().getIssuance_edit_last_x_days());
 					
 					dForm.setIncident_lock_mins(cmpny.getVariable().getIncident_lock_mins());
+					
+					dForm.setBagdrop_autorefresh_mins(cmpny.getVariable().getBagdrop_autorefresh_mins());
 				}
 				
 				if (pageState.equals(TracingConstants.COMPANY_PAGESTATE_MOVETOLZ)) {
@@ -458,6 +460,10 @@ public final class ManageCompany extends Action {
 					
 					if (dForm.getIncident_lock_mins() != null) {
 					var.setIncident_lock_mins(dForm.getIncident_lock_mins().intValue());	
+					}
+					
+					if (dForm.getBagdrop_autorefresh_mins() != null){
+						var.setBagdrop_autorefresh_mins(dForm.getBagdrop_autorefresh_mins().intValue());
 					}
 					
 					if(dForm.getPnrlastxdays()!=null){

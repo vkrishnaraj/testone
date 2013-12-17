@@ -15,6 +15,8 @@ import java.io.Serializable;
  * @hibernate.cache usage="read-write"
  */
 public class Company_Specific_Variable implements Serializable {
+	private static final long serialVersionUID = -6478044103531882239L;
+	
 	private String companyCode_ID;
 	private int total_threads;
 	private int seconds_wait;
@@ -80,6 +82,8 @@ public class Company_Specific_Variable implements Serializable {
 	private int min_pass_size;
 	private int pass_x_history;
 	private String status_message;
+	private int bagdrop_autorefresh_mins;
+	
 	/**
 	 * Variable to determine the last amount of days to include incidents for a PNR Prepopulation Check. -Sean Fine
 	 */
@@ -1196,6 +1200,17 @@ public class Company_Specific_Variable implements Serializable {
 	 */
 	public void setStatus_message(String status_message) {
 		this.status_message = status_message;
+	}
+	
+	/**
+	 * @return
+	 * @hibernate.property type="integer"
+	 */
+	public int getBagdrop_autorefresh_mins() {
+		return bagdrop_autorefresh_mins;
+	}
+	public void setBagdrop_autorefresh_mins(int bagdrop_autorefresh_mins) {
+		this.bagdrop_autorefresh_mins = bagdrop_autorefresh_mins;
 	}
 	
 		

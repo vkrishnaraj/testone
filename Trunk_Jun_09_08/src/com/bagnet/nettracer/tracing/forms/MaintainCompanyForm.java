@@ -13,6 +13,9 @@ import com.bagnet.nettracer.tracing.db.WTCompany;
  */
 
 public final class MaintainCompanyForm extends ValidatorForm {
+
+	private static final long serialVersionUID = 3633060147428850521L;
+	
 	private String pageState;
 	private String companySearchName;
 	private String companyCode;
@@ -109,6 +112,9 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	//lock incident
 	private Integer incident_lock_mins;
 
+	//bagdrop
+	private Integer bagdrop_autorefresh_mins;
+	
 	public String getWt_write_enabled() {
 		return wt_write_enabled;
 	}
@@ -523,6 +529,14 @@ public final class MaintainCompanyForm extends ValidatorForm {
 
 	public void setWtCompanyList(List<WTCompany> wtCompanyList) {
 		this.wtCompanyList = wtCompanyList;
+	}
+
+	public Integer getBagdrop_autorefresh_mins() {
+		return bagdrop_autorefresh_mins;
+	}
+
+	public void setBagdrop_autorefresh_mins(Integer bagdrop_autorefresh_mins) {
+		this.bagdrop_autorefresh_mins = bagdrop_autorefresh_mins;
 	}
 
 }

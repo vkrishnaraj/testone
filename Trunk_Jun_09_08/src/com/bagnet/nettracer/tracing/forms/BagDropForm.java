@@ -1,6 +1,5 @@
 package com.bagnet.nettracer.tracing.forms;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,8 +31,6 @@ public class BagDropForm extends ValidatorForm{
 	private BagDropDTO dto;
 	private BagDrop editBagDrop;
 	private List<Audit_BagDrop> auditList;
- 
-	private Date searchDate;
 	
 	public List <BagDrop> getBagDropList() {
 		return bagDropList;
@@ -126,13 +123,51 @@ public class BagDropForm extends ValidatorForm{
 	public void setAuditList(List<Audit_BagDrop> auditList) {
 		this.auditList = auditList;
 	}
+	
+	
+	/**The following is need for Calendar.js to work, 
+	 * does not seem to work when accessing dto/bagdrop object directly**/
 
-	public Date getSearchDate() {
-		return searchDate;
+	public String getSearchStartDate() {
+		if(dto != null){
+			return dto.getDispStartScheduleArrivalDate();
+		} else {
+			return "";
+		}
 	}
 
-	public void setSearchDate(Date searchDate) {
-		this.searchDate = searchDate;
+	public void setSearchStartDate(String searchStartDate) {
+		if(dto != null){
+			dto.setDispStartScheduleArrivalDate(searchStartDate);
+		}
+	}
+
+	public String getSearchEndDate() {
+		if(dto != null){
+			return dto.getDispEndScheduleArrivalDate();
+		} else {
+			return "";
+		}
+	}
+
+	public void setSearchEndDate(String searchEndDate) {
+		if(dto != null){
+			dto.setDispEndScheduleArrivalDate(searchEndDate);
+		}
+	}
+
+	public String getBagDropDate() {
+		if(editBagDrop != null){
+			return editBagDrop.getDispBagDropDate();
+		} else {
+			return "";
+		}
+	}
+
+	public void setBagDropDate(String bagDropDate) {
+		if(editBagDrop != null){
+			editBagDrop.setDispBagDropDate(bagDropDate);
+		}
 	}
 
 }
