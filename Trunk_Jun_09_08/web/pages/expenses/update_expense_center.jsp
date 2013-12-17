@@ -234,9 +234,16 @@
 				    </logic:messagesPresent>
 					
 					<% if (submitOk) { %>
-					<center><font color=green>
+					<c:if test="${expensePayoutForm.cancelcount != 1}">
+    					<center><font color=green>
             			Successfully Submitted!
-          			</font></center>
+          				</font></center>
+ 					</c:if>
+					<div align="right" width="100%" >
+						Status:<c:if test="${expensePayoutForm.printcount == 0 && expensePayoutForm.cancelcount == 0}">Valid</c:if>
+							   <c:if test="${expensePayoutForm.printcount == 1 && expensePayoutForm.cancelcount == 0}">Printed</c:if>
+						       <c:if test="${expensePayoutForm.cancelcount == 1}">Cancelled</c:if> 
+					</div>
 					<div align="right" width="100%" >
 					<% if (showprint && showcancel) { %>
 						<a name="printrpt" href='#' onclick="DoPrint('Did the Southwest LUV Voucher print correctly')">
