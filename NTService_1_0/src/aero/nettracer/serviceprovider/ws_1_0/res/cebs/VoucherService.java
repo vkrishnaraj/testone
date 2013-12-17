@@ -97,10 +97,16 @@ public class VoucherService implements VoucherServiceInterface {
 						if(voucher.getPassenger().getAddresses().getProvince() != null){
 							addr.setProvince(voucher.getPassenger().getAddresses().getProvince());
 						}
-						if(voucher.getPassenger().getAddresses().getHomePhone() != null &&
-								voucher.getPassenger().getAddresses().getHomePhone().length() > 0){
+						
+						//our address object supports home, work and mobile phone, however, the CEBS voucher service only supports
+						//a single phone field.  Will supply the first phone provided
+						if(voucher.getPassenger().getAddresses().getHomePhone() != null && voucher.getPassenger().getAddresses().getHomePhone().length() > 0){
 							mapPhone(voucher.getPassenger().getAddresses().getHomePhone(), request);
-						} 
+						} else if(voucher.getPassenger().getAddresses().getWorkPhone() != null && voucher.getPassenger().getAddresses().getWorkPhone().length() > 0){
+							mapPhone(voucher.getPassenger().getAddresses().getWorkPhone(), request);
+						} else if(voucher.getPassenger().getAddresses().getMobilePhone() != null && voucher.getPassenger().getAddresses().getMobilePhone().length() > 0){
+							mapPhone(voucher.getPassenger().getAddresses().getMobilePhone(), request);
+						}
 					} 
 					
 					if(voucher.getPassenger().getFirstname() != null && voucher.getPassenger().getFirstname().length() > 0){
