@@ -1004,6 +1004,18 @@ function updatePagination() {
                 </td>
               </logic:iterate>
             </tr>
+            
+            <tr>
+              <td>
+                <bean:message key="colname.bagdrop.autorefresh.mins.audit" />
+              </td>
+              <logic:iterate id="audit_lfi" name="compareList" scope="request">
+                <td>
+                  <bean:write name="audit_lfi" property="variable.bagdrop_autorefresh_mins" />
+                  &nbsp;
+                </td>
+              </logic:iterate>
+            </tr>
 
 
           </table>

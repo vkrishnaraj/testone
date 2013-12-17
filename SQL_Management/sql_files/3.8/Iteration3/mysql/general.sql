@@ -351,4 +351,10 @@ alter table ohd_passenger modify column firstname varchar(25);
 alter table ohd_passenger modify column lastname varchar(25);
 
 alter table ohd modify column claimchecknum_bagnumber varchar(12);
-alter table incident_claimcheck modify column claimchecknum_bagnumber varchar(12);
+alter table incident_claimcheck modify column claimchecknum_bagnumber varchar(12);   
+   
+alter table company_specific_variable add column bagdrop_autorefresh_mins int(11) default 0;
+alter table audit_company_specific_variable add column bagdrop_autorefresh_mins int(11) default 0;
+
+update company_specific_variable set bagdrop_autorefresh_mins=0;
+update audit_company_specific_variable set bagdrop_autorefresh_mins=0;

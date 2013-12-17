@@ -384,6 +384,15 @@
 	              <html:text styleClass="textfield" name="companyForm" property="issuanceitemxdaysback" size="4" maxlength="4" />
 	            </td>
             </tr>
+            <tr>
+	            <td>
+	              <bean:message key="colname.bagdrop.autorefresh.mins" />
+	              :
+	            </td>
+	            <td>
+	              <html:text styleClass="textfield" name="companyForm" property="bagdrop_autorefresh_mins" size="4" maxlength="4" />
+	            </td>
+            </tr>
 	          
 		    <tr>
             <td colspan="2">

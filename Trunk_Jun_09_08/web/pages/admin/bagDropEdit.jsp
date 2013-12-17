@@ -99,7 +99,7 @@
               (<%= a.getDateformat().getFormat() %>)	
             </td>
             <td>
-              <html:text name="bagDropForm" property="editBagDrop.dispBagDropDate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.bagDropForm.editBagDrop.dispBagDropDate,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">
+              <html:text name="bagDropForm" property="bagDropDate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.bagDropForm.bagDropDate,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">
             </td>
           </tr>
           <tr>

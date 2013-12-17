@@ -75,9 +75,11 @@
     <td id="middlecolumn">
       
       <div id="maincontent">
+      <div class="headerleft">
         <h1 class="green">
           <bean:message key='header.bagdrop.search.title'/>
         </h1>
+        </div>
 
         <div id="pageheaderright">
 			<logic:present name="cbroStationID" scope="session">
@@ -92,6 +94,8 @@
 	        </logic:present>
 		</div>
 		
+		<br/>
+		<br/>
         <strong>
           <bean:message key="wildcard" />
         </strong>
@@ -109,8 +113,8 @@
             	<bean:message key='colname.bagdrop.search.scharrival'/>
             	(<%= a.getDateformat().getFormat() %>)	
 		                <br>
-		                <html:text property="dto.dispStartScheduleArrivalDate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.bagDropForm.searchDate,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">&nbsp;-
-		                <html:text property="dto.dispEndScheduleArrivalDate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.bagDropForm.dto.dispEndScheduleArrivalDate,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;">           
+		                <html:text property="searchStartDate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.bagDropForm.searchStartDate,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">&nbsp;-
+		                <html:text property="searchEndDate" size="12" maxlength="11" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.bagDropForm.searchEndDate,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;">           
             </td>
           </tr>
           <tr>

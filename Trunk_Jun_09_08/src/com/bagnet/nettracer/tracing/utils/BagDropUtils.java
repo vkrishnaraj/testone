@@ -16,10 +16,12 @@ import com.bagnet.nettracer.tracing.bmo.BagDropBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BagDrop;
+import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.audit.Audit_BagDrop;
 import com.bagnet.nettracer.tracing.dto.BagDropDTO;
 import com.bagnet.nettracer.exceptions.InvalidDateRangeException;
+import com.bagnet.nettracer.exceptions.InvalidStationException;
 import com.bagnet.nettracer.exceptions.MissingRequiredFieldsException;
 
 /**
@@ -27,7 +29,7 @@ import com.bagnet.nettracer.exceptions.MissingRequiredFieldsException;
  *
  */
 public class BagDropUtils {
-	
+
 	@SuppressWarnings("unused")
 	private static Logger logger = Logger.getLogger(BagDropUtils.class);
 	
@@ -147,12 +149,15 @@ public class BagDropUtils {
 	 * @return
 	 * @throws InvalidDateRangeException
 	 */
-	public static long updateBagDrop(Agent agent, BagDrop bagdrop) throws InvalidDateRangeException{
+	public static long updateBagDrop(Agent agent, BagDrop bagdrop) throws InvalidDateRangeException, InvalidStationException{
 		if(agent == null || bagdrop == null){
 			throw new MissingRequiredFieldsException();
 		}
-		if(!canUpdate(agent, bagdrop.getSchArrivalDate())){
+		if(!canUpdateByDate(agent, bagdrop.getSchArrivalDate())){
 			throw new InvalidDateRangeException();
+		}
+		if(!canUpdateByStation(agent, bagdrop.getArrivalStationCode())){
+			throw new InvalidStationException();
 		}
 
 		/**Do not overwrite original createAgent and createDate**/
@@ -174,11 +179,36 @@ public class BagDropUtils {
 	 * @param date
 	 * @return
 	 */
-	protected static boolean canUpdate(Agent agent, Date date){
+	protected static boolean canUpdateByDate(Agent agent, Date date){
 		int daysBack = getModifyRange(agent);
 		long day = 24 * 60 * 60 * 1000;
 		Date now = DateUtils.convertToGMTDate(new Date());
 		return now.getTime() - date.getTime() < daysBack * day;
+	}
+	
+	/**
+	 * Determines if a BagDrop can be update based on CBRO permissions
+	 * 
+	 * @param agent
+	 * @param station
+	 * @return
+	 */
+	protected static boolean canUpdateByStation(Agent agent, String station){
+		if(station == null || agent == null){
+			return false;
+		} 
+		
+		if(isCbroManager(agent)){
+			//if the agent is a manager, they have permission to update regardless of station
+			return true;
+		} else {
+			//if the agent is not a manager, can only update if the station matches the agent station
+			if(agent.getStation().getStationcode().equalsIgnoreCase(station)){
+				return true;
+			} else {
+				return false;
+			}
+		}
 	}
 	
 	/**
@@ -201,35 +231,32 @@ public class BagDropUtils {
 	 * @param station
 	 * @param date
 	 * @return
+	 * @throws InvalidStationException, Exception 
 	 * @throws InvalidDateRangeException
 	 */
-	public static boolean refreshFlightInfo(Agent agent, String station, Date date) {
+	public static void refreshFlightInfo(Agent agent, String station, Date date) throws InvalidStationException,MissingRequiredFieldsException {
 		if(agent == null || station == null || date == null){
 			throw new MissingRequiredFieldsException();
 		}
+		if(!canUpdateByStation(agent,station)){
+			throw new InvalidStationException();
+		}
 		GregorianCalendar cal = new GregorianCalendar();
 		cal.setTime(date);
-		try{
-			List<BagDrop> bagDropList = SpringUtils.getReservationIntegration().getFlightInfo(station, cal);
-			if(bagDropList != null){
-				for(BagDrop bagDrop:bagDropList){
-					bagDrop.setEntryMethod(TracingConstants.BAGDROP_ENTRY_METHOD_RESERVATION);
-					if(bagDrop.getSchArrivalDate()!=null){
-						bagDrop.setSchArrivalDate(DateUtils.convertToGMTDate(bagDrop.getSchArrivalDate()));
-					}
-					if(bagDrop.getActArrivalDate()!=null){
-						bagDrop.setActArrivalDate(DateUtils.convertToGMTDate(bagDrop.getActArrivalDate()));
-					}
-					BagDropUtils.saveOrUpdateBagDrop(agent, bagDrop);
+		
+		List<BagDrop> bagDropList = SpringUtils.getReservationIntegration().getFlightInfo(station, cal);
+		if(bagDropList != null){
+			for(BagDrop bagDrop:bagDropList){
+				bagDrop.setEntryMethod(TracingConstants.BAGDROP_ENTRY_METHOD_RESERVATION);
+				if(bagDrop.getSchArrivalDate()!=null){
+					bagDrop.setSchArrivalDate(DateUtils.convertToGMTDate(bagDrop.getSchArrivalDate()));
 				}
-			} else {
-				return false;
+				if(bagDrop.getActArrivalDate()!=null){
+					bagDrop.setActArrivalDate(DateUtils.convertToGMTDate(bagDrop.getActArrivalDate()));
+				}
+				BagDropUtils.saveOrUpdateBagDrop(agent, bagDrop);
 			}
-		} catch(Exception e){
-			e.printStackTrace();
-			return false;
-		}
-		return true;
+		} 
 	}
 	
 	/**
@@ -250,7 +277,7 @@ public class BagDropUtils {
 			try {
 				refreshFlightInfo(agent, station.getStationcode(), date);
 			} catch (Exception e) {
-				//Continue
+				e.printStackTrace();
 			}
 		}
 		return true;
@@ -360,6 +387,78 @@ public class BagDropUtils {
 			return UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BAG_DROP_ADMIN,agent);
 		} else {
 			return false;
+		}
+	}
+	
+	/**
+	 * Returns whether the agent is a CBRO manager
+	 * 
+	 * @param agent
+	 * @return
+	 */
+	public static boolean isCbroManager(Agent agent){
+		if(agent != null){
+			return UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CBRO_MGMT,agent);
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Auto fetches the flight information for a given company and station if needed.
+	 * Will only update if the agent has permission to update bagdrop for the given station.
+	 * 
+	 * @param agent
+	 * @param station
+	 * @param company
+	 * @throws InvalidStationException
+	 */
+	public static void autoRefreshFlightInfo(Agent agent, String station, Company company)  throws InvalidStationException {
+		if(needsFlightInfoRefresh(agent,station,company)){
+			refreshFlightInfo(agent, station, new Date());
+		}
+	}
+	
+	/**
+	 * Determines if flight information needs to be fetch for a given station based on the last time flight information was updated
+	 * and the length of staleness that is allowed as specified in company specific variables
+	 * 
+	 * @param agent
+	 * @param station
+	 * @param company
+	 * @return
+	 */
+	protected static boolean needsFlightInfoRefresh(Agent agent, String station, Company company){
+		if(agent == null || company == null || company.getVariable() == null || station == null){
+			return false;
+		}
+		
+		if(company.getVariable().getBagdrop_autorefresh_mins() > 0){
+			int autorefreshMins = company.getVariable().getBagdrop_autorefresh_mins();
+			int minsSinceLastUpdate = minsSinceLastUpdate(station,company.getCompanyCode_ID(),TracingConstants.BAGDROP_ENTRY_METHOD_RESERVATION);
+			if(minsSinceLastUpdate > autorefreshMins){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Returns the number of mins since the most recent update for a given company, station and entryMethod (Reservation,Scanner,Web)
+	 * If no entry is found, return Max int to signal that no entry exists
+	 * 
+	 * @param station
+	 * @param companycode
+	 * @param entryMethod
+	 * @return
+	 */
+	protected static int minsSinceLastUpdate(String station, String companycode, int entryMethod){
+		Date lastUpdated = getBagDropBMO().getLastUpdateDate(station, companycode, entryMethod);
+		if(lastUpdated == null){
+			return Integer.MAX_VALUE;
+		} else {
+			Date now = DateUtils.convertToGMTDate(new Date());
+			return (int) ((now.getTime() - lastUpdated.getTime()) / 60000);
 		}
 	}
 }
