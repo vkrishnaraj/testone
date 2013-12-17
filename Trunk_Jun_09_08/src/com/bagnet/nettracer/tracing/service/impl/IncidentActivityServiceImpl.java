@@ -2,6 +2,7 @@ package com.bagnet.nettracer.tracing.service.impl;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +19,7 @@ import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.communications.Activity;
 import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
+import com.bagnet.nettracer.tracing.db.communications.IncidentActivityRemark;
 import com.bagnet.nettracer.tracing.db.documents.Document;
 import com.bagnet.nettracer.tracing.db.documents.templates.Template;
 import com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask;
@@ -25,6 +27,10 @@ import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskDTO;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskSearchDTO;
 import com.bagnet.nettracer.tracing.dto.OptionDTO;
 import com.bagnet.nettracer.tracing.service.IncidentActivityService;
+import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
+import com.bagnet.nettracer.tracing.utils.DomainUtils;
+import com.bagnet.nettracer.tracing.utils.taskmanager.TaskManagerUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class IncidentActivityServiceImpl implements IncidentActivityService {
@@ -81,8 +87,8 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 
 	@Override
 	public boolean delete(long incidentActivityId) {
-//		if (incidentActivityDao.hasTask(incidentActivityId, STATUS_PENDING, STATUS_DENIED)) return false;		
-		return incidentActivityDao.delete(incidentActivityId);
+		List<IncidentActivityTask> tasks = incidentActivityDao.loadTasksForIncidentActivity(incidentActivityDao.load(incidentActivityId));
+		return incidentActivityDao.deleteTasks(tasks) && incidentActivityDao.delete(incidentActivityId);
 	}
 	
 	@Override
@@ -166,11 +172,28 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 	}
 	
 	@Override
+	public boolean createTask(IncidentActivity incidentActivity, Status withStatus) {
+		return createTask(incidentActivity, withStatus, AdminUtils.getAgentBasedOnUsername("ogadmin", "OW"));
+	}
+	
+	@Override
+	public boolean createTask(IncidentActivity incidentActivity, Status withStatus, Agent forAgent) {
+		if (incidentActivity == null || withStatus == null) return false;
+		IncidentActivityTask iat = DomainUtils.createIncidentActivityTask(incidentActivity, withStatus);
+		iat.setAssigned_agent(forAgent);
+		boolean success = saveTask(iat) != 0;
+		incidentActivity.getTasks().add(iat);
+		return success;
+	}
+	
+	@Override
 	public boolean closeTask(long taskId) {
 		IncidentActivityTask toClose = incidentActivityDao.loadTask(taskId);
 		if (toClose == null) return true;
 		toClose.setActive(false);
-		return incidentActivityDao.updateTask(toClose);
+		toClose.setClosed_timestamp(DateUtils.convertToGMTDate(new Date()));
+		toClose.getIncidentActivity().setApprovalAgent(toClose.getAssigned_agent());
+		return incidentActivityDao.update(toClose.getIncidentActivity()) && incidentActivityDao.updateTask(toClose);
 	}
 	
 	@Override
@@ -183,7 +206,7 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 			iatdto.setIncidentActivityId(iat.getIncidentActivity().getId());
 			iatdto.setIncidentId(iat.getIncidentActivity().getIncident().getIncident_ID());
 			iatdto.setDescription(iat.getIncidentActivity().getDescription());
-			iatdto.setTaskDate(iat.getGeneric_timestamp());
+			iatdto.setTaskDate(iat.getOpened_timestamp());
 			if (iat.getIncidentActivity().getApprovalAgent() != null) {
 				iatdto.setAgent(iat.getIncidentActivity().getApprovalAgent().getUsername());
 			}
@@ -209,9 +232,64 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 	}
 	
 	@Override
+	public IncidentActivityTask loadTaskForIncidentActivity(long incidentActivityId, Status withStatus) {
+		return incidentActivityDao.loadTaskForIncidentActivity(load(incidentActivityId), withStatus);
+	}
+	
+	@Override
 	public IncidentActivityTask loadTaskForIncidentActivity(IncidentActivity incidentActivity, Status withStatus) {
 		if (incidentActivity == null || withStatus == null) return null;
 		return incidentActivityDao.loadTaskForIncidentActivity(incidentActivity, withStatus);
+	}
+	
+	@Override
+	public boolean createIncidentActivityRemark(String remark, IncidentActivity forActivity, Agent madeBy) {
+		boolean success = false;
+		IncidentActivityRemark iar = new IncidentActivityRemark();
+		iar.setRemarkText(remark);
+		iar.setIncidentActivity(forActivity);
+		iar.setAgent(madeBy);
+		iar.setCreateDate(DateUtils.convertToGMTDate(new Date()));
+		try {
+			success = incidentActivityDao.save(iar) != 0;
+		} catch (Exception e) {
+			logger.error("Failed to create remark.", e);
+		}
+		return success;
+	}
+	
+	@Override
+	public IncidentActivityTask getAssignedTask(Agent agent) {
+		if (agent == null) return null;
+		return incidentActivityDao.getAssignedTask(agent);
+	}
+	
+	@Override
+	public IncidentActivityTask getTask(Agent agent) {
+		IncidentActivityTask task = incidentActivityDao.getTask();
+		return startTask(task, agent);
+	}
+	
+	@Override
+	public IncidentActivityTask startTask(long incidentActivityId, Agent agent) {
+		return startTask(loadTaskForIncidentActivity(incidentActivityId, STATUS_PENDING), agent);
+	}
+	
+	private IncidentActivityTask startTask(IncidentActivityTask task, Agent agent) {
+		if (task == null || agent == null) return null;
+		
+		task.setAssigned_agent(agent);
+		if (task.getOpened_timestamp() == null) {
+			task.setOpened_timestamp(DateUtils.convertToGMTDate(new Date()));
+		}
+		
+		task = (IncidentActivityTask) TaskManagerUtil.lockTask(task);
+		if (task != null) {
+			updateTask(task);
+			return task;
+		}
+		
+		return null;
 	}
 	
 	private IncidentActivityTaskDTO createIncidentActivityTaskDTO(IncidentActivityTaskSearchDTO dto) {

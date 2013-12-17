@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Properties;
+import java.util.TimeZone;
 
 import javax.naming.Context;
 import javax.servlet.ServletContext;
@@ -42,15 +43,15 @@ import com.bagnet.nettracer.tracing.dao.OnlineClaimsDao;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.ForwardNotice;
 import com.bagnet.nettracer.tracing.db.GroupComponentPolicy;
+import com.bagnet.nettracer.tracing.db.Label;
 import com.bagnet.nettracer.tracing.db.ProactiveNotification;
 import com.bagnet.nettracer.tracing.db.Station;
-import com.bagnet.nettracer.tracing.db.Label;
-import com.bagnet.nettracer.tracing.db.Status;
-import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.taskmanager.GeneralTask;
+import com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.MorningDutiesTask;
 import com.bagnet.nettracer.tracing.dto.ActivityDTO;
+import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskDTO;
 import com.bagnet.nettracer.tracing.dto.LFSearchDTO;
 import com.bagnet.nettracer.tracing.dto.PcnSearchDTO;
 import com.bagnet.nettracer.tracing.forms.ClaimsToBeProcessedForm;
@@ -64,10 +65,11 @@ import com.bagnet.nettracer.tracing.forms.ViewRequestForm;
 import com.bagnet.nettracer.tracing.forms.ViewTemporaryOnHandsForm;
 import com.bagnet.nettracer.tracing.forms.ViewTemporaryReportsForm;
 import com.bagnet.nettracer.tracing.history.HistoryContainer;
-import com.bagnet.nettracer.tracing.service.label.LabelService;
 import com.bagnet.nettracer.tracing.service.IncidentActivityService;
+import com.bagnet.nettracer.tracing.service.label.LabelService;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
+import com.bagnet.nettracer.tracing.utils.DomainUtils;
 import com.bagnet.nettracer.tracing.utils.ExpenseUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.MatchUtils;
@@ -291,10 +293,20 @@ public class LogonAction extends Action {
 			}
 		}
 		
+		if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL, agent)) {
+			IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
+			IncidentActivityTask iat = incidentActivityService.getAssignedTask(agent);
+			if (iat != null) {
+				IncidentActivityTaskDTO dto = DomainUtils.fromIncidentActivityTask(iat);
+				dto.set_DATEFORMAT(agent.getDateformat().getFormat());
+				dto.set_TIMEFORMAT(agent.getTimeformat().getFormat());
+				dto.set_TIMEZONE(TimeZone.getTimeZone(agent.getDefaulttimezone()));
+				session.setAttribute("iatInProgress", dto);				
+			}
+		}
+		
 		//check if the agent has any outstanding MorningDutiesTask
 		//TODO this is a US Air specific task, check to see of this can be a General Task function
-		
-		
 		ArrayList <GeneralTask> alertList = new ArrayList<GeneralTask>();
 		
 		MorningDutiesTask hasTask = (MorningDutiesTask)MorningDutiesUtil.hasAssignedTask(agent);

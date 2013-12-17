@@ -46,8 +46,10 @@ public class CustomerCommunicationsAction extends CheckedAction {
 	private final String REQUEST_TEMPLATE_LIST = "templateList";
 	private final String REQUEST_PREVIEW_DOCUMENT = "preview_document";
 	private final String REQUEST_VIEW_SAMPLE_PRINTOUT = "view_sample_printout";
+	private final Status STATUS_PENDING = new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING);
 	
 	private Logger logger = Logger.getLogger(CustomerCommunicationsAction.class);
+	
 	
 	private DocumentService documentService = (DocumentService) SpringUtils.getBean(TracingConstants.DOCUMENT_SERVICE_BEAN);
 	private IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
@@ -239,8 +241,10 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		boolean success = incidentActivityId != 0;
 		messages.add(ActionMessages.GLOBAL_MESSAGE, getActionMessage(TracingConstants.COMMAND_CREATE, success, ccf.getDocumentTitle()));
 		if (success && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL, user)) {
-			if (!createTask(incidentActivity)) {
-				logger.error("Failed to create a task for IncidentActivity with id: " + incidentActivityId);
+			if (!incidentActivityService.hasIncidentActivityTask(incidentActivity)) {
+				if (!incidentActivityService.createTask(incidentActivity, STATUS_PENDING)) {
+					logger.error("Failed to create a task for IncidentActivity with id: " + incidentActivityId);
+				}
 			}
 		}
 		return success;
@@ -252,28 +256,19 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		
 		boolean success = incidentActivityService.update(incidentActivity);
 		messages.add(ActionMessages.GLOBAL_MESSAGE, getActionMessage(TracingConstants.COMMAND_UPDATE, success, ccf.getDocumentTitle()));
+
 		if (success && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL, user)) {
 			if (ccf.getTaskId() > 0 && !incidentActivityService.closeTask(ccf.getTaskId())) {
-				logger.error("Failed to delete the rejected task for IncidentActivity with id: " + incidentActivity.getId());
+				logger.error("Failed to close the task for IncidentActivity with id: " + incidentActivity.getId());
 			}
-			
-			if (!createTask(incidentActivity)) {
+
+			if (!incidentActivityService.hasIncidentActivityTask(incidentActivity) && !incidentActivityService.createTask(incidentActivity, STATUS_PENDING)) {
 				logger.error("Failed to create a task for IncidentActivity with id: " + incidentActivity.getId());
 			}
 		}
 		
 		DomainUtils.toForm(incidentActivityService.load(incidentActivity.getId()), ccf, user);
 		return success;
-	}
-	
-	private boolean createTask(IncidentActivity incidentActivity) {
-		if (!incidentActivityService.hasIncidentActivityTask(incidentActivity)) {
-			IncidentActivityTask iat = DomainUtils.createIncidentActivityTask(incidentActivity, new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING));
-			boolean success = incidentActivityService.saveTask(iat) != 0;
-			incidentActivity.getTasks().add(iat);
-			return success;
-		}
-		return true;
 	}
 	
 	private DocumentTemplateResult generateDocument(long templateId, Incident incident, Agent user) {

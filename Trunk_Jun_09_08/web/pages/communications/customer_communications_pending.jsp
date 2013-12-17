@@ -31,6 +31,11 @@
 	function updatePagination() {
 	    return true;
 	}
+
+	function getTask() {
+		document.getElementById("getTaskButton").disabled = true;
+		window.location = "customerCommunicationsTasks.do?gettask=1";
+	}
 	
 </script>
 <html:form action="customerCommunicationsApp.do" method="post" >
@@ -65,10 +70,10 @@
 		       	</logic:notPresent>
 	       		<logic:present name="results" scope="request">
 	       			<div style="text-align:center;padding-top:1em;padding-bottom:1em;">
-	       				<input type="button" value="Start Working!" onclick='this.disabled;document.location.href="";return true;' id="button">
+	       				<input type="button" id="getTaskButton" value="Start Working!" onclick="getTask();" class="button">
 	       			</div>
 	              	<display:table requestURI="/customerCommunicationsApp.do" name="requestScope.results" sort="external" class="form2" cellspacing="0" cellpadding="0" id="<%=TracingConstants.TABLE_ID_CUST_COMM_PENDING_APPROVAL %>" defaultsort="1" >
-	          			<display:column titleKey="colname.cust.comm.id" property="id" href="customerCommunicationsApp.do" paramId="communicationsId" paramProperty="id" sortable="true" sortName="id" />
+	          			<display:column titleKey="colname.cust.comm.id" property="id" href="customerCommunicationsTasks.do?gettask=1" paramId="communicationsId" paramProperty="id" sortable="true" sortName="id" />
 	          			<display:column titleKey="colname.cust.comm.incident.id" property="incidentId" href="searchIncident.do" paramId="incident" paramProperty="incidentId" sortable="true" sortName="incidentId" />
 	          			<display:column titleKey="colname.cust.comm.description" property="description" sortable="false" style="width:35%;" />
 	          			<display:column titleKey="colname.cust.comm.create.by" property="agent" sortable="true" sortName="agent" />

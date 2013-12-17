@@ -58,19 +58,6 @@ public class CustomerCommunicationsApprovalAction extends CheckedAction {
 			request.getSession().removeAttribute("taskMessage");
 		}
 		
-		if (request.getParameter("communicationsId") != null) {
-			String communicationsIdParam = request.getParameter("communicationsId");
-			try {
-				IncidentActivity ia = incidentActivityService.load(Long.valueOf(communicationsIdParam));
-				if (ia != null) {
-					response.sendRedirect("customerCommunications.do?command=" + TracingConstants.COMMAND_EDIT + "&communicationsId=" + ia.getId() + "&approvalTask=true");
-					return null;					
-				}
-			} catch (NumberFormatException nfe) {
-				logger.error("Invalid communications id: " + communicationsIdParam, nfe);
-			}
-		}
-		
 		CustomerCommunicationsTaskForm cctf = (CustomerCommunicationsTaskForm) form;
 		cctf.setActive(true);
 		

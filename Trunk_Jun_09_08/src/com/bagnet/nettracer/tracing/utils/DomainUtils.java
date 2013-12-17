@@ -36,6 +36,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFPerson;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
 import com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityRemarkDTO;
+import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskDTO;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskSearchDTO;
 import com.bagnet.nettracer.tracing.dto.TemplateAdapterDTO;
 import com.bagnet.nettracer.tracing.dto.TemplateSearchDTO;
@@ -129,7 +130,6 @@ public class DomainUtils {
 	}
 	
 	public static IncidentActivityTaskSearchDTO fromForm(CustomerCommunicationsTaskForm cctf) {
-		// TODO: implement this
 		IncidentActivityTaskSearchDTO dto = new IncidentActivityTaskSearchDTO();
 		dto.setActive(cctf.isActive());
 		return dto;
@@ -190,12 +190,21 @@ public class DomainUtils {
 	
 	public static IncidentActivityTask createIncidentActivityTask(IncidentActivity incidentActivity, Status withStatus) {
 		IncidentActivityTask iat = new IncidentActivityTask();
-		iat.setAssigned_agent(AdminUtils.getAgentBasedOnUsername("ogadmin", "OW"));
 		iat.setOpened_timestamp(DateUtils.convertToGMTDate(new Date()));
 		iat.setIncidentActivity(incidentActivity);
 		iat.setStatus(withStatus);
 		iat.setActive(true);
 		return iat;
+	}
+	
+	public static IncidentActivityTaskDTO fromIncidentActivityTask(IncidentActivityTask task) {
+		IncidentActivityTaskDTO dto = new IncidentActivityTaskDTO();
+		dto.setAgent(task.getAssigned_agent().getUsername());
+		dto.setDescription(task.getDescription());
+		dto.setId(task.getTask_id());
+		dto.setIncidentActivityId(task.getIncidentActivity().getId());
+		dto.setIncidentId(task.getIncidentActivity().getIncident().getIncident_ID());
+		return dto;
 	}
 	
 	public static TemplateAdapterDTO getTemplateAdapterDTO(Agent user, Template template) {

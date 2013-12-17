@@ -74,7 +74,7 @@ public class IncidentActivity {
 	
 	private String description;
 	
-	private long custCommId;
+	private int custCommId;
 
 	public long getId() {
 		return id;
@@ -148,11 +148,11 @@ public class IncidentActivity {
 		this.description = description;
 	}
 
-	public long getCustCommId() {
+	public int getCustCommId() {
 		return custCommId;
 	}
 
-	public void setCustCommId(long custCommId) {
+	public void setCustCommId(int custCommId) {
 		this.custCommId = custCommId;
 	}
 

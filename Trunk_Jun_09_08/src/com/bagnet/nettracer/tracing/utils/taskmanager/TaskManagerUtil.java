@@ -6,6 +6,7 @@ import com.bagnet.nettracer.tracing.bmo.LockBMO;
 import com.bagnet.nettracer.tracing.db.Lock;
 import com.bagnet.nettracer.tracing.db.Lock.LockType;
 import com.bagnet.nettracer.tracing.db.taskmanager.GeneralTask;
+import com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.ItemTraceResultsTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.MorningDutiesTask;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
@@ -83,6 +84,8 @@ public abstract class TaskManagerUtil {
 					&& !((ItemTraceResultsTask) task).getFoundItem().getBarcode().isEmpty()) {
 				key = ((ItemTraceResultsTask) task).getFoundItem().getBarcode();
 			}
+		} else if (task instanceof IncidentActivityTask) {
+			key = String.valueOf(((IncidentActivityTask) task).getTask_id());
 		}
 		return key;
 	}
@@ -93,6 +96,8 @@ public abstract class TaskManagerUtil {
 			type = LockType.TM_INCIDENT;
 		} else if (task instanceof ItemTraceResultsTask) {
 			type = LockType.LF_FOUND;
+		} else if (task instanceof IncidentActivityTask) {
+			type = LockType.INCIDENT_ACTIVITY;
 		}
 		return type;
 	}

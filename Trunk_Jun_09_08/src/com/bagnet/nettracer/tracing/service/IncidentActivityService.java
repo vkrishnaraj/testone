@@ -20,7 +20,6 @@ import com.bagnet.nettracer.tracing.dto.OptionDTO;
  *
  */
 public interface IncidentActivityService {
-
 	public IncidentActivity load(long incidentActivityId);
 	public long save(IncidentActivity incidentActivity);
 	public boolean update(IncidentActivity incidentActivity);
@@ -31,7 +30,11 @@ public interface IncidentActivityService {
 	public boolean updateTask(IncidentActivityTask incidentActivityTask);
 	public boolean deleteTask(long incidentActivityTaskId);
 	
+	public boolean createTask(IncidentActivity incidentActivity, Status withStatus);	
+	public boolean createTask(IncidentActivity incidentActivity, Status withStatus, Agent forAgent);	
 	public boolean closeTask(long incidentActivityTaskId);
+	public IncidentActivityTask loadTaskForIncidentActivity(long incidentActivityId, Status withStatus);
+	public IncidentActivityTask loadTaskForIncidentActivity(IncidentActivity incidentActivity, Status withStatus);
 	
 	public List<OptionDTO> getActivityOptions();
 	public Activity getActivity(String code);
@@ -48,6 +51,9 @@ public interface IncidentActivityService {
 	public List<IncidentActivityTaskDTO> listPendingIncidentActivityTasks(IncidentActivityTaskSearchDTO dto);
 	public List<IncidentActivityTaskDTO> listRejectedIncidentActivityTasks(IncidentActivityTaskSearchDTO dto);
 	
-	public IncidentActivityTask loadTaskForIncidentActivity(IncidentActivity incidentActivity, Status withStatus);
+	public boolean createIncidentActivityRemark(String remark, IncidentActivity forActivity, Agent madeBy);
 	
+	public IncidentActivityTask getAssignedTask(Agent agent);
+	public IncidentActivityTask getTask(Agent agent);
+	public IncidentActivityTask startTask(long incidentActivityId, Agent agent);
 }

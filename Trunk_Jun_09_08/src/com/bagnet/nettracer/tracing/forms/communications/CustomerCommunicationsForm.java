@@ -17,7 +17,7 @@ public class CustomerCommunicationsForm extends CommandForm {
 	private long documentId;
 	private String data;
 	private String fileName;
-	private long custCommId;
+	private int custCommId;
 	private boolean preview;
 	private long taskId;
 	private int taskStatus;
@@ -88,11 +88,11 @@ public class CustomerCommunicationsForm extends CommandForm {
 		this.fileName = fileName;
 	}
 
-	public long getCustCommId() {
+	public int getCustCommId() {
 		return custCommId;
 	}
 
-	public void setCustCommId(long custCommId) {
+	public void setCustCommId(int custCommId) {
 		this.custCommId = custCommId;
 	}
 
