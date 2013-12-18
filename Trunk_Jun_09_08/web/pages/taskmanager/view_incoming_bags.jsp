@@ -137,7 +137,7 @@ function sortIncomingBags(sortOrder) {
                 :
               </td>
               <td>
-                <html:text property="bag_tag" size="14" maxlength="13" styleClass="textfield" />
+                <html:text property="bag_tag" size="14" maxlength="12" styleClass="textfield" />
               </td>
               <td>
                 <bean:message key="header.expedite" />

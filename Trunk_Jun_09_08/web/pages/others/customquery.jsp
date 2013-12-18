@@ -514,7 +514,7 @@ function updatePagination() {
                   	<bean:message key="colname.claimnum" />
                   </div>
                   <br>
-                  <html:text property="claimchecknum" size="20" maxlength="13" styleClass="textfield" />
+                  <html:text property="claimchecknum" size="20" maxlength="12" styleClass="textfield" />
                 </td>
                 <td colspan="2">
                   &nbsp;

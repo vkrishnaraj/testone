@@ -144,7 +144,7 @@ function updatePagination() {
                 <td>
                   <bean:message key="colname.claimnum" />
                   <br>
-                  <html:text property="claimchecknum" size="20" maxlength="13" styleClass="textfield" />
+                  <html:text property="claimchecknum" size="20" maxlength="12" styleClass="textfield" />
                 </td>
                 <td nowrap>
                   <bean:message key="colname.flightnum" />

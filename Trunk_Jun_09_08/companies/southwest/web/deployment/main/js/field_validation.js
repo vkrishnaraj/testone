@@ -18,7 +18,7 @@ function checkExpedite(strng)
 
 function checkClaimCheck(strng)
 { 
-    var objRegExp  = /(^UTB\d{1,8}$|^\d{10}$|^[a-zA-Z0-9]{2}\d{6}$)/;
+    var objRegExp  = /(^UTB\d{1,8}$|^\d{10}$|^[a-zA-Z0-9]{2}\d{6}$|^\d{12}$)/;
     return objRegExp.test(strng.toUpperCase());
 }
 

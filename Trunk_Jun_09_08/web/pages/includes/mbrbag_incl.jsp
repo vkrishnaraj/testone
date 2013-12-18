@@ -259,7 +259,7 @@
               <td <% if (report_type == 2 || !collectExpTagNum) { %>colspan="2"<% } %>>
                 <bean:message key="colname.claimnum.req2" />
                 <br>
-                <html:text name="theitem" property="claimchecknum" size="11" maxlength="11" styleClass="textfield" indexed="true" />
+                <html:text name="theitem" property="claimchecknum" size="13" maxlength="12" styleClass="textfield" indexed="true" />
               </td>
               
               <% if (report_type == 0 && collectExpTagNum) { %>

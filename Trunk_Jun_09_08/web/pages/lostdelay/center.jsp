@@ -549,7 +549,7 @@
               <td width="30%" nowrap="nowrap"><bean:message
                 key="colname.claimnum.req" /> :</td>
               <td><html:text name="claimcheck"
-                property="claimchecknum" size="13" maxlength="11"
+                property="claimchecknum" size="13" maxlength="12"
                 styleClass="textfield" indexed="true" /> <%
                   if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SCANNER_DATA, a)) {
                 %> <logic:notEmpty name="claimcheck"
@@ -581,7 +581,7 @@
                       <bean:message key="colname.matched_ohd" />
                       :
                       <html:text name="claimcheck" property="tempOHD_ID"
-                      size="13" maxlength="13" styleClass="textfield"
+                      size="13" maxlength="12" styleClass="textfield"
                       indexed="true" onblur="fillzero(this,13);" />
                     <input type="submit" name="matchclaim<%= i %>"
                       value='<bean:message key="button.do_match"/>'

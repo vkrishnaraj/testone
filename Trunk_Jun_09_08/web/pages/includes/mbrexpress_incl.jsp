@@ -219,7 +219,7 @@
                           :
                         </td>
                         <td>
-                          <html:text name="claimcheck" property="claimchecknum" size="13" maxlength="10" styleClass="textfield" indexed="true" />
+                          <html:text name="claimcheck" property="claimchecknum" size="13" maxlength="12" styleClass="textfield" indexed="true" />
                         </td>
                       </tr>
                       <tr id="claimcheck_<%=i %>_1">
@@ -290,7 +290,7 @@
                             <td colspan="2">
                               <bean:message key="colname.claimnum2" />
                               :
-                              <html:text name="theitem" property="claimchecknum" size="13" maxlength="13" styleClass="textfield" indexed="true" />
+                              <html:text name="theitem" property="claimchecknum" size="13" maxlength="12" styleClass="textfield" indexed="true" />
                             </td>
 <%
                           } else {

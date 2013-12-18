@@ -118,7 +118,7 @@
         		%>
         		<tr id="<%= TracingConstants.JSP_DELETE_BAGTAG %>_<%=i%>">
 	                <td>
-	                  <html:text name="tagNumber" property="bagTagNumber" styleId='<%=btprop %>' size="14" maxlength="13" style="textfield" indexed="true"/>
+	                  <html:text name="tagNumber" property="bagTagNumber" styleId='<%=btprop %>' size="14" maxlength="12" style="textfield" indexed="true"/>
 	                </td>
 	                <td>
 	                  <html:text name="tagNumber" property="expediteNumber" styleId='<%=enprop %>' size="20" maxlength="12" indexed="true" onkeydown="clearSticker(this)"/>
