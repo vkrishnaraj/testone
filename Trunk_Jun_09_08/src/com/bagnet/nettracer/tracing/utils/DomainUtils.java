@@ -17,8 +17,10 @@ import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+//import com.bagnet.nettracer.tracing.dao.OnlineClaimsDao;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.Passenger;
@@ -34,15 +36,25 @@ import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFPerson;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
+//import com.bagnet.nettracer.tracing.db.onlineclaims.OCFile;
+//import com.bagnet.nettracer.tracing.db.onlineclaims.OCMessage;
+//import com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim;
 import com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask;
+//import com.bagnet.nettracer.tracing.dto.FileDTO;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityRemarkDTO;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskDTO;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskSearchDTO;
+//import com.bagnet.nettracer.tracing.dto.MessageDTO;
 import com.bagnet.nettracer.tracing.dto.TemplateAdapterDTO;
 import com.bagnet.nettracer.tracing.dto.TemplateSearchDTO;
 import com.bagnet.nettracer.tracing.enums.TemplateType;
+//import com.bagnet.nettracer.tracing.forms.communications.CorrespondenceForm;
 import com.bagnet.nettracer.tracing.forms.communications.CustomerCommunicationsForm;
 import com.bagnet.nettracer.tracing.forms.communications.CustomerCommunicationsTaskForm;
+import com.bagnet.nettracer.tracing.forms.disbursements.DisbursementRejectionForm;
+import com.bagnet.nettracer.tracing.forms.disbursements.FraudReviewForm;
+import com.bagnet.nettracer.tracing.forms.disbursements.PaymentApprovalForm;
+import com.bagnet.nettracer.tracing.forms.disbursements.SupervisorReviewForm;
 import com.bagnet.nettracer.tracing.forms.templates.TemplateEditForm;
 import com.bagnet.nettracer.tracing.forms.templates.TemplateSearchForm;
 /**
@@ -98,7 +110,34 @@ public class DomainUtils {
 			ccf.setRemarks(fromRemarks(ia.getRemarks(), user));
 		}
 		
+		if (ia.getExpensePayout() != null) {
+			ccf.setExpenseId(ia.getExpensePayout().getExpensepayout_ID());
+		}
 	}
+	
+//	Unrelated to NT-740
+//	public static void toForm(IncidentActivity ia, CorrespondenceForm cf, Agent user) {
+//		cf.setCommand(TracingConstants.COMMAND_UPDATE);
+//		cf.setId(ia.getId());
+//		OnlineClaim c=null;
+//		if (ia.getIncident() != null) {
+//			cf.setIncidentId(ia.getIncident().getIncident_ID());
+//			OnlineClaimsDao dao = new OnlineClaimsDao();
+//			c = dao.getOnlineClaim(ia.getIncident().getIncident_ID());
+//		}
+//		
+//		if(c!=null){
+//			cf.setClaimId(c.getClaimId());
+//			if (c.getMessages() != null && !c.getMessages().isEmpty()) {
+//				cf.setMessages(fromMessages(c.getMessages(), user));
+//			}
+//
+//			if (c.getFile() != null && !c.getFile().isEmpty()) {
+//				cf.setFiles(fromFiles(c.getFile(), user));
+//			}
+//		}
+//		
+//	}
 	
 	public static Template fromForm(TemplateEditForm form) {
 		Template template = new Template();
@@ -134,6 +173,30 @@ public class DomainUtils {
 		dto.setActive(cctf.isActive());
 		return dto;
 	}
+
+	public static IncidentActivityTaskSearchDTO fromForm(DisbursementRejectionForm dtf) {
+		IncidentActivityTaskSearchDTO dto = new IncidentActivityTaskSearchDTO();
+		dto.setActive(dtf.isActive());
+		return dto;
+	}
+
+	public static IncidentActivityTaskSearchDTO fromForm(PaymentApprovalForm paf) {
+		IncidentActivityTaskSearchDTO dto = new IncidentActivityTaskSearchDTO();
+		dto.setActive(paf.isActive());
+		return dto;
+	}
+
+	public static IncidentActivityTaskSearchDTO fromForm(SupervisorReviewForm srf) {
+		IncidentActivityTaskSearchDTO dto = new IncidentActivityTaskSearchDTO();
+		dto.setActive(srf.isActive());
+		return dto;
+	}
+
+	public static IncidentActivityTaskSearchDTO fromForm(FraudReviewForm frf) {
+		IncidentActivityTaskSearchDTO dto = new IncidentActivityTaskSearchDTO();
+		dto.setActive(frf.isActive());
+		return dto;
+	}
 	
 	public static IncidentActivity fromForm(CustomerCommunicationsForm ccf, Agent user) {
 		IncidentActivity ia = new IncidentActivity();
@@ -143,6 +206,11 @@ public class DomainUtils {
 		
 		Template template = new Template();
 		template.setId(ccf.getTemplateId());
+		ExpensePayout ep=null;
+		if(ccf.getExpenseId()>0){
+			ep=new ExpensePayout();
+			ep.setExpensepayout_ID(ccf.getExpenseId());
+		}
 		
 		Document document = new Document();
 		document.setId(ccf.getDocumentId());
@@ -155,7 +223,12 @@ public class DomainUtils {
 		ia.setCustCommId(ccf.getCustCommId());
 		ia.setIncident(incident);
 		ia.setDocument(document);
-		ia.setActivity(new Activity(TracingConstants.ACTIVITY_CUSTOMER_COMMUNICATION));	
+		if(ep!=null){
+			ia.setExpensePayout(ep);
+			ia.setActivity(new Activity(TracingConstants.CREATE_SETTLEMENT_ACTIVITY));
+		} else {
+			ia.setActivity(new Activity(TracingConstants.ACTIVITY_CUSTOMER_COMMUNICATION));
+		}
 		
 		ResourceBundle bundle = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(user.getCurrentlocale()));
 		ia.setDescription(bundle.getString("customer.communication.outgoing") + ": " + ia.getDocument().getTitle());
@@ -253,6 +326,40 @@ public class DomainUtils {
 		}
 		return dtos;
 	}
+	
+//	Unrelated to NT-740
+//	private static List<MessageDTO> fromMessages(Set<OCMessage> messages, Agent user) {
+//		List<MessageDTO> dtos = new ArrayList<MessageDTO>();
+//		TimeZone timeZone = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
+//		for (OCMessage message: messages) {
+//			MessageDTO dto = new MessageDTO();
+//			dto.set_DATEFORMAT(user.getDateformat().getFormat());
+//			dto.set_TIMEFORMAT(user.getTimeformat().getFormat());
+//			dto.set_TIMEZONE(timeZone);
+//			dto.setUsername(message.getUsername());
+//			dto.setDispCreateDate(DateUtils.formatDate(message.getDateCreated(), dto.get_DATEFORMAT(), null, timeZone));
+//			dto.setIncidentId(message.getClaim().getIncident().getIncident_ID());
+//			dto.setMessageText(message.getMessage());
+//			dtos.add(dto);
+//		}
+//		return dtos;
+//	}
+//
+//	private static List<FileDTO> fromFiles(Set<OCFile> files, Agent user) {
+//		List<FileDTO> dtos = new ArrayList<FileDTO>();
+//		TimeZone timeZone = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
+//		for (OCFile file: files) {
+//			FileDTO dto = new FileDTO();
+//			dto.set_DATEFORMAT(user.getDateformat().getFormat());
+//			dto.set_TIMEFORMAT(user.getTimeformat().getFormat());
+//			dto.set_TIMEZONE(timeZone);
+//			dto.setFilename(file.getFilename());
+//			dto.setId(file.getId());
+//			dto.setPath(file.getPath());
+//			dtos.add(dto);
+//		}
+//		return dtos;
+//	}
 	
 	private static LFFound getDummyFoundItem() {
 		// dummy found item

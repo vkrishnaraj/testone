@@ -826,6 +826,13 @@ public class BagService {
 				ep.setIncident(iDTO);
 				ep.setExpensepayout_ID(0);
 			}
+			
+			if(iDTO.getActivities()!=null){
+				for(IncidentActivity ia: iDTO.getActivities()){
+					ia.setId(0); 
+					ia.setIncident(iDTO);
+				}
+			}
 
 			// everytime when user update mbr, reset the ohd lasttraced date so
 			// tracer
@@ -1353,6 +1360,12 @@ public class BagService {
 					ep.setExpensepayout_ID(0);
 				}
 
+				if(iDTO.getActivities()!=null){
+					for(IncidentActivity ia: iDTO.getActivities()){
+						ia.setId(0); 
+						ia.setIncident(iDTO);
+					}
+				}
 				// everytime when user update mbr, reset the ohd lasttraced date so
 				// tracer
 				// will pick it up.
@@ -1573,7 +1586,12 @@ public class BagService {
 			if (activity.getDocument() != null) {
 				dto.setFileName(activity.getDocument().getFileName());
 			}
-			dto.setCustomerCommunication(activity.getActivity().getCode().equals(TracingConstants.ACTIVITY_CUSTOMER_COMMUNICATION));
+			dto.setCustomerCommunication(activity.getActivity().getCode().equals(TracingConstants.ACTIVITY_CUSTOMER_COMMUNICATION) 
+					|| activity.getActivity().getCode().equals(TracingConstants.CREATE_SETTLEMENT_ACTIVITY));
+			
+			//mark if activity is portal correspondence - Not related to NT-740
+//			dto.setCorrespondence(activity.getActivity().getCode().equals(TracingConstants.INBOUND_CORRESPONDANCE)
+//					|| activity.getActivity().getCode().equals(TracingConstants.OUTBOUND_CORRESPONDANCE));
 			activities.add(dto);
 		}
 		theform.setActivityDtos(activities);
@@ -1729,7 +1747,10 @@ public class BagService {
 				if (activity.getDocument() != null) {
 					dto.setFileName(activity.getDocument().getFileName());
 				}
-				dto.setCustomerCommunication(activity.getActivity().getCode().equals(TracingConstants.ACTIVITY_CUSTOMER_COMMUNICATION));
+				dto.setCustomerCommunication(activity.getActivity().getCode().equals(TracingConstants.ACTIVITY_CUSTOMER_COMMUNICATION) || activity.getActivity().getCode().equals(TracingConstants.CREATE_SETTLEMENT_ACTIVITY));
+//				Not related to NT-740
+//				dto.setCorrespondence(activity.getActivity().getCode().equals(TracingConstants.INBOUND_CORRESPONDANCE)
+//						|| activity.getActivity().getCode().equals(TracingConstants.OUTBOUND_CORRESPONDANCE));
 				activities.add(dto);
 			}
 			theform.setActivityDtos(activities);

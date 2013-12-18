@@ -37,9 +37,17 @@ public interface IncidentActivityDAO {
 	
 	public int getIncidentActivityTaskCount(IncidentActivityTaskSearchDTO dto);
 	public List<IncidentActivityTask> listIncidentActivityTasks(IncidentActivityTaskSearchDTO dto);
-	
+
 	public IncidentActivityTask loadTaskForIncidentActivity(IncidentActivity incidentActivity, Status withStatus);
+
+	public List<IncidentActivity> listIncidentActivities(List<Long> idlist);
+	public List<IncidentActivityTask> listIncidentActivityTasks(List<Long> idlist);
+	
+	public boolean saveIncidentActivities(List<IncidentActivity> ialist);
+	public boolean saveIncidentActivityTasks(List<IncidentActivityTask> iatlist);
+	public IncidentActivity loadByActivityCode(String activityCode, String Incident_ID);
+	
 	public List<IncidentActivityTask> loadTasksForIncidentActivity(IncidentActivity incidentActivity);
-	public IncidentActivityTask getAssignedTask(Agent agent);
-	public IncidentActivityTask getTask();
+	public IncidentActivityTask getAssignedTask(Agent agent, Status s);
+	public IncidentActivityTask getTask(Status status);
 }

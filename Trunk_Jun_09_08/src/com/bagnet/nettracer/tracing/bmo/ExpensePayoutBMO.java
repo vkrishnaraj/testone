@@ -89,6 +89,7 @@ public class ExpensePayoutBMO {
 			int rows = form.getRowsPerPage();
 			crit.setFirstResult(startRow);
 			crit.setMaxResults(rows);
+			@SuppressWarnings("unchecked")
 			List<ExpensePayout> foo = crit.list();
 			return foo;
 		} catch (Exception e) {
@@ -284,6 +285,47 @@ public class ExpensePayoutBMO {
 			if (sess != null) sess.close();
 		}
 		
+	}
+
+	public static boolean updateExpenses(List<ExpensePayout> eplist, Agent user) {
+		Session sess = HibernateWrapper.getSession().openSession();
+		Transaction tx = sess.beginTransaction();
+		try {
+			for(ExpensePayout ep:eplist){
+				sess.update(ep);
+				sess.flush();
+				sess.clear();
+			}
+			tx.commit();
+			Transaction tx2 = sess.beginTransaction();
+			try {
+				for(ExpensePayout ep:eplist){
+					IncidentBMO.auditClaim(ep.getIncident(), TracerUtils.getText(
+						"updating.expense.audit", user), user, sess);
+				}
+				tx2.commit();
+			} catch (Exception e) {
+				logger.error("Error updating expenses ", e);
+				tx2.rollback();
+			}
+			return true;
+		} catch (Exception e) {
+
+			logger.error("unable to update expenses ", e);
+			if (tx != null) {
+
+				try {
+					tx.rollback();
+				} catch (HibernateException e1) {
+					// pass
+					logger.debug("unable to rollback expense update transaction");
+				}
+			}
+			return false;
+		} finally {
+			if (sess != null)
+				sess.close();
+		}
 	}
 
 }

@@ -103,6 +103,7 @@ import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.salvage.Salvage;
 import com.bagnet.nettracer.tracing.dto.DisputeResolutionReportDTO;
 import com.bagnet.nettracer.tracing.dto.FraudValuationReportDTO;
+import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskDTO;
 import com.bagnet.nettracer.tracing.dto.IncomingIncDTO;
 import com.bagnet.nettracer.tracing.dto.ScannerDTO;
 import com.bagnet.nettracer.tracing.dto.StatReportDTO;
@@ -6456,6 +6457,44 @@ public class ReportBMO {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	/**
+	 * @author Sean Fine
+	 * Public Method that uses the Search Incident Form to get results and
+	 * create a list of IncomingIncDTOs to create a Dynamic Jasper Report.
+	 * @param iatdtolist - List of DTO results
+	 * @param outputtype - the selected output type for the report
+	 * @param language - User's language
+	 * @param reportPath - Path to where the temp report is stored and retrieved
+	 * @param user - User to generate the Report
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public String createPaymentApprovalReport(List<IncidentActivityTaskDTO> iatdtolist,  int outputtype, 
+			String language,String reportPath,Agent user){
+
+		try {
+			Map parameters = new HashMap();
+			this.user = user;
+			ResourceBundle myResources = ResourceBundle
+					.getBundle(
+							"com.bagnet.nettracer.tracing.resources.ApplicationResources",
+							new Locale(language));
+
+			String title=myResources.getString("header.report.payment.approval");
+			parameters.put("title", title);
+			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);
+			
+			parameters.put("reportLocale", new Locale(user.getCurrentlocale()));
+			
+			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(iatdtolist);
+			return PaymentApprovalReportBMO.getReportFileDj(ds, parameters, ReportingConstants.RPT_PAYMENT_APPROVAL_NAME,
+					reportPath, outputtype, req, this);
+		} catch(Exception e){
+			logger.error("unable to payment approval report: " + e);
+			e.printStackTrace();
+			return null;
+		} 
 	}
 
 	/**

@@ -8,6 +8,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="java.util.ResourceBundle" %>
 <%@ page import="java.util.Locale" %>
+<%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 
 <style>
 legend {
@@ -21,7 +22,6 @@ legend {
 <%
 	Agent a = (Agent)session.getAttribute("user");
 	ResourceBundle bundle = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
-
 	String cssFormClass = "";
 
 	if (request.getAttribute("lostdelay") != null) {
@@ -31,6 +31,10 @@ legend {
 	} else {
 		cssFormClass = "form2_dam";   		
 	}
+	
+	boolean fraudReview=UserPermissions.hasPermission(TracingConstants.FRAUD_REVIEW, a);
+	boolean supervisorReview=UserPermissions.hasPermission(TracingConstants.SUPERVISOR_REVIEW, a);
+	boolean canApproveDeny=fraudReview || supervisorReview;
   
 %>
 <script>
@@ -66,16 +70,16 @@ legend {
 		window.open("customerCommunications.do?preview_document="+fileName, '', 'width=600,height=800,resizable=yes');
 	}
 
-	function approveCommunication() {
-		submitTask('<%=String.valueOf(TracingConstants.STATUS_CUSTOMER_COMM_APPROVED) %>')
+	function approveCommunication(approveStatus) {
+		submitTask(approveStatus);
 	}
 
-	function rejectCommunication() {
+	function rejectCommunication(rejectStatus) {
 		if (!verifyRemark()) {
 			alert('<%=bundle.getString("message.cust.comm.task.enter.remark") %>');
 			document.getElementById("taskRemark").focus();
 		} else {
-			submitTask('<%=String.valueOf(TracingConstants.STATUS_CUSTOMER_COMM_DENIED) %>');
+			submitTask(rejectStatus);
 		}
 	}
 
@@ -97,6 +101,7 @@ legend {
 <html:hidden property="id" styleId="id" />
 <html:hidden property="incidentId" styleId="incidentId" />
 <html:hidden property="templateId" styleId="templateId" />
+<html:hidden property="expenseId" styleId="expenseId" />
 <html:hidden property="fileName" styleId="fileName" />
 <html:hidden property="taskId" styleId="taskId" />
 <html:hidden property="taskStatus" styleId="taskStatus" />
@@ -198,6 +203,18 @@ legend {
 							</html:select>
 						</td>
 					</tr>
+					<logic:notEmpty name="customerCommunicationsForm" property="expenseId">
+						<logic:notEqual name="customerCommunicationsForm" property="expenseId" value="0">
+							<tr>
+								<td  class="header" style="width:50%"><bean:message key="document.for.expense"/>:</td>
+								<td>
+									<a href="EditExpense.do?expense_id=<bean:write name="customerCommunicationsForm" property="expenseId"/>">
+										<bean:write name="customerCommunicationsForm" property="expenseId"/>
+									</a>
+								</td>
+							</tr>
+						</logic:notEqual>
+					</logic:notEmpty>
 					<tr>
 						<td colspan="2" >
 							<textarea id="data" name="data"><bean:write name="customerCommunicationsForm" property="data" /></textarea>
@@ -247,7 +264,7 @@ legend {
 					</table>
 				</logic:notEmpty>
 				<logic:notEqual name="customerCommunicationsForm" property="taskId" value="0" >
-					<logic:equal name="customerCommunicationsForm" property="taskStatus" value="<%=String.valueOf(TracingConstants.STATUS_CUSTOMER_COMM_PENDING) %>" >
+						<logic:equal name="customerCommunicationsForm" property="pendingReview" value="true">
 						<br>
 						<fieldset style="border: 1px solid #000000;text-align:center;">
 							<legend><bean:message key="colname.cust.comm.approval" /></legend>
@@ -264,9 +281,21 @@ legend {
 								</tr>
 								<tr>
 									<td colspan=2 style="text-align:center;" >
-										<input type="button" class="button" value="<bean:message key="cust.comm.approve" />" onclick="approveCommunication();" />
-										&nbsp;
-										<input type="button" class="button" value="<bean:message key="cust.comm.reject" />" onclick="rejectCommunication();" />
+										<logic:equal name="customerCommunicationsForm" property="taskStatus" value="<%=String.valueOf(TracingConstants.STATUS_CUSTOMER_COMM_PENDING) %>"> 
+											<input type="button" class="button" value="<bean:message key="cust.comm.approve" />" onclick="approveCommunication('<%=String.valueOf(TracingConstants.STATUS_CUSTOMER_COMM_APPROVED) %>');" />
+											&nbsp;
+											<input type="button" class="button" value="<bean:message key="cust.comm.reject" />" onclick="rejectCommunication('<%=String.valueOf(TracingConstants.STATUS_CUSTOMER_COMM_DENIED) %>');" />
+										</logic:equal>
+										<logic:equal name="customerCommunicationsForm" property="taskStatus" value="<%=String.valueOf(TracingConstants.FINANCE_STATUS_FRAUD_REVIEW) %>"> 
+											<input type="button" class="button" value="<bean:message key="cust.comm.approve" />" onclick="approveCommunication('<%=String.valueOf(TracingConstants.FINANCE_STATUS_FRAUD_APPROVED) %>');" />
+											&nbsp;
+											<input type="button" class="button" value="<bean:message key="cust.comm.reject" />" onclick="rejectCommunication('<%=String.valueOf(TracingConstants.FINANCE_STATUS_FRAUD_REJECTED) %>');" />
+										</logic:equal>
+										<logic:equal name="customerCommunicationsForm" property="taskStatus" value="<%=String.valueOf(TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW) %>"> 
+											<input type="button" class="button" value="<bean:message key="cust.comm.approve" />" onclick="approveCommunication('<%=String.valueOf(TracingConstants.FINANCE_STATUS_SUPERVISOR_APPROVED) %>');" />
+											&nbsp;
+											<input type="button" class="button" value="<bean:message key="cust.comm.reject" />" onclick="rejectCommunication('<%=String.valueOf(TracingConstants.FINANCE_STATUS_SUPERVISOR_REJECTED) %>');" />
+										</logic:equal>
 									</td>
 								</tr>
 							</table>
@@ -274,7 +303,7 @@ legend {
 							<div style="text-align:center;" >
 							</div> 
 						</fieldset>
-					<br>
+					<br/>
 					</logic:equal>
 				</logic:notEqual>
 			</div>

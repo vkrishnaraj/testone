@@ -9,7 +9,8 @@ public enum TemplateType {
 	CLAIM("Claim", "Claims"),
 	FOUND_ITEM("FoundItem", "Found Items"),
 	STATIC("Static", "All"),
-	INVALID("Invalid", "None");
+	INVALID("Invalid", "None"),
+	CLAIM_SETTLEMENT("ClaimSettlement", "Claim Settlements");
 	
 	private String defaultName;
 	private String displayName;
@@ -50,6 +51,7 @@ public enum TemplateType {
 		types.add(INCIDENT);
 		types.add(CLAIM);
 		types.add(FOUND_ITEM);
+		types.add(CLAIM_SETTLEMENT);
 		return types;
 	}
 	

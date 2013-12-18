@@ -140,6 +140,28 @@
 				<a href="customerCommunicationsTasks.do?gettask=1&communicationsId=<%=String.valueOf(dto.getIncidentActivityId()) %>" ><bean:message key="message.cust.comm.task.click.here" /></a>&nbsp;<bean:message key="message.cust.comm.task.to.continue" />
 			</h2>
 		<% } %>
+		<% 
+			if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_FRAUD_REVIEW, a) && session.getAttribute("fraudIatInProgress") != null) { 
+				IncidentActivityTaskDTO dto = (IncidentActivityTaskDTO) session.getAttribute("fraudIatInProgress");
+				session.removeAttribute("fraudIatInProgress");
+		%>
+			<br>
+			<h2>
+				<bean:message key="message.cust.comm.fraud.review.task.in.process" />
+				<a href="customerCommunicationsTasks.do?gettask=1&communicationsId=<%=String.valueOf(dto.getIncidentActivityId()) %>&fraudReview=1" ><bean:message key="message.cust.comm.task.click.here" /></a>&nbsp;<bean:message key="message.cust.comm.task.to.continue" />
+			</h2>
+		<% } %>
+		<% 
+			if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SUPERVISOR_REVIEW, a) && session.getAttribute("svIatInProgress") != null) { 
+				IncidentActivityTaskDTO dto = (IncidentActivityTaskDTO) session.getAttribute("svIatInProgress");
+				session.removeAttribute("svIatInProgress");
+		%>
+			<br>
+			<h2>
+				<bean:message key="message.cust.comm.supervisor.review.task.in.process" />
+				<a href="customerCommunicationsTasks.do?gettask=1&communicationsId=<%=String.valueOf(dto.getIncidentActivityId()) %>&supervisorReview=1" ><bean:message key="message.cust.comm.task.click.here" /></a>&nbsp;<bean:message key="message.cust.comm.task.to.continue" />
+			</h2>
+		<% } %>
 		</center>
 
 		<%

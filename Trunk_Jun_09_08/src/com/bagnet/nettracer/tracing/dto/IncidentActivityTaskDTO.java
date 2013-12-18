@@ -13,10 +13,39 @@ public class IncidentActivityTaskDTO {
 	
 	private long id;
 	private long incidentActivityId;
+	private long taskid;
 	private String incidentId;
+	private int expenseId;
 	private String description;
 	private String agent;
+	private String status;
 	private Date taskDate;
+	private String lastPrinted;
+	
+
+	/**
+	 * Passenger Information
+	 */
+	private String name;
+	private String address;
+	private String aptnum;
+	private String city;
+	private String state;
+	private String zip;
+	
+	private String airline;
+	private String pnr;
+	private String reason;
+	private String specialist;
+	
+	/**
+	 * Expense Information
+	 */
+	private String expensedraft;
+	private String expensedraftdate;
+	private String expensemaildate;
+	private double expensecheckamt;
+	private double expensevoucheramt;
 	
 	public String get_DATEFORMAT() {
 		return _DATEFORMAT;
@@ -92,6 +121,158 @@ public class IncidentActivityTaskDTO {
 	
 	public String getDispTaskDate() {
 		return DateUtils.formatDate(getTaskDate(), get_DATEFORMAT() + " " + get_TIMEFORMAT(), null, get_TIMEZONE());
+	}
+
+	public int getExpenseId() {
+		return expenseId;
+	}
+
+	public void setExpenseId(int expenseId) {
+		this.expenseId = expenseId;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getExpensedraft() {
+		return expensedraft;
+	}
+
+	public void setExpensedraft(String expensedraft) {
+		this.expensedraft = expensedraft;
+	}
+
+	public String getExpensedraftdate() {
+		return expensedraftdate;
+	}
+
+	public void setExpensedraftdate(String expensedraftdate) {
+		this.expensedraftdate = expensedraftdate;
+	}
+
+	public String getExpensemaildate() {
+		return expensemaildate;
+	}
+
+	public void setExpensemaildate(String expensemaildate) {
+		this.expensemaildate = expensemaildate;
+	}
+
+	public double getExpensecheckamt() {
+		return expensecheckamt;
+	}
+
+	public void setExpensecheckamt(double expensecheckamt) {
+		this.expensecheckamt = expensecheckamt;
+	}
+
+	public double getExpensevoucheramt() {
+		return expensevoucheramt;
+	}
+
+	public void setExpensevoucheramt(double expensevoucheramt) {
+		this.expensevoucheramt = expensevoucheramt;
+	}
+
+	public long getTaskid() {
+		return taskid;
+	}
+
+	public void setTaskid(long taskid) {
+		this.taskid = taskid;
+	}
+
+	public String getLastPrinted() {
+		return lastPrinted;
+	}
+
+	public void setLastPrinted(String lastPrinted) {
+		this.lastPrinted = lastPrinted;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getAptnum() {
+		return aptnum;
+	}
+
+	public void setAptnum(String aptnum) {
+		this.aptnum = aptnum;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getZip() {
+		return zip;
+	}
+
+	public void setZip(String zip) {
+		this.zip = zip;
+	}
+
+	public String getAirline() {
+		return airline;
+	}
+
+	public void setAirline(String airline) {
+		this.airline = airline;
+	}
+
+	public String getPnr() {
+		return pnr;
+	}
+
+	public void setPnr(String pnr) {
+		this.pnr = pnr;
+	}
+
+	public String getSpecialist() {
+		return specialist;
+	}
+
+	public void setSpecialist(String specialist) {
+		this.specialist = specialist;
+	}
+
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
 	}
 
 }

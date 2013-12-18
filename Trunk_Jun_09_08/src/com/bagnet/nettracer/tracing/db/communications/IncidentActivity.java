@@ -21,6 +21,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.documents.Document;
@@ -38,6 +39,14 @@ public class IncidentActivity {
 	@JoinColumn(name = "incident", nullable = false)
 	@Fetch(FetchMode.SELECT)
 	private Incident incident;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "expensepayout_id")
+	@Fetch(FetchMode.SELECT)
+	private ExpensePayout expensePayout;
+
+	@Temporal(value = TemporalType.TIMESTAMP)
+	private Date lastPrinted;
 	
 	@Temporal(value = TemporalType.TIMESTAMP)
 	private Date createDate;
@@ -90,6 +99,14 @@ public class IncidentActivity {
 
 	public void setIncident(Incident incident) {
 		this.incident = incident;
+	}
+	
+	public ExpensePayout getExpensePayout() {
+		return expensePayout;
+	}
+
+	public void setExpensePayout(ExpensePayout expensePayout) {
+		this.expensePayout = expensePayout;
 	}
 
 	public Date getCreateDate() {
@@ -178,6 +195,14 @@ public class IncidentActivity {
 	public Status getLastStatus() {
 		if (tasks == null || tasks.isEmpty()) return null;
 		return tasks.get(tasks.size() - 1).getStatus();
+	}
+	
+	public Date getLastPrinted() {
+		return lastPrinted;
+	}
+
+	public void setLastPrinted(Date lastPrinted) {
+		this.lastPrinted = lastPrinted;
 	}
 	
 }

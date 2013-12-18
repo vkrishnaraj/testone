@@ -46,6 +46,7 @@ import com.bagnet.nettracer.tracing.db.GroupComponentPolicy;
 import com.bagnet.nettracer.tracing.db.Label;
 import com.bagnet.nettracer.tracing.db.ProactiveNotification;
 import com.bagnet.nettracer.tracing.db.Station;
+import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.taskmanager.GeneralTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask;
@@ -295,13 +296,37 @@ public class LogonAction extends Action {
 		
 		if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL, agent)) {
 			IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
-			IncidentActivityTask iat = incidentActivityService.getAssignedTask(agent);
+			IncidentActivityTask iat = incidentActivityService.getAssignedTask(agent,new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING));
 			if (iat != null) {
 				IncidentActivityTaskDTO dto = DomainUtils.fromIncidentActivityTask(iat);
 				dto.set_DATEFORMAT(agent.getDateformat().getFormat());
 				dto.set_TIMEFORMAT(agent.getTimeformat().getFormat());
 				dto.set_TIMEZONE(TimeZone.getTimeZone(agent.getDefaulttimezone()));
 				session.setAttribute("iatInProgress", dto);				
+			}
+		}
+		
+		if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_FRAUD_REVIEW, agent)) {
+			IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
+			IncidentActivityTask iat = incidentActivityService.getAssignedTask(agent,new Status(TracingConstants.FINANCE_STATUS_FRAUD_REVIEW));
+			if (iat != null) {
+				IncidentActivityTaskDTO dto = DomainUtils.fromIncidentActivityTask(iat);
+				dto.set_DATEFORMAT(agent.getDateformat().getFormat());
+				dto.set_TIMEFORMAT(agent.getTimeformat().getFormat());
+				dto.set_TIMEZONE(TimeZone.getTimeZone(agent.getDefaulttimezone()));
+				session.setAttribute("fraudIatInProgress", dto);				
+			}
+		}
+
+		if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SUPERVISOR_REVIEW, agent)) {
+			IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
+			IncidentActivityTask iat = incidentActivityService.getAssignedTask(agent,new Status(TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW));
+			if (iat != null) {
+				IncidentActivityTaskDTO dto = DomainUtils.fromIncidentActivityTask(iat);
+				dto.set_DATEFORMAT(agent.getDateformat().getFormat());
+				dto.set_TIMEFORMAT(agent.getTimeformat().getFormat());
+				dto.set_TIMEZONE(TimeZone.getTimeZone(agent.getDefaulttimezone()));
+				session.setAttribute("svIatInProgress", dto);				
 			}
 		}
 		
@@ -549,6 +574,18 @@ public class LogonAction extends Action {
 																					if (x != -1) {
 																						entries = x;
 																					} 																
+																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_FRAUD_REVIEW)){																					
+																					IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
+																					entries = incidentActivityService.getIncidentActivityFraudReviewCount();
+																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_SUPERVISOR_REVIEW)){																			
+																					IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
+																					entries = incidentActivityService.getIncidentActivitySupervisorReviewCount();
+																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_DISBURSE_REJECT_VIEW)){																			
+																					IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
+																					entries = incidentActivityService.getDisbursementRejectTaskCount(agent);
+																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_PAYMENT_APPROVAL)) {																	
+																					IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
+																					entries = incidentActivityService.getIncidentActivityAwaitingDisbursementCount();
 																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_CLERICAL_CLAIMS_FEATURES)) {
 																					//itemized 3 for damaged
 																					OnlineClaimsDao d = new OnlineClaimsDao();

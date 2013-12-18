@@ -27,6 +27,7 @@ import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.forms.ExpensePayoutForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.SearchExpenseForm;
+import com.bagnet.nettracer.tracing.utils.ExpenseUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
@@ -153,6 +154,8 @@ public abstract class BaseExpenseAction extends CheckedAction {
 			request.setAttribute("incidentForm", incform);
 		}
 
+		epform.setHasIncidentActivity(ExpenseUtils.hasActivity(ep));
+				
 	}
 
 	protected ExpensePayout createNewPayout(ExpensePayoutForm expenseForm, Agent user) throws Exception {
@@ -222,6 +225,7 @@ public abstract class BaseExpenseAction extends CheckedAction {
 		ep.setCurrency(Currency.getInstance(epf.getCurrency_ID()));
 		ep.setDraft(epf.getDraft());
 		ep.setDraftpaiddate(epf.getDraftpaiddate());
+		ep.setMaildate(epf.getMaildate());
 		ep.setDraftreqdate(epf.getDraftreqdate());
 		ep.setIncidentalAmountAuth(epf.getIncidentalAmountAuth());
 		ep.setIncidentalAmountClaimed(epf.getIncidentalAmountClaimed());

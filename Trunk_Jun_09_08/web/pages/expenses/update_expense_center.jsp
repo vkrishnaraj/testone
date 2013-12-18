@@ -40,6 +40,7 @@
 	String createdate = new SimpleDateFormat("MM/dd/yyyy").format(epf.getCreatedate());
 	boolean showcancel = (today.equals(createdate) && epf.getCancelcount() == 0 ) ? true : false;
 	boolean swaBsoPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, a) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN,a);
+	boolean swaPayApproveCreatePerm = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAYMENT_APPROVAL_CREATE, a) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAYMENT_APPROVAL_ADMIN,a);
 	boolean swaIsInBSO=(epf!=null && a!=null && a.getStation()!=null && epf.getExpenselocation_ID()==a.getStation().getStation_ID());
 	
 	org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources) request
@@ -81,6 +82,67 @@
         }
         return true;
       }
+
+    	function loadList(selectId, url) {
+    		if (document.getElementById(selectId).options.length > 1) return;
+
+    		jQuery.ajax({
+     			url:url,
+    			cache: false,
+    			success: function(result) {
+    				populateSelect(selectId, result);
+    			}
+    		});	
+    	}
+
+    	function populateSelect(selectId, json) {
+    		var activitySelect = document.getElementById(selectId);		
+    		for (var i = 0; i < json.length; ++i) {
+    			activitySelect.options[activitySelect.options.length] = new Option(json[i].description, json[i].value);
+    		}
+    	}
+      
+      	function submitIncidentActivity() {
+  			showTemplateSelectDialog2();
+  		}
+      	
+      	/** TODO: Figure out how to dynamically update this method **/
+      	function showTemplateSelectDialog2() {
+    		if (document.getElementById("claimSettleSelect").options.length == 1) {
+    			loadList("claimSettleSelect", "customerCommunications.do?templateList=<%=String.valueOf(TemplateType.CLAIM_SETTLEMENT.getOrdinal()) %>");
+    		}
+
+   		var templateSelectDialog = jQuery("#claimSettleSelectDiv").dialog({
+    										height: 50,
+    										width: 350,
+    										title: 'Select Document',
+    										modal: true,
+    										buttons: {
+    											Submit: function() {
+    												jQuery(this).dialog("close");
+    												var templateSelect = document.getElementById("claimSettleSelect");
+    												templateId = templateSelect.options[templateSelect.selectedIndex].value;
+    												if (templateId == "") {
+    													alert('You must select a Claim Settlement Letter Document.');
+    													return;
+    												}
+    												submitRequest(templateId);
+    											}
+    										}
+    									});
+    		templateSelectDialog.dialog("open");
+    	}
+
+    	function submitRequest(templateId) {
+    		var incidentId = document.getElementById("incident_ID").value;
+    		var expenseId = document.getElementById("expensepayout_ID").value;
+    		var activityId = "<%=TracingConstants.CREATE_SETTLEMENT_ACTIVITY%>";
+    		var url = 'incidentActivity.do?command=<%=TracingConstants.COMMAND_CREATE %>&incident='+incidentId+'&activity='+activityId+'&expense='+expenseId;
+    		if (templateId && templateId != null) {
+    			url = url + '&templateId='+templateId;
+    		}		
+    		window.location.href=url;
+    	}
 
       function showTemplateSelectDialog() {
     	alert('Please choose a reason for cancelling the Southwest LUV Voucher.');
@@ -159,6 +221,7 @@
 	<html:hidden name="expensePayoutForm" property="dateFormat" value="<%= a.getDateformat().getFormat() %>"/>
 	<html:hidden name="expensePayoutForm" property="tz" value="<%= a.getCurrenttimezone() %>" />
 	<html:hidden name="expensePayoutForm" property="expensepayout_ID" />
+	<html:hidden name="expensePayoutForm" property="incident_ID" />
 	<html:hidden name="expensePayoutForm" property="status_id" />
 	<html:hidden name="expensePayoutForm" property="toremark"  value="no"/>
 	<html:hidden name="expensePayoutForm" property="printcount"  value="0"/>
@@ -586,15 +649,29 @@
 								
 								<%
 									}
-									if (canPay && !swaBsoPermission) {
+									if (canPay && !swaBsoPermission && !swaPayApproveCreatePerm) {
 								%>
 								<html:submit property="payExpense" styleId="button" onclick="buttonSelected='payExpense';">
 									<bean:message key="button.payExpense" />
 								</html:submit>
-								<%
-									}
-											}
-								else if (!submitOk && (canEdit || canPay || canApprove)) {
+								<%}
+								if(swaPayApproveCreatePerm && !swaBsoPermission && !epf.isHasIncidentActivity()){ %>
+									<input type="button" id="createClaimSettlement" class="button" value="<bean:message key="button.action.submit.review" />" onclick="if (validateExpense(this.form)) { submitIncidentActivity(); }" />
+
+									<div id="claimSettleSelectDiv" style="display:none;" >
+										<table style="width:100%;">
+											<tr>
+												<td style="width:50%;text-align:right;">Select a Document:</td>
+												<td style="width:50%;text-align:left;">
+													<select id="claimSettleSelect" style="	font-size:9px;border:1px solid #569ECD;margin:2px 0px 1px 0px;display:inline;" >
+														<option value="0"><bean:message key="select.please_select" /></option>
+													</select>
+												</td>
+											</tr>
+										</table>
+									</div>	
+								<% }
+								} else if (!submitOk && (canEdit || canPay || canApprove)) {
 								%>
 								<html:submit property="updateRemarkOnly" styleId="button">
 									<bean:message key="button.updateCommenOnly" />

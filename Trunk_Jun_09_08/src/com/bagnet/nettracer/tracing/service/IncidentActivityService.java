@@ -43,6 +43,7 @@ public interface IncidentActivityService {
 	
 	public int getIncidentActivityAwaitingApprovalCount();
 	public int getIncidentActivityRejectionCount(Agent agent);
+
 	
 	public boolean hasIncidentActivityTask(IncidentActivity incidentActivity);
 	
@@ -53,7 +54,18 @@ public interface IncidentActivityService {
 	
 	public boolean createIncidentActivityRemark(String remark, IncidentActivity forActivity, Agent madeBy);
 	
-	public IncidentActivityTask getAssignedTask(Agent agent);
-	public IncidentActivityTask getTask(Agent agent);
-	public IncidentActivityTask startTask(long incidentActivityId, Agent agent);
+	public IncidentActivityTask getAssignedTask(Agent agent, Status s);
+	public IncidentActivityTask getTask(Agent agent, Status status);
+	public IncidentActivityTask startTask(long incidentActivityId, Agent agent, Status s);
+	
+	public int getDisbursementRejectTaskCount(Agent agent);
+	public int getIncidentActivityFraudReviewCount();
+	public int getIncidentActivitySupervisorReviewCount();
+	public int getIncidentActivityAwaitingDisbursementCount();
+	
+	public List<IncidentActivity> loadActivities(List<Long> actIdList);
+	public List<IncidentActivityTask> loadActivityTasks(List<Long> taskIdList);
+	boolean saveActivityTasks(List<IncidentActivityTask> iatlist);
+	boolean saveActivities(List<IncidentActivity> ialist);
+	public IncidentActivity loadByActivityCode(String activityCode, String incident_ID);
 }

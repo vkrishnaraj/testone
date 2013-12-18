@@ -76,6 +76,11 @@ public class ReportingConstants {
 	public final static int RPT_20_CUSTOM_2 = 2;
 	public final static int RPT_20_CUSTOM_501 = 501;
 	
+
+	//Payment Approval Report
+	public final static int RPT_PAYMENT_APPROVAL = 22;
+	public final static String RPT_PAYMENT_APPROVAL_NAME = "payment_approval_report";
+	
 	//custom reports for in-bound expedite baggage list
 	public final static int RPT_INBOUND_EXPEDITE_BAGS = 30;
 	public final static String RPT_INBOUND_EXPEDITE_BAGS_NAME = "stat_rpt_30";

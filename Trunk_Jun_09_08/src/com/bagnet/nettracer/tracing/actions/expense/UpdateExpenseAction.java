@@ -50,6 +50,8 @@ public class UpdateExpenseAction extends BaseExpenseAction {
 		request.getSession().setAttribute("expense_id", ep.getExpensepayout_ID());
 		
 		boolean cbsProcess=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, user) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN, user); 
+		boolean payAppProcess=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAYMENT_APPROVAL_CREATE, user) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAYMENT_APPROVAL_ADMIN, user);
+		
 		request.setAttribute("swaCbsProcess", cbsProcess);
 		// set status to pending or approved
 		Status st = new Status();
@@ -82,25 +84,28 @@ public class UpdateExpenseAction extends BaseExpenseAction {
 				if (Math.abs(ep.getCheckamt()) > 0.001) {
 					if ((csv.getMin_interim_approval_check() >= -0.001
 							&& (csv.getMin_interim_approval_check() - Math.abs(ep.getCheckamt())) < -0.001) 
-							&& (bsoLimit==0 || !cbsProcess)) {
+							&& (bsoLimit==0 || !cbsProcess) && !payAppProcess) {
 						st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_PENDING);
 					}
 				}
 				if (Math.abs(ep.getMileageamt()) > 0) {
 					if (csv.getMin_interim_approval_miles() >= -0.001
-							&& (csv.getMin_interim_approval_miles() - Math.abs(ep.getMileageamt())) < -0.001) {
+							&& (csv.getMin_interim_approval_miles() - Math.abs(ep.getMileageamt())) < -0.001
+							 && !payAppProcess) {
 						st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_PENDING);
 					}
 				}
 				if (Math.abs(ep.getVoucheramt()) > 0.001) {
 					if (csv.getMin_interim_approval_voucher() >= -0.001
-							&& (csv.getMin_interim_approval_voucher() - Math.abs(ep.getVoucheramt())) < -0.001) {
+							&& (csv.getMin_interim_approval_voucher() - Math.abs(ep.getVoucheramt())) < -0.001
+							 && !payAppProcess) {
 						st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_PENDING);
 					}
 				}
 				if (Math.abs(ep.getCreditCardRefund()) > 0.001) {
 					if (csv.getMin_interim_approval_cc_refund() >= -0.001
-							&& (csv.getMin_interim_approval_cc_refund() - Math.abs(ep.getCreditCardRefund())) < -0.001) {
+							&& (csv.getMin_interim_approval_cc_refund() - Math.abs(ep.getCreditCardRefund())) < -0.001
+							 && !payAppProcess) {
 						st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_PENDING);
 					}
 				}

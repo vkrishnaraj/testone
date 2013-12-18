@@ -1,4 +1,4 @@
-package com.bagnet.nettracer.tracing.actions.communications;
+package com.bagnet.nettracer.tracing.actions.disbursements;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,19 +21,19 @@ import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskDTO;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskSearchDTO;
-import com.bagnet.nettracer.tracing.forms.communications.CustomerCommunicationsTaskForm;
+import com.bagnet.nettracer.tracing.forms.disbursements.FraudReviewForm;
 import com.bagnet.nettracer.tracing.service.IncidentActivityService;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DomainUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
+public class FraudReviewAction extends CheckedAction {
 
-public class CustomerCommunicationsApprovalAction extends CheckedAction {
-	
-	private Logger logger = Logger.getLogger(CustomerCommunicationsApprovalAction.class);
+	private Logger logger = Logger.getLogger(FraudReviewAction.class);
 	
 	private IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
 
@@ -47,38 +47,48 @@ public class CustomerCommunicationsApprovalAction extends CheckedAction {
 			return null;
 		}
 		
-		if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_CREATE, user))
+		if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_FRAUD_REVIEW, user))
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
-		
+
 		if (session.getAttribute("taskMessage") != null) {
 			ActionMessages messages = new ActionMessages();
 			messages.add(ActionMessages.GLOBAL_MESSAGE, (ActionMessage) request.getSession().getAttribute("taskMessage"));
 			saveMessages(request, messages);
 			request.getSession().removeAttribute("taskMessage");
 		}
-		
-		CustomerCommunicationsTaskForm cctf = (CustomerCommunicationsTaskForm) form;
-		cctf.setActive(true);
+
+		if (request.getParameter("communicationsId") != null) {
+			String communicationsIdParam = request.getParameter("communicationsId");
+			try {
+				IncidentActivity ia = incidentActivityService.load(Long.valueOf(communicationsIdParam));
+				if (ia != null) {
+					response.sendRedirect("customerCommunications.do?command=" + TracingConstants.COMMAND_EDIT + "&communicationsId=" + ia.getId() + "&approvalTask=true");
+					return null;					
+				}
+			} catch (NumberFormatException nfe) {
+				logger.error("Invalid communications id: " + communicationsIdParam, nfe);
+			}
+		}
+		FraudReviewForm frf = (FraudReviewForm) form;
 		
 		List<IncidentActivityTaskDTO> results = new ArrayList<IncidentActivityTaskDTO>();
-		IncidentActivityTaskSearchDTO dto = DomainUtils.fromForm(cctf);
-		dto.setStatus(new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING));
+		IncidentActivityTaskSearchDTO dto = DomainUtils.fromForm(frf);
+		dto.setStatus(new Status(TracingConstants.FINANCE_STATUS_FRAUD_REVIEW));
+		dto.setActive(true);
 		setUserInfoOnDto(user, dto);
 		getSortCriteria(dto, request);
-		// mjs: removing the agent in this case since we're looking for pending tasks for all agents 
-		dto.setAgent(null);
 		
 		int currpage = 0;
 		int rowcount = incidentActivityService.getIncidentActivityTaskCount(dto);
 		int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_SEARCH_PAGES, session);
 
 		if (rowcount > 0) {
-			currpage = cctf.getCurrpage() != null ? Integer.parseInt(cctf.getCurrpage()) : 0;
-			if (cctf.getNextpage() != null && cctf.getNextpage().equals("1")) {
+			currpage = frf.getCurrpage() != null ? Integer.parseInt(frf.getCurrpage()) : 0;
+			if (frf.getNextpage() != null && frf.getNextpage().equals("1")) {
 				currpage++;
 			}
 	
-			if (cctf.getPrevpage() != null && cctf.getPrevpage().equals("1")) {
+			if (frf.getPrevpage() != null && frf.getPrevpage().equals("1")) {
 				currpage--;
 			}
 	
@@ -110,20 +120,19 @@ public class CustomerCommunicationsApprovalAction extends CheckedAction {
 		request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
 		request.setAttribute("rowcount", Integer.toString(rowcount));
 		request.setAttribute("currpage", Integer.toString(currpage));	
-		cctf.set_DATEFORMAT(user.getDateformat().getFormat());
+		frf.set_DATEFORMAT(user.getDateformat().getFormat());
 		
-		return mapping.findForward(TracingConstants.CUSTOMER_COMMUNICATIONS_PENDING);
+		return mapping.findForward(TracingConstants.FRAUD_REVIEW);
 	}
 	
 	private void setUserInfoOnDto(Agent user, IncidentActivityTaskSearchDTO dto) {
-		dto.setAgent(user);
 		dto.set_DATEFORMAT(user.getDateformat().getFormat());
 		dto.set_TIMEFORMAT(user.getTimeformat().getFormat());
 		dto.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
 	}
 	
 	private void getSortCriteria(IncidentActivityTaskSearchDTO dto, HttpServletRequest request) {
-		ParamEncoder encoder = new ParamEncoder(TracingConstants.TABLE_ID_CUST_COMM_PENDING_APPROVAL);
+		ParamEncoder encoder = new ParamEncoder(TracingConstants.TABLE_ID_FRAUD_REVIEW);
 		String sort = request.getParameter(encoder.encodeParameterName(TableTagParameters.PARAMETER_SORT));
 		dto.setSort(sort != null ? sort : "id");
 		

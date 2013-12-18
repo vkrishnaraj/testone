@@ -17,6 +17,8 @@ public class IncidentActivityTaskSearchDTO {
 	
 	private String sort;
 	private String dir;
+
+	private boolean financial;
 	
 	private long id;
 	private String incidentId;
@@ -151,6 +153,14 @@ public class IncidentActivityTaskSearchDTO {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	public boolean isFinancial() {
+		return financial;
+	}
+
+	public void setFinancial(boolean financial) {
+		this.financial = financial;
 	}
 	
 }

@@ -466,7 +466,7 @@ public class Incident implements Serializable {
 	 */
 	public void setClaimchecks(Set<Incident_Claimcheck> claimchecks) {
 		this.claimchecks = claimchecks;
-		//this.claimcheck_list = (claimchecks != null ? new ArrayList<Incident_Claimcheck>(claimchecks) : new ArrayList<Incident_Claimcheck>());
+		
 	}
 
 	/**
@@ -1351,7 +1351,7 @@ public class Incident implements Serializable {
 		this.custCommId = custCommId;
 	}
 
-	@OneToMany(fetch=FetchType.EAGER, mappedBy = "incident")
+	@OneToMany(fetch=FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "incident")
 	@org.hibernate.annotations.OrderBy(clause = "createDate")
 	@Fetch(FetchMode.SELECT)
 	public Set<IncidentActivity> getActivities() {

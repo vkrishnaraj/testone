@@ -14,8 +14,10 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.DocumentDAO;
 import com.bagnet.nettracer.tracing.dao.IncidentActivityDAO;
 import com.bagnet.nettracer.tracing.dao.TemplateDAO;
+import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.communications.Activity;
 import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
@@ -43,6 +45,10 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 	
 	private Status STATUS_PENDING = new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING);
 	private Status STATUS_DENIED = new Status(TracingConstants.STATUS_CUSTOMER_COMM_DENIED);
+	private Status FINANCE_STATUS_REJECTED = new Status(TracingConstants.FINANCE_STATUS_REJECTED);
+	private Status FINANCE_STATUS_FRAUD_REVIEW = new Status(TracingConstants.FINANCE_STATUS_FRAUD_REVIEW);
+	private Status FINANCE_STATUS_SUPERVISOR_REVIEW = new Status(TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW);
+	private Status FINANCE_STATUS_AWAITING_DISBURSEMENT = new Status(TracingConstants.FINANCE_STATUS_AWAITING_DISBURSEMENT);
 	
 	@Override
 	public IncidentActivity load(long incidentActivityId) {
@@ -57,7 +63,7 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 		incidentActivity.setIncident(incident);
 		
 		String activityCode = incidentActivity.getActivity().getCode();
-		if (TracingConstants.ACTIVITY_CUSTOMER_COMMUNICATION.equals(activityCode)) {
+		if (TracingConstants.ACTIVITY_CUSTOMER_COMMUNICATION.equals(activityCode) || TracingConstants.CREATE_SETTLEMENT_ACTIVITY.equals(activityCode)) {
 			Template template = templateDao.load(incidentActivity.getDocument().getTemplate().getId());
 			if (template == null) return 0;
 			
@@ -117,7 +123,10 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 		List<OptionDTO> options = new ArrayList<OptionDTO>();
 		if (!fromDb.isEmpty()) {
 			for (Activity a: fromDb) {
-				options.add(new OptionDTO(a.getCode(), a.getDescription()));
+				/** Removes Create Claim Settlement from Activity Selection so Users must go through Expenses to create one **/
+				if(!a.getCode().equals(TracingConstants.CREATE_SETTLEMENT_ACTIVITY)){
+					options.add(new OptionDTO(a.getCode(), a.getDescription()));
+				}
 			}
 		}
 		return options;
@@ -126,6 +135,12 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 	@Override
 	public Activity getActivity(String code) {
 		return incidentActivityDao.getActivity(code);
+	}
+
+	/** Search for a specific Activity by the Activity Code in an Incident **/
+	@Override
+	public IncidentActivity loadByActivityCode(String activityCode, String incident_ID) {
+		return incidentActivityDao.loadByActivityCode(activityCode,incident_ID);
 	}
 	
 	@Override
@@ -159,11 +174,31 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 	public int getIncidentActivityRejectionCount(Agent agent) {
 		return incidentActivityDao.getIncidentActivityCountByUser(agent, STATUS_DENIED);
 	}
+	
+	@Override
+	public int getIncidentActivityFraudReviewCount() {
+		return incidentActivityDao.getIncidentActivityCount(FINANCE_STATUS_FRAUD_REVIEW);
+	}
+	
+	@Override
+	public int getIncidentActivitySupervisorReviewCount() {
+		return incidentActivityDao.getIncidentActivityCount(FINANCE_STATUS_SUPERVISOR_REVIEW);
+	}
+	
+	@Override
+	public int getIncidentActivityAwaitingDisbursementCount() {
+		return incidentActivityDao.getIncidentActivityCount(FINANCE_STATUS_AWAITING_DISBURSEMENT);
+	}
+	
+	@Override
+	public int getDisbursementRejectTaskCount(Agent agent) {
+		return incidentActivityDao.getIncidentActivityCountByUser(agent, FINANCE_STATUS_REJECTED);
+	}
 
 	@Override
 	public boolean hasIncidentActivityTask(IncidentActivity incidentActivity) {
 		if (incidentActivity == null) return false;		
-		return incidentActivityDao.hasTask(incidentActivity, STATUS_PENDING);
+		return incidentActivityDao.hasTask(incidentActivity, new Status[]{STATUS_PENDING,FINANCE_STATUS_SUPERVISOR_REVIEW,FINANCE_STATUS_FRAUD_REVIEW,FINANCE_STATUS_AWAITING_DISBURSEMENT});
 	}
 	
 	@Override
@@ -206,9 +241,14 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 			iatdto.setIncidentActivityId(iat.getIncidentActivity().getId());
 			iatdto.setIncidentId(iat.getIncidentActivity().getIncident().getIncident_ID());
 			iatdto.setDescription(iat.getIncidentActivity().getDescription());
+			iatdto.setSpecialist(iat.getIncidentActivity().getAgent().getUsername());
 			iatdto.setTaskDate(iat.getOpened_timestamp());
+			iatdto.setStatus(iat.getStatus().getKey());
 			if (iat.getIncidentActivity().getApprovalAgent() != null) {
 				iatdto.setAgent(iat.getIncidentActivity().getApprovalAgent().getUsername());
+			}
+			if(iat.getIncidentActivity().getExpensePayout()!=null){
+				iatdto.setExpenseId(iat.getIncidentActivity().getExpensePayout().getExpensepayout_ID());
 			}
 			tasks.add(iatdto);
 		}
@@ -223,9 +263,54 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 			IncidentActivityTaskDTO iatdto = createIncidentActivityTaskDTO(dto);
 			iatdto.setId(iat.getIncidentActivity().getId());
 			iatdto.setIncidentId(iat.getIncidentActivity().getIncident().getIncident_ID());
+			iatdto.setTaskid(iat.getTask_id()); //?
 			iatdto.setDescription(iat.getIncidentActivity().getDescription());
 			iatdto.setTaskDate(iat.getOpened_timestamp());
-			iatdto.setAgent(iat.getIncidentActivity().getAgent().getUsername());
+			iatdto.setSpecialist(iat.getIncidentActivity().getAgent().getUsername());
+			iatdto.setStatus(String.valueOf(iat.getStatus().getStatus_ID()));
+			
+			if (iat.getIncidentActivity().getApprovalAgent() != null) {
+				iatdto.setAgent(iat.getIncidentActivity().getApprovalAgent().getUsername()); //Shouldn't this be the approval agent?
+			}
+
+			/** Passenger Information **/
+			if(iat.getIncidentActivity().getIncident().getPassenger_list().size()>0){
+				Passenger p=iat.getIncidentActivity().getIncident().getPassenger_list().get(0);
+				iatdto.setName(p.getFirstname()+" "+p.getLastname());
+				if(p.getAddresses()!=null && p.getAddresses().size()>0){
+					Address a=p.getAddress(0);
+					iatdto.setAddress(a.getAddress1());
+					iatdto.setAptnum(a.getAddress2());
+					iatdto.setCity(a.getCity());
+					iatdto.setState(a.getState());
+					iatdto.setZip(a.getZip());
+				}
+			}
+			
+			iatdto.setAirline(iat.getIncidentActivity().getIncident().getAgent().getCompanycode_ID()); //double check how/if to get airline code based on pnr
+			iatdto.setPnr(iat.getIncidentActivity().getIncident().getRecordlocator());
+			
+			if(iat.getIncidentActivity().getIncident().getItemtype_ID()==TracingConstants.LOST_DELAY){
+				iatdto.setReason(TracingConstants.REASON_LOSS);
+			} else if(iat.getIncidentActivity().getIncident().getItemtype_ID()==TracingConstants.MISSING_ARTICLES){
+				iatdto.setReason(TracingConstants.REASON_MISSING);
+			} else if(iat.getIncidentActivity().getIncident().getItemtype_ID()==TracingConstants.DAMAGED_BAG){
+				iatdto.setReason(TracingConstants.REASON_DAMAGED);
+			}
+			
+			/** Expense Information **/
+			if(iat.getIncidentActivity().getExpensePayout()!=null){
+				iatdto.setExpenseId(iat.getIncidentActivity().getExpensePayout().getExpensepayout_ID());
+				iatdto.setExpensedraft(iat.getIncidentActivity().getExpensePayout().getDraft());
+				iatdto.setExpensedraftdate(iat.getIncidentActivity().getExpensePayout().getDisdraftpaiddate());
+				iatdto.setExpensemaildate(iat.getIncidentActivity().getExpensePayout().getDismaildate());
+				iatdto.setExpensecheckamt(iat.getIncidentActivity().getExpensePayout().getCheckamt());
+				iatdto.setExpensevoucheramt(iat.getIncidentActivity().getExpensePayout().getVoucheramt());
+			}
+			if(iat.getIncidentActivity().getLastPrinted()!=null){
+				iatdto.setLastPrinted(DateUtils.formatDate(iat.getIncidentActivity().getLastPrinted(), dto.get_DATEFORMAT(), null,null));
+			}
+
 			tasks.add(iatdto);
 		}
 		return tasks;
@@ -259,20 +344,20 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 	}
 	
 	@Override
-	public IncidentActivityTask getAssignedTask(Agent agent) {
+	public IncidentActivityTask getAssignedTask(Agent agent, Status s) {
 		if (agent == null) return null;
-		return incidentActivityDao.getAssignedTask(agent);
+		return incidentActivityDao.getAssignedTask(agent, s);
 	}
 	
 	@Override
-	public IncidentActivityTask getTask(Agent agent) {
-		IncidentActivityTask task = incidentActivityDao.getTask();
+	public IncidentActivityTask getTask(Agent agent, Status status) {
+		IncidentActivityTask task = incidentActivityDao.getTask(status);
 		return startTask(task, agent);
 	}
 	
 	@Override
-	public IncidentActivityTask startTask(long incidentActivityId, Agent agent) {
-		return startTask(loadTaskForIncidentActivity(incidentActivityId, STATUS_PENDING), agent);
+	public IncidentActivityTask startTask(long incidentActivityId, Agent agent, Status s) {
+		return startTask(loadTaskForIncidentActivity(incidentActivityId, s), agent);
 	}
 	
 	private IncidentActivityTask startTask(IncidentActivityTask task, Agent agent) {
@@ -298,6 +383,26 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 		toReturn.set_TIMEFORMAT(dto.get_TIMEFORMAT());
 		toReturn.set_TIMEZONE(dto.get_TIMEZONE());
 		return toReturn;
+	}
+	
+	@Override
+	public List<IncidentActivity> loadActivities(List<Long> idlist){
+		return incidentActivityDao.listIncidentActivities(idlist);
+	}
+	
+	@Override
+	public List<IncidentActivityTask> loadActivityTasks(List<Long> idlist){
+		return incidentActivityDao.listIncidentActivityTasks(idlist);
+	}
+
+	@Override
+	public boolean saveActivities(List<IncidentActivity> ialist){
+		return incidentActivityDao.saveIncidentActivities(ialist);
+	}
+	
+	@Override
+	public boolean saveActivityTasks(List<IncidentActivityTask> iatlist){
+		return incidentActivityDao.saveIncidentActivityTasks(iatlist);
 	}
 	
 	public DocumentDAO getDocumentDao() {

@@ -56,9 +56,13 @@ public class IncidentActivityAction extends CheckedAction {
 		boolean success = false;
 		String command = request.getParameter("command");
 		String incidentId = request.getParameter("incident");
+		String expenseId = request.getParameter("expense");
 		String activity = request.getParameter("activity");
 		if (TracingConstants.ACTIVITY_CUSTOMER_COMMUNICATION.equals(activity)) {
 			response.sendRedirect("customerCommunications.do?incident="+incidentId+"&templateId="+request.getParameter("templateId"));
+			return null;
+		} else if(TracingConstants.CREATE_SETTLEMENT_ACTIVITY.equals(activity)){
+			response.sendRedirect("customerCommunications.do?incident="+incidentId+"&expense="+expenseId+"&templateId="+request.getParameter("templateId"));
 			return null;
 		} else if (TracingConstants.COMMAND_CREATE.equalsIgnoreCase(command)) {
 			success = createActivity(incidentId, activity, user, messages);

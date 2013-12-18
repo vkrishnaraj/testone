@@ -47,6 +47,8 @@ public class CustomerCommunicationsAction extends CheckedAction {
 	private final String REQUEST_PREVIEW_DOCUMENT = "preview_document";
 	private final String REQUEST_VIEW_SAMPLE_PRINTOUT = "view_sample_printout";
 	private final Status STATUS_PENDING = new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING);
+	private final Status STATUS_FRAUD_REVIEW = new Status(TracingConstants.FINANCE_STATUS_FRAUD_REVIEW);
+	private final Status STATUS_SUPERVISOR_REVIEW = new Status(TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW);
 	
 	private Logger logger = Logger.getLogger(CustomerCommunicationsAction.class);
 	
@@ -84,6 +86,11 @@ public class CustomerCommunicationsAction extends CheckedAction {
 				if (task != null) {
 					ccf.setTaskId(task.getTask_id());
 					ccf.setTaskStatus(task.getStatus().getStatus_ID());
+					if(task.getStatus().getStatus_ID()==TracingConstants.STATUS_CUSTOMER_COMM_PENDING
+							 || task.getStatus().getStatus_ID()==TracingConstants.FINANCE_STATUS_FRAUD_REVIEW
+							 || task.getStatus().getStatus_ID()==TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW){
+						ccf.setPendingReview(true);
+					}
 				}
 			} catch (NumberFormatException nfe) {
 				logger.error("Invalid task id: " + taskIdParam, nfe);
@@ -91,7 +98,7 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		}
 		
 		if (request.getParameter("templateId") != null && request.getParameter("incident") != null) {
-			success = populateCustomerCommunicationsForm(request.getParameter("incident"), request.getParameter("templateId"), ccf, user, messages);			
+			success = populateCustomerCommunicationsForm(request.getParameter("incident"), request.getParameter("templateId"), ccf, user, messages, request.getParameter("expense"));			
 		} else if (request.getParameter("command") != null && TracingConstants.COMMAND_EDIT.equals(request.getParameter("command"))
 				&& UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_EDIT, user)) {
 			try {
@@ -100,10 +107,27 @@ public class CustomerCommunicationsAction extends CheckedAction {
 				if (ia != null) {
 					DomainUtils.toForm(ia, ccf, user);
 					if (request.getParameter("approvalTask") != null && TracingConstants.TRUE.equalsIgnoreCase((String) request.getParameter("approvalTask"))) {
-						IncidentActivityTask iat = incidentActivityService.loadTaskForIncidentActivity(ia, new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING));
+						Status s=null;
+						if(ia.getActivity()!=null && ia.getActivity().getCode().equals(TracingConstants.CREATE_SETTLEMENT_ACTIVITY)){
+							if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_FRAUD_REVIEW, user) && request.getParameter("isFraud") != null){
+								s=new Status(TracingConstants.FINANCE_STATUS_FRAUD_REVIEW);
+							} else if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SUPERVISOR_REVIEW, user)){
+
+								s=new Status(TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW);
+							}
+						} else {
+							s=new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING);
+						}
+						IncidentActivityTask iat = incidentActivityService.loadTaskForIncidentActivity(ia, s);
 						if (iat != null) {
 							ccf.setTaskId(iat.getTask_id());
 							ccf.setTaskStatus(iat.getStatus().getStatus_ID());
+
+							if(iat.getStatus().getStatus_ID()==TracingConstants.STATUS_CUSTOMER_COMM_PENDING
+									 || iat.getStatus().getStatus_ID()==TracingConstants.FINANCE_STATUS_FRAUD_REVIEW
+									 || iat.getStatus().getStatus_ID()==TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW){
+								ccf.setPendingReview(true);
+							}
 						}
 					}
 					success = true;
@@ -194,9 +218,14 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		return null;
 	}
 	
-	private boolean populateCustomerCommunicationsForm(String incidentId, String templateId, CustomerCommunicationsForm ccf, Agent user, ActionMessages messages) {
+	private boolean populateCustomerCommunicationsForm(String incidentId, String templateId, CustomerCommunicationsForm ccf, Agent user, ActionMessages messages, String expenseId) {
 		boolean success = false;
 		Incident incident = new IncidentBMO().findIncidentByID(incidentId);
+		int eId=0;
+		if(expenseId!=null && !expenseId.isEmpty()){
+			eId = Integer.valueOf(expenseId);
+		}
+		
 		if (incident == null) {
 			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("unable.to.load.incident", new Object[] { incidentId }));
 		} else {
@@ -226,6 +255,7 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		ccf.setCommand(TracingConstants.COMMAND_CREATE);
 		ccf.setCustCommId(incident.getCustCommId());
 		ccf.setIncidentId(incidentId);
+		ccf.setExpenseId(eId);
 		return success;
 	}
 	
@@ -242,7 +272,16 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		messages.add(ActionMessages.GLOBAL_MESSAGE, getActionMessage(TracingConstants.COMMAND_CREATE, success, ccf.getDocumentTitle()));
 		if (success && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL, user)) {
 			if (!incidentActivityService.hasIncidentActivityTask(incidentActivity)) {
-				if (!incidentActivityService.createTask(incidentActivity, STATUS_PENDING)) {
+
+				Status s=STATUS_PENDING;
+				if(incidentActivity.getActivity()!=null && incidentActivity.getActivity().getCode().equals(TracingConstants.CREATE_SETTLEMENT_ACTIVITY)){
+					if(user.getStation().getCompany().getVariable().isFraudReview()){
+						s=STATUS_FRAUD_REVIEW;
+					} else {
+						s=STATUS_SUPERVISOR_REVIEW;
+					}
+				}
+				if (!incidentActivityService.createTask(incidentActivity, s)) {
 					logger.error("Failed to create a task for IncidentActivity with id: " + incidentActivityId);
 				}
 			}
@@ -261,8 +300,16 @@ public class CustomerCommunicationsAction extends CheckedAction {
 			if (ccf.getTaskId() > 0 && !incidentActivityService.closeTask(ccf.getTaskId())) {
 				logger.error("Failed to close the task for IncidentActivity with id: " + incidentActivity.getId());
 			}
+			Status s=STATUS_PENDING;
+			if(incidentActivity.getActivity()!=null && incidentActivity.getActivity().getCode().equals(TracingConstants.CREATE_SETTLEMENT_ACTIVITY)){
+				if(user.getStation().getCompany().getVariable().isFraudReview()){
+					s=STATUS_FRAUD_REVIEW;
+				} else {
+					s=STATUS_SUPERVISOR_REVIEW;
+				}
+			}
 
-			if (!incidentActivityService.hasIncidentActivityTask(incidentActivity) && !incidentActivityService.createTask(incidentActivity, STATUS_PENDING)) {
+			if (!incidentActivityService.hasIncidentActivityTask(incidentActivity) && !incidentActivityService.createTask(incidentActivity, s)) {
 				logger.error("Failed to create a task for IncidentActivity with id: " + incidentActivity.getId());
 			}
 		}

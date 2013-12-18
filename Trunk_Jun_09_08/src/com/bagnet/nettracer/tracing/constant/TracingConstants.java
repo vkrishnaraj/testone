@@ -224,6 +224,12 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_DEPREC_CALCULATOR_ADMIN = "Depreciation Calculator Administration";
 	public final static String SYSTEM_COMPONENT_NAME_BSO_PROCESS = "BSO Expense Process";
 	public final static String SYSTEM_COMPONENT_NAME_BSO_ADMIN = "BSO Expense Admin";
+	public final static String SYSTEM_COMPONENT_NAME_PAYMENT_APPROVAL = "Payment Approval Process Approve";
+	public final static String SYSTEM_COMPONENT_NAME_PAYMENT_APPROVAL_ADMIN = "Payment Approval Process Admin";
+	public final static String SYSTEM_COMPONENT_NAME_PAYMENT_APPROVAL_CREATE = "Payment Approval Process Create";
+	public final static String SYSTEM_COMPONENT_NAME_FRAUD_REVIEW = "Fraud Review Task Queue";
+	public final static String SYSTEM_COMPONENT_NAME_SUPERVISOR_REVIEW = "Supervisor Review Task Queue";
+	public final static String SYSTEM_COMPONENT_NAME_DISBURSE_REJECT_VIEW = "Disbursement Rejection View";
 	public final static String SYSTEM_COMPONENT_FORWARD_PCN = "pcn";
 
 	public final static String FORWARD_SCANNER_DATA = "scannerData";
@@ -443,6 +449,11 @@ public class TracingConstants {
 	public final static int MISSING_ARTICLES = 2;
 	public final static int DAMAGED_BAG = 3;
 	public final static int OHD = 4;
+
+	public final static String REASON_LOSS= "L";
+	public final static String REASON_MISSING = "M";
+	public final static String REASON_DAMAGED = "D";
+	public final static String REASON_INTERIM_EXPENSE = "IX";
 	
 	public final static String SYSTEM_COMPONENT_NAME_LOST_DELAY_UPDATE_ALL = "Update Incident LostDelay";
 	public final static String SYSTEM_COMPONENT_NAME_MISSING_ARTICLES_UPDATE_ALL = "Update Incident Missing";
@@ -737,6 +748,10 @@ public class TracingConstants {
 	public final static String LD_REQ="lostdelay";
 	public final static String MA_REQ="pilfered";
 	public final static String DM_REQ="damaged";
+	
+	public final static String CREATE_SETTLEMENT_ACTIVITY="55C";
+	public final static String INBOUND_CORRESPONDANCE="99E"; //For Paxview Correspondence Task
+	public final static String OUTBOUND_CORRESPONDANCE="99O"; //For Paxview Correspondence Task
 	
 	/** ********* forwards *********** */
 	// no permission
@@ -1399,6 +1414,11 @@ public class TracingConstants {
 	public static final String TABLE_ID_CUST_COMM_PENDING_APPROVAL = "customerCommunicationsPendingApproval";
 	public static final String TABLE_ID_BAG_DROP = "bagDrop";
 	
+	public static final String TABLE_ID_PAYMENT_APPROVAL = "payment_approval";
+	public static final String TABLE_ID_REJECTED_DISBURSEMENTS = "rejectedDisbursements";
+	public static final String TABLE_ID_FRAUD_REVIEW = "fraudReview";
+	public static final String TABLE_ID_SUPERVISOR_REVIEW= "supervisorReview";
+	
 	public static final String SORT_ASCENDING = "1";
 	public static final String SORT_DESCENDING = "2";
 	
@@ -1447,12 +1467,32 @@ public class TracingConstants {
 	public static final String CUSTOMER_COMMUNICATIONS_PENDING = "customerCommunicationsPending";
 	public static final String CUSTOMER_COMMUNICATIONS_REJECTED = "customerCommunicationsRejected";
 	public static final String EDIT_COMMUNICATIONS = "editCommunications";
+	public static final String VIEW_CORRESPONDENCE = "viewCorrespondence"; //For Paxview Correspondence Task
 //	public static final String CUSTOMER_COMMUNICATIONS_TASKS = "customerCommunicationsTasks";
 
 	public static final int CLAIM_CHECK = 3;
 	public static final int BAG_CHECKED_LOCATION = 4;
 
 	public static final String BAG_CHECK_MIXED = "8";
+
+
+	public static final String DISBURSEMENT_REJECTION = "rejectedDisbursements";
+	public static final String FRAUD_REVIEW = "fraudReview";
+	public static final String SUPERVISOR_REVIEW= "supervisorReview";
+	public static final String PAYMENT_APPROVAL = "paymentApproval";
+	
+	//Establish what status number this will be
+
+	public static final int FINANCE_STATUS_FRAUD_REVIEW = 1411;
+	public static final int FINANCE_STATUS_SUPERVISOR_REVIEW = 1412;
+	public static final int FINANCE_STATUS_AWAITING_DISBURSEMENT = 1413;
+	public static final int FINANCE_STATUS_REJECTED = 1414;
+	public static final int FINANCE_STATUS_FRAUD_REJECTED = 1414;
+	public static final int FINANCE_STATUS_FRAUD_APPROVED = 1418;
+	public static final int FINANCE_STATUS_SUPERVISOR_REJECTED = 1415;
+	public static final int FINANCE_STATUS_SUPERVISOR_APPROVED = 1419;
+	public static final int FINANCE_STATUS_FINANCE_REJECTED = 1416;
+	public static final int FINANCE_STATUS_FINANCE_APPROVED = 1417;
 	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {

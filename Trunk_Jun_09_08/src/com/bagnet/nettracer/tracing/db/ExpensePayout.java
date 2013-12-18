@@ -42,6 +42,7 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
 @Proxy(lazy = false)
 public class ExpensePayout implements Serializable {
 
+	private static final long serialVersionUID = 3312395392352503765L;
 	private Incident incident;
 	private int expensepayout_ID;
 	private Date createdate;
@@ -49,6 +50,7 @@ public class ExpensePayout implements Serializable {
 	private String draft;
 	private Date draftreqdate;
 	private Date draftpaiddate;
+	private Date maildate;
 	private double checkamt;
 	private double voucheramt;
 	private int mileageamt;
@@ -207,6 +209,15 @@ public class ExpensePayout implements Serializable {
 	@Transient
 	public String getDisdraftpaiddate() {
 		return DateUtils.formatDate(getDraftpaiddate(), get_DATEFORMAT(), null, null);
+	}
+
+	public void setDismaildate(String s) {
+		setMaildate(DateUtils.convertToDate(s, get_DATEFORMAT(), null));
+	}
+
+	@Transient
+	public String getDismaildate() {
+		return DateUtils.formatDate(getMaildate(), get_DATEFORMAT(), null, null);
 	}
 
 	@Temporal(TemporalType.DATE)
@@ -501,4 +512,12 @@ public class ExpensePayout implements Serializable {
 		return result;
 	}
 
+	@Temporal(TemporalType.DATE)
+	public Date getMaildate() {
+		return maildate;
+	}
+
+	public void setMaildate(Date maildate) {
+		this.maildate = maildate;
+	}
 }

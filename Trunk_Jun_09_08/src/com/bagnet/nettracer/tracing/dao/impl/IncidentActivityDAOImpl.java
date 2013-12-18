@@ -20,6 +20,7 @@ import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.IncidentActivityDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.communications.Activity;
 import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
@@ -33,12 +34,32 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 	private static Logger logger = Logger.getLogger(IncidentActivityDAOImpl.class);
 	
 	private static Map<String, String> map = new LinkedHashMap<String, String>();
+	private static Map<Integer, String> financestatusmap = new LinkedHashMap<Integer, String>();
 	
 	static {		
 		map.put("id", 			"iat.id");
 		map.put("incidentId", 	"i.incident_ID");
 		map.put("agent", 		"ia.approvalAgent");
 		map.put("date",			"iat.generic_timestamp");
+		map.put("expenseId",    "ia.expensePayout");
+		map.put("status",    	"ia.status");
+		map.put("taskId",    	"iat.task_id");
+		map.put("name",  		"p.firstname");
+		map.put("address", 		"a.address1");
+		map.put("amount", 		"e.checkamt");
+		map.put("pnr", 			"i.recordlocator");
+		map.put("specialist",	"ia.agent");
+		
+		financestatusmap.put(TracingConstants.FINANCE_STATUS_AWAITING_DISBURSEMENT, "1");
+		financestatusmap.put(TracingConstants.FINANCE_STATUS_FINANCE_APPROVED, "1");
+		financestatusmap.put(TracingConstants.FINANCE_STATUS_FINANCE_REJECTED, "1");
+		financestatusmap.put(TracingConstants.FINANCE_STATUS_FRAUD_REJECTED, "1");
+		financestatusmap.put(TracingConstants.FINANCE_STATUS_FRAUD_REVIEW, "1");
+		financestatusmap.put(TracingConstants.FINANCE_STATUS_REJECTED, "1");
+		financestatusmap.put(TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW, "1");
+		financestatusmap.put(TracingConstants.FINANCE_STATUS_SUPERVISOR_REJECTED, "1");
+		financestatusmap.put(TracingConstants.FINANCE_STATUS_SUPERVISOR_APPROVED, "1");
+		financestatusmap.put(TracingConstants.FINANCE_STATUS_FRAUD_APPROVED, "1");
 	}
 	
 	@Override
@@ -165,6 +186,12 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 			session = HibernateWrapper.getSession().openSession();
 			transaction = session.beginTransaction();
 			IncidentActivity incidentActivity = (IncidentActivity) session.createCriteria(IncidentActivity.class, "ia").add(Restrictions.eq("ia.id", incidentActivityId)).uniqueResult();
+			/**
+			 * Because IncidentActivities are CascadeType.All on Incidents, they
+			 * have to be removed from the Incident before they can be deleted
+			 **/
+			Incident inc=incidentActivity.getIncident();
+			inc.getActivities().remove(incidentActivity);
 			session.delete(incidentActivity);
 			transaction.commit();
 			success = true;
@@ -429,7 +456,25 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			Criteria criteria = session.createCriteria(IncidentActivityTask.class, "iat");
-			criteria.add(Restrictions.eq("iat.status", status));
+			
+			/** If Status is Payment Approval Status, then join the ExpensePayout**/
+			if(financestatusmap.get(status.getStatus_ID())!=null){
+				criteria.createAlias("iat.incidentActivity", "ia");
+				criteria.createAlias("ia.expensePayout", "e");
+			}
+			
+			/**
+			 * If looking for Payment Approval Rejected tasks, must get all
+			 * different types of Payment Approval Rejection Statuses
+			 **/
+			if(status.getStatus_ID()==TracingConstants.FINANCE_STATUS_REJECTED){
+				criteria.add(Restrictions.disjunction()
+						.add(Restrictions.eq("iat.status", new Status(TracingConstants.FINANCE_STATUS_FRAUD_REJECTED)))
+						.add(Restrictions.eq("iat.status", new Status(TracingConstants.FINANCE_STATUS_SUPERVISOR_REJECTED)))
+						.add(Restrictions.eq("iat.status", new Status(TracingConstants.FINANCE_STATUS_FINANCE_REJECTED))));
+			} else {
+				criteria.add(Restrictions.eq("iat.status", status));
+			}
 			criteria.add(Restrictions.eq("iat.active", true));
 			
 			if (agent != null) {
@@ -506,14 +551,14 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 	}
 	
 	@Override
-	public IncidentActivityTask getAssignedTask(Agent agent) {
+	public IncidentActivityTask getAssignedTask(Agent agent, Status s) {
 		IncidentActivityTask toReturn = null;
 		Session session = null;
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			Criteria criteria = session.createCriteria(IncidentActivityTask.class, "iat");
 			criteria.add(Restrictions.eq("iat.assigned_agent", agent));
-			criteria.add(Restrictions.eq("iat.status", new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING)));
+			criteria.add(Restrictions.eq("iat.status", s));
 			criteria.add(Restrictions.eq("iat.active", true));
 			toReturn = (IncidentActivityTask) criteria.uniqueResult();
 		} catch (Exception e) {
@@ -528,13 +573,13 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public IncidentActivityTask getTask() {
+	public IncidentActivityTask getTask(Status status) {
 		IncidentActivityTask task = null;
 		Session session = null;
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			Criteria criteria = session.createCriteria(IncidentActivityTask.class, "iat");
-			criteria.add(Restrictions.eq("iat.status", new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING)));
+			criteria.add(Restrictions.eq("iat.status", status));
 			criteria.add(Restrictions.eq("iat.active", true));
 			criteria.addOrder(Order.asc("iat.opened_timestamp"));
 			List<IncidentActivityTask> results = (List<IncidentActivityTask>) criteria.list();
@@ -572,6 +617,56 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 		return tasks;
 	}
 	
+	
+	/** @Author: Sean Fine
+	 * Get List of Incident Activities based on a list of IDs
+	 */
+	@Override
+	@SuppressWarnings("unchecked") public List<IncidentActivity> listIncidentActivities(List<Long> idlist){
+		List<IncidentActivity> results = new ArrayList<IncidentActivity>();
+		Session session = null;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			Criteria criteria = session.createCriteria(IncidentActivity.class, "ia");
+			criteria.createAlias("ia.incident", "i");
+			criteria.add(Restrictions.in("id", idlist));
+			results = (List<IncidentActivity>) criteria.list();
+		} catch (Exception e) {
+			logger.error("An error occurred while attempting to get a list of incident activities", e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return results;
+	}
+	
+
+	/** @Author: Sean Fine
+	 * Get List of Incident Activity Tasks based on a list of IDs
+	 */
+	@Override
+	@SuppressWarnings("unchecked") public List<IncidentActivityTask> listIncidentActivityTasks(List<Long> idlist){
+
+		List<IncidentActivityTask> results = new ArrayList<IncidentActivityTask>();
+		Session session = null;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			Criteria criteria = session.createCriteria(IncidentActivityTask.class, "iat");
+			criteria.createAlias("iat.incidentActivity", "ia");
+			criteria.createAlias("ia.incident", "i");
+			criteria.add(Restrictions.in("id", idlist));
+			results = (List<IncidentActivityTask>) criteria.list();
+		} catch (Exception e) {
+			logger.error("An error occurred while attempting to get a list of incident activities", e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return results;
+	}
+	
 	private Activity getActivityByCode(String activityCode) {
 		Activity activity = null;
 		Session session = null;
@@ -590,18 +685,68 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 		return activity;
 	}
 
+	@Override
+	public IncidentActivity loadByActivityCode(String activityCode,String incident_ID) {
+		IncidentActivity activity = null;
+		Session session = null;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			Criteria criteria = session.createCriteria(IncidentActivity.class, "ia");
+			criteria.createAlias("ia.activity", "a");
+			criteria.createAlias("ia.incident", "i");
+			criteria.add(Restrictions.eq("a.code", activityCode));
+			criteria.add(Restrictions.eq("i.incident_ID", incident_ID));
+			activity = (IncidentActivity) criteria.uniqueResult();
+		} catch (Exception e) {
+			logger.error("Failed to load Incident Activity with code: " + activityCode+" and Incident ID: "+incident_ID, e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return activity;
+	}
+	
 	private Criteria getCriteriaFromDto(Session session, IncidentActivityTaskSearchDTO dto) {
 		Criteria criteria = session.createCriteria(IncidentActivityTask.class, "iat");
 		criteria.createAlias("iat.incidentActivity", "ia");
 		criteria.createAlias("ia.incident", "i");
 		criteria.createAlias("ia.document", "d");
 		
+		if(dto.getSort()!=null){
+			/** Check for sorting to properly join tables as need **/
+			if(dto.getSort().equals("name") || dto.getSort().equals("address")){
+				criteria.createAlias("i.passengers", "p");
+			}
+		
+			if(dto.getSort().equals("address")){
+				criteria.createAlias("p.addresses", "a");
+			}
+		}
+		
 		if (dto.getAgent() != null) {
 			criteria.add(Restrictions.eq("iat.assigned_agent", dto.getAgent()));
 		}
 		
 		if (dto.getStatus() != null) {
-			criteria.add(Restrictions.eq("iat.status", dto.getStatus()));
+
+			/** If Status is Payment Approval Status, then join the ExpensePayout**/
+			if(financestatusmap.get(dto.getStatus().getStatus_ID())!=null){
+				criteria.createAlias("ia.expensePayout", "e");
+			}
+
+			/**
+			 * If looking for Payment Approval Rejected tasks, must get all
+			 * different types of Payment Approval Rejection Statuses
+			 **/
+			if(dto.getStatus().getStatus_ID()==TracingConstants.FINANCE_STATUS_REJECTED){
+				criteria.add(Restrictions.disjunction()
+						.add(Restrictions.eq("iat.status", new Status(TracingConstants.FINANCE_STATUS_FRAUD_REJECTED)))
+						.add(Restrictions.eq("iat.status", new Status(TracingConstants.FINANCE_STATUS_SUPERVISOR_REJECTED)))
+						.add(Restrictions.eq("iat.status", new Status(TracingConstants.FINANCE_STATUS_FINANCE_REJECTED))));
+			} else {
+				criteria.add(Restrictions.eq("iat.status", dto.getStatus()));
+			}
 		}
 		
 		if (dto.getRowsPerPage() > 0) {
@@ -627,6 +772,70 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 		}
 		
 		criteria.addOrder(TracingConstants.SORT_ASCENDING.equals(dir) ? Order.asc(orderVar) : Order.desc(orderVar));
+	}
+
+	/** @author SeanFine
+	 * Save a list of Incident Activities
+	 */
+	@Override
+	public boolean saveIncidentActivities(List<IncidentActivity> ialist) {
+		Session session = null;
+		Transaction transaction = null;
+		boolean success=true;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			transaction = session.beginTransaction();	
+			for(IncidentActivity ia:ialist){
+				session.merge(ia);
+				session.flush();
+				session.clear();
+			}
+			
+			transaction.commit();
+		} catch (Exception e) {
+			logger.error("Failed to save incident activity tasks", e);
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			success=false;
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return success;
+	}
+
+	/** @author SeanFine
+	 * Save a list of Incident Activity Tasks
+	 */
+	@Override
+	public boolean saveIncidentActivityTasks(List<IncidentActivityTask> iatlist) {
+		Session session = null;
+		Transaction transaction = null;
+		boolean success=true;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			transaction = session.beginTransaction();	
+			for(IncidentActivityTask iat:iatlist){
+				session.merge(iat);
+				session.flush();
+				session.clear();
+			}
+			
+			transaction.commit();
+		} catch (Exception e) {
+			logger.error("Failed to save incident activity tasks", e);
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			success=false;
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return success;
 	}
 
 }

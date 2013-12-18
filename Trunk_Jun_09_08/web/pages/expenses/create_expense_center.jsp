@@ -199,7 +199,16 @@
 					            <bean:message key="colname.draftpaiddate" />
 					            (<%= a.getDateformat().getFormat() %>)
 					            <br />
-					            <html:text property="dispDraftpaiddate" size="15" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.expensePayoutForm.dispDraftpaiddate,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;"></td>
+					            <html:text property="dispDraftpaiddate" size="15" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.expensePayoutForm.dispDraftpaiddate,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;">
+					            
+					            <br/><br/>
+					            
+					            <bean:message key="colname.maildate" />
+					            (<%= a.getDateformat().getFormat() %>)
+					            <br />
+					            <html:text property="dispMaildate" size="15" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar3" name="calendar3" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.expensePayoutForm.dispMaildate,'calendar3','<%= a.getDateformat().getFormat() %>'); return false;">
+					        </td>
+					            
 					    </tr>
 					    <% } %>
 						<jsp:include page="/pages/includes/create_payment_incl.jsp" />

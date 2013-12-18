@@ -11,6 +11,7 @@ public class CustomerCommunicationsForm extends CommandForm {
 
 	private long id;
 	private String incidentId;
+	private int expenseId;
 	private long activityId;
 	private long templateId;
 	private String documentTitle;
@@ -21,6 +22,7 @@ public class CustomerCommunicationsForm extends CommandForm {
 	private boolean preview;
 	private long taskId;
 	private int taskStatus;
+	private boolean pendingReview;
 	
 	private List<IncidentActivityRemarkDTO> remarks;
 
@@ -126,6 +128,22 @@ public class CustomerCommunicationsForm extends CommandForm {
 
 	public void setTaskStatus(int taskStatus) {
 		this.taskStatus = taskStatus;
+	}
+
+	public int getExpenseId() {
+		return expenseId;
+	}
+
+	public void setExpenseId(int expenseId) {
+		this.expenseId = expenseId;
+	}
+
+	public boolean isPendingReview() {
+		return pendingReview;
+	}
+
+	public void setPendingReview(boolean pendingReview) {
+		this.pendingReview = pendingReview;
 	}
 
 }

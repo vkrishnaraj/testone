@@ -31,6 +31,8 @@ public class CustomerCommunicationsTasksAction extends CheckedAction {
 	private final Status STATUS_PENDING_PRINT = new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING_PRINT);
 	private final Status STATUS_PENDING_WP = new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING_WP);
 	private final Status STATUS_PENDING = new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING);
+	private final Status STATUS_FRAUD_REVIEW = new Status(TracingConstants.FINANCE_STATUS_FRAUD_REVIEW);
+	private final Status STATUS_SUPERVISOR_REVIEW = new Status(TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW);
 	private final Status STATUS_DENIED = new Status(TracingConstants.STATUS_CUSTOMER_COMM_DENIED);
 	
 	private IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
@@ -42,17 +44,33 @@ public class CustomerCommunicationsTasksAction extends CheckedAction {
 		boolean success = false;
 		
 		Agent user = (Agent) session.getAttribute("user");
+		String returnForward=TracingConstants.CUSTOMER_COMMUNICATIONS_PENDING;
 		if (user == null) {
 			response.sendRedirect("logoff.do");
 			return null;
 		}
 		
-		if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL, user)) {
+		if (!(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL, user) 
+				|| UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_FRAUD_REVIEW, user)
+				|| UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SUPERVISOR_REVIEW, user))) {
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
 		}
 		
 		if (request.getParameter("gettask") != null) {
-			IncidentActivityTask task = incidentActivityService.getAssignedTask(user);
+			Status s=null;
+			if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL, user)){
+				s=STATUS_PENDING;
+			}
+			
+			if(request.getParameter("fraudReview")!=null && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_FRAUD_REVIEW, user)){
+				s=STATUS_FRAUD_REVIEW;
+			}
+
+			if(request.getParameter("supervisorReview")!=null && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SUPERVISOR_REVIEW, user)){
+				s=STATUS_SUPERVISOR_REVIEW;
+			}
+			
+			IncidentActivityTask task = incidentActivityService.getAssignedTask(user,s);
 			if (task != null) {
 				
 				return displayTask(task, response);
@@ -60,7 +78,7 @@ public class CustomerCommunicationsTasksAction extends CheckedAction {
 			} else if (request.getParameter("communicationsId") != null) {
 				
 				String communicationsIdParam = request.getParameter("communicationsId");
-				task = incidentActivityService.startTask((long) getIntValueFromParam(communicationsIdParam), user);
+				task = incidentActivityService.startTask((long) getIntValueFromParam(communicationsIdParam), user,s);
 				if (task != null) {
 					return displayTask(task, response);
 				} else {
@@ -70,7 +88,7 @@ public class CustomerCommunicationsTasksAction extends CheckedAction {
 			} else {
 				int attempts = 0;
 				do{
-					task = incidentActivityService.getTask(user);
+					task = incidentActivityService.getTask(user,s);
 					System.out.println("getting task attempt: " + (attempts + 1));
 				} while(task == null && attempts++ < 2);
 				
@@ -82,23 +100,47 @@ public class CustomerCommunicationsTasksAction extends CheckedAction {
 			}
 		} else if (request.getParameter("taskId") != null) {
 			String taskIdParam = request.getParameter("taskId");
+			String taskStatusParam = request.getParameter("taskStatus");
+			
+			int statusId=getIntValueFromParam(taskStatusParam);
+			if(statusId == TracingConstants.FINANCE_STATUS_FRAUD_REJECTED || statusId == TracingConstants.FINANCE_STATUS_FRAUD_APPROVED ){
+				returnForward=TracingConstants.FRAUD_REVIEW;
+			} else if(statusId == TracingConstants.FINANCE_STATUS_SUPERVISOR_APPROVED || statusId == TracingConstants.FINANCE_STATUS_SUPERVISOR_REJECTED){
+				returnForward=TracingConstants.SUPERVISOR_REVIEW;
+			}
+			
 			if (!userCanModifyTask(taskIdParam, user)) {
 				request.getSession().setAttribute("taskMessage", new ActionMessage("message.cust.comm.task.cannot.modify", new Object[] { taskIdParam, user.getUsername() }));
+				if(returnForward==TracingConstants.FRAUD_REVIEW){
+					response.sendRedirect("fraudReview.do");
+					return null;
+				} else if (returnForward==TracingConstants.SUPERVISOR_REVIEW){
+					response.sendRedirect("supervisorReview.do");
+					return null;
+				}
 				response.sendRedirect("customerCommunicationsApp.do");
 				return null;
 			}
 			
-			String taskStatusParam = request.getParameter("taskStatus");
 			if (!validStatusSubmitted(taskStatusParam)) {
 				logger.warn("Invalid status submitted for incident activity task: " + taskStatusParam);
 				request.getSession().setAttribute("taskMessage", new ActionMessage("message.cust.comm.task.update.failed", new Object[] { taskIdParam }));
+				if(returnForward==TracingConstants.FRAUD_REVIEW){
+					response.sendRedirect("fraudReview.do");
+					return null;
+				} else if (returnForward==TracingConstants.SUPERVISOR_REVIEW){
+					response.sendRedirect("supervisorReview.do");
+					return null;
+				}
 				response.sendRedirect("customerCommunicationsApp.do");
 				return null;
 			}
 			
 			long incidentActivityTaskId = getIntValueFromParam(taskIdParam);
-			int statusId = getIntValueFromParam(taskStatusParam);
-			success = handleTask(incidentActivityTaskId, statusId == TracingConstants.STATUS_CUSTOMER_COMM_APPROVED);
+			success = handleTask(incidentActivityTaskId, 
+					(statusId == TracingConstants.STATUS_CUSTOMER_COMM_APPROVED 
+						|| statusId == TracingConstants.FINANCE_STATUS_FRAUD_APPROVED
+						|| statusId == TracingConstants.FINANCE_STATUS_SUPERVISOR_APPROVED));
 			if (success) {
 				success = handleRemark(incidentActivityTaskId, (String) request.getParameter("remark"), user);
 			}
@@ -108,7 +150,13 @@ public class CustomerCommunicationsTasksAction extends CheckedAction {
 			saveMessages(request, messages);
 			request.setAttribute("success", success);
 		}
-		
+		if(returnForward==TracingConstants.FRAUD_REVIEW){
+			response.sendRedirect("fraudReview.do");
+			return null;
+		} else if (returnForward==TracingConstants.SUPERVISOR_REVIEW){
+			response.sendRedirect("supervisorReview.do");
+			return null;
+		}
 		response.sendRedirect("customerCommunicationsApp.do");
 		return null;
 	}
@@ -117,14 +165,20 @@ public class CustomerCommunicationsTasksAction extends CheckedAction {
 		incidentActivityService.closeTask(incidentActivityTaskId);
 		IncidentActivityTask iat = incidentActivityService.loadTask(incidentActivityTaskId);
 		if (iat != null) {
-			iat.getIncidentActivity().setApprovalAgent(iat.getAssigned_agent());
-			return approved ? handleApproveTask(iat.getIncidentActivity()) : handleRejectTask(iat.getIncidentActivity());
+			return approved ? handleApproveTask(iat) : handleRejectTask(iat);
 		}
 		logger.error("Failed to load task with id: " + incidentActivityTaskId);
 		return false;
 	}
 	
-	private boolean handleApproveTask(IncidentActivity ia) {
+	private boolean handleApproveTask(IncidentActivityTask iat) {
+		IncidentActivity ia=iat.getIncidentActivity();
+		ia.setApprovalAgent(iat.getAssigned_agent());
+		if(iat.getStatus().getStatus_ID()==TracingConstants.FINANCE_STATUS_FRAUD_REVIEW){
+			return incidentActivityService.createTask(ia, new Status(TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW));
+		} else if (iat.getStatus().getStatus_ID()==TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW){
+			return incidentActivityService.createTask(ia, new Status(TracingConstants.FINANCE_STATUS_AWAITING_DISBURSEMENT));
+		}
 		switch(ia.getCustCommId()) {
 			case TracingConstants.CUST_COMM_POSTAL_MAIL:
 				return incidentActivityService.createTask(ia, STATUS_PENDING_PRINT);
@@ -136,7 +190,14 @@ public class CustomerCommunicationsTasksAction extends CheckedAction {
 		}
 	}
 	
-	private boolean handleRejectTask(IncidentActivity ia) {
+	private boolean handleRejectTask(IncidentActivityTask iat) {
+		IncidentActivity ia=iat.getIncidentActivity();
+		ia.setApprovalAgent(iat.getAssigned_agent());
+		if(iat.getStatus().getStatus_ID()==TracingConstants.FINANCE_STATUS_FRAUD_REVIEW){
+			return incidentActivityService.createTask(ia, new Status(TracingConstants.FINANCE_STATUS_FRAUD_REJECTED), ia.getAgent());
+		} else if(iat.getStatus().getStatus_ID()==TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW){
+			return incidentActivityService.createTask(ia, new Status(TracingConstants.FINANCE_STATUS_SUPERVISOR_REJECTED), ia.getAgent());
+		}
 		return incidentActivityService.createTask(ia, STATUS_DENIED, ia.getAgent());
 	}
 	
@@ -175,7 +236,9 @@ public class CustomerCommunicationsTasksAction extends CheckedAction {
 		if (taskStatusParam == null || taskStatusParam.isEmpty()) return false;
 		try {
 			int statusId = getIntValueFromParam(taskStatusParam);
-			return statusId == TracingConstants.STATUS_CUSTOMER_COMM_APPROVED || statusId == TracingConstants.STATUS_CUSTOMER_COMM_DENIED;
+			return statusId == TracingConstants.STATUS_CUSTOMER_COMM_APPROVED || statusId == TracingConstants.STATUS_CUSTOMER_COMM_DENIED
+					|| statusId == TracingConstants.FINANCE_STATUS_FRAUD_REJECTED || statusId == TracingConstants.FINANCE_STATUS_FRAUD_APPROVED 
+					|| statusId == TracingConstants.FINANCE_STATUS_SUPERVISOR_APPROVED || statusId == TracingConstants.FINANCE_STATUS_SUPERVISOR_REJECTED;
 		} catch (NumberFormatException nfe) {
 			logger.error("Received invalid value for status: " + taskStatusParam, nfe);
 		}
@@ -193,7 +256,11 @@ public class CustomerCommunicationsTasksAction extends CheckedAction {
 	}
 	
 	private ActionForward displayTask(IncidentActivityTask iat, HttpServletResponse response) throws IOException {
-		response.sendRedirect("customerCommunications.do?command=" + TracingConstants.COMMAND_EDIT + "&communicationsId=" + iat.getIncidentActivity().getId() + "&approvalTask=true");
+		String addon="";
+		if(iat.getStatus().getStatus_ID()==TracingConstants.FINANCE_STATUS_FRAUD_REVIEW){
+			addon="&isFraud=1";
+		}
+		response.sendRedirect("customerCommunications.do?command=" + TracingConstants.COMMAND_EDIT + "&communicationsId=" + iat.getIncidentActivity().getId() + "&approvalTask=true"+addon);
 		return null;		
 	}
 	

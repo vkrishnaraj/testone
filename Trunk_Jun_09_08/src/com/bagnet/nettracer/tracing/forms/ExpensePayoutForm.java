@@ -17,18 +17,17 @@ import org.apache.struts.action.ActionMessages;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Comment;
-import com.bagnet.nettracer.tracing.db.ExpenseType;
-import com.bagnet.nettracer.tracing.db.Station;
-import com.bagnet.nettracer.tracing.db.Status;
 
 public class ExpensePayoutForm extends ActionForm {
 
+	private static final long serialVersionUID = 1721551402197629720L;
 	//displayed - bean property copy
 	private Date createdate;
 	private String paycode;
 	private String draft;
 	private Date draftreqdate;
 	private Date draftpaiddate;
+	private Date maildate;
 	private double checkamt;
 	private double voucheramt;
 	private int mileageamt;
@@ -67,7 +66,6 @@ public class ExpensePayoutForm extends ActionForm {
 	private String createStation;
 	private String currency_ID;
 	
-	
 	//action buttons
 	private String createExpense;
 	private String updateExpense;
@@ -81,10 +79,13 @@ public class ExpensePayoutForm extends ActionForm {
 	private String tz;
 	private String updateRemarkOnly;
 	private String dispDraftpaiddate;
+	private String dispMaildate;
 	private String dispApproval_date;
 	private String dispDraftreqdate;
 	private String dispVoucherExpirationDate;
 	private String toremark;
+	
+	private boolean hasIncidentActivity;
 
 	public String getErrormsg() {
 		return errormsg;
@@ -429,6 +430,12 @@ public class ExpensePayoutForm extends ActionForm {
 		}
 		
 		try {
+			this.maildate = parseUserDate(dispMaildate);
+		} catch (ParseException e) {
+			errs.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("invalid.date"));
+		}
+
+		try {
 			this.draftreqdate = parseUserDate(dispDraftreqdate);
 		} catch (ParseException e) {
 			errs.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("invalid.date"));
@@ -471,6 +478,26 @@ public class ExpensePayoutForm extends ActionForm {
 	}
 	public void setDistributemethod(String distributemethod) {
 		this.distributemethod = distributemethod;
+	}
+	public Date getMaildate() {
+		return maildate;
+	}
+	public void setMaildate(Date maildate) {
+		this.maildate = maildate;
+	}
+
+	public String getDispMaildate() {
+		return getDispDate(maildate);
+	}
+	
+	public void setDispMaildate(String mDate) {
+		this.dispMaildate = mDate;
+	}
+	public boolean isHasIncidentActivity() {
+		return hasIncidentActivity;
+	}
+	public void setHasIncidentActivity(boolean hasIncidentActivity) {
+		this.hasIncidentActivity = hasIncidentActivity;
 	}
 	
 }

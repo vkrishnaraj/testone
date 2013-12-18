@@ -442,6 +442,22 @@
     <definition name="view_worldtracertty" extends="user_menu">
         <put name="center" value="/pages/worldtracer/worldtracer_tty_main.jsp"/>
     </definition>
+    
+    <definition name="payment_approval" extends="user_menu">
+        <put name="center" value="/pages/disbursements/payment_approval.jsp"/>
+    </definition>
+    
+    <definition name="fraud_review" extends="user_menu">
+        <put name="center" value="/pages/disbursements/fraud_review.jsp"/>
+    </definition>
+    
+    <definition name="supervisor_review" extends="user_menu">
+        <put name="center" value="/pages/disbursements/supervisor_review.jsp"/>
+    </definition>
+    
+    <definition name="rejected_disbursements" extends="user_menu">
+        <put name="center" value="/pages/disbursements/rejected_disbursements.jsp"/>
+    </definition>
 
     
     <definition name="view_worldtracer_sus_rit" extends="user_menu">
@@ -1061,6 +1077,10 @@
     </definition>
 
 	
+    <!--<definition name="viewCorrespondence" extends="user_menu" >
+    	<put name="center" value="/pages/communications/view_correspondence.jsp" />
+    </definition> 	Not part of NT-740-->
+    
     <definition name="customerCommunications" path="/pages/communications/customer_communications.jsp"></definition>
     
     <definition name="editCommunications" extends="user_menu" >

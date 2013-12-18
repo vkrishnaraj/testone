@@ -57,7 +57,10 @@
 		<form-bean name="claimDeprecCalcForm" type="com.bagnet.nettracer.tracing.forms.ClaimDeprecCalcForm" />
 		<form-bean name="expensePayoutForm" type="com.bagnet.nettracer.tracing.forms.ExpensePayoutForm" />
 		<form-bean name="searchExpenseForm" type="com.bagnet.nettracer.tracing.forms.SearchExpenseForm" />
-		
+		<form-bean name="fraudReviewForm" type="com.bagnet.nettracer.tracing.forms.disbursements.FraudReviewForm" />
+		<form-bean name="supervisorReviewForm" type="com.bagnet.nettracer.tracing.forms.disbursements.SupervisorReviewForm" />
+		<form-bean name="paymentApprovalForm" type="com.bagnet.nettracer.tracing.forms.disbursements.PaymentApprovalForm" />
+		<form-bean name="disbursementRejectionForm" type="com.bagnet.nettracer.tracing.forms.disbursements.DisbursementRejectionForm" />
 		
 		<form-bean name="searchForwardNoticeForm" type="com.bagnet.nettracer.tracing.forms.SearchForwardNoticeForm" />
 		<form-bean name="pcnSearchForm" type="com.bagnet.nettracer.tracing.forms.PcnSearchForm" />
@@ -302,7 +305,8 @@
 		<form-bean name="templateSearchForm" type="com.bagnet.nettracer.tracing.forms.templates.TemplateSearchForm" />	
 		
 		<form-bean name="bagDropForm" type="com.bagnet.nettracer.tracing.forms.BagDropForm" />
-
+		<!--<form-bean name="correspondenceForm" type="com.bagnet.nettracer.tracing.forms.communications.CorrespondenceForm" />	Not part of NT-740-->
+		
 		<form-bean name="customerCommunicationsForm" type="com.bagnet.nettracer.tracing.forms.communications.CustomerCommunicationsForm" />	
 		<form-bean name="customerCommunicationsTaskForm" type="com.bagnet.nettracer.tracing.forms.communications.CustomerCommunicationsTaskForm" />	
 
@@ -391,6 +395,10 @@
 		<forward name="viewcsscallstations" path="view_css_call_stations" />
 		<forward name="viewcsscalltasks" path="view_css_call_tasks" />
 		<forward name="morningdutiesupdated" path="morning_duties_updated" />
+		<forward name="paymentApproval" path="payment_approval" />
+		<forward name="supervisorReview" path="supervisor_review" />
+		<forward name="fraudReview" path="fraud_review" />
+		<forward name="rejectedDisbursements" path="rejected_disbursements" />
 
 		<forward name="viewworldtraceractionfiles" path="view_worldtraceractionfiles" />
 		<forward name="viewworldtracerafviewraw" path="view_worldtracerafviewraw" />
@@ -624,6 +632,7 @@
 		
 		<forward name="customerCommunications" path="customerCommunications" />
 		<forward name="editCommunications" path="editCommunications" />
+		<!--<forward name="viewCorrespondence" path="viewCorrespondence" /> 	Not part of NT-740-->
 		<forward name="customerCommunicationsPending" path="customerCommunicationsPending" />
 		<forward name="customerCommunicationsRejected" path="customerCommunicationsRejected" />
 		
@@ -724,9 +733,14 @@
 		
 		<action path="/BatchApproveExpenses" parameter="BatchApprove" type="com.bagnet.nettracer.tracing.actions.expense.BatchApproveExpenseAction" name="interimExpenseRequestForm" scope="request" validate="false" >
 		</action>
-		
 
+		<action path="/paymentApproval" type="com.bagnet.nettracer.tracing.actions.disbursements.PaymentApprovalAction"  name="paymentApprovalForm" scope="request" validate="false" ></action>
 
+		<action path="/supervisorReview" type="com.bagnet.nettracer.tracing.actions.disbursements.SupervisorReviewAction"  name="supervisorReviewForm" scope="request" validate="false" ></action>
+
+		<action path="/fraudReview" type="com.bagnet.nettracer.tracing.actions.disbursements.FraudReviewAction"  name="fraudReviewForm" scope="request" validate="false" ></action>
+
+		<action path="/rejectedDisbursements" type="com.bagnet.nettracer.tracing.actions.disbursements.DisbursementRejectionAction"  name="disbursementRejectionForm" scope="request" validate="false" ></action>
 
 		<action path="/SearchExpenses" parameter="Search" type="com.bagnet.nettracer.tracing.actions.expense.SearchExpenseAction" name="searchExpenseForm" scope="request" validate="false" >
 			<forward name="success" path="search_expense"></forward>
@@ -1009,6 +1023,7 @@
 		<action path="/ntlf_enter_items" type="com.bagnet.nettracer.tracing.actions.ntlf.EnterItemsAction" name="enterItemsForm" scope="session" validate="false"></action>
 		<action path="/ntlf_create_found_item" type="com.bagnet.nettracer.tracing.actions.ntlf.FoundItemAction" name="foundItemForm" scope="session" validate="false"></action>			
 		<action path="/ntlf_search_lost_found" type="com.bagnet.nettracer.tracing.actions.ntlf.SearchLostFoundAction" name="searchLostFoundForm" scope="request" validate="false"></action>	
+		<!--<action path="/viewCorrespondence" type="com.bagnet.nettracer.tracing.actions.communications.CorrespondenceAction" name="correspondenceForm" scope="request" validate="false" ></action> 	Not part of NT-740-->
 		
 		<action path="/customerCommunications" type="com.bagnet.nettracer.tracing.actions.communications.CustomerCommunicationsAction" name="customerCommunicationsForm" scope="request" validate="false" ></action>
 		<action path="/incidentActivity" type="com.bagnet.nettracer.tracing.actions.communications.IncidentActivityAction" scope="request" validate="false" ></action>

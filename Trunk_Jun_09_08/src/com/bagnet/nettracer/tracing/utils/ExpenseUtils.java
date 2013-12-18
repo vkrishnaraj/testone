@@ -2,21 +2,18 @@ package com.bagnet.nettracer.tracing.utils;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Expression;
-import org.hibernate.criterion.Order;
-
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.log4j.Logger;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
-import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
 import com.bagnet.nettracer.tracing.forms.CreatedInterimExpenseRequestForm;
-import com.bagnet.nettracer.tracing.forms.ExpensePayoutForm;
 import com.bagnet.nettracer.tracing.forms.InterimExpenseRequestForm;
 
 /**
@@ -30,11 +27,13 @@ public class ExpenseUtils {
 
 	private static Logger logger = Logger.getLogger(ExpenseUtils.class);
 	
+	@SuppressWarnings("rawtypes")
 	public static List getPendingInterimExpenses(boolean count, String companyCode_ID,
 			InterimExpenseRequestForm form, String sort, int rowsperpage, int currpage) {
 		return getPendingInterimExpenses(count, companyCode_ID, form, sort, rowsperpage, currpage, false);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static List getPendingInterimExpenses(boolean count, String companyCode_ID,
 			InterimExpenseRequestForm form, String sort, int rowsperpage, int currpage, boolean dirtyRead) {
 		Session sess = null;
@@ -89,11 +88,13 @@ public class ExpenseUtils {
 		}
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public static List getCreateInterimExpenses(boolean count, int station_ID,
 			CreatedInterimExpenseRequestForm form, String sort, int rowsperpage, int currpage) {
 		return getCreateInterimExpenses(count, station_ID, form, sort, rowsperpage, currpage, false);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static List getCreateInterimExpenses(boolean count, int station_ID,
 			CreatedInterimExpenseRequestForm form, String sort, int rowsperpage, int currpage, boolean dirtyRead) {
 		Session sess = null;
@@ -174,5 +175,36 @@ public class ExpenseUtils {
 				}
 			}
 		}
+	}
+
+	@SuppressWarnings("rawtypes")
+	public static List getPaymentApprovalInterimExpenses(boolean count, int station_ID,
+			CreatedInterimExpenseRequestForm form, String sort, int rowsperpage, int currpage) {
+		form.setExpense_status(TracingConstants.EXPENSEPAYOUT_STATUS_PENDING+"");
+		return getCreateInterimExpenses(count, station_ID, form, sort, rowsperpage, currpage, false);
+	}
+	
+	public static boolean hasActivity(ExpensePayout ep) {
+		if (ep == null) return false;
+
+		boolean hasTask = false;
+		Session session = null;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			Criteria criteria = session.createCriteria(IncidentActivity.class, "ia");
+			criteria.add(Restrictions.eq("ia.expensePayout",ep));
+			criteria.setProjection(Projections.countDistinct("ia.id"));
+			Long taskCount = (Long) criteria.uniqueResult();
+			if (taskCount != null && taskCount.longValue() != 0) {
+				hasTask = true;
+			}
+		} catch (Exception e) {
+			logger.error("Could not determine if expense Payout with id: " + ep.getExpensepayout_ID() + " has an incident activity.", e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return hasTask;
 	}
 }
