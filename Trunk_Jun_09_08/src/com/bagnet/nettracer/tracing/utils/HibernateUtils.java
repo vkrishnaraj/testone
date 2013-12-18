@@ -338,7 +338,7 @@ public class HibernateUtils {
 						c.getVariable().setPnr_last_x_days(obj.getVariable().getPnr_last_x_days());
 						c.getVariable().setIncident_lock_mins(obj.getVariable().getIncident_lock_mins());
 						c.getVariable().setIssuance_edit_last_x_days(obj.getVariable().getIssuance_edit_last_x_days());
-						
+						c.getVariable().setFraudReview(obj.getVariable().isFraudReview());
 						c.getVariable().setBagdrop_autorefresh_mins(obj.getVariable().getBagdrop_autorefresh_mins());
 					}
 					

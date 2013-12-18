@@ -33,6 +33,7 @@ public class Company_Specific_Variable implements Serializable {
 	private int default_loss_code;
 	private boolean email_customer; // send email to customer after report creation or
 	private boolean autoCloseOhd;
+	private boolean fraudReview;
 	private double min_interim_approval_check;
 	private double min_interim_approval_miles;
 	private double min_interim_approval_voucher;
@@ -1200,6 +1201,21 @@ public class Company_Specific_Variable implements Serializable {
 	 */
 	public void setStatus_message(String status_message) {
 		this.status_message = status_message;
+	}
+
+	/**
+	 * @return fraudReview
+	 * @hibernate.property type="boolean"
+	 */
+	public boolean isFraudReview() {
+		return fraudReview;
+	}
+
+	/**
+	 * @param fraudReview The fraudReview to set.
+	 */
+	public void setFraudReview(boolean fraudReview) {
+		this.fraudReview = fraudReview;
 	}
 	
 	/**

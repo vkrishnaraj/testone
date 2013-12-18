@@ -109,7 +109,7 @@
 	              :
 	            </td>
 	            <td>
-	              <html:select name="companyForm" property="email_customer" style="dropdown">
+	              <html:select name="companyForm" property="email_customer" styleClass="dropdown">
  					<html:option value="true">
                   		<bean:message key="select.yes" />
                   	</html:option>
@@ -386,6 +386,23 @@
             </tr>
             <tr>
 	            <td>
+	              <bean:message key="colname.fraud.review" />
+	              :
+	            </td>
+	              
+	            <td>
+	              <html:select name="companyForm" property="fraudReview" styleClass="dropdown">
+ 					<html:option value="true">
+                  		<bean:message key="select.yes" />
+                  	</html:option>
+                  	<html:option value="false">
+                  		<bean:message key="select.no" />
+                  	</html:option>
+                  </html:select>
+	            </td>
+            </tr>
+            <tr>
+	            <td>
 	              <bean:message key="colname.bagdrop.autorefresh.mins" />
 	              :
 	            </td>
@@ -401,11 +418,13 @@
           </tr>
           <tr>
             <td colspan="2">
-              <center><INPUT type="button" Id="button" value="Back" onClick="history.back()">
-              &nbsp;
-              <html:submit styleId="button" property="save">
-                <bean:message key="button.save" />
-              </html:submit></center>
+              <p align="center">
+              	<INPUT type="button" Id="button" value="Back" onClick="history.back()">
+	              &nbsp;
+	              <html:submit styleId="button" property="save">
+	                <bean:message key="button.save" />
+	              </html:submit>
+              </p>
             </td>
           </tr>
 

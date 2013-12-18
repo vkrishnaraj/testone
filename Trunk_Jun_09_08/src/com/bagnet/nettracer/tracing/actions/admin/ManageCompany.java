@@ -171,7 +171,7 @@ public final class ManageCompany extends Action {
 					dForm.setIssuanceitemxdaysback(cmpny.getVariable().getIssuance_edit_last_x_days());
 					
 					dForm.setIncident_lock_mins(cmpny.getVariable().getIncident_lock_mins());
-					
+					dForm.setFraudReview(cmpny.getVariable().isFraudReview());
 					dForm.setBagdrop_autorefresh_mins(cmpny.getVariable().getBagdrop_autorefresh_mins());
 				}
 				
@@ -407,6 +407,7 @@ public final class ManageCompany extends Action {
 					}
 					var.setEmail_customer(dForm.isEmail_customer());
 					var.setAutoCloseOhd(dForm.isAutoCloseOhd());
+					var.setFraudReview(dForm.isFraudReview());
 					var.setEmail_host((String) dForm.getEmail_host());
 					var.setEmail_port(Integer.parseInt((String) dForm.getEmail_port()));
 					var.setEmail_from((String) dForm.getEmail_from());

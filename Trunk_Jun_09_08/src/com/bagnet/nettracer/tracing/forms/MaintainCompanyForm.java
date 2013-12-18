@@ -42,6 +42,7 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	private String default_loss_code;
 	private boolean email_customer;
 	private boolean autoCloseOhd;
+	private boolean fraudReview;
 	private String email_host;
 	private String email_port;
 	private String email_from;
@@ -77,7 +78,9 @@ public final class MaintainCompanyForm extends ValidatorForm {
 	private String audit_delivery_companies;
 	private String secure_password;
 	private String webs_enabled;
+	@SuppressWarnings("rawtypes")
 	private List lzStations = new ArrayList();
+	@SuppressWarnings("rawtypes")
 	private List stations = new ArrayList();
 	private List<WTCompany> wtCompanyList = new ArrayList<WTCompany>();
 	private Integer defaultLz = 0;
@@ -183,18 +186,22 @@ public final class MaintainCompanyForm extends ValidatorForm {
 		return defaultLz;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public List getLzStations() {
 		return lzStations;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public void setLzStations(List lzStations) {
 		this.lzStations = lzStations;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public List getStations() {
 		return stations;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public void setStations(List stations) {
 		this.stations = stations;
 	}
@@ -529,6 +536,14 @@ public final class MaintainCompanyForm extends ValidatorForm {
 
 	public void setWtCompanyList(List<WTCompany> wtCompanyList) {
 		this.wtCompanyList = wtCompanyList;
+	}
+
+	public boolean isFraudReview() {
+		return fraudReview;
+	}
+
+	public void setFraudReview(boolean fraudReview) {
+		this.fraudReview = fraudReview;
 	}
 
 	public Integer getBagdrop_autorefresh_mins() {
