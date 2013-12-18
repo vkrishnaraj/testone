@@ -11,12 +11,6 @@ import aero.nettracer.web.utility.Settings;
 
 public class WN_CustomerCommunications extends WN_SeleniumTest {
 	
-	private String CUST_COMM_CREATE = "667";
-	private String CUST_COMM_EDIT = "668";
-	private String CUST_COMM_DELETE = "669";
-	private String CUST_COMM_VIEW_PUBLISHED = "670";
-	private String CUST_COMM_APPROVAL = "671";
-	
 	private String[] searchLinks = { "menucol_1.4", "menucol_2.3", "menucol_3.3" };
 	private String[] newLinks = { "menucol_1.1", "menucol_2.1", "menucol_3.1" };
 	private String[] types = { "Lost/Delayed", "Damaged", "Missing Articles" };
@@ -28,11 +22,15 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 				  CUST_COMM_EDIT, 
 				  CUST_COMM_DELETE,
 				  CUST_COMM_VIEW_PUBLISHED,
-				  CUST_COMM_APPROVAL
+				  CUST_COMM_APPROVAL,
+				  CUST_COMM_APPROVAL_QUEUE,
+				  CUST_COMM_REJECTED_QUEUE
 			    };
 
 		boolean[] values = new boolean[] { 
 						false, 
+						false,
+						false,
 						false,
 						false,
 						false,
@@ -247,6 +245,160 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 	}
 	
 	@Test
+	public void testQueuesNotPresent() {
+		String[] permissions = new String[] {
+				  CUST_COMM_CREATE,
+				  CUST_COMM_APPROVAL,
+				  CUST_COMM_APPROVAL_QUEUE, 
+				  CUST_COMM_REJECTED_QUEUE
+			    };
+
+		boolean[] values = new boolean[] {
+						true,
+						false,
+						false, 
+						true
+					 };
+
+		verifyTrue(setPermissions(permissions, values));
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
+		goToTaskManager();
+		verifyFalse(isElementPresent(By.xpath("(//a[contains(@href, 'customerCommunicationsApp.do')])[2]")));
+		verifyTrue(isElementPresent(By.xpath("(//a[contains(@href, 'customerCommunicationsRejected.do')])[2]")));
+	}
+	
+	@Test
+	public void testQueuesPresent() {
+		String[] permissions = new String[] {
+				CUST_COMM_APPROVAL,
+				CUST_COMM_APPROVAL_QUEUE
+		};
+		
+		boolean[] values = new boolean[] { 
+				true, 
+				true
+		};
+		
+		verifyTrue(setPermissions(permissions, values));
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
+		goToTaskManager();
+		verifyTrue(isElementPresent(By.xpath("(//a[contains(@href, 'customerCommunicationsApp.do')])[2]")));
+		verifyTrue(isElementPresent(By.xpath("(//a[contains(@href, 'customerCommunicationsRejected.do')])[2]")));
+	}
+	
+	@Test
+	public void testCreateCustomerCommunicationsTask() {
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
+		goToTaskManager();
+		
+		click(By.xpath("(//a[contains(@href, 'customerCommunicationsApp.do')])[2]"));
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			selenium.click("//a[contains(@href, 'customerCommunicationsTasks.do?communicationsId="+Settings.CUST_COMM_ID+"&gettask=1')]");
+			waitForPageToLoadImproved();
+			if (checkNoErrorPage()) {
+				goToTaskManager();
+				verifyTrue(isElementPresent(By.xpath("//a[contains(@href, 'customerCommunicationsTasks.do?gettask=1&communicationsId="+Settings.CUST_COMM_ID+"')]")));
+				click(By.xpath("//a[contains(@href, 'customerCommunicationsTasks.do?gettask=1&communicationsId="+Settings.CUST_COMM_ID+"')]"));
+				waitForPageToLoadImproved();
+				if (checkNoErrorPage()) {
+					type(By.id("taskRemark"), "test");
+					click(By.id("rejectButton"));
+					waitForPageToLoadImproved();
+					if (checkNoErrorPage()) {
+						verifyEquals("Customer Communications Pending Approval", selenium.getText("//div[@id='maincontent']/h1"));
+						verifyEquals("There are no customer communications pending approval to display", selenium.getText("//div[@id='maincontent']/div"));
+					} else {
+						System.out.println("!!!!!!!!!!!!!!!! Failed to reject the customer communications task.");
+						verifyTrue(false);
+					}
+				} else {
+					System.out.println("!!!!!!!!!!!!!!!! Failed to load the customer communications task.");
+					verifyTrue(false);
+				}
+			} else {
+				System.out.println("!!!!!!!!!!!!!!!! Failed to load the customer communications task.");
+				verifyTrue(false);
+			}
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Failed to load the customer communications approval page.");
+			verifyTrue(false);
+		}
+		goToTaskManager();
+	}
+	
+	@Test
+	public void testRejectCustomerCommunicationsTask() {
+		verifyTrue(setPermissions(new String[] { CUST_COMM_APPROVAL, CUST_COMM_APPROVAL_QUEUE }, new boolean[] { false, false }));
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
+		goToTaskManager();
+
+		click(By.xpath("(//a[contains(@href, 'customerCommunicationsRejected.do')])[2]"));
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			click(By.xpath("//table[@id='customerCommunicationsRejected']/tbody/tr/td/a"));
+			waitForPageToLoadImproved();
+			if (checkNoErrorPage()) {
+				click(By.id("submitCustComm"));
+				waitForPageToLoadImproved();
+				if (!checkNoErrorPage()) {
+					System.out.println("!!!!!!!!!!!!!!!! Failed to load the customer communications rejected task.");
+					verifyTrue(false);
+				}
+			} else {
+				System.out.println("!!!!!!!!!!!!!!!! Failed to load the customer communications rejected task.");
+				verifyTrue(false);
+			}
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Failed to load the customer communications rejected page.");
+			verifyTrue(false);
+		}
+		goToTaskManager();
+		click(By.xpath("(//a[contains(@href, 'customerCommunicationsRejected.do')])[2]"));
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			verifyEquals("There are no rejected customer communications to display", selenium.getText("//div[@id='maincontent']/div"));
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Failed to load the customer communications rejected page.");
+			verifyTrue(false);
+		}
+		goToTaskManager();
+	}
+	
+	@Test
+	public void testApproveCustomerCommunicationsTask() {
+		verifyTrue(setPermissions(new String[] { CUST_COMM_APPROVAL, CUST_COMM_APPROVAL_QUEUE }, new boolean[] { true, true }));
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
+		goToTaskManager();
+		
+		click(By.xpath("(//a[contains(@href, 'customerCommunicationsApp.do')])[2]"));
+		waitForPageToLoadImproved();
+		if (checkNoErrorPage()) {
+			click(By.xpath("//table[@id='customerCommunicationsPendingApproval']/tbody/tr/td/a"));
+			waitForPageToLoadImproved();
+			if (checkNoErrorPage()) {
+				click(By.id("approveButton"));
+				waitForPageToLoadImproved();
+					if (checkNoErrorPage()) {
+						verifyEquals("Customer Communications Pending Approval", selenium.getText("//div[@id='maincontent']/h1"));
+						verifyEquals("There are no customer communications pending approval to display", selenium.getText("//div[@id='maincontent']/div"));
+					} else {
+						System.out.println("!!!!!!!!!!!!!!!! Failed to reject the customer communications task.");
+						verifyTrue(false);
+					}
+			} else {
+				System.out.println("!!!!!!!!!!!!!!!! Failed to load the customer communications task.");
+				verifyTrue(false);
+			}
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Failed to load the customer communications approval page.");
+			verifyTrue(false);
+		}
+		
+		goToTaskManager();
+	}
+
+	@Test
 	public void testDeleteCustomerCommunication() {
 		verifyTrue(setPermissions(new String[] { CUST_COMM_DELETE }, new boolean[] { false }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
@@ -268,33 +420,17 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 	
 	@Test
 	public void testAddAssignedToActivity() {
-		verifyTrue(setPermissions(new String[] { CUST_COMM_DELETE }, new boolean[] { false }));
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		selenium.select("id=activityIdSelect", "label=ASSIGNED TO");
 		selenium.click("id=addCommButton");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			verifyEquals("ASSIGNED TO: " + Settings.USERNAME_ADMIN, selenium.getText("//div[@id='maincontent']/table[9]/tbody/tr[2]/td[3]"));
-			verifyFalse(isElementPresent(By.xpath("//a[contains(text(),'Delete')]")));
+			verifyTrue(isElementPresent(By.xpath("//a[contains(text(),'Delete')]")));
 		} else {
 			System.out.println("!!!!!!!!!!!!!!!! Failed to create Incident Activity");
 			verifyTrue(false);
 		}
-
-		verifyTrue(setPermissions(new String[] { CUST_COMM_DELETE }, new boolean[] { true }));
-		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-		verifyEquals("ASSIGNED TO: " + Settings.USERNAME_ADMIN, selenium.getText("//div[@id='maincontent']/table[9]/tbody/tr[2]/td[3]"));
-		verifyTrue(isElementPresent(By.xpath("//a[contains(text(),'Delete')]")));
-		selenium.click("//a[contains(text(),'Delete')]");
-		waitForPageToLoadImproved();
-		if (checkNoErrorPage()) {
-			verifyFalse(isTextPresent("ASSIGNED TO: ntadmin"));
-		} else {
-			System.out.println("!!!!!!!!!!!!!!!! Failed to delete Incident Activity");
-			verifyTrue(false);
-		}
-		
 		goToTaskManager();
 	}
-
 }

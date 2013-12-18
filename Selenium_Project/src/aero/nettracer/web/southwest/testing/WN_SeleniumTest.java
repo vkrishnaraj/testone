@@ -36,6 +36,14 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 	protected static String TODAY;
 	protected static String TODAY_SIX_DIGIT;
 	
+	protected static String CUST_COMM_CREATE = "667";
+	protected static String CUST_COMM_EDIT = "668";
+	protected static String CUST_COMM_DELETE = "669";
+	protected static String CUST_COMM_VIEW_PUBLISHED = "670";
+	protected static String CUST_COMM_APPROVAL = "671";
+	protected static String CUST_COMM_APPROVAL_QUEUE = "1101";
+	protected static String CUST_COMM_REJECTED_QUEUE = "1102";
+	
 	// set up the current date for use throughout the tests
 	static {
 		TODAY = new SimpleDateFormat("MM/dd/yyyy").format(new Date(System.currentTimeMillis()));
