@@ -255,7 +255,7 @@ alter table audit_issuance_item_inventory add verified_incident tinyInt default 
 alter table audit_issuance_item_quantity add verified_incident tinyInt default 0;
 
 insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group) VALUES (680,'BSO Expense Process','Allows users to create Expense Payouts based on Established BSO Process',59,'',0,99,0);
-insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group) VALUES (681,'BSO Expense Admin','Marks Usergroup as a Administrator to not be limited by BSO Process',39,'',0,99,0);
+insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group) VALUES (681,'BSO Expense Admin','Allows Administrator Usergroup to assign BSO Process and Limit to other Usergroups',39,'',0,99,0);
 alter table usergroup add column bsoLimit double default 0;
 update usergroup set bsoLimit=0;
 
@@ -294,7 +294,6 @@ alter table expensepayout add column cancelcount int default 0;
 alter table expensepayout add column slvnum varchar(20);
 alter table expensepayout add column seccode varchar(10);
 insert into status (Status_ID,description,table_ID) VALUES (94,'Cancelled',11);
-update  expensepayout set distributemethod='',paytype='' where distributemethod is null and paytype is null;
 
 #Label Queue
 insert into properties (ID, keyStr, valueStr) VALUES (140,'label.queue',1);
@@ -358,3 +357,27 @@ alter table audit_company_specific_variable add column bagdrop_autorefresh_mins 
 
 update company_specific_variable set bagdrop_autorefresh_mins=0;
 update audit_company_specific_variable set bagdrop_autorefresh_mins=0;
+
+insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group) VALUES (688,'Payment Approval Process Admin'  ,'Allows Admin User to assign Payment Approval Process to other Usergroups',  ,'' ,0  ,104  ,3);
+insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group) VALUES (687,'Payment Approval Process Create'  ,'Allows User to create finances that need to go through the Approval process'  ,  ,'paymentApproval.do'  ,1  ,104  ,3);
+insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group) VALUES (682,'Payment Approval Process Approve'  ,'Allows User to View and Approve or Reject Tasks associated with Awaiting Disbursement Tasks'  ,15  ,'paymentApproval.do'  ,1  ,104  ,3);
+insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group) VALUES (683,'Disbursement Rejection - View'  ,'Allows User to view rejections for issued Disbursements'  ,15  ,'rejectedDisbursements.do' ,1  ,101  ,3);
+insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group) VALUES (684,'Fraud Review Task Queue'  ,'Allows User to view Fraud Review Tasks that need Approval or Rejection'  ,15  ,'fraudReview.do' ,1  ,102  ,3);
+insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group) VALUES (685,'Supervisor Review Task Queue'  ,'Allows User to view Supervisor Review Tasks that need Approval or Rejection'  ,15  ,'supervisorReview.do' ,1  ,103  ,3);
+
+alter table company_specific_variable add column fraudReview tinyint  default 0;
+update company_specific_variable set fraudReview=0;
+
+alter table incident_activity add expensepayout_id int;
+alter table incident_activity add lastPrinted date;
+insert into status (Status_ID,description,table_ID) VALUES (1411,'Fraud Review',26);
+insert into status (Status_ID,description,table_ID) VALUES (1412,'Supervisor Review',26);
+insert into status (Status_ID,description,table_ID) VALUES (1413,'Awaiting Disbursement',26);
+insert into status (Status_ID,description,table_ID) VALUES (1414,'Fraud Rejected',26);
+insert into status (Status_ID,description,table_ID) VALUES (1415,'Supervisor Rejected',26);
+insert into status (Status_ID,description,table_ID) VALUES (1416,'Finance Rejected',26);
+insert into status (Status_ID,description,table_ID) VALUES (1417,'Finance Approved',26);
+insert into status (Status_ID,description,table_ID) VALUES (1418,'Fraud Approved',26);
+insert into status (Status_ID,description,table_ID) VALUES (1419,'Supervisor Approved',26);
+
+insert into activity (code, description) VALUES ("55C","CREATE CLAIM SETTLEMENT LETTER");
