@@ -325,7 +325,7 @@
 				<textElement lineSpacing="Single">
 					<font isBold="false"/>
 				</textElement>
-				<text><![CDATA[Southwest LUV Vouchers and air fare paid with a Southwest  LUV Voucher(s) are subject to the applicable terms. Contract]]></text>
+				<text><![CDATA[Southwest LUV Vouchers and air fare paid with a Southwest  LUV Voucher(s) are subject to the applicable terms, Contract]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="2" y="484" width="548" height="13"/>
