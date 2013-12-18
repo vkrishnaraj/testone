@@ -243,18 +243,6 @@
 								<% } %>
 							</logic:equal>
 						</logic:equal>
-						
-						<logic:equal name="activity" property="isCorrespondence" value="true" >
-							<% if (canEdit) { %>
-								<a href="viewCorrespondence.do?command=<%=TracingConstants.COMMAND_EDIT %>&correspondenceId=<%=String.valueOf(activity.getId()) %>">
-									<bean:message key="customer.communication.action.view" />
-								</a>
-								<br>
-							<% } %>
-							<% if (!canEdit) { %>
-								&nbsp;
-							<% } %>
-						</logic:equal>
 						<logic:equal name="activity" property="statusId" value="0" >
 							<% if (canDelete) { %>
 								<a href="incidentActivity.do?command=<%=TracingConstants.COMMAND_DELETE %>&activity=<%=String.valueOf(activity.getId()) %>&incident=<bean:write name="incidentForm" property="incident_ID" />" onclick="return verifyDelete();" >
