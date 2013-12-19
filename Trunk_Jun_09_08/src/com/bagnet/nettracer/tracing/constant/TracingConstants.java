@@ -1403,7 +1403,8 @@ public class TracingConstants {
 	public static final String COMMAND_EDIT = "edit";
 	public static final String COMMAND_CLEAR = "clear";
 	public static final String COMMAND_SEARCH = "search";
-	public static final String COMMAND_PRINT = "print";  
+	public static final String COMMAND_PRINT = "print"; 
+	public static final String COMMAND_ACKNOWLEDGE = "acknowledge"; 
 	
 	public static final int ACTIVE_SEARCH_BOTH = 1200;
 	public static final int ACTIVE_SEARCH_ACTIVE = 1201;
