@@ -552,7 +552,7 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 	
 	@Override
 	public IncidentActivityTask getAssignedTask(Agent agent) {
-		return getAssignedTask(agent, null);
+		return getAssignedTask(agent, new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING));
 	}
 	
 	@Override
