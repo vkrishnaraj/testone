@@ -145,7 +145,7 @@ public class ReportOutputServlet extends HttpServlet {
 						break;
 					case ReportingConstants.MISSING_RECEPIT_RPT:
 						IncidentForm theform3 = (IncidentForm) session.getAttribute("incidentForm");
-						iFile = FileShareUtils.getFile(MissingReceipt.ccreateReport(theform3, sc, request, outputtype, language), sc);
+						iFile = FileShareUtils.getFile(MissingReceipt.createReport(theform3, sc, request, outputtype, language), sc);
 						break;
 					case ReportingConstants.BDO_RECEIPT_RPT:
 						BDOForm bdoform = (BDOForm) session.getAttribute("BDOForm");

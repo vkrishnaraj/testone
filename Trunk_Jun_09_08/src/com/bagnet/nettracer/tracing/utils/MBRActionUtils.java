@@ -1206,7 +1206,7 @@ public class MBRActionUtils {
 				}
 				ic.setOHD_ID(ohd); // new uppercased and spaced removed ohd_id
 
-				if ((error = bs.iinsertIncident(new Incident(), theform, TracingConstants.LOST_DELAY, sc, request)) == null) {
+				if ((error = bs.insertIncident(new Incident(), theform, TracingConstants.LOST_DELAY, sc, request)) == null) {
 					if (ohd_obj.getHoldingStation().getStation_ID() == theform.getStationassigned().getStation_ID()) {
 						ohd_obj.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_TO_BE_DELIVERED));
 					} else if (ohd_obj.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_IN_TRANSIT) {
@@ -1356,7 +1356,7 @@ public class MBRActionUtils {
 				// call unmatch to clear out match history
 				MatchUtils.unmatchTheOHD(ohd, user);
 
-				bs.iinsertIncident(new Incident(), theform, TracingConstants.LOST_DELAY, sc, request);
+				bs.insertIncident(new Incident(), theform, TracingConstants.LOST_DELAY, sc, request);
 				request.setAttribute("claimcheck", "1");
 				return true;
 			}
