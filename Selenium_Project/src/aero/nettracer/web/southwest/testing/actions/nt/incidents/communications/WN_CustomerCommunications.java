@@ -299,7 +299,7 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 			if (checkNoErrorPage()) {
 				goToTaskManager();
 				verifyTrue(isElementPresent(By.xpath("//a[contains(@href, 'customerCommunicationsTasks.do?gettask=1&communicationsId="+Settings.CUST_COMM_ID+"')]")));
-				click(By.xpath("//a[contains(@href, 'customerCommunicationsTasks.do?gettask=1&communicationsId="+Settings.CUST_COMM_ID+"')]"));
+				selenium.click("//a[contains(@href, 'customerCommunicationsTasks.do?gettask=1&communicationsId="+Settings.CUST_COMM_ID+"')]");
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
 					type(By.id("taskRemark"), "test");
