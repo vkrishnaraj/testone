@@ -6,10 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.apache.commons.collections.ListUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -34,7 +31,7 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 
-	private final Logger logger = LoggerFactory.getLogger(getClass());
+	private static Logger logger = Logger.getLogger(IncidentActivityDAOImpl.class);
 	
 	private static Map<String, String> map = new LinkedHashMap<String, String>();
 	private static Map<Integer, String> financestatusmap = new LinkedHashMap<Integer, String>();
@@ -274,49 +271,6 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 			success = true;
 		} catch (Exception e) {
 			logger.error("Failed to update incident activity task with id: " + incidentActivityTask.getTask_id(), e);
-			if (transaction != null) {
-				transaction.rollback();
-			}
-		} finally {
-			if (session != null) {
-				session.close();
-			}
-		}
-		return success;
-	}
-
-	@Override
-	public boolean publishTask(IncidentActivityTask incidentActivityTask) {
-		boolean success = false;
-		if (incidentActivityTask == null) {
-			return success;
-		}
-		
-		Session session = null;
-		Transaction transaction = null;
-		
-		try {
-			session = HibernateWrapper.getSession().openSession();
-			IncidentActivityTask oldIncidentActivityTask = (IncidentActivityTask) session.get(IncidentActivityTask.class, incidentActivityTask.getTask_id());
-			if (oldIncidentActivityTask == null) {
-				logger.error("Failed to publish incidentActivityTask - id = {}", incidentActivityTask.getTask_id());
-				return false;			
-			}
-			
-			if (oldIncidentActivityTask.getStatus().getStatus_ID() != TracingConstants.STATUS_CUSTOMER_COMM_PENDING_PRINT) {
-				logger.error("The task status '{}' for incidentActivityTask id '{}' cannot be published", oldIncidentActivityTask.getStatus().getStatus_ID(), incidentActivityTask.getTask_id());
-				return false;			
-			}
-			
-			transaction = session.beginTransaction();
-			
-			incidentActivityTask.getStatus().setStatus_ID(TracingConstants.STATUS_CUSTOMER_COMM_PUBLISHED);
-			session.merge(incidentActivityTask);
-			transaction.commit();
-			
-			success = true;
-		} catch (Exception e) {
-			logger.error("Failed to publish incident activity task with id: " + incidentActivityTask.getTask_id(), e);
 			if (transaction != null) {
 				transaction.rollback();
 			}
@@ -594,67 +548,6 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 			}
 		}
 		return results;
-	}
-	
-	@Override
-	@SuppressWarnings("unchecked")
-	public List<IncidentActivity> getIncidentActivitiesByTaskStatus(Status status, String sortBy) {
-		List<IncidentActivity> incidentActivities = ListUtils.EMPTY_LIST;
-		if (status == null || status.getStatus_ID() < 1) {
-			return incidentActivities;
-		}
-
-		Session session = null;
-		try {
-			session = HibernateWrapper.getSession().openSession();
-			Criteria criteria = session.createCriteria(IncidentActivity.class, "ia");			
-
-			criteria.createAlias("tasks", "task");
-			criteria.add(Restrictions.eq("task.status", status));
-			criteria.add(Restrictions.eq("task.active", true));
-			
-			if (StringUtils.startsWithIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_APPROVAL_AGENT_NAME.getParamString())
-					|| StringUtils.startsWithIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_APPROVAL_AGENT_USERNAME.getParamString())) {
-				criteria.createAlias("approvalAgent", "aa");
-				if (StringUtils.equalsIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_APPROVAL_AGENT_NAME.getParamString())) {
-					criteria.addOrder(Order.asc("aa.lastname"));
-				} else if (StringUtils.equalsIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_APPROVAL_AGENT_NAME_REV.getParamString())) {
-					criteria.addOrder(Order.desc("aa.lastname"));
-				} else if (StringUtils.equalsIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_APPROVAL_AGENT_USERNAME.getParamString())) {
-					criteria.addOrder(Order.asc("aa.username"));
-				} else {
-					criteria.addOrder(Order.desc("aa.username"));
-				}
-			} else if (StringUtils.startsWithIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_DOCUMENT_ID.getParamString())
-					|| StringUtils.startsWithIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_DOCUMENT_TITLE.getParamString())) {
-				criteria.createAlias("document", "d");
-				if (StringUtils.equalsIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_DOCUMENT_ID.getParamString())) {
-					criteria.addOrder(Order.asc("d.id"));
-				} else if (StringUtils.equalsIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_DOCUMENT_ID_REV.getParamString())) {
-					criteria.addOrder(Order.desc("d.id"));
-				} else if (StringUtils.equalsIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_DOCUMENT_TITLE.getParamString())) {
-					criteria.addOrder(Order.asc("d.title"));
-				} else {
-					criteria.addOrder(Order.desc("d.title"));
-				}
-			} else if (StringUtils.equalsIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_REV.getParamString())) {
-				criteria.addOrder(Order.desc("ia.incident"));
-			} else {
-				criteria.addOrder(Order.asc("ia.incident"));
-			}
-			
-			incidentActivities = criteria.list();
-		} catch (Exception e) {
-			logger.error("Failed loading incident activities by tasks status's Id = {}", status.getStatus_ID(), e);
-		} finally {
-			if (session != null) {
-				session.close();
-			}
-		}
-
-
-		logger.info("\r\n------------------------------------------------> incidentActivities={} with status Id={}", incidentActivities.size(), status.getStatus_ID());//??????
-		return incidentActivities;
 	}
 	
 	@Override
