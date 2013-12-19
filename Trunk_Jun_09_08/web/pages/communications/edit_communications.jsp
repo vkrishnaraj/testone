@@ -282,19 +282,19 @@ legend {
 								<tr>
 									<td colspan=2 style="text-align:center;" >
 										<logic:equal name="customerCommunicationsForm" property="taskStatus" value="<%=String.valueOf(TracingConstants.STATUS_CUSTOMER_COMM_PENDING) %>"> 
-											<input type="button" class="button" value="<bean:message key="cust.comm.approve" />" onclick="approveCommunication('<%=String.valueOf(TracingConstants.STATUS_CUSTOMER_COMM_APPROVED) %>');" />
+											<input id="approveButton" type="button" class="button" value="<bean:message key="cust.comm.approve" />" onclick="approveCommunication('<%=String.valueOf(TracingConstants.STATUS_CUSTOMER_COMM_APPROVED) %>');" />
 											&nbsp;
-											<input type="button" class="button" value="<bean:message key="cust.comm.reject" />" onclick="rejectCommunication('<%=String.valueOf(TracingConstants.STATUS_CUSTOMER_COMM_DENIED) %>');" />
+											<input id="rejectButton" type="button" class="button" value="<bean:message key="cust.comm.reject" />" onclick="rejectCommunication('<%=String.valueOf(TracingConstants.STATUS_CUSTOMER_COMM_DENIED) %>');" />
 										</logic:equal>
 										<logic:equal name="customerCommunicationsForm" property="taskStatus" value="<%=String.valueOf(TracingConstants.FINANCE_STATUS_FRAUD_REVIEW) %>"> 
-											<input type="button" class="button" value="<bean:message key="cust.comm.approve" />" onclick="approveCommunication('<%=String.valueOf(TracingConstants.FINANCE_STATUS_FRAUD_APPROVED) %>');" />
+											<input id="approveButton" type="button" class="button" value="<bean:message key="cust.comm.approve" />" onclick="approveCommunication('<%=String.valueOf(TracingConstants.FINANCE_STATUS_FRAUD_APPROVED) %>');" />
 											&nbsp;
-											<input type="button" class="button" value="<bean:message key="cust.comm.reject" />" onclick="rejectCommunication('<%=String.valueOf(TracingConstants.FINANCE_STATUS_FRAUD_REJECTED) %>');" />
+											<input id="rejectButton" type="button" class="button" value="<bean:message key="cust.comm.reject" />" onclick="rejectCommunication('<%=String.valueOf(TracingConstants.FINANCE_STATUS_FRAUD_REJECTED) %>');" />
 										</logic:equal>
 										<logic:equal name="customerCommunicationsForm" property="taskStatus" value="<%=String.valueOf(TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW) %>"> 
-											<input type="button" class="button" value="<bean:message key="cust.comm.approve" />" onclick="approveCommunication('<%=String.valueOf(TracingConstants.FINANCE_STATUS_SUPERVISOR_APPROVED) %>');" />
+											<input id="approveButton" type="button" class="button" value="<bean:message key="cust.comm.approve" />" onclick="approveCommunication('<%=String.valueOf(TracingConstants.FINANCE_STATUS_SUPERVISOR_APPROVED) %>');" />
 											&nbsp;
-											<input type="button" class="button" value="<bean:message key="cust.comm.reject" />" onclick="rejectCommunication('<%=String.valueOf(TracingConstants.FINANCE_STATUS_SUPERVISOR_REJECTED) %>');" />
+											<input id="rejectButton" type="button" class="button" value="<bean:message key="cust.comm.reject" />" onclick="rejectCommunication('<%=String.valueOf(TracingConstants.FINANCE_STATUS_SUPERVISOR_REJECTED) %>');" />
 										</logic:equal>
 									</td>
 								</tr>

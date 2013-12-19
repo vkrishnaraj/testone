@@ -21,6 +21,7 @@ import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskDTO;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskSearchDTO;
 import com.bagnet.nettracer.tracing.forms.communications.CustomerCommunicationsTaskForm;
@@ -47,7 +48,7 @@ public class CustomerCommunicationsApprovalAction extends CheckedAction {
 			return null;
 		}
 		
-		if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_CREATE, user))
+		if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL, user))
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
 		
 		if (session.getAttribute("taskMessage") != null) {
@@ -55,6 +56,12 @@ public class CustomerCommunicationsApprovalAction extends CheckedAction {
 			messages.add(ActionMessages.GLOBAL_MESSAGE, (ActionMessage) request.getSession().getAttribute("taskMessage"));
 			saveMessages(request, messages);
 			request.getSession().removeAttribute("taskMessage");
+		}
+		
+		IncidentActivityTask assignedTask = incidentActivityService.getAssignedTask(user);
+		if (assignedTask != null) {
+			request.setAttribute("assignedTask", DomainUtils.fromIncidentActivityTask(assignedTask));
+			return mapping.findForward(TracingConstants.CUSTOMER_COMMUNICATIONS_PENDING);
 		}
 		
 		CustomerCommunicationsTaskForm cctf = (CustomerCommunicationsTaskForm) form;
