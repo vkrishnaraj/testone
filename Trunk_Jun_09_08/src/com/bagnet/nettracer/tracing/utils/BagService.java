@@ -554,13 +554,13 @@ public class BagService {
 		return ret;
 	}
 
-	public ActionMessage iinsertIncident(Incident iDTO, IncidentForm theform, int itemtype, ServletContext sc,
+	public ActionMessage insertIncident(Incident iDTO, IncidentForm theform, int itemtype, ServletContext sc,
 			HttpServletRequest request) {
-		return iinsertIncident(iDTO, theform, itemtype, sc, request, false);
+		return insertIncident(iDTO, theform, itemtype, sc, request, false);
 	}
 
 	@SuppressWarnings("unchecked")
-	public ActionMessage iinsertIncident(Incident iDTO, IncidentForm theform, int itemtype, ServletContext sc,
+	public ActionMessage insertIncident(Incident iDTO, IncidentForm theform, int itemtype, ServletContext sc,
 			HttpServletRequest request, boolean checkClosedStatus) {
 		try {
 
@@ -1016,7 +1016,6 @@ public class BagService {
 									request.setAttribute(TracingConstants.COMMAND_PRINT, ReportingConstants.LOST_RECEIPT_RPT);									
 									File iFile = FileShareUtils.getFile(LostDelayReceipt.createReport(theform, sc, request, TracingConstants.REPORT_OUTPUT_PDF, currentLocale), sc);
 									if (iFile != null && iFile.exists()) {
-										logger.info("\r\n\r------------>LOST_DELAY\nPath=" + iFile.getPath()); //??????
 										he.attach(new FileDataSource(iFile), iFile.getPath(), "");
 									}
 									
@@ -1046,7 +1045,6 @@ public class BagService {
 									request.setAttribute(TracingConstants.COMMAND_PRINT, ReportingConstants.DAMAGE_RECEPIT_RPT);									
 									File iFile = FileShareUtils.getFile(DamageReceipt.createReport(theform, sc, request, TracingConstants.REPORT_OUTPUT_PDF, currentLocale), sc);
 									if (iFile != null && iFile.exists()) {
-										logger.info("\r\n\r------------>DAMAGED_BAG\nPath=" + iFile.getPath()); //??????
 										he.attach(new FileDataSource(iFile), iFile.getPath(), "");
 									}
 
@@ -1076,7 +1074,6 @@ public class BagService {
 									request.setAttribute(TracingConstants.COMMAND_PRINT, ReportingConstants.MISSING_RECEPIT_RPT);									
 									File iFile = FileShareUtils.getFile(MissingReceipt.createReport(theform, sc, request, TracingConstants.REPORT_OUTPUT_PDF, currentLocale), sc);
 									if (iFile != null && iFile.exists()) {
-										logger.info("\r\n\r------------>MISSING_RECEPIT\nPath=" + iFile.getPath()); //??????
 										he.attach(new FileDataSource(iFile), iFile.getPath(), "");
 									}
 
