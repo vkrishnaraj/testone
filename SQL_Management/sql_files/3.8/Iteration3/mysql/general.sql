@@ -365,7 +365,7 @@ insert into systemcomponents (component_id,component_name,component_desc,parent_
 insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group) VALUES (684,'Fraud Review Task Queue'  ,'Allows User to view Fraud Review Tasks that need Approval or Rejection'  ,15  ,'fraudReview.do' ,1  ,102  ,3);
 insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group) VALUES (685,'Supervisor Review Task Queue'  ,'Allows User to view Supervisor Review Tasks that need Approval or Rejection'  ,15  ,'supervisorReview.do' ,1  ,103  ,3);
 
-alter table expensetype add column maildate date;
+alter table expensepayout add column maildate date;
 alter table company_specific_variable add column fraudReview tinyint  default 0;
 update company_specific_variable set fraudReview=0;
 
