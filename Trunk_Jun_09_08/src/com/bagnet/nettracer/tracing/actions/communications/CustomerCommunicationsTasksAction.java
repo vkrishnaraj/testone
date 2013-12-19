@@ -33,6 +33,7 @@ public class CustomerCommunicationsTasksAction extends CheckedAction {
 	private final Status STATUS_PENDING = new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING);
 	private final Status STATUS_FRAUD_REVIEW = new Status(TracingConstants.FINANCE_STATUS_FRAUD_REVIEW);
 	private final Status STATUS_SUPERVISOR_REVIEW = new Status(TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW);
+	private final Status STATUS_APPROVED = new Status(TracingConstants.STATUS_CUSTOMER_COMM_APPROVED);
 	private final Status STATUS_DENIED = new Status(TracingConstants.STATUS_CUSTOMER_COMM_DENIED);
 	
 	private IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
@@ -165,6 +166,7 @@ public class CustomerCommunicationsTasksAction extends CheckedAction {
 		incidentActivityService.closeTask(incidentActivityTaskId);
 		IncidentActivityTask iat = incidentActivityService.loadTask(incidentActivityTaskId);
 		if (iat != null) {
+			iat.getIncidentActivity().setApprovalAgent(iat.getAssigned_agent());
 			return approved ? handleApproveTask(iat) : handleRejectTask(iat);
 		}
 		logger.error("Failed to load task with id: " + incidentActivityTaskId);
@@ -173,12 +175,16 @@ public class CustomerCommunicationsTasksAction extends CheckedAction {
 	
 	private boolean handleApproveTask(IncidentActivityTask iat) {
 		IncidentActivity ia=iat.getIncidentActivity();
-		ia.setApprovalAgent(iat.getAssigned_agent());
+		if (!incidentActivityService.createTask(ia, STATUS_APPROVED, iat.getAssigned_agent(), false)) {
+			logger.error("Failed to create an approval task for IncidentActivity: " + iat.getTask_id());
+		}
+
 		if(iat.getStatus().getStatus_ID()==TracingConstants.FINANCE_STATUS_FRAUD_REVIEW){
 			return incidentActivityService.createTask(ia, new Status(TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW));
 		} else if (iat.getStatus().getStatus_ID()==TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW){
 			return incidentActivityService.createTask(ia, new Status(TracingConstants.FINANCE_STATUS_AWAITING_DISBURSEMENT));
 		}
+		
 		switch(ia.getCustCommId()) {
 			case TracingConstants.CUST_COMM_POSTAL_MAIL:
 				return incidentActivityService.createTask(ia, STATUS_PENDING_PRINT);
@@ -192,7 +198,6 @@ public class CustomerCommunicationsTasksAction extends CheckedAction {
 	
 	private boolean handleRejectTask(IncidentActivityTask iat) {
 		IncidentActivity ia=iat.getIncidentActivity();
-		ia.setApprovalAgent(iat.getAssigned_agent());
 		if(iat.getStatus().getStatus_ID()==TracingConstants.FINANCE_STATUS_FRAUD_REVIEW){
 			return incidentActivityService.createTask(ia, new Status(TracingConstants.FINANCE_STATUS_FRAUD_REJECTED), ia.getAgent());
 		} else if(iat.getStatus().getStatus_ID()==TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW){

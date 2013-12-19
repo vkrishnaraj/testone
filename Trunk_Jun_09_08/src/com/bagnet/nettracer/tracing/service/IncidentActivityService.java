@@ -32,6 +32,7 @@ public interface IncidentActivityService {
 	
 	public boolean createTask(IncidentActivity incidentActivity, Status withStatus);	
 	public boolean createTask(IncidentActivity incidentActivity, Status withStatus, Agent forAgent);	
+	public boolean createTask(IncidentActivity incidentActivity, Status withStatus, Agent forAgent, boolean active);	
 	public boolean closeTask(long incidentActivityTaskId);
 	public IncidentActivityTask loadTaskForIncidentActivity(long incidentActivityId, Status withStatus);
 	public IncidentActivityTask loadTaskForIncidentActivity(IncidentActivity incidentActivity, Status withStatus);

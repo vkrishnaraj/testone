@@ -213,8 +213,13 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 	
 	@Override
 	public boolean createTask(IncidentActivity incidentActivity, Status withStatus, Agent forAgent) {
+		return createTask(incidentActivity, withStatus, forAgent, true);
+	}
+	
+	@Override
+	public boolean createTask(IncidentActivity incidentActivity, Status withStatus, Agent forAgent, boolean active) {
 		if (incidentActivity == null || withStatus == null) return false;
-		IncidentActivityTask iat = DomainUtils.createIncidentActivityTask(incidentActivity, withStatus);
+		IncidentActivityTask iat = DomainUtils.createIncidentActivityTask(incidentActivity, withStatus, active);
 		iat.setAssigned_agent(forAgent);
 		boolean success = saveTask(iat) != 0;
 		incidentActivity.getTasks().add(iat);

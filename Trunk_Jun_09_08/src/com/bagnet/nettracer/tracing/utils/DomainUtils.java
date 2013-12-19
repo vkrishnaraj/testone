@@ -241,12 +241,15 @@ public class DomainUtils {
 		return ia;
 	}
 	
-	public static IncidentActivityTask createIncidentActivityTask(IncidentActivity incidentActivity, Status withStatus) {
+	public static IncidentActivityTask createIncidentActivityTask(IncidentActivity incidentActivity, Status withStatus, boolean active) {
 		IncidentActivityTask iat = new IncidentActivityTask();
 		iat.setOpened_timestamp(DateUtils.convertToGMTDate(new Date()));
 		iat.setIncidentActivity(incidentActivity);
 		iat.setStatus(withStatus);
-		iat.setActive(true);
+		iat.setActive(active);
+		if (!active) {
+			iat.setClosed_timestamp(DateUtils.convertToGMTDate(new Date()));
+		}
 		return iat;
 	}
 	
