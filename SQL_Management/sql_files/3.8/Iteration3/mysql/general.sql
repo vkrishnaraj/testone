@@ -71,7 +71,9 @@ insert into status (Status_ID,description,table_id) values
 (1400,'Pending',26),
 (1401,'Approved',26),
 (1402,'Denied',26),
-(1403,'Published',26);
+(1403,'Published',26),
+(1404,'Pending Print',26),
+(1405,'Pending Publish to Web Portal',26);
 
 alter table template add typeAvailableFor int default 0;
 
