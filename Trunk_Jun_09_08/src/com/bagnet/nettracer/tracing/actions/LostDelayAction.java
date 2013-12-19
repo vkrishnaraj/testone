@@ -290,12 +290,7 @@ public class LostDelayAction extends CheckedAction {
 			disputeProcess = true;
 		} 
 
-		String realpath = null;
-		if (getServlet() != null){
-			ServletContext sc = getServlet().getServletContext();
-			realpath = sc.getRealPath("/");
-		}
-		
+		ServletContext sc = getServlet().getServletContext();
 		if(request.getAttribute("faultCompanyList") == null || request.getAttribute("faultstationlist") == null) {
 			if(UserPermissions.hasLimitedSavePermissionByType(user, TracingConstants.LOST_DELAY)) {
 				request.setAttribute("faultstationlist", UserPermissions.getLimitedSaveStations(user, TracingConstants.LOST_DELAY));
@@ -321,7 +316,7 @@ public class LostDelayAction extends CheckedAction {
 			}
 		}
 		// / confirm matching and unmatching
-		error = MBRActionUtils.actionMatching(theform, request, user, realpath);
+		error = MBRActionUtils.actionMatching(theform, request, user, sc);
 
 		if(error != null) {
 			if(error.getKey().length() > 0) {
@@ -333,7 +328,7 @@ public class LostDelayAction extends CheckedAction {
 			return (mapping.findForward(TracingConstants.UPDATE_FILE_SUCCESS));
 		}
 
-		if(MBRActionUtils.actionUnMatching(theform, request, user, realpath)) {
+		if(MBRActionUtils.actionUnMatching(theform, request, user, sc)) {
 			request.setAttribute("lostdelay", "1");
 			request.setAttribute("Incident_ID", theform.getIncident_ID());
 			return (mapping.findForward(TracingConstants.UPDATE_FILE_SUCCESS));
@@ -341,7 +336,7 @@ public class LostDelayAction extends CheckedAction {
 
 		// if got here and one of the claimchecks has tempOHD entered, then
 		// alert user
-		error = MBRActionUtils.checkOHDEntered(theform, request, user, realpath);
+		error = MBRActionUtils.checkOHDEntered(theform, request, user, sc);
 		if(error != null) {
 			if(error.getKey().length() > 0) {
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
@@ -567,12 +562,12 @@ public class LostDelayAction extends CheckedAction {
 				}
 				
 				if( request.getParameter("close") != null && request.getParameter("doclose") != null) {
-					error = bs.insertIncident(iDTO, theform, TracingConstants.LOST_DELAY, realpath, user, false);
+					error = bs.insertIncident(iDTO, theform, TracingConstants.LOST_DELAY, sc, request, false);
 				} else if(request.getParameter("saveadditions")!=null){
-					error = bs.saveItems(iDTO,theform, TracingConstants.LOST_DELAY, realpath, user, false);
+					error = bs.saveItems(iDTO,theform, TracingConstants.LOST_DELAY, sc.getRealPath("/"), user, false);
 				}
 				else {
-					error = bs.insertIncident(iDTO, theform, TracingConstants.LOST_DELAY, realpath, user, true);
+					error = bs.insertIncident(iDTO, theform, TracingConstants.LOST_DELAY, sc, request, true);
 				}
 				if(error == null || (request.getParameter("doclosewt") != null && error.getKey().equals("error.unable_to_close_incident"))) {
 					theform.setRemarkEnteredWhenNotifiedOfRequirements(false);

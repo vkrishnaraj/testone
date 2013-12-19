@@ -28,6 +28,7 @@ import com.bagnet.nettracer.tracing.forms.ClaimProrateForm;
 import com.bagnet.nettracer.tracing.forms.ClaimSettlementForm;
 import com.bagnet.nettracer.tracing.forms.ExpensePayoutForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
+import com.bagnet.nettracer.tracing.utils.FileShareUtils;
 
 /**
  * @author Administrator
@@ -35,6 +36,7 @@ import com.bagnet.nettracer.tracing.forms.IncidentForm;
  * create date - Aug 12, 2004
  */
 public class ReportOutputServlet extends HttpServlet {
+	private static final long serialVersionUID = -6091206482068047512L;
 	private static Logger logger = Logger.getLogger(ReportOutputServlet.class);
 
 	/**
@@ -121,68 +123,55 @@ public class ReportOutputServlet extends HttpServlet {
 			ClaimForm cform = (ClaimForm) session.getAttribute("claimForm");
 
 			if ((file = request.getParameter("reportfile")) != null) {
-				iFile = getFile(file, sc);
+				iFile = FileShareUtils.getFile(file, sc);
 				if (iFile == null) response.sendRedirect("statReport.do?error=print");
-			} else {
-	
-				// print receipt or claim forms
-				if ((request.getParameter("print")) != null) {
-					int type = Integer.parseInt(request.getParameter("print"));
-					switch (type) {
-						case ReportingConstants.CLAIM_PAYOUT_RPT:
-							iFile = getFile(ClaimPayoutRpt.createReport(cform.getClaim().getNtIncident(), sc, request), sc);
-							break;
-						case ReportingConstants.CLAIM_PRORATE_RPT:
-							ClaimProrateForm cpform = (ClaimProrateForm) session.getAttribute("claimProrateForm");
-							iFile = getFile(ClaimProrateRpt.createReport(cpform, sc, request), sc);
-							break;
-						case ReportingConstants.LOST_RECEIPT_RPT:
-							IncidentForm theform = (IncidentForm) session.getAttribute("incidentForm");
-							
-							iFile = getFile(LostDelayReceipt.createReport(theform, sc, request, outputtype,
-									language), sc);
-							break;
-						case ReportingConstants.DAMAGE_RECEPIT_RPT:
-							IncidentForm theform2 = (IncidentForm) session.getAttribute("incidentForm");
-							
-							iFile = getFile(DamageReceipt.createReport(theform2, sc, request, outputtype,
-									language), sc);
-							break;
-						case ReportingConstants.MISSING_RECEPIT_RPT:
-							IncidentForm theform3 = (IncidentForm) session.getAttribute("incidentForm");
-							
-							iFile = getFile(MissingReceipt.createReport(theform3, sc, request, outputtype,
-									language), sc);
-							break;
-						case ReportingConstants.BDO_RECEIPT_RPT:
-							BDOForm bdoform = (BDOForm) session.getAttribute("BDOForm");
-							
-							iFile = getFile(BDOReceipt.createReport(bdoform, sc, request, outputtype,
-									language), sc);
-							break;
-						case ReportingConstants.PPLC_RPT:
-							ClaimSettlementForm theform4 = (ClaimSettlementForm) session.getAttribute("claimSettlementForm");
-							
-							iFile = getFile(PPLCReport.createReport(theform4, sc, request, language, outputtype), sc);
-							break;
-						case ReportingConstants.DEPREC_SUMMARY:
-							ClaimDeprecCalcForm deprecForm = (ClaimDeprecCalcForm) session.getAttribute("claimDeprecCalcForm");
-							
-							iFile = getFile(DeprecSummary.createReport(deprecForm, sc, request, outputtype,language),sc);
-							break;
-						case ReportingConstants.CRAP_SHEET:
-							iFile = getFile(CRAPReport.createReport(cform, sc, request, outputtype,language),sc);
-							break;
-						case ReportingConstants.EXP_LUV:
-							ExpensePayoutForm epform = (ExpensePayoutForm) request.getSession().getAttribute("expensepayoutform");
-							if (epform.getDistributemethod().equals(TracingConstants.DISTR_EMAIL) || epform.getDistributemethod().equals(TracingConstants.DISTR_MAIL)) 
-								iFile = getFile(LUVReceipt_Mail.createReport(epform, sc, request, outputtype,language),sc);
-							else if (epform.getDistributemethod().equals(TracingConstants.DISTR_IMME))
-								iFile = getFile(LUVReceipt_Imme.createReport(epform, sc, request, outputtype,language),sc);
-							break;
-						default:
-							break;
-					}
+			} else if ((request.getParameter(TracingConstants.COMMAND_PRINT)) != null) {// print receipt or claim forms
+				int type = Integer.parseInt(request.getParameter(TracingConstants.COMMAND_PRINT));
+				switch (type) {
+					case ReportingConstants.CLAIM_PAYOUT_RPT:
+						iFile = FileShareUtils.getFile(ClaimPayoutRpt.createReport(cform.getClaim().getNtIncident(), sc, request), sc);
+						break;
+					case ReportingConstants.CLAIM_PRORATE_RPT:
+						ClaimProrateForm cpform = (ClaimProrateForm) session.getAttribute("claimProrateForm");
+						iFile = FileShareUtils.getFile(ClaimProrateRpt.createReport(cpform, sc, request), sc);
+						break;
+					case ReportingConstants.LOST_RECEIPT_RPT:
+						IncidentForm theform = (IncidentForm) session.getAttribute("incidentForm");
+						iFile = FileShareUtils.getFile(LostDelayReceipt.createReport(theform, sc, request, outputtype, language), sc);
+						break;
+					case ReportingConstants.DAMAGE_RECEPIT_RPT:
+						IncidentForm theform2 = (IncidentForm) session.getAttribute("incidentForm");
+						iFile = FileShareUtils.getFile(DamageReceipt.createReport(theform2, sc, request, outputtype, language), sc);
+						break;
+					case ReportingConstants.MISSING_RECEPIT_RPT:
+						IncidentForm theform3 = (IncidentForm) session.getAttribute("incidentForm");
+						iFile = FileShareUtils.getFile(MissingReceipt.ccreateReport(theform3, sc, request, outputtype, language), sc);
+						break;
+					case ReportingConstants.BDO_RECEIPT_RPT:
+						BDOForm bdoform = (BDOForm) session.getAttribute("BDOForm");
+						iFile = FileShareUtils.getFile(BDOReceipt.createReport(bdoform, sc, request, outputtype, language), sc);
+						break;
+					case ReportingConstants.PPLC_RPT:
+						ClaimSettlementForm theform4 = (ClaimSettlementForm) session.getAttribute("claimSettlementForm");
+						iFile = FileShareUtils.getFile(PPLCReport.createReport(theform4, sc, request, language, outputtype), sc);
+						break;
+					case ReportingConstants.DEPREC_SUMMARY:
+						ClaimDeprecCalcForm deprecForm = (ClaimDeprecCalcForm) session.getAttribute("claimDeprecCalcForm");
+						iFile = FileShareUtils.getFile(DeprecSummary.createReport(deprecForm, sc, request, outputtype,language),sc);
+						break;
+					case ReportingConstants.CRAP_SHEET:
+						iFile = FileShareUtils.getFile(CRAPReport.createReport(cform, sc, request, outputtype,language),sc);
+						break;
+					case ReportingConstants.EXP_LUV:
+						ExpensePayoutForm epform = (ExpensePayoutForm) request.getSession().getAttribute("expensepayoutform");
+						if (epform.getDistributemethod().equals(TracingConstants.DISTR_EMAIL) || epform.getDistributemethod().equals(TracingConstants.DISTR_MAIL)) { 
+							iFile = FileShareUtils.getFile(LUVReceipt_Mail.createReport(epform, sc, request, outputtype,language),sc);
+						} else if (epform.getDistributemethod().equals(TracingConstants.DISTR_IMME)) {
+							iFile = FileShareUtils.getFile(LUVReceipt_Imme.createReport(epform, sc, request, outputtype,language),sc);
+						}
+						break;
+					default:
+						break;
 				}
 			}
 
@@ -234,20 +223,4 @@ public class ReportOutputServlet extends HttpServlet {
 			response.sendRedirect("claim_payout.do?error=print");
 		} 
 	}
-
-
-	private File getFile(String filepath, ServletContext sc) {
-		filepath = sc.getRealPath("/") + ReportingConstants.REPORT_TMP_PATH
-				+ filepath;
-		File f = new File(filepath);
-
-		if (!f.exists()) {
-			logger.error("no report file exists");
-			return null;
-		} else {
-			return f;
-		}
-	}
-
-
 }

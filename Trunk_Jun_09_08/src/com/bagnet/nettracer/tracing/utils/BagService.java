@@ -6,6 +6,7 @@
  */
 package com.bagnet.nettracer.tracing.utils;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -20,7 +21,11 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.TimeZone;
 
+import org.apache.commons.lang.StringUtils;
+
+import javax.activation.FileDataSource;
 import javax.mail.internet.InternetAddress;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -34,7 +39,10 @@ import org.hibernate.Session;
 import com.bagnet.nettracer.email.HtmlEmail;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.integrations.events.BeornDTO;
+import com.bagnet.nettracer.reporting.DamageReceipt;
 import com.bagnet.nettracer.reporting.LostDelayReceipt;
+import com.bagnet.nettracer.reporting.MissingReceipt;
+import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.bmo.ClaimBMO;
 import com.bagnet.nettracer.tracing.bmo.ForwardNoticeBMO;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
@@ -546,15 +554,18 @@ public class BagService {
 		return ret;
 	}
 
-	public ActionMessage insertIncident(Incident iDTO, IncidentForm theform, int itemtype, String realpath,
-			Agent mod_agent) {
-		return insertIncident(iDTO, theform, itemtype, realpath, mod_agent, false);
+	public ActionMessage iinsertIncident(Incident iDTO, IncidentForm theform, int itemtype, ServletContext sc,
+			HttpServletRequest request) {
+		return iinsertIncident(iDTO, theform, itemtype, sc, request, false);
 	}
 
 	@SuppressWarnings("unchecked")
-	public ActionMessage insertIncident(Incident iDTO, IncidentForm theform, int itemtype, String realpath,
-			Agent mod_agent, boolean checkClosedStatus) {
+	public ActionMessage iinsertIncident(Incident iDTO, IncidentForm theform, int itemtype, ServletContext sc,
+			HttpServletRequest request, boolean checkClosedStatus) {
 		try {
+
+			HttpSession session = request.getSession();
+			Agent mod_agent = (Agent) session.getAttribute("user");
 			boolean setToClosedStatus = false;
 			IncidentBMO iBMO = new IncidentBMO(); // init lostdelay pojo or ejb
 			Incident oldInc=null;
@@ -567,6 +578,7 @@ public class BagService {
 			if(iDTO.getAgentassigned() == null || iDTO.getAgentassigned().getAgent_ID() == 0)
 				iDTO.setAgentassigned(null);
 
+			String realpath = sc.getRealPath("/");
 			String configpath = realpath + "/WEB-INF/classes/";
 			String imagepath = realpath + "/deployment/main/images/nettracer/";
 
@@ -952,9 +964,6 @@ public class BagService {
 							HtmlEmail he = new HtmlEmail();
 							he.setHostName(theform.getAgent().getStation().getCompany().getVariable().getEmail_host());
 							he.setSmtpPort(theform.getAgent().getStation().getCompany().getVariable().getEmail_port());
-
-							he.setFrom(theform.getAgent().getStation().getCompany().getVariable().getEmail_from());
-
 							he.setFrom(theform.getAgent().getStation().getCompany().getVariable().getEmail_from());
 							
 							String currentLocale = theform.getLanguage();
@@ -1000,6 +1009,19 @@ public class BagService {
 								
 								h.put("EMAIL_APOLOGIZE_FOR_TEXT", messages.getMessage(
 										new Locale(currentLocale), "email.mishandled.content.apologize.text"));
+								
+								if (StringUtils.trimToNull(theform.getIncident_ID()) == null && PropertyBMO.isTrue(PropertyBMO.PROPERTY_MISHANDLING_ATTACHMENT_AT_CREATION)) {
+									theform.setIncident_ID(iDTO.getIncident_ID());
+									
+									request.setAttribute(TracingConstants.COMMAND_PRINT, ReportingConstants.LOST_RECEIPT_RPT);									
+									File iFile = FileShareUtils.getFile(LostDelayReceipt.createReport(theform, sc, request, TracingConstants.REPORT_OUTPUT_PDF, currentLocale), sc);
+									if (iFile != null && iFile.exists()) {
+										logger.info("\r\n\r------------>LOST_DELAY\nPath=" + iFile.getPath()); //??????
+										he.attach(new FileDataSource(iFile), iFile.getPath(), "");
+									}
+									
+									theform.setIncident_ID(null);//reset form incident Id
+								}
 							}
 							else if(iDTO.getItemtype_ID() == TracingConstants.DAMAGED_BAG) {
 								h.put("REPORT_TYPE", messages.getMessage(
@@ -1017,6 +1039,19 @@ public class BagService {
 								
 								h.put("EMAIL_APOLOGIZE_FOR_TEXT", messages.getMessage(
 										new Locale(currentLocale), "email.damaged.content.apologize.text"));
+								
+								if (StringUtils.trimToNull(theform.getIncident_ID()) == null && PropertyBMO.isTrue(PropertyBMO.PROPERTY_MISHANDLING_ATTACHMENT_AT_CREATION)) {
+									theform.setIncident_ID(iDTO.getIncident_ID());
+									
+									request.setAttribute(TracingConstants.COMMAND_PRINT, ReportingConstants.DAMAGE_RECEPIT_RPT);									
+									File iFile = FileShareUtils.getFile(DamageReceipt.createReport(theform, sc, request, TracingConstants.REPORT_OUTPUT_PDF, currentLocale), sc);
+									if (iFile != null && iFile.exists()) {
+										logger.info("\r\n\r------------>DAMAGED_BAG\nPath=" + iFile.getPath()); //??????
+										he.attach(new FileDataSource(iFile), iFile.getPath(), "");
+									}
+
+									theform.setIncident_ID(null);//reset form incident Id
+								}
 							} 
 							else if(iDTO.getItemtype_ID() == TracingConstants.MISSING_ARTICLES) {
 								h.put("REPORT_TYPE", messages.getMessage(
@@ -1034,6 +1069,19 @@ public class BagService {
 								
 								h.put("EMAIL_APOLOGIZE_FOR_TEXT", messages.getMessage(
 										new Locale(currentLocale), "email.missing.content.apologize.text"));
+								
+								if (StringUtils.trimToNull(theform.getIncident_ID()) == null && PropertyBMO.isTrue(PropertyBMO.PROPERTY_MISHANDLING_ATTACHMENT_AT_CREATION)) {
+									theform.setIncident_ID(iDTO.getIncident_ID());
+									
+									request.setAttribute(TracingConstants.COMMAND_PRINT, ReportingConstants.MISSING_RECEPIT_RPT);									
+									File iFile = FileShareUtils.getFile(MissingReceipt.createReport(theform, sc, request, TracingConstants.REPORT_OUTPUT_PDF, currentLocale), sc);
+									if (iFile != null && iFile.exists()) {
+										logger.info("\r\n\r------------>MISSING_RECEPIT\nPath=" + iFile.getPath()); //??????
+										he.attach(new FileDataSource(iFile), iFile.getPath(), "");
+									}
+
+									theform.setIncident_ID(null);//reset form incident Id
+								}
 							}
 							
 						

@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -1176,7 +1177,7 @@ public class MBRActionUtils {
 	 * @return @throws
 	 *         Exception
 	 */
-	public static ActionMessage actionMatching(IncidentForm theform, HttpServletRequest request, Agent user, String realpath) throws Exception {
+	public static ActionMessage actionMatching(IncidentForm theform, HttpServletRequest request, Agent user, ServletContext sc) throws Exception {
 
 		BagService bs = new BagService();
 		Incident_Claimcheck ic = null;
@@ -1205,7 +1206,7 @@ public class MBRActionUtils {
 				}
 				ic.setOHD_ID(ohd); // new uppercased and spaced removed ohd_id
 
-				if ((error = bs.insertIncident(new Incident(), theform, TracingConstants.LOST_DELAY, realpath, user)) == null) {
+				if ((error = bs.iinsertIncident(new Incident(), theform, TracingConstants.LOST_DELAY, sc, request)) == null) {
 					if (ohd_obj.getHoldingStation().getStation_ID() == theform.getStationassigned().getStation_ID()) {
 						ohd_obj.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_TO_BE_DELIVERED));
 					} else if (ohd_obj.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_IN_TRANSIT) {
@@ -1273,7 +1274,7 @@ public class MBRActionUtils {
 					item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_MATCHED));
 				}
 
-				if ((error = bs.insertIncident(new Incident(), theform, TracingConstants.LOST_DELAY, realpath, user)) == null) {
+				if ((error = bs.insertIncident(new Incident(), theform, TracingConstants.LOST_DELAY, sc, request)) == null) {
 					// update ohd status to be delivered if it is in this station
 					if (ohd_obj.getHoldingStation().getStation_ID() == theform.getStationassigned().getStation_ID()) {
 						ohd_obj.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_TO_BE_DELIVERED));
@@ -1293,7 +1294,7 @@ public class MBRActionUtils {
 		return null;
 	}
 
-	public static boolean actionUnMatching(IncidentForm theform, HttpServletRequest request, Agent user, String realpath) throws Exception {
+	public static boolean actionUnMatching(IncidentForm theform, HttpServletRequest request, Agent user, ServletContext sc) throws Exception {
 		// unmatch claim is clicked
 		BagService bs = new BagService();
 		Incident_Claimcheck ic = null;
@@ -1355,7 +1356,7 @@ public class MBRActionUtils {
 				// call unmatch to clear out match history
 				MatchUtils.unmatchTheOHD(ohd, user);
 
-				bs.insertIncident(new Incident(), theform, TracingConstants.LOST_DELAY, realpath, user);
+				bs.iinsertIncident(new Incident(), theform, TracingConstants.LOST_DELAY, sc, request);
 				request.setAttribute("claimcheck", "1");
 				return true;
 			}
@@ -1412,8 +1413,7 @@ public class MBRActionUtils {
 					ohd_obj.setMatched_incident(null);
 					oBMO.insertOHD(ohd_obj, user);
 				}
-				
-				bs.insertIncident(new Incident(), theform, TracingConstants.LOST_DELAY, realpath, user);
+				bs.insertIncident(new Incident(), theform, TracingConstants.LOST_DELAY, sc, request);
 
 				request.setAttribute("item", Integer.toString(i));
 				return true;
@@ -1472,7 +1472,7 @@ public class MBRActionUtils {
 		return false;
 	}
 	
-	public static ActionMessage checkOHDEntered(IncidentForm theform, HttpServletRequest request, Agent user, String realpath) throws Exception {
+	public static ActionMessage checkOHDEntered(IncidentForm theform, HttpServletRequest request, Agent user, ServletContext sc) throws Exception {
 
 		BagService bs = new BagService();
 		Incident_Claimcheck ic = null;

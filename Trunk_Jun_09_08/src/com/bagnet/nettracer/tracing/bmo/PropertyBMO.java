@@ -102,6 +102,7 @@ public class PropertyBMO {
 	public static final String PROPERTY_INCIDENT_FAULT_LOCK = "incident.dispute.faultlock";
 	
 	public static final String PROPERTY_TO_BE_INVENTORIED = "to.be.inventoried";
+	public static final String PROPERTY_MISHANDLING_ATTACHMENT_AT_CREATION = "mishandling.attachment.at.creation";
 	
 	public static final String PROPERTY_DEFAULT_DAM_CODE = "default.dam.code";
 	public static final String PROPERTY_DEFAULT_PIL_CODE = "default.pil.code";

@@ -28,7 +28,7 @@ public class TracingConstants {
 		STATION ("station"),
 		INCIDENT ("incident"),
 		OHD ("ohd"),
-		CREATEDATE ("createdate"),
+		CREATEDATE ("createdate"),  
 		DUE_DATE ("due_date"),
 		REMINDER_DATE ("reminder_date"),
 		FILE_REF_NUMBER ("file_ref_number"),
@@ -37,7 +37,20 @@ public class TracingConstants {
 		ASSIGNED_TO ("assigned_to"), 
 
 		/*
-		 * Incident Sort colums
+		 * Incident Activity Sort columns
+		 */
+		INCIDENT_REV ("incidentRev"),
+		INCIDENT_ACTIVITY_APPROVAL_AGENT_NAME("ia_aa_name"),
+		INCIDENT_ACTIVITY_APPROVAL_AGENT_NAME_REV ("ia_aa_nameRev"),	
+		INCIDENT_ACTIVITY_APPROVAL_AGENT_USERNAME("ia_aa_username"),
+		INCIDENT_ACTIVITY_APPROVAL_AGENT_USERNAME_REV ("ia_aa_usernameRev"),	
+		INCIDENT_ACTIVITY_DOCUMENT_ID("ia_doc_id"),
+		INCIDENT_ACTIVITY_DOCUMENT_ID_REV ("ia_doc_idRev"),	
+		INCIDENT_ACTIVITY_DOCUMENT_TITLE("ia_doc_title"),
+		INCIDENT_ACTIVITY_DOCUMENT_TITLE_REV ("ia_doc_titleRev"),
+
+		/*
+		 * Incident Sort columns
 		 */
 		OHD_POSITION ("incident_position"),
 		OHD_POSITIONREV("incident_positionRev"),
@@ -164,6 +177,7 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_NAME_MAINTAIN_WEB_SERVICE_AGENTS = "Maintain Web Service Agents";
 	public final static String SYSTEM_COMPONENT_NAME_INCOMING_BAGS = "Incoming Bags";
 	public final static String SYSTEM_COMPONENT_NAME_LABEL_QUEUE = "Label Queue";
+	public final static String SYSTEM_COMPONENT_NAME_DOCUMENT_PRINT_QUEUE = "Document Print Queue";
 	public final static String SYSTEM_COMPONENT_NAME_TO_BE_INVENTORIED = "To Be Inventoried";
 	public final static String SYSTEM_COMPONENT_NAME_INCOMING_INCIDENTS = "Incoming Incidents";
 	public final static String SYSTEM_COMPONENT_NAME_SHARED_ATTACHMENTS = "Shared Attachments";
@@ -1455,7 +1469,7 @@ public class TracingConstants {
 	public static final int STATUS_CUSTOMER_COMM_PENDING = 1400;
 	public static final int STATUS_CUSTOMER_COMM_APPROVED = 1401;
 	public static final int STATUS_CUSTOMER_COMM_DENIED = 1402;
-	public static final int STATUS_CUSTOMER_COMM_PUBLISHED = 1403;
+	public static final int STATUS_CUSTOMER_COMM_PUBLISHED = 1403; //???
 	public static final int STATUS_CUSTOMER_COMM_PENDING_PRINT = 1404;
 	public static final int STATUS_CUSTOMER_COMM_PENDING_WP = 1405;
 	
@@ -1470,6 +1484,7 @@ public class TracingConstants {
 	public static final String EDIT_COMMUNICATIONS = "editCommunications";
 	public static final String VIEW_CORRESPONDENCE = "viewCorrespondence"; //For Paxview Correspondence Task
 //	public static final String CUSTOMER_COMMUNICATIONS_TASKS = "customerCommunicationsTasks";
+	public static final String DOCUMENT_PRINT_COMMUNICATIONS = "documentPrintCommunications";
 
 	public static final int CLAIM_CHECK = 3;
 	public static final int BAG_CHECKED_LOCATION = 4;

@@ -461,11 +461,11 @@ public class DamagedAction extends CheckedAction {
 				isNew = true;
 			}
 			if (request.getParameter("close") != null && request.getParameter("close").equals("1")) {
-				error = bs.insertIncident(iDTO, theform, TracingConstants.DAMAGED_BAG, realpath, user);
+				error = bs.insertIncident(iDTO, theform, TracingConstants.DAMAGED_BAG, sc, request);
 			} else if(request.getParameter("saveadditions") != null) {
 				error=bs.saveItems(iDTO,theform, TracingConstants.DAMAGED_BAG, realpath, user, false);
 			} else {
-				error = bs.insertIncident(iDTO, theform, TracingConstants.DAMAGED_BAG, realpath, user, true);
+				error = bs.insertIncident(iDTO, theform, TracingConstants.DAMAGED_BAG, sc, request, true);
 			}
 			
 			if (error == null) {

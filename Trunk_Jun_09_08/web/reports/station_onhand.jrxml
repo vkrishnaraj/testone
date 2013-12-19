@@ -2,8 +2,8 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="station_onhand" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="782" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" isIgnorePagination="true">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
-	<property name="ireport.zoom" value="1.3636363636363646"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="33"/>
 	<property name="ireport.y" value="0"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
@@ -53,18 +53,6 @@
 	</pageHeader>
 	<columnHeader>
 		<band height="41">
-			<rectangle radius="0">
-				<reportElement key="rectangle-1" mode="Opaque" x="3" y="-591" width="727" height="23" forecolor="#000000" backcolor="#CCCCCC"/>
-				<graphicElement fill="Solid">
-					<pen lineWidth="0.0" lineStyle="Solid"/>
-				</graphicElement>
-			</rectangle>
-			<rectangle radius="0">
-				<reportElement key="rectangle-2" mode="Opaque" x="3" y="-591" width="727" height="23" forecolor="#000000" backcolor="#CCCCCC"/>
-				<graphicElement fill="Solid">
-					<pen lineWidth="0.0" lineStyle="Solid"/>
-				</graphicElement>
-			</rectangle>
 			<line>
 				<reportElement key="line-1" mode="Opaque" x="0" y="1" width="782" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
@@ -72,7 +60,7 @@
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement key="staticText-2" mode="Opaque" x="-1" y="7" width="80" height="28" forecolor="#000000" backcolor="#CCCCCC">
+				<reportElement key="staticText-2" mode="Opaque" x="-1" y="7" width="86" height="28" forecolor="#000000" backcolor="#CCCCCC">
 					<printWhenExpression><![CDATA[new Boolean($P{showdetail} != null ? true : false)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -87,7 +75,7 @@
 				<text><![CDATA[On-hand Number]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="staticText-4" mode="Opaque" x="79" y="7" width="80" height="28" forecolor="#000000" backcolor="#CCCCCC">
+				<reportElement key="staticText-4" mode="Opaque" x="85" y="7" width="86" height="28" forecolor="#000000" backcolor="#CCCCCC">
 					<printWhenExpression><![CDATA[new Boolean($P{showdetail} != null ? true : false)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -102,7 +90,7 @@
 				<text><![CDATA[Incident Number]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="staticText-9" mode="Opaque" x="159" y="7" width="80" height="28" forecolor="#000000" backcolor="#CCCCCC">
+				<reportElement key="staticText-9" mode="Opaque" x="171" y="7" width="86" height="28" forecolor="#000000" backcolor="#CCCCCC">
 					<printWhenExpression><![CDATA[new Boolean($P{showdetail} != null ? true : false)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -117,7 +105,7 @@
 				<text><![CDATA[OHD Date/Time]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="staticText-9" mode="Opaque" x="239" y="7" width="80" height="28" forecolor="#000000" backcolor="#CCCCCC">
+				<reportElement key="staticText-9" mode="Opaque" x="257" y="7" width="86" height="28" forecolor="#000000" backcolor="#CCCCCC">
 					<printWhenExpression><![CDATA[new Boolean($P{showdetail} != null ? true : false)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -132,7 +120,7 @@
 				<text><![CDATA[Date/Time Modified]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="staticText-9" mode="Opaque" x="319" y="7" width="64" height="28" forecolor="#000000" backcolor="#CCCCCC">
+				<reportElement key="staticText-9" mode="Opaque" x="343" y="7" width="65" height="28" forecolor="#000000" backcolor="#CCCCCC">
 					<printWhenExpression><![CDATA[new Boolean($P{showdetail} != null ? true : false)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -147,7 +135,7 @@
 				<text><![CDATA[Bag Tag Number]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="staticText-7" mode="Opaque" x="383" y="7" width="94" height="28" forecolor="#000000" backcolor="#CCCCCC">
+				<reportElement key="staticText-7" mode="Opaque" x="408" y="7" width="95" height="28" forecolor="#000000" backcolor="#CCCCCC">
 					<printWhenExpression><![CDATA[new Boolean($P{showdetail} != null ? true : false)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -162,7 +150,7 @@
 				<text><![CDATA[Status]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="staticText-13" mode="Opaque" x="477" y="7" width="30" height="28" forecolor="#000000" backcolor="#CCCCCC">
+				<reportElement key="staticText-13" mode="Opaque" x="503" y="7" width="30" height="28" forecolor="#000000" backcolor="#CCCCCC">
 					<printWhenExpression><![CDATA[new Boolean($P{showdetail} != null ? true : false)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -177,7 +165,7 @@
 				<text><![CDATA[Color]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="staticText-14" mode="Opaque" x="507" y="7" width="25" height="28" forecolor="#000000" backcolor="#CCCCCC">
+				<reportElement key="staticText-14" mode="Opaque" x="533" y="7" width="25" height="28" forecolor="#000000" backcolor="#CCCCCC">
 					<printWhenExpression><![CDATA[new Boolean($P{showdetail} != null ? true : false)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -192,7 +180,7 @@
 				<text><![CDATA[Type]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="staticText-7" mode="Opaque" x="577" y="7" width="30" height="28" forecolor="#000000" backcolor="#CCCCCC">
+				<reportElement key="staticText-7" mode="Opaque" x="598" y="7" width="30" height="28" forecolor="#000000" backcolor="#CCCCCC">
 					<printWhenExpression><![CDATA[new Boolean($P{showdetail} != null ? true : false)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -204,10 +192,10 @@
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[Destination]]></text>
+				<text><![CDATA[Dest.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="staticText-4" mode="Opaque" x="607" y="7" width="80" height="28" forecolor="#000000" backcolor="#CCCCCC">
+				<reportElement key="staticText-4" mode="Opaque" x="628" y="7" width="70" height="28" forecolor="#000000" backcolor="#CCCCCC">
 					<printWhenExpression><![CDATA[new Boolean($P{showdetail} != null ? true : false)]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
@@ -216,7 +204,7 @@
 				<text><![CDATA[Name]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="staticText-4" mode="Opaque" x="687" y="7" width="130" height="28" forecolor="#000000" backcolor="#CCCCCC">
+				<reportElement key="staticText-4" mode="Opaque" x="698" y="7" width="110" height="28" forecolor="#000000" backcolor="#CCCCCC">
 					<printWhenExpression><![CDATA[new Boolean($P{showdetail} != null ? true : false)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -231,7 +219,7 @@
 				<text><![CDATA[Comments]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="staticText-7" mode="Opaque" x="532" y="7" width="45" height="28" forecolor="#000000" backcolor="#CCCCCC">
+				<reportElement key="staticText-7" mode="Opaque" x="558" y="7" width="40" height="28" forecolor="#000000" backcolor="#CCCCCC">
 					<printWhenExpression><![CDATA[new Boolean($P{showdetail} != null ? true : false)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -250,7 +238,7 @@
 	<detail>
 		<band height="22">
 			<textField isBlankWhenNull="false">
-				<reportElement key="textField-6" x="-1" y="0" width="80" height="16">
+				<reportElement key="textField-6" x="-1" y="0" width="86" height="16">
 					<printWhenExpression><![CDATA[new Boolean($F{ohdId} != null ? true : false)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -263,14 +251,14 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{ohdId}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="79" y="0" width="80" height="16">
+				<reportElement x="85" y="0" width="86" height="16">
 					<printWhenExpression><![CDATA[new Boolean($F{incidentId} != null ? true : false)]]></printWhenExpression>
 				</reportElement>
 				<textElement lineSpacing="Single"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{incidentId}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false">
-				<reportElement key="textField-10" x="159" y="0" width="80" height="16">
+				<reportElement key="textField-10" x="171" y="0" width="86" height="16">
 					<printWhenExpression><![CDATA[new Boolean($F{date} != null ? true : false)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -283,7 +271,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{date}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false">
-				<reportElement key="textField-11" x="383" y="0" width="94" height="16">
+				<reportElement key="textField-11" x="408" y="0" width="95" height="16">
 					<printWhenExpression><![CDATA[new Boolean($F{status} != null ? true : false)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -296,7 +284,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{status}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false">
-				<reportElement key="textField-16" x="477" y="0" width="30" height="16">
+				<reportElement key="textField-16" x="503" y="0" width="30" height="16">
 					<printWhenExpression><![CDATA[new Boolean($F{color} != null ? true : false)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -309,7 +297,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{color}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false">
-				<reportElement key="textField-17" x="507" y="0" width="25" height="16">
+				<reportElement key="textField-17" x="533" y="0" width="25" height="16">
 					<printWhenExpression><![CDATA[new Boolean($F{type} != null ? true : false)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -322,7 +310,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{type}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false">
-				<reportElement key="textField-17" x="577" y="0" width="30" height="16">
+				<reportElement key="textField-17" x="598" y="0" width="30" height="16">
 					<printWhenExpression><![CDATA[new Boolean($F{destination} != null ? true : false)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -335,7 +323,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{destination}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false">
-				<reportElement key="textField-17" x="607" y="0" width="80" height="16">
+				<reportElement key="textField-17" x="628" y="0" width="70" height="16">
 					<printWhenExpression><![CDATA[new Boolean($F{passengerName} != null ? true : false)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -348,7 +336,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{passengerName}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false">
-				<reportElement key="textField-17" x="687" y="0" width="130" height="16">
+				<reportElement key="textField-17" x="698" y="0" width="110" height="16">
 					<printWhenExpression><![CDATA[new Boolean($F{comments} != null ? true : false)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -361,7 +349,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{comments}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false">
-				<reportElement key="textField-17" x="532" y="0" width="45" height="16">
+				<reportElement key="textField-17" x="558" y="0" width="40" height="16">
 					<printWhenExpression><![CDATA[new Boolean($F{posId} != null ? true : false)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -374,7 +362,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{posId}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false">
-				<reportElement key="textField-13" x="319" y="0" width="64" height="16" isPrintWhenDetailOverflows="true">
+				<reportElement key="textField-13" x="343" y="0" width="65" height="16" isPrintWhenDetailOverflows="true">
 					<printWhenExpression><![CDATA[new Boolean($F{bagTagNumber} != null ? true : false)]]></printWhenExpression>
 				</reportElement>
 				<box>
@@ -387,7 +375,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{bagTagNumber}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false">
-				<reportElement key="textField-10" x="239" y="0" width="80" height="16">
+				<reportElement key="textField-10" x="257" y="0" width="86" height="16">
 					<printWhenExpression><![CDATA[new Boolean($F{modifiedDate} != null ? true : false)]]></printWhenExpression>
 				</reportElement>
 				<box>

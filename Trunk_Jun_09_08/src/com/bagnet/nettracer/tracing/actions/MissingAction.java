@@ -443,11 +443,11 @@ public class MissingAction extends CheckedAction {
 			ActionMessage error = null; 
 
 			if (request.getParameter("close") != null && request.getParameter("close").equals("1")) {
-				error = bs.insertIncident(iDTO, theform, TracingConstants.MISSING_ARTICLES, realpath, user);
+				error = bs.insertIncident(iDTO, theform, TracingConstants.MISSING_ARTICLES, sc, request);
 			} else if(request.getParameter("saveadditions") != null) {
 				error=bs.saveItems(iDTO,theform, TracingConstants.MISSING_ARTICLES, realpath, user, false);
 			} else {
-				error = bs.insertIncident(iDTO, theform, TracingConstants.MISSING_ARTICLES, realpath, user, true);
+				error = bs.insertIncident(iDTO, theform, TracingConstants.MISSING_ARTICLES, sc, request, true);
 			}
 
 			if (error == null) {
