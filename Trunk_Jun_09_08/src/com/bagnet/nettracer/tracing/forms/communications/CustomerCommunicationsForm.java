@@ -23,6 +23,7 @@ public class CustomerCommunicationsForm extends CommandForm {
 	private long taskId;
 	private int taskStatus;
 	private boolean pendingReview;
+	private int agentId;
 	
 	private List<IncidentActivityRemarkDTO> remarks;
 
@@ -144,6 +145,14 @@ public class CustomerCommunicationsForm extends CommandForm {
 
 	public void setPendingReview(boolean pendingReview) {
 		this.pendingReview = pendingReview;
+	}
+
+	public int getAgentId() {
+		return agentId;
+	}
+
+	public void setAgentId(int agentId) {
+		this.agentId = agentId;
 	}
 
 }

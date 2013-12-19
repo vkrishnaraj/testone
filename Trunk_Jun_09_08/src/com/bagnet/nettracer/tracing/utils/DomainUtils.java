@@ -113,31 +113,11 @@ public class DomainUtils {
 		if (ia.getExpensePayout() != null) {
 			ccf.setExpenseId(ia.getExpensePayout().getExpensepayout_ID());
 		}
+		
+		if(ia.getAgent()!=null){
+			ccf.setAgentId(ia.getAgent().getAgent_ID());
+		}
 	}
-	
-//	Unrelated to NT-740
-//	public static void toForm(IncidentActivity ia, CorrespondenceForm cf, Agent user) {
-//		cf.setCommand(TracingConstants.COMMAND_UPDATE);
-//		cf.setId(ia.getId());
-//		OnlineClaim c=null;
-//		if (ia.getIncident() != null) {
-//			cf.setIncidentId(ia.getIncident().getIncident_ID());
-//			OnlineClaimsDao dao = new OnlineClaimsDao();
-//			c = dao.getOnlineClaim(ia.getIncident().getIncident_ID());
-//		}
-//		
-//		if(c!=null){
-//			cf.setClaimId(c.getClaimId());
-//			if (c.getMessages() != null && !c.getMessages().isEmpty()) {
-//				cf.setMessages(fromMessages(c.getMessages(), user));
-//			}
-//
-//			if (c.getFile() != null && !c.getFile().isEmpty()) {
-//				cf.setFiles(fromFiles(c.getFile(), user));
-//			}
-//		}
-//		
-//	}
 	
 	public static Template fromForm(TemplateEditForm form) {
 		Template template = new Template();
@@ -327,8 +307,7 @@ public class DomainUtils {
 		return dtos;
 	}
 	
-//	Unrelated to NT-740
-//	private static List<MessageDTO> fromMessages(Set<OCMessage> messages, Agent user) {
+//	public static List<MessageDTO> fromMessages(List<OCMessage> messages, Agent user) {
 //		List<MessageDTO> dtos = new ArrayList<MessageDTO>();
 //		TimeZone timeZone = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
 //		for (OCMessage message: messages) {
@@ -345,7 +324,7 @@ public class DomainUtils {
 //		return dtos;
 //	}
 //
-//	private static List<FileDTO> fromFiles(Set<OCFile> files, Agent user) {
+//	public static List<FileDTO> fromFiles(List<OCFile> files, Agent user) {
 //		List<FileDTO> dtos = new ArrayList<FileDTO>();
 //		TimeZone timeZone = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
 //		for (OCFile file: files) {

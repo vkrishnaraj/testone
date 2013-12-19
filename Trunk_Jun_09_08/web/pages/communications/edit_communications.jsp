@@ -57,6 +57,11 @@ legend {
 		document.customerCommunicationsForm.submit();
 	}
 	
+	function acknowledge() {
+		setCommand("<%=TracingConstants.COMMAND_ACKNOWLEDGE %>");
+		document.customerCommunicationsForm.submit();
+	}
+	
 	function saveAndPreview() {
 		document.getElementById('preview').value = "true";
 		saveOrUpdate();
@@ -232,6 +237,24 @@ legend {
 					<input type="button" id="submitCustComm" class="button" value='<bean:message key="button.save" />'  onclick="saveOrUpdate();"/>
 					&nbsp;&nbsp;
 					<input id="savePreviewButton" type="button" class="button" value='<bean:message key="button.save.preview" />' onclick="saveAndPreview();">
+					<logic:equal name="customerCommunicationsForm" property="agentId" value="<%=String.valueOf(a.getAgent_ID()) %>">
+						<logic:equal name="customerCommunicationsForm" property="taskStatus" value="<%=String.valueOf(TracingConstants.FINANCE_STATUS_FRAUD_REJECTED)  %>">
+							&nbsp;&nbsp;
+							<input id="acknowledgeButton" type="button" class="button" value='<bean:message key="button.acknowledge" />' onclick="acknowledge();">
+						</logic:equal>
+						<logic:equal name="customerCommunicationsForm" property="taskStatus" value="<%=String.valueOf(TracingConstants.FINANCE_STATUS_SUPERVISOR_REJECTED)  %>">
+							&nbsp;&nbsp;
+							<input id="acknowledgeButton" type="button" class="button" value='<bean:message key="button.acknowledge" />' onclick="acknowledge();">
+						</logic:equal>
+						<logic:equal name="customerCommunicationsForm" property="taskStatus" value="<%=String.valueOf(TracingConstants.STATUS_CUSTOMER_COMM_DENIED)  %>">
+							&nbsp;&nbsp;
+							<input id="acknowledgeButton" type="button" class="button" value='<bean:message key="button.acknowledge" />' onclick="acknowledge();">
+						</logic:equal>
+						<logic:equal name="customerCommunicationsForm" property="taskStatus" value="<%=String.valueOf(TracingConstants.FINANCE_STATUS_FINANCE_REJECTED)  %>">
+							&nbsp;&nbsp;
+							<input id="acknowledgeButton" type="button" class="button" value='<bean:message key="button.acknowledge" />' onclick="acknowledge();">
+						</logic:equal>
+					</logic:equal>
 				</div>
 				<logic:notEmpty name="customerCommunicationsForm" property="remarks" >
 					<br>
