@@ -134,9 +134,9 @@ public abstract class BaseExpenseAction extends CheckedAction {
 		epform.setOldComments(new ArrayList<Comment>(ep.getComments()));
 		epform.setStatus_id(ep.getStatus().getStatus_ID());
 		epform.setTz(user.getCurrenttimezone());
-		epform.setPaymentType(ep.getPaytype());
-		if (ep.getPaytype().equals(TracingConstants.ENUM_VOUCHER)) {
-			epform.setDistributemethod(ep.getDistributemethod());
+		epform.setPaymentType((ep.getPaytype() != null) ? ep.getPaytype() : "");
+		if (ep.getPaytype() != null && ep.getPaytype().equals(TracingConstants.ENUM_VOUCHER)) {
+			epform.setDistributemethod((ep.getDistributemethod() != null) ? ep.getDistributemethod() : "");
 			epform.setCancelreason(ep.getCancelreason());
 			epform.setCancelcount(ep.getCancelcount());
 			epform.setOrdernum(ep.getOrdernum());
