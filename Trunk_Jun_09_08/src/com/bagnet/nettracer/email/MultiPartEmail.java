@@ -339,12 +339,17 @@ public class MultiPartEmail extends Email {
 		}
 		MimeBodyPart mbp = new MimeBodyPart();
 		try {
+			mbp.setDataHandler(new DataHandler(ds));
+			
+			int lastIndex = name.lastIndexOf("\\");
+			if (0 < lastIndex && lastIndex < name.length() -1) {
+				mbp.setFileName(name.substring(lastIndex) + 1);				
+			}
+			
 			getContainer().addBodyPart(mbp);
 
 			mbp.setDisposition(disposition);
-			mbp.setFileName(name);
 			mbp.setDescription(description);
-			mbp.setDataHandler(new DataHandler(ds));
 		} catch (MessagingException me) {
 			throw new EmailException(me);
 		}
