@@ -551,6 +551,11 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 	}
 	
 	@Override
+	public IncidentActivityTask getAssignedTask(Agent agent) {
+		return getAssignedTask(agent, null);
+	}
+	
+	@Override
 	public IncidentActivityTask getAssignedTask(Agent agent, Status s) {
 		IncidentActivityTask toReturn = null;
 		Session session = null;
@@ -558,8 +563,10 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 			session = HibernateWrapper.getSession().openSession();
 			Criteria criteria = session.createCriteria(IncidentActivityTask.class, "iat");
 			criteria.add(Restrictions.eq("iat.assigned_agent", agent));
-			criteria.add(Restrictions.eq("iat.status", s));
 			criteria.add(Restrictions.eq("iat.active", true));
+			if (s != null) {
+				criteria.add(Restrictions.eq("iat.status", s));
+			}
 			toReturn = (IncidentActivityTask) criteria.uniqueResult();
 		} catch (Exception e) {
 			logger.error("An error occurred while attempting to get an assigned task for: " + agent.getUsername(), e);

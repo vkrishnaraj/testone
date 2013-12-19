@@ -48,6 +48,7 @@ public interface IncidentActivityDAO {
 	public IncidentActivity loadByActivityCode(String activityCode, String Incident_ID);
 	
 	public List<IncidentActivityTask> loadTasksForIncidentActivity(IncidentActivity incidentActivity);
+	public IncidentActivityTask getAssignedTask(Agent agent);
 	public IncidentActivityTask getAssignedTask(Agent agent, Status s);
 	public IncidentActivityTask getTask(Status status);
 }

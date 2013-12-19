@@ -344,6 +344,11 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 	}
 	
 	@Override
+	public IncidentActivityTask getAssignedTask(Agent agent) {
+		return incidentActivityDao.getAssignedTask(agent);
+	}
+	
+	@Override
 	public IncidentActivityTask getAssignedTask(Agent agent, Status s) {
 		if (agent == null) return null;
 		return incidentActivityDao.getAssignedTask(agent, s);
