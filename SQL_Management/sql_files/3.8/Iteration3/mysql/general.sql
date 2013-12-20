@@ -384,5 +384,6 @@ insert into status (Status_ID,description,table_ID) VALUES (1418,'Fraud Approved
 insert into status (Status_ID,description,table_ID) VALUES (1419,'Supervisor Approved',26);
 
 insert into activity (code, description) VALUES ("55C","CREATE CLAIM SETTLEMENT LETTER");
+insert into template_type (ordinal,defaultName) VALUES (5,'ClaimSettlement');
 
 insert into properties (ID, keyStr, valueStr) VALUES (142,'mishandling.attachment.at.creation',1);
