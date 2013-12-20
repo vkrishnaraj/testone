@@ -11,6 +11,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -36,6 +38,7 @@ import org.hibernate.annotations.Proxy;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
+import com.bagnet.nettracer.tracing.db.Status;;
 
 @Entity
 @Table(name = "ExpensePayout")
@@ -83,6 +86,7 @@ public class ExpensePayout implements Serializable {
 	private String _TIMEFORMAT;
 	private TimeZone _TIMEZONE;
 
+	private String locale = TracingConstants.DEFAULT_LOCALE;
 	@ManyToOne
 	@JoinColumn(name = "incident_ID", nullable = true)
 	@Fetch(FetchMode.SELECT)
@@ -424,7 +428,12 @@ public class ExpensePayout implements Serializable {
 	public String getTypedesc() {
 		return expensetype.getDescription();
 	}
-
+	
+	@Transient
+	public String getResourceValue() {
+		ResourceBundle myResources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(locale));
+		return myResources.getString(getStatus().getKey());
+	}
 	@ManyToOne
 	@JoinColumn(name = "status_ID")
 	@Fetch(FetchMode.SELECT)

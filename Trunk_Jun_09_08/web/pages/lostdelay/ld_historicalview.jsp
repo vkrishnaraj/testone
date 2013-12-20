@@ -217,7 +217,7 @@ function CBG_check(obj) {
  	sections.addToGroup("remarks");
   sections.addToGroup("messages");
  	sections.addToGroup("tasks");	
-
+ 	sections.addToGroup("interimexpense");
   </script>
   <html:form action="lostDelay.do" method="post">
     <tr>
@@ -334,6 +334,9 @@ function CBG_check(obj) {
                 &nbsp;&nbsp;
                 <INPUT TYPE=CHECKBOX NAME="tasks" <% if (request.getAttribute("tasks") != null || (request.getAttribute("all") == null || (request.getAttribute("all") != null && ((String)request.getAttribute("all")).equals ("1")))) { %> CHECKED <% } %> onClick="sections.check(this);">
                 <bean:message key="header.tasks" />
+                &nbsp;&nbsp;
+                <INPUT TYPE=CHECKBOX NAME="interimexpense" <% if (request.getAttribute("interimexpense") != null || (request.getAttribute("all") == null || (request.getAttribute("all") != null && ((String)request.getAttribute("all")).equals ("1")))) { %> CHECKED <% } %> onClick="sections.check(this);">
+                <bean:message key="header.interimexpense" />              
               </td>
             </tr>
             <input type="hidden" name="incident_ID" value="<bean:write name="incidentForm" property="incident_ID"/>">

@@ -46,6 +46,7 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Articles;
+import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.Item_Inventory;
@@ -626,7 +627,7 @@ public class MissingAction extends CheckedAction {
 			selections.put("remarks", "true");
 			selections.put("messages", "true");
 			selections.put("tasks", "true");
-
+			selections.put("interimexpense", "true");
 		} else {
 			request.setAttribute("all", "0");
 			if (request.getParameter("passenger") != null) {
@@ -683,6 +684,12 @@ public class MissingAction extends CheckedAction {
 				selections.put("tasks", "true");
 			} else
 				selections.put("tasks", null);
+			
+			if (request.getParameter("interimexpense") != null) {
+				request.setAttribute("interimexpense", "1");
+				selections.put("interimexpense", "true");
+			} else
+				selections.put("interimexpense", null);						
 		}
 
 		int type = Integer.parseInt(request.getParameter("outputtype"));
@@ -919,6 +926,19 @@ public class MissingAction extends CheckedAction {
 				parameters.put("tasks", null);
 			}
 
+			if (selections.get("interimexpense") != null) {
+
+				List expenses = form.getExpenselist();
+				if (expenses != null && expenses.size() > 0) {
+					parameters.put("interimexpenseReport", ReportBMO.getCompiledReport("interimexpense", sc.getRealPath("/")));
+					parameters.put("interimexpense", new JRBeanCollectionDataSource(expenses));
+				} else {
+					parameters.put("interimexpense", null);
+				}
+			} else {
+				parameters.put("interimexpense", null);
+			}
+			
 			if (type == 5) {	//Teletype so no regular reports
 				String myTeletypeHistoricalReport = buildTeletypeStyleHistoricalReport(parameters);
 				SharesIntegrationWrapper iw = new SharesIntegrationWrapper();
@@ -1349,7 +1369,27 @@ public class MissingAction extends CheckedAction {
 			} else {
 				historicalReport.append("N/A" + newline);
 			}
-			
+			//interimexpense section
+			historicalReport.append(newline);
+			historicalReport.append("-- " + resourceBundle.getString("header.interimexpense") + " --");
+			historicalReport.append(newline);
+			JRBeanCollectionDataSource expenseDS = (JRBeanCollectionDataSource) parameters.get("interimexpense");
+			if (expenseDS != null) {
+				List<ExpensePayout> expenses = (List<ExpensePayout>) expenseDS.getData();
+				if (expenses != null & expenses.size() >= 1) {
+					for (ExpensePayout payout : expenses) {
+						historicalReport
+							.append(resourceBundle.getString("colname.date_time") + ": ")
+							.append(payout.getDiscreatedate() + newline);
+/*							.append(resourceBundle.getString("colname.station") + ": ")
+							.append(payout.getAgentStation() + newline)
+							.append(resourceBundle.getString("colname.agent") + ": ")
+							.append(payout.getAgentUsername() + newline)
+							.append(payout.getRemarktext() + newline);*/
+						historicalReport.append(newline);
+					}
+				}
+			}			
 		}
 		
 		//logger.error(historicalReport.toString());
