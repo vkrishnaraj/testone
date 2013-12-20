@@ -3,8 +3,6 @@
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
 <%@ taglib uri="/tags/struts-logic" prefix="logic" %>
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
-<%@ taglib uri="http://displaytag.sf.net" prefix="display" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
@@ -14,11 +12,7 @@
 	int divId = 0;
 %>
   
-  <%@page import="com.bagnet.nettracer.reporting.ReportingConstants"%>
-<%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
-<%@page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
-<%@page import="org.displaytag.tags.SetPropertyTag" %>
 <SCRIPT SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
   <SCRIPT SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
@@ -194,7 +188,7 @@ function sortTable(sortOrder) {
 	     					<a href="#" style="color:white" onclick="sortTable('specialist');"><bean:message key="colname.disburse.specialist" /></a>
 	     				</td>
 	     				<td class="header" >
-	     					<a href="#" style="color:white" onclick="sortTable('approver');"><bean:message key="colname.disburse.approver" /></a>
+	     					<a href="#" style="color:white" onclick="sortTable('agent');"><bean:message key="colname.disburse.approver" /></a>
 	     				</td>
 	     				<td class="header" >
 	     					<bean:message key="colname.disburse.draft" />

@@ -19,12 +19,15 @@ import com.bagnet.nettracer.tracing.adapter.TemplateAdapter;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+//import com.bagnet.nettracer.tracing.dao.OnlineClaimsDao; Not related to NT-740
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
 import com.bagnet.nettracer.tracing.db.documents.Document;
 import com.bagnet.nettracer.tracing.db.documents.templates.Template;
+//import com.bagnet.nettracer.tracing.db.onlineclaims.OCFile; Not related to NT-740
+//import com.bagnet.nettracer.tracing.db.onlineclaims.OCMessage; Not related to NT-740
 import com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask;
 import com.bagnet.nettracer.tracing.dto.TemplateAdapterDTO;
 import com.bagnet.nettracer.tracing.enums.TemplateType;
@@ -84,11 +87,12 @@ public class CustomerCommunicationsAction extends CheckedAction {
 			try {
 				IncidentActivityTask task = incidentActivityService.loadTask(Long.valueOf(taskIdParam));
 				if (task != null) {
+					int statusId=task.getStatus().getStatus_ID();
 					ccf.setTaskId(task.getTask_id());
-					ccf.setTaskStatus(task.getStatus().getStatus_ID());
-					if(task.getStatus().getStatus_ID()==TracingConstants.STATUS_CUSTOMER_COMM_PENDING
-							 || task.getStatus().getStatus_ID()==TracingConstants.FINANCE_STATUS_FRAUD_REVIEW
-							 || task.getStatus().getStatus_ID()==TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW){
+					ccf.setTaskStatus(statusId);
+					if(statusId==TracingConstants.STATUS_CUSTOMER_COMM_PENDING
+							 || statusId==TracingConstants.FINANCE_STATUS_FRAUD_REVIEW
+							 || statusId==TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW){
 						ccf.setPendingReview(true);
 					}
 				}
@@ -120,12 +124,13 @@ public class CustomerCommunicationsAction extends CheckedAction {
 						}
 						IncidentActivityTask iat = incidentActivityService.loadTaskForIncidentActivity(ia, s);
 						if (iat != null) {
+							int statusId=iat.getStatus().getStatus_ID();
 							ccf.setTaskId(iat.getTask_id());
-							ccf.setTaskStatus(iat.getStatus().getStatus_ID());
+							ccf.setTaskStatus(statusId);
 
-							if(iat.getStatus().getStatus_ID()==TracingConstants.STATUS_CUSTOMER_COMM_PENDING
-									 || iat.getStatus().getStatus_ID()==TracingConstants.FINANCE_STATUS_FRAUD_REVIEW
-									 || iat.getStatus().getStatus_ID()==TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW){
+							if(statusId==TracingConstants.STATUS_CUSTOMER_COMM_PENDING
+									 || statusId==TracingConstants.FINANCE_STATUS_FRAUD_REVIEW
+									 || statusId==TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW){
 								ccf.setPendingReview(true);
 							}
 						}
@@ -167,6 +172,36 @@ public class CustomerCommunicationsAction extends CheckedAction {
 				logger.error("Failed to close a task for IncidentActivityTask with id: " + ccf.getTaskId());
 			}
 		}
+		/* Not related to NT-740 
+		else if (TracingConstants.COMMAND_ACKNOWLEDGE_INBOUND.equals(ccf.getCommand()) 
+				&& UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_EDIT, user)) {
+
+			long id = Long.valueOf(request.getParameter("communicationsId"));
+			IncidentActivity ia = incidentActivityService.load(id);
+			success=OnlineClaimsDao.acknowledgeMessages(ia);
+
+			if(!success){
+				logger.error("Failed to acknowledge messages for IncidentActivity with id: " + id);
+			}
+
+			response.sendRedirect("searchIncident.do?incident="
+					+ request.getParameter("incident") + "#activities");
+			return null;
+		} else if (TracingConstants.COMMAND_UNPUBLISH.equals(ccf.getCommand()) 
+				&& UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_EDIT, user)) {
+			long id = Long.valueOf(request.getParameter("communicationsId"));
+			success = publishCommunications(id, false);
+			response.sendRedirect("searchIncident.do?incident="
+					+ request.getParameter("incident") + "#activities");
+			return null;
+		} else if (TracingConstants.COMMAND_PUBLISH.equals(ccf.getCommand()) 
+				&& UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_EDIT, user)) {
+			long id = Long.valueOf(request.getParameter("communicationsId"));
+			success = publishCommunications(id, true);
+			response.sendRedirect("searchIncident.do?incident="
+					+ request.getParameter("incident") + "#activities");
+			return null;
+		} */
 		
 		if (ccf.isPreview()) {
 			DocumentTemplateResult result = generatePreview(ccf, user);
@@ -185,6 +220,44 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		return mapping.findForward(TracingConstants.EDIT_COMMUNICATIONS);
 	}
 	
+	/* Not part of NT-740 
+	private boolean publishCommunications(long id, boolean publish) {
+		boolean success=true;
+		try{
+			IncidentActivity ia = incidentActivityService.load(id);
+			if (ia != null) {
+				if (ia.getMessages() != null) {
+					for (OCMessage message : ia.getMessages()) {
+						message.setPublish(publish);
+					}
+					success = OnlineClaimsDao.saveMessages(ia.getMessages());
+				}
+
+				if (ia.getFiles() != null && ia.getFiles().size()>0) {
+					if(!publish){
+						for (OCFile file : ia.getFiles()) {
+							file.setPublish(publish);
+						}
+					} else {
+						/** An Incident Activity will only have one Document to publish on the NT Core side **
+						OCFile file=documentService.publishDocument(ia);
+						if(file!=null){
+							ia.getFiles().add(file);
+						}
+					}
+					success = OnlineClaimsDao.saveFiles(ia.getFiles());
+				}
+				if (!success) {
+					logger.error("Failed to publish or unpublish communication for IncidentActivity with id: "+ id);
+				}
+			}
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+
+		return success;
+	}*/
+
 	private boolean isAjaxRequest(HttpServletRequest request) {
 		return request.getParameter(REQUEST_TEMPLATE_LIST) != null 
 				|| request.getParameter(REQUEST_PREVIEW_DOCUMENT) != null 
@@ -231,7 +304,11 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		Incident incident = new IncidentBMO().findIncidentByID(incidentId);
 		int eId=0;
 		if(expenseId!=null && !expenseId.isEmpty()){
-			eId = Integer.valueOf(expenseId);
+			try {
+				eId = Integer.valueOf(expenseId);
+			} catch (NumberFormatException nfe) {
+				nfe.printStackTrace();
+			}
 		}
 		
 		if (incident == null) {

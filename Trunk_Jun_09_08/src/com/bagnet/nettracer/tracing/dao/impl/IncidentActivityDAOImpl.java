@@ -48,6 +48,7 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 		map.put("address", 		"a.address1");
 		map.put("amount", 		"e.checkamt");
 		map.put("pnr", 			"i.recordlocator");
+		map.put("reason", 		"i.itemtype");
 		map.put("specialist",	"ia.agent");
 		
 		financestatusmap.put(TracingConstants.FINANCE_STATUS_AWAITING_DISBURSEMENT, "1");
@@ -636,7 +637,7 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 			session = HibernateWrapper.getSession().openSession();
 			Criteria criteria = session.createCriteria(IncidentActivity.class, "ia");
 			criteria.createAlias("ia.incident", "i");
-			criteria.add(Restrictions.in("id", idlist));
+			criteria.add(Restrictions.in("ia.id", idlist));
 			results = (List<IncidentActivity>) criteria.list();
 		} catch (Exception e) {
 			logger.error("An error occurred while attempting to get a list of incident activities", e);
@@ -662,7 +663,7 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 			Criteria criteria = session.createCriteria(IncidentActivityTask.class, "iat");
 			criteria.createAlias("iat.incidentActivity", "ia");
 			criteria.createAlias("ia.incident", "i");
-			criteria.add(Restrictions.in("id", idlist));
+			criteria.add(Restrictions.in("iat.id", idlist));
 			results = (List<IncidentActivityTask>) criteria.list();
 		} catch (Exception e) {
 			logger.error("An error occurred while attempting to get a list of incident activities", e);

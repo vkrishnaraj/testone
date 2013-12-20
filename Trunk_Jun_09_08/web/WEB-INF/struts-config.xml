@@ -305,7 +305,6 @@
 		<form-bean name="templateSearchForm" type="com.bagnet.nettracer.tracing.forms.templates.TemplateSearchForm" />	
 		
 		<form-bean name="bagDropForm" type="com.bagnet.nettracer.tracing.forms.BagDropForm" />
-		<!--<form-bean name="correspondenceForm" type="com.bagnet.nettracer.tracing.forms.communications.CorrespondenceForm" />	Not part of NT-740-->
 		
 		<form-bean name="customerCommunicationsForm" type="com.bagnet.nettracer.tracing.forms.communications.CustomerCommunicationsForm" />	
 		<form-bean name="customerCommunicationsTaskForm" type="com.bagnet.nettracer.tracing.forms.communications.CustomerCommunicationsTaskForm" />	
@@ -632,7 +631,6 @@
 		
 		<forward name="customerCommunications" path="customerCommunications" />
 		<forward name="editCommunications" path="editCommunications" />
-		<!--<forward name="viewCorrespondence" path="viewCorrespondence" /> 	Not part of NT-740-->
 		<forward name="customerCommunicationsPending" path="customerCommunicationsPending" />
 		<forward name="customerCommunicationsRejected" path="customerCommunicationsRejected" />
 		
@@ -1023,7 +1021,6 @@
 		<action path="/ntlf_enter_items" type="com.bagnet.nettracer.tracing.actions.ntlf.EnterItemsAction" name="enterItemsForm" scope="session" validate="false"></action>
 		<action path="/ntlf_create_found_item" type="com.bagnet.nettracer.tracing.actions.ntlf.FoundItemAction" name="foundItemForm" scope="session" validate="false"></action>			
 		<action path="/ntlf_search_lost_found" type="com.bagnet.nettracer.tracing.actions.ntlf.SearchLostFoundAction" name="searchLostFoundForm" scope="request" validate="false"></action>	
-		<!--<action path="/viewCorrespondence" type="com.bagnet.nettracer.tracing.actions.communications.CorrespondenceAction" name="correspondenceForm" scope="request" validate="false" ></action> 	Not part of NT-740-->
 		
 		<action path="/customerCommunications" type="com.bagnet.nettracer.tracing.actions.communications.CustomerCommunicationsAction" name="customerCommunicationsForm" scope="request" validate="false" ></action>
 		<action path="/incidentActivity" type="com.bagnet.nettracer.tracing.actions.communications.IncidentActivityAction" scope="request" validate="false" ></action>

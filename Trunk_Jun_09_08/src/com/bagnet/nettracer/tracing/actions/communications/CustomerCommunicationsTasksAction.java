@@ -15,10 +15,14 @@ import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+//import com.bagnet.nettracer.tracing.dao.OnlineClaimsDao; Not related to NT-740
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
+//import com.bagnet.nettracer.tracing.db.onlineclaims.OCFile; Not related to NT-740
 import com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask;
+//import com.bagnet.nettracer.tracing.exceptions.InsufficientInformationException; Not related to NT-740
+//import com.bagnet.nettracer.tracing.service.DocumentService; Not related to NT-740
 import com.bagnet.nettracer.tracing.service.IncidentActivityService;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
@@ -27,6 +31,7 @@ import com.bagnet.nettracer.tracing.utils.UserPermissions;
 public class CustomerCommunicationsTasksAction extends CheckedAction {
 	
 	private Logger logger = Logger.getLogger(CustomerCommunicationsTasksAction.class);
+//	private DocumentService documentService = (DocumentService) SpringUtils.getBean(TracingConstants.DOCUMENT_SERVICE_BEAN); Not related to NT-740
 	
 	private final Status STATUS_PENDING_PRINT = new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING_PRINT);
 	private final Status STATUS_PENDING_WP = new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING_WP);
@@ -112,10 +117,10 @@ public class CustomerCommunicationsTasksAction extends CheckedAction {
 			
 			if (!userCanModifyTask(taskIdParam, user)) {
 				request.getSession().setAttribute("taskMessage", new ActionMessage("message.cust.comm.task.cannot.modify", new Object[] { taskIdParam, user.getUsername() }));
-				if(returnForward==TracingConstants.FRAUD_REVIEW){
+				if(returnForward.equals(TracingConstants.FRAUD_REVIEW)){
 					response.sendRedirect("fraudReview.do");
 					return null;
-				} else if (returnForward==TracingConstants.SUPERVISOR_REVIEW){
+				} else if (returnForward.equals(TracingConstants.SUPERVISOR_REVIEW)){
 					response.sendRedirect("supervisorReview.do");
 					return null;
 				}
@@ -126,10 +131,10 @@ public class CustomerCommunicationsTasksAction extends CheckedAction {
 			if (!validStatusSubmitted(taskStatusParam)) {
 				logger.warn("Invalid status submitted for incident activity task: " + taskStatusParam);
 				request.getSession().setAttribute("taskMessage", new ActionMessage("message.cust.comm.task.update.failed", new Object[] { taskIdParam }));
-				if(returnForward==TracingConstants.FRAUD_REVIEW){
+				if(returnForward.equals(TracingConstants.FRAUD_REVIEW)){
 					response.sendRedirect("fraudReview.do");
 					return null;
-				} else if (returnForward==TracingConstants.SUPERVISOR_REVIEW){
+				} else if (returnForward.equals(TracingConstants.SUPERVISOR_REVIEW)){
 					response.sendRedirect("supervisorReview.do");
 					return null;
 				}
@@ -151,10 +156,10 @@ public class CustomerCommunicationsTasksAction extends CheckedAction {
 			saveMessages(request, messages);
 			request.setAttribute("success", success);
 		}
-		if(returnForward==TracingConstants.FRAUD_REVIEW){
+		if(returnForward.equals(TracingConstants.FRAUD_REVIEW)){
 			response.sendRedirect("fraudReview.do");
 			return null;
-		} else if (returnForward==TracingConstants.SUPERVISOR_REVIEW){
+		} else if (returnForward.equals(TracingConstants.SUPERVISOR_REVIEW)){
 			response.sendRedirect("supervisorReview.do");
 			return null;
 		}
@@ -189,6 +194,18 @@ public class CustomerCommunicationsTasksAction extends CheckedAction {
 			case TracingConstants.CUST_COMM_POSTAL_MAIL:
 				return incidentActivityService.createTask(ia, STATUS_PENDING_PRINT);
 			case TracingConstants.CUST_COMM_WEB_PORTAL:
+				/* Not related to NT-740
+				try {
+					OCFile file=documentService.publishDocument(ia);
+					if(file!=null){
+						OnlineClaimsDao dao=new OnlineClaimsDao();
+						dao.saveFile(file);
+					}
+				} catch (InsufficientInformationException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}*/
+				
 				return incidentActivityService.createTask(ia, STATUS_PENDING_WP);
 			default:
 				logger.error("Invalid value found for customer communication method id: " + ia.getCustCommId());

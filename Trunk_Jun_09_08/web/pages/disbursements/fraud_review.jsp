@@ -7,21 +7,21 @@
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <script type="text/javascript" >
 	function goprev() {
-	  o = document.disbursementRejectionForm;
+	  o = document.fraudReviewForm;
 	  o.prevpage.value = "1";
 	  o.pagination.value="1";
 	  o.submit();
 	}
 	
 	function gonext() {
-	  o = document.disbursementRejectionForm;
+	  o = document.fraudReviewForm;
 	  o.nextpage.value="1";
 	  o.pagination.value="1";
 	  o.submit();
 	}
 	
 	function gopage(i) {
-		  o = document.disbursementRejectionForm;
+		  o = document.fraudReviewForm;
 		  o.currpage.value = i;
 		  o.pagination.value="1";
 		  o.submit();

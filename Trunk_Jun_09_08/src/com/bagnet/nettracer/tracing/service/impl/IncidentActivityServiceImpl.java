@@ -198,7 +198,7 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 	@Override
 	public boolean hasIncidentActivityTask(IncidentActivity incidentActivity) {
 		if (incidentActivity == null) return false;		
-		return incidentActivityDao.hasTask(incidentActivity, new Status[]{STATUS_PENDING,FINANCE_STATUS_SUPERVISOR_REVIEW,FINANCE_STATUS_FRAUD_REVIEW,FINANCE_STATUS_AWAITING_DISBURSEMENT});
+		return incidentActivityDao.hasTask(incidentActivity,STATUS_PENDING,FINANCE_STATUS_SUPERVISOR_REVIEW,FINANCE_STATUS_FRAUD_REVIEW,FINANCE_STATUS_AWAITING_DISBURSEMENT);
 	}
 	
 	@Override
@@ -268,14 +268,14 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 			IncidentActivityTaskDTO iatdto = createIncidentActivityTaskDTO(dto);
 			iatdto.setId(iat.getIncidentActivity().getId());
 			iatdto.setIncidentId(iat.getIncidentActivity().getIncident().getIncident_ID());
-			iatdto.setTaskid(iat.getTask_id()); //?
+			iatdto.setTaskid(iat.getTask_id()); 
 			iatdto.setDescription(iat.getIncidentActivity().getDescription());
 			iatdto.setTaskDate(iat.getOpened_timestamp());
 			iatdto.setSpecialist(iat.getIncidentActivity().getAgent().getUsername());
 			iatdto.setStatus(String.valueOf(iat.getStatus().getStatus_ID()));
 			
 			if (iat.getIncidentActivity().getApprovalAgent() != null) {
-				iatdto.setAgent(iat.getIncidentActivity().getApprovalAgent().getUsername()); //Shouldn't this be the approval agent?
+				iatdto.setAgent(iat.getIncidentActivity().getApprovalAgent().getUsername()); 
 			}
 
 			/** Passenger Information **/
@@ -292,7 +292,13 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 				}
 			}
 			
-			iatdto.setAirline(iat.getIncidentActivity().getIncident().getAgent().getCompanycode_ID()); //double check how/if to get airline code based on pnr
+			/**
+			 * TOBEUPDATED: This is controlled by what Reservation System the
+			 * incident information is pulled from. This dynamic reservation
+			 * system isn't implemented yet, so will need to update this section
+			 * once that feature is implemented. Currently will default to User's company code
+			 **/
+			iatdto.setAirline(iat.getIncidentActivity().getIncident().getAgent().getCompanycode_ID()); 
 			iatdto.setPnr(iat.getIncidentActivity().getIncident().getRecordlocator());
 			
 			if(iat.getIncidentActivity().getIncident().getItemtype_ID()==TracingConstants.LOST_DELAY){

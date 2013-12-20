@@ -191,6 +191,7 @@ public class PaymentApprovalAction extends CheckedAction {
 		if (request.getParameter("generateReport") != null && 
 				request.getParameter("outputtype") != null) {
 			dto.setRowsPerPage(0);
+			results = incidentActivityService.listPendingIncidentActivityTasks(dto);
 			ServletContext sc = getServlet().getServletContext();
 			String reportpath = sc.getRealPath("/");
 			String reportfile = null;

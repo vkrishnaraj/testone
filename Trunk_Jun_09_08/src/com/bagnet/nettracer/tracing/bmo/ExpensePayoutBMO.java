@@ -298,16 +298,11 @@ public class ExpensePayoutBMO {
 			}
 			tx.commit();
 			Transaction tx2 = sess.beginTransaction();
-			try {
-				for(ExpensePayout ep:eplist){
-					IncidentBMO.auditClaim(ep.getIncident(), TracerUtils.getText(
-						"updating.expense.audit", user), user, sess);
-				}
-				tx2.commit();
-			} catch (Exception e) {
-				logger.error("Error updating expenses ", e);
-				tx2.rollback();
+			for(ExpensePayout ep:eplist){
+				IncidentBMO.auditClaim(ep.getIncident(), TracerUtils.getText(
+					"updating.expense.audit", user), user, sess);
 			}
+			tx2.commit();
 			return true;
 		} catch (Exception e) {
 

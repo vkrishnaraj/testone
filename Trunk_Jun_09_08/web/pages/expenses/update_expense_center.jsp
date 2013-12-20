@@ -103,34 +103,34 @@
     	}
       
       	function submitIncidentActivity() {
-  			showTemplateSelectDialog2();
+      		showClaimSettleDialog();
   		}
       	
       	/** TODO: Figure out how to dynamically update this method **/
-      	function showTemplateSelectDialog2() {
+      	function showClaimSettleDialog() {
     		if (document.getElementById("claimSettleSelect").options.length == 1) {
     			loadList("claimSettleSelect", "customerCommunications.do?templateList=<%=String.valueOf(TemplateType.CLAIM_SETTLEMENT.getOrdinal()) %>");
     		}
 
-   		var templateSelectDialog = jQuery("#claimSettleSelectDiv").dialog({
-    										height: 50,
-    										width: 350,
-    										title: 'Select Document',
-    										modal: true,
-    										buttons: {
-    											Submit: function() {
-    												jQuery(this).dialog("close");
-    												var templateSelect = document.getElementById("claimSettleSelect");
-    												templateId = templateSelect.options[templateSelect.selectedIndex].value;
-    												if (templateId == "") {
-    													alert('You must select a Claim Settlement Letter Document.');
-    													return;
-    												}
-    												submitRequest(templateId);
-    											}
-    										}
-    									});
-    		templateSelectDialog.dialog("open");
+   			var claimSettleSelectDialog = jQuery("#claimSettleSelectDiv").dialog({
+ 										height: 50,
+ 										width: 350,
+ 										title: 'Select Document',
+ 										modal: true,
+ 										buttons: {
+ 											Submit: function() {
+ 												jQuery(this).dialog("close");
+ 												var claimSettleSelect = document.getElementById("claimSettleSelect");
+ 												claimSettleId = claimSettleSelect.options[claimSettleSelect.selectedIndex].value;
+ 												if (claimSettleId == "") {
+ 													alert('You must select a Claim Settlement Letter Document.');
+ 													return;
+ 												}
+ 												submitRequest(claimSettleId);
+ 											}
+ 										}
+ 									});
+   			claimSettleSelectDialog.dialog("open");
     	}
 
     	function submitRequest(templateId) {
