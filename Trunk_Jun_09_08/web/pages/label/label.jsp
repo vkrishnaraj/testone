@@ -26,7 +26,7 @@
 			alert(startingPosition.value + ' <%=(String) myMessages.getMessage(myLocale, "error.validation.validNumber")%>');
 			startingPosition.focus();
   			return false;			
-		} else if (<%=TracingConstants.LABELS_PER_PAGE%> < startingPosition.value) {
+		} else if (startingPosition.value < 1 || <%=TracingConstants.LABELS_PER_PAGE%> < startingPosition.value) {
 			alert(startingPosition.value + '<%=(String) myMessages.getMessage(myLocale, "errors.range", new Object[]{"", 1, TracingConstants.LABELS_PER_PAGE})%>');
 			startingPosition.focus();
   			return false;
