@@ -28,7 +28,7 @@ public class TracingConstants {
 		STATION ("station"),
 		INCIDENT ("incident"),
 		OHD ("ohd"),
-		CREATEDATE ("createdate"),  
+		CREATEDATE ("createdate"),
 		DUE_DATE ("due_date"),
 		REMINDER_DATE ("reminder_date"),
 		FILE_REF_NUMBER ("file_ref_number"),
@@ -1472,7 +1472,7 @@ public class TracingConstants {
 	public static final int STATUS_CUSTOMER_COMM_PENDING = 1400;
 	public static final int STATUS_CUSTOMER_COMM_APPROVED = 1401;
 	public static final int STATUS_CUSTOMER_COMM_DENIED = 1402;
-	public static final int STATUS_CUSTOMER_COMM_PUBLISHED = 1403; //???
+	public static final int STATUS_CUSTOMER_COMM_PUBLISHED = 1403;
 	public static final int STATUS_CUSTOMER_COMM_PENDING_PRINT = 1404;
 	public static final int STATUS_CUSTOMER_COMM_PENDING_WP = 1405;
 	

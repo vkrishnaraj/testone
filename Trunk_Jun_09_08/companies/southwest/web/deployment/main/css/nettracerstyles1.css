@@ -384,6 +384,13 @@ th.header {
 	color:#fff;
 }
 
+td.header a,
+th.header a{
+	background-color:#1F6390;
+	color: #fff;
+	text-decoration: none;
+}
+
 div#maincontent table.form2_inc{
 	background-color:#D1E4F1;
 }

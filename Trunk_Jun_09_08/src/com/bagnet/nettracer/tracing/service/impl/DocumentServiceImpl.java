@@ -7,14 +7,18 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import com.bagnet.nettracer.tracing.actions.templates.DocumentTemplateResult;
@@ -117,7 +121,26 @@ public class DocumentServiceImpl implements DocumentService {
 	 */
 	@Override
 	public DocumentTemplateResult generatePdf(Agent user, Document document, String directory) throws InsufficientInformationException {
-		if (document.getTemplate() == null) {
+		if (document == null) {
+			throw new IllegalArgumentException("Documents cannot be null");
+		}
+		
+		List<Document> documents = new ArrayList<Document>(0);
+		documents.add(document);
+		return generatePdf(user, documents, directory);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.bagnet.nettracer.tracing.service.DocumentService#generatePdf(com.bagnet.nettracer.tracing.db.documents.Document, java.lang.String)
+	 */
+	@Override
+	public DocumentTemplateResult generatePdf(Agent user, List<Document> documents, String directory) throws InsufficientInformationException {
+		if (documents == null || documents.isEmpty()) {
+			throw new IllegalArgumentException("No document to be generated");
+		}
+		
+		Document firstDocument = documents.get(0);
+		if (firstDocument.getTemplate() == null) {
 			throw new InsufficientInformationException(Template.class);
 		}
 		
@@ -129,26 +152,43 @@ public class DocumentServiceImpl implements DocumentService {
 			throw new InsufficientInformationException("directory");
 		}
 		
+		OutputStream out = null;
 		String rootPath = TracerProperties.get(user.getCompanycode_ID(),"document_store") + directory + "\\";
 		DocumentTemplateResult result = new DocumentTemplateResult();
 		try {
-			String fileName = this.generateFileName(document.getName());
+			String templateName = (documents.size() == 1) ? firstDocument.getName() : String.format("%s-%s", firstDocument.getName(), documents.size());
+			String fileName = this.generateFileName(templateName);
 			StringBuilder filePath = new StringBuilder(rootPath);
 			filePath.append(fileName);
-			OutputStream out = new FileOutputStream(filePath.toString());
+			out = new FileOutputStream(filePath.toString());
 			ITextRenderer renderer = new ITextRenderer();
-			renderer.setDocumentFromString(document.getXml());
+			renderer.setDocumentFromString(firstDocument.getXml());
 			renderer.layout();
-			renderer.createPDF(out);
+			renderer.createPDF(out, false); 
+			
+			for (int i = 1; i < documents.size(); i++) {
+				Document document = documents.get(i);
+				if (document == null  || StringUtils.isBlank(document.getXml())) {
+					logger.debug("Document is empty: document Id = " + document.getId());
+					continue;
+				}
+				
+		        renderer.setDocumentFromString(document.getXml());
+		        renderer.layout();
+		        renderer.writeNextDocument();
+		    }
+		    renderer.finishPDF();
 			
 			// update the result details
 			result.setSuccess(true);
 			result.setMessageKey("document.generated.success");
 			result.setPayload(fileName);
 		} catch (Exception e) {
-			logger.error("Error occurred while attempting to generate document: " + document.getName(), e);
+			logger.error("Error occurred while attempting to generate document: " + firstDocument.getName(), e);
 			result.setMessageKey("document.generated.failure");
-		}
+		} finally {
+			IOUtils.closeQuietly(out);
+		 }
 		
 		return result;
 	}

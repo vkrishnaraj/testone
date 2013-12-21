@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -151,6 +152,14 @@ public class CustomerCommunicationsAction extends CheckedAction {
 			} catch (NumberFormatException nfe) {
 				logger.error("Failed to delete customer communication with id: " + request.getParameter("communicationsId"), nfe);
 				success = false;
+			}
+			
+			if (StringUtils.equalsIgnoreCase("y", request.getParameter("ajax"))) {
+				if (!success) {
+					response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				}
+				
+				return null;
 			}
 			
 			String anchor = "#activities";

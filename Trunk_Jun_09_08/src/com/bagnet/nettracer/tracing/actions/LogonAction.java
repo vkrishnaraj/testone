@@ -47,6 +47,7 @@ import com.bagnet.nettracer.tracing.db.Label;
 import com.bagnet.nettracer.tracing.db.ProactiveNotification;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.taskmanager.GeneralTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask;
@@ -396,6 +397,11 @@ public class LogonAction extends Action {
 							LabelService labelService = (LabelService) SpringUtils.getBean(TracingConstants.LABEL_SERVICE_BEAN);
 							List<Label> labelList = labelService.getLabels(agent.getAgent_ID());
 							entries = (labelList == null) ? 0 : labelList.size();							
+						} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_DOCUMENT_PRINT_QUEUE)) {
+							Status status = new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING_PRINT);
+							IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
+							List<IncidentActivity> documentPrintlist = incidentActivityService.getIncidentActivitiesByTaskStatus(status, null);
+							entries = (documentPrintlist == null) ? 0 : documentPrintlist.size();							
 						} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_TO_BE_INVENTORIED)) {
 							if (!PropertyBMO.isTrue(PropertyBMO.PROPERTY_TO_BE_INVENTORIED)) {
 								continue;

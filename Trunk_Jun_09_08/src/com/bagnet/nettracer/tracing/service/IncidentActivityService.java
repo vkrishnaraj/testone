@@ -28,6 +28,7 @@ public interface IncidentActivityService {
 	public IncidentActivityTask loadTask(long incidentActivityTaskId);
 	public long saveTask(IncidentActivityTask incidentActivityTask);
 	public boolean updateTask(IncidentActivityTask incidentActivityTask);
+	public boolean publishTask(IncidentActivityTask incidentActivityTask);
 	public boolean deleteTask(long incidentActivityTaskId);
 	
 	public boolean createTask(IncidentActivity incidentActivity, Status withStatus);	
@@ -52,6 +53,7 @@ public interface IncidentActivityService {
 	
 	public List<IncidentActivityTaskDTO> listPendingIncidentActivityTasks(IncidentActivityTaskSearchDTO dto);
 	public List<IncidentActivityTaskDTO> listRejectedIncidentActivityTasks(IncidentActivityTaskSearchDTO dto);
+	public List<IncidentActivity> getIncidentActivitiesByTaskStatus(Status status, String sortBy);
 	
 	public boolean createIncidentActivityRemark(String remark, IncidentActivity forActivity, Agent madeBy);
 	

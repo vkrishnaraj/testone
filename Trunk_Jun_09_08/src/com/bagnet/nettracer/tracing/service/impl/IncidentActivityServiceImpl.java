@@ -123,6 +123,11 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 	}
 
 	@Override
+	public boolean publishTask(IncidentActivityTask incidentActivityTask) {
+		return incidentActivityDao.publishTask(incidentActivityTask);
+	}
+
+	@Override
 	public boolean deleteTask(long incidentActivityTaskId) {
 		return incidentActivityDao.deleteTask(incidentActivityTaskId);
 	}
@@ -409,6 +414,11 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 		toReturn.set_TIMEFORMAT(dto.get_TIMEFORMAT());
 		toReturn.set_TIMEZONE(dto.get_TIMEZONE());
 		return toReturn;
+	}
+	
+	@Override
+	public List<IncidentActivity> getIncidentActivitiesByTaskStatus(Status status, String sortBy) {
+		return incidentActivityDao.getIncidentActivitiesByTaskStatus(status, sortBy);
 	}
 	
 	@Override

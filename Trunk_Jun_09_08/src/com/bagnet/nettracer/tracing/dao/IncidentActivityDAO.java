@@ -22,6 +22,7 @@ public interface IncidentActivityDAO {
 	public IncidentActivityTask loadTask(long incidentActivityTaskId);
 	public long saveTask(IncidentActivityTask incidentActivityTask);
 	public boolean updateTask(IncidentActivityTask incidentActivityTask);
+	public boolean publishTask(IncidentActivityTask incidentActivityTask);
 	public boolean deleteTask(long incidentActivityTaskId);
 	public boolean deleteTask(IncidentActivityTask incidentActivityTask);
 	public boolean deleteTasks(List<IncidentActivityTask> tasks);
@@ -37,6 +38,7 @@ public interface IncidentActivityDAO {
 	
 	public int getIncidentActivityTaskCount(IncidentActivityTaskSearchDTO dto);
 	public List<IncidentActivityTask> listIncidentActivityTasks(IncidentActivityTaskSearchDTO dto);
+	public List<IncidentActivity> getIncidentActivitiesByTaskStatus(Status status, String sortBy);
 
 	public IncidentActivityTask loadTaskForIncidentActivity(IncidentActivity incidentActivity, Status withStatus);
 
