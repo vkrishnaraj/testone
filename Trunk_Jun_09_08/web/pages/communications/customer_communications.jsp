@@ -16,7 +16,6 @@
 	boolean canEdit = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_EDIT, a);
 	boolean canDelete = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_DELETE, a);
 	boolean canViewPublished = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_VIEW_PUBLISHED, a);
-
 	ResourceBundle bundle = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
 	
 	String cssFormClass = "";
@@ -33,7 +32,21 @@
   	}
 %>
 <script type="text/javascript">
-<!--
+
+	function textCounter(field, countfield, maxlimit) {
+	  	if (field.value.length > maxlimit) {
+	  		field.value = field.value.substring(0, maxlimit);
+	  	} else {
+	  		countfield.value = maxlimit - field.value.length;
+	  	}
+	}
+
+	function insertNewLine3() {
+		if (window.event && window.event.keyCode == 13) {
+			window.event.keyCode = 505;
+		}
+  	}
+
 	function loadList(selectId, url) {
 		if (document.getElementById(selectId).options.length > 1) return;
 
@@ -68,6 +81,8 @@
 		var activityId = activitySelect.options[activitySelect.selectedIndex].value;
 		if (activityId == "<%=TracingConstants.ACTIVITY_CUSTOMER_COMMUNICATION %>") {
 			showTemplateSelectDialog();
+		} else if (activityId == "<%=TracingConstants.OUTBOUND_CORRESPONDANCE %>"){
+			showOutboundMessageDialog();
 		} else {
 			submitRequest();
 		}
@@ -84,12 +99,55 @@
 		window.location.href=url;
 	}
 
+	function verifyUnpublish() {
+		return confirm('<%=bundle.getString("message.incident.activity.unpublish") %>');
+	}
+	
+	function verifyPublish() {
+		return confirm('<%=bundle.getString("message.incident.activity.publish") %>');
+	}
+	
 	function verifyDelete() {
 		return confirm('<%=bundle.getString("message.incident.activity.delete") %>');
 	}
 
 	function openPreviewWindow(activityId) {
 		window.open("customerCommunications.do?view_sample_printout="+activityId, '', 'width=600,height=800,top=2600,resizable=yes');
+	}
+
+	function showOutboundMessageDialog() {
+		var outboundMessageDialog = jQuery("#outboundMessageDiv").dialog({
+			height: 225,
+			width: 355,
+			title: 'Outbound Message',
+			modal: true,
+			buttons: {
+				Submit: function() {
+					jQuery(this).dialog("close");
+					var outboundMessage = document.getElementById("outboundMessage");
+					if (outboundMessage && outboundMessage.value == "") {
+						alert('You must enter a Outbound Message.');
+						return;
+					}
+					document.incidentForm.outMessage.value=outboundMessage.value;
+					var incidentId = document.getElementById("incident_ID").value;
+					var activitySelect = document.getElementById("activityIdSelect");
+					var activityId = activitySelect.options[activitySelect.selectedIndex].value;
+					var posturl = 'incidentActivity.do?command=<%=TracingConstants.COMMAND_CREATE %>&incident='+incidentId+'&activity='+activityId;
+					
+					jQuery.ajax({
+						type: "POST",
+						url: posturl,
+						data: "outMessage="+outboundMessage.value,
+						cache: false,
+						success: function() {
+						    window.location.reload(true);
+						}
+					});
+				}
+			}
+		});
+		outboundMessageDialog.dialog("open");
 	}
 
 	function showTemplateSelectDialog() {
@@ -146,6 +204,7 @@
 	}
 //-->
 </script>
+<html:hidden name="incidentForm" property="outMessage" value=""/>
 
 <div style="float:right">
 	<input type="button" id="generateLabelButton" class="button"
@@ -203,6 +262,27 @@
 					</td>
 					<td>
 						<bean:write name="activity" property="description" />
+						<logic:equal name="activity" property="isCorrespondence" value="true" >
+							<logic:notEmpty name="activity" property="messages">
+							<br/>
+							<bean:message key="colname.messages"/><br/>
+								<logic:iterate id="message" name="activity" property="messages" type="com.bagnet.nettracer.tracing.dto.MessageDTO" >
+									<bean:write name="message" property="username" /><br/>
+									<bean:write name="message" property="dispCreateDate" /><br/>
+									<bean:write name="message" property="messageText" filter="false"/><br/><br/>
+									
+								</logic:iterate>
+							</logic:notEmpty>
+							
+							<logic:notEmpty name="activity" property="files">
+							<bean:message key="colname.files"/><br/>
+							<logic:iterate id="file" name="activity" property="files">
+								<a href="showImage?ID=<bean:write name='file' property='path'/>/<bean:write name='file' property='filename'/>&useOCPath=1" target="_blank">
+									<bean:write name="file" property="filename" />
+								</a><br/>
+							</logic:iterate>
+							</logic:notEmpty>
+						</logic:equal>
 					</td>
 					<td>
 						<!-- Currently, customer communications are only identified from other activities by having a status id -->
@@ -241,6 +321,63 @@
 								<% } else { %>
 									&nbsp;
 								<% } %>
+							</logic:equal>
+							<logic:equal name="activity" property="statusId" value="<%=String.valueOf(TracingConstants.STATUS_CUSTOMER_COMM_APPROVED) %>">
+							
+								<logic:equal name="activity" property="published" value="true">
+									
+									<br>
+									<a href="customerCommunications.do?command=<%=TracingConstants.COMMAND_UNPUBLISH %>&communicationsId=<%=String.valueOf(activity.getId()) %>&incident=<bean:write name="incidentForm" property="incident_ID" />" onclick="return verifyUnpublish();" >
+										<bean:message key="customer.communication.action.unpublish" />
+									</a>
+								</logic:equal>
+								<logic:notEqual name="activity" property="published" value="true">
+									
+									<br>
+									<a href="customerCommunications.do?command=<%=TracingConstants.COMMAND_PUBLISH %>&communicationsId=<%=String.valueOf(activity.getId()) %>&incident=<bean:write name="incidentForm" property="incident_ID" />" onclick="return verifyPublish();" >
+										<bean:message key="customer.communication.action.publish" />
+									</a>
+								</logic:notEqual>
+							</logic:equal>
+							<logic:equal name="activity" property="statusId" value="<%=String.valueOf(TracingConstants.FINANCE_STATUS_FINANCE_APPROVED) %>">
+							
+								<logic:equal name="activity" property="published" value="true">
+									
+									<br>
+									<a href="customerCommunications.do?command=<%=TracingConstants.COMMAND_UNPUBLISH %>&communicationsId=<%=String.valueOf(activity.getId()) %>&incident=<bean:write name="incidentForm" property="incident_ID" />" onclick="return verifyUnpublish();" >
+										<bean:message key="customer.communication.action.unpublish" />
+									</a>
+								</logic:equal>
+								<logic:notEqual name="activity" property="published" value="true">
+									
+									<br>
+									<a href="customerCommunications.do?command=<%=TracingConstants.COMMAND_PUBLISH %>&communicationsId=<%=String.valueOf(activity.getId()) %>&incident=<bean:write name="incidentForm" property="incident_ID" />" onclick="return verifyPublish();" >
+										<bean:message key="customer.communication.action.publish" />
+									</a>
+								</logic:notEqual>
+							</logic:equal>
+						</logic:equal>
+						
+						<logic:equal name="activity" property="isCorrespondence" value="true" >
+							<logic:equal name="activity" property="activityCode" value="<%=String.valueOf(TracingConstants.OUTBOUND_CORRESPONDANCE) %>">
+								<logic:equal name="activity" property="published" value="true">
+									<a href="customerCommunications.do?command=<%=TracingConstants.COMMAND_UNPUBLISH %>&communicationsId=<%=String.valueOf(activity.getId()) %>&incident=<bean:write name="incidentForm" property="incident_ID" />" onclick="return verifyUnpublish();" >
+										<bean:message key="customer.communication.action.unpublish" />
+									</a>
+								</logic:equal>
+								<logic:notEqual name="activity" property="published" value="true">
+									<a href="customerCommunications.do?command=<%=TracingConstants.COMMAND_PUBLISH %>&communicationsId=<%=String.valueOf(activity.getId()) %>&incident=<bean:write name="incidentForm" property="incident_ID" />" onclick="return verifyPublish();" >
+										<bean:message key="customer.communication.action.publish" />
+									</a>
+								</logic:notEqual>
+							</logic:equal>
+							
+							<logic:equal name="activity" property="activityCode" value="<%=String.valueOf(TracingConstants.INBOUND_CORRESPONDANCE) %>">
+								<logic:equal name="activity" property="toBeAcknowledged" value="true">
+									<a href="customerCommunications.do?command=<%=TracingConstants.COMMAND_ACKNOWLEDGE_INBOUND %>&communicationsId=<%=String.valueOf(activity.getId()) %>&incident=<bean:write name="incidentForm" property="incident_ID" />" >
+										<bean:message key="customer.communication.action.acknowledge" />
+									</a>
+								</logic:equal>
 							</logic:equal>
 						</logic:equal>
 						<logic:equal name="activity" property="statusId" value="0" >
@@ -282,6 +419,20 @@
 				<select id="templateSelect" style="	font-size:9px;border:1px solid #569ECD;margin:2px 0px 1px 0px;display:inline;" >
 					<option value="0"><bean:message key="select.please_select" /></option>
 				</select>
+			</td>
+		</tr>
+	</table>
+</div>
+
+<div id="outboundMessageDiv" style="display:none;" >
+	<table style="width:100%;">
+		<tr>
+			<td style="width:50%;text-align:right;">Enter Outbound message:<br/></td>
+			<td>
+				<textarea id="outboundMessage" rows="4" cols="50" styleClass="textfield"           
+					onkeydown="textCounter(outboundMessage, counter, 10000); insertNewLine3();" 
+    								onkeyup="textCounter(outboundMessage, counter, 10000);"></textarea>
+				<input id="counter" value="10000" size="4" disabled />
 			</td>
 		</tr>
 	</table>

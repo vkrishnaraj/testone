@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.onlineclaims.xsd;
 public interface File extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(File.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s88BD0230C96D0EEDE5A966901E77F2BE").resolveHandle("file3dabtype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(File.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s47918F556B545B4B159263E4D62D20A1").resolveHandle("file3dabtype");
     
     /**
      * Gets the "filename" element
@@ -157,6 +157,36 @@ public interface File extends org.apache.xmlbeans.XmlObject
      * Unsets the "path" element
      */
     void unsetPath();
+    
+    /**
+     * Gets the "publish" element
+     */
+    boolean getPublish();
+    
+    /**
+     * Gets (as xml) the "publish" element
+     */
+    org.apache.xmlbeans.XmlBoolean xgetPublish();
+    
+    /**
+     * True if has "publish" element
+     */
+    boolean isSetPublish();
+    
+    /**
+     * Sets the "publish" element
+     */
+    void setPublish(boolean publish);
+    
+    /**
+     * Sets (as xml) the "publish" element
+     */
+    void xsetPublish(org.apache.xmlbeans.XmlBoolean publish);
+    
+    /**
+     * Unsets the "publish" element
+     */
+    void unsetPublish();
     
     /**
      * A factory class with static methods for creating instances

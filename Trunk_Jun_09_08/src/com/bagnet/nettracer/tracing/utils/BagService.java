@@ -97,9 +97,13 @@ import com.bagnet.nettracer.tracing.db.audit.Audit_ClaimProrate;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Prorate_Itinerary;
 import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemIncident;
+import com.bagnet.nettracer.tracing.db.onlineclaims.OCFile;
+import com.bagnet.nettracer.tracing.db.onlineclaims.OCMessage;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCloseOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqOhdAction;
+import com.bagnet.nettracer.tracing.dto.FileDTO;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityDTO;
+import com.bagnet.nettracer.tracing.dto.MessageDTO;
 import com.bagnet.nettracer.tracing.dto.Ohd_DTO;
 import com.bagnet.nettracer.tracing.dto.SearchIncident_DTO;
 import com.bagnet.nettracer.tracing.forms.ClaimForm;
@@ -313,6 +317,7 @@ public class BagService {
 
 			// update l/d bag status to in transit as well if forwarding station
 			// is the same as l/d assigned station
+			@SuppressWarnings("deprecation")
 			Item item = BDOUtils.findOHDfromMatchedLD(onhandnum); /* Not sure what to replace this with*/
 			if(item != null) {
 				Status s2 = new Status();
@@ -1628,15 +1633,56 @@ public class BagService {
 			dto.setAgent(activity.getAgent().getUsername());
 			dto.setDescription(activity.getDescription());
 			dto.setCustCommId(activity.getCustCommId());
+			if (activity.getActivity() != null) {
+				dto.setActivityCode(activity.getActivity().getCode());
+			}
+
 			if (activity.getDocument() != null) {
 				dto.setFileName(activity.getDocument().getFileName());
 			}
-			dto.setCustomerCommunication(activity.getActivity().getCode().equals(TracingConstants.ACTIVITY_CUSTOMER_COMMUNICATION) 
+			boolean published = false;
+			boolean toBeAcknowledged = false;
+			if (activity.getMessages() != null && activity.getMessages().size() > 0) {
+				List<MessageDTO> mdtolist = DomainUtils.fromMessages(activity.getMessages(), user);
+				if (mdtolist != null) {
+					dto.setMessages(mdtolist);
+				}
+				for (OCMessage message : activity.getMessages()) {
+					if (message.isPublish()) {
+						published = true;
+					}
+					if (message.getDateReviewed() == null) {
+						toBeAcknowledged = true;
+					}
+				}
+
+			}
+
+			if (activity.getFiles() != null && activity.getFiles().size() > 0) {
+				List<FileDTO> fdtolist = DomainUtils.fromFiles(activity.getFiles(), user);
+				if (fdtolist != null) {
+					dto.setFiles(fdtolist);
+				}
+
+				for (OCFile file : activity.getFiles()) {
+					if (file.isPublish()) {
+						published = true;
+					}
+					if (file.getDateViewed() == null) {
+						toBeAcknowledged = true;
+					}
+				}
+			}
+
+			dto.setPublished(published);
+			dto.setToBeAcknowledged(toBeAcknowledged);
+
+			dto.setCustomerCommunication(activity.getActivity().getCode().equals(TracingConstants.ACTIVITY_CUSTOMER_COMMUNICATION)
 					|| activity.getActivity().getCode().equals(TracingConstants.CREATE_SETTLEMENT_ACTIVITY));
-			
-			//mark if activity is portal correspondence - Not related to NT-740
-//			dto.setCorrespondence(activity.getActivity().getCode().equals(TracingConstants.INBOUND_CORRESPONDANCE)
-//					|| activity.getActivity().getCode().equals(TracingConstants.OUTBOUND_CORRESPONDANCE));
+
+			// mark if activity is portal correspondence
+			dto.setCorrespondence(activity.getActivity().getCode().equals(TracingConstants.INBOUND_CORRESPONDANCE)
+					|| activity.getActivity().getCode().equals(TracingConstants.OUTBOUND_CORRESPONDANCE));
 			activities.add(dto);
 		}
 		theform.setActivityDtos(activities);
@@ -1775,7 +1821,7 @@ public class BagService {
 			theform.setPassengerlist(new ArrayList<Passenger>(iDTO.getPassengers()));
 			
 			List<IncidentActivityDTO> activities = new ArrayList<IncidentActivityDTO>();
-			for (IncidentActivity activity: iDTO.getActivities()) {
+			for (IncidentActivity activity : iDTO.getActivities()) {
 				IncidentActivityDTO dto = new IncidentActivityDTO();
 				dto.set_DATEFORMAT(user.getDateformat().getFormat());
 				dto.set_TIMEFORMAT(user.getTimeformat().getFormat());
@@ -1789,13 +1835,46 @@ public class BagService {
 				dto.setAgent(activity.getAgent().getUsername());
 				dto.setDescription(activity.getDescription());
 				dto.setCustCommId(activity.getCustCommId());
+				if (activity.getActivity() != null) {
+					dto.setActivityCode(activity.getActivity().getCode());
+				}
+
 				if (activity.getDocument() != null) {
 					dto.setFileName(activity.getDocument().getFileName());
 				}
-				dto.setCustomerCommunication(activity.getActivity().getCode().equals(TracingConstants.ACTIVITY_CUSTOMER_COMMUNICATION) || activity.getActivity().getCode().equals(TracingConstants.CREATE_SETTLEMENT_ACTIVITY));
-//				Not related to NT-740
-//				dto.setCorrespondence(activity.getActivity().getCode().equals(TracingConstants.INBOUND_CORRESPONDANCE)
-//						|| activity.getActivity().getCode().equals(TracingConstants.OUTBOUND_CORRESPONDANCE));
+
+				boolean published = false;
+				if (activity.getMessages() != null && activity.getMessages().size() > 0) {
+					List<MessageDTO> mdtolist = DomainUtils.fromMessages(activity.getMessages(), user);
+					if (mdtolist != null) {
+						dto.setMessages(mdtolist);
+					}
+					for (OCMessage message : activity.getMessages()) {
+						if (message.isPublish()) {
+							published = true;
+						}
+					}
+				}
+
+				if (activity.getFiles() != null && activity.getFiles().size() > 0) {
+					List<FileDTO> fdtolist = DomainUtils.fromFiles(activity.getFiles(), user);
+					if (fdtolist != null) {
+						dto.setFiles(fdtolist);
+					}
+
+					for (OCFile file : activity.getFiles()) {
+						if (file.isPublish()) {
+							published = true;
+						}
+					}
+				}
+
+				dto.setPublished(published);
+				dto.setCustomerCommunication(activity.getActivity().getCode().equals(TracingConstants.ACTIVITY_CUSTOMER_COMMUNICATION)
+						|| activity.getActivity().getCode().equals(TracingConstants.CREATE_SETTLEMENT_ACTIVITY));
+
+				dto.setCorrespondence(activity.getActivity().getCode().equals(TracingConstants.INBOUND_CORRESPONDANCE)
+						|| activity.getActivity().getCode().equals(TracingConstants.OUTBOUND_CORRESPONDANCE));
 				activities.add(dto);
 			}
 			theform.setActivityDtos(activities);

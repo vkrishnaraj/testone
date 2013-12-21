@@ -1,5 +1,8 @@
 package com.bagnet.nettracer.tracing.actions.communications;
 
+import java.util.Date;
+
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,12 +17,20 @@ import org.apache.struts.action.ActionMessages;
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.dao.AuthorizationException;
+import com.bagnet.nettracer.tracing.dao.OnlineClaimsDao;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.communications.Activity;
 import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
+import com.bagnet.nettracer.tracing.db.onlineclaims.OCMessage;
+import com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim;
+import com.bagnet.nettracer.tracing.exceptions.InsufficientInformationException;
+import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.service.IncidentActivityService;
 import com.bagnet.nettracer.tracing.utils.DomainUtils;
+import com.bagnet.nettracer.tracing.utils.EmailUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
@@ -46,6 +57,7 @@ public class IncidentActivityAction extends CheckedAction {
 		if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_CREATE, user)) {
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
 		}
+		IncidentForm myform=(IncidentForm) form;
 		
 		// ajax call to return the list of available incident activities
 		if (request.getParameter("activityList") != null) {
@@ -64,8 +76,11 @@ public class IncidentActivityAction extends CheckedAction {
 		} else if(TracingConstants.CREATE_SETTLEMENT_ACTIVITY.equals(activity)){
 			response.sendRedirect("customerCommunications.do?incident="+incidentId+"&expense="+expenseId+"&templateId="+request.getParameter("templateId"));
 			return null;
+		} else if(TracingConstants.OUTBOUND_CORRESPONDANCE.equals(activity)){
+
+			success = createActivity(incidentId, activity, user, messages, myform.getOutMessage());
 		} else if (TracingConstants.COMMAND_CREATE.equalsIgnoreCase(command)) {
-			success = createActivity(incidentId, activity, user, messages);
+			success = createActivity(incidentId, activity, user, messages, null);
 		} else if (TracingConstants.COMMAND_DELETE.equalsIgnoreCase(command)
 				&& UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_DELETE, user)) {
 			success = deleteActivity(request.getParameter("activity"), incidentId, messages);
@@ -80,7 +95,7 @@ public class IncidentActivityAction extends CheckedAction {
 		return null;
 	}
 	
-	private boolean createActivity(String incidentId, String activityId, Agent user, ActionMessages messages) {
+	private boolean createActivity(String incidentId, String activityId, Agent user, ActionMessages messages, String message) {
 		boolean success = false;
 		
 		Activity activity = getActivityFromParam(activityId, messages);
@@ -96,10 +111,60 @@ public class IncidentActivityAction extends CheckedAction {
 		}
 		
 		IncidentActivity ia = DomainUtils.createIncidentActivity(incident, activity, user);
+		if(message!=null && ia.getCustCommId()==TracingConstants.CUST_COMM_WEB_PORTAL){
+			ia.setPublishedDate(new Date());
+		}
+		
 		success = incidentActivityService.save(ia) != 0;
 		if (!success) {
 			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.unable.to.create", new Object[] { activity.getDescription() }));
 		}
+
+		if(message!=null && !message.isEmpty() && ia.getCustCommId()==TracingConstants.CUST_COMM_WEB_PORTAL){
+			OnlineClaimsDao dao=new OnlineClaimsDao();
+			OnlineClaim c=dao.getOnlineClaim(incidentId);
+			if (c == null) {
+				try {
+					String fName="";
+					String name="";
+					if(incident.getPassenger_list()!=null && incident.getPassenger_list().get(0)!=null){
+						Passenger p=incident.getPassenger_list().get(0);
+						fName=p.getFirstname();
+						name=p.getLastname();
+					}
+					c = dao.createOnlineClaim(incidentId, null, fName, name);
+	
+					dao.saveOnlineClaimWsUseOnly(c, incidentId, null, null);
+					
+				} catch (AuthorizationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			OCMessage newmessage=new OCMessage();
+			newmessage.setDateCreated(new Date());
+			newmessage.setMessage(message);
+			newmessage.setUsername(user.getFirstname()+" "+user.getLastname());
+			newmessage.setIncAct(ia);
+			newmessage.setClaim(c);
+			newmessage.setPublish(true);
+			newmessage.setStatusId(TracingConstants.OC_STATUS_PUBLISHED);
+			success=dao.saveMessage(newmessage);
+			if (!success) {
+				messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.unable.to.create.message", new Object[] { activity.getDescription() }));
+			} else {
+
+				ServletContext sc = getServlet().getServletContext();
+				String realpath = sc.getRealPath("/");
+				try{
+					EmailUtils.sendIncidentActivityEmail(ia, realpath);
+				} catch(InsufficientInformationException iie){
+					iie.printStackTrace();
+					logger.error("Failed to email customer about communication for IncidentActivity with id: "+ ia.getId());
+				}
+			}
+		}
+		
 		return success;
 	}
 	

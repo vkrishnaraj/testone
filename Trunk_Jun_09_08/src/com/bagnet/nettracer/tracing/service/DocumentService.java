@@ -5,7 +5,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.bagnet.nettracer.tracing.actions.templates.DocumentTemplateResult;
 import com.bagnet.nettracer.tracing.adapter.TemplateAdapter;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
 import com.bagnet.nettracer.tracing.db.documents.Document;
+import com.bagnet.nettracer.tracing.db.onlineclaims.OCFile;
 import com.bagnet.nettracer.tracing.exceptions.InsufficientInformationException;
 
 /**
@@ -62,4 +64,26 @@ public interface DocumentService {
 	 * @return a DocumentTemplateResult containing the results of the previewFile operation
 	 */
 	public DocumentTemplateResult previewFile(Agent user, String fileName, String directory, HttpServletResponse response);
+	
+	/**
+	 * The generatePdfForPortal method creates a pdf file in the OC Claim Files directory from the contents of the given document.
+	 * @param user requesting the pdf be generated
+	 * @param document from which the file will be created
+	 * @param directory is the folder where the pdf should be generated
+	 * @return a OCFile to save and push to the portal
+	 * @throws InsufficientInformationException if the method is called without both the document and the 
+	 * root path to the file share being supplied
+	 */
+	public OCFile generatePdfForPortal(Agent user, Document document,
+			String directory) throws InsufficientInformationException;
+	
+
+	/**
+	 * The publish document method takes the document of a Incident Activity and makes a file version of itself to push to the Online Claims portal for customers to view files
+	 * @param ia is the Incident Activity which to reference the Document to create
+	 * @return a OCFile to save and push to the portal
+	 * @throws InsufficientInformationException if the method is called without both the document and the 
+	 * root path to the file share being supplied
+	 */
+	public OCFile publishDocument(IncidentActivity ia) throws InsufficientInformationException;
 }

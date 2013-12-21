@@ -25,6 +25,8 @@ import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.documents.Document;
+import com.bagnet.nettracer.tracing.db.onlineclaims.OCFile;
+import com.bagnet.nettracer.tracing.db.onlineclaims.OCMessage;
 import com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask;
 
 @Entity
@@ -70,6 +72,16 @@ public class IncidentActivity {
 	@ManyToOne
 	@JoinColumn(name = "activity")
 	private Activity activity;
+	
+	@OneToMany(mappedBy = "incAct", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@org.hibernate.annotations.OrderBy(clause="dateCreated")
+	@Fetch(FetchMode.SELECT)
+	private List<OCMessage> messages;
+	
+	@OneToMany(mappedBy = "incAct", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@org.hibernate.annotations.OrderBy(clause="id")
+	@Fetch(FetchMode.SELECT)
+	private List<OCFile> files;
 	
 	@OneToMany(mappedBy = "incidentActivity", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@org.hibernate.annotations.OrderBy(clause="createDate")
@@ -190,6 +202,28 @@ public class IncidentActivity {
 
 	public void setTasks(List<IncidentActivityTask> tasks) {
 		this.tasks = tasks;
+	}
+
+	public List<OCMessage> getMessages() {
+		if (messages == null) {
+			messages = new ArrayList<OCMessage>();
+		}
+		return messages;
+	}
+
+	public void setMessages(List<OCMessage> messages) {
+		this.messages = messages;
+	}
+
+	public List<OCFile> getFiles() {
+		if (files == null) {
+			files = new ArrayList<OCFile>();
+		}
+		return files;
+	}
+
+	public void setFiles(List<OCFile> files) {
+		this.files = files;
 	}
 	
 	public Status getLastStatus() {

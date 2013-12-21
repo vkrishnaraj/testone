@@ -153,16 +153,9 @@ public class OnlineClaimsServiceImplementation extends
 		Passenger pa = new Passenger();
 		
 		pa.setIncident(inc);
-		//pa.setSalutation(IncidentUtils.getSalutationid(wp.getSalutation()));
 		pa.setFirstname(ws.getFirstName());
 		pa.setIsprimary(1);
 		pa.setLastname(ws.getLastName());
-		//pa.setMiddlename(wp.getMiddlename());
-		//pa.setCommonnum(wp.getCommonnum());
-		//pa.setCountryofissue(wp.getCountryofissue());
-		//pa.setDlstate(wp.getDlstate());
-		//pa.setDriverslicense(wp.getDriverslicense());
-		//pa.setJobtitle(wp.getJobtitle());
 			
 		if (ws.getMembershipNumber() != null && ws.getMembershipNumber().length() > 0) {
 			 AirlineMembership am = new AirlineMembership();
@@ -202,11 +195,8 @@ public class OnlineClaimsServiceImplementation extends
 				addr.setAltphone(ph.getNumber());
 				break;
 			}
-			//addr.setPager(wp.getPager());
 		}
 
-		//addr.setValid_bdate(thedate);
-		//addr.setValid_edate(thedate);
 					
 		addrhash.add(addr);
 		pa.setAddresses(addrhash);
@@ -254,40 +244,8 @@ public class OnlineClaimsServiceImplementation extends
 			 		status = new Status();
 			 		status.setStatus_ID(TracingConstants.ITEM_STATUS_OPEN);
 			 		status.setTable_ID(TracingConstants.TABLE_ITEM);
-					item.setStatus(status);
-					//item.setArrivedonairline_ID(wi.getArrivedonairlineID());
-					//item.setArrivedondate(thedate);
-					//item.setArrivedonflightnum(wi.getArrivedonflightnum());
 					
-					//item.setClaimchecknum(wi.getClaimchecknum());
-					//item.setCost(wi.getCost());
-					//item.setCurrency_ID(wi.getCurrencyID());
-					//item.setDamage(wi.getDamage());
-					//item.setDrafts(wi.getDrafts());
-					//item.setFnameonbag(wi.getFnameonbag());
-					//item.setLnameonbag(wi.getLnameonbag());
-					//item.setMnameonbag(wi.getMnameonbag());
-					//item.setLvlofdamage(wi.getLvlofdamage());
-					//item.setManufacturer_ID(TracingConstants.MANUFACTURER_OTHER_ID);
-					//item.setManufacturer_other(wi.getManufacturer());
-					//item.setResolutiondesc(wi.getResolutiondesc());
-					//item.setXdescelement_ID_1(XDescElementsBMO.getXdescelementid(wi.getXdescelement1()));
-					//item.setXdescelement_ID_2(XDescElementsBMO.getXdescelementid(wi.getXdescelement2()));
-					//item.setXdescelement_ID_3(XDescElementsBMO.getXdescelementid(wi.getXdescelement3()));
-
-					// inventories
-/*					if (wi.getInventoriesArray() != null) {
-						ii_set = new HashSet<Item_Inventory>();
-						for (int j=0;j<wi.getInventoriesArray().length;j++) {
-							wii = wi.getInventoriesArray(j);
-							iinv = new Item_Inventory();
-							iinv.setItem(item);
-							iinv.setCategorytype_ID(WSCoreUtil.getContentCategory(wii.getCategory()));
-							iinv.setDescription(wii.getDescription());
-							ii_set.add(iinv);
-						}
-						item.setInventory(ii_set);
-					} */
+			 		item.setStatus(status);
 					ii_list.add(item);
 				}
 			}
@@ -323,17 +281,6 @@ public class OnlineClaimsServiceImplementation extends
 						oi.setDepartdate(wit.getDepartureDate().getTime());
 					}
 					
-					// actual arrive time
-					//oi.setActarrivetime(thedate);
-					
-					// actual depart time
-					//oi.setActdeparttime(thedate);
-					
-					// scheduled arrive time
-					//oi.setScharrivetime(thedate);
-					
-					// scheduled depart time
-					//oi.setSchdeparttime(thedate);
 					oi_set.add(oi);
 				}
 			}
@@ -361,32 +308,6 @@ public class OnlineClaimsServiceImplementation extends
  		 		inc.setStationassigned(createandassigns);
  		
 		
-		// articles
-/*		HashSet<Articles> art_set = new HashSet<Articles>();
-		
-		Articles art = null;
-		WSArticle wart = null;
-		if (ws.getArticlesArray() != null) {
-			for (int i=0;i<ws.getArticlesArray().length;i++) {
-				wart = ws.getArticlesArray(i);
-				if (wart != null) {
-					art = new Articles();
-					art.setIncident(inc);
-					art.setArticle(wart.getArticle());
-					art.setCost(wart.getCost());
-					art.setCurrency_ID(wart.getCurrencyID());
-					art.setDescription(wart.getDescription());
-					
-					datetimestr = wart.getPurchasedate();
-					thedate = DateUtils.convertToDate(datetimestr, WSCoreUtil.WS_DATEFORMAT, null);
-					if (thedate != null) art.setPurchasedate(thedate);
-
-					art_set.add(art);
-				}
-			}
-			inc.setArticles(art_set);
-		} */
- 		 		/* FAKING IT FOR THE WORKING */
  		 		inc.setOverall_weight(0D);
  		 		
  		 		
@@ -431,40 +352,6 @@ public class OnlineClaimsServiceImplementation extends
 		}
 		
  		return inc.getIncident_ID();
- 		
- 		 /*		// fault airline and fault station
- 		 		if (ws.getFaultstation() != null && ws.getFaultstation().length() > 0) {
- 			 		createandassigns = TracerUtils.getStationByCode(ws.getFaultstation(), ws.getFaultairline());
- 			 		if (createandassigns == null) {
- 			 			ws.setErrorcode("invalid fault station code, please add the fault airline's station into NetTracer first");
- 			 			return null;
- 			 		}
- 			 		inc.setFaultstation(createandassigns);
- 		 		} 
- 		
- 		// assigned agent
- 		if (ws.getAgentassigned() != null && ws.getAgentassigned().length() > 0) {
-	 		agent = AdminUtils.getAgentBasedOnUsername(ws.getAgentassigned(), ws.getCompanycodeID());
-	 		if (agent == null) {
-	 			ws.setErrorcode("invalid assigned agent username, please add the agent into NetTracer first");
-	 			return null;
-	 		}
-	 		inc.setAgentassigned(agent);
- 		} */
-
-		
-		//inc.setClosedate(tmpDate);
-		//inc.setTicketnumber(ws.getTicketnumber());
-		//inc.setReportmethod(IncidentUtils.getReportMethod(ws.getReportmethod()));
-		//inc.setCheckedlocation(ws.getCheckedlocation());
-		//inc.setNumbagchecked(ws.getNumbagchecked());
-		//inc.setNumbagreceived(ws.getNumbagreceived());
-		//inc.setVoluntaryseparation(ws.getVoluntaryseparation());
-		//inc.setCourtesyreport(ws.getCourtesyreport());
-		//inc.setTsachecked(ws.getTsachecked());
-		//inc.setCustomcleared(ws.getCustomcleared());
-		//inc.setNonrevenue(ws.getNonrevenue());
-		//inc.setLoss_code(ws.getLossCode());	
 	}
 
 	/**

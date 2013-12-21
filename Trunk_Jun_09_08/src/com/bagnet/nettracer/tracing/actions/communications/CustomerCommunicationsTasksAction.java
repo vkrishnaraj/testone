@@ -2,6 +2,7 @@ package com.bagnet.nettracer.tracing.actions.communications;
 
 import java.io.IOException;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -15,15 +16,16 @@ import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
-//import com.bagnet.nettracer.tracing.dao.OnlineClaimsDao; Not related to NT-740
+import com.bagnet.nettracer.tracing.dao.OnlineClaimsDao;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
-//import com.bagnet.nettracer.tracing.db.onlineclaims.OCFile; Not related to NT-740
+import com.bagnet.nettracer.tracing.db.onlineclaims.OCFile;
 import com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask;
-//import com.bagnet.nettracer.tracing.exceptions.InsufficientInformationException; Not related to NT-740
-//import com.bagnet.nettracer.tracing.service.DocumentService; Not related to NT-740
+import com.bagnet.nettracer.tracing.exceptions.InsufficientInformationException;
+import com.bagnet.nettracer.tracing.service.DocumentService;
 import com.bagnet.nettracer.tracing.service.IncidentActivityService;
+import com.bagnet.nettracer.tracing.utils.EmailUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
@@ -31,15 +33,11 @@ import com.bagnet.nettracer.tracing.utils.UserPermissions;
 public class CustomerCommunicationsTasksAction extends CheckedAction {
 	
 	private Logger logger = Logger.getLogger(CustomerCommunicationsTasksAction.class);
-//	private DocumentService documentService = (DocumentService) SpringUtils.getBean(TracingConstants.DOCUMENT_SERVICE_BEAN); Not related to NT-740
+	private DocumentService documentService = (DocumentService) SpringUtils.getBean(TracingConstants.DOCUMENT_SERVICE_BEAN);
 	
-	private final Status STATUS_PENDING_PRINT = new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING_PRINT);
-	private final Status STATUS_PENDING_WP = new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING_WP);
 	private final Status STATUS_PENDING = new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING);
 	private final Status STATUS_FRAUD_REVIEW = new Status(TracingConstants.FINANCE_STATUS_FRAUD_REVIEW);
 	private final Status STATUS_SUPERVISOR_REVIEW = new Status(TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW);
-	private final Status STATUS_APPROVED = new Status(TracingConstants.STATUS_CUSTOMER_COMM_APPROVED);
-	private final Status STATUS_DENIED = new Status(TracingConstants.STATUS_CUSTOMER_COMM_DENIED);
 	
 	private IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
 	
@@ -143,12 +141,36 @@ public class CustomerCommunicationsTasksAction extends CheckedAction {
 			}
 			
 			long incidentActivityTaskId = getIntValueFromParam(taskIdParam);
-			success = handleTask(incidentActivityTaskId, 
-					(statusId == TracingConstants.STATUS_CUSTOMER_COMM_APPROVED 
-						|| statusId == TracingConstants.FINANCE_STATUS_FRAUD_APPROVED
-						|| statusId == TracingConstants.FINANCE_STATUS_SUPERVISOR_APPROVED));
+			boolean printapproved=statusId == TracingConstants.STATUS_CUSTOMER_COMM_APPROVED;
+			boolean approved=(statusId == TracingConstants.FINANCE_STATUS_FRAUD_APPROVED
+					|| statusId == TracingConstants.FINANCE_STATUS_SUPERVISOR_APPROVED);
+			success = incidentActivityService.handleTask(incidentActivityTaskId, (printapproved || approved));
 			if (success) {
-				success = handleRemark(incidentActivityTaskId, (String) request.getParameter("remark"), user);
+				if (printapproved) {
+					ServletContext sc = getServlet().getServletContext();
+					String realpath = sc.getRealPath("/");
+					try {
+						IncidentActivityTask iat = incidentActivityService.loadTask(incidentActivityTaskId);
+						IncidentActivity ia=iat.getIncidentActivity();
+						if(ia.getCustCommId()==TracingConstants.CUST_COMM_WEB_PORTAL){
+							OCFile file = documentService.publishDocument(ia);
+							if (file != null) {
+								OnlineClaimsDao dao = new OnlineClaimsDao();
+								if (!dao.saveFile(file)) {
+									logger.error("Failed to email customer about communication for IncidentActivity with id: " + ia.getId());
+								} else {
+									if (!EmailUtils.sendIncidentActivityEmail(ia, realpath)) {
+										logger.error("Failed to email customer about communication for IncidentActivity with id: " + ia.getId());
+									}
+								}
+							}
+						}
+					} catch (InsufficientInformationException e1) {
+						logger.error("Failed to publish document for IncidentActivity Task with id: " + incidentActivityTaskId);
+						e1.printStackTrace();
+					}
+				}
+				success = incidentActivityService.handleRemark(incidentActivityTaskId, (String) request.getParameter("remark"), user);
 			}
 		}
 
@@ -165,73 +187,6 @@ public class CustomerCommunicationsTasksAction extends CheckedAction {
 		}
 		response.sendRedirect("customerCommunicationsApp.do");
 		return null;
-	}
-	
-	private boolean handleTask(long incidentActivityTaskId, boolean approved) {
-		incidentActivityService.closeTask(incidentActivityTaskId);
-		IncidentActivityTask iat = incidentActivityService.loadTask(incidentActivityTaskId);
-		if (iat != null) {
-			iat.getIncidentActivity().setApprovalAgent(iat.getAssigned_agent());
-			return approved ? handleApproveTask(iat) : handleRejectTask(iat);
-		}
-		logger.error("Failed to load task with id: " + incidentActivityTaskId);
-		return false;
-	}
-	
-	private boolean handleApproveTask(IncidentActivityTask iat) {
-		IncidentActivity ia=iat.getIncidentActivity();
-		if (!incidentActivityService.createTask(ia, STATUS_APPROVED, iat.getAssigned_agent(), false)) {
-			logger.error("Failed to create an approval task for IncidentActivity: " + iat.getTask_id());
-		}
-
-		if(iat.getStatus().getStatus_ID()==TracingConstants.FINANCE_STATUS_FRAUD_REVIEW){
-			return incidentActivityService.createTask(ia, new Status(TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW));
-		} else if (iat.getStatus().getStatus_ID()==TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW){
-			return incidentActivityService.createTask(ia, new Status(TracingConstants.FINANCE_STATUS_AWAITING_DISBURSEMENT));
-		}
-		
-		switch(ia.getCustCommId()) {
-			case TracingConstants.CUST_COMM_POSTAL_MAIL:
-				return incidentActivityService.createTask(ia, STATUS_PENDING_PRINT);
-			case TracingConstants.CUST_COMM_WEB_PORTAL:
-				/* Not related to NT-740
-				try {
-					OCFile file=documentService.publishDocument(ia);
-					if(file!=null){
-						OnlineClaimsDao dao=new OnlineClaimsDao();
-						dao.saveFile(file);
-					}
-				} catch (InsufficientInformationException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}*/
-				
-				return incidentActivityService.createTask(ia, STATUS_PENDING_WP);
-			default:
-				logger.error("Invalid value found for customer communication method id: " + ia.getCustCommId());
-				return false;
-		}
-	}
-	
-	private boolean handleRejectTask(IncidentActivityTask iat) {
-		IncidentActivity ia=iat.getIncidentActivity();
-		if(iat.getStatus().getStatus_ID()==TracingConstants.FINANCE_STATUS_FRAUD_REVIEW){
-			return incidentActivityService.createTask(ia, new Status(TracingConstants.FINANCE_STATUS_FRAUD_REJECTED), ia.getAgent());
-		} else if(iat.getStatus().getStatus_ID()==TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW){
-			return incidentActivityService.createTask(ia, new Status(TracingConstants.FINANCE_STATUS_SUPERVISOR_REJECTED), ia.getAgent());
-		}
-		return incidentActivityService.createTask(ia, STATUS_DENIED, ia.getAgent());
-	}
-	
-	private boolean handleRemark(long incidentActivityTaskId, String remark, Agent madeBy) {
-		if (remark == null || remark.isEmpty()) return true;
-		
-		incidentActivityService.closeTask(incidentActivityTaskId);
-		IncidentActivityTask iat = incidentActivityService.loadTask(incidentActivityTaskId);
-		if (iat != null) {
-			return incidentActivityService.createIncidentActivityRemark(remark, iat.getIncidentActivity(), madeBy);
-		}
-		return false;
 	}
 	
 	private boolean userCanModifyTask(String taskIdParam, Agent user) {

@@ -25,6 +25,7 @@ import org.hibernate.annotations.Proxy;
 
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
+import com.bagnet.nettracer.ws.onlineclaims.Message;
 
 @Entity
 @Table(name = "oc_claim")
@@ -47,6 +48,10 @@ public class OnlineClaim {
 
 	@Column(length = 20)
 	private String status;
+
+	@Column(length = 20)
+	private String claimStatus;
+
 
 	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private OCAddress permanentAddress;
@@ -77,6 +82,12 @@ public class OnlineClaim {
 	@org.hibernate.annotations.OrderBy(clause = "bagId")
 	@Fetch(FetchMode.SELECT)
 	private Set<OCBag> bag;
+	
+
+	@OneToMany(mappedBy = "claim", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@org.hibernate.annotations.OrderBy(clause = "id")
+	@Fetch(FetchMode.SELECT)
+	private Set<OCMessage> messages;
 	
 	/*
 	 * Persist method chosen so that the item will be persisted, but never deleted.
@@ -358,6 +369,14 @@ public class OnlineClaim {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getClaimStatus() {
+		return claimStatus;
+	}
+
+	public void setClaimStatus(String claimStatus) {
+		this.claimStatus = claimStatus;
 	}
 
 	public OCAddress getPermanentAddress() {
@@ -718,6 +737,14 @@ public class OnlineClaim {
 
 	public void setBag(Set<OCBag> bag) {
 		this.bag = bag;
+	}
+	
+	public Set<OCMessage> getMessages() {
+		return messages;
+	}
+
+	public void setMessages(Set<OCMessage> messages) {
+		this.messages = messages;
 	}
 
 	public Set<OCFile> getFile() {

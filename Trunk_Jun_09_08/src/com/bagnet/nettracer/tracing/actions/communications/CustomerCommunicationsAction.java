@@ -2,6 +2,7 @@ package com.bagnet.nettracer.tracing.actions.communications;
 
 import java.util.Date;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -19,15 +20,15 @@ import com.bagnet.nettracer.tracing.adapter.TemplateAdapter;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
-//import com.bagnet.nettracer.tracing.dao.OnlineClaimsDao; Not related to NT-740
+import com.bagnet.nettracer.tracing.dao.OnlineClaimsDao;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
 import com.bagnet.nettracer.tracing.db.documents.Document;
 import com.bagnet.nettracer.tracing.db.documents.templates.Template;
-//import com.bagnet.nettracer.tracing.db.onlineclaims.OCFile; Not related to NT-740
-//import com.bagnet.nettracer.tracing.db.onlineclaims.OCMessage; Not related to NT-740
+import com.bagnet.nettracer.tracing.db.onlineclaims.OCFile;
+import com.bagnet.nettracer.tracing.db.onlineclaims.OCMessage;
 import com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask;
 import com.bagnet.nettracer.tracing.dto.TemplateAdapterDTO;
 import com.bagnet.nettracer.tracing.enums.TemplateType;
@@ -40,6 +41,7 @@ import com.bagnet.nettracer.tracing.service.IncidentActivityService;
 import com.bagnet.nettracer.tracing.service.TemplateService;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.DomainUtils;
+import com.bagnet.nettracer.tracing.utils.EmailUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
@@ -171,9 +173,7 @@ public class CustomerCommunicationsAction extends CheckedAction {
 			if(!success){
 				logger.error("Failed to close a task for IncidentActivityTask with id: " + ccf.getTaskId());
 			}
-		}
-		/* Not related to NT-740 
-		else if (TracingConstants.COMMAND_ACKNOWLEDGE_INBOUND.equals(ccf.getCommand()) 
+		} else if (TracingConstants.COMMAND_ACKNOWLEDGE_INBOUND.equals(ccf.getCommand()) 
 				&& UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_EDIT, user)) {
 
 			long id = Long.valueOf(request.getParameter("communicationsId"));
@@ -201,7 +201,7 @@ public class CustomerCommunicationsAction extends CheckedAction {
 			response.sendRedirect("searchIncident.do?incident="
 					+ request.getParameter("incident") + "#activities");
 			return null;
-		} */
+		}
 		
 		if (ccf.isPreview()) {
 			DocumentTemplateResult result = generatePreview(ccf, user);
@@ -220,7 +220,6 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		return mapping.findForward(TracingConstants.EDIT_COMMUNICATIONS);
 	}
 	
-	/* Not part of NT-740 
 	private boolean publishCommunications(long id, boolean publish) {
 		boolean success=true;
 		try{
@@ -229,6 +228,11 @@ public class CustomerCommunicationsAction extends CheckedAction {
 				if (ia.getMessages() != null) {
 					for (OCMessage message : ia.getMessages()) {
 						message.setPublish(publish);
+						if(publish){
+							message.setStatusId(TracingConstants.OC_STATUS_PUBLISHED);
+						} else {
+							message.setStatusId(TracingConstants.OC_STATUS_UNPUBLISHED);
+						}
 					}
 					success = OnlineClaimsDao.saveMessages(ia.getMessages());
 				}
@@ -237,9 +241,10 @@ public class CustomerCommunicationsAction extends CheckedAction {
 					if(!publish){
 						for (OCFile file : ia.getFiles()) {
 							file.setPublish(publish);
+							file.setStatusId(TracingConstants.OC_STATUS_UNPUBLISHED);
 						}
 					} else {
-						/** An Incident Activity will only have one Document to publish on the NT Core side **
+						/** An Incident Activity will only have one Document to publish on the NT Core side **/
 						OCFile file=documentService.publishDocument(ia);
 						if(file!=null){
 							ia.getFiles().add(file);
@@ -249,6 +254,15 @@ public class CustomerCommunicationsAction extends CheckedAction {
 				}
 				if (!success) {
 					logger.error("Failed to publish or unpublish communication for IncidentActivity with id: "+ id);
+				} else if (publish){
+					ia.setPublishedDate(new Date());
+					success=incidentActivityService.update(ia);
+					ServletContext sc = getServlet().getServletContext();
+					String realpath = sc.getRealPath("/");
+					if(!success || !EmailUtils.sendIncidentActivityEmail(ia, realpath)){
+						logger.error("Failed to email customer about communication for IncidentActivity with id: "+ id);
+					}
+					
 				}
 			}
 		} catch (Exception e){
@@ -256,7 +270,7 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		}
 
 		return success;
-	}*/
+	}
 
 	private boolean isAjaxRequest(HttpServletRequest request) {
 		return request.getParameter(REQUEST_TEMPLATE_LIST) != null 

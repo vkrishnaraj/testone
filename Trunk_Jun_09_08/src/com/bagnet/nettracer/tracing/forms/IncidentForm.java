@@ -126,6 +126,8 @@ public final class IncidentForm extends ValidatorForm {
 	private Set<IncidentActivity> activities;
 	private List<IncidentActivityDTO> activityDtos;
 
+	private String outMessage;
+
 	public int getTracingStatus() {
 		return tracingStatus;
 	}
@@ -294,6 +296,7 @@ public final class IncidentForm extends ValidatorForm {
 		this.issuanceItemIncidents = issuanceItemIncidents;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void reset(org.apache.struts.action.ActionMapping mapping, javax.servlet.http.HttpServletRequest request) {
 		super.reset(mapping, request);
@@ -1511,4 +1514,13 @@ public final class IncidentForm extends ValidatorForm {
 		this.swaLocked = swaLocked;
 	}
 
+	public String getOutMessage() {
+		return outMessage;
+	}
+
+	public void setOutMessage(String outMessage) {
+		this.outMessage = outMessage;
+	}
+	
+	
 }

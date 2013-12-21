@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.onlineclaims.xsd;
 public interface Claim extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Claim.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s88BD0230C96D0EEDE5A966901E77F2BE").resolveHandle("claimd979type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(Claim.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s47918F556B545B4B159263E4D62D20A1").resolveHandle("claimd979type");
     
     /**
      * Gets the "attemptToClaimAtArrival" element
@@ -507,6 +507,46 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
      * Unsets the "claimId" element
      */
     void unsetClaimId();
+    
+    /**
+     * Gets the "claimStatus" element
+     */
+    java.lang.String getClaimStatus();
+    
+    /**
+     * Gets (as xml) the "claimStatus" element
+     */
+    org.apache.xmlbeans.XmlString xgetClaimStatus();
+    
+    /**
+     * Tests for nil "claimStatus" element
+     */
+    boolean isNilClaimStatus();
+    
+    /**
+     * True if has "claimStatus" element
+     */
+    boolean isSetClaimStatus();
+    
+    /**
+     * Sets the "claimStatus" element
+     */
+    void setClaimStatus(java.lang.String claimStatus);
+    
+    /**
+     * Sets (as xml) the "claimStatus" element
+     */
+    void xsetClaimStatus(org.apache.xmlbeans.XmlString claimStatus);
+    
+    /**
+     * Nils the "claimStatus" element
+     */
+    void setNilClaimStatus();
+    
+    /**
+     * Unsets the "claimStatus" element
+     */
+    void unsetClaimStatus();
     
     /**
      * Gets the "claimType" element
@@ -1232,6 +1272,56 @@ public interface Claim extends org.apache.xmlbeans.XmlObject
      * Unsets the "mailingAddress" element
      */
     void unsetMailingAddress();
+    
+    /**
+     * Gets array of all "messages" elements
+     */
+    com.bagnet.nettracer.ws.onlineclaims.xsd.Message[] getMessagesArray();
+    
+    /**
+     * Gets ith "messages" element
+     */
+    com.bagnet.nettracer.ws.onlineclaims.xsd.Message getMessagesArray(int i);
+    
+    /**
+     * Tests for nil ith "messages" element
+     */
+    boolean isNilMessagesArray(int i);
+    
+    /**
+     * Returns number of "messages" element
+     */
+    int sizeOfMessagesArray();
+    
+    /**
+     * Sets array of all "messages" element
+     */
+    void setMessagesArray(com.bagnet.nettracer.ws.onlineclaims.xsd.Message[] messagesArray);
+    
+    /**
+     * Sets ith "messages" element
+     */
+    void setMessagesArray(int i, com.bagnet.nettracer.ws.onlineclaims.xsd.Message messages);
+    
+    /**
+     * Nils the ith "messages" element
+     */
+    void setNilMessagesArray(int i);
+    
+    /**
+     * Inserts and returns a new empty value (as xml) as the ith "messages" element
+     */
+    com.bagnet.nettracer.ws.onlineclaims.xsd.Message insertNewMessages(int i);
+    
+    /**
+     * Appends and returns a new empty value (as xml) as the last "messages" element
+     */
+    com.bagnet.nettracer.ws.onlineclaims.xsd.Message addNewMessages();
+    
+    /**
+     * Removes the ith "messages" element
+     */
+    void removeMessages(int i);
     
     /**
      * Gets the "occupation" element

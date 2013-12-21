@@ -226,6 +226,10 @@
 			<b>bagArray</b>
 		</field>
 		<field >
+			<a>messages</a>
+			<b>messagesArray</b>
+		</field>
+		<field >
 			<a>phone</a>
 			<b>phoneArray</b>
 		</field>

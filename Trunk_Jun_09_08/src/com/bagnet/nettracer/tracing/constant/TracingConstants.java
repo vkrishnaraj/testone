@@ -1419,6 +1419,9 @@ public class TracingConstants {
 	public static final String COMMAND_SEARCH = "search";
 	public static final String COMMAND_PRINT = "print"; 
 	public static final String COMMAND_ACKNOWLEDGE = "acknowledge"; 
+	public static final String COMMAND_ACKNOWLEDGE_INBOUND = "acknowledge_inbound"; 
+	public static final String COMMAND_UNPUBLISH = "unpublish"; 
+	public static final String COMMAND_PUBLISH = "publish"; 
 	
 	public static final int ACTIVE_SEARCH_BOTH = 1200;
 	public static final int ACTIVE_SEARCH_ACTIVE = 1201;
@@ -1491,6 +1494,12 @@ public class TracingConstants {
 
 	public static final String BAG_CHECK_MIXED = "8";
 
+	public static final int OC_STATUS_NEW=0;
+	public static final int OC_STATUS_PUBLISHED=1;
+	public static final int OC_STATUS_UNPUBLISHED=2;
+	public static final int OC_STATUS_NODOWNLOAD=3;
+	
+	public static final String REPORT_UPDATE_INFO_EMAIL="report_update_info_email.html";
 
 	public static final String DISBURSEMENT_REJECTION = "rejectedDisbursements";
 	public static final String FRAUD_REVIEW = "fraudReview";

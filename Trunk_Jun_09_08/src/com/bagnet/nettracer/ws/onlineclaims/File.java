@@ -6,6 +6,7 @@ public class File {
 	private String filename;
 	private String path;
 	private boolean interim;
+	private boolean publish;
 	
 	public long getId() {
   	return id;
@@ -30,6 +31,12 @@ public class File {
 	}
 	public void setInterim(boolean interim) {
 		this.interim = interim;
+	}
+	public boolean isPublish() {
+		return publish;
+	}
+	public void setPublish(boolean publish) {
+		this.publish = publish;
 	}
 	
 }

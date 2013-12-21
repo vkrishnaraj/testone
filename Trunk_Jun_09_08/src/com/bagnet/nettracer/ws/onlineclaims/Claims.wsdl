@@ -247,6 +247,7 @@
                     <xs:element minOccurs="0" name="checkedLocation" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="checkedLocationDescription" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="claimId" type="xs:long"/>
+                    <xs:element minOccurs="0" name="claimStatus" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="claimType" type="xs:int"/>
                     <xs:element minOccurs="0" name="comments" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="declaredCurrency" nillable="true" type="xs:string"/>
@@ -266,6 +267,7 @@
                     <xs:element minOccurs="0" name="lastSawBaggage" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="lengthOfStay" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="mailingAddress" nillable="true" type="ax21:Address"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="messages" nillable="true" type="ax21:Message"/>
                     <xs:element minOccurs="0" name="occupation" nillable="true" type="xs:string"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="passenger" nillable="true" type="ax21:Passenger"/>
                     <xs:element minOccurs="0" name="passengersTravelingWithYou" type="xs:int"/>
@@ -351,6 +353,7 @@
                     <xs:element minOccurs="0" name="id" type="xs:long"/>
                     <xs:element minOccurs="0" name="interim" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="path" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="publish" type="xs:boolean"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="Itinerary">
@@ -370,6 +373,17 @@
                     <xs:element minOccurs="0" name="country" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="postalCode" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="stateProvince" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Message">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="dateCreated" nillable="true" type="xs:dateTime"/>
+                    <xs:element minOccurs="0" name="dateReviewed" nillable="true" type="xs:dateTime"/>
+                    <xs:element minOccurs="0" name="id" type="xs:long"/>
+                    <xs:element minOccurs="0" name="message" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="publish" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="statusId" type="xs:int"/>
+                    <xs:element minOccurs="0" name="username" nillable="true" type="xs:string"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="Passenger">

@@ -28,6 +28,8 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "interim");
     private static final javax.xml.namespace.QName PATH$6 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "path");
+    private static final javax.xml.namespace.QName PUBLISH$8 = 
+        new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "publish");
     
     
     /**
@@ -461,6 +463,98 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             get_store().remove_element(PATH$6, 0);
+        }
+    }
+    
+    /**
+     * Gets the "publish" element
+     */
+    public boolean getPublish()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PUBLISH$8, 0);
+            if (target == null)
+            {
+                return false;
+            }
+            return target.getBooleanValue();
+        }
+    }
+    
+    /**
+     * Gets (as xml) the "publish" element
+     */
+    public org.apache.xmlbeans.XmlBoolean xgetPublish()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlBoolean target = null;
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(PUBLISH$8, 0);
+            return target;
+        }
+    }
+    
+    /**
+     * True if has "publish" element
+     */
+    public boolean isSetPublish()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return get_store().count_elements(PUBLISH$8) != 0;
+        }
+    }
+    
+    /**
+     * Sets the "publish" element
+     */
+    public void setPublish(boolean publish)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PUBLISH$8, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(PUBLISH$8);
+            }
+            target.setBooleanValue(publish);
+        }
+    }
+    
+    /**
+     * Sets (as xml) the "publish" element
+     */
+    public void xsetPublish(org.apache.xmlbeans.XmlBoolean publish)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlBoolean target = null;
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(PUBLISH$8, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(PUBLISH$8);
+            }
+            target.set(publish);
+        }
+    }
+    
+    /**
+     * Unsets the "publish" element
+     */
+    public void unsetPublish()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            get_store().remove_element(PUBLISH$8, 0);
         }
     }
 }

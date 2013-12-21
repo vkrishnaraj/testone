@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
@@ -16,13 +19,23 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import com.bagnet.nettracer.tracing.actions.templates.DocumentTemplateResult;
 import com.bagnet.nettracer.tracing.adapter.TemplateAdapter;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.dao.AuthorizationException;
 import com.bagnet.nettracer.tracing.dao.DocumentDAO;
+import com.bagnet.nettracer.tracing.dao.OnlineClaimsDao;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Passenger;
+import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
 import com.bagnet.nettracer.tracing.db.documents.Document;
 import com.bagnet.nettracer.tracing.db.documents.templates.Template;
 import com.bagnet.nettracer.tracing.db.documents.templates.TemplateVar;
+import com.bagnet.nettracer.tracing.db.onlineclaims.OCFile;
+import com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim;
 import com.bagnet.nettracer.tracing.exceptions.InsufficientInformationException;
 import com.bagnet.nettracer.tracing.service.DocumentService;
+import com.bagnet.nettracer.tracing.utils.ImageUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 
@@ -141,6 +154,53 @@ public class DocumentServiceImpl implements DocumentService {
 	}
 	
 	/* (non-Javadoc)
+	 * @see com.bagnet.nettracer.tracing.service.DocumentService#generatePdfForPortal(com.bagnet.nettracer.tracing.db.documents.Document, java.lang.String)
+	 */
+	@Override
+	public OCFile generatePdfForPortal(Agent user, Document document, String directory) throws InsufficientInformationException {
+		if (document.getTemplate() == null) {
+			throw new InsufficientInformationException(Template.class);
+		}
+		
+		if (user == null) {
+			throw new InsufficientInformationException(Agent.class);
+		}
+		
+		if (directory == null || directory.isEmpty()) {
+			throw new InsufficientInformationException("directory");
+		}
+		
+		OCFile file=new OCFile();
+		
+		String rootPath = TracerProperties.get(user.getCompanycode_ID(),"oc_image_store") + directory + "\\";
+		if(!ImageUtils.makeFolder(rootPath)){
+			logger.error("Unable to create directory");
+			return null;
+		}
+		try {
+			String fileName = this.generateFileName(document.getName());
+			StringBuilder filePath = new StringBuilder(rootPath);
+			filePath.append(fileName);
+			OutputStream out = new FileOutputStream(filePath.toString());
+			ITextRenderer renderer = new ITextRenderer();
+			renderer.setDocumentFromString(document.getXml());
+			renderer.layout();
+			renderer.createPDF(out);
+			
+			// update the file details
+			file.setFilename(fileName);
+			file.setPath(directory);
+			file.setDateUploaded(new Date());
+			file.setPublish(true);
+			file.setStatusId(TracingConstants.OC_STATUS_PUBLISHED);
+		} catch (Exception e) {
+			logger.error("Error occurred while attempting to generate document: " + document.getName(), e);
+		}
+		
+		return file;
+	}
+	
+	/* (non-Javadoc)
 	 * @see com.bagnet.nettracer.tracing.service.DocumentService#canPreviewFile(java.lang.String)
 	 */
 	@Override
@@ -216,6 +276,49 @@ public class DocumentServiceImpl implements DocumentService {
 		fileName.append("_" + new SimpleDateFormat("MMddyyyyhhmmss").format(TracerDateTime.getGMTDate()));
 		fileName.append(".pdf");
 		return fileName.toString();
+	}
+	
+	public OCFile publishDocument(IncidentActivity ia) throws InsufficientInformationException{
+		if (ia.getDocument() == null) {
+			throw new InsufficientInformationException(Document.class);
+		}
+		if (ia.getIncident() == null) {
+			throw new InsufficientInformationException(Incident.class);
+		}
+		if(ia.getAgent()==null){
+			throw new InsufficientInformationException(Agent.class);
+		}
+		
+		String incidentId=ia.getIncident().getIncident_ID();
+		OCFile file=new OCFile();
+		Calendar cal = new GregorianCalendar();
+		int year = cal.get(Calendar.YEAR);
+		int month = cal.get(Calendar.MONTH) + 1;
+		int day = cal.get(Calendar.DAY_OF_MONTH);
+		String path=PropertyBMO.getValue(PropertyBMO.DOCUMENT_LOCATION_LETTERS)+"/"+year+"-"+month+"/"+day;
+		file = generatePdfForPortal(ia.getAgent(), ia.getDocument(), path);
+		if(file!=null){
+			OnlineClaimsDao dao=new OnlineClaimsDao();
+			OnlineClaim c=dao.getOnlineClaim(ia.getIncident().getIncident_ID());
+			if (c == null) {
+				try {
+					String fName="";
+					String name="";
+					if(ia.getIncident().getPassenger_list()!=null && ia.getIncident().getPassenger_list().get(0)!=null){
+						Passenger p=ia.getIncident().getPassenger_list().get(0);
+						fName=p.getFirstname();
+						name=p.getLastname();
+					}
+					c = dao.createOnlineClaim(incidentId, null, fName, name);
+					dao.saveOnlineClaimWsUseOnly(c, incidentId, null, null);
+				} catch (AuthorizationException e) {
+					e.printStackTrace();
+				}
+			}
+			file.setIncAct(ia);
+			file.setClaim(c);
+		}
+		return file;
 	}
 	
 }

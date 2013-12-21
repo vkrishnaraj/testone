@@ -1,6 +1,7 @@
 package com.bagnet.nettracer.tracing.dto;
 
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 import com.bagnet.nettracer.tracing.utils.DateUtils;
@@ -19,6 +20,14 @@ public class IncidentActivityDTO {
 	private String fileName;
 	private long custCommId;
 	private boolean isCustomerCommunication;
+	private boolean isCorrespondence;
+	private boolean toBeAcknowledged;
+	private boolean published;
+
+	private String activityCode;
+	
+	private List<MessageDTO> messages;
+	private List<FileDTO> files;
 	
 	public String get_DATEFORMAT() {
 		return _DATEFORMAT;
@@ -122,6 +131,54 @@ public class IncidentActivityDTO {
 
 	public void setCustomerCommunication(boolean isCustomerCommunication) {
 		this.isCustomerCommunication = isCustomerCommunication;
+	}
+
+	public boolean getIsCorrespondence() {
+		return isCorrespondence;
+	}
+
+	public void setCorrespondence(boolean isCorrespondence) {
+		this.isCorrespondence = isCorrespondence;
+	}
+
+	public List<MessageDTO> getMessages() {
+		return messages;
+	}
+
+	public void setMessages(List<MessageDTO> messages) {
+		this.messages = messages;
+	}
+
+	public List<FileDTO> getFiles() {
+		return files;
+	}
+
+	public void setFiles(List<FileDTO> files) {
+		this.files = files;
+	}
+
+	public String getActivityCode() {
+		return activityCode;
+	}
+
+	public void setActivityCode(String activityCode) {
+		this.activityCode = activityCode;
+	}
+
+	public boolean isPublished() {
+		return published;
+	}
+
+	public void setPublished(boolean published) {
+		this.published = published;
+	}
+
+	public boolean isToBeAcknowledged() {
+		return toBeAcknowledged;
+	}
+
+	public void setToBeAcknowledged(boolean toBeAcknowledged) {
+		this.toBeAcknowledged = toBeAcknowledged;
 	}
 	
 }

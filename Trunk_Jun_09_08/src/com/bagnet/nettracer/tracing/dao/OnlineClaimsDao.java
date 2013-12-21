@@ -1,11 +1,14 @@
 package com.bagnet.nettracer.tracing.dao;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.TimeZone;
 
 import org.dozer.DozerBeanMapperSingletonWrapper;
 import org.dozer.Mapper;
@@ -13,31 +16,39 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Expression;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.BeanUtils;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.exception.StaleStateException;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.communications.Activity;
+import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OCBag;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OCContents;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OCFile;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OCItinerary;
+import com.bagnet.nettracer.tracing.db.onlineclaims.OCMessage;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OCPassenger;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OCPhone;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim;
+import com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim.ClaimStatus;
 import com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCBag;
 import com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCContents;
 import com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCFile;
 import com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCItinerary;
 import com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCPhone;
+import com.bagnet.nettracer.tracing.service.IncidentActivityService;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.DomainUtils;
+import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
+import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.Bag;
-
 import common.Logger;
 
 public class OnlineClaimsDao {
@@ -127,6 +138,67 @@ public class OnlineClaimsDao {
 		return null;
 	}
 	
+	public boolean saveMessage(OCMessage message) {
+		List<OCMessage> messagelist=new ArrayList<OCMessage>();
+		messagelist.add(message);
+		return saveMessages(messagelist);
+
+	}
+
+	public static boolean saveMessages(List<OCMessage> messages) {
+		Session sess = null;
+		Transaction t = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			t = sess.beginTransaction();
+			for(OCMessage message:messages){
+				sess.merge(message);
+				sess.flush();
+				sess.clear();
+			}
+			t.commit();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (t != null) {
+				t.rollback();
+			}
+		} finally {
+			sess.close();
+		}
+		return false;
+	}
+
+	public boolean saveFile(OCFile file) {
+		List<OCFile> filelist=new ArrayList<OCFile>();
+		filelist.add(file);
+		return saveFiles(filelist);
+	}
+	
+	public static boolean saveFiles(List<OCFile> files) {
+		Session sess = null;
+		Transaction t = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			t = sess.beginTransaction();
+			for(OCFile file:files){
+				sess.merge(file);
+				sess.flush();
+				sess.clear();
+			}
+			t.commit();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (t != null) {
+				t.rollback();
+			}
+		} finally {
+			sess.close();
+		}
+		return false;
+	}
+	
 	public OnlineClaim changeClaimStatusToOnRecord(long claimId) {
 		Session sess = null;
 		Transaction t = null;
@@ -189,6 +261,7 @@ public class OnlineClaimsDao {
 				q.setFirstResult(startnum);
 				q.setMaxResults(rowsPerPage);
 			}
+			@SuppressWarnings("unchecked")
 			List<OnlineClaim> l = q.list();
 			return l;
 
@@ -247,7 +320,7 @@ public class OnlineClaimsDao {
 			sess = HibernateWrapper.getSession().openSession();
 
 			Criteria crit = sess.createCriteria(OnlineClaim.class);
-			crit.add(Expression.eq("incident.incident_ID", incidentId));
+			crit.add(Restrictions.eq("incident.incident_ID", incidentId));
 			claim = (OnlineClaim) crit.uniqueResult();
 
 		} catch (Exception e) {
@@ -297,7 +370,6 @@ public class OnlineClaimsDao {
 				existingDbClaim = (OnlineClaim) sess.load(OnlineClaim.class, claim.getClaimId());
 				
 				String currentStatus = existingDbClaim.getStatus();
-//				String currentSubmitDate = existingDbClaim.getSubmitDate();
 
 				if (existingDbClaim.getClaimId() != claim.getClaimId() || !existingDbClaim.getIncident().getIncident_ID().equals(incidentId)) {
 					throw new AuthorizationException();
@@ -333,9 +405,40 @@ public class OnlineClaimsDao {
 						for (OCItinerary i : existingDbClaim.getItinerary()) {
 							sess.delete(i);
 						}
-						
+
+						Map<Long,IncidentActivity> iafilemap=new HashMap<Long,IncidentActivity>();
 						for (OCFile i : existingDbClaim.getFile()) {
+							if(i.getIncAct()!=null){
+								iafilemap.put(i.getId(), i.getIncAct());
+								i.getIncAct().getFiles().remove(i);
+							}
 							sess.delete(i);
+						}
+
+						Map<Long,IncidentActivity> iamessagemap=new HashMap<Long,IncidentActivity>();
+						for (OCMessage i : existingDbClaim.getMessages()) {
+							if(i.getIncAct()!=null){
+								iamessagemap.put(i.getId(), i.getIncAct());
+								i.getIncAct().getMessages().remove(i);
+							}
+							sess.delete(i);
+						}
+						
+						IncidentActivity ia=null;
+						for(OCMessage i:claim.getMessages()){
+							ia=iamessagemap.get(i.getId());
+							if(ia!=null){
+								i.setIncAct(ia);
+							}
+							i.setId(0);
+						}
+
+						for(OCFile i:claim.getFile()){
+							ia=iafilemap.get(i.getId());
+							if(ia!=null){
+								i.setIncAct(ia);
+							}
+							i.setId(0);
 						}
 						
 						BeanUtils.copyProperties(claim, existingDbClaim);
@@ -352,30 +455,27 @@ public class OnlineClaimsDao {
 			
 			boolean saveIncident = false;
 			if (!isNew && !contactUpdateOnly) {
-
 				mapSubObjToParentObjects(existingDbClaim);
 				
+				createIncidentActivity(existingDbClaim);
 				sess.saveOrUpdate(existingDbClaim);
 				com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCClaim ac = generateAuditClaim(claim, agent);
-				// TODO: SAVE AC
-//				sess.save(ac);
 			} else if (!isNew && contactUpdateOnly) {
 				mapSubObjToParentObjects(existingDbClaim);
 				// Updating the existing claim, not replacing it.
+				createIncidentActivity(existingDbClaim);
 				sess.saveOrUpdate(existingDbClaim);
 				com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCClaim ac = generateAuditClaim(claim, agent);
-				// TODO: SAVE AC
-				//				sess.save(ac);
 			} else {
 				mapSubObjToParentObjects(claim);
 				claim.setStatus("NEW");
+				createIncidentActivity(claim);
 				sess.save(claim);
 				saveIncident = true;
 				com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCClaim ac = generateAuditClaim(claim, agent);
-				// TODO: SAVE AC
-				//				sess.save(ac);
 			}
-
+			
+//			sess.clear();
 			t.commit();
 			if (saveIncident) {
 				Incident i = claim.getIncident();
@@ -388,6 +488,7 @@ public class OnlineClaimsDao {
 				try{
 					iBMO.saveAndAuditIncident(false, i, agent, sess);
 				} catch (StaleStateException sse){
+					sse.printStackTrace();
 					//loupas - should never reach here
 				}
 			}
@@ -454,6 +555,13 @@ public class OnlineClaimsDao {
 					i.setClaim(claim);
 			}
 		}
+
+		if (claim.getMessages() != null) {
+			for (OCMessage i : claim.getMessages()) {
+				if (i.getClaim() == null)
+					i.setClaim(claim);
+			}
+		}
 	}
 
 	private void contactOnlyUpdateMapping(OnlineClaim origin, OnlineClaim dest) {
@@ -469,17 +577,8 @@ public class OnlineClaimsDao {
 	}
 
 	private com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCClaim generateAuditClaim(OnlineClaim claim, Agent agent_modified) {
-//		Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
-//		com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCClaim retVal = mapper.map(claim, com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCClaim.class);
-
-		/*
-		  
-		 
-		 */
 		com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCClaim retVal = new com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCClaim();
-		
-//		BeanUtils.copyProperties(claim, retVal);
-				
+						
 		if (retVal.getBag() != null) {
 			for (AOCBag i : retVal.getBag()) {
 				i.setClaim(retVal);
@@ -514,47 +613,10 @@ public class OnlineClaimsDao {
 
 	public com.bagnet.nettracer.ws.onlineclaims.xsd.Claim convertClaimDbToWs(OnlineClaim claim) {
 		Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
+		//claim.setClaimStatus(claim.getIncident().getClaimStatus()); PLACEHOLDER TO FILL IN CLAIM STATUS INFO FROM INCIDENT
 		com.bagnet.nettracer.ws.onlineclaims.xsd.Claim retVal = mapper.map(claim, com.bagnet.nettracer.ws.onlineclaims.xsd.Claim.class);
-//		retVal = fixDates(retVal);
 		return retVal;
 	}
-	
-//	private com.bagnet.nettracer.ws.onlineclaims.xsd.Claim fixDates(com.bagnet.nettracer.ws.onlineclaims.xsd.Claim claim) {
-//        if(null != claim.getFiledPrevoiusDate()){
-//        	Calendar temp = Calendar.getInstance();
-//        	temp.setTime(claim.getFiledPrevoiusDate().getTime());
-//        	temp.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
-//        	claim.setFiledPrevoiusDate(temp);
-//        }
-//        
-//		com.bagnet.nettracer.ws.onlineclaims.xsd.Itinerary[] wsItinerary =claim.getItineraryArray();
-//		if(null != wsItinerary && wsItinerary.length >0){
-//			for (int i = 0; i < wsItinerary.length; i++) {
-//				if(null != wsItinerary[i].getDate()){
-//		        	Calendar temp = Calendar.getInstance();
-//		        	temp.setTime(wsItinerary[i].getDate().getTime());
-//					temp.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
-//					wsItinerary[i].setDate(temp);
-//				}
-//			}
-//		}
-//		claim.setItineraryArray(wsItinerary);
-//		
-//		com.bagnet.nettracer.ws.onlineclaims.xsd.Bag[] wsBag=claim.getBagArray();
-//		if(null != wsBag && wsBag.length >0){
-//			for (int i = 0; i < wsBag.length; i++) {
-//				if(null != wsBag[i].getPurchaseDate()){
-//		        	Calendar temp = Calendar.getInstance();
-//		        	temp.setTime(wsBag[i].getPurchaseDate().getTime());
-//					temp.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
-//					wsBag[i].setPurchaseDate(temp);
-//				}
-//			}
-//		}
-//		claim.setBagArray(wsBag);
-//		
-//		return claim;
-//	}
 
 	public OnlineClaim convertClaimWsToDb(com.bagnet.nettracer.ws.onlineclaims.xsd.Claim claim, String incidentId) {
 		logBefore(claim);
@@ -565,6 +627,7 @@ public class OnlineClaimsDao {
 		retVal.setItinerary(new LinkedHashSet<OCItinerary>());
 		retVal.setPassenger(new LinkedHashSet<OCPassenger>());
 		retVal.setPhone(new LinkedHashSet<OCPhone>());
+		retVal.setMessages(new LinkedHashSet<OCMessage>());
 		mapper.map(claim, retVal);
 		
 		Set<OCBag> bagsRet = new LinkedHashSet<OCBag>();
@@ -621,6 +684,49 @@ public class OnlineClaimsDao {
 		}
 		retVal.setBag(bags);
 		return retVal;
+	}
+	
+	private boolean createIncidentActivity(OnlineClaim claim){
+		Agent activityagent = AdminUtils.getAgent(PropertyBMO.getValue(PropertyBMO.PROPERTY_OIA_AGENT));
+		boolean hasNewInfo=false;
+		if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_CREATE, activityagent)){
+			try{
+				IncidentActivityService ias=(IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
+			
+				Activity a=ias.getActivity(TracingConstants.INBOUND_CORRESPONDANCE);
+				IncidentActivity ia=DomainUtils.createIncidentActivity(claim.getIncident(), a, activityagent);
+				if(claim.getMessages()!=null){
+					for(OCMessage message:claim.getMessages()){
+						if(message.getStatusId()==TracingConstants.OC_STATUS_NEW){
+							hasNewInfo=true;
+							message.setIncAct(ia);
+							message.setStatusId(TracingConstants.OC_STATUS_PUBLISHED);
+						}
+					}
+				}
+				
+				if(claim.getFile()!=null){
+					for(OCFile file:claim.getFile()){
+						if(file.getStatusId()==TracingConstants.OC_STATUS_NEW){
+							hasNewInfo=true;
+							file.setIncAct(ia);
+							file.setStatusId(TracingConstants.OC_STATUS_NODOWNLOAD);
+						}
+					}
+				}
+				if(hasNewInfo){
+					ias.save(ia);
+				
+					System.out.println("CREATE INBOUND CORRESPONDANCE TASK");
+					//Create Task for Inbound Correspondance for NT-
+				}
+			} catch(Exception e){
+				e.printStackTrace();
+				return false;
+			}
+			return true;
+		}
+		return true;
 	}
 	
 	private int getTimeDiff(com.bagnet.nettracer.ws.onlineclaims.xsd.Claim claim) {
@@ -707,8 +813,41 @@ public class OnlineClaimsDao {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private void completeMapping(OnlineClaim source, OnlineClaim destination) {
 		Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
 		mapper.map(source, destination);
+	}
+	
+	public OnlineClaim createOnlineClaim(String incidentId, Session sess, String fName, String name){
+		OnlineClaim c=new OnlineClaim();
+		Incident i = IncidentBMO.getIncidentByID(incidentId, sess);
+		c.setIncident(i);
+		c.setStatus(ClaimStatus.NEW.toString());
+		Set<OCPassenger> paxes = new HashSet<OCPassenger>();
+		OCPassenger pass = new OCPassenger();
+		pass.setFirstName(fName);
+		pass.setLastName(name);
+		paxes.add(pass);
+		c.setPassenger(paxes);
+		return c;
+	}
+
+	public static boolean acknowledgeMessages(IncidentActivity ia){
+		boolean success=false;
+		if(ia!=null){
+			List<OCMessage> messagelist=new ArrayList<OCMessage>();
+			for(OCMessage message:ia.getMessages()){
+				message.setDateReviewed(new Date());
+				messagelist.add(message);
+			}
+			List<OCFile> filelist=new ArrayList<OCFile>();
+			for(OCFile file:ia.getFiles()){
+				file.setDateViewed(new Date());
+				filelist.add(file);
+			}
+			success=saveMessages(messagelist) && saveFiles(filelist);
+		}
+		return success;
 	}
 }

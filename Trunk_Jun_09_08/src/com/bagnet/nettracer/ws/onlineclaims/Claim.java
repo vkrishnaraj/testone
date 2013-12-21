@@ -2,15 +2,12 @@ package com.bagnet.nettracer.ws.onlineclaims;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
 public class Claim {
 
 	private long claimId;
 	private int claimType;
 	private String status;
+	private String claimStatus;
 	private Address permanentAddress;
 	private Address mailingAddress;
 	private String emailAddress;
@@ -71,6 +68,7 @@ public class Claim {
 	private Date bagReceivedDate;
 	private String reasonForTravel;
 	private String lengthOfStay;
+	private Message[] messages;
 
 	public String getReasonForTravel() {
 		return reasonForTravel;
@@ -574,6 +572,22 @@ public class Claim {
 
 	public void setPrivateInsuranceAddr(String privateInsuranceAddr) {
 		this.privateInsuranceAddr = privateInsuranceAddr;
+	}
+
+	public Message[] getMessages() {
+		return messages;
+	}
+
+	public void setMessages(Message[] messages) {
+		this.messages = messages;
+	}
+
+	public String getClaimStatus() {
+		return claimStatus;
+	}
+
+	public void setClaimStatus(String claimStatus) {
+		this.claimStatus = claimStatus;
 	}
 
 }

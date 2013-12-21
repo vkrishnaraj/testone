@@ -17,7 +17,6 @@ import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
-//import com.bagnet.nettracer.tracing.dao.OnlineClaimsDao;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
@@ -36,19 +35,17 @@ import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
 import com.bagnet.nettracer.tracing.db.lf.LFPerson;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
-//import com.bagnet.nettracer.tracing.db.onlineclaims.OCFile;
-//import com.bagnet.nettracer.tracing.db.onlineclaims.OCMessage;
-//import com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim;
+import com.bagnet.nettracer.tracing.db.onlineclaims.OCFile;
+import com.bagnet.nettracer.tracing.db.onlineclaims.OCMessage;
 import com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask;
-//import com.bagnet.nettracer.tracing.dto.FileDTO;
+import com.bagnet.nettracer.tracing.dto.FileDTO;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityRemarkDTO;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskDTO;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskSearchDTO;
-//import com.bagnet.nettracer.tracing.dto.MessageDTO;
+import com.bagnet.nettracer.tracing.dto.MessageDTO;
 import com.bagnet.nettracer.tracing.dto.TemplateAdapterDTO;
 import com.bagnet.nettracer.tracing.dto.TemplateSearchDTO;
 import com.bagnet.nettracer.tracing.enums.TemplateType;
-//import com.bagnet.nettracer.tracing.forms.communications.CorrespondenceForm;
 import com.bagnet.nettracer.tracing.forms.communications.CustomerCommunicationsForm;
 import com.bagnet.nettracer.tracing.forms.communications.CustomerCommunicationsTaskForm;
 import com.bagnet.nettracer.tracing.forms.disbursements.DisbursementRejectionForm;
@@ -310,38 +307,38 @@ public class DomainUtils {
 		return dtos;
 	}
 	
-//	public static List<MessageDTO> fromMessages(List<OCMessage> messages, Agent user) {
-//		List<MessageDTO> dtos = new ArrayList<MessageDTO>();
-//		TimeZone timeZone = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
-//		for (OCMessage message: messages) {
-//			MessageDTO dto = new MessageDTO();
-//			dto.set_DATEFORMAT(user.getDateformat().getFormat());
-//			dto.set_TIMEFORMAT(user.getTimeformat().getFormat());
-//			dto.set_TIMEZONE(timeZone);
-//			dto.setUsername(message.getUsername());
-//			dto.setDispCreateDate(DateUtils.formatDate(message.getDateCreated(), dto.get_DATEFORMAT(), null, timeZone));
-//			dto.setIncidentId(message.getClaim().getIncident().getIncident_ID());
-//			dto.setMessageText(message.getMessage());
-//			dtos.add(dto);
-//		}
-//		return dtos;
-//	}
-//
-//	public static List<FileDTO> fromFiles(List<OCFile> files, Agent user) {
-//		List<FileDTO> dtos = new ArrayList<FileDTO>();
-//		TimeZone timeZone = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
-//		for (OCFile file: files) {
-//			FileDTO dto = new FileDTO();
-//			dto.set_DATEFORMAT(user.getDateformat().getFormat());
-//			dto.set_TIMEFORMAT(user.getTimeformat().getFormat());
-//			dto.set_TIMEZONE(timeZone);
-//			dto.setFilename(file.getFilename());
-//			dto.setId(file.getId());
-//			dto.setPath(file.getPath());
-//			dtos.add(dto);
-//		}
-//		return dtos;
-//	}
+	public static List<MessageDTO> fromMessages(List<OCMessage> messages, Agent user) {
+		List<MessageDTO> dtos = new ArrayList<MessageDTO>();
+		TimeZone timeZone = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
+		for (OCMessage message: messages) {
+			MessageDTO dto = new MessageDTO();
+			dto.set_DATEFORMAT(user.getDateformat().getFormat());
+			dto.set_TIMEFORMAT(user.getTimeformat().getFormat());
+			dto.set_TIMEZONE(timeZone);
+			dto.setUsername(message.getUsername());
+			dto.setDispCreateDate(DateUtils.formatDate(message.getDateCreated(), dto.get_DATEFORMAT(), null, timeZone));
+			dto.setIncidentId(message.getClaim().getIncident().getIncident_ID());
+			dto.setMessageText(message.getMessage().replaceAll("\r\n", "<br>"));
+			dtos.add(dto);
+		}
+		return dtos;
+	}
+
+	public static List<FileDTO> fromFiles(List<OCFile> files, Agent user) {
+		List<FileDTO> dtos = new ArrayList<FileDTO>();
+		TimeZone timeZone = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
+		for (OCFile file: files) {
+			FileDTO dto = new FileDTO();
+			dto.set_DATEFORMAT(user.getDateformat().getFormat());
+			dto.set_TIMEFORMAT(user.getTimeformat().getFormat());
+			dto.set_TIMEZONE(timeZone);
+			dto.setFilename(file.getFilename());
+			dto.setId(file.getId());
+			dto.setPath(file.getPath());
+			dtos.add(dto);
+		}
+		return dtos;
+	}
 	
 	private static LFFound getDummyFoundItem() {
 		// dummy found item

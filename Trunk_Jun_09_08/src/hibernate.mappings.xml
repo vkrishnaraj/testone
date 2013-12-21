@@ -204,6 +204,7 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim" />
 		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.OCAddress" />
 		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.OCBag" />
+		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.OCMessage" />
 		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.OCFile" />
 		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.OCContents" />
 		<mapping class="com.bagnet.nettracer.tracing.db.onlineclaims.OCPhone" />

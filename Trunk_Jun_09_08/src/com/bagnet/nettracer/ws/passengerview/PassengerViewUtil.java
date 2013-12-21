@@ -469,34 +469,12 @@ public class PassengerViewUtil {
 		si.setCreatedate(createCal);
 		si.setItemType(iDTO.getItemtype_ID());
 		si.setIncidentStatus(iDTO.getStatus().getTextDescription(null));
-		
-//		Calendar cal = new GregorianCalendar();
-//		cal.setTime(iDTO.getCreatedate());
-//		cal.add(Calendar.DAY_OF_MONTH, -4);
-//		Date startDate = cal.getTime();
-//		cal.setTime(iDTO.getCreatedate());
-//		cal.add(Calendar.DAY_OF_MONTH, 2);
-//		Date endDate = cal.getTime();
-//		ScannerDataSource scannerDataSource =	(ScannerDataSource) SpringUtils.getBean(SpringUtils.SCANNER_DATA_SOURCE);
+
 		int index = 0;
 		for (Incident_Claimcheck claimCheck : iDTO.getClaimchecks()) {
 			com.bagnet.nettracer.ws.core.pojo.xsd.WSClaimCheck check = null;
 			check = si.addNewClaimChecks();
 			check.setTag(claimCheck.getClaimchecknum());
-//			ScannerDTO dto = scannerDataSource.getScannerData(startDate, endDate, claimCheck.getClaimchecknum(), 5);
-//			if (dto.getScannerDataDTOs() != null) {
-//				int scanIndex = 0;
-//				for (ScannerDataDTO sdd : dto.getScannerDataDTOs()) {
-//					com.bagnet.nettracer.ws.core.pojo.xsd.WSScanPoints scan = null;
-//					scan = check.addNewScans();
-//					scan.setLocation(sdd.getString2()); //USAirways implementation sets String2 to station
-//					scan.setType(sdd.getString3());     //USAirways implementation sets String3 to type
-//					scan.setTag(claimCheck.getClaimchecknum());
-//					scan.setTimestamp(sdd.getString1());//USAirways implementation sets String1 to human readable timestamp
-//					check.setScansArray(scanIndex, scan);
-//					scanIndex++;
-//				}
-//			}
 			si.setClaimChecksArray(index, check);
 			index++;
 		}

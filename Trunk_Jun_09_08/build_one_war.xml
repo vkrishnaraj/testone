@@ -329,6 +329,10 @@
 						<fileset dir="${app.home.jb7}\modules\org\jboss\as\jpa\hibernate\4">
 							<patternset refid="jar.files" />
 						</fileset>
+
+				<fileset dir="schema-generate">
+					<patternset refid="jar.files" />
+				</fileset>
 						<fileset dir="lib/jars">
 							<patternset refid="jar.files" />
 						</fileset>
@@ -3983,6 +3987,7 @@
 		<antcall target="generate-hibernate-xmls" />
 		
 		<copy todir="${basedir}/src" file="${basedir}/companies/southwest/report_email.html" />
+		<copy todir="${basedir}/src" file="${basedir}/companies/southwest/report_update_info_email.html" />
 		<copy todir="${basedir}/web/pages/login" file="companies/southwest/environment/${environment.name}/login/center.jsp" />
 	
 		<ant antfile="build-gen.xml" target="combineResourceFiles">
