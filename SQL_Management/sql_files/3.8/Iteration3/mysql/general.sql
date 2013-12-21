@@ -387,3 +387,6 @@ insert into activity (code, description) VALUES ("55C","CREATE CLAIM SETTLEMENT 
 insert into template_type (ordinal,defaultName) VALUES (5,'ClaimSettlement');
 
 insert into properties (ID, keyStr, valueStr) VALUES (142,'mishandling.attachment.at.creation',1);
+
+insert into activity (code,description) VALUES ('99E','INBOUND WEB PORTAL MESSAGE');
+insert into activity (code,description) VALUES ('99O','OUTBOUND WEB PORTAL MESSAGE');
