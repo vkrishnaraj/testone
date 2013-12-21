@@ -429,3 +429,4 @@ alter table oc_file add column dateViewed date;
 
 alter table oc_file add column statusId int default 1;
 alter table oc_message add column statusId int default 1;
+alter table oc_claim add column claimStatus varchar(50);
