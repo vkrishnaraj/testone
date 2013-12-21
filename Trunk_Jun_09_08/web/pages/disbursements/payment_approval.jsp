@@ -188,7 +188,7 @@ function sortTable(sortOrder) {
 	     					<a href="#" style="color:white" onclick="sortTable('specialist');"><bean:message key="colname.disburse.specialist" /></a>
 	     				</td>
 	     				<td class="header" >
-	     					<a href="#" style="color:white" onclick="sortTable('agent');"><bean:message key="colname.disburse.approver" /></a>
+	     					<a href="#" style="color:white" onclick="sortTable('approver');"><bean:message key="colname.disburse.approver" /></a>
 	     				</td>
 	     				<td class="header" >
 	     					<bean:message key="colname.disburse.draft" />
@@ -231,7 +231,7 @@ function sortTable(sortOrder) {
 		    					<bean:write name="iat" property="zip"/>
 		    				</td>
 		    				<td >
-		    					<bean:write name="iat" property="expensecheckamt"/>
+		    					<bean:write name="iat" property="dispExpensecheckamt"/>
 		    				</td>
 		    				<td >
 		    					<bean:write name="iat" property="airline"/>
@@ -251,7 +251,7 @@ function sortTable(sortOrder) {
 		    					<bean:write name="iat" property="specialist"/>
 		    				</td>
 		    				<td >
-		    					<bean:write name="iat" property="agent"/>
+		    					<bean:write name="iat" property="approver"/>
 		    				</td>
 		    				<td >
 		    					<html:text name="iat" property="expensedraft" styleClass="textfield" indexed="true" size="10" />

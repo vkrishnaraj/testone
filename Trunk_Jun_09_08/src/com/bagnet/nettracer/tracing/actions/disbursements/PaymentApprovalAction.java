@@ -23,17 +23,22 @@ import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.bmo.ExpensePayoutBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.dao.OnlineClaimsDao;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
+import com.bagnet.nettracer.tracing.db.onlineclaims.OCFile;
 import com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskDTO;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskSearchDTO;
+import com.bagnet.nettracer.tracing.exceptions.InsufficientInformationException;
 import com.bagnet.nettracer.tracing.forms.disbursements.PaymentApprovalForm;
+import com.bagnet.nettracer.tracing.service.DocumentService;
 import com.bagnet.nettracer.tracing.service.IncidentActivityService;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DomainUtils;
+import com.bagnet.nettracer.tracing.utils.EmailUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
@@ -41,9 +46,7 @@ import com.bagnet.nettracer.tracing.utils.UserPermissions;
 public class PaymentApprovalAction extends CheckedAction {
 	
 	private IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
-
-	private final Status STATUS_PENDING_PRINT = new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING_PRINT);
-	private final Status STATUS_PENDING_WP = new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING_WP);
+	private DocumentService documentService = (DocumentService) SpringUtils.getBean(TracingConstants.DOCUMENT_SERVICE_BEAN);
 	private Logger logger = Logger.getLogger(PaymentApprovalAction.class);
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		HttpSession session = request.getSession();
@@ -69,10 +72,11 @@ public class PaymentApprovalAction extends CheckedAction {
 			IncidentActivityTask iat=incidentActivityService.loadTask(Long.valueOf(paf.getRejectId()));
 			if(iat!=null){
 
-				boolean success = handleTask(iat,false);
+				boolean success = incidentActivityService.handleTask(iat.getTask_id(),false);
 				if (success) {
-					success = handleRemark(iat.getTask_id(), (String) paf.getRejectRemark(), user);
+					success = incidentActivityService.handleRemark(iat.getTask_id(), paf.getRejectRemark(), user);
 				} else {
+					logger.error("Failed to reject task with ID: "+iat.getTask_id());
 					ActionMessage error = new ActionMessage("");
 					error = new ActionMessage("message.unable.to.save.finance.task");
 					
@@ -101,32 +105,61 @@ public class PaymentApprovalAction extends CheckedAction {
 					iatmap.put(iat.getTask_id(), iat);
 					
 				}
-				List<ExpensePayout> eplist=new ArrayList<ExpensePayout>();
+				OnlineClaimsDao dao = new OnlineClaimsDao();
+				ExpensePayout ep=null;
 				for(IncidentActivityTaskDTO iatdto:paf.getIatlist()){
-					//Update Expense values and set status to paid
 
 					IncidentActivityTask iat=iatmap.get(iatdto.getTaskid());
 					if(iat!=null){
-						ExpensePayout ep=iat.getIncidentActivity().getExpensePayout();
-						
-						ep.set_DATEFORMAT(user.getDateformat().getFormat());
-						ep.setDraft(iatdto.getExpensedraft());
-						if(iatdto.getExpensedraftdate()!=null && !iatdto.getExpensedraftdate().isEmpty()){
-							ep.setDisdraftpaiddate(iatdto.getExpensedraftdate());
+						ep=null;
+						success = incidentActivityService.handleTask(iat.getTask_id(),true);
+						if (success) {
+							ep=iat.getIncidentActivity().getExpensePayout();
+							if(ep!=null){
+								//Update Expense values and set status to paid
+								ep.set_DATEFORMAT(user.getDateformat().getFormat());
+								ep.setDraft(iatdto.getExpensedraft());
+								if(iatdto.getExpensedraftdate()!=null && !iatdto.getExpensedraftdate().isEmpty()){
+									ep.setDisdraftpaiddate(iatdto.getExpensedraftdate());
+								}
+								if(iatdto.getExpensemaildate()!=null && !iatdto.getExpensemaildate().isEmpty()){
+									ep.setDismaildate(iatdto.getExpensemaildate());
+								}
+								ep.setStatus(new Status(TracingConstants.EXPENSEPAYOUT_STATUS_PAID));
+	
+								success=ExpensePayoutBMO.updateExpense(ep,user);
+								if(!success){
+									logger.error("Failed to updating expense with Task ID: "+iat.getTask_id());
+								}
+							}
+							if(ep!=null && success){
+								ServletContext sc = getServlet().getServletContext();
+								String realpath = sc.getRealPath("/");
+								try {
+									IncidentActivity ia=iat.getIncidentActivity();
+									if(ia.getCustCommId()==TracingConstants.CUST_COMM_WEB_PORTAL){
+										OCFile file = documentService.publishDocument(ia);
+										if (file != null) {
+											if (!dao.saveFile(file)) {
+												logger.error("Failed to email customer about communication for IncidentActivity with id: " + ia.getId());
+											} else {
+												if (!EmailUtils.sendIncidentActivityEmail(ia, realpath)) {
+													logger.error("Failed to email customer about communication for IncidentActivity with id: " + ia.getId());
+												}
+											}
+										}
+									}
+								} catch (InsufficientInformationException e1) {
+									logger.error("Failed to publish document for IncidentActivity Task with id: " + iat.getTask_id());
+									e1.printStackTrace();
+								}
+							}
+							if(!success){
+								logger.error("Failure handling remark with Incident Activity Task with ID: "+iat.getTask_id());
+							}
 						}
-						if(iatdto.getExpensemaildate()!=null && !iatdto.getExpensemaildate().isEmpty()){
-							ep.setDismaildate(iatdto.getExpensemaildate());
-						}
-						ep.setStatus(new Status(TracingConstants.EXPENSEPAYOUT_STATUS_PAID));
-						eplist.add(ep);
-						success = handleTask(iat,true);
 					}
 
-				}
-				
-				if(success){
-					//Saving expenses with paid status
-					success=ExpensePayoutBMO.updateExpenses(eplist, user);
 				}
 				
 				if(!success){
@@ -252,42 +285,6 @@ public class PaymentApprovalAction extends CheckedAction {
 		request.setAttribute("dir", dir);
 		dto.setDir(dir!=null ? dir:TracingConstants.SORT_ASCENDING);
 		dto.setSort(sort != null ? sort : "incidentId");
-	}
-	
-	private boolean handleTask(IncidentActivityTask iat, boolean approved) {
-		incidentActivityService.closeTask(iat.getTask_id());
-		return approved ? handleApproveTask(iat) : handleRejectTask(iat);
-	}
-	
-	private boolean handleApproveTask(IncidentActivityTask iat) {
-		IncidentActivity ia=iat.getIncidentActivity();
-		ia.setApprovalAgent(iat.getAssigned_agent());
-		switch(ia.getCustCommId()) {
-		case TracingConstants.CUST_COMM_POSTAL_MAIL:
-			return incidentActivityService.createTask(ia, STATUS_PENDING_PRINT);
-		case TracingConstants.CUST_COMM_WEB_PORTAL:
-			return incidentActivityService.createTask(ia, STATUS_PENDING_WP);
-		default:
-			logger.error("Invalid value found for customer communication method id: " + ia.getCustCommId());
-			return false;
-		}
-	}
-	
-	private boolean handleRejectTask(IncidentActivityTask iat) {
-		IncidentActivity ia=iat.getIncidentActivity();
-		ia.setApprovalAgent(iat.getAssigned_agent());
-		return incidentActivityService.createTask(ia, new Status(TracingConstants.FINANCE_STATUS_FINANCE_REJECTED), ia.getAgent());
-	}
-	
-	private boolean handleRemark(long incidentActivityTaskId, String remark, Agent madeBy) {
-		if (remark == null || remark.isEmpty()) return true;
-		
-		incidentActivityService.closeTask(incidentActivityTaskId);
-		IncidentActivityTask iat = incidentActivityService.loadTask(incidentActivityTaskId);
-		if (iat != null) {
-			return incidentActivityService.createIncidentActivityRemark(remark, iat.getIncidentActivity(), madeBy);
-		}
-		return false;
 	}
 
 }

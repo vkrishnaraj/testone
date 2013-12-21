@@ -3,6 +3,7 @@ package com.bagnet.nettracer.tracing.dto;
 import java.util.Date;
 import java.util.TimeZone;
 
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 public class IncidentActivityTaskDTO {
@@ -37,6 +38,7 @@ public class IncidentActivityTaskDTO {
 	private String pnr;
 	private String reason;
 	private String specialist;
+	private String approver;
 	
 	/**
 	 * Expense Information
@@ -171,12 +173,20 @@ public class IncidentActivityTaskDTO {
 		this.expensecheckamt = expensecheckamt;
 	}
 
+	public String getDispExpensecheckamt() {
+		return TracingConstants.DECIMALFORMAT.format(expensecheckamt);
+	}
+
 	public double getExpensevoucheramt() {
 		return expensevoucheramt;
 	}
 
 	public void setExpensevoucheramt(double expensevoucheramt) {
 		this.expensevoucheramt = expensevoucheramt;
+	}
+
+	public String getDispExpensevoucheramt() {
+		return TracingConstants.DECIMALFORMAT.format(expensevoucheramt);
 	}
 
 	public long getTaskid() {
@@ -273,6 +283,14 @@ public class IncidentActivityTaskDTO {
 
 	public void setReason(String reason) {
 		this.reason = reason;
+	}
+
+	public String getApprover() {
+		return approver;
+	}
+
+	public void setApprover(String approver) {
+		this.approver = approver;
 	}
 
 }

@@ -43,12 +43,22 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 	private IncidentActivityDAO incidentActivityDao;
 	private TemplateDAO templateDao;
 	
-	private Status STATUS_PENDING = new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING);
-	private Status STATUS_DENIED = new Status(TracingConstants.STATUS_CUSTOMER_COMM_DENIED);
-	private Status FINANCE_STATUS_REJECTED = new Status(TracingConstants.FINANCE_STATUS_REJECTED);
-	private Status FINANCE_STATUS_FRAUD_REVIEW = new Status(TracingConstants.FINANCE_STATUS_FRAUD_REVIEW);
-	private Status FINANCE_STATUS_SUPERVISOR_REVIEW = new Status(TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW);
-	private Status FINANCE_STATUS_AWAITING_DISBURSEMENT = new Status(TracingConstants.FINANCE_STATUS_AWAITING_DISBURSEMENT);
+	private final Status STATUS_PENDING = new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING);
+	private final Status STATUS_DENIED = new Status(TracingConstants.STATUS_CUSTOMER_COMM_DENIED);
+	private final Status FINANCE_STATUS_REJECTED = new Status(TracingConstants.FINANCE_STATUS_REJECTED);
+	private final Status FINANCE_STATUS_FRAUD_REVIEW = new Status(TracingConstants.FINANCE_STATUS_FRAUD_REVIEW);
+	private final Status FINANCE_STATUS_SUPERVISOR_REVIEW = new Status(TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW);
+	private final Status FINANCE_STATUS_AWAITING_DISBURSEMENT = new Status(TracingConstants.FINANCE_STATUS_AWAITING_DISBURSEMENT);
+	private final Status STATUS_PENDING_PRINT = new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING_PRINT);
+	private final Status STATUS_PENDING_WP = new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING_WP);
+	private final Status STATUS_APPROVED = new Status(TracingConstants.STATUS_CUSTOMER_COMM_APPROVED);
+	private final Status STATUS_FRAUD_APPROVED = new Status(TracingConstants.FINANCE_STATUS_FRAUD_APPROVED);
+	private final Status STATUS_SUPERVISOR_APPROVED = new Status(TracingConstants.FINANCE_STATUS_SUPERVISOR_APPROVED);
+	private final Status FINANCE_STATUS_APPROVED = new Status(TracingConstants.FINANCE_STATUS_FINANCE_APPROVED);
+	private final Status FINANCE_STATUS_FINANCE_REJECTED = new Status(TracingConstants.FINANCE_STATUS_FINANCE_REJECTED);
+	private final Status FINANCE_STATUS_FRAUD_REJECTED = new Status(TracingConstants.FINANCE_STATUS_FRAUD_REJECTED);
+	private final Status FINANCE_STATUS_SUPERVISOR_REJECTED = new Status(TracingConstants.FINANCE_STATUS_SUPERVISOR_REJECTED);
+	
 	
 	@Override
 	public IncidentActivity load(long incidentActivityId) {
@@ -275,7 +285,7 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 			iatdto.setStatus(String.valueOf(iat.getStatus().getStatus_ID()));
 			
 			if (iat.getIncidentActivity().getApprovalAgent() != null) {
-				iatdto.setAgent(iat.getIncidentActivity().getApprovalAgent().getUsername()); 
+				iatdto.setApprover(iat.getIncidentActivity().getApprovalAgent().getUsername()); 
 			}
 
 			/** Passenger Information **/
@@ -444,5 +454,94 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 	public void setTemplateDao(TemplateDAO templateDao) {
 		this.templateDao = templateDao;
 	}
+	
+	public boolean handleTask(long incidentActivityTaskId, boolean approved) {
+		closeTask(incidentActivityTaskId);
+		IncidentActivityTask iat = loadTask(incidentActivityTaskId);
+		if (iat != null) {
+			iat.getIncidentActivity().setApprovalAgent(iat.getAssigned_agent());
+			return approved ? handleApproveTask(iat) : handleRejectTask(iat);
+		}
+		logger.error("Failed to load task with id: " + incidentActivityTaskId);
+		return false;
+	}
+
+	private boolean handleApproveTask(IncidentActivityTask iat) {
+
+		IncidentActivity ia=iat.getIncidentActivity();
+		ia.setApprovalAgent(iat.getAssigned_agent());
+		int statusId=iat.getStatus().getStatus_ID();
+		Status s=STATUS_APPROVED;
+		if(statusId==TracingConstants.FINANCE_STATUS_FRAUD_REVIEW){
+			s=STATUS_FRAUD_APPROVED;
+		} else if (statusId==TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW){
+			s=STATUS_SUPERVISOR_APPROVED;
+		} else if (statusId==TracingConstants.FINANCE_STATUS_AWAITING_DISBURSEMENT){
+			s=FINANCE_STATUS_APPROVED;
+		}
+		
+		if (!createTask(ia, s, iat.getAssigned_agent(), false)) {
+			logger.error("Failed to create an approval task for IncidentActivity: " + iat.getTask_id());
+		}
+
+		if(statusId==TracingConstants.FINANCE_STATUS_FRAUD_REVIEW){
+			return createTask(ia, FINANCE_STATUS_SUPERVISOR_REVIEW);
+		} else if (statusId==TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW){
+			return createTask(ia, FINANCE_STATUS_AWAITING_DISBURSEMENT);
+		}
+		
+		switch(ia.getCustCommId()) {
+			case TracingConstants.CUST_COMM_POSTAL_MAIL:
+				return createTask(ia, STATUS_PENDING_PRINT);
+			case TracingConstants.CUST_COMM_WEB_PORTAL:
+//				try {
+//					OCFile file=documentService.publishDocument(ia);
+//					if(file!=null){
+//						OnlineClaimsDao dao=new OnlineClaimsDao();
+//						if(!dao.saveFile(file)){
+//							logger.error("Failed to email customer about communication for IncidentActivity with id: "+ ia.getId());
+//						} else {
+//							if(!EmailUtils.sendIncidentActivityEmail(ia, realpath)){
+//								logger.error("Failed to email customer about communication for IncidentActivity with id: "+ ia.getId());
+//							}
+//						}
+//					}
+//				} catch (InsufficientInformationException e1) {
+//					logger.error("Failed to publish document for IncidentActivity with id: "+ia.getId());
+//					e1.printStackTrace();
+//				}
+//				
+				return createTask(ia, STATUS_PENDING_WP);
+			default:
+				logger.error("Invalid value found for customer communication method id: " + ia.getCustCommId());
+				return false;
+		}
+	}
+
+	private boolean handleRejectTask(IncidentActivityTask iat) {
+		IncidentActivity ia=iat.getIncidentActivity();
+		ia.setApprovalAgent(iat.getAssigned_agent());
+		int statusId=iat.getStatus().getStatus_ID();
+		if(statusId==TracingConstants.FINANCE_STATUS_FRAUD_REVIEW){
+			return createTask(ia, FINANCE_STATUS_FRAUD_REJECTED, ia.getAgent());
+		} else if(statusId==TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW){
+			return createTask(ia, FINANCE_STATUS_SUPERVISOR_REJECTED, ia.getAgent());
+		} else if(statusId==TracingConstants.FINANCE_STATUS_AWAITING_DISBURSEMENT){
+			return createTask(ia, FINANCE_STATUS_FINANCE_REJECTED, ia.getAgent());
+		}
+		return createTask(ia, STATUS_DENIED, ia.getAgent());
+	}
+	
+	public boolean handleRemark(long incidentActivityTaskId, String remark, Agent madeBy) {
+		if (remark == null || remark.isEmpty()) return true;
+		
+		closeTask(incidentActivityTaskId);
+		IncidentActivityTask iat = loadTask(incidentActivityTaskId);
+		if (iat != null) {
+			return createIncidentActivityRemark(remark, iat.getIncidentActivity(), madeBy);
+		}
+		return false;
+	}
+	
 
 }

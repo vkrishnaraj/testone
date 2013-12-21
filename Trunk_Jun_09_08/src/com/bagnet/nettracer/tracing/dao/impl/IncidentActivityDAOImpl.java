@@ -50,6 +50,7 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 		map.put("pnr", 			"i.recordlocator");
 		map.put("reason", 		"i.itemtype");
 		map.put("specialist",	"ia.agent");
+		map.put("approver",		"ia.approvalAgent");
 		
 		financestatusmap.put(TracingConstants.FINANCE_STATUS_AWAITING_DISBURSEMENT, "1");
 		financestatusmap.put(TracingConstants.FINANCE_STATUS_FINANCE_APPROVED, "1");

@@ -70,4 +70,7 @@ public interface IncidentActivityService {
 	boolean saveActivityTasks(List<IncidentActivityTask> iatlist);
 	boolean saveActivities(List<IncidentActivity> ialist);
 	public IncidentActivity loadByActivityCode(String activityCode, String incident_ID);
+	
+	public boolean handleTask(long incidentActivityTaskId, boolean approved);
+	public boolean handleRemark(long incidentActivityTaskId, String remark, Agent madeBy);
 }
