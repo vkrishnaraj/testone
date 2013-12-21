@@ -947,12 +947,14 @@ public class BagService {
 				// set passenger membership back to not null
 				String toemail = null;
 				String passname = null;
+				String languageKey = null;
 				for(int i = 0; i < theform.getPassengerlist().size(); i++) {
 					pa = (Passenger) theform.getPassenger(i);
 					if(i == 0) {
 						Address adr = pa.getAddress(0);
 						toemail = adr.getEmail();
 						passname = pa.getFirstname() + " " + pa.getLastname();
+						languageKey = StringUtils.trim(pa.getLanguageKey());
 					}
 					if(pa.getMembership() == null) {
 						pa.setMembership(new AirlineMembership());
@@ -970,10 +972,23 @@ public class BagService {
 							he.setHostName(theform.getAgent().getStation().getCompany().getVariable().getEmail_host());
 							he.setSmtpPort(theform.getAgent().getStation().getCompany().getVariable().getEmail_port());
 							he.setFrom(theform.getAgent().getStation().getCompany().getVariable().getEmail_from());
+						
+							//prefered language has higher precedence
+							String currentLocale = null;
+							if (languageKey != null && session.getAttribute("receiptLocaleList") != null) {
+								ArrayList<LabelValueBean> receiptLocaleList = (ArrayList<LabelValueBean>) session.getAttribute("receiptLocaleList");
+								for (LabelValueBean labelValueBean : receiptLocaleList) {
+									if (StringUtils.equalsIgnoreCase(languageKey, labelValueBean.getLabel())) {
+										currentLocale = labelValueBean.getValue();
+										break;
+									}
+								}
+							}
 							
-							String currentLocale = theform.getLanguage();
-							
-							if(currentLocale == null || currentLocale.trim().length() < 1) {
+							if(currentLocale == null) {
+								currentLocale = StringUtils.trimToNull(theform.getLanguage());
+							}		
+							if(currentLocale == null) {
 								currentLocale = iDTO.getAgent().getCurrentlocale();
 							}
 
@@ -996,7 +1011,9 @@ public class BagService {
 							
 							HashMap<String,String> h = new HashMap<String,String>();
 							h.put("PASS_NAME", passname);
-														
+
+							File file = null;
+							String myEmailSubjectLine = null;
 							if(iDTO.getItemtype_ID() == TracingConstants.LOST_DELAY) {
 								h.put("REPORT_TYPE", messages.getMessage(
 										new Locale(currentLocale), "email.mishandled"));
@@ -1005,25 +1022,17 @@ public class BagService {
 								embedImage = !TracerProperties.isTrue(theform.getAgent().getStation().getCompany().getCompanyCode_ID(),TracerProperties.EMAIL_REPORT_LD_DISABLE_IMAGE);
 								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "lostdelay.email.title"));
 								
-								String myEmailSubjectLine = TracerProperties.get(theform.getAgent().getStation().getCompany().getCompanyCode_ID(),"email.subjectline.lostdelay.key");
-								if (myEmailSubjectLine != null && !myEmailSubjectLine.equalsIgnoreCase("")) {
-									he.setSubject(messages.getMessage(new Locale(currentLocale), myEmailSubjectLine));
-								} else {
-									he.setSubject(messages.getMessage(new Locale(currentLocale), "email.subject", messages.getMessage(new Locale(currentLocale), "email.mishandled")));
-								}
+								myEmailSubjectLine = StringUtils.trimToNull(TracerProperties.get(theform.getAgent().getStation().getCompany().getCompanyCode_ID(),"email.subjectline.lostdelay.key"));
+								myEmailSubjectLine = (myEmailSubjectLine == null) ? myEmailSubjectLine : StringUtils.trimToNull(messages.getMessage(new Locale(currentLocale), myEmailSubjectLine));
+								myEmailSubjectLine = (myEmailSubjectLine != null) ? myEmailSubjectLine : messages.getMessage(new Locale(currentLocale), "email.subject", messages.getMessage(new Locale(currentLocale), "email.mishandled"));
 								
 								h.put("EMAIL_APOLOGIZE_FOR_TEXT", messages.getMessage(
 										new Locale(currentLocale), "email.mishandled.content.apologize.text"));
 								
 								if (StringUtils.trimToNull(theform.getIncident_ID()) == null && PropertyBMO.isTrue(PropertyBMO.PROPERTY_MISHANDLING_ATTACHMENT_AT_CREATION)) {
 									theform.setIncident_ID(iDTO.getIncident_ID());
-									
 									request.setAttribute(TracingConstants.COMMAND_PRINT, ReportingConstants.LOST_RECEIPT_RPT);									
-									File iFile = FileShareUtils.getFile(LostDelayReceipt.createReport(theform, sc, request, TracingConstants.REPORT_OUTPUT_PDF, currentLocale), sc);
-									if (iFile != null && iFile.exists()) {
-										he.attach(new FileDataSource(iFile), iFile.getPath(), "");
-									}
-									
+									file = FileShareUtils.getFile(LostDelayReceipt.createReport(theform, sc, request, TracingConstants.REPORT_OUTPUT_PDF, currentLocale), sc);
 									theform.setIncident_ID(null);//reset form incident Id
 								}
 							}
@@ -1034,25 +1043,17 @@ public class BagService {
 								embedImage = !TracerProperties.isTrue(theform.getAgent().getStation().getCompany().getCompanyCode_ID(),TracerProperties.EMAIL_REPORT_DAM_DISABLE_IMAGE);
 								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "damage.email.title"));
 								
-								String myEmailSubjectLine = TracerProperties.get(theform.getAgent().getStation().getCompany().getCompanyCode_ID(),"email.subjectline.damaged.key");
-								if (myEmailSubjectLine != null && !myEmailSubjectLine.equalsIgnoreCase("")) {
-									he.setSubject(messages.getMessage(new Locale(currentLocale), myEmailSubjectLine));
-								} else {
-									he.setSubject(messages.getMessage(new Locale(currentLocale), "email.subject", messages.getMessage(new Locale(currentLocale), "email.damaged")));
-								}
+								myEmailSubjectLine = StringUtils.trimToNull(TracerProperties.get(theform.getAgent().getStation().getCompany().getCompanyCode_ID(),"email.subjectline.damaged.key"));
+								myEmailSubjectLine = (myEmailSubjectLine == null) ? myEmailSubjectLine : StringUtils.trimToNull(messages.getMessage(new Locale(currentLocale), myEmailSubjectLine));
+								myEmailSubjectLine = (myEmailSubjectLine != null) ? myEmailSubjectLine : messages.getMessage(new Locale(currentLocale), "email.subject", messages.getMessage(new Locale(currentLocale), "email.damaged"));
 								
 								h.put("EMAIL_APOLOGIZE_FOR_TEXT", messages.getMessage(
 										new Locale(currentLocale), "email.damaged.content.apologize.text"));
 								
 								if (StringUtils.trimToNull(theform.getIncident_ID()) == null && PropertyBMO.isTrue(PropertyBMO.PROPERTY_MISHANDLING_ATTACHMENT_AT_CREATION)) {
 									theform.setIncident_ID(iDTO.getIncident_ID());
-									
 									request.setAttribute(TracingConstants.COMMAND_PRINT, ReportingConstants.DAMAGE_RECEPIT_RPT);									
-									File iFile = FileShareUtils.getFile(DamageReceipt.createReport(theform, sc, request, TracingConstants.REPORT_OUTPUT_PDF, currentLocale), sc);
-									if (iFile != null && iFile.exists()) {
-										he.attach(new FileDataSource(iFile), iFile.getPath(), "");
-									}
-
+									file = FileShareUtils.getFile(DamageReceipt.createReport(theform, sc, request, TracingConstants.REPORT_OUTPUT_PDF, currentLocale), sc);
 									theform.setIncident_ID(null);//reset form incident Id
 								}
 							} 
@@ -1063,25 +1064,17 @@ public class BagService {
 								embedImage = !TracerProperties.isTrue(theform.getAgent().getStation().getCompany().getCompanyCode_ID(),TracerProperties.EMAIL_REPORT_PIL_DISABLE_IMAGE);
 								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "missing.email.title"));
 								
-								String myEmailSubjectLine = TracerProperties.get(theform.getAgent().getStation().getCompany().getCompanyCode_ID(),"email.subjectline.pilfered.key");
-								if (myEmailSubjectLine != null && !myEmailSubjectLine.equalsIgnoreCase("")) {
-									he.setSubject(messages.getMessage(new Locale(currentLocale), myEmailSubjectLine));
-								} else {
-									he.setSubject(messages.getMessage(new Locale(currentLocale), "email.subject", messages.getMessage(new Locale(currentLocale), "email.missing")));
-								}
+								myEmailSubjectLine = StringUtils.trimToNull(TracerProperties.get(theform.getAgent().getStation().getCompany().getCompanyCode_ID(),"email.subjectline.pilfered.key"));
+								myEmailSubjectLine = (myEmailSubjectLine == null) ? myEmailSubjectLine : StringUtils.trimToNull(messages.getMessage(new Locale(currentLocale), myEmailSubjectLine));
+								myEmailSubjectLine = (myEmailSubjectLine != null) ? myEmailSubjectLine : messages.getMessage(new Locale(currentLocale), "email.subject", messages.getMessage(new Locale(currentLocale), "email.missing"));
 								
 								h.put("EMAIL_APOLOGIZE_FOR_TEXT", messages.getMessage(
 										new Locale(currentLocale), "email.missing.content.apologize.text"));
 								
 								if (StringUtils.trimToNull(theform.getIncident_ID()) == null && PropertyBMO.isTrue(PropertyBMO.PROPERTY_MISHANDLING_ATTACHMENT_AT_CREATION)) {
 									theform.setIncident_ID(iDTO.getIncident_ID());
-									
 									request.setAttribute(TracingConstants.COMMAND_PRINT, ReportingConstants.MISSING_RECEPIT_RPT);									
-									File iFile = FileShareUtils.getFile(MissingReceipt.createReport(theform, sc, request, TracingConstants.REPORT_OUTPUT_PDF, currentLocale), sc);
-									if (iFile != null && iFile.exists()) {
-										he.attach(new FileDataSource(iFile), iFile.getPath(), "");
-									}
-
+									file = FileShareUtils.getFile(MissingReceipt.createReport(theform, sc, request, TracingConstants.REPORT_OUTPUT_PDF, currentLocale), sc);
 									theform.setIncident_ID(null);//reset form incident Id
 								}
 							}
@@ -1139,8 +1132,16 @@ public class BagService {
 							//logger.error("entire html email:" + msg);
 							
 							if(msg != null) {
+								he.setSubject(myEmailSubjectLine);
 								he.setHtmlMsg(msg);
 								he.setCharset("UTF-8");
+								
+								if (file != null && file.exists()) {
+									logger.debug("Attaching file : " + file.getPath());
+									he.attach(new FileDataSource(file), file.getPath(), "");
+									he.setBoolHasAttachments(false); //appear to have a bug when there is an attachment
+								}
+								
 								he.send();
 							}
 							else {

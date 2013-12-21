@@ -26,6 +26,7 @@ import javax.activation.FileDataSource;
 import javax.activation.URLDataSource;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import org.apache.commons.lang.StringUtils;
@@ -339,17 +340,17 @@ public class MultiPartEmail extends Email {
 		}
 		MimeBodyPart mbp = new MimeBodyPart();
 		try {
+			this.getMailSession();
+			
 			mbp.setDataHandler(new DataHandler(ds));
-			
-			int lastIndex = name.lastIndexOf("\\");
-			if (0 < lastIndex && lastIndex < name.length() -1) {
-				mbp.setFileName(name.substring(lastIndex) + 1);				
-			}
-			
-			getContainer().addBodyPart(mbp);
-
 			mbp.setDisposition(disposition);
+			mbp.setFileName((name == null) ? name : name.replaceAll(".*[/\\\\]", ""));
 			mbp.setDescription(description);
+
+			getContainer().addBodyPart(mbp);
+			
+			this.message = new MimeMessage(this.getMailSession());
+			this.message.setContent(getContainer());
 		} catch (MessagingException me) {
 			throw new EmailException(me);
 		}

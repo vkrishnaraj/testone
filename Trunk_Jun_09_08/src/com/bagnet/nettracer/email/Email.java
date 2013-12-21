@@ -692,8 +692,9 @@ public abstract class Email {
 	 */
 	public void send() throws EmailException {
 		try {
+			boolean hasMessage = (this.message != null);
 			this.getMailSession();
-			this.message = new MimeMessage(this.session);
+			this.message = (hasMessage) ? this.message : new MimeMessage(this.session);
 
 			if (StringUtils.isNotEmpty(this.subject)) {
 				if (StringUtils.isNotEmpty(this.charset)) {
@@ -703,17 +704,19 @@ public abstract class Email {
 				}
 			}
 
-			// ========================================================
-			// Start of replacement code
-			if (this.content != null) {
-				this.message.setContent(this.content, this.contentType);
-			}
-			// end of replacement code
-			// ========================================================
-			else if (this.emailBody != null) {
-				this.message.setContent(this.emailBody);
-			} else {
-				this.message.setContent("", Email.TEXT_PLAIN);
+			if (!hasMessage) {
+				// ========================================================
+				// Start of replacement code
+				if (this.content != null) {
+					this.message.setContent(this.content, this.contentType);
+				}
+				// end of replacement code
+				// ========================================================
+				else if (this.emailBody != null) {
+					this.message.setContent(this.emailBody);
+				} else {
+					this.message.setContent("", Email.TEXT_PLAIN);
+				}
 			}
 
 			if (this.fromAddress != null) {
