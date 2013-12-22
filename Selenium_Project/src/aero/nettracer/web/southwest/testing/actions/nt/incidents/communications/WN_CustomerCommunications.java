@@ -424,7 +424,7 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 		selenium.click("id=addCommButton");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
-			verifyEquals("ASSIGNED TO: " + Settings.USERNAME_ADMIN, selenium.getText("//div[@id='maincontent']/table[9]/tbody/tr[2]/td[3]"));
+			verifyEquals("ASSIGNED TO: " + Settings.USERNAME_ADMIN, selenium.getText("//div[@id='maincontent']/table[9]/tbody/tr[3]/td[3]"));
 			verifyTrue(isElementPresent(By.xpath("//a[contains(text(),'Delete')]")));
 		} else {
 			System.out.println("!!!!!!!!!!!!!!!! Failed to create Incident Activity");
