@@ -28,6 +28,8 @@ import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.communications.Activity;
 import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
 import com.bagnet.nettracer.tracing.db.communications.IncidentActivityRemark;
+import com.bagnet.nettracer.tracing.db.onlineclaims.OCFile;
+import com.bagnet.nettracer.tracing.db.onlineclaims.OCMessage;
 import com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskSearchDTO;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
@@ -197,6 +199,24 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 			 **/
 			Incident inc=incidentActivity.getIncident();
 			inc.getActivities().remove(incidentActivity);
+			/**
+			 * Because IncidentActivities are CascadeType.All on OCMessages and OCFiles, they
+			 * have to be removed from the OCMessage and OCFile before they can be deleted
+			 **/
+			List<OCMessage>  messageList=new ArrayList<OCMessage>(incidentActivity.getMessages());
+			for(OCMessage message:messageList){
+				incidentActivity.getMessages().remove(message);
+				
+				message.setIncAct(null);
+				session.merge(message);
+			}
+			List<OCFile>  fileList=new ArrayList<OCFile>(incidentActivity.getFiles());
+			for(OCFile file:fileList){
+				incidentActivity.getFiles().remove(file);
+				file.setIncAct(null);
+				session.merge(file);
+			}
+			
 			session.delete(incidentActivity);
 			transaction.commit();
 			success = true;
