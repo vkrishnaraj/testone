@@ -1486,10 +1486,11 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				} catch (BagtagException e) {
 					logger.debug("Unable to convert bagtag while creating fwd: " + airtag);
 				}
-
-				BagTagType t3 = d2.addNewBagTag();
-				t3.setAirlineCode(airtag.substring(0, 2));
-				t3.setTagSequence(airtag.substring(2));
+				if (airtag != null) {
+					BagTagType t3 = d2.addNewBagTag();
+					t3.setAirlineCode(airtag.substring(0, 2));
+					t3.setTagSequence(airtag.substring(2));					
+				}
 			}
 
 			int itinCount = 0;
@@ -3622,10 +3623,11 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				} catch (BagtagException e) {
 					logger.debug("Unable to convert bagtag while creating fwd: " + airtag);
 				}
-
-				BagTagAmendType t3 = d2.addNewBagTag();
-				t3.setAirlineCode(airtag.substring(0, 2));
-				t3.setTagSequence(airtag.substring(2));
+				if (airtag != null) {
+					BagTagAmendType t3 = d2.addNewBagTag();
+					t3.setAirlineCode(airtag.substring(0, 2));
+					t3.setTagSequence(airtag.substring(2));					
+				}
 			}
 
 			int itinCount = 0;
@@ -4453,11 +4455,11 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					// tag in the tag sequence field.
 					airtag = t.getTagSequence();
 					airtag = BagTagConversion.getTwoCharacterBagTag(airtag);
-
-					BagTagType tag = tags.addNewBagTag();
-					tag.setAirlineCode(airtag.substring(0, 2));
-					tag.setTagSequence(airtag.substring(2));
-
+					if (airtag != null) {
+						BagTagType tag = tags.addNewBagTag();
+						tag.setAirlineCode(airtag.substring(0, 2));
+						tag.setTagSequence(airtag.substring(2));
+					}
 				} catch (BagtagException e) {
 					logger.debug("Unable to convert bagtag while creating fwd: " + airtag);
 				}

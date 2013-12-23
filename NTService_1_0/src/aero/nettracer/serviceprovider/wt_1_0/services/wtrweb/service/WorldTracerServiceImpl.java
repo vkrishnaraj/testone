@@ -954,10 +954,11 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 								logger.debug("Unable to convert bagtag while creating fwd: " + rawTag);
 								continue;
 							}
-							
-							search.setParameter("rushBagRecord.rushBagGroup.rushBags[" + addedCount + "].originalBagTag.airlineCode", finalTag.substring(0,2));
-							search.setParameter("rushBagRecord.rushBagGroup.rushBags[" + addedCount + "].originalBagTag.tagNumber", finalTag.substring(2,8));
-							addedCount++;
+							if (finalTag != null) {
+								search.setParameter("rushBagRecord.rushBagGroup.rushBags[" + addedCount + "].originalBagTag.airlineCode", finalTag.substring(0,2));
+								search.setParameter("rushBagRecord.rushBagGroup.rushBags[" + addedCount + "].originalBagTag.tagNumber", finalTag.substring(2,8));
+								addedCount++;								
+							}
 						}
 					}
 					break;

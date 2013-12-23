@@ -20,7 +20,7 @@ import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
  *
  */
 public class BagTagConversion {
-
+	private static final String PATTERN_12_DIGIT_BAG_TAG = "^\\d{12}$";
 	private static final String PATTERN_10_DIGIT_BAG_TAG = "^\\d{10}$";
 	private static final String PATTERN_9_DIGIT_BAG_TAG = "^\\d{9}$";
 	private static final String PATTERN_8_CHAR_BAG_TAG = "^[a-zA-Z0-9]{2}\\d{6}$";
@@ -84,6 +84,7 @@ public class BagTagConversion {
 	 * @return Returns an 8 character bag tag number.
 	 */
 	public static String getTwoCharacterBagTag(String bagTag) throws BagtagException {
+		Pattern twelveDigitPattern = Pattern.compile(PATTERN_12_DIGIT_BAG_TAG);
 		Pattern tenDigitPattern = Pattern.compile(PATTERN_10_DIGIT_BAG_TAG);
 		Pattern nineDigitPattern = Pattern.compile(PATTERN_9_DIGIT_BAG_TAG);
 		Pattern twoCharPattern = Pattern.compile(PATTERN_8_CHAR_BAG_TAG);
@@ -91,7 +92,9 @@ public class BagTagConversion {
 		String airlineCode = "";
 		String suffix = "";
 		
-		if (tenDigitPattern.matcher(bagTag).find()) {
+		if (twelveDigitPattern.matcher(bagTag).find()) {
+			return null; 
+		} else if (tenDigitPattern.matcher(bagTag).find()) {
 			airlineCode = bagTag.substring(1, 4);
 			suffix = bagTag.substring(4); 
 		} else if (nineDigitPattern.matcher(bagTag).find()) {
