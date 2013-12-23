@@ -257,7 +257,8 @@ public class WN_OHD_Sort_Search extends WN_SeleniumTest {
 		String sortCheck="";
 		if(checkNoErrorPage()) {
 			selenium.click("xpath=(//a[contains(text(),'On-hand Bags')])[2]");
-			waitForPageToLoadImproved();
+
+			waitForPageToLoadImproved(1000,false);
 		} else {
 			System.out.println("!!!!!!!!!!!!!!! - Failed to access Task Manager - !!!!!!!!!!!!!!!!!!");
 		}
