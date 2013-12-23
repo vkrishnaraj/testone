@@ -111,7 +111,7 @@ public class IncidentActivityAction extends CheckedAction {
 		}
 		
 		IncidentActivity ia = DomainUtils.createIncidentActivity(incident, activity, user);
-		if(message!=null && ia.getCustCommId()==TracingConstants.CUST_COMM_WEB_PORTAL){
+		if(message!=null && incident.getCustCommId()==TracingConstants.CUST_COMM_WEB_PORTAL){
 			ia.setPublishedDate(new Date());
 		}
 		
@@ -120,7 +120,7 @@ public class IncidentActivityAction extends CheckedAction {
 			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.unable.to.create", new Object[] { activity.getDescription() }));
 		}
 
-		if(message!=null && !message.isEmpty() && ia.getCustCommId()==TracingConstants.CUST_COMM_WEB_PORTAL){
+		if(message!=null && !message.isEmpty() && incident.getCustCommId()==TracingConstants.CUST_COMM_WEB_PORTAL){
 			OnlineClaimsDao dao=new OnlineClaimsDao();
 			OnlineClaim c=dao.getOnlineClaim(incidentId);
 			if (c == null) {

@@ -363,12 +363,12 @@
 								<logic:equal name="activity" property="published" value="true">
 									<a href="customerCommunications.do?command=<%=TracingConstants.COMMAND_UNPUBLISH %>&communicationsId=<%=String.valueOf(activity.getId()) %>&incident=<bean:write name="incidentForm" property="incident_ID" />" onclick="return verifyUnpublish();" >
 										<bean:message key="customer.communication.action.unpublish" />
-									</a>
+									</a><br>
 								</logic:equal>
 								<logic:notEqual name="activity" property="published" value="true">
 									<a href="customerCommunications.do?command=<%=TracingConstants.COMMAND_PUBLISH %>&communicationsId=<%=String.valueOf(activity.getId()) %>&incident=<bean:write name="incidentForm" property="incident_ID" />" onclick="return verifyPublish();" >
 										<bean:message key="customer.communication.action.publish" />
-									</a>
+									</a><br>
 								</logic:notEqual>
 							</logic:equal>
 							
@@ -376,7 +376,7 @@
 								<logic:equal name="activity" property="toBeAcknowledged" value="true">
 									<a href="customerCommunications.do?command=<%=TracingConstants.COMMAND_ACKNOWLEDGE_INBOUND %>&communicationsId=<%=String.valueOf(activity.getId()) %>&incident=<bean:write name="incidentForm" property="incident_ID" />" >
 										<bean:message key="customer.communication.action.acknowledge" />
-									</a>
+									</a><br>
 								</logic:equal>
 							</logic:equal>
 						</logic:equal>
