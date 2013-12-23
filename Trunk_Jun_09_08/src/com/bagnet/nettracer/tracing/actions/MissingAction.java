@@ -1379,13 +1379,26 @@ public class MissingAction extends CheckedAction {
 				if (expenses != null & expenses.size() >= 1) {
 					for (ExpensePayout payout : expenses) {
 						historicalReport
-							.append(resourceBundle.getString("colname.date_time") + ": ")
-							.append(payout.getDiscreatedate() + newline);
-/*							.append(resourceBundle.getString("colname.station") + ": ")
-							.append(payout.getAgentStation() + newline)
-							.append(resourceBundle.getString("colname.agent") + ": ")
-							.append(payout.getAgentUsername() + newline)
-							.append(payout.getRemarktext() + newline);*/
+						.append(resourceBundle.getString("colname.createdate") + ": ")
+						.append(payout.getDiscreatedate() + newline)
+						.append(resourceBundle.getString("colname.paycode") + ": ")
+						.append(payout.getPaycode() + newline)
+						.append(resourceBundle.getString("colname.draft") + ": ")
+						.append(payout.getDraft() + newline)
+						.append(resourceBundle.getString("colname.draftreqdate") + ": ")
+						.append(payout.getDisdraftreqdate() + newline)
+						.append(resourceBundle.getString("colname.draftpaiddate") + ": ")
+						.append(payout.getDisdraftpaiddate() + newline)
+						.append(resourceBundle.getString("colname.checkamt") + ": ")
+						.append(payout.getDischeckamt() + payout.getCurrency_ID() + newline)
+						.append(resourceBundle.getString("colname.voucheramt") + ": ")
+						.append(payout.getDisvoucheramt() + newline)
+						.append(resourceBundle.getString("colname.mileageamt") + ": ")
+						.append(payout.getMileageamt() + newline)
+						.append(resourceBundle.getString("header.status") + ": ")
+						.append(payout.getResourceValue() + newline)
+						.append(resourceBundle.getString("header.approval_deny_date") + ": ")
+						.append(payout.getDispapproval_date() + newline);	
 						historicalReport.append(newline);
 					}
 				}
