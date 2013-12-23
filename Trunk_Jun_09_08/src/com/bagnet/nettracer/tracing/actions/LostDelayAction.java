@@ -1242,8 +1242,24 @@ public class LostDelayAction extends CheckedAction {
 
 			if (selections.get("interimexpense") != null) {
 
-				List interimexpense = form.getExpenselist();
+				List<ExpensePayout> interimexpense = form.getExpenselist();
+
 				if (interimexpense != null && interimexpense.size() > 0) {
+		            double checktotal   = 0;
+		            double vouchertotal = 0;
+		            int    mileagetotal = 0;
+					for(ExpensePayout payout : interimexpense) {
+			              if(payout.getStatus().getStatus_ID() != TracingConstants.EXPENSEPAYOUT_STATUS_DENIED) {
+			                  checktotal   += payout.getCheckamt();
+			                  if (payout.getStatus().getStatus_ID() == TracingConstants.EXPENSEPAYOUT_STATUS_PAID ) 
+			                    vouchertotal += payout.getVoucheramt();
+			                  mileagetotal += payout.getMileageamt();
+			                  }
+						
+					}
+					parameters.put("checktotal",  Double.toString(checktotal));
+					parameters.put("vouchertotal", Double.toString(vouchertotal));
+					parameters.put("mileagetotal", Integer.toString(mileagetotal));
 					parameters.put("interimexpenseReport", ReportBMO.getCompiledReport("interimexpense", sc.getRealPath("/")));
 					parameters.put("interimexpense", new JRBeanCollectionDataSource(interimexpense));
 				} else {

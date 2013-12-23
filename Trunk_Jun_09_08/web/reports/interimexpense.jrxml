@@ -8,6 +8,9 @@
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="mileagetotal" class="java.lang.String"/>
+	<parameter name="vouchertotal" class="java.lang.String"/>
+	<parameter name="checktotal" class="java.lang.String"/>
 	<field name="discreatedate" class="java.lang.String"/>
 	<field name="paycode" class="java.lang.String"/>
 	<field name="draft" class="java.lang.String"/>
@@ -32,7 +35,7 @@
 		<band/>
 	</columnHeader>
 	<detail>
-		<band height="375">
+		<band height="234">
 			<textField pattern="" isBlankWhenNull="true">
 				<reportElement key="textField-1" positionType="Float" mode="Opaque" x="80" y="4" width="70" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF">
 					<printWhenExpression><![CDATA[new Boolean($F{discreatedate} != null ? true : false)]]></printWhenExpression>
@@ -334,6 +337,9 @@
 	<pageFooter>
 		<band/>
 	</pageFooter>
+	<lastPageFooter>
+		<band height="93"/>
+	</lastPageFooter>
 	<summary>
 		<band/>
 	</summary>
