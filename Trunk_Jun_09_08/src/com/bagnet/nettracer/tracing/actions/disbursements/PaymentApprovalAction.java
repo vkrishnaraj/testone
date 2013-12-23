@@ -37,6 +37,7 @@ import com.bagnet.nettracer.tracing.forms.disbursements.PaymentApprovalForm;
 import com.bagnet.nettracer.tracing.service.DocumentService;
 import com.bagnet.nettracer.tracing.service.IncidentActivityService;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.DomainUtils;
 import com.bagnet.nettracer.tracing.utils.EmailUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
@@ -92,12 +93,28 @@ public class PaymentApprovalAction extends CheckedAction {
 		if(request.getParameter("updateExpense")!=null && paf.getIatlist()!=null && paf.getIatlist().size()>0){
 			boolean success=true;
 			List<Long> iatidlist=new ArrayList<Long>();
+			boolean sameDraftFormat=false;
+			boolean sameMailFormat=false;
 			for(IncidentActivityTaskDTO iatdto:paf.getIatlist()){
-				if(iatdto.getExpensedraft()!=null && !iatdto.getExpensedraft().isEmpty()){
+				sameDraftFormat=false;
+				sameMailFormat=false;
+				
+				if(iatdto.getExpensedraftdate()!=null && !iatdto.getExpensedraftdate().isEmpty()){
+					sameDraftFormat=DateUtils.convertToDate(iatdto.getExpensedraftdate(), user.getDateformat().getFormat(), null)!=null;
+				}
+
+				if(iatdto.getExpensemaildate()!=null && !iatdto.getExpensemaildate().isEmpty()){
+					sameMailFormat=DateUtils.convertToDate(iatdto.getExpensemaildate(), user.getDateformat().getFormat(), null)!=null;
+				}
+				
+				if(iatdto.getExpensedraft()!=null && !iatdto.getExpensedraft().isEmpty() && sameDraftFormat && sameMailFormat){
 					iatidlist.add(iatdto.getTaskid());
 				}
 			}
-			List<IncidentActivityTask> iatlist=incidentActivityService.loadActivityTasks(iatidlist);
+			List<IncidentActivityTask> iatlist=null;
+			if(iatidlist!=null && iatidlist.size()>0){
+				iatlist=incidentActivityService.loadActivityTasks(iatidlist);
+			}
 
 			if(iatlist!=null){
 				Map<Long, IncidentActivityTask> iatmap=new HashMap<Long,IncidentActivityTask>();
