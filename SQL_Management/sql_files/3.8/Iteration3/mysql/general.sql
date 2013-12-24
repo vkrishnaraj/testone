@@ -395,3 +395,6 @@ insert into activity (code,description) VALUES ('99O','OUTBOUND WEB PORTAL MESSA
 insert into properties (ID, keyStr, valueStr) VALUES (141,'document.print.queue',1);
 insert into systemcomponents (component_id, component_name, component_desc, parent_component_id, component_action_link,display ,sort_order,sort_group) 
 VALUES (1501, 'Document Print Queue', 'Approved incident activity documents pending print', 15, 'documentPrintCommunications.do', 1, 101, 4);
+
+insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group) 
+VALUES (1103,'Tasks View Pending','View tasks not in work.',39,'viewPendingTasks.do',1,100,0);
