@@ -34,6 +34,9 @@ public class IncidentActivityTaskSearchDTO {
 	private int currentPage;
 	
 	private int rowsPerPage;
+	
+	private String passengerLastName;
+	private String passengerFirstName;
 
 	public String get_DATEFORMAT() {
 		return _DATEFORMAT;
@@ -161,6 +164,22 @@ public class IncidentActivityTaskSearchDTO {
 
 	public void setFinancial(boolean financial) {
 		this.financial = financial;
+	}
+
+	public String getPassengerLastName() {
+		return passengerLastName;
+	}
+
+	public void setPassengerLastName(String passengerLastName) {
+		this.passengerLastName = passengerLastName;
+	}
+
+	public String getPassengerFirstName() {
+		return passengerFirstName;
+	}
+
+	public void setPassengerFirstName(String passengerFirstName) {
+		this.passengerFirstName = passengerFirstName;
 	}
 	
 }

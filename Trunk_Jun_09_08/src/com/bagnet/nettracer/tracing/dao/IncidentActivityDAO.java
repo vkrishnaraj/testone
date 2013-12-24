@@ -53,4 +53,7 @@ public interface IncidentActivityDAO {
 	public IncidentActivityTask getAssignedTask(Agent agent);
 	public IncidentActivityTask getAssignedTask(Agent agent, Status s);
 	public IncidentActivityTask getTask(Status status);
+
+	public int getIncidentActivityTaskNotInWorkCount(IncidentActivityTaskSearchDTO dto);
+	public List<IncidentActivityTask> getIncidentActivitiesNotInWork(IncidentActivityTaskSearchDTO dto);
 }

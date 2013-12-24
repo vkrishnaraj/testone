@@ -67,6 +67,9 @@ public interface IncidentActivityService {
 	public int getIncidentActivitySupervisorReviewCount();
 	public int getIncidentActivityAwaitingDisbursementCount();
 	
+	public int getIncidentActivitiesNotInWorkCount(IncidentActivityTaskSearchDTO dto);
+	public List<IncidentActivityTaskDTO> listIncidentActivitiesNotInWork(IncidentActivityTaskSearchDTO dto);
+	
 	public List<IncidentActivity> loadActivities(List<Long> actIdList);
 	public List<IncidentActivityTask> loadActivityTasks(List<Long> taskIdList);
 	boolean saveActivityTasks(List<IncidentActivityTask> iatlist);

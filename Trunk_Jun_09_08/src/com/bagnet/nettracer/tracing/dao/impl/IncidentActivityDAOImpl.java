@@ -6,8 +6,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
@@ -18,6 +16,8 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -384,9 +384,9 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 
 	@Override
 	public boolean deleteTasks(List<IncidentActivityTask> tasks) {
-		boolean success = false;
-		if (tasks == null || tasks.isEmpty()) return success;
+		if (tasks == null || tasks.isEmpty()) return true;
 		
+		boolean success = false;
 		Session session = null;
 		Transaction transaction = null;
 		try {
@@ -866,15 +866,15 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 		
 		if (dto.getStatus() != null) {
 
-			/** If Status is Payment Approval Status, then join the ExpensePayout**/
+			/* If Status is Payment Approval Status, then join the ExpensePayout */
 			if(financestatusmap.get(dto.getStatus().getStatus_ID())!=null){
 				criteria.createAlias("ia.expensePayout", "e");
 			}
 
-			/**
+			/*
 			 * If looking for Payment Approval Rejected tasks, must get all
 			 * different types of Payment Approval Rejection Statuses
-			 **/
+			 */
 			if(dto.getStatus().getStatus_ID()==TracingConstants.FINANCE_STATUS_REJECTED){
 				criteria.add(Restrictions.disjunction()
 						.add(Restrictions.eq("iat.status", new Status(TracingConstants.FINANCE_STATUS_FRAUD_REJECTED)))
@@ -972,6 +972,81 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 			}
 		}
 		return success;
+	}
+	
+	@Override
+	public int getIncidentActivityTaskNotInWorkCount(IncidentActivityTaskSearchDTO dto) {
+		int count = 0;
+		Session session = null;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			Criteria criteria = getCriteriaForNotInWorkTasks(session, dto);
+			criteria.setProjection(Projections.countDistinct("iat.task_id"));
+			Long result = (Long) criteria.uniqueResult();
+			if (result != null) {
+				count = result.intValue();
+			}
+		} catch (Exception e) {
+			logger.error("An error occurred while attempting to get the incident activity task count.", e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return count;
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<IncidentActivityTask> getIncidentActivitiesNotInWork(IncidentActivityTaskSearchDTO dto) {
+		List<IncidentActivityTask> results = new ArrayList<IncidentActivityTask>();
+		Session session = null;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			Criteria criteria = getCriteriaForNotInWorkTasks(session, dto);
+			results = (List<IncidentActivityTask>) criteria.list();
+		} catch (Exception e) {
+			logger.error("An error occurred while attempting to get the incident activity tasks.", e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return results;
+	}
+	
+	private Criteria getCriteriaForNotInWorkTasks(Session session, IncidentActivityTaskSearchDTO dto) {
+		Criteria criteria = session.createCriteria(IncidentActivityTask.class, "iat");
+		criteria.createAlias("iat.incidentActivity", "ia");
+		criteria.createAlias("ia.incident", "i");
+		
+		if (dto.getAgent() != null) {
+			criteria.add(Restrictions.eq("i.agentassigned", dto.getAgent()));
+		}
+		
+		if (dto.getPassengerFirstName() != null || dto.getPassengerLastName() != null) {
+			criteria.createAlias("i.passengers", "p");
+			if (dto.getPassengerFirstName() != null && !dto.getPassengerFirstName().isEmpty()) {
+				criteria.add(Restrictions.ilike("p.firstname", dto.getPassengerFirstName()));
+			}
+
+			if (dto.getPassengerLastName() != null && !dto.getPassengerLastName().isEmpty()) {
+				criteria.add(Restrictions.ilike("p.lastname", dto.getPassengerLastName()));
+			}
+		}
+		
+		Date start = dto.getStartCreateDate();
+		Date end = dto.getEndCreateDate();
+		if (start != null && end != null) {
+			criteria.add(Restrictions.between("iat.opened_timestamp", start, end));
+		} else if (start != null) {
+			criteria.add(Restrictions.ge("iat.opened_timestamp", start));
+		} else if (end != null) {
+			criteria.add(Restrictions.lt("iat.opened_timestamp", end));
+		}
+		
+		criteria.add(Restrictions.eq("iat.active", true));
+		return criteria;
 	}
 
 }

@@ -48,12 +48,21 @@ import com.bagnet.nettracer.tracing.dto.TemplateSearchDTO;
 import com.bagnet.nettracer.tracing.enums.TemplateType;
 import com.bagnet.nettracer.tracing.forms.communications.CustomerCommunicationsForm;
 import com.bagnet.nettracer.tracing.forms.communications.CustomerCommunicationsTaskForm;
+import com.bagnet.nettracer.tracing.forms.communications.IncidentActivityTaskForm;
+import com.bagnet.nettracer.tracing.forms.communications.TaskSearchForm;
 import com.bagnet.nettracer.tracing.forms.disbursements.DisbursementRejectionForm;
 import com.bagnet.nettracer.tracing.forms.disbursements.FraudReviewForm;
 import com.bagnet.nettracer.tracing.forms.disbursements.PaymentApprovalForm;
 import com.bagnet.nettracer.tracing.forms.disbursements.SupervisorReviewForm;
 import com.bagnet.nettracer.tracing.forms.templates.TemplateEditForm;
 import com.bagnet.nettracer.tracing.forms.templates.TemplateSearchForm;
+//import com.bagnet.nettracer.tracing.dao.OnlineClaimsDao;
+//import com.bagnet.nettracer.tracing.db.onlineclaims.OCFile;
+//import com.bagnet.nettracer.tracing.db.onlineclaims.OCMessage;
+//import com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim;
+//import com.bagnet.nettracer.tracing.dto.FileDTO;
+//import com.bagnet.nettracer.tracing.dto.MessageDTO;
+//import com.bagnet.nettracer.tracing.forms.communications.CorrespondenceForm;
 /**
  * This class is used to provide basic tasks related to Document Template management 
  * (ie: converting between DocumentTemplate and DocmentTemplateForm, etc...).
@@ -90,6 +99,7 @@ public class DomainUtils {
 	public static void toForm(IncidentActivity ia, CustomerCommunicationsForm ccf, Agent user) {
 		ccf.setCommand(TracingConstants.COMMAND_UPDATE);
 		ccf.setId(ia.getId());
+		ccf.setAgentId(ia.getAgent().getAgent_ID());
 
 		if (ia.getIncident() != null) {
 			ccf.setIncidentId(ia.getIncident().getIncident_ID());
@@ -145,9 +155,15 @@ public class DomainUtils {
 		return dto;
 	}
 	
-	public static IncidentActivityTaskSearchDTO fromForm(CustomerCommunicationsTaskForm cctf) {
+	public static IncidentActivityTaskSearchDTO fromForm(IncidentActivityTaskForm iatf) {
 		IncidentActivityTaskSearchDTO dto = new IncidentActivityTaskSearchDTO();
-		dto.setActive(cctf.isActive());
+		dto.setActive(iatf.isActive());
+		if (iatf.getS_createtime() != null && !iatf.getS_createtime().isEmpty()) {
+			dto.setStartCreateDate(DateUtils.convertToGMTDate(iatf.getS_createtime(), iatf.get_DATEFORMAT()));
+		}
+		if (iatf.getE_createtime() != null && !iatf.getE_createtime().isEmpty()) {
+			dto.setEndCreateDate(DateUtils.convertToGMTDate(iatf.getE_createtime(), iatf.get_DATEFORMAT()));
+		}
 		return dto;
 	}
 
@@ -220,6 +236,14 @@ public class DomainUtils {
 		form.setS_createtime(null);
 		form.setE_createtime(null);
 		form.setCommand(null);
+	}
+	
+	public static void resetTaskForm(TaskSearchForm form) {
+		form.setAgentName(null);
+		form.setPassengerFirstName(null);
+		form.setPassengerLastName(null);
+		form.setS_createtime(null);
+		form.setE_createtime(null);
 	}
 	
 	public static void resetSearchForm(CustomerCommunicationsTaskForm form) {

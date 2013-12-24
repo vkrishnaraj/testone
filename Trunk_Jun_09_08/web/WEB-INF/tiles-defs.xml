@@ -1090,8 +1090,12 @@
     <definition name="customerCommunicationsRejected" extends="user_menu" >
     	<put name="center" value="/pages/communications/customer_communications_rejected.jsp" />
     </definition>
-	<definition name="documentPrintCommunications" extends="user_menu">
+    <definition name="documentPrintCommunications" extends="user_menu">
     	<put name="center" value="/pages/communications/document_print_communications.jsp"/>
+    </definition>
+    
+    <definition name="viewPendingTasks" extends="user_menu">
+    	<put name="center" value="/pages/communications/view_pending_tasks.jsp"/>
     </definition>
 	
  </tiles-definitions>

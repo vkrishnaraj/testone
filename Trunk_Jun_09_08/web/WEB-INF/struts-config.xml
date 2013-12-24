@@ -313,6 +313,7 @@
 		<form-bean name="customerCommunicationsForm" type="com.bagnet.nettracer.tracing.forms.communications.CustomerCommunicationsForm" />	
 		<form-bean name="customerCommunicationsTaskForm" type="com.bagnet.nettracer.tracing.forms.communications.CustomerCommunicationsTaskForm" />	
 
+		<form-bean name="taskSearchForm" type="com.bagnet.nettracer.tracing.forms.communications.TaskSearchForm" />	
 	</form-beans>
 	<!-- global exception -->
 	<global-exceptions>
@@ -641,6 +642,8 @@
 		
 		<forward name="bagDrop" path="bagDrop" />
 		<forward name="bagDropEdit" path="bagDropEdit" />
+		
+		<forward name="viewPendingTasks" path="viewPendingTasks" />
 		
 	</global-forwards>
 
@@ -1038,6 +1041,8 @@
 		<action path="/documentPrintCommunications" type="com.bagnet.nettracer.tracing.actions.communications.DocumentPrintCommunicationsAction" name="documentPrintCommunicationsForm" scope="request" validate="false" ></action>
 
 		<action path="/customerCommunicationsTasks" type="com.bagnet.nettracer.tracing.actions.communications.CustomerCommunicationsTasksAction" scope="request" validate="false" ></action>
+
+		<action path="/viewPendingTasks" type="com.bagnet.nettracer.tracing.actions.communications.ViewPendingTasksAction" name="taskSearchForm" scope="request" validate="false" ></action>
 
 	</action-mappings>
 

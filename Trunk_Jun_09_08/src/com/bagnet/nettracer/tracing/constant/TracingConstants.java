@@ -385,6 +385,8 @@ public class TracingConstants {
 	public static final String SYSTEM_COMPONENT_NAME_BAG_DROP = "Bag Drop";
 	public static final String SYSTEM_COMPONENT_NAME_BAG_DROP_ADMIN = "Bag Drop Admin";
 	
+	public static final String SYSTEM_COMPONENT_NAME_TASKS_VIEW_PENDING = "Tasks View Pending";
+	
 	//Table numbers for status
 	public final static int AJAX_STATUS_INC = 1;
 	public final static int AJAX_STATUS_OHD = 2;
@@ -1431,6 +1433,7 @@ public class TracingConstants {
 	public static final String TABLE_ID_CUST_COMM_REJECTED = "customerCommunicationsRejected";
 	public static final String TABLE_ID_CUST_COMM_PENDING_APPROVAL = "customerCommunicationsPendingApproval";
 	public static final String TABLE_ID_BAG_DROP = "bagDrop";
+	public static final String TABLE_ID_TASKS_NOT_IN_WORK = "tasksNotInWork";
 	
 	public static final String TABLE_ID_PAYMENT_APPROVAL = "payment_approval";
 	public static final String TABLE_ID_REJECTED_DISBURSEMENTS = "rejectedDisbursements";
@@ -1486,8 +1489,9 @@ public class TracingConstants {
 	public static final String CUSTOMER_COMMUNICATIONS_REJECTED = "customerCommunicationsRejected";
 	public static final String EDIT_COMMUNICATIONS = "editCommunications";
 	public static final String VIEW_CORRESPONDENCE = "viewCorrespondence"; //For Paxview Correspondence Task
-//	public static final String CUSTOMER_COMMUNICATIONS_TASKS = "customerCommunicationsTasks";
 	public static final String DOCUMENT_PRINT_COMMUNICATIONS = "documentPrintCommunications";
+	
+	public static final String TASKS_VIEW_PENDING = "viewPendingTasks";
 
 	public static final int CLAIM_CHECK = 3;
 	public static final int BAG_CHECKED_LOCATION = 4;
