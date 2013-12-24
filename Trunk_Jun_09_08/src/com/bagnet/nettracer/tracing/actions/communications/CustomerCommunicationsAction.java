@@ -399,7 +399,12 @@ public class CustomerCommunicationsAction extends CheckedAction {
 
 	private boolean updateCustomerCommunications(CustomerCommunicationsForm ccf, Agent user, ActionMessages messages) {
 		IncidentActivity incidentActivity = DomainUtils.fromForm(ccf, user);
-		incidentActivity.setAgent(user);
+		// mjs: we don't want to change the agent if a task is in progress.
+		if (ccf.getTaskId() == 0) {
+			incidentActivity.setAgent(user);
+		} else {
+			incidentActivity.setAgent(new Agent(ccf.getAgentId()));
+		}
 		
 		boolean success = incidentActivityService.update(incidentActivity);
 		messages.add(ActionMessages.GLOBAL_MESSAGE, getActionMessage(TracingConstants.COMMAND_UPDATE, success, ccf.getDocumentTitle()));

@@ -104,6 +104,7 @@ legend {
 <html:hidden property="command" styleId="command" />
 <html:hidden property="preview" styleId="preview" />
 <html:hidden property="id" styleId="id" />
+<html:hidden property="agentId" styleId="agentId" />
 <html:hidden property="incidentId" styleId="incidentId" />
 <html:hidden property="templateId" styleId="templateId" />
 <html:hidden property="expenseId" styleId="expenseId" />

@@ -54,8 +54,11 @@ public class Agent implements Serializable {
 	private int max_ws_sessions;
 	private UserGroup cachedGroup = null;
 	
+	public Agent() { }
 	
-	
+	public Agent(int Agent_ID) {
+		this.Agent_ID = Agent_ID;
+	}
 	
 	/**
 	 * @hibernate.many-to-one class="com.bagnet.nettracer.tracing.db.Work_Shift"
