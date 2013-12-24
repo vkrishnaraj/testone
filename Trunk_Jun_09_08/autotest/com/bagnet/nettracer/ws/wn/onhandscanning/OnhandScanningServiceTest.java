@@ -311,6 +311,8 @@ public class OnhandScanningServiceTest {
 		ohd.setBagtagnum(bagtag);
 		ohd.setHoldingStation(stationcode);
 		ohd.addNewItineraries().setLegto("XAX");//testing the update of a 1D tag
+		ohd.addNewPassengers().setLastname("Anderson");
+		ohd.addNewPassengers().setLastname("Venture");
 		
 //		doc.getCreateUpdateOnhand().setLateCheckIndicator(true);
 //		doc.getCreateUpdateOnhand().setPositionId(posId);
@@ -336,6 +338,10 @@ public class OnhandScanningServiceTest {
 		assertTrue(ret.getOnhand().getFirstname().equals("Bill"));
 		assertTrue(ret.getOnhand().getLastname().equals("Nettracer"));
 		assertTrue(ret.getOnhand().getRecordLocator().equals("nttest"));
+		assertTrue(ret.getOnhand().getPassengersArray(0).getFirstname().equals("John"));
+		assertTrue(ret.getOnhand().getPassengersArray(0).getLastname().equals("Anderson"));
+		assertTrue(ret.getOnhand().getPassengersArray(1).getFirstname().equals("Jane"));
+		assertTrue(ret.getOnhand().getPassengersArray(1).getLastname().equals("Doe"));
 		
 		
 		// verify that fields that are not to be alter are in fact not altered.

@@ -16,6 +16,7 @@ import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHD_Itinerary;
+import com.bagnet.nettracer.tracing.db.OHD_Passenger;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
@@ -25,6 +26,7 @@ import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.ws.core.WSCoreOHDUtil;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSItinerary;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD;
+import com.bagnet.nettracer.ws.core.pojo.xsd.WSPassenger;
 import com.bagnet.nettracer.ws.wn.onhandscanning.AddBagForLZResponseDocument.AddBagForLZResponse;
 import com.bagnet.nettracer.ws.wn.onhandscanning.CreateUpdateOnhandResponseDocument.CreateUpdateOnhandResponse;
 import com.bagnet.nettracer.ws.wn.onhandscanning.EchoResponseDocument.EchoResponse;
@@ -369,6 +371,8 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 	 * Checks the required field for creating an OHD.  
 	 * The set of required fields will differ based on the presents of an itinerary segment with a flight number.
 	 * 
+	 * As per NT-1822, the passenger name is now part of the first element of the Passenger array as opposed to the name on the bag
+	 * 
 	 * @param wsohd
 	 * @param response
 	 * @return
@@ -395,13 +399,20 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 				response.addError(ERROR_REQ_HOLDINGSTATION);
 				success = false;
 			}
-			if(wsohd.getFirstname() == null || wsohd.getFirstname().length() == 0){
+			if(wsohd.getPassengersArray() == null || wsohd.getPassengersArray().length == 0) {
 				response.addError(ERROR_REQ_FIRSTNAME);
-				success = false;
-			}
-			if(wsohd.getLastname() == null || wsohd.getLastname().length() == 0){
 				response.addError(ERROR_REQ_LASTNAME);
 				success = false;
+			} else {
+				WSPassenger pax = wsohd.getPassengersArray(0);
+				if(pax.getFirstname() == null || pax.getFirstname().length() == 0){
+					response.addError(ERROR_REQ_FIRSTNAME);
+					success = false;
+				}
+				if(pax.getLastname() == null || pax.getLastname().length() == 0){
+					response.addError(ERROR_REQ_LASTNAME);
+					success = false;
+				}
 			}
 		} else if (wsohd != null){//SWA defines this as a 1D tag
 			if(wsohd.getBagtagnum() == null || wsohd.getBagtagnum().length() == 0){
@@ -489,6 +500,11 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 	 *   	A 1D tag is defined as single itinerary segment with no flight number (only dest station). 
 	 *   	If 1D tag is provided, update the existing itinerary's last segment's dst station with the one provided.  In the case of updating an existing
 	 *   	ohd with no segments, create a new segment with destination only. 
+	 *   
+	 *   passenger name - only a single passenger object with a first and last name is to be provided.  In the event that multiple passengers are provided,
+	 *   	only use the first passenger.  In update an existing passenger, only update the first and last name if a first and last name is provided
+	 *   	(the service can be provided empty string in which update the existing the existing passenger name to empty string).  If more than one passenger already
+	 *   	exists, update the first passenger.  If no passengers exists, create a new passenger
 	 *   	
 	 * 
 	 * @param ohd
@@ -560,6 +576,32 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 			
 			if(ohd.getPosId() != null && ohd.getPosId().length() > 0){
 				oldohd.setPosId(ohd.getPosId());
+			}
+			
+			if(ohd.getPassengers() != null && ohd.getPassengers().size() > 0){
+				//if multiple passengers, only use first one provided
+				OHD_Passenger pax = ohd.getPassengers().iterator().next();
+				if(pax.getFirstname() != null || pax.getLastname() != null){
+					OHD_Passenger oldpax = null;
+					if(oldohd.getPassengers() != null && oldohd.getPassengers().size() > 0){
+						//passenger set exists, update first passenger
+						oldpax = oldohd.getPassengers().iterator().next();
+					} else {
+						//Passenger set doesn't exist, create one
+						LinkedHashSet<OHD_Passenger> oldpaxset = new LinkedHashSet<OHD_Passenger>();
+						oldpax = new OHD_Passenger();
+						oldpax.setOhd(oldohd);
+						oldpaxset.add(oldpax);
+						oldohd.setPassengers(oldpaxset);
+					}
+					
+					if(pax.getFirstname() != null){
+						oldpax.setFirstname(pax.getFirstname());
+					}
+					if(pax.getLastname() != null){
+						oldpax.setLastname(pax.getLastname());
+					}
+				}
 			}
 			
 			return obmo.insertOHD(oldohd, ohd.getAgent());
