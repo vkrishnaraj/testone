@@ -630,6 +630,7 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			Criteria criteria = session.createCriteria(IncidentActivity.class, "ia");			
+			criteria.add(Restrictions.isNotNull("ia.approvalAgent"));		
 
 			criteria.createAlias("tasks", "task");
 			criteria.add(Restrictions.eq("task.status", status));

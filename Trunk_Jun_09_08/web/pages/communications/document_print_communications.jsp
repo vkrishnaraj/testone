@@ -177,13 +177,13 @@ function validateCheckboxes(checkboxName) {
 		          		<display:column titleKey="colname.name" sortable="true" value="${incidentActivity.approvalAgent.lastname}, ${incidentActivity.approvalAgent.firstname}" headerClass="header"
 										sortName="<%=sortBy.equals(TracingConstants.SortParam.INCIDENT_ACTIVITY_APPROVAL_AGENT_NAME.getParamString())?TracingConstants.SortParam.INCIDENT_ACTIVITY_APPROVAL_AGENT_NAME_REV.getParamString():TracingConstants.SortParam.INCIDENT_ACTIVITY_APPROVAL_AGENT_NAME.getParamString()%>"/>
 		
-						<display:column titleKey="customer.communication.approving.agent" sortable="true" value="${incidentActivity.approvalAgent.username}" headerClass="header"
+						<display:column titleKey="customer.communication.approving.agent" sortable="true" value="${incidentActivity.approvalAgent.username}&nbsp;" headerClass="header"
 										sortName="<%=sortBy.equals(TracingConstants.SortParam.INCIDENT_ACTIVITY_APPROVAL_AGENT_USERNAME.getParamString())?TracingConstants.SortParam.INCIDENT_ACTIVITY_APPROVAL_AGENT_USERNAME_REV.getParamString():TracingConstants.SortParam.INCIDENT_ACTIVITY_APPROVAL_AGENT_USERNAME.getParamString()%>"/>
 		          		
-						<display:column titleKey="colname.incident.activity.document.id" sortable="true" value="${incidentActivity.document.id}" headerClass="header"
+						<display:column titleKey="colname.incident.activity.document.id" sortable="true" value="${incidentActivity.document.id}&nbsp;" headerClass="header"
 										sortName="<%=sortBy.equals(TracingConstants.SortParam.INCIDENT_ACTIVITY_DOCUMENT_ID.getParamString())?TracingConstants.SortParam.INCIDENT_ACTIVITY_DOCUMENT_ID_REV.getParamString():TracingConstants.SortParam.INCIDENT_ACTIVITY_DOCUMENT_ID.getParamString()%>"/>
 		
-						<display:column titleKey="colname.incident.activity.document.title" sortable="true" value="${incidentActivity.document.title}" headerClass="header"
+						<display:column titleKey="colname.incident.activity.document.title" sortable="true" value="${incidentActivity.document.title}&nbsp;" headerClass="header"
 										sortName="<%=sortBy.equals(TracingConstants.SortParam.INCIDENT_ACTIVITY_DOCUMENT_TITLE.getParamString())?TracingConstants.SortParam.INCIDENT_ACTIVITY_DOCUMENT_TITLE_REV.getParamString():TracingConstants.SortParam.INCIDENT_ACTIVITY_DOCUMENT_TITLE.getParamString()%>"/>
 		
 						<display:column titleKey="header.action" headerClass="header">
