@@ -23,7 +23,7 @@ boolean hasCancelPermission = UserPermissions.hasPermission(TracingConstants.SYS
 function getStatusIds(type) {
 	if (type=='VOUCH') {
 		if (<%=hasImmFulfillPermission%> || <%=hasEmailFulfillPermission%> || <%=hasMailFulfillPermission%> ){
-			document.getElementById("amountColumn").innerHTML='<bean:message key="issue.amount"/>' +
+			document.getElementById("amountColumn").value='<bean:message key="issue.amount"/>' +
 			'<br />' +
 			'<html:text property="checkamt" maxlength="20" styleClass="textfield"></html:text>';
 			document.getElementById("button").value='<bean:message key="button.issue.voucher"/>';
@@ -34,7 +34,7 @@ function getStatusIds(type) {
 			issue_voucher = false;
 		}
 	} else if (type!='VOUCH'){
-			document.getElementById("amountColumn").innerHTML='<bean:message key="draft.amount"/>' +
+			document.getElementById("amountColumn").value='<bean:message key="draft.amount"/>' +
 			'<br />' +
 			'<html:text property="checkamt" maxlength="20" styleClass="textfield"></html:text>';
 			document.getElementById("button").value='<bean:message key="button.request_for_approval"/>';
