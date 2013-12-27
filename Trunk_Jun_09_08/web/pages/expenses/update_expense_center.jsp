@@ -167,21 +167,7 @@
     									});
     		templateSelectDialog.dialog("open");
     	}
-      
-      function rePrint() {
-    	  openReportWindow('reporting?print=<%=ReportingConstants.EXP_LUV %>&outputtype=0',800,600);
 
- 	      var del=window.confirm("Did the Southwest LUV Voucher print correctly?");
-  	      if(del==true){
-  	    	document.getElementById("printrpt").style.display= 'none';
-  	    	document.expensePayoutForm.printcount.value="1";
-  	    	document.expensePayoutForm.submit();
-          } else if(del==false){
-        	document.expensePayoutForm.toremark.value="yes";
-			document.expensePayoutForm.submit();
-          }
-      }
-	    
 	    function ReSubmitWS() {
 	    	alert('Error in submitting Web Service. Please Resubmit or Call Administrator for connection issue.');
 	    };  
@@ -201,7 +187,8 @@
 		                        buttons: {
 		                            Yes: function () {
 		                                jQuery(this).dialog("close");
-		                     	    	document.getElementById("printrpt").style.display= 'none';
+//		                                document.getElementById("printrpt").setAttribute( 'style', 'display:none' );
+//		                     	    	document.getElementById("printrpt").style.display= 'none';
 		                      	    	document.expensePayoutForm.printcount.value="1";
 		                      	    	document.expensePayoutForm.submit();
 		                            },
