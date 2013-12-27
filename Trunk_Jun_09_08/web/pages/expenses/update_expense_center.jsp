@@ -38,7 +38,8 @@
 	boolean showprint = epf.getPrintcount() == 0 ? true : false;
 	String today = new SimpleDateFormat("MM/dd/yyyy").format(Calendar.getInstance().getTime());
 	String createdate = new SimpleDateFormat("MM/dd/yyyy").format(epf.getCreatedate());
-	boolean showcancel = (today.equals(createdate) && epf.getCancelcount() == 0 ) ? true : false;
+	boolean sameday = today.equals(createdate);
+	boolean showcancel = (sameday && epf.getCancelcount() == 0 ) ? true : false;
 	boolean swaBsoPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, a) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN,a);
 	boolean swaPayApproveCreatePerm = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAYMENT_APPROVAL_CREATE, a) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAYMENT_APPROVAL_ADMIN,a);
 	boolean swaIsInBSO=(epf!=null && a!=null && a.getStation()!=null && epf.getExpenselocation_ID()==a.getStation().getStation_ID());
@@ -290,7 +291,12 @@
           				</font></center>
  					</c:if>
 					<div align="right" width="100%" >
-						Status:<c:if test="${expensePayoutForm.printcount == 0 && expensePayoutForm.cancelcount == 0}">Valid</c:if>
+						Status:<c:if test="${expensePayoutForm.printcount == 0 && expensePayoutForm.cancelcount == 0}">
+								<% if (sameday) { %>Valid
+								<% } else { %>Expired
+								<% } %>
+						       </c:if>
+
 							   <c:if test="${expensePayoutForm.printcount == 1 && expensePayoutForm.cancelcount == 0}">Printed</c:if>
 						       <c:if test="${expensePayoutForm.cancelcount == 1}">Cancelled</c:if> 
 					</div>
