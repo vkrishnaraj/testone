@@ -947,14 +947,12 @@ public class BagService {
 				// set passenger membership back to not null
 				String toemail = null;
 				String passname = null;
-				String languageKey = null;
 				for(int i = 0; i < theform.getPassengerlist().size(); i++) {
 					pa = (Passenger) theform.getPassenger(i);
 					if(i == 0) {
 						Address adr = pa.getAddress(0);
 						toemail = adr.getEmail();
 						passname = pa.getFirstname() + " " + pa.getLastname();
-						languageKey = StringUtils.trim(pa.getLanguageKey());
 					}
 					if(pa.getMembership() == null) {
 						pa.setMembership(new AirlineMembership());
@@ -973,21 +971,7 @@ public class BagService {
 							he.setSmtpPort(theform.getAgent().getStation().getCompany().getVariable().getEmail_port());
 							he.setFrom(theform.getAgent().getStation().getCompany().getVariable().getEmail_from());
 						
-							//prefered language has higher precedence
-							String currentLocale = null;
-							if (languageKey != null && session.getAttribute("receiptLocaleList") != null) {
-								ArrayList<LabelValueBean> receiptLocaleList = (ArrayList<LabelValueBean>) session.getAttribute("receiptLocaleList");
-								for (LabelValueBean labelValueBean : receiptLocaleList) {
-									if (StringUtils.equalsIgnoreCase(languageKey, labelValueBean.getLabel())) {
-										currentLocale = labelValueBean.getValue();
-										break;
-									}
-								}
-							}
-							
-							if(currentLocale == null) {
-								currentLocale = StringUtils.trimToNull(theform.getLanguage());
-							}		
+							String currentLocale = StringUtils.trimToNull(theform.getLanguage());
 							if(currentLocale == null) {
 								currentLocale = iDTO.getAgent().getCurrentlocale();
 							}
