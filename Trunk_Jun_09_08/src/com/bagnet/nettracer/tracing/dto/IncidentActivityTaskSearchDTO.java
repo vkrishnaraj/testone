@@ -1,6 +1,7 @@
 package com.bagnet.nettracer.tracing.dto;
 
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -11,6 +12,7 @@ public class IncidentActivityTaskSearchDTO {
 	private String _DATEFORMAT;
 	private String _TIMEFORMAT;
 	private TimeZone _TIMEZONE;
+	private Locale agentLocale;
 
 	private Agent agent;
 	private Status status;
@@ -60,6 +62,14 @@ public class IncidentActivityTaskSearchDTO {
 
 	public void set_TIMEZONE(TimeZone _TIMEZONE) {
 		this._TIMEZONE = _TIMEZONE;
+	}
+
+	public Locale getAgentLocale() {
+		return agentLocale;
+	}
+
+	public void setAgentLocale(Locale agentLocale) {
+		this.agentLocale = agentLocale;
 	}
 
 	public Agent getAgent() {

@@ -1,6 +1,7 @@
 package com.bagnet.nettracer.tracing.dto;
 
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -11,6 +12,7 @@ public class IncidentActivityTaskDTO {
 	private String _DATEFORMAT;
 	private String _TIMEFORMAT;
 	private TimeZone _TIMEZONE;
+	private Locale agentLocale;
 	
 	private long id;
 	private long incidentActivityId;
@@ -27,6 +29,8 @@ public class IncidentActivityTaskDTO {
 	/**
 	 * Passenger Information
 	 */
+	private String lastName;
+	private String firstName;
 	private String name;
 	private String address;
 	private String aptnum;
@@ -71,6 +75,14 @@ public class IncidentActivityTaskDTO {
 
 	public void set_TIMEZONE(TimeZone _TIMEZONE) {
 		this._TIMEZONE = _TIMEZONE;
+	}
+
+	public Locale getAgentLocale() {
+		return agentLocale;
+	}
+
+	public void setAgentLocale(Locale agentLocale) {
+		this.agentLocale = agentLocale;
 	}
 
 	public long getId() {
@@ -134,7 +146,7 @@ public class IncidentActivityTaskDTO {
 	}
 
 	public String getStatus() {
-		return status;
+		return status != null ? status : "";
 	}
 
 	public void setStatus(String status) {
@@ -203,6 +215,22 @@ public class IncidentActivityTaskDTO {
 
 	public void setLastPrinted(String lastPrinted) {
 		this.lastPrinted = lastPrinted;
+	}
+
+	public String getLastName() {
+		return lastName != null ? lastName : "";
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getFirstName() {
+		return firstName != null ? firstName : "";
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
 	public String getName() {
@@ -292,5 +320,5 @@ public class IncidentActivityTaskDTO {
 	public void setApprover(String approver) {
 		this.approver = approver;
 	}
-
+	
 }

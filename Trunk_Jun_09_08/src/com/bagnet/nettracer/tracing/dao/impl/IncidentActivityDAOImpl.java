@@ -50,12 +50,16 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 		map.put("status",    	"ia.status");
 		map.put("taskId",    	"iat.task_id");
 		map.put("name",  		"p.firstname");
+		map.put("lastName",		"p.lastname");
 		map.put("address", 		"a.address1");
 		map.put("amount", 		"e.checkamt");
 		map.put("pnr", 			"i.recordlocator");
 		map.put("reason", 		"i.itemtype");
 		map.put("specialist",	"ia.agent");
 		map.put("approver",		"ia.approvalAgent");
+		map.put("openDate",		"iat.opened_timestamp");
+		map.put("incidentAgent","i.agent");
+		map.put("statusDesc",	"s.description");
 		
 		financestatusmap.put(TracingConstants.FINANCE_STATUS_AWAITING_DISBURSEMENT, "1");
 		financestatusmap.put(TracingConstants.FINANCE_STATUS_FINANCE_APPROVED, "1");
@@ -982,6 +986,7 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			Criteria criteria = getCriteriaForNotInWorkTasks(session, dto);
+			applyOrder(dto, criteria);
 			criteria.setProjection(Projections.countDistinct("iat.task_id"));
 			Long result = (Long) criteria.uniqueResult();
 			if (result != null) {
@@ -1005,6 +1010,7 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			Criteria criteria = getCriteriaForNotInWorkTasks(session, dto);
+			applyOrder(dto, criteria);
 			results = (List<IncidentActivityTask>) criteria.list();
 		} catch (Exception e) {
 			logger.error("An error occurred while attempting to get the incident activity tasks.", e);
@@ -1018,11 +1024,12 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 	
 	private Criteria getCriteriaForNotInWorkTasks(Session session, IncidentActivityTaskSearchDTO dto) {
 		Criteria criteria = session.createCriteria(IncidentActivityTask.class, "iat");
+		criteria.createAlias("iat.status", "s");
 		criteria.createAlias("iat.incidentActivity", "ia");
 		criteria.createAlias("ia.incident", "i");
 		
 		if (dto.getAgent() != null) {
-			criteria.add(Restrictions.eq("i.agentassigned", dto.getAgent()));
+			criteria.add(Restrictions.eq("i.agent", dto.getAgent()));
 		}
 		
 		if (dto.getPassengerFirstName() != null || dto.getPassengerLastName() != null) {
@@ -1044,6 +1051,10 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 			criteria.add(Restrictions.ge("iat.opened_timestamp", start));
 		} else if (end != null) {
 			criteria.add(Restrictions.lt("iat.opened_timestamp", end));
+		}
+		
+		if (dto.getStatus() != null) {
+			criteria.add(Restrictions.eq("iat.status", dto.getStatus()));
 		}
 		
 		criteria.add(Restrictions.eq("iat.active", true));

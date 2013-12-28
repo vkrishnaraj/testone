@@ -4,6 +4,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -401,14 +402,22 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 	public List<IncidentActivityTaskDTO> listIncidentActivitiesNotInWork(IncidentActivityTaskSearchDTO dto) {
 		List<IncidentActivityTaskDTO> dtos = new ArrayList<IncidentActivityTaskDTO>();
 		List<IncidentActivityTask> fromDb = incidentActivityDao.getIncidentActivitiesNotInWork(dto);
+		ResourceBundle bundle = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", dto.getAgentLocale());
 		for (IncidentActivityTask iat: fromDb) {
 			IncidentActivityTaskDTO iatdto = createIncidentActivityTaskDTO(dto);
 			Incident i = iat.getIncidentActivity().getIncident();
 			iatdto.setIncidentId(i.getIncident_ID());
 			iatdto.setAgent(i.getAgent().getUsername());
+			iatdto.setAgentLocale(dto.getAgentLocale());
 			Passenger p = i.getPassenger_list().get(0);
-			iatdto.setName(p.getLastname() + ", " + p.getFirstname());
+			iatdto.setLastName(p.getLastname());
+			iatdto.setFirstName(p.getFirstname());
 			iatdto.setTaskDate(iat.getOpened_timestamp());
+			try {
+				iatdto.setStatus(bundle.getString(iat.getStatus().getKey()));
+			} catch (Exception e) {
+				logger.error("Could not find description for status: " + iat.getStatus().getKey(), e);
+			}
 			dtos.add(iatdto);
 		}
 		return dtos;
@@ -436,6 +445,9 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 		toReturn.set_DATEFORMAT(dto.get_DATEFORMAT());
 		toReturn.set_TIMEFORMAT(dto.get_TIMEFORMAT());
 		toReturn.set_TIMEZONE(dto.get_TIMEZONE());
+		if (dto.getAgent() != null) {
+			toReturn.setAgentLocale(dto.getAgentLocale());
+		}
 		return toReturn;
 	}
 	

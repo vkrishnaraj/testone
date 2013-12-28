@@ -244,6 +244,7 @@ public class DomainUtils {
 		form.setPassengerLastName(null);
 		form.setS_createtime(null);
 		form.setE_createtime(null);
+		form.setStatus(0);
 	}
 	
 	public static void resetSearchForm(CustomerCommunicationsTaskForm form) {

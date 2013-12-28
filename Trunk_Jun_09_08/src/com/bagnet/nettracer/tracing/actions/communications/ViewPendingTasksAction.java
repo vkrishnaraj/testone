@@ -2,6 +2,7 @@ package com.bagnet.nettracer.tracing.actions.communications;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,7 @@ import org.displaytag.util.ParamEncoder;
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskDTO;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskSearchDTO;
 import com.bagnet.nettracer.tracing.forms.communications.TaskSearchForm;
@@ -48,6 +50,7 @@ public class ViewPendingTasksAction extends CheckedAction {
 
 		List<IncidentActivityTaskDTO> results = new ArrayList<IncidentActivityTaskDTO>();
 		IncidentActivityTaskSearchDTO dto = DomainUtils.fromForm(tsf);
+		dto.setAgentLocale(new Locale(user.getCurrentlocale()));
 		setSearchSpecificInfoOnDto(tsf, dto, user);
 		getSortCriteria(dto, request);
 		
@@ -89,21 +92,14 @@ public class ViewPendingTasksAction extends CheckedAction {
 			}
 			
 			results = incidentActivityService.listIncidentActivitiesNotInWork(dto);
-			
-//			if (!end && results.size() == 1) {
-//				long templateId = results.iterator().next().getId();
-//				response.sendRedirect("editTemplate.do?template_id=" + templateId);
-//				return null;
-//			}
-			
 			request.setAttribute("results", results);
 		} else {
 			DomainUtils.resetTaskForm(tsf);
 		}
 		
-//		if (session.getAttribute("templateStatusList") == null) {
-//			session.setAttribute("templateStatusList", TracerUtils.getStatusList(TracingConstants.TABLE_TEMPLATE_STATUS, user.getDefaultlocale()));
-//		}
+		if (session.getAttribute("incidentActivityStatusList") == null) {
+			session.setAttribute("incidentActivityStatusList", TracerUtils.getStatusList(TracingConstants.TABLE_COMMUNICATIONS_STATUS, user.getDefaultlocale(), "description"));
+		}
 		
 		request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
 		request.setAttribute("rowcount", Integer.toString(rowcount));
@@ -118,6 +114,9 @@ public class ViewPendingTasksAction extends CheckedAction {
 		if (tsf.getAgentName() != null && !tsf.getAgentName().isEmpty()) {
 			dto.setAgent(AdminUtils.getAgentBasedOnUsername(tsf.getAgentName(), user.getCompanycode_ID()));
 		}
+		if (tsf.getStatus() > 0) {
+			dto.setStatus(new Status(tsf.getStatus()));
+		}
 		dto.setPassengerLastName(tsf.getPassengerLastName());
 		dto.setPassengerFirstName(tsf.getPassengerFirstName());
 	}
@@ -131,7 +130,7 @@ public class ViewPendingTasksAction extends CheckedAction {
 	private void getSortCriteria(IncidentActivityTaskSearchDTO dto, HttpServletRequest request) {
 		ParamEncoder encoder = new ParamEncoder(TracingConstants.TABLE_ID_TASKS_NOT_IN_WORK);
 		String sort = request.getParameter(encoder.encodeParameterName(TableTagParameters.PARAMETER_SORT));
-		dto.setSort(sort != null ? sort : "type");
+		dto.setSort(sort != null ? sort : "openDate");
 		
 		String dir = request.getParameter(encoder.encodeParameterName(TableTagParameters.PARAMETER_ORDER));
 		dto.setDir(dir != null ? dir : TracingConstants.SORT_ASCENDING);		

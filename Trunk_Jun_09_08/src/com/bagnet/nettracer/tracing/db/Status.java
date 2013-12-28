@@ -23,6 +23,7 @@ public class Status extends LocaleBasedObject implements Serializable {
 	private static String MSG_KEY = "STATUS_KEY_";
 	private int Status_ID;
 	private int table_ID;
+	private String description;
 
 	public Status() { }
 
@@ -72,6 +73,17 @@ public class Status extends LocaleBasedObject implements Serializable {
 	
 	public static String getKey(int id) {
 		return MSG_KEY + id;
+	}
+
+	/**
+	* @hibernate.property type="string"
+	*/
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 }

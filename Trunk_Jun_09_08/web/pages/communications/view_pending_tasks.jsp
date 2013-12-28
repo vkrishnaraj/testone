@@ -105,7 +105,7 @@
 	          	        	<html:option value="">
                       			<bean:message key="select.all" />
                     		</html:option>
-<%-- 							<html:options collection="templateStatusList" property="status_ID" labelProperty="description" /> --%>
+							<html:options collection="incidentActivityStatusList" property="status_ID" labelProperty="description" />
 						</html:select>
             		</td>
             	</tr>
@@ -124,6 +124,8 @@
             	<tr>
             		<td align="center" colspan="3">
             			<input id="searchButton" type="button" class="button" value='<bean:message key="button.search" />' onclick="setCommand('<%=TracingConstants.COMMAND_SEARCH %>')" />
+      			        &nbsp;&nbsp;
+            			<input id="resetButton" type="button" class="button" value='<bean:message key="button.reset" />' onclick="setCommand('<%=TracingConstants.COMMAND_CLEAR %>')" />
               		</td>
             	</tr>
             </table>
@@ -134,14 +136,15 @@
              	</h1>
               	<a id="result"></a>
               	<display:table requestURI="/viewPendingTasks.do" name="requestScope.results" sort="external" class="form2" cellspacing="0" cellpadding="0" id="<%=TracingConstants.TABLE_ID_TASKS_NOT_IN_WORK %>" defaultsort="1" >
-          			<display:column titleKey="colname.template.id" property="id" href="editTemplate.do" paramId="template_id" paramProperty="id" sortable="true" sortName="id" />
-<%--           			<display:column titleKey="colname.template.name" property="name" href="editTemplate.do" paramId="template_id" paramProperty="id" sortable="true" sortName="name" /> --%>
-<%--           			<display:column titleKey="colname.template.description" property="description" sortable="false" style="width:35%;" /> --%>
-<%--           			<display:column titleKey="colname.create.date" property="dispCreateDate" sortable="true" sortName="createDate" /> --%>
-<%--           			<display:column titleKey="colname.template.active" property="dispActive" sortable="true" sortName="active" /> --%>
+          			<display:column titleKey="colname.create_date_time" property="dispTaskDate" sortable="true" sortName="openDate" />
+          			<display:column titleKey="tasks.not.in.work.agent.name" property="agent" sortable="true" sortName="incidentAgent" />
+          			<display:column titleKey="tasks.not.in.work.task.type" property="status" sortable="true" sortName="statusDesc" />
+          			<display:column titleKey="tasks.not.in.work.incident.id" property="incidentId" href="searchIncident.do" paramId="incident" paramProperty="incidentId" sortable="true" sortName="incidentId" />
+          			<display:column titleKey="tasks.not.in.work.passenger.last.name" property="lastName" sortable="true" sortName="passengerLastName" />
+          			<display:column titleKey="tasks.not.in.work.passenger.first.name" property="firstName" sortable="true" sortName="passengerFirstName" />
  			    	<display:footer>
 		               	<tr>
-			                <td colspan="5">
+			                <td colspan="6">
 			                  <jsp:include page="/pages/includes/pagination_incl.jsp" />
 			                </td>
 		              	</tr>

@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.TimeZone;
 
@@ -303,6 +304,7 @@ public class LogonAction extends Action {
 				dto.set_DATEFORMAT(agent.getDateformat().getFormat());
 				dto.set_TIMEFORMAT(agent.getTimeformat().getFormat());
 				dto.set_TIMEZONE(TimeZone.getTimeZone(agent.getDefaulttimezone()));
+				dto.setAgentLocale(new Locale(agent.getCurrentlocale()));
 				session.setAttribute("iatInProgress", dto);				
 			}
 		}
