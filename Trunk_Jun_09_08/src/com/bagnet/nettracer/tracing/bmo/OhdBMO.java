@@ -13,15 +13,12 @@ import java.util.TimeZone;
 import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Hibernate;
 import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.StaleObjectStateException;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Disjunction;
-import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Restrictions;
 
 import com.bagnet.nettracer.exceptions.BagtagException;
@@ -29,6 +26,7 @@ import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.constant.TracingConstants.SortParam;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.ControlLog;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHDRequest;
@@ -78,7 +76,7 @@ public class OhdBMO {
 	public boolean insertOHD(OHD iDTO, Agent mod_agent) {
 		return insertOHD(iDTO, mod_agent, (Station)null);
 	}
-//	
+	
 	public boolean insertOHD(OHD iDTO, Agent mod_agent, Session sess) {
 		return simpleSaveAndAuditOhd(iDTO, mod_agent, null, sess);
 	}
@@ -100,6 +98,10 @@ public class OhdBMO {
 		if (sess == null) {
 			return insertOHD(iDTO, mod_agent, createStation);
 		} else {
+			if(mod_agent != null){
+				iDTO.setModifiedBy(mod_agent.getUsername());
+			}
+			iDTO.setModifiedDate(DateUtils.convertToGMTDate(new Date()));
 			Transaction t = null;
 			try {
 				t = sess.beginTransaction();
@@ -127,6 +129,11 @@ public class OhdBMO {
 	public boolean insertOHD(OHD iDTO, Agent mod_agent, Station createStation) {
 		Transaction t = null;
 		Session sess = null;
+		
+		if(mod_agent != null){
+			iDTO.setModifiedBy(mod_agent.getUsername());
+		}
+		iDTO.setModifiedDate(DateUtils.convertToGMTDate(new Date()));
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			
@@ -278,7 +285,7 @@ public class OhdBMO {
 		return true;
 	}
 	
-	public boolean updateRemarksOnly(String incident_id, Set remarks, Agent mod_agent) throws HibernateException {
+	public boolean updateRemarksOnly(String incident_id, Set<Remark> remarks, Agent mod_agent) throws HibernateException {
 		Transaction t = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
@@ -297,9 +304,15 @@ public class OhdBMO {
 			if (oldinc.getOHD_ID() != null) {
 				oldinc.setLastupdated(TracerDateTime.getGMTDate());
 				
+				if(mod_agent != null){
+					oldinc.setModifiedBy(mod_agent.getUsername());
+				}
+				oldinc.setModifiedDate(DateUtils.convertToGMTDate(new Date()));
+				
 				if (remarks != null) {
 					oldinc.setRemarks(remarks);
-					for (Iterator i = oldinc.getRemarks().iterator(); i.hasNext();) {
+					for (@SuppressWarnings("rawtypes")
+					Iterator i = oldinc.getRemarks().iterator(); i.hasNext();) {
 						Remark rm = (Remark) i.next();
 						rm.setOhd(oldinc);
 					}
@@ -358,6 +371,11 @@ public class OhdBMO {
 		Transaction t = null;
 		Session sess = null;
 		try {
+			if(mod_agent != null){
+				ohd.setModifiedBy(mod_agent.getUsername());
+			}
+			ohd.setModifiedDate(DateUtils.convertToGMTDate(new Date()));
+			
 			sess = HibernateWrapper.getSession().openSession();
 			t = sess.beginTransaction();
 			if (log != null)
@@ -408,6 +426,11 @@ public class OhdBMO {
 		Transaction t = null;
 		Session sess = null;
 		try {
+			if(mod_agent != null){
+				ohd.setModifiedBy(mod_agent.getUsername());
+			}
+			ohd.setModifiedDate(DateUtils.convertToGMTDate(new Date()));
+			
 			sess = HibernateWrapper.getSession().openSession();
 			t = sess.beginTransaction();
 			sess.save(request);
@@ -457,7 +480,8 @@ public class OhdBMO {
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(query);
 			q.setString("ohd_request_id", ID);
-			List list = q.list();
+			@SuppressWarnings("unchecked")
+			List<OHDRequest> list = q.list();
 			if (list.size() == 0) {
 				logger.debug("unable to find ohd: " + ID);
 				return null;
@@ -536,7 +560,8 @@ public class OhdBMO {
 			}
 			Query q = sess.createQuery(query);
 			q.setString("incident_ID", incident_ID);
-			List list = q.list();
+			@SuppressWarnings("unchecked")
+			List<OHD> list = q.list();
 			if (list.size() == 0) {
 				logger.debug("unable to find ohd with matched incident: " + incident_ID);
 				return null;
@@ -614,7 +639,8 @@ public class OhdBMO {
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(query);
 			q.setString("ohd_ID", ohd_ID);
-			List list = q.list();
+			@SuppressWarnings("unchecked")
+			List<TraceOHD> list = q.list();
 			if (list.size() == 0) {
 				logger.debug("unable to find ohd: " + ohd_ID);
 				return null;
@@ -635,7 +661,7 @@ public class OhdBMO {
 		}
 	}
 
-	
+	@SuppressWarnings("rawtypes")//suppressing List rawtype since based on the iscount param, the list can be of type OHD or of type long
 	public List findOnHandBagsBySearchCriteria(Ohd_DTO oDTO, Agent user, int rowsperpage,
 			int currpage, boolean iscount, boolean notClosed) {
 		return findOnHandBagsBySearchCriteria(oDTO, user, rowsperpage, currpage, iscount, notClosed, false, null);
@@ -653,6 +679,7 @@ public class OhdBMO {
 	 *          size of current page
 	 * @return list of on hands, null if none found.
 	 */
+	@SuppressWarnings("rawtypes")//suppressing List rawtype since based on the iscount param, the list can be of type OHD or of type long
 	public List findOnHandBagsBySearchCriteria(Ohd_DTO oDTO, Agent user, int rowsperpage,
 			int currpage, boolean iscount, boolean notClosed, boolean dirtyRead, String sort) {
 
@@ -745,7 +772,7 @@ public class OhdBMO {
 			//check if description is not empty
 			if (oDTO.getDescription() != null && !oDTO.getDescription().equals("")) {
 				String[] words = StringUtils.removePronouns(oDTO.getDescription()).replace(' ',',').split("\\,");
-				Disjunction desc = Restrictions.disjunction();
+				Restrictions.disjunction();
 				for (int x = 0; x < words.length; x++) {
 					if (x == 0) sql.append(" and (");
 					else sql.append(" or ");
@@ -786,7 +813,6 @@ public class OhdBMO {
 			Date sdate = null, edate = null;
 			Date sdate1 = null, edate1 = null; // add one for timezone
 			Date stime = null; // time to compare (04:00 if eastern, for example)
-			String dateq = "";
 			
 			ArrayList dateal = null;
 			if ((dateal = IncidentUtils.calculateDateDiff(oDTO.getS_createtime(),oDTO.getE_createtime(),tz,user)) == null) {
@@ -982,7 +1008,7 @@ public class OhdBMO {
 			//check if description is not empty
 			if (oDTO.getDescription() != null && !oDTO.getDescription().equals("")) {
 				String[] words = StringUtils.removePronouns(oDTO.getDescription()).replace(' ',',').split("\\,");
-				Disjunction desc = Restrictions.disjunction();
+				Restrictions.disjunction();
 				for (int x = 0; x < words.length; x++) {
 					q.setString("description" + x, "%" + words[x] + "%");
 				}
@@ -1061,11 +1087,13 @@ public class OhdBMO {
 		}
 	}
 	
+	@SuppressWarnings("rawtypes")//suppressing List rawtype since based on the iscount param, the list can be of type OHD or of type long
 	public List customQuery(SearchIncidentForm siDTO, Agent user, int rowsperpage, int currpage,
 			boolean iscount) throws HibernateException {
 		return customQuery(siDTO, user, rowsperpage, currpage, iscount, false);
 	}
 
+	@SuppressWarnings("rawtypes")//suppressing List rawtype since based on the iscount param, the list can be of type OHD or of type long
 	public List customQuery(SearchIncidentForm siDTO, Agent user, int rowsperpage, int currpage,
 			boolean iscount, boolean dirtyRead) throws HibernateException {
 		Session sess = null;
@@ -1142,7 +1170,6 @@ public class OhdBMO {
 			Date sdate = null, edate = null;
 			Date sdate1 = null, edate1 = null; // add one for timezone
 			Date stime = null; // time to compare (04:00 if eastern, for example)
-			String dateq = "";
 			
 			ArrayList dateal = null;
 			if ((dateal = IncidentUtils.calculateDateDiff(siDTO.getS_createtime(),siDTO.getE_createtime(),tz,user)) == null) {
@@ -1586,7 +1613,7 @@ public class OhdBMO {
 	 * @return
 	 * @throws HibernateException
 	 */
-	public List findOHDforWT(int numdays,String companycode) throws HibernateException {
+	public List<OHD> findOHDforWT(int numdays,String companycode) throws HibernateException {
 		Session sess = HibernateWrapper.getSession().openSession();
 		Query q = null;
 		try {
@@ -1600,7 +1627,8 @@ public class OhdBMO {
 					" ohd.founddate <= :founddate and ohd.foundAtStation.company.companyCode_ID = :companycode");
 			q.setDate("founddate", thedate);
 			q.setString("companycode", companycode);
-			List list = q.list();
+			@SuppressWarnings("unchecked")
+			List<OHD> list = q.list();
 
 			return list;
 		} catch (Exception e) {
@@ -1630,6 +1658,7 @@ public class OhdBMO {
 
 			Query q = sess.createQuery(query);
 			q.setString(column, instr);
+			@SuppressWarnings("rawtypes")
 			List list = q.list();
 
 			if (list.size() > 0) return true;
@@ -1655,6 +1684,7 @@ public class OhdBMO {
 	 *          station for which identifier is sought
 	 * @return the on hand identifier for the station
 	 */
+	@SuppressWarnings("unchecked")
 	public String getOHD_ID(Station station) {
 		// get highest num from Incident_Range table
 		Session sess = null;
@@ -1681,7 +1711,7 @@ public class OhdBMO {
 
 			// get the last record with this companycode_ID;
 			Query q = null;
-			List list = null;
+			List<OHD> list = null;
 
 
 			StringBuffer s = new StringBuffer();
@@ -1740,7 +1770,8 @@ public class OhdBMO {
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(query);
 			q.setInteger("station_ID", station_ID);
-			List list = q.list();
+			@SuppressWarnings("unchecked")
+			List<Station> list = q.list();
 
 			if (list.size() == 0) {
 				logger.debug("unable to find station: " + station_ID);
@@ -1762,7 +1793,7 @@ public class OhdBMO {
 	 * @param ohd_ID
 	 * @return
 	 */
-	public List findBDOList(String ohd_ID) {
+	public List<BDO> findBDOList(String ohd_ID) {
 		Session sess = null;
 		try {
 
@@ -1771,7 +1802,8 @@ public class OhdBMO {
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(query);
 			q.setString("ohd_ID", ohd_ID);
-			List list = q.list();
+			@SuppressWarnings("unchecked")
+			List<BDO> list = q.list();
 			if (list.size() == 0) {
 				logger.debug("unable to find bdos from ohd_ID: " + ohd_ID);
 				return null;
@@ -1802,13 +1834,14 @@ public class OhdBMO {
 		}
 		
 		if (inc.getPassenger() != null && inc.getPassengers().size() > 0) {
-			for (Iterator i = inc.getPassengers().iterator(); i.hasNext();) {
+			for (Iterator<OHD_Passenger> i = inc.getPassengers().iterator(); i.hasNext();) {
 				OHD_Passenger o = (OHD_Passenger) i.next();
 				o.setPassenger_id(0);
 				
 				
 				if (o.getAddresses() != null && o.getAddresses().size() > 0) {
-					for (Iterator j = o.getAddresses().iterator(); j.hasNext();) {
+					for (@SuppressWarnings("unchecked")
+					Iterator<OHD_Address> j = o.getAddresses().iterator(); j.hasNext();) {
 						OHD_Address o2 = (OHD_Address) j.next();
 						o2.setAddress_ID(0);
 					}
@@ -1817,7 +1850,7 @@ public class OhdBMO {
 		}
 
 		if (inc.getItinerary() != null && inc.getItinerary().size() > 0) {
-			for (Iterator i = inc.getItinerary().iterator(); i.hasNext();) {
+			for (Iterator<OHD_Itinerary> i = inc.getItinerary().iterator(); i.hasNext();) {
 				OHD_Itinerary o = (OHD_Itinerary) i.next();
 				o.setItinerary_ID(0);
 			}
@@ -1825,35 +1858,35 @@ public class OhdBMO {
 
 		
 		if (inc.getItems() != null && inc.getItems().size() > 0) {
-			for (Iterator i = inc.getItems().iterator(); i.hasNext();) {
+			for (Iterator<OHD_Inventory> i = inc.getItems().iterator(); i.hasNext();) {
 				OHD_Inventory o = (OHD_Inventory) i.next();
 				o.setOHD_Inventory_ID(0);
 			}
 		}
 		
 		if (inc.getPhotos() != null && inc.getPhotos().size() > 0) {
-			for (Iterator i = inc.getPhotos().iterator(); i.hasNext();) {
+			for (Iterator<OHD_Photo> i = inc.getPhotos().iterator(); i.hasNext();) {
 				OHD_Photo o = (OHD_Photo) i.next();
 				o.setPhoto_ID(0);
 			}
 		}
 		
 		if (inc.getTasks() != null && inc.getTasks().size() > 0) {
-			for (Iterator i = inc.getTasks().iterator(); i.hasNext();) {
+			for (Iterator<Task> i = inc.getTasks().iterator(); i.hasNext();) {
 				Task o = (Task) i.next();
 				o.setTask_id(0);
 			}
 		}
 		
 		if (inc.getControlLog() != null && inc.getControlLog().size() > 0) {
-			for (Iterator i = inc.getControlLog().iterator(); i.hasNext();) {
+			for (Iterator<ControlLog> i = inc.getControlLog().iterator(); i.hasNext();) {
 				ControlLog o = (ControlLog) i.next();
 				o.setControl_id(0);
 			}
 		}
 		
 		if (inc.getRemarks() != null && inc.getRemarks().size() > 0) {
-			for (Iterator i = inc.getRemarks().iterator(); i.hasNext();) {
+			for (Iterator<Remark> i = inc.getRemarks().iterator(); i.hasNext();) {
 				Remark o = (Remark) i.next();
 				o.setRemark_ID(0);
 			}
@@ -1891,7 +1924,8 @@ public class OhdBMO {
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery("from com.bagnet.nettracer.tracing.db.OHD o where o.wtFile.wt_id= :wt_id");
 			q.setParameter("wt_id", wt_id);
-			List list = q.list();
+			@SuppressWarnings("unchecked")
+			List<OHD> list = q.list();
 
 			if (list.size() == 0) {
 				logger.debug("unable to find incident with wt_id: " + wt_id);
@@ -1930,8 +1964,6 @@ public class OhdBMO {
 
 		String queryString = "select ohd from com.bagnet.nettracer.tracing.db.OHD ohd where " +
 		" ohd.wtFile is null " +  //no worldtracer file already
-		//" and ohd.OHD_ID not in (select q.ohd.OHD_ID from WtqOhdAction q where q.status = :qStatus)" +
-		//" and ((ohd.lastupdated > (select max(q.createdate) from WtqOhdAction q where q.ohd = ohd)) or ((select max(q.createdate) from WtqOhdAction q where q.ohd.OHD_ID = ohd.OHD_ID) is null)) " +
 		" and ((ohd.founddate < :ohdCutoff) or (ohd.founddate = :ohdCutoff and ohd.foundtime < :ohdTimeCutoff))  " + //old enough
 		" and ohd.status.status_ID = :status " + // only open
 		" and ohd.foundAtStation.company.companyCode_ID = :companyCode " +
@@ -1946,9 +1978,10 @@ public class OhdBMO {
 			q.setTime("ohdTimeCutoff", ohdCutoff);
 			q.setParameter("status", TracingConstants.OHD_STATUS_OPEN);
 			q.setParameter("companyCode", companyCode);
-			//q.setParameter("qStatus", WtqStatus.PENDING);
 			q.setParameter("ohd_type", TracingConstants.NOT_MASS_OHD_TYPE);
-			return q.list();
+			@SuppressWarnings("unchecked")
+			List<OHD> list = q.list();
+			return list;
 		}
 		catch (Exception e) {
 			logger.error("unable to get move to WT OHD list: " + e);
@@ -2025,6 +2058,7 @@ public class OhdBMO {
 				q.setParameter("fullTag", fullTag);
 			}
 			
+			@SuppressWarnings("unchecked")
 			List<OHD> list = (List<OHD>) q.list();
 
 			if (list.size() == 0) {
@@ -2075,7 +2109,9 @@ public class OhdBMO {
 				q.setParameter("qStatus", WtqStatus.PENDING);
 				q.setParameter("ohd_type", TracingConstants.NOT_MASS_OHD_TYPE);
 				q.setParameterList("earlyStationList", earlyMoveStations, StandardBasicTypes.STRING);
-				return q.list();
+				@SuppressWarnings("unchecked")
+				List<OHD> list = q.list();
+				return list;
 			}
 			catch (Exception e) {
 				logger.error("unable to get move to WT OHD list: " + e);
@@ -2111,6 +2147,12 @@ public class OhdBMO {
 			boolean nullSession = false;
 
 			try {
+				
+				if(mod_agent != null){
+					ohd.setModifiedBy(mod_agent.getUsername());
+				}
+				ohd.setModifiedDate(DateUtils.convertToGMTDate(new Date()));
+				
 				if (sess == null) {
 					sess = HibernateWrapper.getSession().openSession();
 					nullSession = true;
@@ -2189,8 +2231,10 @@ public class OhdBMO {
 				q.setParameter("false", companyCode);
 				q.setBoolean("false", false);
 				q.setBoolean("true", true);
-
-				return q.list();
+				
+				@SuppressWarnings("unchecked")
+				List<OHD> list = q.list();
+				return list;
 			}
 			catch (Exception e) {
 				logger.error("unable to get move to WT OHD list: " + e);
@@ -2228,7 +2272,11 @@ public class OhdBMO {
 			if(agent == null){
 				//TODO - we use ogadmin for remarks for other crons such as moveToLZ, maybe we should consider a configuration system or auto agent
 				agent = AdminUtils.getAgentBasedOnUsername("ogadmin", "OW");
+
 			}
+			
+			ohd.setModifiedBy(agent.getUsername());
+			ohd.setModifiedDate(DateUtils.convertToGMTDate(new Date()));
 			
 			Remark r = new Remark();
 			r.setAgent(agent);

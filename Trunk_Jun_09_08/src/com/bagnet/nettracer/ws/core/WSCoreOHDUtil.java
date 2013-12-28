@@ -28,7 +28,6 @@ import com.bagnet.nettracer.tracing.bmo.XDescElementsBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.AirlineMembership;
-import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code;
 import com.bagnet.nettracer.tracing.db.ControlLog;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -187,12 +186,10 @@ public class WSCoreOHDUtil {
  		try {
 			if (companycode == null || companycode.length() == 0)
 				return null;
-			Company_Specific_Variable csv = AdminUtils.getCompany(companycode).getVariable();
 			// default to 5 days to send to WT
 			int numdays = 5;
-			//numdays = csv.getdaysToWT();
 			OhdBMO oBMO = new OhdBMO();
-			ArrayList<OHD> al = (ArrayList)oBMO.findOHDforWT(numdays, companycode);//TODO Fix warnings in OhdBMO NT-1842
+			ArrayList<OHD> al = (ArrayList<OHD>)oBMO.findOHDforWT(numdays, companycode);
 			if (al != null && al.size() > 0) {
 				int numohds = al.size();
 				com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD[] ohds = new com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD[numohds];
