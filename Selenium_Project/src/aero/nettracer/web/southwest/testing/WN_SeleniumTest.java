@@ -43,6 +43,7 @@ public class WN_SeleniumTest extends DefaultSeleneseTestCase {
 	protected static String CUST_COMM_APPROVAL = "671";
 	protected static String CUST_COMM_APPROVAL_QUEUE = "1101";
 	protected static String CUST_COMM_REJECTED_QUEUE = "1102";
+	protected static String VIEW_TASKS_NOT_IN_WORK = "1103";
 	
 	// set up the current date for use throughout the tests
 	static {

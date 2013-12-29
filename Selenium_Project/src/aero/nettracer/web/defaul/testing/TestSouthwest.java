@@ -9,6 +9,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 import aero.nettracer.web.southwest.testing.actions.nt.core.WN_Login;
 import aero.nettracer.web.southwest.testing.actions.nt.incidents.communications.WN_CustomerCommunications;
+import aero.nettracer.web.southwest.testing.actions.nt.incidents.communications.WN_ViewTasksNotInWork;
 import aero.nettracer.web.southwest.testing.actions.nt.incidents.damaged.WN_CreateDamaged;
 import aero.nettracer.web.southwest.testing.actions.nt.incidents.expensepayouts.WN_ExpensePayouts;
 import aero.nettracer.web.southwest.testing.actions.nt.incidents.lostdelay.WN_CloseLD;
@@ -32,6 +33,7 @@ import aero.nettracer.web.utility.Settings;
 	, WN_CreateDamaged.class
 	, WN_CreateMissing.class
 	, WN_CustomerCommunications.class
+	, WN_ViewTasksNotInWork.class
 	})
 public class TestSouthwest { 
 	
