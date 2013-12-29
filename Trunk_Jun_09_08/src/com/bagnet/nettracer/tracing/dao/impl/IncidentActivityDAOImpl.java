@@ -678,9 +678,7 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 				session.close();
 			}
 		}
-
-
-		logger.info("\r\n------------------------------------------------> incidentActivities={} with status Id={}", incidentActivities.size(), status.getStatus_ID());//??????
+		
 		return incidentActivities;
 	}
 	

@@ -4,6 +4,7 @@
 <%@ taglib uri="/tags/struts-logic" prefix="logic"%>
 <%@ taglib uri="http://displaytag.sf.net" prefix="display"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <%@ page import="java.util.Locale, org.apache.struts.util.PropertyMessageResources"%>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
@@ -166,7 +167,7 @@ function validateCheckboxes(checkboxName) {
 		          		class="form2" cellspacing="0" cellpadding="0" partialList="true">
 		          		
 		          		<display:column titleKey="colname.select" headerClass="header">
-		          			<input type="checkbox" name="incident_activity_task_id" value="${incidentActivity.tasks[0].task_id}"/>
+		          			<input type="checkbox" name="incident_activity_task_id" value="${incidentActivity.tasks[fn:length(incidentActivity.tasks) - 1].task_id}"/>
 		          		</display:column>
 		
 		          		<display:column titleKey="colname.incident_num" sortable="true" headerClass="header"

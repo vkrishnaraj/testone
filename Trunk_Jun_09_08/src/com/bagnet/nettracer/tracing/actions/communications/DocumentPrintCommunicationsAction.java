@@ -158,7 +158,7 @@ public class DocumentPrintCommunicationsAction extends Action {
 						continue;
 					}
 					
-					IncidentActivityTask task = tasks.get(0);
+					IncidentActivityTask task = tasks.get(tasks.size() - 1);
 					int index = (task == null) ? -1 : Arrays.binarySearch(taskIds, task.getTask_id());
 					if (index < 0) {
 						continue;
