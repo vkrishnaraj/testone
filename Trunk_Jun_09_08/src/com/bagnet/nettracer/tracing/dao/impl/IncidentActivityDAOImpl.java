@@ -1058,6 +1058,12 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 		}
 		
 		criteria.add(Restrictions.eq("iat.active", true));
+		
+		if (dto.getRowsPerPage() > 0) {
+			criteria.setFirstResult(dto.getCurrentPage() * dto.getRowsPerPage());
+			criteria.setMaxResults(dto.getRowsPerPage());
+		}
+		
 		return criteria;
 	}
 
