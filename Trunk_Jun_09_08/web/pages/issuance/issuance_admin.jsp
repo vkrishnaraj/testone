@@ -34,7 +34,8 @@
 			{	
 				<% int index = 0;
 					for (IssuanceItem item : c_item.getItems()) { 
-						String desc = item.getDescription() != null ? item.getDescription().replaceAll("\"", "\\\"") : ""; %>
+						String desc = item.getDescription() != null ? item.getDescription().replaceAll("\"", "\\\\\"") : ""; 
+						desc = desc.replaceAll("/", "\\\\/");%>
 						typeList.options[<%=index%>]=new Option("<%=desc%>","<%=item.getId()%>",false,false);
 				<%   	index++;
 				    } %>
