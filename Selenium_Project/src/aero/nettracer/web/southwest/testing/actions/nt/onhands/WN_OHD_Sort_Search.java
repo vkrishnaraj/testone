@@ -264,23 +264,23 @@ public class WN_OHD_Sort_Search extends WN_SeleniumTest {
 			System.out.println("!!!!!!!!!!!!!!! - Failed to access Task Manager - !!!!!!!!!!!!!!!!!!");
 		}
 
-		if(checkNoErrorPage()) {
-			click(By.linkText("On-hand Number"),true,true);
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("!!!!!!!!!!!!!!! - Failed to access Station On Hand page - !!!!!!!!!!!!!!!!!!");
-		}
+//		if(checkNoErrorPage()) {
+//			click(By.linkText("On-hand Number"),true,true);
+//			waitForPageToLoadImproved();
+//		} else {
+//			System.out.println("!!!!!!!!!!!!!!! - Failed to access Station On Hand page - !!!!!!!!!!!!!!!!!!");
+//		}
+//
+//		if(checkNoErrorPage()) {
+//			sortCheck=selenium.getText("//td[@id='middlecolumn']/div/table/tbody/tr/td[2]");
+//			click(By.linkText("On-hand Number"),true,true);
+//			waitForPageToLoadImproved();
+//		} else {
+//			System.out.println("!!!!!!!!!!!!!!! - Failed to Sort by OHD Number - !!!!!!!!!!!!!!!!!!");
+//		}
 
 		if(checkNoErrorPage()) {
-			sortCheck=selenium.getText("//td[@id='middlecolumn']/div/table/tbody/tr/td[2]");
-			click(By.linkText("On-hand Number"),true,true);
-			waitForPageToLoadImproved();
-		} else {
-			System.out.println("!!!!!!!!!!!!!!! - Failed to Sort by OHD Number - !!!!!!!!!!!!!!!!!!");
-		}
-
-		if(checkNoErrorPage()) {
-			verifyNotEquals("//td[@id='middlecolumn']/div/table/tbody/tr/td[2]",sortCheck);
+//			verifyNotEquals("//td[@id='middlecolumn']/div/table/tbody/tr/td[2]",sortCheck);
 			click(By.linkText("Incident Number"));
 			waitForPageToLoadImproved();
 		} else {

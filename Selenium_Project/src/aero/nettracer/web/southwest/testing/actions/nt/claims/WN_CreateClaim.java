@@ -5,10 +5,13 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
+import aero.nettracer.web.utility.Settings;
 
 public class WN_CreateClaim extends WN_SeleniumTest {
 
@@ -46,7 +49,9 @@ public class WN_CreateClaim extends WN_SeleniumTest {
 			selenium.select("name=claim.claimCheck", "label=WAIVE");
 			selenium.check("name=claim.ix");
 			selenium.check("name=claim.carryon");
-			selenium.click("name=save");
+			driver.manage().timeouts().pageLoadTimeout(300, TimeUnit.SECONDS);
+			click(By.name("save"));
+			driver.manage().timeouts().pageLoadTimeout(Settings.ELEMENT_TIMEOUT_SECONDS, TimeUnit.SECONDS);		
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("Failed to skip population");
