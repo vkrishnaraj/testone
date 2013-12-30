@@ -33,8 +33,9 @@
 		if("<%=c_item.getId()%>"==selectedCategory)
 			{	
 				<% int index = 0;
-					for (IssuanceItem item : c_item.getItems()) { %>
-						typeList.options[<%=index%>]=new Option("<%=item.getDescription()%>","<%=item.getId()%>",false,false);
+					for (IssuanceItem item : c_item.getItems()) { 
+						String desc = item.getDescription() != null ? item.getDescription().replaceAll("\"", "\\\"") : ""; %>
+						typeList.options[<%=index%>]=new Option("<%=desc%>","<%=item.getId()%>",false,false);
 				<%   	index++;
 				    } %>
 			}
