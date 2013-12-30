@@ -398,3 +398,6 @@ VALUES (1501, 'Document Print Queue', 'Approved incident activity documents pend
 
 insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group) 
 VALUES (1103,'Tasks View Pending','View tasks not in work.',39,'viewPendingTasks.do',1,100,0);
+
+insert into template_var (displayTag,associatedClass) VALUES ('TotalAmount','Expense');
+insert into template_var_dependency (associatedClass,dependentClass) VALUES ('Expense'  ,'Expense');
