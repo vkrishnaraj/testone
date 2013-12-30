@@ -1,9 +1,13 @@
 package aero.nettracer.web.southwest.testing.actions.nt.incidents.expensepayouts;
 
+import java.util.List;
+
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
+import aero.nettracer.web.utility.Settings;
 
 public class WN_ExpensePayouts extends WN_SeleniumTest {
 
@@ -154,9 +158,455 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 		}
 	}
 	
+	//Test Payment Approval Process
 	@Test
-	public void resetPermissions(){
-		verifyTrue(setPermissions(new String[] { "680","681"}, new boolean[] { true,true}));
+	public void testSetFraudOnReview(){
+		clickMenu(MENU_ADMIN_COMPANY);
+		
+		if (checkNoErrorPage()) {
+			click(By.xpath("//td[@id='navmenucell']/div/dl/dd[2]/a/span[2]"), false, true);
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Fraud Review Message 1");
+		}
+
+		if (checkNoErrorPage()) {
+			selenium.select("name=fraudReview","label=yes");
+			click(By.name("save"));
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Fraud Review Message 2");
+		}
 	}
 	
+	@Test
+	public void testCreateFraudReview(){
+
+		verifyTrue(setPermissions(new String[] { "680","681","687","684","688","671"}, new boolean[] { false,false,true,true,false,false}));
+		
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
+		click(By.name("addnewexpense"));
+
+		if (checkNoErrorPage()) {
+		    type(By.name("checkamt"),"151");
+		    click(By.id("button"));
+		} else {
+			System.out.println("!!!!!!!!!!! ERROR - Loading Create Expense Payout Page !!!!!!!!!");
+		}
+
+		if (checkNoErrorPage()) {
+			click(By.id("createClaimSettlement"));
+			waitForPageToLoadImproved(1000,false);
+
+			List<WebElement> buttons = driver.findElements(By.className("ui-state-default"));
+			selenium.select("id=claimSettleSelect", "label=Test Template");
+			buttons.get(0).click();
+		} else {
+			System.out.println("!!!!!!!!!!! ERROR - Saving Expense Payout !!!!!!!!!");
+		}
+		
+		if (checkNoErrorPage()) {
+
+			checkCopyrightAndQuestionMarks();
+			verifyTrue(isTextPresent("Create Outgoing Communication"));
+			verifyTrue(isElementPresent(By.id("documentTitle")));
+			verifyEquals("Test Template", selenium.getValue("id=documentTitle"));
+			verifyTrue(isElementPresent(By.id("documentId")));
+			verifyEquals("0", selenium.getValue("id=documentId"));
+			selenium.click("id=submitCustComm");
+			waitForPageToLoadImproved();
+			if (checkNoErrorPage()) {
+				verifyEquals("Successfully created incident activity: Test Template", selenium.getText("//div[@id='maincontent']/span/font"));
+				verifyNotEquals("0", selenium.getValue("id=documentId"));
+				String incidentActivityId = selenium.getValue("id=id");
+				Settings.PAYMENT_COMM_ID = incidentActivityId;
+				System.out.println("WN: Payment Communications Created: " + Settings.PAYMENT_COMM_ID);
+			} else {
+				System.out.println("!!!!!!!!!!!!!!!! Failed to save the customer communications page.");
+				verifyTrue(false);
+			}
+		} else {
+			System.out.println("!!!!!!!!!!! ERROR - Creating Claim Settlement Letter !!!!!!!!!");
+		}
+	}
+	
+	@Test
+	public void testRejectFraudReview(){
+		goToTaskManager();
+		click(By.id("684link"));
+		
+		if (checkNoErrorPage()) {
+			verifyTrue(isElementPresent(By.xpath("//a[contains(@href, 'customerCommunicationsTasks.do?communicationsId="+Settings.PAYMENT_COMM_ID+"&fraudReview=1&gettask=1')]")));
+			selenium.click("//a[contains(@href, 'customerCommunicationsTasks.do?communicationsId="+Settings.PAYMENT_COMM_ID+"&fraudReview=1&gettask=1')]");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!! ERROR - Going to Task manager page !!!!!!!!!");
+		}
+		
+		if(checkNoErrorPage()){
+			goToTaskManager();
+			verifyTrue(isElementPresent(By.xpath("//a[contains(@href, 'customerCommunicationsTasks.do?gettask=1&communicationsId="+Settings.PAYMENT_COMM_ID+"&fraudReview=1')]")));
+			selenium.click("//a[contains(@href, 'customerCommunicationsTasks.do?gettask=1&communicationsId="+Settings.PAYMENT_COMM_ID+"&fraudReview=1')]");
+			if (checkNoErrorPage()) {
+				type(By.id("taskRemark"), "test");
+				click(By.id("rejectButton"));
+				waitForPageToLoadImproved();
+				if (checkNoErrorPage()) {
+					verifyEquals("Fraud Review", selenium.getText("//div[@id='maincontent']/h1"));
+				} else {
+					System.out.println("!!!!!!!!!!!!!!!! Failed to reject the fraud review task.");
+					verifyTrue(false);
+				}
+			} else {
+				System.out.println("!!!!!!!!!!!!!!!! Failed to load the fraud review  task.");
+				verifyTrue(false);
+			}
+		}
+	}
+
+	@Test
+	public void testResubmitFraudReview(){
+		verifyTrue(setPermissions(new String[] { "683",}, new boolean[] { true}));
+		
+		if(checkNoErrorPage()){
+			goToTaskManager();
+
+			click(By.xpath("(//a[contains(@href, 'rejectedDisbursements.do')])[2]"));
+			waitForPageToLoadImproved();
+			if (checkNoErrorPage()) {
+				click(By.xpath("//table[@id='rejectedDisbursements']/tbody/tr/td/a"));
+				waitForPageToLoadImproved();
+				if (checkNoErrorPage()) {
+					click(By.id("submitCustComm"));
+					waitForPageToLoadImproved();
+					if (!checkNoErrorPage()) {
+						System.out.println("!!!!!!!!!!!!!!!! Failed to load the fraud review rejected task.");
+						verifyTrue(false);
+					}
+				} else {
+					System.out.println("!!!!!!!!!!!!!!!! Failed to load the fraud review rejected task.");
+					verifyTrue(false);
+				}
+			} else {
+				System.out.println("!!!!!!!!!!!!!!!! Failed to load the fraud review rejected page.");
+				verifyTrue(false);
+			}
+		}
+		
+	}
+	
+	@Test
+	public void testApproveFraudReviewTask() {
+		goToTaskManager();
+		click(By.id("684link"));
+		
+		if (checkNoErrorPage()) {
+			verifyTrue(isElementPresent(By.xpath("//a[contains(@href, 'customerCommunicationsTasks.do?communicationsId="+Settings.PAYMENT_COMM_ID+"&fraudReview=1&gettask=1')]")));
+			selenium.click("//a[contains(@href, 'customerCommunicationsTasks.do?communicationsId="+Settings.PAYMENT_COMM_ID+"&fraudReview=1&gettask=1')]");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!! ERROR - Going to Task manager page !!!!!!!!!");
+		}
+		
+		if (checkNoErrorPage()) {
+			click(By.id("approveButton"));
+			waitForPageToLoadImproved();
+				if (checkNoErrorPage()) {
+					verifyEquals("Fraud Review", selenium.getText("//div[@id='maincontent']/h1"));
+					verifyEquals("No Fraud Reviews at this time.", selenium.getText("//div[@id='maincontent']/div"));
+				} else {
+					System.out.println("!!!!!!!!!!!!!!!! Failed to approve the fraud review task.");
+					verifyTrue(false);
+				}
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Failed to load the fraud review task.");
+			verifyTrue(false);
+		}
+		
+		goToTaskManager();
+	}
+	
+
+	@Test
+	public void testRejectSupervisorReview(){
+		verifyTrue(setPermissions(new String[] { "685",}, new boolean[] { true}));
+		goToTaskManager();
+		click(By.id("685link"));
+		
+		if (checkNoErrorPage()) {
+
+			verifyTrue(isElementPresent(By.xpath("//a[contains(@href, 'customerCommunicationsTasks.do?communicationsId="+Settings.PAYMENT_COMM_ID+"&gettask=1&supervisorReview=1')]")));
+			selenium.click("//a[contains(@href, 'customerCommunicationsTasks.do?communicationsId="+Settings.PAYMENT_COMM_ID+"&gettask=1&supervisorReview=1')]");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!! ERROR - Going to Task manager page !!!!!!!!!");
+		}
+		
+		if(checkNoErrorPage()){
+			goToTaskManager();
+			verifyTrue(isElementPresent(By.xpath("//a[contains(@href, 'customerCommunicationsTasks.do?gettask=1&communicationsId="+Settings.PAYMENT_COMM_ID+"&supervisorReview=1')]")));
+			selenium.click("//a[contains(@href, 'customerCommunicationsTasks.do?gettask=1&communicationsId="+Settings.PAYMENT_COMM_ID+"&supervisorReview=1')]");
+			if (checkNoErrorPage()) {
+				type(By.id("taskRemark"), "test");
+				click(By.id("rejectButton"));
+				waitForPageToLoadImproved();
+				if (checkNoErrorPage()) {
+					verifyEquals("Supervisor Review", selenium.getText("//div[@id='maincontent']/h1"));
+				} else {
+					System.out.println("!!!!!!!!!!!!!!!! Failed to reject the fraud review task.");
+					verifyTrue(false);
+				}
+			} else {
+				System.out.println("!!!!!!!!!!!!!!!! Failed to load the fraud review  task.");
+				verifyTrue(false);
+			}
+		}
+	}
+	
+	@Test
+	public void testSetFraudOffReview(){
+		clickMenu(MENU_ADMIN_COMPANY);
+		
+		if (checkNoErrorPage()) {
+			click(By.xpath("//td[@id='navmenucell']/div/dl/dd[2]/a/span[2]"), false, true);
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Fraud Review Message 3");
+		}
+
+		if (checkNoErrorPage()) {
+			selenium.select("name=fraudReview","label=no");
+			click(By.name("save"));
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Fraud Review Message 4");
+		}
+	}
+
+	@Test
+	public void testResubmitSupervisorReview(){
+		verifyTrue(setPermissions(new String[] { "683",}, new boolean[] { true}));
+		
+		if(checkNoErrorPage()){
+			goToTaskManager();
+
+			click(By.xpath("(//a[contains(@href, 'rejectedDisbursements.do')])[2]"));
+			waitForPageToLoadImproved();
+			if (checkNoErrorPage()) {
+				click(By.xpath("//table[@id='rejectedDisbursements']/tbody/tr/td/a"));
+				waitForPageToLoadImproved();
+				if (checkNoErrorPage()) {
+					click(By.id("submitCustComm"));
+					waitForPageToLoadImproved();
+					if (!checkNoErrorPage()) {
+						System.out.println("!!!!!!!!!!!!!!!! Failed to load the supervisor review rejected task.");
+						verifyTrue(false);
+					}
+				} else {
+					System.out.println("!!!!!!!!!!!!!!!! Failed to load the supervisor review rejected task.");
+					verifyTrue(false);
+				}
+			} else {
+				System.out.println("!!!!!!!!!!!!!!!! Failed to load the supervisor review rejected page.");
+				verifyTrue(false);
+			}
+		}
+	}
+	
+	@Test
+	public void testApproveSupervisorTask() {
+
+		goToTaskManager();
+		click(By.id("685link"));
+		
+		if (checkNoErrorPage()) {
+			verifyTrue(isElementPresent(By.xpath("//a[contains(@href, 'customerCommunicationsTasks.do?communicationsId="+Settings.PAYMENT_COMM_ID+"&gettask=1&supervisorReview=1')]")));
+			selenium.click("//a[contains(@href, 'customerCommunicationsTasks.do?communicationsId="+Settings.PAYMENT_COMM_ID+"&gettask=1&supervisorReview=1')]");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!! ERROR - Going to Task manager page !!!!!!!!!");
+		}
+		
+		if (checkNoErrorPage()) {
+			click(By.id("approveButton"));
+			waitForPageToLoadImproved();
+				if (checkNoErrorPage()) {
+					verifyEquals("Supervisor Review", selenium.getText("//div[@id='maincontent']/h1"));
+					verifyEquals("No Supervisor Reviews at this time.", selenium.getText("//div[@id='maincontent']/div"));
+				} else {
+					System.out.println("!!!!!!!!!!!!!!!! Failed to approve the supervisor review task.");
+					verifyTrue(false);
+				}
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Failed to load the supervisor review task.");
+			verifyTrue(false);
+		}
+	}
+	
+	@Test
+	public void testRejectPaymentApproval(){
+		verifyTrue(setPermissions(new String[] { "682",}, new boolean[] { true}));
+		goToTaskManager();
+		click(By.id("682link"));
+		
+		if (checkNoErrorPage()) {
+
+			verifyTrue(isElementPresent(By.xpath("//a[contains(@href, 'customerCommunications.do?command=edit&communicationsId="+Settings.PAYMENT_COMM_ID+"')]")));
+			click(By.linkText("Deny"));
+			type(By.id("taskRemark"),"Deny Test");
+
+			List<WebElement> buttons = driver.findElements(By.className("ui-state-default"));
+			buttons.get(0).click();
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!! ERROR - Going to Payment Approval list page !!!!!!!!!");
+		}
+		
+		if(checkNoErrorPage()){
+			verifyEquals("No Payments to Approve at this time.", selenium.getText("//div[@id='maincontent']/div"));
+			goToTaskManager();
+		} else {
+			System.out.println("!!!!!!!!!!! ERROR - Denying Payment !!!!!!!!!");
+		}
+	}
+	
+
+	@Test
+	public void testResubmitPayment(){
+		verifyTrue(setPermissions(new String[] { "683",}, new boolean[] { true}));
+		
+		if(checkNoErrorPage()){
+			goToTaskManager();
+
+			click(By.xpath("(//a[contains(@href, 'rejectedDisbursements.do')])[2]"));
+			waitForPageToLoadImproved();
+			if (checkNoErrorPage()) {
+				click(By.xpath("//table[@id='rejectedDisbursements']/tbody/tr/td/a"));
+				waitForPageToLoadImproved();
+				if (checkNoErrorPage()) {
+					click(By.id("submitCustComm"));
+					waitForPageToLoadImproved();
+					if (!checkNoErrorPage()) {
+						System.out.println("!!!!!!!!!!!!!!!! Failed to load the payment review rejected task.");
+						verifyTrue(false);
+					}
+				} else {
+					System.out.println("!!!!!!!!!!!!!!!! Failed to load the payment review rejected task.");
+					verifyTrue(false);
+				}
+			} else {
+				System.out.println("!!!!!!!!!!!!!!!! Failed to load the payment review rejected page.");
+				verifyTrue(false);
+			}
+		}
+	}
+
+	@Test
+	public void testReApproveSupervisorTask() {
+
+		goToTaskManager();
+		click(By.id("685link"));
+		
+		if (checkNoErrorPage()) {
+			verifyTrue(isElementPresent(By.xpath("//a[contains(@href, 'customerCommunicationsTasks.do?communicationsId="+Settings.PAYMENT_COMM_ID+"&gettask=1&supervisorReview=1')]")));
+			selenium.click("//a[contains(@href, 'customerCommunicationsTasks.do?communicationsId="+Settings.PAYMENT_COMM_ID+"&gettask=1&supervisorReview=1')]");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!! ERROR - Going to Task manager page !!!!!!!!!");
+		}
+		
+		if (checkNoErrorPage()) {
+			click(By.id("approveButton"));
+			waitForPageToLoadImproved();
+				if (checkNoErrorPage()) {
+					verifyEquals("Supervisor Review", selenium.getText("//div[@id='maincontent']/h1"));
+					verifyEquals("No Supervisor Reviews at this time.", selenium.getText("//div[@id='maincontent']/div"));
+				} else {
+					System.out.println("!!!!!!!!!!!!!!!! Failed to approve the supervisor review task.");
+					verifyTrue(false);
+				}
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Failed to load the supervisor review task.");
+			verifyTrue(false);
+		}
+	}
+	
+	@Test
+	public void testApprovePaymentTask() {
+
+		verifyTrue(setPermissions(new String[] { "682",}, new boolean[] { true}));
+		goToTaskManager();
+		click(By.id("682link"));
+		
+		if (checkNoErrorPage()) {
+			verifyTrue(isElementPresent(By.xpath("//a[contains(@href, 'customerCommunications.do?command=edit&communicationsId="+Settings.PAYMENT_COMM_ID+"')]")));
+			type(By.name("iat[0].expensedraft"),"");
+			type(By.name("iat[0].expensedraftdate"),"");
+			type(By.name("iat[0].expensemaildate"),"");
+			click(By.name("updateExpense"));
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Failed to load the Payment Approval tasks.");
+		}
+		
+		if (checkNoErrorPage()) {
+			verifyTrue(isElementPresent(By.xpath("//a[contains(@href, 'customerCommunications.do?command=edit&communicationsId="+Settings.PAYMENT_COMM_ID+"')]")));
+			type(By.name("iat[0].expensedraft"),"TEST123");
+			click(By.name("updateExpense"));
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Failed to attempt submit Payment Approval with no info.");
+		}
+		
+		if (checkNoErrorPage()) {
+			verifyTrue(isElementPresent(By.xpath("//a[contains(@href, 'customerCommunications.do?command=edit&communicationsId="+Settings.PAYMENT_COMM_ID+"')]")));
+			type(By.name("iat[0].expensedraft"),"TEST123");
+			click(By.id("expensedraftdatecalendar0"));
+			click(By.linkText("Today"));
+			
+
+			type(By.name("iat[0].expensedraftdate"),"");
+			type(By.name("iat[0].expensemaildate"),"");
+			click(By.name("updateExpense"));
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Failed to attempt submit Payment Approval with no info.");
+		}
+
+		if (checkNoErrorPage()) {
+			verifyTrue(isElementPresent(By.xpath("//a[contains(@href, 'customerCommunications.do?command=edit&communicationsId="+Settings.PAYMENT_COMM_ID+"')]")));
+			type(By.name("iat[0].expensedraft"),"TEST123");
+			click(By.id("expensemaildatecalendar0"));
+			click(By.linkText("Today"));
+			
+			
+			click(By.name("updateExpense"));
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Failed to attempt submit Payment Approval with no info.");
+		}
+		
+		if (checkNoErrorPage()) {
+			verifyTrue(isElementPresent(By.xpath("//a[contains(@href, 'customerCommunications.do?command=edit&communicationsId="+Settings.PAYMENT_COMM_ID+"')]")));
+			type(By.name("iat[0].expensedraft"),"TEST123");
+			click(By.id("expensedraftdatecalendar0"));
+			click(By.linkText("Today"));
+			click(By.id("expensemaildatecalendar0"));
+			click(By.linkText("Today"));
+			
+			
+			click(By.name("updateExpense"));
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Failed to attempt submit Payment Approval with no info.");
+		}
+		
+		if (checkNoErrorPage()) {
+			verifyFalse(isElementPresent(By.xpath("//a[contains(@href, 'customerCommunications.do?command=edit&communicationsId="+Settings.PAYMENT_COMM_ID+"')]")));
+			goToTaskManager();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Failed to attempt submit Payment Approval with no info.");
+		}
+	}
+	
+	@Test
+	public void resetPaymentAppPermissions(){
+		verifyTrue(setPermissions(new String[] { "682","683","685","687","684","688"}, new boolean[] { true,true,true,true,true,true}));
+	}
+	
+	@Test
+	public void resetBSOPermissions(){
+		verifyTrue(setPermissions(new String[] { "680","681"}, new boolean[] { true,true}));
+	}
 }
