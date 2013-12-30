@@ -461,4 +461,27 @@ public class BagDropUtils {
 			return (int) ((now.getTime() - lastUpdated.getTime()) / 60000);
 		}
 	}
+	
+	/**
+	 * Returns in minutes the average time to Carousel for the current day for the given company/station
+	 * 
+	 * @param companycode
+	 * @param station
+	 * @return
+	 */
+	public static int avgTimeToCarousel(String companycode, String station){
+		Calendar start = GregorianCalendar.getInstance();
+		start.set(Calendar.HOUR, 0);
+		start.set(Calendar.MINUTE, 0);
+		start.set(Calendar.SECOND, 0);
+		start.set(Calendar.AM_PM, Calendar.AM);
+		
+		Calendar end = (Calendar) start.clone();
+		end.add(Calendar.DATE, 1);
+		
+		Date startGMTDate = DateUtils.convertToGMTDate(start.getTime());
+		Date endGMTDate = DateUtils.convertToGMTDate(end.getTime());
+		
+		return getBagDropBMO().getAverageTimeToCarousel(station, companycode, startGMTDate, endGMTDate);
+	}
 }

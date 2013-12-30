@@ -79,6 +79,7 @@ public class BagDropAction extends Action{
 		
 		if (request.getParameter("search") != null){
 			bdform.setBagDropList(getPaginatedList(request,bdform,user,dto,cbroStation));
+			bdform.setAvgTimeToCarousel(BagDropUtils.avgTimeToCarousel(user.getCompanycode_ID(), getCurrentStation(cbroStation, user)));
 			return mapping.findForward(TracingConstants.BAGDROP);
 		}
 		
@@ -95,6 +96,7 @@ public class BagDropAction extends Action{
 				saveMessages(request, errors);
 			}
 			bdform.setBagDropList(getPaginatedList(request,bdform,user,dto,cbroStation));
+			bdform.setAvgTimeToCarousel(BagDropUtils.avgTimeToCarousel(user.getCompanycode_ID(), getCurrentStation(cbroStation, user)));
 			return mapping.findForward(TracingConstants.BAGDROP);
 		}
 		
@@ -111,6 +113,12 @@ public class BagDropAction extends Action{
 			boolean success = true;
 			try{
 				BagDropUtils.saveOrUpdateBagDrop(user, bagDrop);
+				if(bagDrop.getTimeToCarousel() > 120){
+					ActionMessage error = new ActionMessage("bagdrop.error.120");
+					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+					saveMessages(request, errors);
+					success = false;
+				}
 			} catch (InvalidDateRangeException idre) {
 				ActionMessage error = new ActionMessage("bagdrop.error.invaliddaterange",BagDropUtils.getModifyRange(user));
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
@@ -134,6 +142,7 @@ public class BagDropAction extends Action{
 			}
 			if(success){
 				bdform.setBagDropList(getPaginatedList(request,bdform,user,dto,cbroStation));
+				bdform.setAvgTimeToCarousel(BagDropUtils.avgTimeToCarousel(user.getCompanycode_ID(), getCurrentStation(cbroStation, user)));
 				return mapping.findForward(TracingConstants.BAGDROP);
 			} else {
 				return mapping.findForward(TracingConstants.BAGDROPEDIT);
@@ -155,6 +164,7 @@ public class BagDropAction extends Action{
 		}
 		bdform.setDto(dto);
 		bdform.setBagDropList(getPaginatedList(request,bdform,user,dto,cbroStation));
+		bdform.setAvgTimeToCarousel(BagDropUtils.avgTimeToCarousel(user.getCompanycode_ID(), getCurrentStation(cbroStation, user)));
 		return mapping.findForward(TracingConstants.BAGDROP);
 	}
 	

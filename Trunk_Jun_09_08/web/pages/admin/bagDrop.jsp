@@ -96,6 +96,7 @@
 		
 		<br/>
 		<br/>
+		
         <strong>
           <bean:message key="wildcard" />
         </strong>
@@ -135,6 +136,11 @@
           <bean:message key='header.search_result'/>
         </h1>
         
+		<br/>
+       	<bean:message key='bagdrop.avgtime'/> &nbsp; <bean:write name="bagDropForm" property="dispAvgTimeToCarousel"/>
+		<br/>
+		<br/>
+        
 	    <display:table requestURI="/bagDrop.do" name="bagDropForm.bagDropList" sort="external" class="form2" cellspacing="0" cellpadding="0" id="<%=TracingConstants.TABLE_ID_BAG_DROP %>" defaultsort="1"  >
 	       	<display:setProperty name="basic.empty.showtable" value="true"/>
 	       	<display:column style="width:10%;" titleKey="colname.bagdrop.origin" property="originStationCode" sortable="true" sortName="origin"/>
@@ -153,7 +159,8 @@
 			    </tr>
 			    <tr>
             		<td colspan="9" align="center">
-              			<html:submit styleId="button" property="getFlightData">
+            			<html:hidden property="refreshFlightInfo" value="" disabled="true" />
+              			<html:submit styleId="button" property="getFlightData" onclick="this.form.refreshFlightInfo.disabled = true;">
                 			<bean:message key="button.bagdrop.refreshflightinfo" />
               			</html:submit>
             		</td>

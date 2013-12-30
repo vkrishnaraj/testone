@@ -362,4 +362,47 @@ public class BagDropBMO {
 		}
 	}
 	
+	/**
+	 * Returns the average time to coursel in minutes based on the presents of an actual arrival time or schedule arrival time (if both are present, use actual) and
+	 * bagdrop time for the given company, station and date range.
+	 * 
+	 * @param station
+	 * @param companycode
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	public int getAverageTimeToCarousel(String station, String companycode, Date start, Date end){
+		Session sess = null;
+		try {
+			
+			String sql = "select avg(timestampdiff(MINUTE, case when actArrivalDate is null then schArrivalDate else actArrivalDate end, bagdroptime)) avgtime " +
+			             "from bagdrop where scharrivaldate between :start and :end " +
+			             "and arrivalStationCode = :station " +
+			             "and airline = :companycode " +
+			             "and bagdroptime is not null and (schArrivalDate is not null or actArrivalDate is not null) ";   
+					
+			sess = HibernateWrapper.getSession().openSession();
+			SQLQuery query = sess.createSQLQuery(sql);
+			query.setParameter("station", station);
+			query.setParameter("companycode", companycode);
+			query.setParameter("start", start);
+			query.setParameter("end", end);
+			query.addScalar("avgtime", StandardBasicTypes.INTEGER);
+			
+			Integer result = (Integer)query.uniqueResult();
+			return result;
+		} catch (Exception e){
+			return 0;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 }

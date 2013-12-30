@@ -127,17 +127,30 @@ public class BagDrop {
 			return "&nbsp;";//needed for displaying empty cells in DisplayTag
 		}
 		
-		long arrivalTime = actArrivalDate!=null?actArrivalDate.getTime():schArrivalDate.getTime();
-		
-		long time = bagDropTime.getTime() - arrivalTime;
+		long time = getTimeToCarousel();
 		if(time <= 0){
 			return "00:00";
 		}
 		
-		long mins = (time/(1000*60))%60;
-		long hours = (time/(1000*60*60));
+		long mins = time%60;
+		long hours = time/60;
 		
 		return String.format("%02d:%02d", hours, mins);
+	}
+	
+	/**
+	 * If actArrivalTime exist, use actArrivalTime for calculation, otherwise use schArrivalTime
+	 * 
+	 * @return
+	 */
+	public long getTimeToCarousel(){
+		if(bagDropTime == null || (actArrivalDate == null && schArrivalDate == null)){
+			return 0;
+		}
+		
+		long arrivalTime = actArrivalDate!=null?actArrivalDate.getTime():schArrivalDate.getTime();
+		
+		return (bagDropTime.getTime() - arrivalTime)/60000;
 	}
 	
 	/**

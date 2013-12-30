@@ -32,6 +32,8 @@ public class BagDropForm extends ValidatorForm{
 	private BagDrop editBagDrop;
 	private List<Audit_BagDrop> auditList;
 	
+	private int avgTimeToCarousel;
+	
 	public List <BagDrop> getBagDropList() {
 		return bagDropList;
 	}
@@ -170,4 +172,23 @@ public class BagDropForm extends ValidatorForm{
 		}
 	}
 
+	public int getAvgTimeToCarousel() {
+		return avgTimeToCarousel;
+	}
+
+	public void setAvgTimeToCarousel(int avgTimeToCarousel) {
+		this.avgTimeToCarousel = avgTimeToCarousel;
+	}
+
+	public String getDispAvgTimeToCarousel(){
+		if(avgTimeToCarousel <= 0){
+			return "00:00";
+		}
+		
+		long mins = avgTimeToCarousel%60;
+		long hours = avgTimeToCarousel/60;
+		
+		return String.format("%02d:%02d", hours, mins);
+	}
+	
 }

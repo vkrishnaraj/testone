@@ -7,6 +7,8 @@ import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 
+import com.bagnet.nettracer.exceptions.InvalidDateRangeException;
+import com.bagnet.nettracer.exceptions.InvalidStationException;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.utils.BagDropUtils;
@@ -15,8 +17,9 @@ import com.bagnet.nettracer.ws.wn.onhandscanning.SaveBagDropTimeResponseDocument
 import com.bagnet.nettracer.ws.wn.onhandscanning.pojo.xsd.BagDrop;
 
 public class BagDropUtil {
-	
+
 	private static Logger logger = Logger.getLogger(BagDropUtil.class);
+	
 	
 	/**
 	 * Web Service Util method for creating or updating a BagDrop.  Determining an existing bag drop to update is a function of companycode, flight number and arrival time.
@@ -32,7 +35,7 @@ public class BagDropUtil {
 		SaveBagDropTimeResponseDocument resDoc = SaveBagDropTimeResponseDocument.Factory.newInstance();
 		SaveBagDropTimeResponse res = resDoc.addNewSaveBagDropTimeResponse();
 		com.bagnet.nettracer.ws.wn.onhandscanning.pojo.xsd.ServiceResponse serviceResponse = res.addNewReturn();
-		
+
 		if(saveBagDropTime == null || saveBagDropTime.getSaveBagDropTime() == null || saveBagDropTime.getSaveBagDropTime().getBagDrop() == null){
 			serviceResponse.setSuccess(false);
 			serviceResponse.setValidUser(false);
@@ -42,7 +45,7 @@ public class BagDropUtil {
 		}
 
 		Agent agent = null;
-		
+
 		com.bagnet.nettracer.ws.wn.pojo.xsd.Authentication auth = saveBagDropTime.getSaveBagDropTime().getAuthentication();
 		try {
 			agent = OnhandScanningServiceUtil.getAgent(auth);
@@ -54,14 +57,14 @@ public class BagDropUtil {
 			return resDoc;
 		}
 		serviceResponse.setValidUser(true);
-		
+
 		BagDrop wsbagdrop = null;
 		com.bagnet.nettracer.tracing.db.BagDrop ntbagdrop = null;
 		boolean previouslyEntered = false;
-		
+
 		if(saveBagDropTime != null && saveBagDropTime.getSaveBagDropTime() != null && saveBagDropTime.getSaveBagDropTime().getBagDrop() != null
 				&& saveBagDropTime.getSaveBagDropTime().getBagDrop().getBagDropDatetime() != null){
-			
+
 			wsbagdrop = saveBagDropTime.getSaveBagDropTime().getBagDrop();			
 			long bagDropId = BagDropUtils.bagdropExists(
 					wsbagdrop.getAirlineCode(), 
@@ -73,12 +76,10 @@ public class BagDropUtil {
 				ntbagdrop = BagDropUtils.getBagDropById(agent, bagDropId);
 				ntbagdrop.setEntryMethod(TracingConstants.BAGDROP_ENTRY_METHOD_SCANNER);
 				ntbagdrop.setBagDropTime(DateUtils.convertToGMTDate(wsbagdrop.getBagDropDatetime().getTime()));
-				if(BagDropUtils.saveOrUpdateBagDrop(agent, ntbagdrop) > 0){
+				if(saveBagDrop(agent, ntbagdrop, serviceResponse)){
 					serviceResponse.setCreateUpdateIndicator(OnhandScanningServiceImplementation.STATUS_UPDATE);
 					previouslyEntered = true;
 				} else {
-					serviceResponse.setSuccess(false);
-					serviceResponse.addError("Error updating bagdrop");
 					logger.info(resDoc);
 					return resDoc;
 				}
@@ -87,11 +88,9 @@ public class BagDropUtil {
 				ntbagdrop = wsToNtBagDrop(wsbagdrop);
 				ntbagdrop.setCreateAgent(agent);
 				ntbagdrop.setEntryMethod(TracingConstants.BAGDROP_ENTRY_METHOD_SCANNER);
-				if(BagDropUtils.saveOrUpdateBagDrop(agent, ntbagdrop) > 0){
+				if(saveBagDrop(agent, ntbagdrop, serviceResponse)){
 					serviceResponse.setCreateUpdateIndicator(OnhandScanningServiceImplementation.STATUS_CREATE);
 				} else {
-					serviceResponse.setSuccess(false);
-					serviceResponse.addError("Error updating bagdrop");
 					logger.info(resDoc);
 					return resDoc;
 				}
@@ -102,7 +101,7 @@ public class BagDropUtil {
 			logger.info(resDoc);
 			return resDoc;
 		}
-		
+
 		//Return copy of ntbagdrop
 		serviceResponse.setBagDrop(ntToWsBagDrop(BagDropUtils.getBagDropById(agent, ntbagdrop.getId())));
 		serviceResponse.getBagDrop().setPreviouslyEnteredFlag(previouslyEntered);
@@ -110,7 +109,7 @@ public class BagDropUtil {
 		logger.info(resDoc);
 		return resDoc;
 	}
-	
+
 	/**
 	 * Maps the web service bagdrop to a newly created NetTracer BagDrop.  All timestamps are to be converted to GMT
 	 * 
@@ -159,7 +158,7 @@ public class BagDropUtil {
 		}
 		return wsbagdrop;
 	}
-	
+
 	/**
 	 * Manually sets the offset to GMT
 	 * 
@@ -175,7 +174,33 @@ public class BagDropUtil {
 				cal.get(Calendar.HOUR_OF_DAY),
 				cal.get(Calendar.MINUTE),
 				cal.get(Calendar.SECOND)
-		);
+				);
 		return ret;
+	}
+	
+	/**
+	 * saves bagdrop, handles exceptions
+	 * 
+	 * @param agent
+	 * @param ntbagdrop
+	 * @param serviceResponse
+	 * @return
+	 */
+	private static boolean saveBagDrop(Agent agent, com.bagnet.nettracer.tracing.db.BagDrop ntbagdrop, com.bagnet.nettracer.ws.wn.onhandscanning.pojo.xsd.ServiceResponse serviceResponse){
+		try{
+			if(BagDropUtils.saveOrUpdateBagDrop(agent, ntbagdrop) > 0){
+				return true;
+			} else {
+				serviceResponse.addError("Error updating bagdrop");
+			}
+		} catch (InvalidDateRangeException idre){
+			serviceResponse.addError("Unable to update BagDrop, outside of acceptable date range");
+		} catch (InvalidStationException ise){
+			serviceResponse.addError("Do not have permission to update for this station");
+		} catch (Exception e){
+			serviceResponse.addError("Error updating bagdrop");
+		}
+		serviceResponse.setSuccess(false);
+		return false;
 	}
 }
