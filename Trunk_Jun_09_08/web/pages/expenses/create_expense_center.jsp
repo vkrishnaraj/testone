@@ -368,7 +368,10 @@
                   </logic:equal>
                 </td>
                </tr>
-               
+<tr>
+ <td colspan="3">&nbsp;
+ </td>
+ </tr>               
 				<% if(swaBsoPermission){ %>
 		        	<html:hidden name="address" property="email"/>
 					<html:hidden name="address" property="countrycode_ID"/>
