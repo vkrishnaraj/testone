@@ -147,12 +147,14 @@ public class UpdateExpenseAction extends BaseExpenseAction {
 				if (ws_submit_ok) {
 					request.getSession().setAttribute("wssubmitc", "yes");
 					expenseForm.setWssubmitc("yes");
+					request.getSession().setAttribute("showsubmit", "0");
 					ep.setCancelreason(expenseForm.getCancelreason());
 					ep.setCancelcount(1);
 					expenseForm.setCancelcount(1);
 					expenseForm.setStatus_id(TracingConstants.EXPENSEPAYOUT_STATUS_CANCEL);
 				} else {
 					request.getSession().setAttribute("wssubmitc", "no");
+					request.getSession().setAttribute("showsubmit", "0");
 					expenseForm.setWssubmitc("no");
 					request.getSession().setAttribute("errormsg", (ret != null) ? ret.get(4) : "NO CONNECTION!!");
 					expenseForm.setErrormsg((ret != null) ? ret.get(4) : "NO CONNECTION!!");

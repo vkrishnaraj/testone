@@ -285,10 +285,11 @@
 				    </logic:messagesPresent>
 					
 					<% if (submitOk) { %>
-					<c:if test="${expensePayoutForm.cancelcount != 1}">
+					<c:if test="${expensePayoutForm.showsuccess == 1}">
     					<center><font color=green>
             			Successfully Submitted!
           				</font></center>
+          				<%request.getSession().setAttribute("showsubmit", "0");	%>
  					</c:if>
 					<div align="right" width="100%" >
 						Status:<c:if test="${expensePayoutForm.printcount == 0 && expensePayoutForm.cancelcount == 0}">
@@ -583,7 +584,10 @@
                   </logic:equal>
                 </td>
                </tr>       
-               
+ <tr>
+ <td colspan="3">&nbsp;
+ </td>
+ </tr>             
 		<% if(swaBsoPermission){ %>
         	<html:hidden name="address" property="email"/>
 			<html:hidden name="address" property="countrycode_ID"/>

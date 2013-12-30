@@ -56,6 +56,7 @@ public class ExpensePayoutForm extends ActionForm {
 	private String wssubmitc;//for cancel submit
 	private int cancelcount;
 	private String errormsg;
+	private int showsuccess=0;
 
 	//displayed - need conversion
 	private String incident_ID;
@@ -87,6 +88,12 @@ public class ExpensePayoutForm extends ActionForm {
 	
 	private boolean hasIncidentActivity;
 
+	public int getShowsuccess() {
+		return showsuccess;
+	}
+	public void setShowsuccess(int showsuccess) {
+		this.showsuccess = showsuccess;
+	}
 	public String getErrormsg() {
 		return errormsg;
 	}
