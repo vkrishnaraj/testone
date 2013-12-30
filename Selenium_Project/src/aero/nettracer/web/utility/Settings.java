@@ -45,7 +45,7 @@ public class Settings {
 //	public static final String APP_URL_LOCAL = "http://172.30.68.3:8180/";
 	public static final String APP_URL_LOCAL = "http://172.30.68.3";
 //	public static final String APP_URL_LOCAL = "http://172.30.68.3:8380/";
-//	public static final String APP_URL_LOCAL = "http://localhost/";
+//	public static final String APP_URL_LOCAL = "http://localhost";
 	
 
 	public static String PORT1=":8180/";
@@ -213,5 +213,6 @@ public class Settings {
 	public static String TEMPLATE_ID_WN = "";
 	public static String BDO_ID_WN = "";
 	public static String CUST_COMM_ID = "";
+	public static String PAYMENT_COMM_ID ="";
 	
 }
