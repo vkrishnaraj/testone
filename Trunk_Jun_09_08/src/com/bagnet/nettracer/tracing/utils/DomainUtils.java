@@ -56,13 +56,6 @@ import com.bagnet.nettracer.tracing.forms.disbursements.PaymentApprovalForm;
 import com.bagnet.nettracer.tracing.forms.disbursements.SupervisorReviewForm;
 import com.bagnet.nettracer.tracing.forms.templates.TemplateEditForm;
 import com.bagnet.nettracer.tracing.forms.templates.TemplateSearchForm;
-//import com.bagnet.nettracer.tracing.dao.OnlineClaimsDao;
-//import com.bagnet.nettracer.tracing.db.onlineclaims.OCFile;
-//import com.bagnet.nettracer.tracing.db.onlineclaims.OCMessage;
-//import com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim;
-//import com.bagnet.nettracer.tracing.dto.FileDTO;
-//import com.bagnet.nettracer.tracing.dto.MessageDTO;
-//import com.bagnet.nettracer.tracing.forms.communications.CorrespondenceForm;
 /**
  * This class is used to provide basic tasks related to Document Template management 
  * (ie: converting between DocumentTemplate and DocmentTemplateForm, etc...).
@@ -305,11 +298,13 @@ public class DomainUtils {
 		dto.setIncident(getDummyIncident(user));
 		dto.setClaim(getDummyClaim());
 		dto.setFound(getDummyFoundItem());
+		dto.setExpensePayout(getDummyExpense());
 
 		List<TemplateType> types = new ArrayList<TemplateType>();
 		types.add(TemplateType.INCIDENT);
 		types.add(TemplateType.CLAIM);
 		types.add(TemplateType.FOUND_ITEM);
+		types.add(TemplateType.CLAIM_SETTLEMENT);
 		
 		dto.setTypes(types);
 		
@@ -419,6 +414,17 @@ public class DomainUtils {
 		found.setItem(item);
 		found.setClient(lfPerson);
 		return found;
+	}
+	
+	private static ExpensePayout getDummyExpense() {
+		// dummy expense payout
+		ExpensePayout ep=new ExpensePayout();
+		ep.setCheckamt(100);
+		ep.setVoucheramt(100);
+		ep.setCreditCardRefund(100);
+		
+		return ep;
+		
 	}
 
 	private static FsClaim getDummyClaim() {

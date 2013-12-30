@@ -7,6 +7,7 @@ import aero.nettracer.fs.model.Phone;
 
 import com.bagnet.nettracer.tracing.adapter.TemplateAdapter;
 import com.bagnet.nettracer.tracing.adapter.impl.TemplateAdapterImpl;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.ClaimDAO;
 import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -50,6 +51,10 @@ public class TemplateAdapterFactory {
 				case FOUND_ITEM:
 					instance.getFoundItemInfo(dto, adapter);
 					break;
+				case CLAIM_SETTLEMENT:
+					instance.getIncidentInfo(dto, adapter);
+					instance.getExpenseInfo(dto, adapter);
+					break;
 				default:
 					throw new InvalidDocumentTypeException();
 			}
@@ -69,6 +74,25 @@ public class TemplateAdapterFactory {
 		adapter.setAgentLastName(dto.getAgent().getLastname());
 		adapter.setAgentInitials(dto.getAgent().getInitial());
 		adapter.setDateFormat(dto.getAgent().getDateformat().getFormat());
+	}
+	
+
+	private void getExpenseInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) throws InsufficientInformationException {
+		if(dto.getExpensePayout()!=null){
+			double total=0;
+			if(dto.getExpensePayout().getCheckamt()>0){
+				total+=dto.getExpensePayout().getCheckamt();
+			}
+			if(dto.getExpensePayout().getVoucheramt()>0){
+				total+=dto.getExpensePayout().getVoucheramt();
+			}
+			if(dto.getExpensePayout().getCreditCardRefund()>0){
+				total+=dto.getExpensePayout().getCreditCardRefund();
+			}
+			adapter.setExpenseTotalAmount(TracingConstants.DECIMALFORMAT.format(total));
+		} else {
+			adapter.setExpenseTotalAmount(TracingConstants.DECIMALFORMAT.format(0));
+		}
 	}
 	
 	private void getIncidentInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) throws InsufficientInformationException {

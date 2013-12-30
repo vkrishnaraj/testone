@@ -60,6 +60,9 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	private String incidentBusinessPhone = "";
 	private String incidentMobilePhone = "";
 	
+	// Expense info
+	private String expenseTotalAmount = "";
+	
 	public String getDateFormat() {
 		return dateFormat;
 	}
@@ -414,6 +417,14 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 
 	public String getDateToday() {
 		return DateUtils.formatDate(new Date(), this.dateFormat, null, null);
+	}
+
+	public String getExpenseTotalAmount() {
+		return expenseTotalAmount;
+	}
+
+	public void setExpenseTotalAmount(String expenseTotalAmount) {
+		this.expenseTotalAmount = expenseTotalAmount;
 	}
 
 }

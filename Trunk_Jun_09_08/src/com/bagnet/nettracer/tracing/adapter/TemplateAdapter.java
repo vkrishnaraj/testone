@@ -102,6 +102,10 @@ public interface TemplateAdapter {
 	public String getIncidentMobilePhone();
 	public void setIncidentMobilePhone(String incidentHomePhone);
 	
+	// Expense Data
+	public String getExpenseTotalAmount();
+	public void setExpenseTotalAmount(String expenseTotalAmount);
+	
 	// Generic data
 	public void setDateFormat(String dateFormat);
 	public String getDateToday();

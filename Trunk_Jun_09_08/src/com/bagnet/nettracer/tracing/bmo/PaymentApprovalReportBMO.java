@@ -239,7 +239,7 @@ public class PaymentApprovalReportBMO {
     	drb = drb.addColumn(reportHeadingIncidentID, "incidentId", String.class.getName(), 100);
     	drb = drb.addColumn(reportHeadingReason, "reason", String.class.getName(), 60);
     	drb = drb.addColumn(reportHeadingSpecialist,"specialist",String.class.getName(),60);
-    	drb = drb.addColumn(reportHeadingApprover,"agent",String.class.getName(),60);
+    	drb = drb.addColumn(reportHeadingApprover,"approver",String.class.getName(),60);
     	drb = drb.addColumn(reportHeadingExpenseDraft,"expensedraft",String.class.getName(),100);
 		drb = drb.addColumn(reportHeadingLastPrinted,"lastPrinted",String.class.getName(),60);
         

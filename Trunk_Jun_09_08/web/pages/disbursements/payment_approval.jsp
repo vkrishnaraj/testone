@@ -123,10 +123,12 @@ function sortTable(sortOrder) {
 					</font>
 				</span>
 			</logic:messagesPresent>
-	     	<h1 class="green">
-	         	<bean:message key="header.payment.approval" />
-	       	</h1>
-		    <logic:empty name="paymentApprovalForm" property="iatlist">
+			<h1 class="green">
+				<bean:message key="header.payment.approval" />
+			</h1>
+			<span class="reqfield">*</span>
+			<bean:message key="message.required.payment.approval" />
+			<logic:empty name="paymentApprovalForm" property="iatlist">
 		       		<div style="text-align:center;color:green;" >
 		       			<br>
 		       			<bean:message key="message.no.payment.approval" />

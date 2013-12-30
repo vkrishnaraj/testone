@@ -23,6 +23,7 @@ import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.OnlineClaimsDao;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
@@ -43,6 +44,7 @@ import com.bagnet.nettracer.tracing.service.TemplateService;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.DomainUtils;
 import com.bagnet.nettracer.tracing.utils.EmailUtils;
+import com.bagnet.nettracer.tracing.utils.ExpenseUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
@@ -339,7 +341,7 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		} else {
 			try {
 				long tId = Long.valueOf(templateId);
-				DocumentTemplateResult result = generateDocument(tId, incident, user);
+				DocumentTemplateResult result = generateDocument(tId, incident, user,eId);
 				if (!result.isSuccess()) {
 					if (result.getPayload() != null) {
 						messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(result.getMessageKey(), new Object[] { result.getPayload() }));
@@ -430,8 +432,13 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		DomainUtils.toForm(incidentActivityService.load(incidentActivity.getId()), ccf, user);
 		return success;
 	}
-	
+	/** SF: making a mask method in case it is used elsewhere despite being a local private method **/
+	@SuppressWarnings("unused")
 	private DocumentTemplateResult generateDocument(long templateId, Incident incident, Agent user) {
+		return generateDocument( templateId,  incident,  user, 0);
+	}
+	
+	private DocumentTemplateResult generateDocument(long templateId, Incident incident, Agent user, int epId) {
 		DocumentTemplateResult result = new DocumentTemplateResult();
 		Template template;
 		
@@ -450,6 +457,12 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		try {
 			TemplateAdapterDTO dto = DomainUtils.getTemplateAdapterDTO(user, template);
 			dto.setIncident(incident);
+			if(epId>0){
+				ExpensePayout ep=ExpenseUtils.getExpensePayout(String.valueOf(epId));
+				if(ep!=null){
+					dto.setExpensePayout(ep);
+				}
+			}
 
 			TemplateAdapter adapter = TemplateAdapterFactory.getTemplateAdapter(dto);
 			result = documentService.merge(document, adapter);
