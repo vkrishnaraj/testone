@@ -143,7 +143,7 @@
         
 	    <display:table requestURI="/bagDrop.do" name="bagDropForm.bagDropList" sort="external" class="form2" cellspacing="0" cellpadding="0" id="<%=TracingConstants.TABLE_ID_BAG_DROP %>" defaultsort="1"  >
 	       	<display:setProperty name="basic.empty.showtable" value="true"/>
-	       	<display:column style="width:10%;" titleKey="colname.bagdrop.origin" property="originStationCode" sortable="true" sortName="origin"/>
+	       	<display:column style="width:10%;" titleKey="colname.bagdrop.origin" value="${bagDrop.originStationCode}&nbsp;" sortable="true" sortName="origin"/>
 	        <display:column style="width:10%;" titleKey="colname.bagdrop.dest" property="arrivalStationCode" sortable="true" sortName="dest"/>
 	        <display:column style="width:10%;" titleKey="itin_flightnum" property="flight" sortable="true" sortName="flight"/>
 	        <display:column style="width:20%;" titleKey="colname.scharrtime" property="dispSchArrivalDateTimeCell" sortable="true" sortName="scharr" />
