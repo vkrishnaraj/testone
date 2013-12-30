@@ -1522,6 +1522,8 @@ public class TracingConstants {
 	public static final int FINANCE_STATUS_SUPERVISOR_APPROVED = 1419;
 	public static final int FINANCE_STATUS_FINANCE_REJECTED = 1416;
 	public static final int FINANCE_STATUS_FINANCE_APPROVED = 1417;
+
+	public static final String SUBJECT_INFO_UPDATE = "subject.info.update";
 	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {

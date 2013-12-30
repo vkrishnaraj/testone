@@ -181,7 +181,7 @@ public class EmailUtils {
 		if(ia==null){
 			throw new InsufficientInformationException(IncidentActivity.class);
 		}
-		return createAndSendEmail(ia.getIncident(), ia.getAgent(), TracingConstants.REPORT_UPDATE_INFO_EMAIL, PropertyBMO.SUBJECT_INFO_UPDATE, realpath);
+		return createAndSendEmail(ia.getIncident(), ia.getAgent(), TracingConstants.REPORT_UPDATE_INFO_EMAIL, TracingConstants.SUBJECT_INFO_UPDATE, realpath);
 		
 	}
 	
