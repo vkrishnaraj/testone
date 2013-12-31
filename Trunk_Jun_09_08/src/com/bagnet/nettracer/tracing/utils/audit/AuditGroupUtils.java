@@ -221,6 +221,8 @@ public class AuditGroupUtils {
 	public static Audit_UserGroup getAuditGroup(UserGroup grp, Agent mod_agent) throws Exception {
 		Audit_UserGroup audit_grp = new Audit_UserGroup();
 		BeanUtils.copyProperties(audit_grp, grp);
+		audit_grp.setBsolimit(grp.getBsoLimit());
+		audit_grp.setLuvlimit(grp.getLuvLimit());
 		audit_grp.setModifying_agent(mod_agent);
 		audit_grp.setTime_modified(TracerDateTime.getGMTDate());
 		audit_grp.setComponentPolicies(null);

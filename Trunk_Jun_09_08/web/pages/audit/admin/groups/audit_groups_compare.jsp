@@ -241,6 +241,28 @@ function updatePagination() {
                 </td>
               </logic:iterate>
             </tr>
+           <tr>
+              <td>
+                <bean:message key="header.bsoLimit" />
+              </td>
+              <logic:iterate id="audit_lfi" name="compareList" scope="request">
+                <td>
+                  <bean:write name="audit_lfi" property="bsolimit" />
+                  &nbsp;
+                </td>
+              </logic:iterate>
+            </tr>                 
+           <tr>
+              <td>
+                <bean:message key="header.luvLimit" />
+              </td>
+              <logic:iterate id="audit_lfi" name="compareList" scope="request">
+                <td>
+                  <bean:write name="audit_lfi" property="luvlimit" />
+                  &nbsp;
+                </td>
+              </logic:iterate>
+            </tr>            
             <tr>
               <td>
                 <bean:message key="permissions" />

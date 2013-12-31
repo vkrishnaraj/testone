@@ -28,6 +28,8 @@ public class Audit_UserGroup implements Serializable {
 	private String description2;
 	private String companycode_ID;
 	private Set componentPolicies;
+	private double luvlimit;
+	private double bsolimit;
 
 	private Agent modifying_agent;
 	private Date time_modified;
@@ -242,4 +244,40 @@ public class Audit_UserGroup implements Serializable {
 	public void setAudit_id(int audit_id) {
 		this.audit_id = audit_id;
 	}
+	
+	/**
+	 * @hibernate.property type="double"
+	 * 
+	 * @return Returns the luvlimit.
+	 */
+	public double getLuvlimit() {
+		return luvlimit;
+	}
+	
+	/**
+	 * @param luvlimit
+	 *          The luvlimit to set.
+	 */
+	public void setLuvlimit(double luvlimit) {
+		this.luvlimit = luvlimit;
+	}
+	
+	
+	/**
+	 * @hibernate.property type="double"
+	 * 
+	 * @return Returns the bsolimit.
+	 */	
+	public double getBsolimit() {
+		return bsolimit;
+	}
+	
+	/**
+	 * @param bsolimit
+	 *          The bsolimit to set.
+	 */
+	public void setBsolimit(double bsolimit) {
+		this.bsolimit = bsolimit;
+	}
+	
 }
