@@ -129,8 +129,8 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 	
 	@Test
 	public void testSetCustomerPreference() {
-		String[] permissions = new String[] { CUST_COMM_CREATE, "635" };
-		boolean[] values = new boolean[] { true, true };
+		String[] permissions = new String[] { CUST_COMM_CREATE, "635", "682","683","685","687","684","688" };
+		boolean[] values = new boolean[] { true, true, false, false,false,false,false,false };
 		verifyTrue(setPermissions(permissions, values));
 		
 		createIncident(true);
@@ -271,12 +271,14 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 	public void testQueuesPresent() {
 		String[] permissions = new String[] {
 				CUST_COMM_APPROVAL,
-				CUST_COMM_APPROVAL_QUEUE
+				CUST_COMM_APPROVAL_QUEUE,
+				"682","683","685","687","684","688"
 		};
 		
 		boolean[] values = new boolean[] { 
 				true, 
-				true
+				true,
+				false,false,false,false,false,false
 		};
 		
 		verifyTrue(setPermissions(permissions, values));

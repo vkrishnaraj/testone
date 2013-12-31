@@ -44,8 +44,10 @@ public class WN_ViewTasksNotInWork extends WN_SeleniumTest {
 	
 	@Test
 	public void testSearchForTasksNotInWork() {
-		String[] permissions = { CUST_COMM_CREATE, CUST_COMM_EDIT, CUST_COMM_DELETE, CUST_COMM_APPROVAL, CUST_COMM_APPROVAL_QUEUE, VIEW_TASKS_NOT_IN_WORK };
-		boolean[] values = { true, true, true, false, false, true };
+		String[] permissions = { CUST_COMM_CREATE, CUST_COMM_EDIT, CUST_COMM_DELETE, CUST_COMM_APPROVAL, CUST_COMM_APPROVAL_QUEUE, VIEW_TASKS_NOT_IN_WORK, 
+				"682","683","685","687","684","688" };
+		boolean[] values = { true, true, true, false, false, true, 
+				false, false, false, false, false, false };
 		verifyTrue(setPermissions(permissions, values));
 		createIncident(true);
 		createCustomerCommunication();
@@ -147,5 +149,10 @@ public class WN_ViewTasksNotInWork extends WN_SeleniumTest {
 		}
 		goToTaskManager();
 	}
-
+	
+	@Test
+	public void resetPaymentAppPermissions(){
+		verifyTrue(setPermissions(new String[] { "682","683","685","687","684","688"}, new boolean[] { true,true,true,true,true,true}));
+	}
+	
 }
