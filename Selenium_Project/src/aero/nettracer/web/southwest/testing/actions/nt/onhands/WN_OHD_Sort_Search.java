@@ -9,79 +9,79 @@ import aero.nettracer.web.utility.Settings;
 
 public class WN_OHD_Sort_Search extends WN_SeleniumTest {
 
-//	@Test
-//	public void testOHDSearch() throws Exception {
-//		verifyTrue(setPermissions(new String[] {PermissionsUtil.TO_BE_INVENTORIED}, new boolean[] {true}));
-//
-//		clickMenu("menucol_4.4");
-//		waitForPageToLoadImproved();
-//		if(checkNoErrorPage()) {
-//			selenium.click("id=calendar3");
-//			selenium.click("link=Today");
-//			selenium.click("id=button");
-//			waitForPageToLoadImproved();
-//		} else {
-//			System.out.println("!!!!!!!!!!!!!!! - Failed to reach OHD Search page - !!!!!!!!!!!!!!!!!!");
-//		}
-//
-//		if(checkNoErrorPage()) {
-//			verifyTrue(isTextPresent(Settings.ONHAND_ID_WN));
-//			selenium.type("name=s_inventorydate", "");
-//			selenium.click("id=calendar4");
-//			selenium.click("link=Today");
-//			selenium.click("id=button");
-//			waitForPageToLoadImproved();
-//		} else {
-//			System.out.println("!!!!!!!!!!!!!!! - Failed to Search on start inventory date- !!!!!!!!!!!!!!!!!!");
-//		}
-//
-//		if(checkNoErrorPage()) {
-//			verifyTrue(isTextPresent(Settings.ONHAND_ID_WN));
-//			selenium.click("id=calendar3");
-//			selenium.click("link=Today");
-//			selenium.click("id=button");
-//			waitForPageToLoadImproved();
-//		} else {
-//			System.out.println("!!!!!!!!!!!!!!! - Failed to Search on end inventory date- !!!!!!!!!!!!!!!!!!");
-//		}
-//
-//		if(checkNoErrorPage()) {
-//			verifyTrue(isTextPresent(Settings.ONHAND_ID_WN));
-//			selenium.type("name=s_inventorydate", "");
-//			selenium.type("name=e_inventorydate", "");
-//			selenium.click("id=calendar5");
-//			selenium.click("link=Today");
-//			selenium.click("id=button");
-//			waitForPageToLoadImproved();
-//		} else {
-//			System.out.println("!!!!!!!!!!!!!!! - Failed to Search on start and end inventory date- !!!!!!!!!!!!!!!!!!");
-//		}
-//		
-//		if(checkNoErrorPage()) {
-//			verifyTrue(isTextPresent(Settings.ONHAND_ID_WN));
-//			selenium.type("name=routingstation", "ATL");
-//			selenium.click("id=button");
-//			waitForPageToLoadImproved();
-//		} else {
-//			System.out.println("!!!!!!!!!!!!!!! - Failed to Search on routing date- !!!!!!!!!!!!!!!!!!");
-//		}
-//
-//		if(checkNoErrorPage()) {
-//			verifyTrue(isTextPresent(Settings.ONHAND_ID_WN));
-//			selenium.type("name=routingstation", "LAX");
-//			selenium.click("id=button");
-//			waitForPageToLoadImproved();
-//		} else {
-//			System.out.println("!!!!!!!!!!!!!!! - Failed to Search on routing Station- !!!!!!!!!!!!!!!!!!");
-//		}
-//
-//		if(checkNoErrorPage()) {
-//			verifyFalse(isTextPresent(Settings.ONHAND_ID_WN));
-//			goToTaskManager();
-//		} else {
-//			System.out.println("!!!!!!!!!!!!!!! - Failed to Search on routing date 2- !!!!!!!!!!!!!!!!!!");
-//		}
-//	}
+	@Test
+	public void testOHDSearch() throws Exception {
+		verifyTrue(setPermissions(new String[] {PermissionsUtil.TO_BE_INVENTORIED}, new boolean[] {true}));
+
+		clickMenu("menucol_4.4");
+		waitForPageToLoadImproved();
+		if(checkNoErrorPage()) {
+			selenium.click("id=calendar3");
+			selenium.click("link=Today");
+			selenium.click("id=button");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to reach OHD Search page - !!!!!!!!!!!!!!!!!!");
+		}
+
+		if(checkNoErrorPage()) {
+			verifyTrue(isTextPresent(Settings.ONHAND_ID_WN));
+			selenium.type("name=s_inventorydate", "");
+			selenium.click("id=calendar4");
+			selenium.click("link=Today");
+			selenium.click("id=button");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Search on start inventory date- !!!!!!!!!!!!!!!!!!");
+		}
+
+		if(checkNoErrorPage()) {
+			verifyTrue(isTextPresent(Settings.ONHAND_ID_WN));
+			selenium.click("id=calendar3");
+			selenium.click("link=Today");
+			selenium.click("id=button");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Search on end inventory date- !!!!!!!!!!!!!!!!!!");
+		}
+
+		if(checkNoErrorPage()) {
+			verifyTrue(isTextPresent(Settings.ONHAND_ID_WN));
+			selenium.type("name=s_inventorydate", "");
+			selenium.type("name=e_inventorydate", "");
+			selenium.click("id=calendar5");
+			selenium.click("link=Today");
+			selenium.click("id=button");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Search on start and end inventory date- !!!!!!!!!!!!!!!!!!");
+		}
+		
+		if(checkNoErrorPage()) {
+			verifyTrue(isTextPresent(Settings.ONHAND_ID_WN));
+			selenium.type("name=routingstation", "ATL");
+			selenium.click("id=button");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Search on routing date- !!!!!!!!!!!!!!!!!!");
+		}
+
+		if(checkNoErrorPage()) {
+			verifyTrue(isTextPresent(Settings.ONHAND_ID_WN));
+			selenium.type("name=routingstation", "LAX");
+			selenium.click("id=button");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Search on routing Station- !!!!!!!!!!!!!!!!!!");
+		}
+
+		if(checkNoErrorPage()) {
+			verifyFalse(isTextPresent(Settings.ONHAND_ID_WN));
+			goToTaskManager();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Search on routing date 2- !!!!!!!!!!!!!!!!!!");
+		}
+	}
 	
 	@Test
 	public void testSortSearchText() throws Exception {
@@ -259,28 +259,28 @@ public class WN_OHD_Sort_Search extends WN_SeleniumTest {
 		if(checkNoErrorPage()) {
 			selenium.click("xpath=(//a[contains(text(),'On-hand Bags')])[2]");
 
-			waitForPageToLoadImproved(1000,false);
+			waitForPageToLoadImproved();
 		} else {
 			System.out.println("!!!!!!!!!!!!!!! - Failed to access Task Manager - !!!!!!!!!!!!!!!!!!");
 		}
-
-//		if(checkNoErrorPage()) {
-//			click(By.linkText("On-hand Number"),true,true);
-//			waitForPageToLoadImproved();
-//		} else {
-//			System.out.println("!!!!!!!!!!!!!!! - Failed to access Station On Hand page - !!!!!!!!!!!!!!!!!!");
-//		}
-//
-//		if(checkNoErrorPage()) {
-//			sortCheck=selenium.getText("//td[@id='middlecolumn']/div/table/tbody/tr/td[2]");
-//			click(By.linkText("On-hand Number"),true,true);
-//			waitForPageToLoadImproved();
-//		} else {
-//			System.out.println("!!!!!!!!!!!!!!! - Failed to Sort by OHD Number - !!!!!!!!!!!!!!!!!!");
-//		}
+		/** Testing for On-hand Number link **/
+		if(checkNoErrorPage()) {
+			click(By.linkText("On-hand Number"),true,true);
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to access Station On Hand page - !!!!!!!!!!!!!!!!!!");
+		}
 
 		if(checkNoErrorPage()) {
-//			verifyNotEquals("//td[@id='middlecolumn']/div/table/tbody/tr/td[2]",sortCheck);
+			sortCheck=selenium.getText("//td[@id='middlecolumn']/div/table/tbody/tr/td[2]");
+			click(By.linkText("On-hand Number"),true,true);
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("!!!!!!!!!!!!!!! - Failed to Sort by OHD Number - !!!!!!!!!!!!!!!!!!");
+		}
+
+		if(checkNoErrorPage()) {
+			verifyNotEquals("//td[@id='middlecolumn']/div/table/tbody/tr/td[2]",sortCheck);
 			click(By.linkText("Incident Number"));
 			waitForPageToLoadImproved();
 		} else {
