@@ -1352,7 +1352,7 @@ public class Incident implements Serializable {
 		this.custCommId = custCommId;
 	}
 	
-	@Column(name = "claimStatus", columnDefinition="int(11) default 1500")
+	@Column(name = "claimStatus")
 	public int getClaimStatusId() {
 		return claimStatusId;
 	}

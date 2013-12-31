@@ -242,6 +242,7 @@
 			<td>
 				&nbsp;&nbsp;
 				<html:select name="incidentForm" property="claimStatusId" styleId="claimStatusId" styleClass="dropdown" >
+					<html:option value="0" ><bean:message key="select.please_select" /></html:option>
 					<html:options collection="claimStatusList" property="status_ID" labelProperty="description" />
 				</html:select>
 			</td>
