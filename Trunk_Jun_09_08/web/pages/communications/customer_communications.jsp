@@ -235,6 +235,17 @@
 				<input type="submit" id="setCommMethodButton" class="button" name="saveCustCommId" value="<bean:message key="button.save.preference" />" onclick="return validatereqFields(this.form, '<%=formType %>')" />
 			</td>
 		</tr>
+		<tr>
+			<td class="header" style="width:25%;">
+				<bean:message key="colname.claim.status" />
+			</td>
+			<td>
+				&nbsp;&nbsp;
+				<html:select name="incidentForm" property="claimStatusId" styleId="claimStatusId" styleClass="dropdown" >
+					<html:options collection="claimStatusList" property="status_ID" labelProperty="description" />
+				</html:select>
+			</td>
+		</tr>
 	</table>
 	<logic:notEmpty name="incidentForm" property="activityDtos" >
 		<table  class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">

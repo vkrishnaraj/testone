@@ -137,6 +137,7 @@ public class Incident implements Serializable {
 	private int courtesyReasonId;
 	private String courtesyDescription;
 	private int custCommId;
+	private int claimStatusId;
 
 	
 	private List<IssuanceItemIncident> issuanceItemIncidents;
@@ -1349,6 +1350,15 @@ public class Incident implements Serializable {
 
 	public void setCustCommId(int custCommId) {
 		this.custCommId = custCommId;
+	}
+	
+	@Column(name = "claimStatus", columnDefinition="int(11) default 1500")
+	public int getClaimStatusId() {
+		return claimStatusId;
+	}
+
+	public void setClaimStatusId(int claimStatusId) {
+		this.claimStatusId = claimStatusId;
 	}
 
 	@OneToMany(fetch=FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "incident")

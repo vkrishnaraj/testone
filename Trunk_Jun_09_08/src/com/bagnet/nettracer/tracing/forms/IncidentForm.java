@@ -123,6 +123,8 @@ public final class IncidentForm extends ValidatorForm {
 	private Status existIncStatus;
 	
 	private int custCommId;
+	private int claimStatusId;
+	
 	private Set<IncidentActivity> activities;
 	private List<IncidentActivityDTO> activityDtos;
 
@@ -1464,6 +1466,14 @@ public final class IncidentForm extends ValidatorForm {
 
 	public void setCustCommId(int custCommId) {
 		this.custCommId = custCommId;
+	}
+
+	public int getClaimStatusId() {
+		return claimStatusId;
+	}
+
+	public void setClaimStatusId(int claimStatusId) {
+		this.claimStatusId = claimStatusId;
 	}
 
 	public Set<IncidentActivity> getActivities() {

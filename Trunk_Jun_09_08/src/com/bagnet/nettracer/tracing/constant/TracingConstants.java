@@ -413,6 +413,7 @@ public class TracingConstants {
 	public final static int TABLE_TEMPLATE_STATUS = 24;
 	public final static int TABLE_COMMUNICATIONS_METHOD = 25;
 	public final static int TABLE_COMMUNICATIONS_STATUS = 26;
+	public final static int TABLE_CLAIM_STATUS = 27;
 	
 	public final static int PRIORITY_LOW = 1;
 	public final static int PRIORITY_MEDIUM = 2;
@@ -1479,6 +1480,12 @@ public class TracingConstants {
 	public static final int STATUS_CUSTOMER_COMM_PENDING_PRINT = 1404;
 	public static final int STATUS_CUSTOMER_COMM_PENDING_WP = 1405;
 	
+	public static final int STATUS_CLAIM_IN_PROGRESS = 1500;
+	public static final int STATUS_CORRESPONDENCE_RECEIVED = 1501;
+	public static final int STATUS_FINAL_REVIEW = 1502;
+	public static final int STATUS_PENDING_CUSTOMER_RESPONSE = 1503;
+	public static final int STATUS_CLAIM_FINALIZED = 1504;
+	
 	public static final String ACTIVITY_CUSTOMER_COMMUNICATION = "55";
 	public static final String ACTIVITY_ASSIGNED_TO = "AS";
 	
@@ -1504,6 +1511,7 @@ public class TracingConstants {
 	public static final int OC_STATUS_NODOWNLOAD=3;
 	
 	public static final String REPORT_UPDATE_INFO_EMAIL="report_update_info_email.html";
+	public static final String CLAIM_STATUS_CHANGED_EMAIL="claim_status_changed_email.html";
 
 	public static final String DISBURSEMENT_REJECTION = "rejectedDisbursements";
 	public static final String FRAUD_REVIEW = "fraudReview";
@@ -1524,6 +1532,8 @@ public class TracingConstants {
 	public static final int FINANCE_STATUS_FINANCE_APPROVED = 1417;
 
 	public static final String SUBJECT_INFO_UPDATE = "subject.info.update";
+	
+	public static final String SUBJECT_CLAIM_STATUS_CHANGED = "email.subjectline.claim.status.changed";
 	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {

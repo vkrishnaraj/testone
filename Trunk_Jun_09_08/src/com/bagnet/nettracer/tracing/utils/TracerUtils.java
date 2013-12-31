@@ -581,6 +581,10 @@ public class TracerUtils {
 		session.setAttribute("bagchecklist",
 				session.getAttribute("bagchecklist") != null ? session
 						.getAttribute("bagchecklist") : getBagcheckValues());
+		
+		session.setAttribute("claimStatusList",
+				session.getAttribute("claimStatusList") != null ? session
+						.getAttribute("claimStatusList") : getStatusList(TracingConstants.TABLE_CLAIM_STATUS, locale));
 	}
 
 	/**

@@ -17,7 +17,6 @@ import org.apache.struts.util.MessageResources;
 
 import com.bagnet.nettracer.email.EmailException;
 import com.bagnet.nettracer.email.HtmlEmail;
-import com.bagnet.nettracer.tracing.actions.salvage.SalvageSearchAction;
 import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -33,7 +32,7 @@ import com.bagnet.nettracer.tracing.exceptions.InsufficientInformationException;
 
 public class EmailUtils {
 	
-	private static Logger logger = Logger.getLogger(SalvageSearchAction.class);
+	private static Logger logger = Logger.getLogger(EmailUtils.class);
 
 	public static void emailSalvageSummary(String filePath, Agent user, Salvage salvage) {
 		if (filePath == null || filePath.isEmpty()) {
@@ -183,6 +182,15 @@ public class EmailUtils {
 		}
 		return createAndSendEmail(ia.getIncident(), ia.getAgent(), TracingConstants.REPORT_UPDATE_INFO_EMAIL, TracingConstants.SUBJECT_INFO_UPDATE, realpath);
 		
+	}
+	
+	public static boolean sendClaimStatusEmail(Incident incident, String realpath) {
+		try {
+			return createAndSendEmail(incident, incident.getAgent(), TracingConstants.CLAIM_STATUS_CHANGED_EMAIL, TracingConstants.SUBJECT_CLAIM_STATUS_CHANGED, realpath);
+		} catch (InsufficientInformationException iie) {
+			logger.error("Failed to send claim status changed email for incident.", iie);
+		}
+		return false;
 	}
 	
 }

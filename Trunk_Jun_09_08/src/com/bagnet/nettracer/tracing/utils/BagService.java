@@ -576,7 +576,7 @@ public class BagService {
 			Incident oldInc=null;
 			if(theform.getIncident_ID()!=null && !theform.getIncident_ID().isEmpty())
 				oldInc=IncidentBMO.getIncidentByID(theform.getIncident_ID(), null);
-				
+			
 			// copy into incident bean
 			BeanUtils.copyProperties(iDTO, theform);
 			
@@ -881,6 +881,15 @@ public class BagService {
 					else {
 						result = iBMO.insertIncident(true, iDTO, theform.getAssoc_ID(), mod_agent, false);
 					}
+					
+					if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_CREATE, mod_agent)) {
+						if (theform.getClaimStatusId() != oldInc.getClaimStatusId()) {
+							if (!EmailUtils.sendClaimStatusEmail(iDTO, sc.getRealPath("/"))) {
+								logger.error("Failed to send a claim status changed email for incident: " + theform.getIncident_ID());
+							}
+						}
+					}
+					
 				} catch (StaleStateException e){
 					for(int i = 0; i < theform.getPassengerlist().size(); i++) {
 						pa = (Passenger) theform.getPassenger(i);
