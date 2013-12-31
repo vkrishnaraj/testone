@@ -266,7 +266,7 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 			iatdto.setTaskDate(iat.getOpened_timestamp());
 			iatdto.setStatus(iat.getStatus().getKey());
 			if (iat.getIncidentActivity().getApprovalAgent() != null) {
-				iatdto.setAgent(iat.getIncidentActivity().getApprovalAgent().getUsername());
+				iatdto.setApprover(iat.getIncidentActivity().getApprovalAgent().getUsername());
 			}
 			if(iat.getIncidentActivity().getExpensePayout()!=null){
 				iatdto.setExpenseId(iat.getIncidentActivity().getExpensePayout().getExpensepayout_ID());
@@ -423,7 +423,8 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 		return dtos;
 	}
 	
-	private IncidentActivityTask startTask(IncidentActivityTask task, Agent agent) {
+	@Override
+	public IncidentActivityTask startTask(IncidentActivityTask task, Agent agent) {
 		if (task == null || agent == null) return null;
 		
 		task.setAssigned_agent(agent);
@@ -539,23 +540,6 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 			case TracingConstants.CUST_COMM_POSTAL_MAIL:
 				return createTask(ia, STATUS_PENDING_PRINT);
 			case TracingConstants.CUST_COMM_WEB_PORTAL:
-//				try {
-//					OCFile file=documentService.publishDocument(ia);
-//					if(file!=null){
-//						OnlineClaimsDao dao=new OnlineClaimsDao();
-//						if(!dao.saveFile(file)){
-//							logger.error("Failed to email customer about communication for IncidentActivity with id: "+ ia.getId());
-//						} else {
-//							if(!EmailUtils.sendIncidentActivityEmail(ia, realpath)){
-//								logger.error("Failed to email customer about communication for IncidentActivity with id: "+ ia.getId());
-//							}
-//						}
-//					}
-//				} catch (InsufficientInformationException e1) {
-//					logger.error("Failed to publish document for IncidentActivity with id: "+ia.getId());
-//					e1.printStackTrace();
-//				}
-//				
 				return createTask(ia, STATUS_PENDING_WP);
 			default:
 				logger.error("Invalid value found for customer communication method id: " + ia.getCustCommId());

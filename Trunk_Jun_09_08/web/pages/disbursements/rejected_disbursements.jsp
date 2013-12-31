@@ -72,7 +72,7 @@
 	          				<bean:message key="${rejectedDisbursements.status}"/>
 	          			</display:column>
 	          			<display:column titleKey="colname.disburse.description" property="description" sortable="false" style="width:35%;" />
-	          			<display:column titleKey="colname.disburse.rejected.by" property="agent" sortable="true" sortName="agent" />
+	          			<display:column titleKey="colname.disburse.rejected.by" property="approver" sortable="true" sortName="agent" />
 	          			<display:footer>
 			               	<tr>
 				                <td colspan="7">

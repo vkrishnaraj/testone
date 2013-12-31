@@ -78,4 +78,5 @@ public interface IncidentActivityService {
 	
 	public boolean handleTask(long incidentActivityTaskId, boolean approved);
 	public boolean handleRemark(long incidentActivityTaskId, String remark, Agent madeBy);
+	public IncidentActivityTask startTask(IncidentActivityTask task, Agent agent);
 }

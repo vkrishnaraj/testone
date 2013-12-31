@@ -70,9 +70,10 @@ public class PaymentApprovalAction extends CheckedAction {
 				&& paf.getRejectRemark()!=null && !paf.getRejectRemark().isEmpty()){
 			s=new Status();
 			s.setStatus_ID(TracingConstants.FINANCE_STATUS_FINANCE_REJECTED);
-			IncidentActivityTask iat=incidentActivityService.loadTask(Long.valueOf(paf.getRejectId()));
+			/** SF: Agent needs to start the task to approve/reject it**/
+			IncidentActivityTask iat=incidentActivityService.startTask(Long.valueOf(paf.getRejectId()), user,new Status(TracingConstants.FINANCE_STATUS_AWAITING_DISBURSEMENT));
 			if(iat!=null){
-
+				/** SF: Sets the assigned user to whoever is updating the Tasks from the Payment Approval Page **/
 				boolean success = incidentActivityService.handleTask(iat.getTask_id(),false);
 				if (success) {
 					success = incidentActivityService.handleRemark(iat.getTask_id(), paf.getRejectRemark(), user);
@@ -129,50 +130,53 @@ public class PaymentApprovalAction extends CheckedAction {
 					IncidentActivityTask iat=iatmap.get(iatdto.getTaskid());
 					if(iat!=null){
 						ep=null;
-						success = incidentActivityService.handleTask(iat.getTask_id(),true);
-						if (success) {
-							ep=iat.getIncidentActivity().getExpensePayout();
-							if(ep!=null){
-								//Update Expense values and set status to paid
-								ep.set_DATEFORMAT(user.getDateformat().getFormat());
-								ep.setDraft(iatdto.getExpensedraft());
-								if(iatdto.getExpensedraftdate()!=null && !iatdto.getExpensedraftdate().isEmpty()){
-									ep.setDisdraftpaiddate(iatdto.getExpensedraftdate());
+						/** SF: Agent needs to start task to approve it**/
+						if(incidentActivityService.startTask(iat, user)!=null){
+							success = incidentActivityService.handleTask(iat.getTask_id(),true);
+							if (success) {
+								ep=iat.getIncidentActivity().getExpensePayout();
+								if(ep!=null){
+									//Update Expense values and set status to paid
+									ep.set_DATEFORMAT(user.getDateformat().getFormat());
+									ep.setDraft(iatdto.getExpensedraft());
+									if(iatdto.getExpensedraftdate()!=null && !iatdto.getExpensedraftdate().isEmpty()){
+										ep.setDisdraftpaiddate(iatdto.getExpensedraftdate());
+									}
+									if(iatdto.getExpensemaildate()!=null && !iatdto.getExpensemaildate().isEmpty()){
+										ep.setDismaildate(iatdto.getExpensemaildate());
+									}
+									ep.setStatus(new Status(TracingConstants.EXPENSEPAYOUT_STATUS_PAID));
+		
+									success=ExpensePayoutBMO.updateExpense(ep,user);
+									if(!success){
+										logger.error("Failed to updating expense with Task ID: "+iat.getTask_id());
+									}
 								}
-								if(iatdto.getExpensemaildate()!=null && !iatdto.getExpensemaildate().isEmpty()){
-									ep.setDismaildate(iatdto.getExpensemaildate());
-								}
-								ep.setStatus(new Status(TracingConstants.EXPENSEPAYOUT_STATUS_PAID));
-	
-								success=ExpensePayoutBMO.updateExpense(ep,user);
-								if(!success){
-									logger.error("Failed to updating expense with Task ID: "+iat.getTask_id());
-								}
-							}
-							if(ep!=null && success){
-								ServletContext sc = getServlet().getServletContext();
-								String realpath = sc.getRealPath("/");
-								try {
-									IncidentActivity ia=iat.getIncidentActivity();
-									if(ia.getCustCommId()==TracingConstants.CUST_COMM_WEB_PORTAL){
-										OCFile file = documentService.publishDocument(ia);
-										if (file != null) {
-											if (!dao.saveFile(file)) {
-												logger.error("Failed to email customer about communication for IncidentActivity with id: " + ia.getId());
-											} else {
-												if (!EmailUtils.sendIncidentActivityEmail(ia, realpath)) {
+								if(ep!=null && success){
+									ServletContext sc = getServlet().getServletContext();
+									String realpath = sc.getRealPath("/");
+									try {
+										IncidentActivity ia=iat.getIncidentActivity();
+										if(ia.getCustCommId()==TracingConstants.CUST_COMM_WEB_PORTAL){
+											OCFile file = documentService.publishDocument(ia);
+											if (file != null) {
+												if (!dao.saveFile(file)) {
 													logger.error("Failed to email customer about communication for IncidentActivity with id: " + ia.getId());
+												} else {
+													if (!EmailUtils.sendIncidentActivityEmail(ia, realpath)) {
+														logger.error("Failed to email customer about communication for IncidentActivity with id: " + ia.getId());
+													}
 												}
 											}
 										}
+									} catch (InsufficientInformationException e1) {
+										logger.error("Failed to publish document for IncidentActivity Task with id: " + iat.getTask_id());
+										e1.printStackTrace();
 									}
-								} catch (InsufficientInformationException e1) {
-									logger.error("Failed to publish document for IncidentActivity Task with id: " + iat.getTask_id());
-									e1.printStackTrace();
 								}
-							}
-							if(!success){
-								logger.error("Failure handling remark with Incident Activity Task with ID: "+iat.getTask_id());
+								if(!success){
+									logger.error("Failure handling remark with Incident Activity Task with ID: "+iat.getTask_id());
+								}
 							}
 						}
 					}

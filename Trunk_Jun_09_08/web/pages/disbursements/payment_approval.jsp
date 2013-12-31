@@ -272,7 +272,7 @@ function sortTable(sortOrder) {
 		    				</td>
 		    				<td >
 		     					<logic:equal name="iat" property="status" value="<%=String.valueOf(TracingConstants.FINANCE_STATUS_AWAITING_DISBURSEMENT) %>" >
-			    					<a href='#' onclick="submitRejection('<bean:write name="iat" property="taskid" />')" ><bean:message key="deny" /></a>
+			    					<a href='#' onclick="submitRejection('<bean:write name="iat" property="id" />')" ><bean:message key="deny" /></a>
 		    					</logic:equal>
 		    				</td>
 	     				</tr>
