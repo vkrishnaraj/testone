@@ -152,12 +152,6 @@ function sortTable(sortOrder) {
               
               <table class="form2" id="payment_approval" style="margin-bottom:0;padding-bottom:0; border-spacing:0; border-collapse:collapse;">
      			<thead>
-     			<!--  "id", 			"d.id");
-		map.put("incidentId", 	"i.incident_ID");
-		map.put("agent", 		"ia.approvalAgent");
-		map.put("date",			"iat.generic_timestamp");
-		map.put("expenseId",    "ia.expensepayout_id");
-		map.put("status" -->
      				<tr>
 	     				<td class="header">
 	     					<a href="#" style="color:white" onclick="sortTable('taskId');"><bean:message key="colname.disburse.id" /></a>
