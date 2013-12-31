@@ -883,7 +883,7 @@ public class BagService {
 					}
 					
 					if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_CREATE, mod_agent)) {
-						if (theform.getClaimStatusId() != oldInc.getClaimStatusId()) {
+						if (theform.getClaimStatusId() > 0 && theform.getClaimStatusId() != oldInc.getClaimStatusId()) {
 							if (!EmailUtils.sendClaimStatusEmail(iDTO, sc.getRealPath("/"))) {
 								logger.error("Failed to send a claim status changed email for incident: " + theform.getIncident_ID());
 							}
