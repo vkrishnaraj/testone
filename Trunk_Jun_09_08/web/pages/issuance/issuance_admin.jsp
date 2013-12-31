@@ -226,6 +226,9 @@
 	                     <bean:message key="issuance.item.type" />
 	                  </td>
 	                  <td class="header">
+	                     <bean:message key="issuance.item.cost" />
+	                  </td>	 	                  
+	                  <td class="header">
 	                     <bean:message key="issuance.item.description" />
 	                  </td>
 	                  <td class="header">
@@ -279,6 +282,9 @@
 	                     <%=i_item.getIssuanceItem().getDescription()%>
 	                  </td>
 	                  	 <% if (globalAdmin) { %>
+	                  <td>
+	                     <input type="text" name="item_cost_<%=i_item.getId() %>" value="<%=i_item.getCost()%>" size="6" class="textfield" />
+	                  </td>	                  	 
 	                  <td>
 	                     <input type="text" name="item_desc_<%=i_item.getId() %>" value="<%=i_item.getDescription()%>" size="10" class="textfield" />
 	                  </td>
@@ -348,6 +354,9 @@
 	                     <bean:message key="issuance.item.type" />
 	                  </td>
 	                  <td class="header">
+	                     <bean:message key="issuance.item.cost" />
+	                  </td>	 	                  
+	                  <td class="header">
 	                     <bean:message key="issuance.item.description" />
 	                  </td>
 	                  <td class="header">
@@ -387,6 +396,9 @@
 	                     		</logic:iterate>
 	                     	</select>
 	                  	</td>
+	                  	<td>
+	                     	<input type="text" name="item_cost" value="" size="6" maxlength="20" class="textfield" />
+	                  	</td>	                  	
 	                  	<td>
 	                     	<input type="text" name="item_desc" value="" size="10" class="textfield" />
 	                  	</td>

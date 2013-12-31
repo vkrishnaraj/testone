@@ -440,8 +440,9 @@ public class IssuanceItemBMO {
 	 * @param tradetype
 	 * @param user
 	 * @param station
+	 * @param cost
 	 */
-	public static void addInventoriedItem(long type, String desc, String barcode, int tradetype, Agent user, Station station) {
+	public static void addInventoriedItem(long type, String desc, String barcode, int tradetype, Agent user, Station station, Double cost) {
 			Session sess = null;
 			Transaction t = null;
 			try {
@@ -453,6 +454,7 @@ public class IssuanceItemBMO {
 				iItem.setBarcode(barcode);
 				iItem.setTradeType(tradetype);
 				iItem.setStation(station);
+				iItem.setCost(cost);
 				iItem.setInventoryStatus(StatusBMO.getStatus(TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_AVAILABLE));
 				t = sess.beginTransaction();
 				sess.save(iItem);
@@ -486,8 +488,9 @@ public class IssuanceItemBMO {
 	 * @param barcode
 	 * @param tradetype
 	 * @param user
+	 * @param cost
 	 */
-	public static void editInventoriedItem(long id, String desc, String barcode, int tradetype, Agent user) {
+	public static void editInventoriedItem(long id, String desc, String barcode, int tradetype, Agent user, Double cost) {
 			Session sess = null;
 			Transaction t = null;
 			try {
@@ -496,6 +499,7 @@ public class IssuanceItemBMO {
 				iItem.setDescription(desc);
 				iItem.setBarcode(barcode);
 				iItem.setTradeType(tradetype);
+				iItem.setCost(cost);
 				Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
 				AuditIssuanceItemInventory auditIItem = mapper.map(iItem, AuditIssuanceItemInventory.class);
 				auditIItem.setEditAgent(user);

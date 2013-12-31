@@ -414,3 +414,6 @@ update incident set claimStatus = 0;
 
 alter table audit_usergroup add column luvLimit double default 0;
 alter table audit_usergroup add column bsoLimit double default 0;
+
+alter table issuance_item_inventory add column cost double default 0;
+alter table audit_issuance_item_inventory add column cost double default 0;

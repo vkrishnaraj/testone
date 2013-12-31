@@ -29,7 +29,10 @@ public class IssuanceItemInventory {
 	
 	@Column(name = "trade_type")
 	private int tradeType;
-	
+
+	@Column(name = "cost")
+	private double cost;
+		
 	@Column(length = 100)
 	private String description;
 	
@@ -136,6 +139,14 @@ public class IssuanceItemInventory {
 
 	public void setVerifiedIncident(boolean verifiedIncident) {
 		this.verifiedIncident = verifiedIncident;
+	}
+	
+	public double getCost() {
+		return cost;
+	}
+
+	public void setCost(double cost) {
+		this.cost = cost;
 	}
 	
 }
