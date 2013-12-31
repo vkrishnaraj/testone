@@ -411,3 +411,6 @@ insert into status (Status_ID,description,table_ID) values
 
 alter table incident add column claimStatus int default 0;
 update incident set claimStatus = 0;
+
+alter table audit_usergroup add column luvLimit double default 0;
+alter table audit_usergroup add column bsoLimit double default 0;
