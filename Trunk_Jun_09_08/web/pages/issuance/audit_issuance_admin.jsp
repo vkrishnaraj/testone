@@ -203,6 +203,9 @@
 	                     <bean:message key="issuance.item.type" />
 	                  </td>
 	                  <td class="header">
+	                     <bean:message key="issuance.item.cost" />
+	                  </td>	 	  	                  
+	                  <td class="header">
 	                     <bean:message key="issuance.item.description" />
 	                  </td>
 	                  <td class="header">
@@ -232,6 +235,9 @@
 	                  <td>
 	                     <%=i_item.getIssuanceItem().getDescription()%>
 	                  </td>
+	                  <td>
+	                     <%=i_item.getCost()%>
+	                  </td>	                  
 	                  <td>
 	                     <%=i_item.getDescription()%>
 	                  </td>
