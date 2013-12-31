@@ -180,7 +180,7 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 	@Test
 	public void testCreateFraudReview(){
 
-		verifyTrue(setPermissions(new String[] { "680","681","687","684","688","671"}, new boolean[] { false,false,true,true,false,false}));
+		verifyTrue(setPermissions(new String[] { "680","681","687","684","688","671"}, new boolean[] { false,false,true,false,false,false}));
 		
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		click(By.name("addnewexpense"));
@@ -230,6 +230,8 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 	
 	@Test
 	public void testRejectFraudReview(){
+
+		verifyTrue(setPermissions(new String[] {"682", "684","685","687","688","671"}, new boolean[] {false,true,false,true,false,false}));
 		goToTaskManager();
 		click(By.id("684link"));
 		
@@ -264,7 +266,8 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 
 	@Test
 	public void testResubmitFraudReview(){
-		verifyTrue(setPermissions(new String[] { "683",}, new boolean[] { true}));
+
+		verifyTrue(setPermissions(new String[] {"682", "683","684","685","687","688","671"}, new boolean[] {false,true,false,false,true,false,false}));
 		
 		if(checkNoErrorPage()){
 			goToTaskManager();
@@ -295,6 +298,8 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 	
 	@Test
 	public void testApproveFraudReviewTask() {
+		verifyTrue(setPermissions(new String[] {"682", "683","684","685","687","688","671"}, new boolean[] {false,true,true,false,true,false,false}));
+		
 		goToTaskManager();
 		click(By.id("684link"));
 		
@@ -327,7 +332,8 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 
 	@Test
 	public void testRejectSupervisorReview(){
-		verifyTrue(setPermissions(new String[] { "685",}, new boolean[] { true}));
+		verifyTrue(setPermissions(new String[] {"682", "683","684","685","687","688","671"}, new boolean[] {false,true,true,true,true,false,false}));
+		
 		goToTaskManager();
 		click(By.id("685link"));
 		
@@ -381,7 +387,8 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 
 	@Test
 	public void testResubmitSupervisorReview(){
-		verifyTrue(setPermissions(new String[] { "683",}, new boolean[] { true}));
+
+		verifyTrue(setPermissions(new String[] {"682", "683","684","685","687","688","671"}, new boolean[] {false,true,false,false,true,false,false}));
 		
 		if(checkNoErrorPage()){
 			goToTaskManager();
@@ -411,7 +418,8 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 	
 	@Test
 	public void testApproveSupervisorTask() {
-
+		verifyTrue(setPermissions(new String[] {"682", "683","684","685","687","688","671"}, new boolean[] {false,true,false,true,true,false,false}));
+		
 		goToTaskManager();
 		click(By.id("685link"));
 		
@@ -441,7 +449,9 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 	
 	@Test
 	public void testRejectPaymentApproval(){
-		verifyTrue(setPermissions(new String[] { "682",}, new boolean[] { true}));
+
+		verifyTrue(setPermissions(new String[] {"682", "683","684","685","687","688","671"}, new boolean[] {true,true,false,false,true,false,false}));
+		
 		goToTaskManager();
 		click(By.id("682link"));
 		
@@ -469,7 +479,8 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 
 	@Test
 	public void testResubmitPayment(){
-		verifyTrue(setPermissions(new String[] { "683",}, new boolean[] { true}));
+		verifyTrue(setPermissions(new String[] {"682", "683","684","685","687","688","671"}, new boolean[] {false,true,false,false,true,false,false}));
+		
 		
 		if(checkNoErrorPage()){
 			goToTaskManager();
@@ -500,6 +511,8 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 	@Test
 	public void testReApproveSupervisorTask() {
 
+		verifyTrue(setPermissions(new String[] {"682", "683","684","685","687","688","671"}, new boolean[] {false,true,false,true,true,false,false}));
+		
 		goToTaskManager();
 		click(By.id("685link"));
 		
@@ -529,8 +542,8 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 	
 	@Test
 	public void testApprovePaymentTask() {
-
-		verifyTrue(setPermissions(new String[] { "682",}, new boolean[] { true}));
+		verifyTrue(setPermissions(new String[] {"682", "683","684","685","687","688","671"}, new boolean[] {true,true,false,true,true,false,false}));
+		
 		goToTaskManager();
 		click(By.id("682link"));
 		
