@@ -401,3 +401,13 @@ VALUES (1103,'Tasks View Pending','View tasks not in work.',39,'viewPendingTasks
 
 insert into template_var (displayTag,associatedClass) VALUES ('TotalAmount','Expense');
 insert into template_var_dependency (associatedClass,dependentClass) VALUES ('Expense'  ,'Expense');
+
+insert into status (Status_ID,description,table_ID) values
+(1500,'Claim In Progress',27),
+(1501,'Correspondence Received',27),
+(1502,'Final Review',27),
+(1503,'Pending Customer Response',27),
+(1504,'Claim Finalized',27);
+
+alter table incident add column claimStatus int default 0;
+update incident set claimStatus = 0;
