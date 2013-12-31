@@ -24,7 +24,8 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 				  CUST_COMM_VIEW_PUBLISHED,
 				  CUST_COMM_APPROVAL,
 				  CUST_COMM_APPROVAL_QUEUE,
-				  CUST_COMM_REJECTED_QUEUE
+				  CUST_COMM_REJECTED_QUEUE,
+				  "682","683","685","687","684","688" 
 			    };
 
 		boolean[] values = new boolean[] { 
@@ -34,7 +35,8 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 						false,
 						false,
 						false,
-						false
+						false,
+						false,false,false,false,false,false
 					 };
 
 		verifyTrue(setPermissions(permissions, values));
