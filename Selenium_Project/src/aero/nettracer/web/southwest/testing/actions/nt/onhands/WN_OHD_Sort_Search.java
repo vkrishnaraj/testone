@@ -257,7 +257,7 @@ public class WN_OHD_Sort_Search extends WN_SeleniumTest {
 		waitForPageToLoadImproved();
 		String sortCheck="";
 		if(checkNoErrorPage()) {
-			selenium.click("xpath=(//a[contains(text(),'On-hand Bags')])[2]");
+			click(By.xpath("(//a[contains(text(),'On-hand Bags')])[2]"));
 
 			waitForPageToLoadImproved();
 		} else {
