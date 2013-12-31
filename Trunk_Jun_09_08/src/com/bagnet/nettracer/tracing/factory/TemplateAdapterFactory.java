@@ -52,7 +52,6 @@ public class TemplateAdapterFactory {
 					instance.getFoundItemInfo(dto, adapter);
 					break;
 				case CLAIM_SETTLEMENT:
-					instance.getIncidentInfo(dto, adapter);
 					instance.getExpenseInfo(dto, adapter);
 					break;
 				default:

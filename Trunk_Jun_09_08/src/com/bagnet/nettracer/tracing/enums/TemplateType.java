@@ -10,7 +10,7 @@ public enum TemplateType {
 	FOUND_ITEM("FoundItem", "Found Items"),
 	STATIC("Static", "All"),
 	INVALID("Invalid", "None"),
-	CLAIM_SETTLEMENT("ClaimSettlement", "Claim Settlements");
+	CLAIM_SETTLEMENT("Expense", "Claim Settlements");
 	
 	private String defaultName;
 	private String displayName;
