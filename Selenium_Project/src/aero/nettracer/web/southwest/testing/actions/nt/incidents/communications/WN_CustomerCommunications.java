@@ -384,7 +384,6 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 				waitForPageToLoadImproved();
 					if (checkNoErrorPage()) {
 						verifyEquals("Customer Communications Pending Approval", selenium.getText("//div[@id='maincontent']/h1"));
-						verifyEquals("There are no customer communications pending approval to display", selenium.getText("//div[@id='maincontent']/div"));
 					} else {
 						System.out.println("!!!!!!!!!!!!!!!! Failed to reject the customer communications task.");
 						verifyTrue(false);
