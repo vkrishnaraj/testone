@@ -670,6 +670,8 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 				criteria.addOrder(Order.asc("ia.incident"));
 			}
 			
+			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+			
 			incidentActivities = criteria.list();
 		} catch (Exception e) {
 			logger.error("Failed loading incident activities by tasks status's Id = {}", status.getStatus_ID(), e);
