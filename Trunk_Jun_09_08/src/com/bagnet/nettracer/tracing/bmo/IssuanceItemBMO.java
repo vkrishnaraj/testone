@@ -4,6 +4,7 @@
 package com.bagnet.nettracer.tracing.bmo;
 
 import java.text.SimpleDateFormat;
+import java.util.Currency;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -20,9 +21,12 @@ import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.exception.StaleStateException;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.ExpensePayout;
+import com.bagnet.nettracer.tracing.db.ExpenseType;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
+import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.documents.templates.Template;
 import com.bagnet.nettracer.tracing.db.issuance.AuditIssuanceItemInventory;
 import com.bagnet.nettracer.tracing.db.issuance.AuditIssuanceItemQuantity;
@@ -589,6 +593,33 @@ public class IssuanceItemBMO {
 							t.rollback();
 						}
 					}
+					//Add expense
+					if (inc != null && iItem.getCost() > 0 && reason.equals("Issued Item")) {
+						ExpensePayout ep = new ExpensePayout();
+
+						ep.setPaycode("ADV");
+						ep.setAgent(user);	
+						ep.setCurrency(Currency.getInstance("USD"));
+						ep.setCreatedate(new Date());
+						
+						ExpenseType et = new ExpenseType();
+						et.setExpensetype_ID(3);
+						ep.setExpensetype(et);
+						ep.getAgent().setAgent_ID(inc.getAgent().getAgent_ID());
+						Status s = new Status();
+						s.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_PAID);
+						ep.setStatus(s);
+						ep.setCheckamt(iItem.getCost());
+						ep.setVoucheramt(0);
+						ep.setMileageamt(0);
+						ep.setDistributemethod("");
+						ep.setPaytype("DRAFT");
+						ep.setStation(user.getStation());
+						ep.setExpenselocation(user.getStation());
+						
+						bmo.saveExpense(ep, incID, user);
+					}
+						
 				}
 			} catch (Exception e) {
 				logger.fatal(e.getMessage());
