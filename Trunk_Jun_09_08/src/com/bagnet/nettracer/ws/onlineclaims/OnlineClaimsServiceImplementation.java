@@ -13,7 +13,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -23,7 +22,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.StaleObjectStateException;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Expression;
+import org.hibernate.criterion.Restrictions;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.integrations.reservation.ReservationIntegration;
@@ -40,7 +39,6 @@ import com.bagnet.nettracer.tracing.db.AirlineMembership;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item;
-import com.bagnet.nettracer.tracing.db.Item_Inventory;
 import com.bagnet.nettracer.tracing.db.Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHD_Log;
@@ -53,9 +51,7 @@ import com.bagnet.nettracer.tracing.db.onlineclaims.OCFile;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OCPassenger;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OnlineClaim.ClaimStatus;
-import com.bagnet.nettracer.tracing.db.salvage.Salvage;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
-import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.ImageUtils;
 import com.bagnet.nettracer.tracing.utils.IncidentUtils;
 import com.bagnet.nettracer.tracing.utils.SecurityUtils;
@@ -63,15 +59,7 @@ import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
-import com.bagnet.nettracer.tracing.utils.TracerUtils;
-import com.bagnet.nettracer.ws.core.WSCoreUtil;
-import com.bagnet.nettracer.ws.core.pojo.xsd.WSArticle;
-import com.bagnet.nettracer.ws.core.pojo.xsd.WSIncidentClaimCheck;
-import com.bagnet.nettracer.ws.core.pojo.xsd.WSInventory;
-import com.bagnet.nettracer.ws.core.pojo.xsd.WSItem;
-import com.bagnet.nettracer.ws.core.pojo.xsd.WSItinerary;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident;
-import com.bagnet.nettracer.ws.core.pojo.xsd.WSPassenger;
 import com.bagnet.nettracer.ws.onlineclaims.LoadClaimResponseDocument.LoadClaimResponse;
 import com.bagnet.nettracer.ws.onlineclaims.SaveClaimResponseDocument.SaveClaimResponse;
 import com.bagnet.nettracer.ws.onlineclaims.SaveNewIncidentResponseDocument.SaveNewIncidentResponse;
@@ -140,8 +128,6 @@ public class OnlineClaimsServiceImplementation extends
 		
 		inc.setCreatedate(thedate);
 		inc.setCreatetime(thedate);
-		
-		String datetimestr = null;
 		
 		inc.setRecordlocator(ws.getPnr());
 		inc.setNumpassengers(ws.getNumPassengers());
@@ -225,11 +211,8 @@ public class OnlineClaimsServiceImplementation extends
 		
 		// item
 		List<Item> ii_list = new ArrayList<Item>();
-		HashSet<Item_Inventory> ii_set = new HashSet<Item_Inventory>();
 		Item item = null;
-		Item_Inventory iinv = null;
 		IncidentBag wi = null;
-		WSInventory wii = null;
 		
 		if (ws.getBagArray() != null) {
 			for (int i = 0; i < ws.getBagArray().length; i++) {
@@ -384,11 +367,11 @@ public class OnlineClaimsServiceImplementation extends
 			logger.info("Grabbing Authentication information from the DB!");
 			Criteria criteria = sess
 					.createCriteria(OnlineIncidentAuthorization.class);
-			criteria.add(Expression.like("firstName", incident.getFirstName()
+			criteria.add(Restrictions.like("firstName", incident.getFirstName()
 					.toUpperCase()));
-			criteria.add(Expression.like("lastName", incident.getLastName()
+			criteria.add(Restrictions.like("lastName", incident.getLastName()
 					.toUpperCase()));
-			criteria.add(Expression.eq("pnr", incident.getPnr().toUpperCase()));
+			criteria.add(Restrictions.eq("pnr", incident.getPnr().toUpperCase()));
 			List<OnlineIncidentAuthorization> results = new ArrayList<OnlineIncidentAuthorization>(
 					criteria.list());
 			if (results != null && results.size() > 0) {
@@ -523,8 +506,6 @@ public class OnlineClaimsServiceImplementation extends
 
 		boolean value = false;
 		try {
-			OnlineClaimsService cs = new OnlineClaimsService();
-
 			SecurityUtils util = new SecurityUtils();
 			Agent a = util.authAdminUser(authAdminUser.getAuthAdminUser()
 					.getUsername(), authAdminUser.getAuthAdminUser()
@@ -632,10 +613,6 @@ public class OnlineClaimsServiceImplementation extends
 			Session sess = null;
 
 			try {
-				sess = HibernateWrapper.getSession().openSession();
-				Incident inc = (Incident) sess.load(Incident.class, incidentId);
-				sess.close();
-
 				sess = HibernateWrapper.getSession().openSession();
 
 				OnlineClaimsDao dao = new OnlineClaimsDao();

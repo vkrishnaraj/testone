@@ -157,7 +157,7 @@ public class CustomerCommunicationsTasksAction extends CheckedAction {
 							if (file != null) {
 								OnlineClaimsDao dao = new OnlineClaimsDao();
 								if (!dao.saveFile(file)) {
-									logger.error("Failed to email customer about communication for IncidentActivity with id: " + ia.getId());
+									logger.error("Failed to publish customer communication for IncidentActivity with id: " + ia.getId());
 								} else {
 									if (!EmailUtils.sendIncidentActivityEmail(ia, realpath)) {
 										logger.error("Failed to email customer about communication for IncidentActivity with id: " + ia.getId());

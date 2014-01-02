@@ -120,7 +120,7 @@ public class IncidentActivityAction extends CheckedAction {
 			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.unable.to.create", new Object[] { activity.getDescription() }));
 		}
 
-		if(message!=null && !message.isEmpty() && incident.getCustCommId()==TracingConstants.CUST_COMM_WEB_PORTAL){
+		if(message!=null && !message.isEmpty()){
 			OnlineClaimsDao dao=new OnlineClaimsDao();
 			OnlineClaim c=dao.getOnlineClaim(incidentId);
 			if (c == null) {
@@ -147,12 +147,17 @@ public class IncidentActivityAction extends CheckedAction {
 			newmessage.setUsername(user.getFirstname()+" "+user.getLastname());
 			newmessage.setIncAct(ia);
 			newmessage.setClaim(c);
-			newmessage.setPublish(true);
-			newmessage.setStatusId(TracingConstants.OC_STATUS_PUBLISHED);
+			if(incident.getCustCommId()==TracingConstants.CUST_COMM_WEB_PORTAL) {
+				newmessage.setPublish(true);
+				newmessage.setStatusId(TracingConstants.OC_STATUS_PUBLISHED);
+			} else {
+				newmessage.setPublish(false);
+				newmessage.setStatusId(TracingConstants.OC_STATUS_UNPUBLISHED);
+			}
 			success=dao.saveMessage(newmessage);
 			if (!success) {
 				messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.unable.to.create.message", new Object[] { activity.getDescription() }));
-			} else {
+			} else if(incident.getCustCommId()==TracingConstants.CUST_COMM_WEB_PORTAL) {
 
 				ServletContext sc = getServlet().getServletContext();
 				String realpath = sc.getRealPath("/");

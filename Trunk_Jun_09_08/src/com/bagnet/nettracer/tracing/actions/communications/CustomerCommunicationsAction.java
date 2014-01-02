@@ -21,7 +21,9 @@ import com.bagnet.nettracer.tracing.adapter.TemplateAdapter;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.dao.IncidentActivityDAO;
 import com.bagnet.nettracer.tracing.dao.OnlineClaimsDao;
+import com.bagnet.nettracer.tracing.dao.impl.IncidentActivityDAOImpl;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -248,7 +250,8 @@ public class CustomerCommunicationsAction extends CheckedAction {
 					success = OnlineClaimsDao.saveMessages(ia.getMessages());
 				}
 
-				if (ia.getFiles() != null && ia.getFiles().size()>0) {
+				if (ia.getFiles() != null && ia.getFiles().size()>0
+						|| (ia.getDocument()!=null && publish)) {
 					if(!publish){
 						for (OCFile file : ia.getFiles()) {
 							file.setPublish(publish);
@@ -267,7 +270,8 @@ public class CustomerCommunicationsAction extends CheckedAction {
 					logger.error("Failed to publish or unpublish communication for IncidentActivity with id: "+ id);
 				} else if (publish){
 					ia.setPublishedDate(new Date());
-					success=incidentActivityService.update(ia);
+					IncidentActivityDAO dao=new IncidentActivityDAOImpl();
+					success=dao.update(ia);
 					ServletContext sc = getServlet().getServletContext();
 					String realpath = sc.getRealPath("/");
 					if(!success || !EmailUtils.sendIncidentActivityEmail(ia, realpath)){

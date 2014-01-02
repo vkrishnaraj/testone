@@ -22,10 +22,12 @@ import org.springframework.beans.BeanUtils;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
+import com.bagnet.nettracer.tracing.bmo.StatusBMO;
 import com.bagnet.nettracer.tracing.bmo.exception.StaleStateException;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.communications.Activity;
 import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OCBag;
@@ -459,20 +461,20 @@ public class OnlineClaimsDao {
 				
 				createIncidentActivity(existingDbClaim);
 				sess.saveOrUpdate(existingDbClaim);
-				com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCClaim ac = generateAuditClaim(claim, agent);
+				generateAuditClaim(claim, agent);
 			} else if (!isNew && contactUpdateOnly) {
 				mapSubObjToParentObjects(existingDbClaim);
 				// Updating the existing claim, not replacing it.
 				createIncidentActivity(existingDbClaim);
 				sess.saveOrUpdate(existingDbClaim);
-				com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCClaim ac = generateAuditClaim(claim, agent);
+				generateAuditClaim(claim, agent);
 			} else {
 				mapSubObjToParentObjects(claim);
 				claim.setStatus("NEW");
 				createIncidentActivity(claim);
 				sess.save(claim);
 				saveIncident = true;
-				com.bagnet.nettracer.tracing.db.onlineclaims.audit.AOCClaim ac = generateAuditClaim(claim, agent);
+				generateAuditClaim(claim, agent);
 			}
 			
 //			sess.clear();
@@ -613,7 +615,12 @@ public class OnlineClaimsDao {
 
 	public com.bagnet.nettracer.ws.onlineclaims.xsd.Claim convertClaimDbToWs(OnlineClaim claim) {
 		Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
-		//claim.setClaimStatus(claim.getIncident().getClaimStatus()); PLACEHOLDER TO FILL IN CLAIM STATUS INFO FROM INCIDENT
+		Status s=StatusBMO.getStatus(claim.getIncident().getClaimStatusId());
+		if(s!=null){
+			claim.setClaimStatus(s.getDescription());
+		} else {
+			claim.setClaimStatus("");
+		}
 		com.bagnet.nettracer.ws.onlineclaims.xsd.Claim retVal = mapper.map(claim, com.bagnet.nettracer.ws.onlineclaims.xsd.Claim.class);
 		return retVal;
 	}
