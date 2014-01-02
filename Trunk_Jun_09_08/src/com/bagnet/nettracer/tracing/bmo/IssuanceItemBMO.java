@@ -616,6 +616,7 @@ public class IssuanceItemBMO {
 						ep.setPaytype("DRAFT");
 						ep.setStation(user.getStation());
 						ep.setExpenselocation(user.getStation());
+						ep.setIssuanceItem(1);
 						
 						bmo.saveExpense(ep, incID, user);
 					}

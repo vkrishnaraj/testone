@@ -98,20 +98,22 @@ public class CRAPReport {
 					}
 				}
 				for(ExpensePayout ep:theform.getClaim().getNtIncident().getExpenselist()){
-					boolean epApproved=ep.getStatus().getStatus_ID()==TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED;
-					boolean epDelivered=ep.getExpensetype().getExpensetype_ID()==TracingConstants.EXPENSEPAYOUT_DELIVERY;
-					boolean epPaid=ep.getStatus().getStatus_ID()==TracingConstants.EXPENSEPAYOUT_STATUS_PAID;
-					if(epApproved || epPaid){
-						if(lzmap!=null && lzmap.get(ep.getAgent().getStation().getStation_ID())!=null && ep.getVoucheramt()>0){
-							cbsslv+=ep.getVoucheramt();
-						} else {
-							if(ep.getVoucheramt()>0){
-								stationslv+=ep.getVoucheramt();
-							} else if(!epDelivered){
-								stationPaid+=ep.getCheckamt()+ep.getCreditCardRefund();
+					if (ep.getIssuanceItem() == 0) {
+						boolean epApproved=ep.getStatus().getStatus_ID()==TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED;
+						boolean epDelivered=ep.getExpensetype().getExpensetype_ID()==TracingConstants.EXPENSEPAYOUT_DELIVERY;
+						boolean epPaid=ep.getStatus().getStatus_ID()==TracingConstants.EXPENSEPAYOUT_STATUS_PAID;
+						if(epApproved || epPaid){
+							if(lzmap!=null && lzmap.get(ep.getAgent().getStation().getStation_ID())!=null && ep.getVoucheramt()>0){
+								cbsslv+=ep.getVoucheramt();
+							} else {
+								if(ep.getVoucheramt()>0){
+									stationslv+=ep.getVoucheramt();
+								} else if(!epDelivered){
+									stationPaid+=ep.getCheckamt()+ep.getCreditCardRefund();
+								}
 							}
 						}
-					}
+					}					
 				}
 			}
 			report_info.put("claimStatus", theform.getClaim().getStatus().getDescription());

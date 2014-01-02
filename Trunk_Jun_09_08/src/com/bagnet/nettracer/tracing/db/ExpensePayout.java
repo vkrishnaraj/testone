@@ -80,6 +80,7 @@ public class ExpensePayout implements Serializable {
 	private String seccode;
 	private String cancelreason;
 	private int cancelcount;
+	private int issuanceItem;
 
 	//not part of the model
 	private String _DATEFORMAT;
@@ -360,9 +361,18 @@ public class ExpensePayout implements Serializable {
 	public int getPrintcount() {
 		return printcount;
 	}
-
+	
+	@Basic
 	public void setPrintcount(int printcount) {
 		this.printcount = printcount;
+	}
+
+	public int getIssuanceItem() {
+		return issuanceItem;
+	}
+
+	public void setIssuanceItem(int issuanceItem) {
+		this.issuanceItem = issuanceItem;
 	}
 	
 	@Basic

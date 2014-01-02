@@ -295,6 +295,7 @@ alter table expensepayout add column cancelreason varchar(10);
 alter table expensepayout add column cancelcount int default 0;
 alter table expensepayout add column slvnum varchar(20);
 alter table expensepayout add column seccode varchar(10);
+alter table expensepayout add column issuanceItem int default 0;
 insert into status (Status_ID,description,table_ID) VALUES (94,'Cancelled',11);
 
 #Label Queue
