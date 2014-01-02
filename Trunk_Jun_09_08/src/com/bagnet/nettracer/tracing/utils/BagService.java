@@ -1106,17 +1106,16 @@ public class BagService {
 							}
 							h.put("CLAIM_CHECKS", sb.toString());
 
-							// set embedded images
-							String myEmailHeaderImage = TracingConstants.BANNER_IMAGE;
-							String strImageLogoFromPropertiesFile = 
-								messages.getMessage(new Locale(currentLocale), "email.to.pax.header.image.file");
-							if (strImageLogoFromPropertiesFile != null && strImageLogoFromPropertiesFile.equalsIgnoreCase("")) {
-								myEmailHeaderImage = strImageLogoFromPropertiesFile;
-							}
-							
 							if (embedImage) {
-								String img1 = he.embed(new URL("file:/" + imagepath + myEmailHeaderImage),
-										myEmailHeaderImage);
+								// set embedded images
+								String myEmailHeaderImage = TracingConstants.BANNER_IMAGE;
+								String strImageLogoFromPropertiesFile = 
+									StringUtils.trimToNull(messages.getMessage(new Locale(currentLocale), "email.to.pax.header.image.file"));
+								if (strImageLogoFromPropertiesFile != null) {
+									myEmailHeaderImage = strImageLogoFromPropertiesFile;
+								}
+								
+								String img1 = he.embed(new URL("file:/" + imagepath + myEmailHeaderImage), myEmailHeaderImage);
 								h.put("BANNER_IMAGE", img1);
 							}
 								
