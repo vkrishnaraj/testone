@@ -28,6 +28,14 @@
 	    	alert('Error in submitting Web Service. Please Resubmit or Call Administrator for connection issue.');
 	    };
 	    
+	    function textCounter(field, countfield, maxlimit) {
+	        if (field.value.length > maxlimit) {
+	          field.value = field.value.substring(0, maxlimit);
+	        } else {
+	          countfield.value = maxlimit - field.value.length;
+	        }
+	      }	    
+	    
   </SCRIPT>
 
 
@@ -217,8 +225,8 @@
 								<bean:message key="colname.comments" />
 								<br />
 								<html:textarea property="newComment" cols="80" rows="5"
-									onkeydown="textCounter(this,this,255);"
-									onkeyup="textCounter(this,this,255);" />
+									onkeydown="textCounter(this.form.newComment,this.form.comments2,255);"
+									onkeyup="textCounter(this.form.newComment,this.form.comments2,255);" />
 								<input name='comments2' type="text" id='comments2' value="255"
 									size="4" maxlength="4" disabled="disabled"/>
 							</td>
