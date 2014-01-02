@@ -354,6 +354,7 @@
                     <xs:element minOccurs="0" name="interim" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="path" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="publish" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="statusId" type="xs:int"/>
                 </xs:sequence>
             </xs:complexType>
             <xs:complexType name="Itinerary">

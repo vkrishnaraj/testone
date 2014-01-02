@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.onlineclaims.xsd;
 public interface File extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(File.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s47918F556B545B4B159263E4D62D20A1").resolveHandle("file3dabtype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(File.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s6B9AE42F380158AA4A818798B2B09D68").resolveHandle("file3dabtype");
     
     /**
      * Gets the "filename" element
@@ -187,6 +187,36 @@ public interface File extends org.apache.xmlbeans.XmlObject
      * Unsets the "publish" element
      */
     void unsetPublish();
+    
+    /**
+     * Gets the "statusId" element
+     */
+    int getStatusId();
+    
+    /**
+     * Gets (as xml) the "statusId" element
+     */
+    org.apache.xmlbeans.XmlInt xgetStatusId();
+    
+    /**
+     * True if has "statusId" element
+     */
+    boolean isSetStatusId();
+    
+    /**
+     * Sets the "statusId" element
+     */
+    void setStatusId(int statusId);
+    
+    /**
+     * Sets (as xml) the "statusId" element
+     */
+    void xsetStatusId(org.apache.xmlbeans.XmlInt statusId);
+    
+    /**
+     * Unsets the "statusId" element
+     */
+    void unsetStatusId();
     
     /**
      * A factory class with static methods for creating instances

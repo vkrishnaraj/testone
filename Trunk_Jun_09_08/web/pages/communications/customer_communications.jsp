@@ -126,7 +126,7 @@
 					jQuery(this).dialog("close");
 					var outboundMessage = document.getElementById("outboundMessage");
 					if (outboundMessage && outboundMessage.value == "") {
-						alert('You must enter a Outbound Message.');
+						alert('You must enter an Outbound Message.');
 						return;
 					}
 					document.incidentForm.outMessage.value=outboundMessage.value;
@@ -286,7 +286,7 @@
 								</logic:iterate>
 							</logic:notEmpty>
 							
-							<logic:notEmpty name="activity" property="files">
+							<logic:notEmpty name="activity" property="files"><br/>
 							<bean:message key="colname.files"/><br/>
 							<logic:iterate id="file" name="activity" property="files">
 								<a href="showImage?ID=<bean:write name='file' property='path'/>/<bean:write name='file' property='filename'/>&useOCPath=1" target="_blank">

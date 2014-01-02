@@ -30,6 +30,8 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "path");
     private static final javax.xml.namespace.QName PUBLISH$8 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "publish");
+    private static final javax.xml.namespace.QName STATUSID$10 = 
+        new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "statusId");
     
     
     /**
@@ -555,6 +557,98 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             get_store().remove_element(PUBLISH$8, 0);
+        }
+    }
+    
+    /**
+     * Gets the "statusId" element
+     */
+    public int getStatusId()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATUSID$10, 0);
+            if (target == null)
+            {
+                return 0;
+            }
+            return target.getIntValue();
+        }
+    }
+    
+    /**
+     * Gets (as xml) the "statusId" element
+     */
+    public org.apache.xmlbeans.XmlInt xgetStatusId()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlInt target = null;
+            target = (org.apache.xmlbeans.XmlInt)get_store().find_element_user(STATUSID$10, 0);
+            return target;
+        }
+    }
+    
+    /**
+     * True if has "statusId" element
+     */
+    public boolean isSetStatusId()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return get_store().count_elements(STATUSID$10) != 0;
+        }
+    }
+    
+    /**
+     * Sets the "statusId" element
+     */
+    public void setStatusId(int statusId)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATUSID$10, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(STATUSID$10);
+            }
+            target.setIntValue(statusId);
+        }
+    }
+    
+    /**
+     * Sets (as xml) the "statusId" element
+     */
+    public void xsetStatusId(org.apache.xmlbeans.XmlInt statusId)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlInt target = null;
+            target = (org.apache.xmlbeans.XmlInt)get_store().find_element_user(STATUSID$10, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlInt)get_store().add_element_user(STATUSID$10);
+            }
+            target.set(statusId);
+        }
+    }
+    
+    /**
+     * Unsets the "statusId" element
+     */
+    public void unsetStatusId()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            get_store().remove_element(STATUSID$10, 0);
         }
     }
 }
