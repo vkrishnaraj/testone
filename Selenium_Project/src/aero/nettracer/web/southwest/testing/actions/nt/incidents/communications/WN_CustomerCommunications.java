@@ -435,4 +435,30 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 		}
 		goToTaskManager();
 	}
+
+	@Test
+	public void testOutboundWebPortalMessage() {
+		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
+		selenium.select("id=activityIdSelect", "label=OUTBOUND WEB PORTAL MESSAGE");
+		selenium.click("id=addCommButton");
+		waitForPageToLoadImproved(500,false);
+		
+		List<WebElement> buttons = driver.findElements(By.className("ui-state-default"));
+		buttons.get(0).click();
+
+		assertEquals("You must enter an Outbound Message.", selenium.getAlert());
+		selenium.click("id=addCommButton");
+		waitForPageToLoadImproved(500,false);
+		type(By.id("outboundMessage"),"Test Outbound Message");
+		
+		buttons = driver.findElements(By.className("ui-state-default"));
+		buttons.get(0).click();
+		if (checkNoErrorPage()) {
+			isTextPresent(By.xpath("//div[@id='maincontent']/table[9]/tbody/tr[3]/td[3]"), "OUTBOUND WEB PORTAL MESSAGE");
+		} else {
+			System.out.println("!!!!!!!!!!!!!!!! Failed to create Outbound Incident Activity");
+			verifyTrue(false);
+		}
+		goToTaskManager();
+	}
 }
