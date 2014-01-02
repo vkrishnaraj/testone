@@ -59,6 +59,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 	public static String ERROR_REQ_LASTNAME = "Please provide last name";
 	public static String ERROR_REQ_COLOR = "Please provide color";
 	public static String ERROR_REQ_TYPE = "Please provide type";
+	public static String ERROR_REQ_ADDBAGLZ = "Color, Type, Type of Item Required";
 	
 	public static String REMARK_SCANNED = "Item Scanned";
 	public static String REMARK_IMPROPER_FOWARD = "Item Improperly Forwarded";
@@ -725,8 +726,9 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 			logger.info(resDoc);
 			return resDoc;
 		} else {
-			serviceResponse.setSuccess(true);
+			serviceResponse.setSuccess(false);
 			serviceResponse.setReturnStatus(STATUS_RETURN_CREATE_OHD);
+			serviceResponse.addError(ERROR_REQ_ADDBAGLZ);
 			logger.info(resDoc);
 			return resDoc;
 		}
@@ -896,6 +898,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		ohd.setAgent(inc.getAgent());
 		ohd.setFounddate(inc.getCreatedate());
 		ohd.setFoundtime(inc.getCreatetime());
+		ohd.setRecord_locator(inc.getRecordlocator());
 		
 		if(inc.getItemlist() != null && inc.getItemlist().size() > 0){
 			ohd.setColor(inc.getItemlist().get(0).getColor());
