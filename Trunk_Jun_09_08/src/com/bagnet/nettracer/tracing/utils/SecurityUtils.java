@@ -20,7 +20,7 @@ import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Expression;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.type.StandardBasicTypes;
 
 import aero.nettracer.lf.services.LFLogUtil;
@@ -62,20 +62,22 @@ public class SecurityUtils {
 			sess = HibernateWrapper.getSession().openSession();
 			
 			Criteria criteria = sess.createCriteria(Agent.class);
-			criteria.add(Expression.eq("username", username));
-			criteria.add(Expression.eq("password", StringUtils.sha1_256(password, true)));
-			List results = criteria.list();
+			criteria.add(Restrictions.eq("username", username));
+			criteria.add(Restrictions.eq("password", StringUtils.sha1_256(password, true)));
+			@SuppressWarnings("unchecked")
+			List<Agent> results = criteria.list();
 			
 			if (results == null || results.size() < 1) {
 				
 				// Add 1 to # of times login failed.
 				Criteria criteria2 = sess.createCriteria(Agent.class);
-				criteria2.add(Expression.eq("username", username));
+				criteria2.add(Restrictions.eq("username", username));
 				
-				List results2 = criteria2.list();
+				@SuppressWarnings("unchecked")
+				List<Agent> results2 = criteria2.list();
 				if (results2.size() == 1) {
-					log.info("User: "+agent.getUsername()+", Company Code: "+agent.getCompanycode_ID()+", Instance: "+System.getProperty("instance.ref")+" entered a wrong password.");
 					agent = (Agent)results2.get(0);
+					log.info("User: "+agent.getUsername()+", Company Code: "+agent.getCompanycode_ID()+", Instance: "+System.getProperty("instance.ref")+" entered a wrong password.");
 					int maxFailedAttempts = AdminUtils.getCompVariable(agent.getCompanycode_ID()).getMax_failed_logins();
 					
 					if (maxFailedAttempts > 0) {
@@ -139,6 +141,8 @@ public class SecurityUtils {
 	 * @param errors
 	 * @return
 	 */
+	
+	@SuppressWarnings("unchecked")
 	public static Agent authUser(String username, String password, String companyCode, int logintype,
 			ActionMessages errors) {
 		Session sess = null;
@@ -152,17 +156,17 @@ public class SecurityUtils {
 				sess = HibernateWrapper.getSession().openSession();
 	
 				Criteria criteria = sess.createCriteria(Agent.class);
-				criteria.add(Expression.eq("username", username));
-				criteria.add(Expression.eq("password", StringUtils.sha1_256(password, true)));
-				criteria.add(Expression.eq("companycode_ID", companyCode));
-				List results = criteria.list();
+				criteria.add(Restrictions.eq("username", username));
+				criteria.add(Restrictions.eq("password", StringUtils.sha1_256(password, true)));
+				criteria.add(Restrictions.eq("companycode_ID", companyCode));
+				List<Agent> results = criteria.list();
 				
 				if (results == null || results.size() < 1){
 					//loupas - check to see if the password is still using TEA encryption, if so, return the agent with reset_password=true
 					Criteria criteriaSHA1 = sess.createCriteria(Agent.class);
-					criteriaSHA1.add(Expression.eq("username", username));
-					criteriaSHA1.add(Expression.eq("password", StringUtils.sha1(password, true)));
-					criteriaSHA1.add(Expression.eq("companycode_ID", companyCode));
+					criteriaSHA1.add(Restrictions.eq("username", username));
+					criteriaSHA1.add(Restrictions.eq("password", StringUtils.sha1(password, true)));
+					criteriaSHA1.add(Restrictions.eq("companycode_ID", companyCode));
 					results = criteriaSHA1.list();
 					// Commenting out because we don't want to force reset for this change. per Byron
 					//if(results != null && results.size() > 0 ){
@@ -173,9 +177,9 @@ public class SecurityUtils {
 				if (results == null || results.size() < 1){
 					//loupas - check to see if the password is still using TEA encryption, if so, return the agent with reset_password=true
 					Criteria criteriaTEA = sess.createCriteria(Agent.class);
-					criteriaTEA.add(Expression.eq("username", username));
-					criteriaTEA.add(Expression.eq("password", TEA.encryptTEA(password)));
-					criteriaTEA.add(Expression.eq("companycode_ID", companyCode));
+					criteriaTEA.add(Restrictions.eq("username", username));
+					criteriaTEA.add(Restrictions.eq("password", TEA.encryptTEA(password)));
+					criteriaTEA.add(Restrictions.eq("companycode_ID", companyCode));
 					results = criteriaTEA.list();
 					if(results != null && results.size() > 0 ){
 						((Agent) results.get(0)).setReset_password(true);
@@ -185,9 +189,9 @@ public class SecurityUtils {
 				if (results == null || results.size() < 1) {
 					// Add 1 to # of times login failed.
 					Criteria criteria2 = sess.createCriteria(Agent.class);
-					criteria2.add(Expression.eq("username", username));
-					criteria2.add(Expression.eq("companycode_ID", companyCode));
-					List results2 = criteria2.list();
+					criteria2.add(Restrictions.eq("username", username));
+					criteria2.add(Restrictions.eq("companycode_ID", companyCode));
+					List<Agent> results2 = criteria2.list();
 					if (results2.size() == 1) {
 						agent = (Agent)results2.get(0);
 						log.info("User: "+agent.getUsername()+", Company Code: "+agent.getCompanycode_ID()+", Instance: "+System.getProperty("instance.ref")+" entered a wrong password.");
@@ -270,6 +274,80 @@ public class SecurityUtils {
 		return agent;
 
 	}
+	
+
+	/**
+	 * Login method that requires no password to login.
+	 * @author SeanFine
+	 * logintype == 0: application login
+	 * logintype == 1: webservice login
+	 * anything else for logintype is default to application login
+	 * 
+	 * @param username
+	 * @param companyCode
+	 * @param logintype
+	 * @param errors
+	 * @return agent
+	 */
+	public static Agent authUserNoPassword(String username, String companyCode, int logintype,
+			ActionMessages errors) {
+		Session sess = null;
+		Agent agent = null;
+		if (username == null || username.isEmpty()) {
+			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.password.mismatch"));
+		} else {
+			try {
+				sess = HibernateWrapper.getSession().openSession();
+	
+				Criteria criteria = sess.createCriteria(Agent.class);
+				criteria.add(Restrictions.eq("username", username));
+				criteria.add(Restrictions.eq("companycode_ID", companyCode));
+				@SuppressWarnings("unchecked")
+				List<Agent> results = criteria.list();
+				if(results==null || results.size()<1){
+					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.password.mismatch"));
+				} else {
+					agent = (Agent) results.get(0);
+					if (!agent.isActive()) {
+						log.info("User: "+agent.getUsername()+", Company Code: "+agent.getCompanycode_ID()+", Instance: "+System.getProperty("instance.ref")+" is inactive.");
+						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.user.inactive"));
+					}
+					
+					if (logintype == 1 && agent.isWs_enabled() != true) {
+						log.info("User: "+agent.getUsername()+", Company Code: "+agent.getCompanycode_ID()+", Instance: "+System.getProperty("instance.ref")+" does not have access to webservice.");
+						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.user.ws_disabled"));
+					} else if (logintype == 0 && agent.isWeb_enabled() != true) {
+						log.info("User: "+agent.getUsername()+", Company Code: "+agent.getCompanycode_ID()+", Instance: "+System.getProperty("instance.ref")+" does not have access to web application.");
+						
+						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.user.web_disabled"));
+					}
+					if (agent.isAccount_locked()) {
+						log.info("User: "+agent.getUsername()+", Company Code: "+agent.getCompanycode_ID()+", Instance: "+System.getProperty("instance.ref")+" is locked");
+						
+						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.user.lockedout"));
+					} else {
+						agent.setFailed_logins(0);
+						HibernateUtils.save(agent);
+						if (PropertyBMO.isTrue(PropertyBMO.LF_USER)) {
+							LFLogUtil.writeLog(agent.getUsername(), agent.getStation().getStationcode(), LFLogUtil.EVENT_LOGIN, 0, 0);
+						}
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.database.connection"));
+			} finally {
+				if (sess != null) {
+					try {
+						sess.close();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		return agent;
+	}
 
 	public static void updateAgentLogin(Agent agent, Date log_off_time, int is_online, boolean fullSave) {
 		Session sess = null;
@@ -299,9 +377,10 @@ public class SecurityUtils {
 			if (log_off_time != null) {
 
 				Criteria criteria = sess.createCriteria(Agent_Logger.class);
-				criteria.add(Expression.eq("agent_ID", new Integer(agent.getAgent_ID())));
-				criteria.add(Expression.eq("log_in_time", agent.getLast_logged_on()));
-				List results = criteria.list();
+				criteria.add(Restrictions.eq("agent_ID", new Integer(agent.getAgent_ID())));
+				criteria.add(Restrictions.eq("log_in_time", agent.getLast_logged_on()));
+				@SuppressWarnings("unchecked")
+				List<Agent_Logger> results = criteria.list();
 
 				if (results != null && results.size() > 0) al = (Agent_Logger) results.get(0);
 			}
@@ -332,7 +411,7 @@ public class SecurityUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Company_Specific_Variable.class);
-			cri.add(Expression.eq("companyCode_ID", companycode_id));
+			cri.add(Restrictions.eq("companyCode_ID", companycode_id));
 			Company_Specific_Variable csv = (Company_Specific_Variable)cri.list().get(0);
 			if (csv != null) {
 				return csv.getWebs_enabled() == 1 ? true : false;
@@ -356,6 +435,7 @@ public class SecurityUtils {
 	 * @return boolean Returns false if password policy not met.
 	 */
 	public static boolean isPolicyAcceptablePassword(String companycode_id, String password, String username, HttpServletRequest request, boolean suppress) {
+		@SuppressWarnings("unused")
 		boolean securePolicy = false;
 		int passlength = 8;
 		
@@ -363,7 +443,7 @@ public class SecurityUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Company_Specific_Variable.class);
-			cri.add(Expression.eq("companyCode_ID", companycode_id));
+			cri.add(Restrictions.eq("companyCode_ID", companycode_id));
 			Company_Specific_Variable csv = (Company_Specific_Variable)cri.list().get(0);
 			if (csv != null && csv.getSecure_password() == 1) {
 				securePolicy = true;
@@ -447,6 +527,7 @@ public class SecurityUtils {
 			q.setParameter("passcount", passcount);
 			q.setParameter("password", password);
 			q.addScalar("id", StandardBasicTypes.LONG);
+			@SuppressWarnings("unchecked")
 			List<Long> ret = q.list();
 			if(ret != null && ret.size() > 0){
 				return true;
