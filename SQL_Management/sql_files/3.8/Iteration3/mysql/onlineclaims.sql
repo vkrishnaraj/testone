@@ -415,7 +415,7 @@ create table oc_message (
   claimId bigint,
   incActId bigint,
   dateCreated datetime not null,
-  username varchar(20) not null,
+  username varchar(40) not null,
   message text,
   dateReviewed datetime,
   publish tinyint default 1,
