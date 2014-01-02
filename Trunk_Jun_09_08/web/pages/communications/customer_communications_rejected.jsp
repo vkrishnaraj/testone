@@ -67,7 +67,7 @@
 	          			<display:column titleKey="colname.cust.comm.id" property="id" href="customerCommunicationsRejected.do" paramId="taskId" paramProperty="id" sortable="true" sortName="id" />
 	          			<display:column titleKey="colname.cust.comm.incident.id" property="incidentId" href="searchIncident.do" paramId="incident" paramProperty="incidentId" sortable="true" sortName="incidentId" />
 	          			<display:column titleKey="colname.cust.comm.description" property="description" sortable="false" style="width:35%;" />
-	          			<display:column titleKey="colname.cust.comm.rejected.by" property="agent" sortable="true" sortName="agent" />
+	          			<display:column titleKey="colname.cust.comm.rejected.by" property="approver" sortable="true" sortName="approver" />
 	          			<display:column titleKey="colname.cust.comm.updated" property="dispTaskDate" sortable="true" sortName="date" />
 	 			    	<display:footer>
 			               	<tr>
