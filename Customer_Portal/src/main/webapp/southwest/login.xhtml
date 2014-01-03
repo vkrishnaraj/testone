@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	template="../layout/southwest_template.xhtml">
+	<ui:define name="title">Southwest Airlines: Lost &amp; Found</ui:define>
+	<ui:define name="body">
+		<h:form id="pageForm">
+			<h:panelGroup style="width: 315px">
+				<p class="contentHeader"><t:outputText value="#{msg.landing_text_edit_title}" /></p>
+				<p><t:outputText value="#{msg.landing_text_edit_desc}" /></p>
+				<div>
+					<rich:messages id="reportMsg" errorClass="errormsg" infoClass="infomsg" layout="list"/>
+					<rich:spacer width="100%" height="15" title="" />
+				</div>
+				<table><tr>
+				<td><t:outputText value="#{msg.landing_label_last_name}" /></td>
+				<td><t:inputText value="#{lostAndFoundLogin.login.lastName}" /></td>
+				</tr><tr>
+				<td><t:outputText value="#{msg.landing_label_tracking}" /></td>
+				<td><t:inputText value="#{lostAndFoundLogin.login.trackingNumber}" /></td>
+				</tr></table>
+				
+				<a4j:commandButton styleClass="submitButtonOrange" value="#{msg.landing_button_edit_status}" action="#{lostAndFoundLogin.loginSouthwest}" /><br/><br/>
+				
+			</h:panelGroup>
+		</h:form>
+	</ui:define>
+</ui:composition>

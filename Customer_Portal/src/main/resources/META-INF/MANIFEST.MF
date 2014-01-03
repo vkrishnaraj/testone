@@ -1,0 +1,1 @@
+Dependencies: org.apache.axis2,org.apache.xmlbeans,com.bagnet.nettracer.ws.onlineclaims

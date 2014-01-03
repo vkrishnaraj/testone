@@ -1,0 +1,364 @@
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, caption {
+    background: none repeat scroll 0 0 transparent;
+    border: 0 none;
+    font-size: 100%;
+    margin: 0;
+    outline: 0 none;
+    padding: 0;
+    vertical-align: baseline;
+    color: #333333;
+}
+
+body {
+    background: url("../_images/southwest/wrapShadow.png") repeat-y scroll center top transparent;
+    font-family: Arial,Tahoma,sans-serif;
+    font-size: 11px;
+    line-height: 1em;
+}
+
+a {
+    color: #2583F9;
+    font-weight: normal;
+    outline: medium none;
+    text-decoration: none;
+}
+
+a:hover {
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+.col25 {
+	width: 25%;
+}
+
+.errormsg span {
+	clear: none;
+	color: red;
+	margin-top: 2px;
+	font-size: 8pt;
+}
+
+.infomsg span {
+	color: green;
+	list-style: none;
+	font-size: 10pt;
+	font-weight: bold;
+}
+
+#bagItUp {
+    margin: 0 auto;
+    width: 988px;
+}
+
+#header {
+    height: 95px;
+    margin: 5px 0 0;
+    position: relative;
+    width: 988px;
+}
+
+#header a.wings {
+    background: url("../_images/southwest/swaHeart.gif") no-repeat scroll left center transparent;
+    color: #348BF9;
+    display: block;
+    float: none;
+    font-size: 13px;
+    height: 20px;
+    line-height: 20px;
+    margin: 0 0 3px;
+    padding: 1px 0 0 50px;
+    position: absolute;
+    right: 0;
+    text-decoration: none;
+    text-transform: lowercase;
+    top: 50px;
+    width: 123px;
+}
+
+#header a img {
+    padding: 0 15px 15px;
+}
+
+#header img {
+    float: left;
+}
+
+a img {
+    border: medium none;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#nav {
+    background: url("../_images/southwest/navBG.gif") no-repeat scroll left top transparent;
+    color: #FFFFFF;
+    height: 42px;
+    position: relative;
+}
+
+#footer {
+    border-top: 1px dotted #999999;
+    clear: both;
+    height: 70px;
+    position: relative;
+    width: 990px;
+    margin: 0 auto;
+    padding: 30px 0;
+}
+
+#footer, #footer a {
+    color: #2583F9;
+    font-size: 12px;
+    font-weight: normal;
+    text-transform: capitalize;
+}
+
+#footer p.nuts {
+    background: url("../_images/southwest/nuts.gif") no-repeat scroll left top transparent;
+    height: 90px;
+    left: 0;
+    padding: 12px 0 0 30px;
+    position: absolute;
+    top: 0;
+    width: 140px;
+}
+
+#footer p.nuts span {
+    color: #333333;
+    font: bold 10px Verdana,Tahoma,sans-serif;
+}
+
+#footer p.nuts a {
+    display: block;
+    font-size: 11px;
+    padding: 3px 0 0;
+}
+
+#footer p.copyright {
+    color: #999999;
+    left: 185px;
+    line-height: 14px;
+    position: absolute;
+    top: 10px;
+    width: 360px;
+}
+
+ol, ul {
+    list-style: none outside none;
+}
+
+ul#socialLinks {
+    color: #333333;
+    float: right;
+    font-size: 11px;
+    height: 40px;
+    margin-top: -18px;
+    width: 440px;
+}
+
+ul#socialLinks li {
+    display: block;
+    float: left;
+    height: 40px;
+    position: relative;
+    width: 110px;
+}
+
+ul#socialLinks li span {
+    display: block;
+    left: 28px;
+    position: absolute;
+    top: 1px;
+}
+
+ul#socialLinks li a.sociallink {
+    display: block;
+    font-size: 11px;
+    left: 28px;
+    position: absolute;
+    top: 12px;
+}
+
+ul#socialLinks li a.socialicon {
+    display: block;
+    height: 22px;
+    left: 0;
+    position: absolute;
+    text-indent: -9999px;
+    top: 0;
+    width: 22px;
+}
+
+ul#socialLinks li a.facebook {
+    background: url("../_images/southwest/socialIcons.gif") no-repeat scroll left top transparent;
+}
+
+ul#socialLinks li a.twitter {
+    background: url("../_images/southwest/socialIcons.gif") no-repeat scroll -22px 0 transparent;
+}
+
+ul#socialLinks li a.youtube {
+    background: url("../_images/southwest/socialIcons.gif") no-repeat scroll -44px 0 transparent;
+}
+
+ul#socialLinks li a.flickr {
+    background: url("../_images/southwest/socialIcons.gif") no-repeat scroll right top transparent;
+}
+
+#leftColumn {
+    display: inline;
+    float: left;
+    margin: 20px 0 0;
+    width: 100px;
+}
+
+#middleColumn {
+    width: 735px;
+    color: #666666;
+    font-family: Arial,sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    float: left;
+    margin: 20px 0 0 16px;
+}
+
+#rightColumn {
+    float: right;
+    margin: 20px 20px 0 0;
+    width: 94px;
+}
+
+.contentHeader {
+	border-bottom: 1px dotted #666666;
+    font-size: 28px;
+    font-weight: bold;
+    line-height: 30px;
+    margin: 0 0 6px;
+    padding: 10px 0 15px;
+}
+
+.contentHeaderLine {
+	border-bottom: 1px dotted #666666;
+    margin: 0 0 6px;
+    padding: 10px 0 15px;
+    width: 100%;
+}
+
+.contentHeaderText {
+    font-size: 28px;
+    font-weight: bold;
+    line-height: 30px;
+}
+
+.contentSubHeader {
+	font-size: 1em;
+    font-weight: bold;
+    position: relative;
+}
+
+.twlvPxBlk {
+}
+
+input[type="button"], input[type="submit"], input[type="reset"] {
+    border: medium none;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 22px;
+    margin-top: 5px;
+}
+
+.swa_expandables_expandable_list dd, .swa_expandables_expandable_list dt span {
+    padding-left: 30px;
+}
+
+.swa_expandables_expandable_list dt.collapsed span {
+    background: url("../_images/southwest/icon_open_dt.png") no-repeat scroll left 2px transparent;
+    display: inline-block;
+}
+
+.swa_expandables_expandable_list dt.expanded span {
+    background: url("../_images/southwest/icon_close_dt.png") no-repeat scroll left 2px transparent;
+}
+
+dl.swa_expandables_expandable_list {
+    background: url("../_images/southwest/dotted_grayOverBlue_1_2.gif") repeat-x scroll center bottom transparent;
+    margin-top: 0;
+    padding-bottom: 1px;
+}
+
+.swa_expandables_expandable_list dt {
+    background: url("../_images/southwest/dotted_grayOverBlue_1_2.gif") repeat-x scroll center top transparent;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: -1px;
+    margin-bottom: 20px;
+    padding-top: 20px;
+}
+
+.swa_expandables_expandable_list dt.first_item {
+    background: none repeat scroll 0 0 transparent;
+}
+
+.swa_expandables_expandable_list dd {
+    display: none;
+    margin: 0;
+    padding-bottom: 5px;
+}
+
+.swa_expandables_expandable_list dd.active {
+    display: block;
+}
+
+h2.swa_faq_title {
+    font-size: 22px;
+    margin-bottom: 5px;
+}
+
+.submitButtonWhite {
+    background-color: transparent;
+    background-image: url("../_images/southwest/button_white.gif");
+    background-position: left top;
+    background-repeat: no-repeat;
+    height: 25px;
+    width: 101px;
+	color: #2683F9;
+}
+
+.submitButtonOrange {
+	background: url("../_images/southwest/button.png") no-repeat scroll left top transparent;
+    height: 26px;
+    width: 86px;
+    color: white;
+}
+
+.rich-calendar-button {
+	padding: 0 0 2px 4px;
+}
+
+.rich-calendar-weekends {
+	color: black;
+}
+
+.rich-calendar-holly {
+	background-color: white;
+	color: black;
+}
+
+.rich-calendar-boundary-dates {
+	color: #A0A0A0;
+}
+
+.rich-calendar-hover {
+	background-color: #E4F5E2;
+	color: #000000;
+}
+
+.rich-calendar-select {
+background-color: #BED6F8;
+    color: #000000;
+    font-weight: bold;
+}
+

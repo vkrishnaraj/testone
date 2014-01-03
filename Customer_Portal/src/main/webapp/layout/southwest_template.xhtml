@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+	
+<f:view contentType="text/html" encoding="UTF-8">
+<f:loadBundle basename="southwest" var="msg"/>	
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=8" />
+<title><ui:insert name="title">Default Title</ui:insert></title>
+<link rel="stylesheet" type="text/css" href="../_css/southwest_master.css"/>
+<link href="../_images/southwest/favicon.ico" type="image/png" rel="shortcut icon" />
+</head>
+<body>
+<div id="main">
+<!-- ########## BEGIN HEADER ########## -->
+<div id="bagItUp">   
+<div id="header">
+<a href="/">
+<img alt="Southwest Airlines" src="../_images/southwest/logo.png" />
+</a>
+<a class="wings" href="http://southwest.com">Go to southwest.com</a>
+</div>
+<!-- ########## END HEADER ########## -->
+<div id="nav"></div>
+<div id="body">	 
+	<div id="leftColumn" ></div>
+	<div id="middleColumn"> 
+		<!-- #################### END HEADER TEMPLATE ########################## -->
+		<ui:insert name="body" />
+		<!-- #################### BEGIN FOOTER TEMPLATE ######################## -->
+	</div>
+	<div id="rightColumn"></div>
+</div>
+<div class="clear"></div>
+<!-- ########## BEGIN FOOTER ########## -->
+</div>
+<div id="footer">
+<p class="nuts">
+<span>Nuts about Southwest?</span>
+<a href="http://www.southwest.com/jp/blog.html?int=GFOOTER-TOP-BLOG">So are we, read the blog</a>
+</p>
+<p class="copyright">&#169; 2011 Southwest Airlines. All Rights Reserved. Use of the Southwest websites and our Company Information constitutes acceptance of our Terms and Conditions. Privacy Policy.</p>
+<ul id="socialLinks">
+<li>
+<a class="socialicon facebook" href="http://www.facebook.com/Southwest?int=GFOOTER-TOP-FACEBOOK">facebook</a>
+<span>Become a Fan</span>
+<a class="sociallink" href="http://www.facebook.com/Southwest?int=GFOOTER-TOP-FACEBOOK">Facebook</a>
+</li>
+<li>
+<a class="socialicon twitter" href="http://twitter.com/SouthwestAir?int=GFOOTER-TOP-TWITTER">twitter</a>
+<span>Follow Us</span>
+<a class="sociallink" href="http://twitter.com/SouthwestAir?int=GFOOTER-TOP-TWITTER">Twitter</a>
+</li>
+<li>
+<a class="socialicon youtube" href="http://www.youtube.com/user/NutsAboutSouthwest?int=GFOOTER-TOP-YOUTUBE">youtube</a>
+<span>Tune In</span>
+<a class="sociallink" href="http://www.youtube.com/user/NutsAboutSouthwest?int=GFOOTER-TOP-YOUTUBE">YouTube</a>
+</li>
+<li>
+<a class="socialicon flickr" href="http://flickr.com/groups/southwestairlines/?int=GFOOTER-TOP-FLICKR">flickr</a>
+<span>Share Photos</span>
+<a class="sociallink" href="http://flickr.com/groups/southwestairlines/?int=GFOOTER-TOP-FLICKR">Flickr</a>
+</li>
+</ul>
+</div>
+<!-- ########## END FOOTER ########## -->
+</div> 
+</body>
+</f:view>
+</html>

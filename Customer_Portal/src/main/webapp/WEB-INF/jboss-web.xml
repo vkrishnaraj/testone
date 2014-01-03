@@ -1,0 +1,3 @@
+<jboss-web>
+	<context-root>/customer-portal</context-root>
+</jboss-web>

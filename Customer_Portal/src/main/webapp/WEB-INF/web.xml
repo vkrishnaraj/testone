@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/j2ee"
+ 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+ 	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+ 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+ 	
+  <display-name>Archetype Created Web Application</display-name>
+  
+	<!-- JBoss Params -->
+	<!-- Disables JBoss's JSF implementation !!!COMMENT OUT FOR JBoss 6!!! -->
+	<context-param>
+		<param-name>org.jboss.jbossfaces.WAR_BUNDLES_JSF_IMPL</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<!-- End JBoss Params -->
+	
+	
+	<!-- JSF Params -->
+	<!-- Sets servlet to faces -->
+	<servlet>
+		<servlet-name>Faces Servlet</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<!-- Any page request with the suffix .faces will be handled by Faces -->
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.faces</url-pattern>
+	</servlet-mapping>
+	<!-- Any page request with the suffix .do will be handled by Faces -->
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+	<!-- The view state will be saved server side, this severely reduces network traffic -->
+	<context-param>
+		<param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+		<param-value>server</param-value>
+	</context-param>
+	<!-- This will validate the XML of faces-config.xml -->
+	<context-param>
+		<param-name>com.sun.faces.validateXml</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<!-- End JSF Params -->
+	
+	
+	<!-- Richfaces Params -->
+	<context-param>
+		<param-name>org.richfaces.SKIN</param-name>
+		<param-value>blueSky</param-value>
+	</context-param>
+	<context-param>
+		<param-name>org.ajax4jsf.VIEW_HANDLERS</param-name>
+		<param-value>com.sun.facelets.FaceletViewHandler</param-value>
+	</context-param>
+	<!-- Below is needed for RichFaces 3.3.4 and below -->
+	<filter>
+		<display-name>RichFaces Filter</display-name>
+		<filter-name>richfaces</filter-name>
+		<filter-class>org.ajax4jsf.Filter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>richfaces</filter-name>
+		<servlet-name>Faces Servlet</servlet-name>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>INCLUDE</dispatcher>
+	</filter-mapping>
+	<!-- End Richfaces Params -->
+	
+	
+	<!-- Tomahawk Params -->
+	<filter>
+		<filter-name>MyFacesExtensionsFilter</filter-name>
+		<filter-class>org.apache.myfaces.webapp.filter.ExtensionsFilter</filter-class>
+		<init-param>
+			 <description>Size limit for uploaded files.
+                 10 - 10 bytes, 10k - 10 KB, 10m - 10 MB, 1g - 1 GB</description>
+ 			<param-name>uploadMaxFileSize</param-name>
+ 			<param-value>100m</param-value>
+ 		</init-param>
+ 		<init-param>
+ 			 <description>Set the threshold size - files below this limit are stored
+			     in memory, files above this limit are stored on disk.
+                 10 - 10 bytes, 10k - 10 KB, 10m - 10 MB, 1g - 1 GB</description>
+ 			<param-name>uploadThresholdSize</param-name>
+ 			<param-value>100k</param-value>
+ 		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>MyFacesExtensionsFilter</filter-name>
+		<servlet-name>Faces Servlet</servlet-name>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>MyFacesExtensionsFilter</filter-name>
+		<url-pattern>/faces/myFacesExtensionResource/*</url-pattern>
+	</filter-mapping>
+	<!-- End Tomahawk Params -->
+	
+	
+	<!-- Facelets Params -->
+	<context-param>
+		<param-name>javax.faces.DEFAULT_SUFFIX</param-name>
+		<param-value>.xhtml</param-value>
+	</context-param>
+	<context-param>
+		<param-name>facelets.REFRESH_PERIOD</param-name>
+		<param-value>2</param-value>
+	</context-param>
+	<context-param>
+		<param-name>facelets.DEVELOPMENT</param-name>
+		<param-value>false</param-value>
+	</context-param>
+	<!-- End Facelets Params -->
+	
+
+	<!-- Spring Params -->
+	<context-param>
+    	<param-name>contextConfigLocation</param-name>
+    	<param-value>/WEB-INF/applicationContext.xml</param-value>
+	</context-param>
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<listener>
+    	<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+	<welcome-file-list>
+    	<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+	<!-- End Spring Params -->
+	
+	<error-page>
+    	<error-code>500</error-code>
+    	<location>/error.jsp</location>
+	</error-page>
+	
+ 	<session-config>
+ 		<cookie-config>
+ 			<http-only>true</http-only>
+ 		</cookie-config>
+ 		<tracking-mode>COOKIE</tracking-mode>
+ 	
+ 	</session-config>
+	
+</web-app>
