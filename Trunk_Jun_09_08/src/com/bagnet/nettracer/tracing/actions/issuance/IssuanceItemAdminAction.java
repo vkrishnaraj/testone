@@ -8,34 +8,19 @@ package com.bagnet.nettracer.tracing.actions.issuance;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.TimeZone;
 
-import javax.naming.Context;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.axis2.transport.TransportUtils;
 import org.apache.log4j.Logger;
+import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 
-import aero.nettracer.fs.model.forum.FsForumPost;
-import aero.nettracer.fs.model.forum.FsForumSearch;
-import aero.nettracer.fs.model.forum.FsForumTag;
-import aero.nettracer.fs.model.forum.FsForumThread;
-import aero.nettracer.fs.model.transport.v3.forum.FsForumSearchResults;
-import aero.nettracer.fs.model.transport.v3.forum.FsForumThreadInfo;
-import aero.nettracer.fs.utilities.TransportMapper;
-import aero.nettracer.selfservice.fraud.client.ClaimClientRemote;
-
-import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.bmo.IssuanceItemBMO;
-import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -43,19 +28,10 @@ import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceCategory;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemInventory;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemQuantity;
-import com.bagnet.nettracer.tracing.db.lf.LFFound;
-import com.bagnet.nettracer.tracing.db.lf.LFLost;
-import com.bagnet.nettracer.tracing.forms.ClaimForm;
-import com.bagnet.nettracer.tracing.forms.forum.ForumSearchForm;
-import com.bagnet.nettracer.tracing.forms.forum.ForumViewForm;
 import com.bagnet.nettracer.tracing.forms.issuance.IssuanceItemAdminForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
-import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
-import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
-
-import org.apache.struts.action.Action;
 
 public class IssuanceItemAdminAction extends Action {
 	
@@ -78,8 +54,6 @@ public class IssuanceItemAdminAction extends Action {
 
 		if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_STATION_ADMIN, user))
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
-		
-		ActionMessages errors = new ActionMessages();
 
 		IssuanceItemAdminForm fform = (IssuanceItemAdminForm) form;
 		
