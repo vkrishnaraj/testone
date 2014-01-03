@@ -550,6 +550,30 @@ public class IssuanceItemBMO {
 	 * @param fromAdmin
 	 */
 	public static void moveInventoriedItem(long id, int status_id, Agent user, String incID, String reason, boolean fromAdmin) {
+		moveInventoriedItem(id, status_id, user, incID, reason, fromAdmin, null, null, null, null, null, null, null, null, null, null);
+	}
+	
+	/**
+	 * Changes the status on an inventoried item. Also creates audit data for this action, collecting a custom reason as well.
+	 * @param id
+	 * @param status_id
+	 * @param user
+	 * @param incID
+	 * @param reason
+	 * @param fromAdmin
+	 * @param fName
+	 * @param lName
+	 * @param addr1
+	 * @param addr2
+	 * @param city
+	 * @param state
+	 * @param zip
+	 * @param ctry
+	 * @param phone
+	 * @param desc
+	 */
+	public static void moveInventoriedItem(long id, int status_id, Agent user, String incID, String reason, boolean fromAdmin,
+			String fName, String lName, String addr1, String addr2, String city, String state, String zip, String ctry, String phone, String desc) {
 			Session sess = null;
 			Transaction t = null;
 			try {
@@ -570,6 +594,16 @@ public class IssuanceItemBMO {
 					} else {
 						iItem.setIssueDate(null);
 					}
+					iItem.setFirstName(fName);
+					iItem.setLastName(lName);
+					iItem.setAddress1(addr1);
+					iItem.setAddress2(addr2);
+					iItem.setCity(city);
+					iItem.setState(state);
+					iItem.setZip(zip);
+					iItem.setCountry(ctry);
+					iItem.setPhoneNumber(phone);
+					iItem.setSpecialNeedDescription(desc);
 					IncidentBMO bmo = new IncidentBMO();
 					Incident inc = bmo.findIncidentByID(incID);
 					iItem.setVerifiedIncident(inc != null);

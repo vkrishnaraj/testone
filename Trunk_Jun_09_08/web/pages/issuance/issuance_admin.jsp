@@ -1,3 +1,5 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.apache.struts.util.LabelValueBean"%>
 <%@page import="com.bagnet.nettracer.tracing.db.issuance.IssuanceItem"%>
 <%@page import="com.bagnet.nettracer.tracing.forms.ClaimForm"%>
 <%@ page language="java" %>
@@ -58,6 +60,168 @@
 			}
 		}
 		/* Prompt cancelled */
+		return false;
+	}
+
+	function determineLoanType(incValue, iItemID) {
+		var lButton = document.getElementsByName('inventory_loan_' + iItemID)[0];
+		var snButton = document.getElementsByName('inventory_snloan_' + iItemID)[0];
+		if (incValue.length > 0) {
+			lButton.style.display = 'inline';
+			snButton.style.display = 'none';
+		} else {
+			lButton.style.display = 'none';
+			snButton.style.display = 'inline';
+		}
+	}
+
+	function specialNeedLoan(iItemID) {
+		var fName = document.getElementById("snFName");
+		var lName = document.getElementById("snLName");
+		var addr1 = document.getElementById("snAddr1");
+		var addr2 = document.getElementById("snAddr2");
+		var city = document.getElementById("snCity");
+		var state = document.getElementById("snState");
+		var zip = document.getElementById("snZip");
+		var ctry = document.getElementById("snCountry");
+		var phone = document.getElementById("snPhone");
+		var desc = document.getElementById("snDesc");
+		if (fName.value.length == 0) {
+			alert("<bean:message key="issuance.item.label.sn.fname" /> <bean:message key="error.validation.isRequired" />");
+			fName.focus();
+			return false;
+		}
+		if (lName.value.length == 0) {
+			alert("<bean:message key="issuance.item.label.sn.lname" /> <bean:message key="error.validation.isRequired" />");
+			lName.focus();
+			return false;
+		}
+		if (phone.value.length == 0) {
+			alert("<bean:message key="issuance.item.label.sn.phone" /> <bean:message key="error.validation.isRequired" />");
+			phone.focus();
+			return false;
+		}
+		if (desc.value.length == 0) {
+			alert("<bean:message key="issuance.item.label.sn.desc" /> <bean:message key="error.validation.isRequired" />");
+			desc.focus();
+			return false;
+		}
+		document.location.href="issuanceItemAdmin.do?snloaninventory=" + iItemID + "&snFName=" + escape(fName.value) + "&snLName=" + escape(lName.value) +
+		"&snAddr1=" + escape(addr1.value) + "&snAddr2=" + escape(addr2.value) + "&snCity=" + escape(city.value) + "&snState=" + escape(state.value) + "&snZip=" + escape(zip.value) +
+		"&snCtry=" + escape(ctry.value) + "&snPhone=" + escape(phone.value) + "&snDesc=" + escape(desc.value);
+		return false;
+	}
+
+	function loadSpecialNeedCollectionModal(iItemID) {
+		var theHtml = '' +
+		'<form><div>' +
+		'	<table class="form2" cellspacing="0" cellpadding="0" width="100%" >' +
+		'		<tr>' +
+		'   		<td colspan="3" width="50%"><strong><bean:message key="issuance.item.label.sn.fname" /> *</strong><br/>' +
+		'			<input type="text" id="snFName" class="textfield" value="" maxlength="25" style="width:96%;" /></td>' +
+		'			<td colspan="3" width="50%"><strong><bean:message key="issuance.item.label.sn.lname" /> *</strong><br/>' +
+		'			<input type="text" id="snLName" class="textfield" value="" maxlength="25" style="width:96%;" /></td>' +
+		'		</tr>' +
+		'		<tr>' +
+		'   		<td colspan="6"><strong><bean:message key="issuance.item.label.sn.addr1" /></strong><br/>' +
+		'			<input type="text" id="snAddr1" class="textfield" value="" maxlength="100" style="width:98%;" /></td>' +
+		'		</tr>' +
+		'		<tr>' +
+		'   		<td colspan="6"><strong><bean:message key="issuance.item.label.sn.addr2" /></strong><br/>' +
+		'			<input type="text" id="snAddr2" class="textfield" value="" maxlength="100" style="width:98%;" /></td>' +
+		'		</tr>' +
+		'		<tr>' +
+		'   		<td colspan="2" width="34%"><strong><bean:message key="issuance.item.label.sn.city" /></strong><br/>' +
+		'			<input type="text" id="snCity" class="textfield" value="" maxlength="50" style="width:95%;" /></td>' +
+		'   		<td colspan="2" width="33%"><strong><bean:message key="issuance.item.label.sn.state" /></strong><br/>' +
+		'			<input type="text" id="snState" class="textfield" value="" maxlength="20" style="width:95%;" /></td>' +
+		'   		<td colspan="2" width="33%"><strong><bean:message key="issuance.item.label.sn.zip" /></strong><br/>' +
+		'			<input type="text" id="snZip" class="textfield" value="" maxlength="12" style="width:94%;" /></td>' +
+		'		</tr>' +
+		'		<tr>' +
+		'   		<td colspan="3" width="50%"><strong><bean:message key="issuance.item.label.sn.country" /></strong><br/>' +
+		'			<select id="snCountry" class="dropdown" style="width:96%;" >' +
+        '  				<option value="">' +
+        '    				<bean:message key="select.none" />' +
+        '  				</option>' +
+        <% for (LabelValueBean bean : (ArrayList<LabelValueBean>) session.getAttribute("countrylist")) { %>
+        '	            <option value="<%=bean.getValue()%>"><%=bean.getLabel().replaceAll("'", "\\\\'").replaceAll("/", "\\\\/")%></option>' +
+        <% } %>
+        '			</select></td>' +
+		'			<td colspan="3" width="50%"><strong><bean:message key="issuance.item.label.sn.phone" /> *</strong><br/>' +
+		'			<input type="text" id="snPhone" class="textfield" value="" maxlength="20" style="width:96%;" /></td>' +
+		'		</tr>' +
+		'		<tr>' +
+		'   		<td colspan="6"><strong><bean:message key="issuance.item.label.sn.desc" /> *</strong><br/>' +
+		'			<input type="text" id="snDesc" class="textfield" value="" maxlength="255" style="width:98%;" /></td>' +
+		'		</tr>' +
+		'	</table><br /><br />' +
+		'	<div style="width:100%;" align="center">' +
+		'		<input type="button" value="<bean:message key="issuance.item.button.loan" />" onclick="return specialNeedLoan(' + iItemID + ');" name="snLoanPopup" id="button">' +
+		'	</div>' +
+		'	<br /><br />' +
+		'</div></form>';
+		jQuery("#dialog").dialog({bgiframe : true, autoOpen: false, modal: true, draggable: false, resizable: false, 
+						width: 500, height: 350, title: 'Collect Special Need Information', close: function(ev,ui){ jQuery('#dialog-inner-content').empty();} });
+		jQuery('#dialog-inner-content').html(theHtml);
+		jQuery("#dialog").dialog("open");
+		jQuery("#dialog").dialog("option", "title","Collect Special Need Information");
+		
+		var currentElement = document.getElementById("snFName");
+		currentElement.focus();
+		
+		return false;
+	}
+
+	function loadSpecialNeedViewModal(fName, lName, addr1, addr2, city, state, zip, ctry, phone, desc) {
+		var theHtml = '' +
+		'<form><div>' +
+		'	<table class="form2" cellspacing="0" cellpadding="0" width="100%" >' +
+		'		<tr>' +
+		'   		<td colspan="3" width="50%"><strong><bean:message key="issuance.item.label.sn.fname" /></strong> :' +
+		'			' + fName + '<br/>' +
+		'			<td colspan="3" width="50%"><strong><bean:message key="issuance.item.label.sn.lname" /></strong> :' +
+		'			' + lName + '<br/>' +
+		'		</tr>' +
+		'		<tr><td colspan="6">&nbsp;</td></tr>' +
+		'		<tr>' +
+		'   		<td colspan="6"><strong><bean:message key="issuance.item.label.sn.addr1" /></strong> :' +
+		'			' + addr1 + '<br/>' +
+		'		</tr>' +
+		'		<tr><td colspan="6">&nbsp;</td></tr>' +
+		'		<tr>' +
+		'   		<td colspan="6"><strong><bean:message key="issuance.item.label.sn.addr2" /></strong> :' +
+		'			' + addr2 + '<br/>' +
+		'		</tr>' +
+		'		<tr><td colspan="6">&nbsp;</td></tr>' +
+		'		<tr>' +
+		'   		<td colspan="2" width="34%"><strong><bean:message key="issuance.item.label.sn.city" /></strong> :' +
+		'			' + city + '<br/>' +
+		'   		<td colspan="2" width="33%"><strong><bean:message key="issuance.item.label.sn.state" /></strong> :' +
+		'			' + state + '<br/>' +
+		'   		<td colspan="2" width="33%"><strong><bean:message key="issuance.item.label.sn.zip" /></strong> :' +
+		'			' + zip + '<br/>' +
+		'		</tr>' +
+		'		<tr><td colspan="6">&nbsp;</td></tr>' +
+		'		<tr>' +
+		'   		<td colspan="3" width="50%"><strong><bean:message key="issuance.item.label.sn.country" /></strong> :' +
+		'			' + ctry + '<br/>' +
+		'			<td colspan="3" width="50%"><strong><bean:message key="issuance.item.label.sn.phone" /></strong> :' +
+		'			' + phone + '<br/>' +
+		'		</tr>' +
+		'		<tr><td colspan="6">&nbsp;</td></tr>' +
+		'		<tr>' +
+		'   		<td colspan="6"><strong><bean:message key="issuance.item.label.sn.desc" /></strong> :' +
+		'			' + desc + '<br/>' +
+		'		</tr>' +
+		'	</table>' +
+		'</div></form>';
+		jQuery("#dialog").dialog({bgiframe : true, autoOpen: false, modal: true, draggable: false, resizable: false, 
+						width: 500, height: 350, title: 'View Special Need Information', close: function(ev,ui){ jQuery('#dialog-inner-content').empty();} });
+		jQuery('#dialog-inner-content').html(theHtml);
+		jQuery("#dialog").dialog("open");
+		jQuery("#dialog").dialog("option", "title","View Special Need Information");
+		
 		return false;
 	}
 
@@ -253,7 +417,7 @@
                 	<% boolean itemActive = (i_item.getIssuanceItem().getCategory().isActive() && i_item.getIssuanceItem().isActive()); %>
                   <tr>
 	                  <td>
-	                     <input type="text" name="inv_item_incid_<%=i_item.getId() %>" value="" size="5" class="textfield" />
+	                     <input type="text" name="inv_item_incid_<%=i_item.getId() %>" value="" size="5" class="textfield" onkeyup="determineLoanType(this.value, <%=i_item.getId()%>);"/>
 	                  </td>
 	                  <% if (itemActive) { %>
 	                  <td>
@@ -266,7 +430,10 @@
 	                  <td>
 	                  	 <% if (i_item.getTradeType() != TracingConstants.ISSUANCE_ITEM_INVENTORY_TYPE_TRADEOUT_ONLY) { %>
 	                     <input type="submit" name="inventory_loan_<%=i_item.getId()%>" id="button" onclick="this.form.loaninventory.value = <%=i_item.getId()%>; this.form.loaninventory.disabled = false;" 
-							value="<bean:message key="issuance.item.button.loan" />" >
+							value="<bean:message key="issuance.item.button.loan" />" style="display:none;" >
+						 </input>
+	                     <input type="submit" name="inventory_snloan_<%=i_item.getId()%>" id="button" onclick="return loadSpecialNeedCollectionModal(<%=i_item.getId()%>);" 
+							value="<bean:message key="issuance.item.button.snloan" />" >
 						 </input>
 						<% } %>&nbsp;
 	                  </td>
@@ -466,6 +633,20 @@
 	                  <td>
 	                  	 <% if (i_item.isVerifiedIncident()) { %>
 	                  	 	<a href="<%="searchIncident.do?incident=" + i_item.getIncidentID() %>" ><%=i_item.getIncidentID() %></a>
+	                     <% } else if (i_item.getIncidentID() != null && i_item.getIncidentID().equals("$SNITEM$")) { 
+	                     		String fn = i_item.getFirstName() != null ? i_item.getFirstName().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
+	                     		String ln = i_item.getLastName() != null ? i_item.getLastName().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
+	                     		String ad1 = i_item.getAddress1() != null ? i_item.getAddress1().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
+	                     		String ad2 = i_item.getAddress2() != null ? i_item.getAddress2().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
+	                     		String ct = i_item.getCity() != null ? i_item.getCity().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
+	                     		String st = i_item.getState() != null ? i_item.getState().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
+	                     		String zp = i_item.getZip() != null ? i_item.getZip().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
+	                     		String ctry = i_item.getCountry() != null ? i_item.getCountry().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
+	                     		String pn = i_item.getPhoneNumber() != null ? i_item.getPhoneNumber().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
+	                     		String desc = i_item.getSpecialNeedDescription() != null ? i_item.getSpecialNeedDescription().replace("'", "\\\\'").replace("/", "\\\\/") : ""; %>
+	                     	<a href="###" 
+	                     	onclick="loadSpecialNeedViewModal('<%=fn %>', '<%=ln %>', '<%=ad1 %>', '<%=ad2 %>', '<%=ct %>', '<%=st %>', '<%=zp %>', '<%=ctry %>', '<%=pn %>', '<%=desc %>')"
+	                     	><bean:message key="issuance.item.button.snloan" /></a>
 	                     <% } else { %>
 	                     	<%=i_item.getIncidentID() %>
 	                     <% } %>

@@ -27,6 +27,61 @@
   
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
+<SCRIPT LANGUAGE="JavaScript">
+
+	function loadSpecialNeedViewModal(fName, lName, addr1, addr2, city, state, zip, ctry, phone, desc) {
+		var theHtml = '' +
+		'<form><div>' +
+		'	<table class="form2" cellspacing="0" cellpadding="0" width="100%" >' +
+		'		<tr>' +
+		'   		<td colspan="3" width="50%"><strong><bean:message key="issuance.item.label.sn.fname" /></strong> :' +
+		'			' + fName + '<br/>' +
+		'			<td colspan="3" width="50%"><strong><bean:message key="issuance.item.label.sn.lname" /></strong> :' +
+		'			' + lName + '<br/>' +
+		'		</tr>' +
+		'		<tr><td colspan="6">&nbsp;</td></tr>' +
+		'		<tr>' +
+		'   		<td colspan="6"><strong><bean:message key="issuance.item.label.sn.addr1" /></strong> :' +
+		'			' + addr1 + '<br/>' +
+		'		</tr>' +
+		'		<tr><td colspan="6">&nbsp;</td></tr>' +
+		'		<tr>' +
+		'   		<td colspan="6"><strong><bean:message key="issuance.item.label.sn.addr2" /></strong> :' +
+		'			' + addr2 + '<br/>' +
+		'		</tr>' +
+		'		<tr><td colspan="6">&nbsp;</td></tr>' +
+		'		<tr>' +
+		'   		<td colspan="2" width="34%"><strong><bean:message key="issuance.item.label.sn.city" /></strong> :' +
+		'			' + city + '<br/>' +
+		'   		<td colspan="2" width="33%"><strong><bean:message key="issuance.item.label.sn.state" /></strong> :' +
+		'			' + state + '<br/>' +
+		'   		<td colspan="2" width="33%"><strong><bean:message key="issuance.item.label.sn.zip" /></strong> :' +
+		'			' + zip + '<br/>' +
+		'		</tr>' +
+		'		<tr><td colspan="6">&nbsp;</td></tr>' +
+		'		<tr>' +
+		'   		<td colspan="3" width="50%"><strong><bean:message key="issuance.item.label.sn.country" /></strong> :' +
+		'			' + ctry + '<br/>' +
+		'			<td colspan="3" width="50%"><strong><bean:message key="issuance.item.label.sn.phone" /></strong> :' +
+		'			' + phone + '<br/>' +
+		'		</tr>' +
+		'		<tr><td colspan="6">&nbsp;</td></tr>' +
+		'		<tr>' +
+		'   		<td colspan="6"><strong><bean:message key="issuance.item.label.sn.desc" /></strong> :' +
+		'			' + desc + '<br/>' +
+		'		</tr>' +
+		'	</table>' +
+		'</div></form>';
+		jQuery("#dialog").dialog({bgiframe : true, autoOpen: false, modal: true, draggable: false, resizable: false, 
+						width: 500, height: 350, title: 'View Special Need Information', close: function(ev,ui){ jQuery('#dialog-inner-content').empty();} });
+		jQuery('#dialog-inner-content').html(theHtml);
+		jQuery("#dialog").dialog("open");
+		jQuery("#dialog").dialog("option", "title","View Special Need Information");
+		
+		return false;
+	}
+
+</SCRIPT>
 
         <html:form action="auditIssuanceItemAdmin.do" method="post" enctype="multipart/form-data" >
             <tr>
@@ -242,7 +297,7 @@
 	                     <%=i_item.getDescription()%>
 	                  </td>
 	                  <td>
-	                     <%=i_item.getBarcode()%>
+	                     <%=i_item.getBarcode()%>&nbsp;
 	                  </td>
 	                  <td>
 	                     <bean:message key="<%="issuance.item.tradetype." + i_item.getTradeType()%>" />
@@ -254,6 +309,20 @@
 	                  	 <% String incID = (i_item.getIncidentID() != null ? i_item.getIncidentID() : ""); %>
 	                  	 <% if (i_item.isVerifiedIncident()) { %>
 	                  	 	<a href="<%="searchIncident.do?incident=" + incID %>" ><%=incID %></a>
+	                     <% } else if (i_item.getIncidentID() != null && i_item.getIncidentID().equals("$SNITEM$")) { 
+	                     		String fn = i_item.getFirstName() != null ? i_item.getFirstName().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
+	                     		String ln = i_item.getLastName() != null ? i_item.getLastName().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
+	                     		String ad1 = i_item.getAddress1() != null ? i_item.getAddress1().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
+	                     		String ad2 = i_item.getAddress2() != null ? i_item.getAddress2().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
+	                     		String ct = i_item.getCity() != null ? i_item.getCity().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
+	                     		String st = i_item.getState() != null ? i_item.getState().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
+	                     		String zp = i_item.getZip() != null ? i_item.getZip().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
+	                     		String ctry = i_item.getCountry() != null ? i_item.getCountry().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
+	                     		String pn = i_item.getPhoneNumber() != null ? i_item.getPhoneNumber().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
+	                     		String desc = i_item.getSpecialNeedDescription() != null ? i_item.getSpecialNeedDescription().replace("'", "\\\\'").replace("/", "\\\\/") : ""; %>
+	                     	<a href="###" 
+	                     	onclick="loadSpecialNeedViewModal('<%=fn %>', '<%=ln %>', '<%=ad1 %>', '<%=ad2 %>', '<%=ct %>', '<%=st %>', '<%=zp %>', '<%=ctry %>', '<%=pn %>', '<%=desc %>')"
+	                     	><bean:message key="issuance.item.button.snloan" /></a>
 	                     <% } else { %>
 	                     	<%=incID %>
 	                     <% } %>&nbsp;

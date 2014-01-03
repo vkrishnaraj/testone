@@ -74,6 +74,36 @@ public class AuditIssuanceItemInventory {
 	
 	@Column(name="verified_incident")
 	private boolean verifiedIncident;
+	
+	@Column(length = 25)
+	private String firstName;
+	
+	@Column(length = 25)
+	private String lastName;
+
+	@Column(length = 2)
+	private String country;
+
+	@Column(length = 20)
+	private String phoneNumber;
+
+	@Column(length = 100)
+	private String address1;
+
+	@Column(length = 100)
+	private String address2;
+
+	@Column(length = 50)
+	private String city;
+
+	@Column(length = 20)
+	private String state;
+
+	@Column(length = 12)
+	private String zip;
+
+	@Column(length = 255)
+	private String specialNeedDescription;
 
 	public long getId() {
 		return id;
@@ -193,6 +223,86 @@ public class AuditIssuanceItemInventory {
 	
 	public void setCost(double cost) {
 		this.cost = cost;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public String getAddress1() {
+		return address1;
+	}
+
+	public void setAddress1(String address1) {
+		this.address1 = address1;
+	}
+
+	public String getAddress2() {
+		return address2;
+	}
+
+	public void setAddress2(String address2) {
+		this.address2 = address2;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public String getZip() {
+		return zip;
+	}
+
+	public void setZip(String zip) {
+		this.zip = zip;
+	}
+
+	public String getSpecialNeedDescription() {
+		return specialNeedDescription;
+	}
+
+	public void setSpecialNeedDescription(String specialNeedDescription) {
+		this.specialNeedDescription = specialNeedDescription;
 	}
 	
 }

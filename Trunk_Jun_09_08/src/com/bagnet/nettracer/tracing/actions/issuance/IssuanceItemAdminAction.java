@@ -185,6 +185,24 @@ public class IssuanceItemAdminAction extends Action {
 			}
 		}
 		
+		if (request.getParameter("snloaninventory") != null) {
+			String qID = request.getParameter("snloaninventory");
+			if (qID.matches("^\\d+$")) {
+				String snFName = (String) request.getParameter("snFName");
+				String snLName = (String) request.getParameter("snLName");
+				String snAddr1 = (String) request.getParameter("snAddr1");
+				String snAddr2 = (String) request.getParameter("snAddr2");
+				String snCity = (String) request.getParameter("snCity");
+				String snState = (String) request.getParameter("snState");
+				String snZip = (String) request.getParameter("snZip");
+				String snCtry = (String) request.getParameter("snCtry");
+				String snPhone = (String) request.getParameter("snPhone");
+				String snDesc = (String) request.getParameter("snDesc");
+				IssuanceItemBMO.moveInventoriedItem(Long.parseLong(qID), TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_ONLOAN, user, "$SNITEM$", "SN Loaned Item",
+						true, snFName, snLName, snAddr1, snAddr2, snCity, snState, snZip, snCtry, snPhone, snDesc);
+			}
+		}
+		
 		if (request.getParameter("returninventory") != null) {
 			String qID = request.getParameter("returninventory");
 			if (qID.matches("^\\d+$")) {
