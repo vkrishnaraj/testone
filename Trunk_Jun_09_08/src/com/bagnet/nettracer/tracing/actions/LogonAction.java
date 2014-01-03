@@ -151,17 +151,26 @@ public class LogonAction extends Action {
 		String password = (String) PropertyUtils.getSimpleProperty(form, "password");
 		String instance = (String) System.getProperty("instance.ref");
 		String companyCode = request.getParameter("companyCode");
-
+		boolean hasSSO=false; //TODO: Add check if the agent is logging in through the assertion
+		
 		if (username.length() == 0 && password.length() == 0) {
 			session.invalidate();
 			response.addHeader("Pragma", "No-cache");
 			response.addHeader("Cache-Control", "no-cache");
 			response.addDateHeader("Expires", -1);
+
+			String ldapRedirect=PropertyBMO.getValue(PropertyBMO.LDAP_REDIRECT);
+			if(request.getParameter("bypass") == null && ldapRedirect!=null && !ldapRedirect.isEmpty()){
+				response.sendRedirect(ldapRedirect);
+			}
 			return mapping.findForward(TracingConstants.LOGON);
 		}
 		authenlog.info("Authenticating User: "+username+". Company Code: "+companyCode+". Instance: "+instance);
-		agent = SecurityUtils.authUser(username, password, companyCode, 0, errors);
-
+		if(hasSSO){
+			agent = SecurityUtils.authUserNoPassword(username, companyCode, 0, errors);
+		} else {
+			agent = SecurityUtils.authUser(username, password, companyCode, 0, errors);
+		}
 		// Report any errors we have discovered back to the original form
 		if (!errors.isEmpty()) {
 			saveMessages(request, errors);
@@ -175,7 +184,8 @@ public class LogonAction extends Action {
 
 		authenlog.info("User: "+username+", Company Code: "+companyCode+", Instance: "+instance+" Authentication Success");
 		// check to see if password needs to be reset
-		if (agent.isReset_password() || !SecurityUtils.isPolicyAcceptablePassword(companyCode, password, username, request, true)) {
+		/** SF: If user logged in through LDAP, it should bypass password validation requirements **/
+		if (!hasSSO && (agent.isReset_password() || !SecurityUtils.isPolicyAcceptablePassword(companyCode, password, username, request, true))) {
 			session.setAttribute("usertemp", agent);
 			response.addHeader("Pragma", "No-cache");
 			response.addHeader("Cache-Control", "no-cache");
@@ -184,7 +194,8 @@ public class LogonAction extends Action {
 		}
 
 		int expiredays = agent.getStation().getCompany().getVariable().getPass_expire_days();
-		if (expiredays > 0) {
+		/** SF: If user logged in through LDAP, it should bypass password expiration requirements **/
+		if (!hasSSO && expiredays > 0) {
 			Date lastreset = agent.getLast_pass_reset_date();
 			if (lastreset == null || DateUtils.formatDate(lastreset, TracingConstants.DB_DATEFORMAT, null, null).equals("0000-00-00")) {
 				// first time logon, set it

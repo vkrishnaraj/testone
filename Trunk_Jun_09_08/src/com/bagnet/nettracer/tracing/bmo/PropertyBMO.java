@@ -261,6 +261,8 @@ public class PropertyBMO {
 	public static final String DOCUMENT_LOCATION_TEMP = "document.location.temp";
 	
 	public static final String RECEIPT_CUSTOM_TYPES = "receipt.custom.types";
+
+	public static final String LDAP_REDIRECT = "ldap.redirect";
 	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;

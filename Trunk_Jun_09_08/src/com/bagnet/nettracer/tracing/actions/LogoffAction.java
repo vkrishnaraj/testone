@@ -11,6 +11,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.utils.SecurityUtils;
@@ -73,6 +74,12 @@ public class LogoffAction extends Action {
 		response.addHeader("Pragma", "No-cache");
 		response.addHeader("Cache-Control", "no-cache");
 		response.addDateHeader("Expires", -1);
+		
+		String ldapRedirect=PropertyBMO.getValue(PropertyBMO.LDAP_REDIRECT);
+		if(request.getParameter("bypass") == null && ldapRedirect!=null && !ldapRedirect.isEmpty()){
+			response.sendRedirect(ldapRedirect);
+		}
+		
 		return mapping.findForward(TracingConstants.LOGON);
 	}
 
