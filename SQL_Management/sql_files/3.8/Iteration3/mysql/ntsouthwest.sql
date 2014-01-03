@@ -160,3 +160,13 @@ insert into expensetype (expensetype_id,description,companycode_ID) VALUES
 (14,'Stop Payment','WN'),
 (15,'Water Damage','WN'),
 (16,'Cruise-Line Interim Expense','WN');
+
+
+--Hudson DO NOT RUN OR TESTS WILL BREAK
+insert into properties (keyStr,valueStr) VALUES ('ldap.redirect','https://www37c.swalifeqa.com/nettracerhud');
+--Testing
+insert into properties (keyStr,valueStr) VALUES ('ldap.redirect','https://www37c.swalifeqa.com/nettracer');
+--Testing2
+insert into properties (keyStr,valueStr) VALUES ('ldap.redirect','https://www37c.swalifeqa.com/nettracer2');
+--Training
+insert into properties (keyStr,valueStr) VALUES ('ldap.redirect','https://www37c.swalifeqa.com/nettracertrain');
