@@ -230,7 +230,11 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.taskmanager.ThreeDayTask" />	
 		<mapping class="com.bagnet.nettracer.tracing.db.taskmanager.FourDayTask" />		
 		<mapping class="com.bagnet.nettracer.tracing.db.taskmanager.FiveDayTask" />		
-		<mapping class="com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask" />		
+		<mapping class="com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask" />
+		<mapping class="com.bagnet.nettracer.tracing.db.taskmanager.InboundQueueTask" />
+		<mapping class="com.bagnet.nettracer.tracing.db.taskmanager.AcaaTask" />
+		<mapping class="com.bagnet.nettracer.tracing.db.taskmanager.InboundTask" />
+		<mapping class="com.bagnet.nettracer.tracing.db.taskmanager.DamagedTask" />		
 		
 		
 		

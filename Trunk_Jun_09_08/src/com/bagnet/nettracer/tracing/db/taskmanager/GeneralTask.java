@@ -18,18 +18,30 @@ import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Transient;
 
+import org.apache.struts.util.MessageResources;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import com.bagnet.nettracer.tracing.db.Lock;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 @Entity
 @Table(name="task")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="task_type", discriminatorType = DiscriminatorType.STRING, length=16)
 public abstract class GeneralTask {
+	protected static MessageResources messages = null;
+	private String locale;
+	static {
+		try {
+			messages = MessageResources.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
+		} catch (Exception e) {
+			// Ignore
+		}
+	}
+	
 	@Id
 	@GeneratedValue
 	public long getTask_id() {
@@ -139,4 +151,49 @@ public abstract class GeneralTask {
 	public String getAlert() {
 		return "Example";
 	}
+	
+	/**
+	 * ************************************************
+	 * The following are for date/time display purposes
+	 * ************************************************
+	 */
+	private String _DATEFORMAT;
+	private String _TIMEFORMAT;
+	private java.util.TimeZone _TIMEZONE;
+	
+	@Transient
+	public String getLocale() {
+		return locale;
+	}
+	public void setLocale(String locale) {
+		this.locale = locale;
+	}
+	
+	@Transient
+	public String getDispOpened_timestamp(){
+		String s = DateUtils.formatDate(getOpened_timestamp(), _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
+		return s!=null?s:"";
+	}
+	@Transient
+	public String get_DATEFORMAT() {
+		return _DATEFORMAT;
+	}
+	public void set_DATEFORMAT(String _DATEFORMAT) {
+		this._DATEFORMAT = _DATEFORMAT;
+	}
+	@Transient
+	public String get_TIMEFORMAT() {
+		return _TIMEFORMAT;
+	}
+	public void set_TIMEFORMAT(String _TIMEFORMAT) {
+		this._TIMEFORMAT = _TIMEFORMAT;
+	}
+	@Transient
+	public java.util.TimeZone get_TIMEZONE() {
+		return _TIMEZONE;
+	}
+	public void set_TIMEZONE(java.util.TimeZone _TIMEZONE) {
+		this._TIMEZONE = _TIMEZONE;
+	}
+	
 }

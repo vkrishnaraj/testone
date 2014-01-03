@@ -29,6 +29,7 @@ import org.apache.struts.action.ActionMessages;
 import aero.nettracer.fs.model.detection.AccessRequestDTO;
 import aero.nettracer.fs.utilities.TransportMapper;
 import aero.nettracer.lf.services.LFServiceBean;
+import aero.nettracer.security.SamlUtils;
 import aero.nettracer.selfservice.fraud.client.ClaimClientRemote;
 
 import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
@@ -87,6 +88,7 @@ import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
 import com.bagnet.nettracer.tracing.utils.taskmanager.CSSCallsUtil;
 import com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesUtil;
+import com.bagnet.nettracer.tracing.utils.taskmanager.InboundTasksUtils;
 
 
 public class LogonAction extends Action {
@@ -117,6 +119,9 @@ public class LogonAction extends Action {
 
 		// Extract attributes we will need
 		Agent agent = null;
+
+//		SamlUtils.test(request);
+		
 		HttpSession session = request.getSession();
 		ActionMessages errors = new ActionMessages();
 		request.setAttribute("maintask", "1");
@@ -713,7 +718,13 @@ public class LogonAction extends Action {
 																						UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_CREATE, agent)) {
 																					IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
 																					entries = incidentActivityService.getIncidentActivityRejectionCount(agent);
-																				} 
+																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_UNASSIGNED_INBOUND_QUEUE) && 
+																						UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_UNASSIGNED_INBOUND_QUEUE, agent)){
+																					entries = InboundTasksUtils.getUnassignedTasksCount();
+																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_PERSONAL_QUEUE) && 
+																						UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PERSONAL_QUEUE, agent)){
+																					entries = InboundTasksUtils.getAssignedTasksCount(agent);																		
+																				}
 																			}
 																		}
 																	}

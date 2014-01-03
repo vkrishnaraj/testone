@@ -76,6 +76,7 @@ import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
+import com.bagnet.nettracer.tracing.utils.taskmanager.InboundTasksUtils;
 
 /**
  * @author Matt
@@ -112,6 +113,7 @@ public class DamagedAction extends CheckedAction {
 				if (iBmo.insertIncident(false, incident, null, user) == 1) {
 					theform.setRxTimestamp(rxTimestamp);
 					theform.setLastupdated(incident.getLastupdated());
+					InboundTasksUtils.createDamagedTask(incident, user);
 				} else {
 					request.setAttribute("error", "error.message.set.rx.timestamp.failed");
 					logger.error("An error occurred while trying to set the receive Date/Time for incident: " + incidentId);

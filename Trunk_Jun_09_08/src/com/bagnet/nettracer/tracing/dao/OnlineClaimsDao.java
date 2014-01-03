@@ -50,6 +50,7 @@ import com.bagnet.nettracer.tracing.utils.DomainUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
+import com.bagnet.nettracer.tracing.utils.taskmanager.InboundTasksUtils;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.Bag;
 import common.Logger;
 
@@ -723,9 +724,7 @@ public class OnlineClaimsDao {
 				}
 				if(hasNewInfo){
 					ias.save(ia);
-				
-					System.out.println("CREATE INBOUND CORRESPONDANCE TASK");
-					//Create Task for Inbound Correspondance for NT-1089
+					InboundTasksUtils.createInboundTask(ia.getIncident(), activityagent);
 				}
 			} catch(Exception e){
 				e.printStackTrace();

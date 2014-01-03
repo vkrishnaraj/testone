@@ -387,6 +387,9 @@ public class TracingConstants {
 	
 	public static final String SYSTEM_COMPONENT_NAME_TASKS_VIEW_PENDING = "Tasks View Pending";
 	
+	public static final String SYSTEM_COMPONENT_NAME_UNASSIGNED_INBOUND_QUEUE = "Unassigned Inbound Queue";
+	public static final String SYSTEM_COMPONENT_NAME_PERSONAL_QUEUE = "Assigned Personal Tasks";
+	
 	//Table numbers for status
 	public final static int AJAX_STATUS_INC = 1;
 	public final static int AJAX_STATUS_OHD = 2;
@@ -1042,6 +1045,9 @@ public class TracingConstants {
 	public final static String BAGDROP = "bagDrop";
 	public final static String BAGDROPEDIT = "bagDropEdit";
 	
+	public final static String UNASSIGNED_INBOUND_QUEUE = "unassignedInboundQueue";
+	public final static String PERSONAL_TASKS= "personalTasks";
+	
 	public final static String EDIT_AIRPORT = "editairport";
 	public final static String VIEW_AIRPORTS = "viewairports";
 
@@ -1435,6 +1441,7 @@ public class TracingConstants {
 	public static final String TABLE_ID_CUST_COMM_PENDING_APPROVAL = "customerCommunicationsPendingApproval";
 	public static final String TABLE_ID_BAG_DROP = "bagDrop";
 	public static final String TABLE_ID_TASKS_NOT_IN_WORK = "tasksNotInWork";
+	public static final String TABLE_ID_UNASSIGN_INBOUND_MATRIX = "unassignedInboundMatrix";
 	
 	public static final String TABLE_ID_PAYMENT_APPROVAL = "payment_approval";
 	public static final String TABLE_ID_REJECTED_DISBURSEMENTS = "rejectedDisbursements";

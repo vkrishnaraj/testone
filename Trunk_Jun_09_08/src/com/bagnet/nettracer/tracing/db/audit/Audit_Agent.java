@@ -63,6 +63,8 @@ public class Audit_Agent implements Serializable {
 
 	private boolean resetPassword;
 	private boolean accountLocked;
+	
+	private boolean inboundQueue;
 
 	private String _DATEFORMAT; // current login agent's date format
 	private String _TIMEFORMAT; // current login agent's time format
@@ -656,5 +658,18 @@ public class Audit_Agent implements Serializable {
 	 */
 	public void setAccount_locked(boolean accountLocked) {
 		this.accountLocked = accountLocked;
+	}
+
+	
+	/**
+	 * @return whether agent can be assigned to inbound queue
+	 * @hibernate.property type="boolean"
+	 */
+	public boolean isInboundQueue() {
+		return inboundQueue;
+	}
+
+	public void setInboundQueue(boolean inboundQueue) {
+		this.inboundQueue = inboundQueue;
 	}
 }

@@ -459,6 +459,28 @@ String passMin = bundle.getString("error.security.password.minimal").replace("{0
               </logic:present>
             </td>
           </tr>
+
+		<%
+          if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_UNASSIGNED_INBOUND_QUEUE, a)) {
+		%>
+          <tr>
+            <td>
+              <bean:message key="header.agentInboundQueue" />
+              :
+            </td>
+            <td>
+              <html:select name="agentForm" property="inboundQueue" styleClass="dropdown">
+                <html:option value="true">
+                  <bean:message key="select.yes" />
+                </html:option>
+                <html:option value="false">
+                  <bean:message key="select.no" />
+                </html:option>
+              </html:select>
+            </td>
+          </tr>
+  			<% } %>        
+          
           <tr>
             <td colspan="2">
               &nbsp;

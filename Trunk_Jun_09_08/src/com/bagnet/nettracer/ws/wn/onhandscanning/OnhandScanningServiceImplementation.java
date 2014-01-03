@@ -23,6 +23,7 @@ import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.OHDUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
+import com.bagnet.nettracer.tracing.utils.taskmanager.InboundTasksUtils;
 import com.bagnet.nettracer.ws.core.WSCoreOHDUtil;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSItinerary;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD;
@@ -806,6 +807,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 			e.printStackTrace();
 			return null;
 		}
+		InboundTasksUtils.createDamagedTask(inc, agent);
 		return copyIncidentToOHD(inc);
 	}
 

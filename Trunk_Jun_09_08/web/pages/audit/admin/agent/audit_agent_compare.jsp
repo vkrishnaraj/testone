@@ -460,6 +460,22 @@ function updatePagination() {
                 </td>
               </logic:iterate>
             </tr>
+            <tr>
+              <td>
+                <bean:message key="header.agentInboundQueue" />
+              </td>
+              <logic:iterate id="audit_lfi" name="compareList" scope="request">
+                <td>
+                  <logic:equal name="audit_lfi" property="inboundQueue" value="true">
+                    <bean:message key="select.yes" />
+                  </logic:equal>
+                  <logic:notEqual name="audit_lfi" property="inboundQueue" value="true">
+                    <bean:message key="select.no" />
+                  </logic:notEqual>
+                  &nbsp;
+                </td>
+              </logic:iterate>
+            </tr>
           </table>
           <br>
           <center><INPUT type="button" Id="button" value="Back" onClick="history.back()"></center>

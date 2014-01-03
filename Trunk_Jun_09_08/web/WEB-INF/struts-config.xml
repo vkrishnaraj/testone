@@ -150,6 +150,7 @@
 			<form-property name="web_enabled" type="java.lang.String" />
 			<form-property name="ws_enabled" type="java.lang.String" />
 			<form-property name="max_ws_sessions" type="java.lang.String" />
+			<form-property name="inboundQueue" type="java.lang.String" />
 		</form-bean>
 		<form-bean name="groupForm" type="org.apache.struts.validator.DynaValidatorForm">
 			<form-property name="groupSearchName" type="java.lang.String" />
@@ -314,6 +315,10 @@
 		<form-bean name="customerCommunicationsTaskForm" type="com.bagnet.nettracer.tracing.forms.communications.CustomerCommunicationsTaskForm" />	
 
 		<form-bean name="taskSearchForm" type="com.bagnet.nettracer.tracing.forms.communications.TaskSearchForm" />	
+		
+		<form-bean name="unassignedInboundQueueForm" type="com.bagnet.nettracer.tracing.forms.UnassignedInboundQueueForm" />
+		<form-bean name="personalTasksForm" type="com.bagnet.nettracer.tracing.forms.PersonalTasksForm" />
+		
 	</form-beans>
 	<!-- global exception -->
 	<global-exceptions>
@@ -644,6 +649,9 @@
 		<forward name="bagDropEdit" path="bagDropEdit" />
 		
 		<forward name="viewPendingTasks" path="viewPendingTasks" />
+		
+		<forward name="unassignedInboundQueue" path="unassignedInboundQueue" />
+		<forward name="personalTasks" path="personalTasks" />
 		
 	</global-forwards>
 
@@ -1043,6 +1051,9 @@
 		<action path="/customerCommunicationsTasks" type="com.bagnet.nettracer.tracing.actions.communications.CustomerCommunicationsTasksAction" scope="request" validate="false" ></action>
 
 		<action path="/viewPendingTasks" type="com.bagnet.nettracer.tracing.actions.communications.ViewPendingTasksAction" name="taskSearchForm" scope="request" validate="false" ></action>
+		
+		<action path="/unassignedInboundQueue" type="com.bagnet.nettracer.tracing.actions.UnassignedInboundQueueAction" name="unassignedInboundQueueForm" scope="session" validate="false" ></action>
+		<action path="/personalTasks" type="com.bagnet.nettracer.tracing.actions.PersonalTasksAction" name="personalTasksForm" scope="session" validate="false" ></action>
 
 	</action-mappings>
 

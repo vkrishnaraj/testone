@@ -1097,5 +1097,13 @@
     <definition name="viewPendingTasks" extends="user_menu">
     	<put name="center" value="/pages/communications/view_pending_tasks.jsp"/>
     </definition>
+    
+    <definition name="unassignedInboundQueue" extends="user_menu">
+    	<put name="center" value="/pages/taskmanager/view_unassigned_tasks.jsp"/>
+    </definition>
+    
+    <definition name="personalTasks" extends="user_menu">
+    	<put name="center" value="/pages/taskmanager/view_personal_tasks.jsp"/>
+    </definition>
 	
  </tiles-definitions>

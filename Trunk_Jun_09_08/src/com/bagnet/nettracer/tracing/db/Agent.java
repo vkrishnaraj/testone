@@ -54,6 +54,8 @@ public class Agent implements Serializable {
 	private int max_ws_sessions;
 	private UserGroup cachedGroup = null;
 	
+	private boolean inboundQueue;
+	
 	public Agent() { }
 	
 	public Agent(int Agent_ID) {
@@ -624,5 +626,17 @@ public class Agent implements Serializable {
 	 */
 	public void setAccount_locked(boolean accountLocked) {
 		this.accountLocked = accountLocked;
+	}
+
+	/**
+	 * @return whether agent can be assigned to inbound queue
+	 * @hibernate.property type="boolean"
+	 */
+	public boolean isInboundQueue() {
+		return inboundQueue;
+	}
+
+	public void setInboundQueue(boolean inboundQueue) {
+		this.inboundQueue = inboundQueue;
 	}	
 }

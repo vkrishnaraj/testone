@@ -442,3 +442,14 @@ alter table audit_issuance_item_inventory add column state varchar(2);
 alter table audit_issuance_item_inventory add column province varchar(20);
 alter table audit_issuance_item_inventory add column zip varchar(12);
 alter table audit_issuance_item_inventory add column specialNeedDescription varchar(255);
+
+insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group) 
+VALUES (1150,'Unassigned Inbound Queue','View tasks that have not been assigned',15,'unassignedInboundQueue.do',1,50,4);
+
+insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group) 
+VALUES (1151,'Assigned Personal Tasks','View assigned tasks',15,'personalTasks.do?reset=1',1,51,4);
+
+alter table agent add column inboundQueue tinyint(1) default 0;
+alter table audit_agent add column inboundQueue tinyint(1) default 0;
+
+alter table task modify column agent_id int(11);

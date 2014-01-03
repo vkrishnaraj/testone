@@ -137,6 +137,7 @@ public final class ManageAgents extends Action {
 			dForm.set("web_enabled", "" + a.isWeb_enabled());
 			dForm.set("ws_enabled", "" + a.isWs_enabled());
 			dForm.set("max_ws_sessions", "" + a.getMax_ws_sessions());
+			dForm.set("inboundQueue", "" + a.isInboundQueue());
 					
 			if (a.isAccount_locked()) {
 				ActionMessage error = new ActionMessage("error.user.admin.lockedout");
@@ -292,6 +293,11 @@ public final class ManageAgents extends Action {
 					s.setStation_ID(Integer.parseInt(((String) dForm.get("station_id"))));
 					agent.setStation(s);
 				}
+				
+				if (request.getParameter("self") == null) {
+					agent.setInboundQueue(((String)dForm.get("inboundQueue")).equals("true"));
+				}
+				
 				Subcompany sc = new Subcompany();
 				if (request.getParameter("self") == null) {
 					if((!((String)dForm.get("subcompany_id")).equals(""))){
