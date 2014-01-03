@@ -23,6 +23,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.UsergroupBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.constant.TracingConstants.SortParam;
@@ -85,6 +86,7 @@ public class AdminUtils {
 
 			Query q = sess.createQuery(sql);
 			q.setInteger("agent_ID", user.getAgent_ID());
+			@SuppressWarnings("rawtypes")
 			List list = q.list();
 			if (list.size() > 0) {
 				return ((Long) list.get(0)).intValue();
@@ -159,6 +161,7 @@ public class AdminUtils {
 				}
 			}
 
+			@SuppressWarnings("rawtypes")
 			List list = q.list();
 			if (list.size() > 0) {
 				return ((Long) list.get(0)).intValue();
@@ -179,6 +182,7 @@ public class AdminUtils {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static List getLoggedAgents(Agent user, UserActivityForm form, String companycode, int rowsperpage, int currpage) {
 		Session sess = null;
 		try {
@@ -301,7 +305,8 @@ public class AdminUtils {
 	 * 
 	 * @return list of timezones or null if exception or nothing found.
 	 */
-	public static List getTimeZones() {
+	@SuppressWarnings("unchecked")
+	public static List<TimeZone> getTimeZones() {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
@@ -370,7 +375,8 @@ public class AdminUtils {
 			Criteria cri = sess.createCriteria(UserGroup.class);
 			cri.add(Restrictions.eq("userGroup_ID", new Integer(group_id)));
 			cri.add(Restrictions.eq("companycode_ID", TracingConstants.OWENS_GROUP));
-			List x = cri.list();
+			@SuppressWarnings("unchecked")
+			List<UserGroup> x = cri.list();
 			if (x != null && x.size() > 0)
 				return true;
 			else
@@ -406,7 +412,8 @@ public class AdminUtils {
 			Criteria cri = sess.createCriteria(GroupComponentPolicy.class);
 			cri.createCriteria("usergroup").add(Restrictions.eq("userGroup_ID", new Integer(group_id)));
 			cri.createCriteria("component").add(Restrictions.eq("component_ID", new Integer(component_id)));
-			List x = cri.list();
+			@SuppressWarnings("unchecked")
+			List<GroupComponentPolicy> x = cri.list();
 			if (x != null && x.size() > 0)
 				return true;
 			else
@@ -674,6 +681,7 @@ public class AdminUtils {
 	 * @param currpage
 	 * @return list of companies or null if exception
 	 */
+	@SuppressWarnings("unchecked")
 	public static List<Company> getCompanies(MaintainCompanyForm dForm, int rowsperpage, int currpage) {
 		Session sess = null;
 		try {
@@ -744,7 +752,8 @@ public class AdminUtils {
 	 * @param currpage
 	 * @return list of companies or null if exception
 	 */
-	public static List getCompaniesByName(int rowsperpage, int currpage) {
+	@SuppressWarnings("unchecked")
+	public static List<Company> getCompaniesByName(int rowsperpage, int currpage) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
@@ -780,7 +789,8 @@ public class AdminUtils {
 	 *          page to start from
 	 * @return number of shifts in the system
 	 */
-	public static List getShifts(DynaValidatorForm form, String companyCode, int rowsperpage, int currpage) {
+	@SuppressWarnings("unchecked")
+	public static List<Work_Shift> getShifts(DynaValidatorForm form, String companyCode, int rowsperpage, int currpage) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
@@ -820,7 +830,8 @@ public class AdminUtils {
 	 * @param companyCode
 	 * @return number of links in the system
 	 */
-	public static List getLinks(String companyCode) {
+	@SuppressWarnings("unchecked")
+	public static List<Link> getLinks(String companyCode) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
@@ -848,6 +859,7 @@ public class AdminUtils {
 	 * @param locale
 	 * @return list of codes null in case of exception
 	 */
+	@SuppressWarnings("rawtypes")
 	public static List getDistinctLocaleCompanyCodes(String companyCode, int report_type) {
 		Session sess = null;
 		try {
@@ -864,7 +876,7 @@ public class AdminUtils {
 				q.setInteger("report_type", report_type);
 
 			List l = q.list();
-			List l2 = new ArrayList();
+			List<Company_specific_irregularity_code> l2 = new ArrayList<Company_specific_irregularity_code>();
 			if (l != null) {
 				Company_specific_irregularity_code co = null;
 				Object o[] = null;
@@ -900,6 +912,7 @@ public class AdminUtils {
 	 * @return true if it is and false otherwise
 	 */
 	public static boolean isIATAcode(String locale, int loss_code) {
+		@SuppressWarnings("unused")
 		boolean ret = false;
 		Session sess = null;
 		try {
@@ -907,7 +920,8 @@ public class AdminUtils {
 			Criteria cri = sess.createCriteria(IATA_irregularity_code.class).add(Restrictions.eq("locale", locale)).add(
 					Restrictions.eq("loss_code", new Integer(loss_code)));
 			cri.addOrder(Order.asc("loss_code"));
-			List results = cri.list();
+			@SuppressWarnings("unchecked")
+			List<IATA_irregularity_code> results = cri.list();
 
 			if (results != null && results.size() > 0)
 				return true;
@@ -936,7 +950,8 @@ public class AdminUtils {
 	 * @param currpage
 	 * @return shifts within a company
 	 */
-	public static List getShifts(String companyCode, String locale, int rowsperpage, int currpage) {
+	@SuppressWarnings("unchecked")
+	public static List<Work_Shift> getShifts(String companyCode, String locale, int rowsperpage, int currpage) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
@@ -973,7 +988,8 @@ public class AdminUtils {
 	 * @param currpage
 	 * @return shifts within a company
 	 */
-	public static List getAirports(String companyCode, DynaValidatorForm dForm, int rowsperpage, int currpage) {
+	@SuppressWarnings("unchecked")
+	public static List<Airport> getAirports(String companyCode, DynaValidatorForm dForm, int rowsperpage, int currpage) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
@@ -1093,7 +1109,8 @@ public class AdminUtils {
 	 * @param currpage
 	 * @return list of stations
 	 */
-	public static List getCustomStations(SubCompanyForm form, int rowsperpage, int currpage, TracingConstants.AgentActiveStatus activeStatus) {
+	@SuppressWarnings("unchecked")
+	public static List<Station> getCustomStations(SubCompanyForm form, int rowsperpage, int currpage, TracingConstants.AgentActiveStatus activeStatus) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
@@ -1128,6 +1145,7 @@ public class AdminUtils {
 	 * @param currpage
 	 * @return list of stations
 	 */
+	@SuppressWarnings("unchecked")
 	public static List<Subcompany> getCustomSubCompanies(SubCompanyForm form, String companyCode, int rowsperpage, int currpage) {
 		Session sess = null;
 		try {
@@ -1183,6 +1201,7 @@ public class AdminUtils {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static List<SubcompanyStation> getSubcompanyStationsBySubcompany(long subcompId){
 		Session sess = null;
 		try {
@@ -1215,7 +1234,8 @@ public class AdminUtils {
 	 * @param currpage
 	 * @return list of stations
 	 */
-	public static List getDeliveryCompanies(MaintainDeliveryCompanyForm form, Company company, int rowsperpage, int currpage) {
+	@SuppressWarnings("unchecked")
+	public static List<DeliverCompany> getDeliveryCompanies(MaintainDeliveryCompanyForm form, Company company, int rowsperpage, int currpage) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
@@ -1320,6 +1340,7 @@ public class AdminUtils {
 					+ " where agent.username = :user and agent.station.company.companyCode_ID = :code");
 			q.setString("user", username);
 			q.setString("code", companyCode.toUpperCase());
+			@SuppressWarnings("unchecked")
 			List<Agent> ret = q.list();
 			if (ret == null || ret.size() == 0)
 				return null;
@@ -1353,7 +1374,8 @@ public class AdminUtils {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Agent.class).add(Restrictions.eq("username", username));
 			cri.createCriteria("station").createCriteria("company").add(Restrictions.eq("companyCode_ID", companyCode));
-			List ret = cri.list();
+			@SuppressWarnings("unchecked")
+			List<Agent> ret = cri.list();
 			if (ret == null || ret.size() == 0)
 				return null;
 			else
@@ -1409,6 +1431,7 @@ public class AdminUtils {
 	 * @param currpage
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public static List<Station> getStationsBySubcompany(String subcompId, String companyCode, int rowsperpage, int currpage) {
 		//return getCustomStations(subcomp_id, null, sort, form, rowsperpage, currpage, TracingConstants.AgentActiveStatus.ACTIVE);
 		Session sess = null;
@@ -1651,6 +1674,7 @@ public class AdminUtils {
 	 * @param currpage
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public static List<UserGroup> getGroups(DynaValidatorForm form, String companyCode, int rowsperpage, int currpage) {
 		Session sess = null;
 		try {
@@ -1685,13 +1709,14 @@ public class AdminUtils {
 		}
 	}
 	
-	public static List getGroups(String companyCode) {
+	public static List<UserGroup> getGroups(String companyCode) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(UserGroup.class);
 			cri.add(Restrictions.eq("companycode_ID", companyCode));
-			List list = cri.list();
+			@SuppressWarnings("unchecked")
+			List<UserGroup> list = cri.list();
 			
 			if (list.size() == 0) return null;
 			
@@ -1717,6 +1742,7 @@ public class AdminUtils {
 	 * @param loggedOnUserGroupID
 	 * @return
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static TreeMap getComponentTreeMap(String groupID, Agent user) {
 		
 		
@@ -1801,6 +1827,7 @@ public class AdminUtils {
 		
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static List getChildComponents(int parent_id) {
 		Session sess = null;
 		try {
@@ -1847,13 +1874,14 @@ public class AdminUtils {
 			t = sess.beginTransaction();
 
 			UserGroup u = getGroup(groupID);
-			for (Iterator i = u.getComponentPolicies().iterator(); i.hasNext();) {
+			for (Iterator<GroupComponentPolicy> i = u.getComponentPolicies().iterator(); i.hasNext();) {
 				GroupComponentPolicy gcp = (GroupComponentPolicy) i.next();
 				sess.delete(gcp);
 			}
-			u.setComponentPolicies(new HashSet());
+			u.setComponentPolicies(new HashSet<GroupComponentPolicy>());
 
 			//delete all the group relationships for this group Id.
+			@SuppressWarnings("rawtypes")
 			Enumeration e = request.getParameterNames();
 			while (e.hasMoreElements()) {
 				String parameter = (String) e.nextElement();
@@ -1913,6 +1941,7 @@ public class AdminUtils {
 
 			Query q = sess.createQuery(sql);
 			q.setInteger("agent_ID", user.getAgent_ID());
+			@SuppressWarnings("rawtypes")
 			List list = q.list();
 			if (list.size() > 0) {
 				return ((Long) list.get(0)).intValue();
@@ -1930,6 +1959,77 @@ public class AdminUtils {
 					e.printStackTrace();
 				}
 			}
+		}
+	}
+	
+	public static Agent createAgent(String username, String fname, String lname, List<String> groupNames,
+			String stationCode, String compCode) {
+
+		/** If an agent with the user name already exists, do not create a new agent **/
+		Agent agent = getAgentBasedOnUsername(username, compCode);
+		if(agent!=null){
+			logger.error("Agent with Username: "+username+" already exists - method should not run");
+			return null;
+		}
+		
+		Agent ntuser = getAgentBasedOnUsername("ntadmin", compCode);
+		Agent u=new Agent();
+
+		u.setUsername(username);
+		u.setLastname(lname);
+		u.setFirstname(fname);
+		
+		/**
+		 * SF: Get a group based off the name provided in the Assertion Call. If no
+		 * Group is available based on the name, default to Claims group
+		 **/
+		UserGroup group=null;
+		if(groupNames!=null && groupNames.size()>0){
+			int groupId=UsergroupBMO.getUsergroupMapId(groupNames);
+			group=UsergroupBMO.getUsergroup(groupId);
+		}
+		if(group!=null){
+			u.setUsergroup_id(group.getUserGroup_ID());
+		} else {
+			group=UsergroupBMO.getUsergroup(3);
+			u.setUsergroup_id(group.getUserGroup_ID());
+		}
+		
+		/** SF: Get a station based off the station code provided in Assertion call. 
+		 * If no station is available, default the ntadmin Station
+		 */
+		Station station=StationBMO.getStationByCode(stationCode,compCode);
+		if(station!=null){
+			u.setStation(station);
+		} else {
+			u.setStation(ntuser.getStation());
+		}
+		
+		u.setCompanycode_ID(compCode);
+		
+		u.setActive(true);
+		u.setWeb_enabled(true);
+		
+		/** Default other values to blank or ntadmin values **/
+		u.setDefaultlocale(ntuser.getDefaultlocale());
+		u.setMname("");
+		u.setCurrentlocale(ntuser.getCurrentlocale());
+		u.setDefaultcurrency(ntuser.getDefaultcurrency());
+		u.setDefaulttimezone(ntuser.getDefaulttimezone());
+		u.setCurrenttimezone(ntuser.getCurrenttimezone());
+		u.setDateformat(ntuser.getDateformat());
+		u.setTimeformat(ntuser.getTimeformat());
+		u.setTimeout(ntuser.getTimeout());
+		
+		String pass=StringUtils.sha1_256("ntp@ssw0rd"); //Default Password
+		u.setPassword(pass);
+		u.setReset_password(false);
+		
+		HibernateUtils.save(u);
+		if(u.getAgent_ID()>0){
+			return u;
+		} else {
+			return null;
 		}
 	}
 }

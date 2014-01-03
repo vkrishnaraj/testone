@@ -334,3 +334,5 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.communications.Activity" />		
 		<mapping class="com.bagnet.nettracer.tracing.db.communications.IncidentActivity" />		
 		<mapping class="com.bagnet.nettracer.tracing.db.communications.IncidentActivityRemark" />		
+			
+		<mapping class="com.bagnet.nettracer.tracing.db.UsergroupNameMap" />	
