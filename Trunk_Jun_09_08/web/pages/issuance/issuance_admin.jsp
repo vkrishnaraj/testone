@@ -82,6 +82,7 @@
 		var addr2 = document.getElementById("snAddr2");
 		var city = document.getElementById("snCity");
 		var state = document.getElementById("snState");
+		var prov = document.getElementById("snProv");
 		var zip = document.getElementById("snZip");
 		var ctry = document.getElementById("snCountry");
 		var phone = document.getElementById("snPhone");
@@ -108,8 +109,24 @@
 		}
 		document.location.href="issuanceItemAdmin.do?snloaninventory=" + iItemID + "&snFName=" + escape(fName.value) + "&snLName=" + escape(lName.value) +
 		"&snAddr1=" + escape(addr1.value) + "&snAddr2=" + escape(addr2.value) + "&snCity=" + escape(city.value) + "&snState=" + escape(state.value) + "&snZip=" + escape(zip.value) +
-		"&snCtry=" + escape(ctry.value) + "&snPhone=" + escape(phone.value) + "&snDesc=" + escape(desc.value);
+		"&snCtry=" + escape(ctry.value) + "&snPhone=" + escape(phone.value) + "&snProv=" + escape(prov.value) + "&snDesc=" + escape(desc.value);
 		return false;
+	}
+
+	function switchStateProvince(country) {
+		var stateField = document.getElementById("snState");
+		var provField = document.getElementById("snProv");
+		var stateTD = document.getElementById("stateTD");
+		var provTD = document.getElementById("provTD");
+		if (country.length == 0 || country == 'US') {
+			provField.value = '';
+			provTD.style.display = 'none';
+			stateTD.style.display = 'inline';
+		} else {
+			stateField.selectedIndex = 0;
+			stateTD.style.display = 'none';
+			provTD.style.display = 'inline';
+		}
 	}
 
 	function loadSpecialNeedCollectionModal(iItemID) {
@@ -133,19 +150,29 @@
 		'		<tr>' +
 		'   		<td colspan="2" width="34%"><strong><bean:message key="issuance.item.label.sn.city" /></strong><br/>' +
 		'			<input type="text" id="snCity" class="textfield" value="" maxlength="50" style="width:95%;" /></td>' +
-		'   		<td colspan="2" width="33%"><strong><bean:message key="issuance.item.label.sn.state" /></strong><br/>' +
-		'			<input type="text" id="snState" class="textfield" value="" maxlength="20" style="width:95%;" /></td>' +
+		'   		<td colspan="2" width="33%" id="stateTD"><strong><bean:message key="issuance.item.label.sn.state" /></strong><br/>' +
+		'           <select id="snState" class="dropdown" style="width:96%;font-size:9px;border:1px solid #569ECD;margin: 2px 0px 1px 0px" >' +
+        '  				<option value="">' +
+        '    				<bean:message key="select.none" />' +
+        '  				</option>' +
+        <% for (LabelValueBean bean : (ArrayList<LabelValueBean>) session.getAttribute("statelist")) { %>
+        '	            <option value="<%=bean.getValue()%>" ><%=bean.getLabel().replaceAll("'", "\\\\'").replaceAll("/", "\\\\/")%></option>' +
+        <% } %>
+        '			</select></td>' +
+		'   		<td colspan="2" width="33%" id="provTD" style="display:none;"><strong><bean:message key="issuance.item.label.sn.prov" /></strong><br/>' +
+		'			<input type="text" id="snProv" class="textfield" value="" maxlength="20" style="width:95%;" /></td>' +
 		'   		<td colspan="2" width="33%"><strong><bean:message key="issuance.item.label.sn.zip" /></strong><br/>' +
 		'			<input type="text" id="snZip" class="textfield" value="" maxlength="12" style="width:94%;" /></td>' +
 		'		</tr>' +
 		'		<tr>' +
 		'   		<td colspan="3" width="50%"><strong><bean:message key="issuance.item.label.sn.country" /></strong><br/>' +
-		'			<select id="snCountry" class="dropdown" style="width:96%;" >' +
+		'			<select id="snCountry" class="dropdown" style="width:96%;font-size:9px;border:1px solid #569ECD;margin: 2px 0px 1px 0px" ' +
+		' 					onchange="switchStateProvince(this.options[this.selectedIndex].value);">' +
         '  				<option value="">' +
         '    				<bean:message key="select.none" />' +
         '  				</option>' +
         <% for (LabelValueBean bean : (ArrayList<LabelValueBean>) session.getAttribute("countrylist")) { %>
-        '	            <option value="<%=bean.getValue()%>"><%=bean.getLabel().replaceAll("'", "\\\\'").replaceAll("/", "\\\\/")%></option>' +
+        '	            <option value="<%=bean.getValue()%>" <% if (bean.getValue().equals("US")) { %>selected<% } %>><%=bean.getLabel().replaceAll("'", "\\\\'").replaceAll("/", "\\\\/")%></option>' +
         <% } %>
         '			</select></td>' +
 		'			<td colspan="3" width="50%"><strong><bean:message key="issuance.item.label.sn.phone" /> *</strong><br/>' +
@@ -173,7 +200,15 @@
 		return false;
 	}
 
-	function loadSpecialNeedViewModal(fName, lName, addr1, addr2, city, state, zip, ctry, phone, desc) {
+	function loadSpecialNeedViewModal(fName, lName, addr1, addr2, city, state, prov, zip, ctry, phone, desc) {
+		var stateSection = '' +
+		'   		<td colspan="2" width="33%"><strong><bean:message key="issuance.item.label.sn.prov" /></strong> :' +
+		'			' + prov + '<br/>'
+		if (ctry.length == 0 || ctry == 'US') {
+			stateSection = '' +
+			'   		<td colspan="2" width="33%"><strong><bean:message key="issuance.item.label.sn.state" /></strong> :' +
+			'			' + state + '<br/>'
+		}
 		var theHtml = '' +
 		'<form><div>' +
 		'	<table class="form2" cellspacing="0" cellpadding="0" width="100%" >' +
@@ -196,9 +231,7 @@
 		'		<tr><td colspan="6">&nbsp;</td></tr>' +
 		'		<tr>' +
 		'   		<td colspan="2" width="34%"><strong><bean:message key="issuance.item.label.sn.city" /></strong> :' +
-		'			' + city + '<br/>' +
-		'   		<td colspan="2" width="33%"><strong><bean:message key="issuance.item.label.sn.state" /></strong> :' +
-		'			' + state + '<br/>' +
+		'			' + city + '<br/>' + stateSection +
 		'   		<td colspan="2" width="33%"><strong><bean:message key="issuance.item.label.sn.zip" /></strong> :' +
 		'			' + zip + '<br/>' +
 		'		</tr>' +
@@ -640,12 +673,13 @@
 	                     		String ad2 = i_item.getAddress2() != null ? i_item.getAddress2().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
 	                     		String ct = i_item.getCity() != null ? i_item.getCity().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
 	                     		String st = i_item.getState() != null ? i_item.getState().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
+	                     		String pv = i_item.getProvince() != null ? i_item.getProvince().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
 	                     		String zp = i_item.getZip() != null ? i_item.getZip().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
 	                     		String ctry = i_item.getCountry() != null ? i_item.getCountry().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
 	                     		String pn = i_item.getPhoneNumber() != null ? i_item.getPhoneNumber().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
 	                     		String desc = i_item.getSpecialNeedDescription() != null ? i_item.getSpecialNeedDescription().replace("'", "\\\\'").replace("/", "\\\\/") : ""; %>
 	                     	<a href="###" 
-	                     	onclick="loadSpecialNeedViewModal('<%=fn %>', '<%=ln %>', '<%=ad1 %>', '<%=ad2 %>', '<%=ct %>', '<%=st %>', '<%=zp %>', '<%=ctry %>', '<%=pn %>', '<%=desc %>')"
+	                     	onclick="loadSpecialNeedViewModal('<%=fn %>', '<%=ln %>', '<%=ad1 %>', '<%=ad2 %>', '<%=ct %>', '<%=st %>', '<%=pv %>', '<%=zp %>', '<%=ctry %>', '<%=pn %>', '<%=desc %>')"
 	                     	><bean:message key="issuance.item.button.snloan" /></a>
 	                     <% } else { %>
 	                     	<%=i_item.getIncidentID() %>

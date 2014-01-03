@@ -550,7 +550,7 @@ public class IssuanceItemBMO {
 	 * @param fromAdmin
 	 */
 	public static void moveInventoriedItem(long id, int status_id, Agent user, String incID, String reason, boolean fromAdmin) {
-		moveInventoriedItem(id, status_id, user, incID, reason, fromAdmin, null, null, null, null, null, null, null, null, null, null);
+		moveInventoriedItem(id, status_id, user, incID, reason, fromAdmin, null, null, null, null, null, null, null, null, null, null, null);
 	}
 	
 	/**
@@ -567,13 +567,14 @@ public class IssuanceItemBMO {
 	 * @param addr2
 	 * @param city
 	 * @param state
+	 * @param prov
 	 * @param zip
 	 * @param ctry
 	 * @param phone
 	 * @param desc
 	 */
 	public static void moveInventoriedItem(long id, int status_id, Agent user, String incID, String reason, boolean fromAdmin,
-			String fName, String lName, String addr1, String addr2, String city, String state, String zip, String ctry, String phone, String desc) {
+			String fName, String lName, String addr1, String addr2, String city, String state, String prov, String zip, String ctry, String phone, String desc) {
 			Session sess = null;
 			Transaction t = null;
 			try {
@@ -600,6 +601,7 @@ public class IssuanceItemBMO {
 					iItem.setAddress2(addr2);
 					iItem.setCity(city);
 					iItem.setState(state);
+					iItem.setProvince(prov);
 					iItem.setZip(zip);
 					iItem.setCountry(ctry);
 					iItem.setPhoneNumber(phone);

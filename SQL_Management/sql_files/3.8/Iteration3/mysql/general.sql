@@ -426,7 +426,8 @@ alter table issuance_item_inventory add column phoneNumber varchar(20);
 alter table issuance_item_inventory add column address1 varchar(100);
 alter table issuance_item_inventory add column address2 varchar(100);
 alter table issuance_item_inventory add column city varchar(50);
-alter table issuance_item_inventory add column state varchar(20);
+alter table issuance_item_inventory add column state varchar(2);
+alter table issuance_item_inventory add column province varchar(20);
 alter table issuance_item_inventory add column zip varchar(12);
 alter table issuance_item_inventory add column specialNeedDescription varchar(255);
 
@@ -437,6 +438,7 @@ alter table audit_issuance_item_inventory add column phoneNumber varchar(20);
 alter table audit_issuance_item_inventory add column address1 varchar(100);
 alter table audit_issuance_item_inventory add column address2 varchar(100);
 alter table audit_issuance_item_inventory add column city varchar(50);
-alter table audit_issuance_item_inventory add column state varchar(20);
+alter table audit_issuance_item_inventory add column state varchar(2);
+alter table audit_issuance_item_inventory add column province varchar(20);
 alter table audit_issuance_item_inventory add column zip varchar(12);
 alter table audit_issuance_item_inventory add column specialNeedDescription varchar(255);

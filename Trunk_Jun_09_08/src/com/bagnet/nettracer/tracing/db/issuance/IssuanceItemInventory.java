@@ -82,8 +82,11 @@ public class IssuanceItemInventory {
 	@Column(length = 50)
 	private String city;
 
-	@Column(length = 20)
+	@Column(length = 2)
 	private String state;
+
+	@Column(length = 20)
+	private String province;
 
 	@Column(length = 12)
 	private String zip;
@@ -241,6 +244,14 @@ public class IssuanceItemInventory {
 
 	public void setState(String state) {
 		this.state = state;
+	}
+
+	public String getProvince() {
+		return province;
+	}
+
+	public void setProvince(String province) {
+		this.province = province;
 	}
 
 	public String getZip() {
