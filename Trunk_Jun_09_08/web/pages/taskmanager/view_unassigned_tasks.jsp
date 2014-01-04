@@ -21,10 +21,10 @@
   request.setAttribute("", null);
 %>
   
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
+  <script type="text/javascript" SRC="deployment/main/js/date.js"></script>
+  <script type="text/javascript" SRC="deployment/main/js/AnchorPosition.js"></script>
+  <script type="text/javascript" SRC="deployment/main/js/PopupWindow.js"></script>
+  <script type="text/javascript" SRC="deployment/main/js/popcalendar.js"></script>
 
   
   
@@ -44,12 +44,19 @@
     <td id="middlecolumn">
       
       <div id="maincontent">
+			<logic:messagesPresent message="true">
+				<div>
+					<html:messages id="msg" message="true">
+						<font color="red"><bean:write name="msg"/><br/></font>
+					</html:messages>
+				</div>
+			</logic:messagesPresent>
  
-        <div class="headerleft">
-        <h1 class="green">
-          <bean:message key='header.unassignedinbound.matrix.title'/>
-        </h1>
-        </div>
+	        <div class="headerleft">
+		        <h1 class="green">
+		          <bean:message key='header.unassignedinbound.matrix.title'/>
+		        </h1>
+	        </div>
         
           <display:table requestURI="/unassignedInboundQueue.do" name="unassignedInboundQueueForm.agentMatrix" class="form2" cellspacing="0" cellpadding="0" id="agentElement"  >
 	       	<display:setProperty name="basic.empty.showtable" value="true"/>
@@ -94,7 +101,23 @@
   		<br/>
            <display:table requestURI="/unassignedInboundQueue.do" name="unassignedInboundQueueForm.taskList" class="form2" cellspacing="0" cellpadding="0" id="task" >
 	       	<display:setProperty name="basic.empty.showtable" value="true"/>
-	       	<display:column style="width:25%;" titleKey="agent" value="${task.incident.agentassigned.username}&nbsp;" sortable="true" sortName="username" headerClass="header" />
+	       	
+	       	<display:column style="width:25%;" titleKey="agent" sortable="true" sortName="username" headerClass="header">
+	       		<select name="task.inicident.agentassigned.agent_ID" class="dropdown">
+                	<option value="-1">Select</option>
+			       		<c:forEach var="agentElement" items="${unassignedInboundQueueForm.agentMatrix}">
+			       			<c:if test="${not empty agentElement.agent and not empty agentElement.agent.username}">
+			       				<option value="${agentElement.agent.agent_ID}"
+					       			<c:if test="${not empty task.incident.agentassigned and not empty task.incident.agentassigned.username and task.incident.agentassigned.username.equalsIgnoreCase(agentElement.agent.username)}">
+					       				selected
+					       			</c:if>
+							    	>${agentElement.agent.username}
+						    	</option>
+			       			</c:if>
+						</c:forEach>
+				</select>
+	       	</display:column>
+	       	
 	       	<display:column style="width:25%;" titleKey="colname.incident_num" headerClass="header" sortable="true" sortName="incident">
 	       		<a href="<c:url value="/searchIncident.do?incident=${task.incident.incident_ID}"/>">${task.incident.incident_ID}</a>
 	       	</display:column>
@@ -114,5 +137,7 @@
           		</tr>
 		 	</display:footer>
 	       	</display:table>
-  
+  		</div>
+  	</td>
+  </tr>
   </html:form>
