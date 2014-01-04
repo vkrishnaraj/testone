@@ -126,7 +126,7 @@
 			
 			<h:panelGrid columns="2" width="100%">
 				<t:outputText value="MESSAGE INSTR MSG" styleClass="bodycopy"/>
-				<t:inputText value="#{customerPortal.passengerBean.currentMessage}" />
+				<t:inputTextarea value="#{customerPortal.passengerBean.currentMessage}" />
 			</h:panelGrid>
 				
 			<rich:spacer width="100%" height="20" title=""/>
@@ -148,7 +148,7 @@
 						value="#{customerPortal.fileDataModelList}" var="file">
 						
 					<h:column rendered="#{file.publish}">
-						<h:outputLink value="/customer-portal/showImage?ID=#{file.path}/#{file.name}" rendered="#{file.downloadable}">
+						<h:outputLink value="/customer-portal/showImage?ID=#{file.path}/#{file.name}" rendered="#{file.downloadable}" target="blank">
 							<h:outputText value="#{file.name}" styleClass="formLabel" style="padding:10px;"/>
 						</h:outputLink>
 						<h:outputText value="#{file.name}" styleClass="formLabel" style="padding:10px;" rendered="#{!file.downloadable}"/>
@@ -157,7 +157,7 @@
 						<rich:spacer width="50" title=""/>
 					</h:column>
 					<h:column rendered="#{file.publish}">
-						<a4j:commandButton  value="REMOVE MSG" 
+						<a4j:commandButton  value="REMOVE MSG" rendered="#{file.new}"
 								reRender="filePanel" limitToList="true" immediate="true" styleClass="submitButtonOrange" 
 								actionListener="#{customerPortal.removeFileListener}"/>
 					</h:column>
@@ -181,13 +181,13 @@
 			
 			<rich:spacer width="100%" height="20" title=""/>
 			
-			<h:outputLink value="/customer-portal/showImage?ID=swa_faq.pdf" >
+			<h:outputLink value="/customer-portal/showImage?ID=swa_faq.pdf" target="blank" >
 				<h:outputText value="FAQ DL" styleClass="formLabel" style="padding:10px;"/>
 			</h:outputLink>
 			
 			<rich:spacer width="100%" height="20" title=""/>
 			
-			<h:outputLink value="/customer-portal/showImage?ID=swa_claim_form.pdf" >
+			<h:outputLink value="/customer-portal/showImage?ID=swa_claim_form.pdf" target="blank" >
 				<h:outputText value="CLAIM DL" styleClass="formLabel" style="padding:10px;"/>
 			</h:outputLink>
 				

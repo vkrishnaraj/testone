@@ -120,4 +120,8 @@ public class File {
 	public boolean isDownloadable() {
 		return getStatus() != 3;
 	}
+	
+	public boolean isNew() {
+		return getStatus() == 0;
+	}
 }
