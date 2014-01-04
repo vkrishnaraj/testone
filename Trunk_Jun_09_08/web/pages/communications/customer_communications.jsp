@@ -334,24 +334,7 @@
 									&nbsp;
 								<% } %>
 							</logic:equal>
-							<logic:equal name="activity" property="statusId" value="<%=String.valueOf(TracingConstants.STATUS_CUSTOMER_COMM_APPROVED) %>">
-							
-								<logic:equal name="activity" property="published" value="true">
-									
-									<br>
-									<a href="customerCommunications.do?command=<%=TracingConstants.COMMAND_UNPUBLISH %>&communicationsId=<%=String.valueOf(activity.getId()) %>&incident=<bean:write name="incidentForm" property="incident_ID" />" onclick="return verifyUnpublish();" >
-										<bean:message key="customer.communication.action.unpublish" />
-									</a>
-								</logic:equal>
-								<logic:notEqual name="activity" property="published" value="true">
-									
-									<br>
-									<a href="customerCommunications.do?command=<%=TracingConstants.COMMAND_PUBLISH %>&communicationsId=<%=String.valueOf(activity.getId()) %>&incident=<bean:write name="incidentForm" property="incident_ID" />" onclick="return verifyPublish();" >
-										<bean:message key="customer.communication.action.publish" />
-									</a>
-								</logic:notEqual>
-							</logic:equal>
-							<logic:equal name="activity" property="statusId" value="<%=String.valueOf(TracingConstants.FINANCE_STATUS_FINANCE_APPROVED) %>">
+							<logic:equal name="activity" property="statusId" value="<%=String.valueOf(TracingConstants.STATUS_CUSTOMER_COMM_PENDING_WP) %>">
 							
 								<logic:equal name="activity" property="published" value="true">
 									
