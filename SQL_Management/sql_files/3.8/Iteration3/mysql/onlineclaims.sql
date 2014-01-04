@@ -425,7 +425,7 @@ create table oc_message (
 alter table oc_file add column incActId bigint;
 alter table oc_file add column publish tinyint default 1;
 update oc_file set publish=1;
-alter table oc_file add column dateViewed date;
+alter table oc_file add column dateViewed datetime;
 
 alter table oc_file add column statusId int default 1;
 alter table oc_message add column statusId int default 1;
