@@ -22,6 +22,10 @@
 		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	<servlet>
+	  	<servlet-name>showImage</servlet-name>
+	  	<servlet-class>aero.nettracer.portal.utils.showImage</servlet-class>
+	</servlet>
 	<!-- Any page request with the suffix .faces will be handled by Faces -->
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
@@ -32,6 +36,10 @@
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.do</url-pattern>
 	</servlet-mapping>
+ 	<servlet-mapping>
+  		<servlet-name>showImage</servlet-name>
+  		<url-pattern>/showImage</url-pattern>
+ 	</servlet-mapping>
 	<!-- The view state will be saved server side, this severely reduces network traffic -->
 	<context-param>
 		<param-name>javax.faces.STATE_SAVING_METHOD</param-name>

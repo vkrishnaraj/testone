@@ -299,7 +299,9 @@
 						value="#{customerPortal.fileDataModelList}" var="file">
 						
 						<h:column>
-							<h:outputText value="#{file.name}" styleClass="formLabel" style="padding:10px;"/>
+							<h:outputLink value="/customer-portal/showImage?ID=#{file.path}/#{file.name}" >
+								<h:outputText value="#{file.name}" styleClass="formLabel" style="padding:10px;"/>
+							</h:outputLink>
 						</h:column>
 						<h:column>
 							<rich:spacer width="50" title=""/>
