@@ -135,8 +135,8 @@ public class CustomerPortalLoginController {
 						return (isMobile() ? "gotoMobileDirectionPage" : "gotoDirectionPage");
 	
 				} else {
-					FacesUtil.addError("Incorrect Claim Number and Name combination. Please try again.");
-					logger.error("Claim Number and Last Name are incorrect for admin for the IP Adress: "
+					FacesUtil.addError("Incorrect Incident ID and Name combination. Please try again.");
+					logger.error("Incident ID and Last Name are incorrect for admin for the IP Adress: "
 									+ ((HttpServletRequest) FacesUtil
 											.getFacesContext().getExternalContext()
 											.getRequest()).getRemoteAddr());

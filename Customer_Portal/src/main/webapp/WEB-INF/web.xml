@@ -90,7 +90,7 @@
 			 <description>Size limit for uploaded files.
                  10 - 10 bytes, 10k - 10 KB, 10m - 10 MB, 1g - 1 GB</description>
  			<param-name>uploadMaxFileSize</param-name>
- 			<param-value>100m</param-value>
+ 			<param-value>5m</param-value>
  		</init-param>
  		<init-param>
  			 <description>Set the threshold size - files below this limit are stored

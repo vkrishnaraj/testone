@@ -88,6 +88,10 @@ public class CustomerPortalController {
 					String extension = upFile.getName().substring(extDot + 1);
 					if (extension.equals("jpg") || extension.equals("gif")
 							|| extension.equals("pdf")
+							|| extension.equals("jpeg")
+							|| extension.equals("doc")
+							|| extension.equals("docx")
+							|| extension.equals("tiff")
 							|| extension.equalsIgnoreCase("png")) {
 						// InputStream stream = upFile.getInputStream();
 						// long size = upFile.getSize();

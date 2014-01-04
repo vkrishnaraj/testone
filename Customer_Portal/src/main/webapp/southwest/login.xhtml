@@ -24,11 +24,11 @@
 				<td><t:outputText value="#{msg.landing_label_tracking}" /></td>
 				<td><t:inputText value="#{customerPortalLogin.loginBean.claimNumber}" /></td>
 				</tr><tr>
-				<td colspan="2"><h:commandLink
+				<td>&nbsp;</td><td><h:commandLink
 							value="#{msg.landing_label_trydiff}"
 							styleClass="commandLink" style="text-decoration: underline;" /></td>
 				</tr><tr>
-				<td colspan="2"><t:captcha
+				<td>&nbsp;</td><td><t:captcha
 							captchaSessionKeyName="#{customerPortalLogin.captchaBean.sessionKeyName}"
 							imageHeight="45" imageWidth="128" /></td>
 				</tr><tr>
@@ -39,7 +39,7 @@
 							value="#{customerPortalLogin.captchaBean.value}"
 							tabindex="3" /></td>	
 				</tr><tr>
-				<td colspan="2"><h:outputText id="captchaStatus"
+				<td>&nbsp;</td><td><h:outputText id="captchaStatus"
 							value="#{customerPortalLogin.captchaBean.status}"/></td>
 				</tr></table>
 				

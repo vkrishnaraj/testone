@@ -117,4 +117,7 @@ public class File {
 		this.dateViewed = dateViewed;
 	}
 	
+	public boolean isDownloadable() {
+		return getStatus() != 3;
+	}
 }
