@@ -16,7 +16,87 @@ package com.bagnet.nettracer.ws.onlineclaims.xsd;
 public interface File extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(File.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s6B9AE42F380158AA4A818798B2B09D68").resolveHandle("file3dabtype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(File.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.sB19FE03AAADC8EF07F1707671AB638D5").resolveHandle("file3dabtype");
+    
+    /**
+     * Gets the "dateUploaded" element
+     */
+    java.util.Calendar getDateUploaded();
+    
+    /**
+     * Gets (as xml) the "dateUploaded" element
+     */
+    org.apache.xmlbeans.XmlDateTime xgetDateUploaded();
+    
+    /**
+     * Tests for nil "dateUploaded" element
+     */
+    boolean isNilDateUploaded();
+    
+    /**
+     * True if has "dateUploaded" element
+     */
+    boolean isSetDateUploaded();
+    
+    /**
+     * Sets the "dateUploaded" element
+     */
+    void setDateUploaded(java.util.Calendar dateUploaded);
+    
+    /**
+     * Sets (as xml) the "dateUploaded" element
+     */
+    void xsetDateUploaded(org.apache.xmlbeans.XmlDateTime dateUploaded);
+    
+    /**
+     * Nils the "dateUploaded" element
+     */
+    void setNilDateUploaded();
+    
+    /**
+     * Unsets the "dateUploaded" element
+     */
+    void unsetDateUploaded();
+    
+    /**
+     * Gets the "dateViewed" element
+     */
+    java.util.Calendar getDateViewed();
+    
+    /**
+     * Gets (as xml) the "dateViewed" element
+     */
+    org.apache.xmlbeans.XmlDateTime xgetDateViewed();
+    
+    /**
+     * Tests for nil "dateViewed" element
+     */
+    boolean isNilDateViewed();
+    
+    /**
+     * True if has "dateViewed" element
+     */
+    boolean isSetDateViewed();
+    
+    /**
+     * Sets the "dateViewed" element
+     */
+    void setDateViewed(java.util.Calendar dateViewed);
+    
+    /**
+     * Sets (as xml) the "dateViewed" element
+     */
+    void xsetDateViewed(org.apache.xmlbeans.XmlDateTime dateViewed);
+    
+    /**
+     * Nils the "dateViewed" element
+     */
+    void setNilDateViewed();
+    
+    /**
+     * Unsets the "dateViewed" element
+     */
+    void unsetDateViewed();
     
     /**
      * Gets the "filename" element

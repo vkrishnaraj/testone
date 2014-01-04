@@ -20,19 +20,273 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         super(sType);
     }
     
-    private static final javax.xml.namespace.QName FILENAME$0 = 
+    private static final javax.xml.namespace.QName DATEUPLOADED$0 = 
+        new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "dateUploaded");
+    private static final javax.xml.namespace.QName DATEVIEWED$2 = 
+        new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "dateViewed");
+    private static final javax.xml.namespace.QName FILENAME$4 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "filename");
-    private static final javax.xml.namespace.QName ID$2 = 
+    private static final javax.xml.namespace.QName ID$6 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "id");
-    private static final javax.xml.namespace.QName INTERIM$4 = 
+    private static final javax.xml.namespace.QName INTERIM$8 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "interim");
-    private static final javax.xml.namespace.QName PATH$6 = 
+    private static final javax.xml.namespace.QName PATH$10 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "path");
-    private static final javax.xml.namespace.QName PUBLISH$8 = 
+    private static final javax.xml.namespace.QName PUBLISH$12 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "publish");
-    private static final javax.xml.namespace.QName STATUSID$10 = 
+    private static final javax.xml.namespace.QName STATUSID$14 = 
         new javax.xml.namespace.QName("http://onlineclaims.ws.nettracer.bagnet.com/xsd", "statusId");
     
+    
+    /**
+     * Gets the "dateUploaded" element
+     */
+    public java.util.Calendar getDateUploaded()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(DATEUPLOADED$0, 0);
+            if (target == null)
+            {
+                return null;
+            }
+            return target.getCalendarValue();
+        }
+    }
+    
+    /**
+     * Gets (as xml) the "dateUploaded" element
+     */
+    public org.apache.xmlbeans.XmlDateTime xgetDateUploaded()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlDateTime target = null;
+            target = (org.apache.xmlbeans.XmlDateTime)get_store().find_element_user(DATEUPLOADED$0, 0);
+            return target;
+        }
+    }
+    
+    /**
+     * Tests for nil "dateUploaded" element
+     */
+    public boolean isNilDateUploaded()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlDateTime target = null;
+            target = (org.apache.xmlbeans.XmlDateTime)get_store().find_element_user(DATEUPLOADED$0, 0);
+            if (target == null) return false;
+            return target.isNil();
+        }
+    }
+    
+    /**
+     * True if has "dateUploaded" element
+     */
+    public boolean isSetDateUploaded()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return get_store().count_elements(DATEUPLOADED$0) != 0;
+        }
+    }
+    
+    /**
+     * Sets the "dateUploaded" element
+     */
+    public void setDateUploaded(java.util.Calendar dateUploaded)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(DATEUPLOADED$0, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(DATEUPLOADED$0);
+            }
+            target.setCalendarValue(dateUploaded);
+        }
+    }
+    
+    /**
+     * Sets (as xml) the "dateUploaded" element
+     */
+    public void xsetDateUploaded(org.apache.xmlbeans.XmlDateTime dateUploaded)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlDateTime target = null;
+            target = (org.apache.xmlbeans.XmlDateTime)get_store().find_element_user(DATEUPLOADED$0, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlDateTime)get_store().add_element_user(DATEUPLOADED$0);
+            }
+            target.set(dateUploaded);
+        }
+    }
+    
+    /**
+     * Nils the "dateUploaded" element
+     */
+    public void setNilDateUploaded()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlDateTime target = null;
+            target = (org.apache.xmlbeans.XmlDateTime)get_store().find_element_user(DATEUPLOADED$0, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlDateTime)get_store().add_element_user(DATEUPLOADED$0);
+            }
+            target.setNil();
+        }
+    }
+    
+    /**
+     * Unsets the "dateUploaded" element
+     */
+    public void unsetDateUploaded()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            get_store().remove_element(DATEUPLOADED$0, 0);
+        }
+    }
+    
+    /**
+     * Gets the "dateViewed" element
+     */
+    public java.util.Calendar getDateViewed()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(DATEVIEWED$2, 0);
+            if (target == null)
+            {
+                return null;
+            }
+            return target.getCalendarValue();
+        }
+    }
+    
+    /**
+     * Gets (as xml) the "dateViewed" element
+     */
+    public org.apache.xmlbeans.XmlDateTime xgetDateViewed()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlDateTime target = null;
+            target = (org.apache.xmlbeans.XmlDateTime)get_store().find_element_user(DATEVIEWED$2, 0);
+            return target;
+        }
+    }
+    
+    /**
+     * Tests for nil "dateViewed" element
+     */
+    public boolean isNilDateViewed()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlDateTime target = null;
+            target = (org.apache.xmlbeans.XmlDateTime)get_store().find_element_user(DATEVIEWED$2, 0);
+            if (target == null) return false;
+            return target.isNil();
+        }
+    }
+    
+    /**
+     * True if has "dateViewed" element
+     */
+    public boolean isSetDateViewed()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            return get_store().count_elements(DATEVIEWED$2) != 0;
+        }
+    }
+    
+    /**
+     * Sets the "dateViewed" element
+     */
+    public void setDateViewed(java.util.Calendar dateViewed)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.SimpleValue target = null;
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(DATEVIEWED$2, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(DATEVIEWED$2);
+            }
+            target.setCalendarValue(dateViewed);
+        }
+    }
+    
+    /**
+     * Sets (as xml) the "dateViewed" element
+     */
+    public void xsetDateViewed(org.apache.xmlbeans.XmlDateTime dateViewed)
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlDateTime target = null;
+            target = (org.apache.xmlbeans.XmlDateTime)get_store().find_element_user(DATEVIEWED$2, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlDateTime)get_store().add_element_user(DATEVIEWED$2);
+            }
+            target.set(dateViewed);
+        }
+    }
+    
+    /**
+     * Nils the "dateViewed" element
+     */
+    public void setNilDateViewed()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            org.apache.xmlbeans.XmlDateTime target = null;
+            target = (org.apache.xmlbeans.XmlDateTime)get_store().find_element_user(DATEVIEWED$2, 0);
+            if (target == null)
+            {
+                target = (org.apache.xmlbeans.XmlDateTime)get_store().add_element_user(DATEVIEWED$2);
+            }
+            target.setNil();
+        }
+    }
+    
+    /**
+     * Unsets the "dateViewed" element
+     */
+    public void unsetDateViewed()
+    {
+        synchronized (monitor())
+        {
+            check_orphaned();
+            get_store().remove_element(DATEVIEWED$2, 0);
+        }
+    }
     
     /**
      * Gets the "filename" element
@@ -43,7 +297,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(FILENAME$0, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(FILENAME$4, 0);
             if (target == null)
             {
                 return null;
@@ -61,7 +315,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(FILENAME$0, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(FILENAME$4, 0);
             return target;
         }
     }
@@ -75,7 +329,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(FILENAME$0, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(FILENAME$4, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -89,7 +343,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(FILENAME$0) != 0;
+            return get_store().count_elements(FILENAME$4) != 0;
         }
     }
     
@@ -102,10 +356,10 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(FILENAME$0, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(FILENAME$4, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(FILENAME$0);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(FILENAME$4);
             }
             target.setStringValue(filename);
         }
@@ -120,10 +374,10 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(FILENAME$0, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(FILENAME$4, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(FILENAME$0);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(FILENAME$4);
             }
             target.set(filename);
         }
@@ -138,10 +392,10 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(FILENAME$0, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(FILENAME$4, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(FILENAME$0);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(FILENAME$4);
             }
             target.setNil();
         }
@@ -155,7 +409,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(FILENAME$0, 0);
+            get_store().remove_element(FILENAME$4, 0);
         }
     }
     
@@ -168,7 +422,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(ID$2, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(ID$6, 0);
             if (target == null)
             {
                 return 0L;
@@ -186,7 +440,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.XmlLong target = null;
-            target = (org.apache.xmlbeans.XmlLong)get_store().find_element_user(ID$2, 0);
+            target = (org.apache.xmlbeans.XmlLong)get_store().find_element_user(ID$6, 0);
             return target;
         }
     }
@@ -199,7 +453,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(ID$2) != 0;
+            return get_store().count_elements(ID$6) != 0;
         }
     }
     
@@ -212,10 +466,10 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(ID$2, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(ID$6, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(ID$2);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(ID$6);
             }
             target.setLongValue(id);
         }
@@ -230,10 +484,10 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.XmlLong target = null;
-            target = (org.apache.xmlbeans.XmlLong)get_store().find_element_user(ID$2, 0);
+            target = (org.apache.xmlbeans.XmlLong)get_store().find_element_user(ID$6, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlLong)get_store().add_element_user(ID$2);
+                target = (org.apache.xmlbeans.XmlLong)get_store().add_element_user(ID$6);
             }
             target.set(id);
         }
@@ -247,7 +501,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(ID$2, 0);
+            get_store().remove_element(ID$6, 0);
         }
     }
     
@@ -260,7 +514,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(INTERIM$4, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(INTERIM$8, 0);
             if (target == null)
             {
                 return false;
@@ -278,7 +532,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(INTERIM$4, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(INTERIM$8, 0);
             return target;
         }
     }
@@ -291,7 +545,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(INTERIM$4) != 0;
+            return get_store().count_elements(INTERIM$8) != 0;
         }
     }
     
@@ -304,10 +558,10 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(INTERIM$4, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(INTERIM$8, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(INTERIM$4);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(INTERIM$8);
             }
             target.setBooleanValue(interim);
         }
@@ -322,10 +576,10 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(INTERIM$4, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(INTERIM$8, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(INTERIM$4);
+                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(INTERIM$8);
             }
             target.set(interim);
         }
@@ -339,7 +593,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(INTERIM$4, 0);
+            get_store().remove_element(INTERIM$8, 0);
         }
     }
     
@@ -352,7 +606,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PATH$6, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PATH$10, 0);
             if (target == null)
             {
                 return null;
@@ -370,7 +624,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PATH$6, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PATH$10, 0);
             return target;
         }
     }
@@ -384,7 +638,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PATH$6, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PATH$10, 0);
             if (target == null) return false;
             return target.isNil();
         }
@@ -398,7 +652,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(PATH$6) != 0;
+            return get_store().count_elements(PATH$10) != 0;
         }
     }
     
@@ -411,10 +665,10 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PATH$6, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PATH$10, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(PATH$6);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(PATH$10);
             }
             target.setStringValue(path);
         }
@@ -429,10 +683,10 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PATH$6, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PATH$10, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(PATH$6);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(PATH$10);
             }
             target.set(path);
         }
@@ -447,10 +701,10 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.XmlString target = null;
-            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PATH$6, 0);
+            target = (org.apache.xmlbeans.XmlString)get_store().find_element_user(PATH$10, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(PATH$6);
+                target = (org.apache.xmlbeans.XmlString)get_store().add_element_user(PATH$10);
             }
             target.setNil();
         }
@@ -464,7 +718,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(PATH$6, 0);
+            get_store().remove_element(PATH$10, 0);
         }
     }
     
@@ -477,7 +731,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PUBLISH$8, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PUBLISH$12, 0);
             if (target == null)
             {
                 return false;
@@ -495,7 +749,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(PUBLISH$8, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(PUBLISH$12, 0);
             return target;
         }
     }
@@ -508,7 +762,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(PUBLISH$8) != 0;
+            return get_store().count_elements(PUBLISH$12) != 0;
         }
     }
     
@@ -521,10 +775,10 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PUBLISH$8, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(PUBLISH$12, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(PUBLISH$8);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(PUBLISH$12);
             }
             target.setBooleanValue(publish);
         }
@@ -539,10 +793,10 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.XmlBoolean target = null;
-            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(PUBLISH$8, 0);
+            target = (org.apache.xmlbeans.XmlBoolean)get_store().find_element_user(PUBLISH$12, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(PUBLISH$8);
+                target = (org.apache.xmlbeans.XmlBoolean)get_store().add_element_user(PUBLISH$12);
             }
             target.set(publish);
         }
@@ -556,7 +810,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(PUBLISH$8, 0);
+            get_store().remove_element(PUBLISH$12, 0);
         }
     }
     
@@ -569,7 +823,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATUSID$10, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATUSID$14, 0);
             if (target == null)
             {
                 return 0;
@@ -587,7 +841,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.XmlInt target = null;
-            target = (org.apache.xmlbeans.XmlInt)get_store().find_element_user(STATUSID$10, 0);
+            target = (org.apache.xmlbeans.XmlInt)get_store().find_element_user(STATUSID$14, 0);
             return target;
         }
     }
@@ -600,7 +854,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         synchronized (monitor())
         {
             check_orphaned();
-            return get_store().count_elements(STATUSID$10) != 0;
+            return get_store().count_elements(STATUSID$14) != 0;
         }
     }
     
@@ -613,10 +867,10 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.SimpleValue target = null;
-            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATUSID$10, 0);
+            target = (org.apache.xmlbeans.SimpleValue)get_store().find_element_user(STATUSID$14, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(STATUSID$10);
+                target = (org.apache.xmlbeans.SimpleValue)get_store().add_element_user(STATUSID$14);
             }
             target.setIntValue(statusId);
         }
@@ -631,10 +885,10 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         {
             check_orphaned();
             org.apache.xmlbeans.XmlInt target = null;
-            target = (org.apache.xmlbeans.XmlInt)get_store().find_element_user(STATUSID$10, 0);
+            target = (org.apache.xmlbeans.XmlInt)get_store().find_element_user(STATUSID$14, 0);
             if (target == null)
             {
-                target = (org.apache.xmlbeans.XmlInt)get_store().add_element_user(STATUSID$10);
+                target = (org.apache.xmlbeans.XmlInt)get_store().add_element_user(STATUSID$14);
             }
             target.set(statusId);
         }
@@ -648,7 +902,7 @@ public class FileImpl extends org.apache.xmlbeans.impl.values.XmlComplexContentI
         synchronized (monitor())
         {
             check_orphaned();
-            get_store().remove_element(STATUSID$10, 0);
+            get_store().remove_element(STATUSID$14, 0);
         }
     }
 }

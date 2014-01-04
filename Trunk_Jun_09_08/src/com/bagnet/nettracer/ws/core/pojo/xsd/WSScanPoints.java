@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.core.pojo.xsd;
 public interface WSScanPoints extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WSScanPoints.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.s6B9AE42F380158AA4A818798B2B09D68").resolveHandle("wsscanpoints2827type");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WSScanPoints.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.sB19FE03AAADC8EF07F1707671AB638D5").resolveHandle("wsscanpoints2827type");
     
     /**
      * Gets the "location" element

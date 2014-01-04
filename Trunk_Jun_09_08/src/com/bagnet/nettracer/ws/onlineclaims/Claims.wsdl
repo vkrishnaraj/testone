@@ -349,6 +349,8 @@
             </xs:complexType>
             <xs:complexType name="File">
                 <xs:sequence>
+                    <xs:element minOccurs="0" name="dateUploaded" nillable="true" type="xs:dateTime"/>
+                    <xs:element minOccurs="0" name="dateViewed" nillable="true" type="xs:dateTime"/>
                     <xs:element minOccurs="0" name="filename" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="id" type="xs:long"/>
                     <xs:element minOccurs="0" name="interim" type="xs:boolean"/>
