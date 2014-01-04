@@ -7,7 +7,7 @@
 	xmlns:rich="http://richfaces.org/rich"
 	xmlns:a4j="http://richfaces.org/a4j"
 	template="../layout/southwest_template.xhtml">
-	<ui:define name="title">Southwest Airlines: Lost &amp; Found</ui:define>
+	<ui:define name="title">Southwest Airlines: Customer Portal</ui:define>
 	<ui:define name="body">
 		<h:form id="pageForm">
 			<h:panelGroup style="width: 315px">
@@ -19,13 +19,31 @@
 				</div>
 				<table><tr>
 				<td><t:outputText value="#{msg.landing_label_last_name}" /></td>
-				<td><t:inputText value="#{lostAndFoundLogin.login.lastName}" /></td>
+				<td><t:inputText value="#{customerPortalLogin.loginBean.lastName}" /></td>
 				</tr><tr>
 				<td><t:outputText value="#{msg.landing_label_tracking}" /></td>
-				<td><t:inputText value="#{lostAndFoundLogin.login.trackingNumber}" /></td>
+				<td><t:inputText value="#{customerPortalLogin.loginBean.claimNumber}" /></td>
+				</tr><tr>
+				<td colspan="2"><h:commandLink
+							value="#{msg.landing_label_trydiff}"
+							styleClass="commandLink" style="text-decoration: underline;" /></td>
+				</tr><tr>
+				<td colspan="2"><t:captcha
+							captchaSessionKeyName="#{customerPortalLogin.captchaBean.sessionKeyName}"
+							imageHeight="45" imageWidth="128" /></td>
+				</tr><tr>
+				<td><h:outputText
+							value="#{msg.landing_label_captcha}"
+							styleClass="formLabel" /></td>
+				<td><h:inputText id="captcha"
+							value="#{customerPortalLogin.captchaBean.value}"
+							tabindex="3" /></td>	
+				</tr><tr>
+				<td colspan="2"><h:outputText id="captchaStatus"
+							value="#{customerPortalLogin.captchaBean.status}"/></td>
 				</tr></table>
 				
-				<a4j:commandButton styleClass="submitButtonOrange" value="#{msg.landing_button_edit_status}" action="#{lostAndFoundLogin.loginSouthwest}" /><br/><br/>
+				<a4j:commandButton styleClass="submitButtonOrange" value="#{msg.landing_button_edit_status}" action="#{customerPortalLogin.gotoDirectionPage}" /><br/><br/>
 				
 			</h:panelGroup>
 		</h:form>

@@ -1,0 +1,352 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="https://ajax4jsf.dev.java.net/ajax"
+	template="../layout/southwest_template.xhtml">
+
+
+	<ui:define name="title">Southwest Airlines: Customer Portal</ui:define>
+
+	<ui:define name="body">
+		<h:form id="appForm" enctype="multipart/form-data">
+
+			<div class="container containerfull">
+			<div class="containerTL"></div>
+			<div class="containerheader headerfull">
+			<h1 class="dkblue">Bag tracking summary</h1>
+			</div>
+			<div class="containerTR"></div>
+			<div class="containercontent gradientsmall">
+			<div class="contentbodyspacing"></div>
+			<div class="contentbody"><!-- Start body content -->
+
+
+			<div class="clear htxlg"></div>
+
+			<div class="twocol">
+
+<h:outputText
+				id="dirpass" styleClass="bodycopy"
+				value="MSG BUNDLE HERE" /> 
+
+			<div class="clear htxlg"></div>
+			<div class="listitem">
+			<p>File number:</p>
+			<span><h:outputText
+				value="#{customerPortal.passengerData.incidentID}"
+				styleClass="formLabel" /></span></div>
+
+			<div class="listitem">
+			<p>Date file opened:</p>
+			<span><h:outputText
+				value="#{customerPortal.passengerData.dispcreatetime}"
+				styleClass="formLabel" /></span></div>
+
+			<div class="listitem">
+			<p>File status:</p>
+			<span><h:outputText
+				value="#{customerPortal.passengerData.incidentStatus}"
+				styleClass="formLabel" /></span></div>
+
+			<div class="clear htxlg"></div>
+			<a4j:repeat value="#{customerPortal.passengerData.passengersArray}"
+				var="passenger" rowKeyVar="rowIndex">
+				<h3><h:outputText value="#{passenger.firstname} "
+					styleClass="formLabel" />&nbsp;&nbsp;<h:outputText
+					value=" #{passenger.lastname}" styleClass="formLabel" /></h3>
+
+
+				<div class="clear htxsm"></div>
+				<div class="listitem">
+				<p>Home phone:</p>
+				<span><h:outputText value="#{passenger.homephone}"
+					styleClass="formLabel" /></span></div>
+
+				<div class="listitem">
+				<p>Business phone:</p>
+				<span><h:outputText value="#{passenger.workphone}"
+					styleClass="formLabel" /></span></div>
+
+				<div class="listitem">
+				<p>Mobile phone:</p>
+				<span><h:outputText value="#{passenger.mobile}"
+					styleClass="formLabel" /></span></div>
+
+				<div class="listitem">
+				<p>Email:</p>
+				<span><h:outputText value="#{passenger.email}"
+					styleClass="formLabel" /></span></div>
+
+				<div class="clear"></div>
+			</a4j:repeat>
+
+
+			<div class="clear htxlg"></div>
+
+
+			<div class="bodycopy">
+				<p>Comments:</p>
+				<span><h:outputText
+				value="#{customerPortal.passengerData.comments}"
+				styleClass="formLabel" /></span>
+                 
+			</div>
+			
+
+			<div class="clear htmd"></div>
+
+			<div class="clear"></div>
+
+			</div>
+			<!-- ends twocol --> <!-- End body content --></div>
+
+
+			<!-- ends contentbody --></div>
+			<!-- ends containercontent -->
+			<div id="divFooter">
+			<div class="containerBLgradient"></div>
+			<div class="containerfootergradient footerfull"></div>
+			<div class="containerBRgradient"></div>
+			<div class="clear"></div>
+			</div>
+			</div>
+			<!-- ends container -->
+
+
+
+
+			<div class="container containerfull">
+			<div class="containerTL"></div>
+			<div class="containerheader headerfull">
+			<h1 class="dkblue">Baggage information</h1>
+			</div>
+			<div class="containerTR"></div>
+			<div class="containercontent gradientsmall">
+			<div class="contentbodyspacing"></div>
+			<div class="contentbody"><!-- Start body content --> 
+				
+				<a4j:repeat value="#{customerPortal.passengerBean.pvItems}"
+				var="item" rowKeyVar="rowIndex">
+				<b><h:outputText value="Bag \##{rowIndex + 1}" styleClass="formLabel" /></b><br/>
+				<h:panelGroup rendered="#{item.claimchecknumavail}">
+			<div class="listitem">
+				<p>Bag Tag:</p>
+				<span><h:outputText value="#{item.claimchecknum}"
+					styleClass="formLabel" /></span>
+			</div></h:panelGroup>
+			
+			
+			<div class="listitem">
+				<p>Status:</p>
+				<span><h:outputText value="#{item.bagstatus}"
+					styleClass="formLabel" /></span>
+			</div>
+			<div class="clear htxlg"></div>
+			</a4j:repeat>
+				
+				
+				<!-- End body content -->
+			</div>
+
+			
+
+
+			<!-- ends contentbody --></div>
+			<!-- ends containercontent -->
+			<div id="divFooter">
+			<div class="containerBLgradient"></div>
+			<div class="containerfootergradient footerfull"></div>
+			<div class="containerBRgradient"></div>
+			<div class="clear"></div>
+			</div>
+			</div>
+			<!-- ends container -->
+
+
+			
+			<h:panelGroup rendered="#{customerPortal.passengerBean.scansAvailable}">
+			<div class="container containerfull">
+			<div class="containerTL"></div>
+			<div class="containerheader headerfull">
+			<h1 class="dkblue">Claim Checks</h1>
+			</div>
+			<div class="containerTR"></div>
+			<div class="containercontent gradientsmall">
+			<div class="contentbodyspacing"></div>
+			<div class="contentbody"><!-- Start body content --> 
+				
+				<a4j:repeat value="#{customerPortal.passengerData.claimChecksArray}"
+				var="check" rowKeyVar="checkIndex">
+			<div class="listitem">
+				<p>Claim Check ID:</p>
+				<span><h:outputText value="#{check.tag}"
+					styleClass="formLabel" /></span>
+			</div><br/>
+			<table width="400px">
+			<tr><th>Location:</th><th>Type:</th><th>Date:</th></tr>
+			
+				<a4j:repeat value="#{check.scansArray}"
+				var="scans" rowKeyVar="scanIndex">
+			<tr>
+			<td><div class="listitem">
+				<span><h:outputText value="#{scans.location}"
+					styleClass="formLabel" /></span>
+			</div></td>
+			<td><div class="listitem">
+				<span><h:outputText value="#{scans.type}"
+					styleClass="formLabel" /></span>
+			</div></td>
+			<td><div class="listitem">
+				<span><h:outputText value="#{scans.timestamp}"
+					styleClass="formLabel" /></span>
+			</div></td>
+			</tr>
+			</a4j:repeat>
+			</table>
+			<div class="clear htxlg"></div>
+			</a4j:repeat>
+				
+				
+				<!-- End body content -->
+			</div>
+
+			
+
+
+			<!-- ends contentbody --></div>
+			<!-- ends containercontent -->
+			<div id="divFooter">
+			<div class="containerBLgradient"></div>
+			<div class="containerfootergradient footerfull"></div>
+			<div class="containerBRgradient"></div>
+			<div class="clear"></div>
+			</div>
+			</div>
+			<!-- ends container -->
+			</h:panelGroup>
+				<rich:spacer width="100%" height="30" title=""/>
+				
+				<div>
+					<t:outputText value="PAST MESSAGES MSG" styleClass="subHeader"/>	
+				</div>
+				<div>
+					<rich:spacer width="100%" height="10" title=""/>
+				</div>
+				<a4j:outputPanel id="messagePanel" ajaxRendered="true">
+					<t:dataTable width="200" align="center" id="messageTable" 
+						value="#{customerPortal.passengerBean.messages}" var="message">
+						
+						<h:column>
+							<h:outputText value="#{message.message}" styleClass="formLabel" style="padding:10px;"/>
+						</h:column>
+						<h:column>
+							<rich:spacer width="50" title=""/>
+						</h:column>
+						<h:column>
+							<h:outputText value="#{message.username}" styleClass="formLabel" style="padding:10px;"/>
+						</h:column>
+					
+					</t:dataTable>
+				
+				</a4j:outputPanel>
+				<rich:spacer width="100%" height="30" title=""/>
+			
+			<div>
+					<t:outputText value="MESSAGES MSG" styleClass="subHeader"/>	
+				</div>
+				<div>
+					<rich:spacer width="100%" height="10" title=""/>
+				</div>
+				<div>
+				<h:panelGrid columns="1" width="49%"  columnClasses="width1">
+					<t:outputText value="MESSAGE INSTR MSG" styleClass="bodycopy"/>
+				</h:panelGrid>
+				</div>
+				
+				<rich:spacer width="100%" height="30" title=""/>
+			
+			<div>
+					<t:outputText value="FILE MSG" styleClass="subHeader"/>	
+				</div>
+				<div>
+					<rich:spacer width="100%" height="10" title=""/>
+				</div>
+				<div>
+				<h:panelGrid columns="1" width="49%"  columnClasses="width1">
+					<t:outputText value="FILE INSTR MSG" styleClass="bodycopy"/>
+				</h:panelGrid>
+				</div>
+				<rich:spacer width="100%" height="30" title=""/>
+				<div>
+				<h:panelGrid columns="1" width="49%"  columnClasses="width1">
+					<t:inputText value="#{customerPortal.passengerBean.currentMessage}" />
+				</h:panelGrid>
+				</div>
+				<rich:spacer width="100%" height="30" title=""/>
+				
+				<div>
+					<t:outputText value="RECPTS MSG" styleClass="subHeader"/>	
+				</div>
+				<div>
+					<rich:spacer width="100%" height="10" title=""/>
+				</div>
+				<a4j:outputPanel id="filePanel" ajaxRendered="true">
+					<t:dataTable width="200" align="center" id="fileTable" 
+						value="#{customerPortal.fileDataModelList}" var="file">
+						
+						<h:column>
+							<h:outputText value="#{file.name}" styleClass="formLabel" style="padding:10px;"/>
+						</h:column>
+						<h:column>
+							<rich:spacer width="50" title=""/>
+						</h:column>
+						<h:column>
+							<a4j:commandButton  value="REMOVE MSG" 
+								reRender="filePanel" limitToList="true" immediate="true" styleClass="button140pxred button140pxred2" 
+								actionListener="#{customerPortal.removeFileListener}"/>
+						</h:column>
+					
+					</t:dataTable>
+				
+				</a4j:outputPanel>
+				<rich:spacer width="100%" height="30" title=""/>
+				<h:panelGrid columns="2" width="100%">
+					<t:outputText value="FILE" styleClass="formLabel"/>
+					<t:inputFileUpload id="fileupload" value="#{customerPortal.upFile}" size="60" />
+				</h:panelGrid>
+				
+				<rich:spacer width="100%" height="20" title=""/>
+				<div>
+				<h:panelGrid columns="2" width="100%">
+				<rich:spacer width="145"  title=""/>
+				<h:panelGroup>
+				<h:commandButton value="ADD MSG" 
+					 	action="#{customerPortal.upload}" styleClass="button140pxred button140pxred2" >
+					 	<a4j:support event="onclick" reRender="filePanel" limitToList="true"/>
+				</h:commandButton>
+				<h:outputText value=""/>
+				</h:panelGroup>
+				</h:panelGrid>
+				</div>
+				
+				<rich:spacer width="100%" height="20" title=""/>
+				<rich:spacer width="100%" height="20" title=""/>
+				<div>
+				<h:panelGrid columns="2" width="100%">
+				<rich:spacer width="145"  title=""/>
+				<h:panelGroup>
+				<h:commandButton value="SEND MSG" 
+					 	action="#{customerPortal.sendToNT}" styleClass="button140pxred button140pxred2" >
+				</h:commandButton>
+				<h:outputText value=""/>
+				</h:panelGroup>
+				</h:panelGrid>
+				</div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

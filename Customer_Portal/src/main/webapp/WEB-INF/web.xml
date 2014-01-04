@@ -42,6 +42,10 @@
 		<param-name>com.sun.faces.validateXml</param-name>
 		<param-value>true</param-value>
 	</context-param>
+	<context-param>
+  		<param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
+  		<param-value>true</param-value>
+	</context-param>
 	<!-- End JSF Params -->
 	
 	
@@ -122,9 +126,6 @@
 	</context-param>
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
-	<listener>
-    	<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
 	</listener>
 	<welcome-file-list>
     	<welcome-file>index.jsp</welcome-file>

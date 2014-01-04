@@ -2,11 +2,45 @@
 <faces-config version="1.2" xmlns="http://java.sun.com/xml/ns/javaee"
 	xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
+ <converter>
+  <converter-id>convertToUpper</converter-id>
+  <converter-class>aero.nettracer.portal.faces.util.StringAsUpper</converter-class>
+ </converter>
+  <converter>
+  <converter-id>DateConverter</converter-id>
+  <converter-class>aero.nettracer.portal.faces.util.DateConverter</converter-class>
+ </converter>
+ <managed-bean>
+  <managed-bean-name>sessionPassengerBean</managed-bean-name>
+  <managed-bean-class>aero.nettracer.portal.model.SessionPassengerBean</managed-bean-class>
+  <managed-bean-scope>session</managed-bean-scope>
+ </managed-bean>
+ <navigation-rule>
+ 
+  <!-- Passenger side Navigation -->
+  <navigation-case>
+   <from-outcome>passengerLogout</from-outcome>
+   <to-view-id>/southwest/login.do</to-view-id>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>gotoDirectionPage</from-outcome>
+   <to-view-id>/southwest/direction.do</to-view-id>
+   <redirect/>
+  </navigation-case>
+  
+  <!-- Mobile Navigation -->
+  <navigation-case>
+   <from-outcome>gotoMobileDirectionPage</from-outcome>
+   <to-view-id>/southwest/mobile/direction.do</to-view-id>
+   <redirect/>
+  </navigation-case>
+  
+ </navigation-rule>
 	<factory>
 		<exception-handler-factory>aero.nettracer.portal.exception.ViewExpiredExceptionExceptionHandlerFactory</exception-handler-factory>
 	</factory>
 	<application>
 		<!-- Spring Configuration -->
-		<variable-resolver>org.springframework.web.jsf.SpringBeanVariableResolver</variable-resolver>		
+		<variable-resolver>org.springframework.web.jsf.DelegatingVariableResolver</variable-resolver>		
 	</application>	
 </faces-config>
