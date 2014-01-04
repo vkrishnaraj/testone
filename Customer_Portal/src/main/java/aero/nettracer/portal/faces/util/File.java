@@ -3,6 +3,8 @@
  */
 package aero.nettracer.portal.faces.util;
 
+import java.util.Calendar;
+
 public class File {
 	private String name;
 	private String mime;
@@ -13,6 +15,8 @@ public class File {
 	private boolean interim;
 	private boolean publish;
 	private int status;
+	private Calendar dateUploaded;
+	private Calendar dateViewed;
 
 	public byte[] getData() {
 		return data;
@@ -95,6 +99,22 @@ public class File {
 
 	public void setPublish(boolean publish) {
 		this.publish = publish;
+	}
+
+	public Calendar getDateUploaded() {
+		return dateUploaded;
+	}
+
+	public void setDateUploaded(Calendar dateUploaded) {
+		this.dateUploaded = dateUploaded;
+	}
+
+	public Calendar getDateViewed() {
+		return dateViewed;
+	}
+
+	public void setDateViewed(Calendar dateViewed) {
+		this.dateViewed = dateViewed;
 	}
 	
 }

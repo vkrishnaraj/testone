@@ -6,6 +6,7 @@ package aero.nettracer.portal.faces.util;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.servlet.http.HttpSession;
 
@@ -48,6 +49,8 @@ public class FileUploadBean{
         file.setLength(new Long(item.getData().length));
         file.setName(item.getFileName());
         file.setData(item.getData());
+        file.setPublish(true);
+        file.setDateUploaded(Calendar.getInstance());
         files.add(file);
         passengerBean.setFiles(files);
         session.setAttribute("passengerBean",passengerBean);

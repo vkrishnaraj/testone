@@ -184,6 +184,8 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 				file.setId(wsFile[i].getId());
 				file.setPublish(wsFile[i].getPublish());
 				file.setStatus(wsFile[i].getStatusId());
+				file.setDateUploaded(wsFile[i].getDateUploaded());
+				file.setDateViewed(wsFile[i].getDateViewed());
 				files.add(file);
 				file=null; //GC
 			}
@@ -256,6 +258,8 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 				wsFile.setId(file.getId());
 				wsFile.setPublish(file.isPublish());
 				wsFile.setStatusId(file.getStatus());
+				wsFile.setDateUploaded(file.getDateUploaded());
+				wsFile.setDateViewed(file.getDateViewed());
 				wsFileArray[i]=wsFile;
 				wsFile=null; //GC
 				file=null;
