@@ -29,7 +29,9 @@ import org.apache.struts.action.ActionMessages;
 import aero.nettracer.fs.model.detection.AccessRequestDTO;
 import aero.nettracer.fs.utilities.TransportMapper;
 import aero.nettracer.lf.services.LFServiceBean;
-//import aero.nettracer.security.SamlUtils;
+import aero.nettracer.security.SamlUtils;
+import aero.nettracer.security.SsoNode;
+import aero.nettracer.security.SsoUtils;
 import aero.nettracer.selfservice.fraud.client.ClaimClientRemote;
 
 import com.bagnet.nettracer.tracing.bmo.CompanyBMO;
@@ -119,8 +121,6 @@ public class LogonAction extends Action {
 
 		// Extract attributes we will need
 		Agent agent = null;
-
-//		SamlUtils.test(request);
 		
 		HttpSession session = request.getSession();
 		ActionMessages errors = new ActionMessages();
@@ -156,9 +156,15 @@ public class LogonAction extends Action {
 		String password = (String) PropertyUtils.getSimpleProperty(form, "password");
 		String instance = (String) System.getProperty("instance.ref");
 		String companyCode = request.getParameter("companyCode");
-		boolean hasSSO=false; //TODO: Add check if the agent is logging in through the assertion
 		
-		if (username.length() == 0 && password.length() == 0) {
+		SsoUtils ssoUtils = new SamlUtils();//TODO consider spring injection
+		SsoNode ssoNode = ssoUtils.getSsoNode(request);
+		
+		boolean hasSSO=ssoNode.isValidAssertion(); //TODO: Add check if the agent is logging in through the assertion
+		
+		//TODO SAML failed assertion, do we need special error message
+		
+		if (!hasSSO && username.length() == 0 && password.length() == 0) {
 			session.invalidate();
 			response.addHeader("Pragma", "No-cache");
 			response.addHeader("Cache-Control", "no-cache");
@@ -172,7 +178,7 @@ public class LogonAction extends Action {
 		}
 		authenlog.info("Authenticating User: "+username+". Company Code: "+companyCode+". Instance: "+instance);
 		if(hasSSO){
-			agent = SecurityUtils.authUserNoPassword(username, companyCode, 0, errors);
+			agent = SecurityUtils.authUserNoPassword(ssoNode.getUsername(), ssoNode.getCompanycode(), 0, errors);
 		} else {
 			agent = SecurityUtils.authUser(username, password, companyCode, 0, errors);
 		}

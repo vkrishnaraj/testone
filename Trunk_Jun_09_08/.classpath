@@ -176,5 +176,9 @@
 	<classpathentry kind="lib" path="lib/jars/core-renderer.jar"/>
 	<classpathentry kind="lib" path="lib/jars/AddressValidationService-test-client.jar"/>
 	<classpathentry kind="lib" path="lib/provided/infinispan-core-5.1.2.FINAL.jar"/>
+	<classpathentry kind="lib" path="lib/provided/esapi-2.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/provided/opensaml-2.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/provided/openws-1.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/provided/xmltooling-1.4.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
