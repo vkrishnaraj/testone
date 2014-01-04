@@ -461,15 +461,15 @@ create table UsergroupNameMap (
  insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_CS&S_Representative_S','CS&S Representative',10);
  insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Station_Leader_S','Station Leader',5);
  insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Vendor_S','Vendor',11);
- --The following still need groups in the testing Environment and the IDs filled in here
- --insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Corp_Security_S','Corp Security');
- --insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_EO_Representative_S','EO Representative');
- --insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Finance_S','Finance');
- --insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Ramp_Supervisor_S','Ramp Supervisor');
- --insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Read_Only_S','Read Only');
- --insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Station_Admin_S','Station Admin');
- --insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Station_Supervisor_S','Station Supervisor');
- -- insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Technology_S','Technology');
+ # -- The following still need groups in the testing Environment and the IDs filled in here
+ # -- insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Corp_Security_S','Corp Security');
+ # -- insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_EO_Representative_S','EO Representative');
+ # -- insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Finance_S','Finance');
+ # -- insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Ramp_Supervisor_S','Ramp Supervisor');
+ # -- insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Read_Only_S','Read Only');
+ # -- insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Station_Admin_S','Station Admin');
+ # -- insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Station_Supervisor_S','Station Supervisor');
+ # -- insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Technology_S','Technology');
  
  
 insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group) 
