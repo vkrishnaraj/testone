@@ -1983,16 +1983,15 @@ public class AdminUtils {
 		 * SF: Get a group based off the name provided in the Assertion Call. If no
 		 * Group is available based on the name, default to Claims group
 		 **/
-		UserGroup group=null;
+		int groupId=0;
 		if(groupNames!=null && groupNames.size()>0){
-			int groupId=UsergroupBMO.getUsergroupMapId(groupNames);
-			group=UsergroupBMO.getUsergroup(groupId);
+			groupId=UsergroupBMO.getUsergroupMapId(groupNames);
 		}
-		if(group!=null){
-			u.setUsergroup_id(group.getUserGroup_ID());
+		if(groupId>0){
+			u.setUsergroup_id(groupId);
 		} else {
-			group=UsergroupBMO.getUsergroup(3);
-			u.setUsergroup_id(group.getUserGroup_ID());
+			/** If no proper group is provide, do not create a user for the agent */
+			return null;
 		}
 		
 		/** SF: Get a station based off the station code provided in Assertion call. 

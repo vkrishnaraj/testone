@@ -67,8 +67,7 @@ public class UsergroupBMO {
 				}
 			}
 		}
-		/** If no group exists, default to Claims group **/
-		return 3;
+		return 0;
 	}
 	
 	@SuppressWarnings("unchecked")

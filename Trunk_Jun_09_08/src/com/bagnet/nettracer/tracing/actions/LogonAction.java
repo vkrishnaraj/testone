@@ -178,7 +178,7 @@ public class LogonAction extends Action {
 		}
 		authenlog.info("Authenticating User: "+username+". Company Code: "+companyCode+". Instance: "+instance);
 		if(hasSSO){
-			agent = SecurityUtils.authUserNoPassword(ssoNode.getUsername(), ssoNode.getCompanycode(), 0, errors);
+			agent = SecurityUtils.authUserNoPassword(ssoNode.getUsername(), ssoNode.getCompanycode(), 0, errors, true, ssoNode);
 		} else {
 			agent = SecurityUtils.authUser(username, password, companyCode, 0, errors);
 		}

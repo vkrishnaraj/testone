@@ -41,7 +41,7 @@ public class OnhandScanningServiceUtil {
 		} else {
 			Agent agent = null;
 			ActionMessages errors = new ActionMessages();
-			agent = SecurityUtils.authUserNoPassword(auth.getSystemName(), auth.getAirlineCode(), 0, errors);
+			agent = SecurityUtils.authUserNoPassword(auth.getSystemName(), auth.getAirlineCode(), 0, errors, false, null);
 			if(!errors.isEmpty()){
 				Iterator i = errors.get();
 				while(i.hasNext()){

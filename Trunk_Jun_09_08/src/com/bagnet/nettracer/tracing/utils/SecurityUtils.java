@@ -6,6 +6,7 @@
  */
 package com.bagnet.nettracer.tracing.utils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -24,6 +25,7 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.type.StandardBasicTypes;
 
 import aero.nettracer.lf.services.LFLogUtil;
+import aero.nettracer.security.SsoNode;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
@@ -290,7 +292,7 @@ public class SecurityUtils {
 	 * @return agent
 	 */
 	public static Agent authUserNoPassword(String username, String companyCode, int logintype,
-			ActionMessages errors) {
+			ActionMessages errors, boolean autoProvision, SsoNode node) {
 		Session sess = null;
 		Agent agent = null;
 		if (username == null || username.isEmpty()) {
@@ -305,25 +307,31 @@ public class SecurityUtils {
 				@SuppressWarnings("unchecked")
 				List<Agent> results = criteria.list();
 				if(results==null || results.size()<1){
-					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.password.mismatch"));
+					if(!autoProvision){
+						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.password.mismatch"));
+					} else if(node!=null){
+						List<String> groupNames=new ArrayList<String>();
+						groupNames.add(node.getGroup());
+						agent = AdminUtils.createAgent(node.getUsername(), node.getFirstname(), node.getLastname(), groupNames, node.getStation(), node.getCompanycode());
+					}
 				} else {
 					agent = (Agent) results.get(0);
+				}
+				
+				if(agent!=null){
 					if (!agent.isActive()) {
 						log.info("User: "+agent.getUsername()+", Company Code: "+agent.getCompanycode_ID()+", Instance: "+System.getProperty("instance.ref")+" is inactive.");
 						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.user.inactive"));
 					}
-					
 					if (logintype == 1 && agent.isWs_enabled() != true) {
 						log.info("User: "+agent.getUsername()+", Company Code: "+agent.getCompanycode_ID()+", Instance: "+System.getProperty("instance.ref")+" does not have access to webservice.");
 						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.user.ws_disabled"));
 					} else if (logintype == 0 && agent.isWeb_enabled() != true) {
 						log.info("User: "+agent.getUsername()+", Company Code: "+agent.getCompanycode_ID()+", Instance: "+System.getProperty("instance.ref")+" does not have access to web application.");
-						
 						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.user.web_disabled"));
 					}
 					if (agent.isAccount_locked()) {
 						log.info("User: "+agent.getUsername()+", Company Code: "+agent.getCompanycode_ID()+", Instance: "+System.getProperty("instance.ref")+" is locked");
-						
 						errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.user.lockedout"));
 					} else {
 						agent.setFailed_logins(0);
@@ -332,6 +340,8 @@ public class SecurityUtils {
 							LFLogUtil.writeLog(agent.getUsername(), agent.getStation().getStationcode(), LFLogUtil.EVENT_LOGIN, 0, 0);
 						}
 					}
+				} else {
+					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.password.mismatch"));
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
