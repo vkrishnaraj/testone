@@ -211,7 +211,7 @@ public class CustomerPortalController {
 					FacesUtil.addError("Error in persisting the Data");
 				}
 
-				Claim claim=onlineClaimsWS.getClaim(passengerBean.getPassengerData(),loginBean.getLastName(), loginBean.getFirstName());
+				Claim claim=onlineClaimsWS.getClaim(passengerBean.getPassengerData(),passengerBean.getPassengers().get(0).getLastName(), passengerBean.getPassengers().get(0).getFirstName());
 				passengerBean = onlineClaimsWS.getPassengerData(passengerBean.getPassengerData(),claim);
 				session.setAttribute("claim", claim);
 				session.setAttribute("passengerBean", passengerBean);
