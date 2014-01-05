@@ -143,7 +143,7 @@ public class IncidentActivityAction extends CheckedAction {
 			}
 			OCMessage newmessage=new OCMessage();
 			newmessage.setDateCreated(new Date());
-			newmessage.setMessage(message);
+			newmessage.setMessage(message.replace("\r\n", "<br>"));
 			newmessage.setUsername(user.getFirstname()+" "+user.getLastname());
 			newmessage.setIncAct(ia);
 			newmessage.setClaim(c);
