@@ -170,3 +170,5 @@ insert into properties (keyStr,valueStr) VALUES ('ldap.redirect','https://www37c
 insert into properties (keyStr,valueStr) VALUES ('ldap.redirect','https://www37c.swalifeqa.com/nettracer2');
 --Training
 insert into properties (keyStr,valueStr) VALUES ('ldap.redirect','https://www37c.swalifeqa.com/nettracertrain');
+
+insert into properties (keyStr,valueStr) values ('saml.x509.wn','D:\\security\\saml\\wn\\idp.cer');
