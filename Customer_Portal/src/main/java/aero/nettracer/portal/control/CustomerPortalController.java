@@ -210,6 +210,13 @@ public class CustomerPortalController {
 					logger.error("Error in persisting the Data");
 					FacesUtil.addError("Error in persisting the Data");
 				}
+
+				Claim claim=onlineClaimsWS.getClaim(passengerBean.getPassengerData(),loginBean.getLastName(), loginBean.getFirstName());
+				passengerBean = onlineClaimsWS.getPassengerData(passengerBean.getPassengerData(),claim);
+				session.setAttribute("claim", claim);
+				session.setAttribute("passengerBean", passengerBean);
+				
+				return null;
 			} catch (AxisFault e) {
 				e.printStackTrace();
 				FacesUtil.addError("Error in persisting the Data");
@@ -219,15 +226,6 @@ public class CustomerPortalController {
 				FacesUtil.addError("Connection failure, Please try again");
 				return null;
 			}
-			passengerBean.setCurrentMessage("");
-			if (passengerBean.getFiles() != null && passengerBean.getFiles().size() > 0) {
-				for (File file : passengerBean.getFiles()) {
-					if (file.getStatus() == 0) {
-						file.setStatus(3);
-					}
-				}
-			}
-			return null;
 	}
 
 	public CaptchaBean getCaptchaBean() {
