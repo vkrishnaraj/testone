@@ -816,4 +816,11 @@ public class PassengerBean {
 		}
 		return "N/A";
 	}
+	
+	public boolean isShowClaimStatus() {
+		if (getStatus() != null) {
+			return !getStatus().equals("");
+		}
+		return false;
+	}
 }

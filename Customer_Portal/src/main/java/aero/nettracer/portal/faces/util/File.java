@@ -125,6 +125,7 @@ public class File {
 	public boolean isNew() {
 		return getStatus() == 0;
 	}
+	
 	public String getDispDateUploaded() {
 		SimpleDateFormat format = new SimpleDateFormat("MM-dd-yyyy hh:mm:ss");
 		if (getDateUploaded() != null) {

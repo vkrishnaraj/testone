@@ -362,3 +362,11 @@ background-color: #BED6F8;
     font-weight: bold;
 }
 
+.baginfo-column-a {
+	width: 40%
+}
+
+.baginfo-column-b {
+	width: 60%
+}
+

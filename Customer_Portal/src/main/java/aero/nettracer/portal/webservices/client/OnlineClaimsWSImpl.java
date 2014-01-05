@@ -281,7 +281,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 			message.setDateCreated(Calendar.getInstance());
 			message.setPublish(true);
 			message.setStatusId(0);
-			message.setUsername("Customer Portal");
+			message.setUsername(Message.portalUser);
 			if (messages == null) {
 				messages = new ArrayList<Message>();
 			}

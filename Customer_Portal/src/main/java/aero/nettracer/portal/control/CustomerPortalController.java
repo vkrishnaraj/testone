@@ -2,7 +2,9 @@ package aero.nettracer.portal.control;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -25,7 +27,9 @@ import aero.nettracer.portal.faces.util.FacesUtil;
 import aero.nettracer.portal.faces.util.File;
 import aero.nettracer.portal.faces.util.FileHelper;
 import aero.nettracer.portal.faces.util.FileUploadBean;
+import aero.nettracer.portal.model.FileAndMessage;
 import aero.nettracer.portal.model.LoginBean;
+import aero.nettracer.portal.model.Message;
 import aero.nettracer.portal.model.PassengerBean;
 import aero.nettracer.portal.webservices.client.OnlineClaimsWS;
 
@@ -49,7 +53,8 @@ public class CustomerPortalController {
 	private UploadedFile upFile;
 	boolean rendSuccess = false;
 	boolean rendFailure = false;
-	private DataModel fileDataModelList;
+	private DataModel<File> fileDataModelList;
+	private List<FileAndMessage> previousObjects;
 	// -- End File Upload
 	
 	@Autowired
@@ -65,12 +70,56 @@ public class CustomerPortalController {
 			baggageState = (Long) session.getAttribute("baggageState");
 			passengerBean = (PassengerBean) session.getAttribute("passengerBean");
 			if (null != passengerBean.getFiles() && passengerBean.getFiles().size() > 0) {
-				fileDataModelList = new ListDataModel(passengerBean.getFiles());
+				fileDataModelList = new ListDataModel<File>(new ArrayList<File>());
 			}
+			previousObjects = generatePreviousList();
 		} else {
 			FacesUtil.addError("Your session has been expired. Please log in again");
 			FacesContext context = FacesContext.getCurrentInstance();
 			context.getApplication().getNavigationHandler().handleNavigation(context, null, "passengerLogout");
+		}
+	}
+	
+	private List<FileAndMessage> generatePreviousList() {
+		List<FileAndMessage> toReturn = new ArrayList<FileAndMessage>();
+		if (passengerBean != null) {
+			if (passengerBean.getMessages() != null) {
+				for (Message message : passengerBean.getMessages()) {
+					FileAndMessage temp = new FileAndMessage();
+					temp.setColumn1(message.getMessage());
+					temp.setMessage(true);
+					temp.setDateCreated(message.getDateCreated());
+					temp.setUsername(getUserString(message.getUsername()));
+					temp.setPublish(message.isPublish());
+					toReturn.add(temp);
+				}
+			}
+			if (passengerBean.getFiles() != null) {
+				for (File file : passengerBean.getFiles()) {
+					FileAndMessage temp = new FileAndMessage();
+					temp.setColumn1(file.getName());
+					temp.setMessage(false);
+					temp.setDateCreated(file.getDateUploaded());
+					temp.setUsername(file.getStatus() == 3 ? "From You at " : "From Southwest at ");
+					temp.setPublish(file.isPublish());
+					temp.setPath(file.getPath());
+					temp.setStatusId(file.getStatus());
+					toReturn.add(temp);
+				}
+			}
+			Collections.sort(toReturn);
+		}
+		return toReturn;
+	}
+	
+	private String getUserString(String username) {
+		if (username == null) {
+			return "";
+		}
+		if (username.equals(Message.portalUser)) {
+			return "From You at ";
+		} else {
+			return "From Southwest at ";
 		}
 	}
 
@@ -122,16 +171,13 @@ public class CustomerPortalController {
 									return null; //"no";
 								}
 							}
-							HttpSession session = (HttpSession) FacesUtil
-									.getFacesContext().getExternalContext()
-									.getSession(false);
 							FileHelper.saveImage(passengerBean.getIncidentID(),
 									fileName, data);
 							file.setPath(FileHelper.getPath());
 					        file.setPublish(true);
 					        file.setDateUploaded(Calendar.getInstance());
 							passengerBean.getFiles().add(file);
-							fileDataModelList = new ListDataModel(
+							fileDataModelList = new ListDataModel<File>(
 									passengerBean.getFiles());
 							logger.info("File Uploaded Successfully.");
 						}
@@ -164,8 +210,6 @@ public class CustomerPortalController {
 		File file = (File) fileDataModelList.getRowData();
 		List<File> files = passengerBean.getFiles();
 		int fileSize = files.size();
-		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
-				.getExternalContext().getSession(false);
 		try {
 			FileHelper.deleteImage(passengerBean.getIncidentID(), file.getName(), file.getPath());
 			for (int i = fileSize - 1; i >= 0; i--) {
@@ -175,7 +219,7 @@ public class CustomerPortalController {
 				}
 			}
 			fileDataModelList = null;
-			fileDataModelList = new ListDataModel(passengerBean.getFiles());
+			fileDataModelList = new ListDataModel<File>(passengerBean.getFiles());
 		} catch (IOException e) {
 			logger.info("File can not be deleted");
 			e.printStackTrace();
@@ -295,11 +339,11 @@ public class CustomerPortalController {
 		this.upFile = upFile;
 	}
 
-	public DataModel getFileDataModelList() {
+	public DataModel<File> getFileDataModelList() {
 		return fileDataModelList;
 	}
 
-	public void setFileDataModelList(DataModel fileDataModelList) {
+	public void setFileDataModelList(DataModel<File> fileDataModelList) {
 		this.fileDataModelList = fileDataModelList;
 	}
 
@@ -321,6 +365,14 @@ public class CustomerPortalController {
 
 	public void setRendFailure(boolean rendFailure) {
 		this.rendFailure = rendFailure;
+	}
+
+	public List<FileAndMessage> getPreviousObjects() {
+		return previousObjects;
+	}
+
+	public void setPreviousObjects(List<FileAndMessage> previousObjects) {
+		this.previousObjects = previousObjects;
 	}
 
 	public static void setFileId(long fileId) {
