@@ -1511,6 +1511,8 @@ public class TracingConstants {
 	public static final String ACTIVITY_CODE_INBOUND_PORTAL = "99E";
 	public static final String ACTIVITY_CODE_RECEIVED_DAMAGED_ITEM = "10";
 	
+	public static final String BAGTYPE_94 = "94";
+	public static final String BAGTYPE_95 = "95";
 	
 	public static final String TASKS_VIEW_PENDING = "viewPendingTasks";
 

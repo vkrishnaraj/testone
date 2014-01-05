@@ -339,7 +339,7 @@ public class InboundTasksUtils {
 		boolean isAcaa = false;
 		if(incident != null && incident.getItemlist() != null){
 			for(Item item: incident.getItemlist()){
-				if(item.getItemtype_ID() == 94 || item.getItemtype_ID() == 95){
+				if(TracingConstants.BAGTYPE_94.equals(item.getBagtype()) || TracingConstants.BAGTYPE_94.equals(item.getBagtype())){
 					isAcaa = true;
 				}
 			}
