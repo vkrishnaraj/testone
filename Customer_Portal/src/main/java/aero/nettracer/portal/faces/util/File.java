@@ -3,6 +3,7 @@
  */
 package aero.nettracer.portal.faces.util;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class File {
@@ -123,5 +124,12 @@ public class File {
 	
 	public boolean isNew() {
 		return getStatus() == 0;
+	}
+	public String getDispDateUploaded() {
+		SimpleDateFormat format = new SimpleDateFormat("MM-dd-yyyy hh:mm:ss");
+		if (getDateUploaded() != null) {
+			return format.format(getDateUploaded().getTime());
+		}
+		return "";
 	}
 }

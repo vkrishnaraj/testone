@@ -14,7 +14,7 @@
 	<ui:define name="body">
 		<h:form id="appForm" enctype="multipart/form-data">
 
-			<p class="contentHeader">Bag tracking summary</p>
+			<p class="contentHeader"><h:outputText value="#{msg.status_title}" /></p>
 			
 			<rich:spacer width="100%" height="20" title=""/>
 			
@@ -22,100 +22,109 @@
 			
 			<rich:spacer width="100%" height="10" title=""/>
 
-			<p class="contentSubHeader"><h:outputText id="dirpass" styleClass="bodycopy" value="MSG BUNDLE HERE" /></p>
+			<p class="contentSubHeader"><h:outputText value="#{msg.status_text_desc}" /></p>
+			
+			<rich:spacer width="100%" height="20" title=""/>
+			
+			<h:panelGrid columns="3" width="50%">
+			<h:outputLink value="/customer-portal/showImage?ID=swa_faq.pdf" target="blank" >
+				<h:outputText value="#{msg.status_link_faq}" />
+			</h:outputLink>
+			
+			<rich:spacer width="30" title=""/>
+			
+			<h:outputLink value="/customer-portal/showImage?ID=swa_claim_form.pdf" target="blank" >
+				<h:outputText value="#{msg.status_link_claim_form}" />
+			</h:outputLink>
+			</h:panelGrid>
 			
 			<rich:spacer width="100%" height="30" title=""/>
 
-			<h:panelGrid columns="2" width="100%">
-				<p>File number:</p>
-				<span><h:outputText
-					value="#{customerPortal.passengerData.incidentID}"
-					styleClass="formLabel" /></span>
+			<h:panelGrid columns="2" width="60%">
+				<h:outputText value="#{msg.status_label_file_nbr}" />
+				<h:outputText value="#{customerPortal.passengerData.incidentID}" />
 	
-				<p>Date file opened:</p>
-				<span><h:outputText
-					value="#{customerPortal.passengerData.dispcreatetime}"
-					styleClass="formLabel" /></span>
+				<h:outputText value="#{msg.status_label_date_opn}" />
+				<h:outputText value="#{customerPortal.passengerData.dispcreatetime}" />
 	
-				<p>File status:</p>
-				<span><h:outputText
-					value="#{customerPortal.passengerData.incidentStatus}"
-					styleClass="formLabel" /></span>
+				<h:outputText value="#{msg.status_label_file_sts}" />
+				<h:outputText value="#{customerPortal.passengerBean.status}" />
+			</h:panelGrid>  
 
 			<a4j:repeat value="#{customerPortal.passengerData.passengersArray}"
 				var="passenger" rowKeyVar="rowIndex">
-				<h3><h:outputText value="#{passenger.firstname} "
-					styleClass="formLabel" />&nbsp;&nbsp;<h:outputText
-					value=" #{passenger.lastname}" styleClass="formLabel" /></h3>
-
-				<p>Home phone:</p>
-				<span><h:outputText value="#{passenger.homephone}"
-					styleClass="formLabel" /></span>
-
-				<p>Business phone:</p>
-				<span><h:outputText value="#{passenger.workphone}"
-					styleClass="formLabel" /></span>
-
-				<p>Mobile phone:</p>
-				<span><h:outputText value="#{passenger.mobile}"
-					styleClass="formLabel" /></span>
-
-				<p>Email:</p>
-				<span><h:outputText value="#{passenger.email}"
-					styleClass="formLabel" /></span>
+				<h:panelGrid columns="2" width="60%">
+					<h3><h:outputText value="#{passenger.firstname} "
+						styleClass="formLabel" />&nbsp;&nbsp;<h:outputText
+						value=" #{passenger.lastname}" styleClass="formLabel" /></h3>
+					<rich:spacer width="30" title=""/>
+	
+					<h:outputText value="#{msg.status_label_home_phn}" />
+					<h:outputText value="#{passenger.homephone}" />
+	
+					<h:outputText value="#{msg.status_label_bus_phn}" />
+					<h:outputText value="#{passenger.workphone}"/>
+	
+					<h:outputText value="#{msg.status_label_mob_phn}" />
+					<h:outputText value="#{passenger.mobile}" />
+	
+					<h:outputText value="#{msg.status_label_email}" />
+					<h:outputText value="#{passenger.email}" />
+				</h:panelGrid>  
 
 			</a4j:repeat>
-
-
-			<p>Comments:</p>
-			<span><h:outputText
-				value="#{customerPortal.passengerData.comments}"
-				styleClass="formLabel" /></span>
-             
-			</h:panelGrid>    
-
+			
 			<rich:spacer width="100%" height="30" title=""/>
 
-			<p class="contentSubHeader">Baggage information</p>
+			<p class="contentSubHeader"><h:outputText value="#{msg.status_label_bag_info}" /></p>
 				
 			<a4j:repeat value="#{customerPortal.passengerBean.pvItems}" var="item" rowKeyVar="rowIndex">
-				<b><h:outputText value="Bag ##{rowIndex + 1}" styleClass="formLabel" /></b><br/>
+				<b><h:outputText value="#{msg.status_label_bag_nmb}#{rowIndex + 1}" styleClass="formLabel" /></b><br/>
 				<table>
 				<h:panelGroup rendered="#{item.claimchecknumavail}">
-					<tr><td><p>Bag Tag:</p></td>
-					<td><span><h:outputText value="#{item.claimchecknum}"
-						styleClass="formLabel" /></span></td>
+					<tr><td><h:outputText value="#{msg.status_label_bag_tag}" /></td>
+					<td><h:outputText value="#{item.claimchecknum}" /></td>
 					</tr>
 				</h:panelGroup>
 			
-			
-				<tr><td><p>Status:</p></td>
-				<td><span><h:outputText value="#{item.bagstatus}"
-					styleClass="formLabel" /></span>
+				<tr><td><h:outputText value="#{msg.status_label_bag_status}" /></td>
+				<td><h:outputText value="#{item.bagstatus}" />
 				</td></tr></table>
 			</a4j:repeat>
 			
 			<rich:spacer width="100%" height="20" title=""/>
 			
-			<p class="contentSubHeader"><t:outputText value="MESSAGES MSG" /></p>
+			<p class="contentSubHeader"><t:outputText value="#{msg.status_title_messages}" /></p>
 			
 			<rich:spacer width="100%" height="10" title=""/>
 				
-			<p class="contentSubHeader"><t:outputText value="PAST MESSAGES MSG" /></p>
+			<p><t:outputText value="#{msg.status_text_past_msgs}" /></p>
 			
 			<rich:spacer width="100%" height="10" title=""/>
 			
 			<a4j:outputPanel id="messagePanel" ajaxRendered="true">
 				<t:dataTable width="80%" align="center" id="messageTable" value="#{customerPortal.passengerBean.messages}" var="message">
 						
+					<f:facet name="spacer">
+          				<f:verbatim>&amp;#160;</f:verbatim>
+    				</f:facet>	
 					<h:column rendered="#{message.publish}">
-						<h:outputText value="#{message.message}" style="padding:10px;" escape="false"/>
+				        <f:facet name="header">
+				            <h:outputText value="#{msg.status_column_message}"/>
+				        </f:facet>
+						<h:outputText value="#{message.message}" escape="false"/>
 					</h:column>
 					<h:column rendered="#{message.publish}">
-						<rich:spacer width="50" title=""/>
+				        <f:facet name="header">
+				            <h:outputText value="#{msg.status_column_sender}"/>
+				        </f:facet>
+						<h:outputText value="#{message.username}" />
 					</h:column>
 					<h:column rendered="#{message.publish}">
-						<h:outputText value="#{message.username}" style="padding:10px;"/>
+				        <f:facet name="header">
+				            <h:outputText value="#{msg.status_column_date}"/>
+				        </f:facet>
+						<h:outputText value="#{message.dispDateCreated}" />
 					</h:column>
 					
 				</t:dataTable>
@@ -125,39 +134,50 @@
 			<rich:spacer width="100%" height="20" title=""/>
 			
 			<h:panelGrid columns="2" width="100%">
-				<t:outputText value="MESSAGE INSTR MSG" styleClass="bodycopy"/>
+				<t:outputText value="#{msg.status_label_new_msg}" />
 				<t:inputTextarea value="#{customerPortal.passengerBean.currentMessage}" />
 			</h:panelGrid>
 				
 			<rich:spacer width="100%" height="20" title=""/>
 			
-			<p class="contentSubHeader"><t:outputText value="FILE MSG" />	</p>
+			<p class="contentSubHeader"><t:outputText value="#{msg.status_title_files}" />	</p>
 			
 			<rich:spacer width="100%" height="10" title=""/>
 			
-			<t:outputText value="FILE INSTR MSG" />
+			<t:outputText value="#{msg.status_text_file_desc}" />
 			
 			<rich:spacer width="100%" height="20" title=""/>
 				
-			<t:outputText value="RECPTS MSG" />	
+			<t:outputText value="#{msg.status_text_past_files}" />	
 			
 			<rich:spacer width="100%" height="10" title=""/>
 			
 			<a4j:outputPanel id="filePanel" ajaxRendered="true">
 				<t:dataTable width="80%" align="center" id="fileTable" 
 						value="#{customerPortal.fileDataModelList}" var="file">
-						
+					<f:facet name="spacer">
+          				<f:verbatim>&amp;#160;</f:verbatim>
+    				</f:facet>	
 					<h:column rendered="#{file.publish}">
+				        <f:facet name="header">
+				            <h:outputText value="#{msg.status_column_filename}"/>
+				        </f:facet>
 						<h:outputLink value="/customer-portal/showImage?ID=#{file.path}/#{file.name}" rendered="#{file.downloadable}" target="blank">
-							<h:outputText value="#{file.name}" styleClass="formLabel" style="padding:10px;"/>
+							<h:outputText value="#{file.name}" />
 						</h:outputLink>
-						<h:outputText value="#{file.name}" styleClass="formLabel" style="padding:10px;" rendered="#{!file.downloadable}"/>
+						<h:outputText value="#{file.name}" rendered="#{!file.downloadable}"/>
 					</h:column>
 					<h:column rendered="#{file.publish}">
-						<rich:spacer width="50" title=""/>
+				        <f:facet name="header">
+				            <h:outputText value="#{msg.status_column_dateup}"/>
+				        </f:facet>
+						<h:outputText value="#{file.dispDateUploaded}" rendered="#{!file.downloadable}"/>
 					</h:column>
 					<h:column rendered="#{file.publish}">
-						<a4j:commandButton  value="REMOVE MSG" rendered="#{file.new}"
+				        <f:facet name="header">
+				            <h:outputText value="#{msg.status_column_action}"/>
+				        </f:facet>
+						<a4j:commandButton  value="#{msg.status_button_remove}" rendered="#{file.new}"
 								reRender="filePanel" limitToList="true" immediate="true" styleClass="submitButtonOrange" 
 								actionListener="#{customerPortal.removeFileListener}"/>
 					</h:column>
@@ -169,34 +189,22 @@
 			<rich:spacer width="100%" height="20" title=""/>
 				
 			<h:panelGrid columns="3" width="100%">
-				<t:outputText value="FILE" styleClass="formLabel"/>
+				<t:outputText value="#{msg.status_label_new_file}" />
 				<t:inputFileUpload id="fileupload" value="#{customerPortal.upFile}" size="60" />
 				<h:panelGroup>
-					<h:commandButton value="ADD MSG" 
+					<h:commandButton value="#{msg.status_button_add}" 
 						 	action="#{customerPortal.upload}" styleClass="submitButtonOrange" >
 						 	<a4j:support event="onclick" reRender="filePanel" limitToList="true"/>
 					</h:commandButton>
 				</h:panelGroup>
 			</h:panelGrid>
-			
-			<rich:spacer width="100%" height="20" title=""/>
-			
-			<h:outputLink value="/customer-portal/showImage?ID=swa_faq.pdf" target="blank" >
-				<h:outputText value="FAQ DL" styleClass="formLabel" style="padding:10px;"/>
-			</h:outputLink>
-			
-			<rich:spacer width="100%" height="20" title=""/>
-			
-			<h:outputLink value="/customer-portal/showImage?ID=swa_claim_form.pdf" target="blank" >
-				<h:outputText value="CLAIM DL" styleClass="formLabel" style="padding:10px;"/>
-			</h:outputLink>
 				
 			<rich:spacer width="100%" height="30" title=""/>
 
 			<h:panelGroup>
-				<h:commandButton value="BACK MSG" action="login?faces-redirect=true" styleClass="submitButtonWhite" >
+				<h:commandButton value="#{msg.status_button_back}" action="login?faces-redirect=true" styleClass="submitButtonWhite" >
 				</h:commandButton>
-				<h:commandButton value="SEND MSG" action="#{customerPortal.sendToNT}" styleClass="submitButtonOrange" >
+				<h:commandButton value="#{msg.status_button_send}" action="#{customerPortal.sendToNT}" styleClass="submitButtonOrange" >
 				</h:commandButton>
 			</h:panelGroup>
 				

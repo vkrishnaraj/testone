@@ -120,7 +120,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 				throws AxisFault, RemoteException{
         
         passengerBean.setClaimId(claim.getClaimId()); //mandatory field for the web service  
-        passengerBean.setStatus(claim.getStatus());              
+        passengerBean.setStatus(claim.getClaimStatus());              
                
         //File
         setFiles(claim,passengerBean);

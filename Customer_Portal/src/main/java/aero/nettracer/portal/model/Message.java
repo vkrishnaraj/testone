@@ -1,5 +1,6 @@
 package aero.nettracer.portal.model;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class Message {
@@ -53,6 +54,13 @@ public class Message {
 	}
 	public void setStatusId(int statusId) {
 		this.statusId = statusId;
+	}
+	public String getDispDateCreated() {
+		SimpleDateFormat format = new SimpleDateFormat("MM-dd-yyyy hh:mm:ss");
+		if (getDateCreated() != null) {
+			return format.format(getDateCreated().getTime());
+		}
+		return "";
 	}
 	
 	
