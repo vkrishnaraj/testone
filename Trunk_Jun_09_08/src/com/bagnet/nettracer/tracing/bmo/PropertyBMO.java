@@ -264,6 +264,8 @@ public class PropertyBMO {
 
 	public static final String LDAP_REDIRECT = "ldap.redirect";
 	
+	public static final String SAML_X509_WN = "saml.x509.wn";
+	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;
 		if(key != null && value != null){

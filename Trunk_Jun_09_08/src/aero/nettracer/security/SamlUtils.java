@@ -1,5 +1,13 @@
 package aero.nettracer.security;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.security.KeyFactory;
+import java.security.PublicKey;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -11,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.opensaml.DefaultBootstrap;
 import org.opensaml.common.SAMLObject;
 import org.opensaml.common.binding.BasicSAMLMessageContext;
+import org.opensaml.saml2.binding.decoding.HTTPPostDecoder;
 import org.opensaml.saml2.core.Assertion;
 import org.opensaml.saml2.core.Attribute;
 import org.opensaml.saml2.core.AttributeStatement;
@@ -22,9 +31,13 @@ import org.opensaml.xml.XMLObject;
 import org.opensaml.xml.parse.BasicParserPool;
 import org.opensaml.xml.schema.impl.XSAnyImpl;
 import org.opensaml.xml.security.credential.Credential;
+import org.opensaml.xml.security.x509.BasicX509Credential;
 import org.opensaml.xml.signature.KeyInfo;
 import org.opensaml.xml.signature.Signature;
-import org.opensaml.saml2.binding.decoding.HTTPPostDecoder;
+import org.opensaml.xml.signature.SignatureValidator;
+import org.opensaml.xml.validation.ValidationException;
+
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 
 
 public class SamlUtils implements SsoUtils{
@@ -49,21 +62,24 @@ public class SamlUtils implements SsoUtils{
 	@Override
 	public SsoNode getSsoNode(HttpServletRequest request) {
 		SsoNode node = new SsoNode();
-		
-		Map<String, Object> attr = getSamlAttributeMap(request);
-		
-		String companycode = mapIssuer((String)attr.get("issuerName"));
-		node.setCompanycode(companycode);
-		
-		Map<String, String> keyMap = getKeyMap(companycode);
-		
-		if(keyMap != null){
-			node.setUsername(((List<String>)attr.get(keyMap.get("username"))).get(0));
-			node.setGroup(((List<String>)attr.get(keyMap.get("group"))).get(0));
-			node.setStation(((List<String>)attr.get(keyMap.get("stationcode"))).get(0));
-			node.setFirstname(((List<String>)attr.get(keyMap.get("firstname"))).get(0));
-			node.setLastname(((List<String>)attr.get(keyMap.get("lastname"))).get(0));
-			node.setValidAssertion(validAssertion((Map<String,Object>)attr.get("auth")));
+		if(request.getParameter("SAMLResponse") != null){
+			Map<String, Object> attr = getSamlAttributeMap(request);
+
+			String companycode = mapIssuer((String)attr.get("issuerName"));
+			node.setCompanycode(companycode);
+			
+			boolean validAssertion = (Boolean)attr.get("signatureValidation");
+			node.setValidAssertion(validAssertion);
+
+			Map<String, String> keyMap = getKeyMap(companycode);
+
+			if(keyMap != null){
+				node.setUsername(((List<String>)attr.get(keyMap.get("username"))).get(0));
+				node.setGroup(((List<String>)attr.get(keyMap.get("group"))).get(0));
+				node.setStation(((List<String>)attr.get(keyMap.get("stationcode"))).get(0));
+				node.setFirstname(((List<String>)attr.get(keyMap.get("firstname"))).get(0));
+				node.setLastname(((List<String>)attr.get(keyMap.get("lastname"))).get(0));
+			}
 		}
 		return node;
 	}
@@ -84,9 +100,6 @@ public class SamlUtils implements SsoUtils{
 		return null;
 	}
 	
-	protected static boolean validAssertion(Map<String,Object> params){
-		return true;
-	}
 	
 	protected static Map<String, Object> getSamlAttributeMap(HttpServletRequest request){
 		
@@ -106,6 +119,9 @@ public class SamlUtils implements SsoUtils{
 	       XMLObject c = messageContext.getInboundMessage();
 	       
 	       ResponseImpl  message = messageContext.getInboundSAMLMessage();
+	       
+	       map.put("signatureValidation", validate(message));
+	       
 	       
 	       Issuer issuer = message.getIssuer();
 	       map.put("issuerName", issuer.getValue());
@@ -155,6 +171,60 @@ public class SamlUtils implements SsoUtils{
 		return map;
 	}
 
+	public static Boolean validate(ResponseImpl  message){
+		String fileLocation = PropertyBMO.getValue(PropertyBMO.SAML_X509_WN);//TODO consider abstracting
+		if(fileLocation == null){
+			return false;
+		}
+		
+		File signatureVerificationPublicKeyFile = new File(fileLocation);
+//		File signatureVerificationPublicKeyFile = new File("C:\\SAML\\idp.cer");
 
-	
+		try{          
+
+			InputStream inputStream2 = new FileInputStream(signatureVerificationPublicKeyFile);
+			CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
+			X509Certificate certificate = (X509Certificate)certificateFactory.generateCertificate(inputStream2);
+			inputStream2.close();
+
+			//pull out the public key part of the certificate into a KeySpec
+			X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(certificate.getPublicKey().getEncoded());
+
+			//get KeyFactory object that creates key objects, specifying RSA
+			KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+
+			//generate public key to validate signatures
+			PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
+
+			//create credentials
+			BasicX509Credential publicCredential = new BasicX509Credential();
+
+			//add public key value
+			publicCredential.setPublicKey(publicKey);
+
+			//create SignatureValidator
+			SignatureValidator signatureValidator = new SignatureValidator(publicCredential);
+
+			//get the signature to validate from the response object
+			Signature signature = message.getSignature();
+
+			//try to validate
+			try
+			{
+				signatureValidator.validate(signature);
+				return true;
+			}
+			catch (ValidationException ve)
+			{
+				System.out.println("Signature is not valid.");
+				System.out.println(ve.getMessage());
+			}
+
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+
 }
