@@ -78,19 +78,56 @@ public class SamlUtils implements SsoUtils{
 
 			String companycode = mapIssuer((String)attr.get("issuerName"));
 			node.setCompanycode(companycode);
-			
-			boolean validAssertion = (Boolean)attr.get("signatureValidation");
-			node.setValidAssertion(validAssertion);
 
 			Map<String, String> keyMap = getKeyMap(companycode);
+			
+			boolean validAssertion = (Boolean)attr.get("signatureValidation");
+			boolean validAttributes = true;
 
+			
 			if(keyMap != null){
-				node.setUsername(((List<String>)attr.get(keyMap.get("username"))).get(0));
-				node.setGroup(((List<String>)attr.get(keyMap.get("group"))).get(0));
-				node.setStation(((List<String>)attr.get(keyMap.get("stationcode"))).get(0));
-				node.setFirstname(((List<String>)attr.get(keyMap.get("firstname"))).get(0));
-				node.setLastname(((List<String>)attr.get(keyMap.get("lastname"))).get(0));
+				List<String> username = ((List<String>)attr.get(keyMap.get("username"))); 
+				if(username != null && username.size() == 1){
+					node.setUsername(username.get(0));
+				} else {
+					validAttributes = false;
+					logger.debug("Incorrect number of username attribute values");
+				}
+				
+				List<String> group = ((List<String>)attr.get(keyMap.get("group"))); 
+				if(group != null && group.size() == 1){
+					node.setGroup(group.get(0));
+				} else {
+					validAttributes = false;
+					logger.debug("Incorrect number of group attribute values");
+				}
+				
+				List<String> stationcode = ((List<String>)attr.get(keyMap.get("stationcode"))); 
+				if(stationcode != null && stationcode.size() == 1){
+					node.setStation(stationcode.get(0));
+				} else {
+					validAttributes = false;
+					logger.debug("Incorrect number of stationcode attribute values");
+				}
+				
+				List<String> firstname = ((List<String>)attr.get(keyMap.get("firstname"))); 
+				if(firstname != null && firstname.size() == 1){
+					node.setFirstname(firstname.get(0));
+				} else {
+					validAttributes = false;
+					logger.debug("Incorrect number of firstname attribute values");
+				}
+				
+				List<String> lastname = ((List<String>)attr.get(keyMap.get("lastname"))); 
+				if(lastname != null && lastname.size() == 1){
+					node.setLastname(lastname.get(0));
+				} else {
+					validAttributes = false;
+					logger.debug("Incorrect number of lastname attribute values");
+				}
 			}
+			
+			node.setValidAssertion(validAssertion && validAttributes);
 		}
 		logger.debug(node.toString());
 		return node;
