@@ -173,23 +173,22 @@ insert into properties (keyStr,valueStr) VALUES ('ldap.redirect','https://www37c
 
 insert into properties (keyStr,valueStr) values ('saml.x509.wn','D:\\security\\saml\\wn\\idp.cer');
 
-  --Based off group ids in Southwest Testing environment
- insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Admin_S','Admin',2);
- insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Station_Agent_S','Station Agent',4);
- insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_CBS_Coordinator_S','CBS Coordinator',6);
- insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_CBS_Leader_S','CBS Leader',8);
- insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_CBS_Specialist_S','CBS Specialist',7);
- insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_CR_Representative_S','CR Representative',9);
- insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_CS&S_Representative_S','CS&S Representative',10);
- insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Station_Leader_S','Station Leader',5);
- insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Vendor_S','Vendor',11);
- # -- The following still need groups in the testing Environment and the IDs filled in here
- # -- insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Corp_Security_S','Corp Security');
- # -- insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_EO_Representative_S','EO Representative');
- # -- insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Finance_S','Finance');
- # -- insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Ramp_Supervisor_S','Ramp Supervisor');
- # -- insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Read_Only_S','Read Only');
- # -- insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Station_Admin_S','Station Admin');
- # -- insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Station_Supervisor_S','Station Supervisor');
- # -- insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Technology_S','Technology');
+--Based off group ids in Southwest Testing and Training environment - Insert into Testing and Training
+insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Admin_S','Admin',2);
+insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Station_Agent_S','Station Agent',4);
+insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_CBS_Coordinator_S','CBS Coordinator',6);
+insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_CBS_Leader_S','CBS Leader',8);
+insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_CBS_Specialist_S','CBS Specialist',7);
+insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_CR_Representative_S','CR Representative',9);
+insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_CS&S_Representative_S','CS&S Representative',10);
+insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Station_Leader_S','Station Leader',5);
+insert into UsergroupNameMap (ldapName,ntName,ntGroupId) values ('NetTracer_Vendor_S','Vendor',11);
+insert into usergroupnamemap (ldapName,ntName,ntGroupId) VALUES ('NetTracer_Corp_Security_S','Corp Security',12);
+insert into usergroupnamemap (ldapName,ntName,ntGroupId) VALUES ('NetTracer_EO_Representative_S','EO Representative',13);
+insert into usergroupnamemap (ldapName,ntName,ntGroupId) VALUES ('NetTracer_Finance_S','Finance',14);
+insert into usergroupnamemap (ldapName,ntName,ntGroupId) VALUES ('NetTracer_Ramp_Supervisor_S','Ramp Supervisor',15);
+insert into usergroupnamemap (ldapName,ntName,ntGroupId) VALUES ('NetTracer_Read_Only_S','Read Only',16);
+insert into usergroupnamemap (ldapName,ntName,ntGroupId) VALUES ('NetTracer_Station_Admin_S','Station Admin',17);
+insert into usergroupnamemap (ldapName,ntName,ntGroupId) VALUES ('NetTracer_Station_Supervisor_S','Station Supervisor',18);
+insert into usergroupnamemap (ldapName,ntName,ntGroupId) VALUES ('NetTracer_Technology_S','Technology',19);
  
