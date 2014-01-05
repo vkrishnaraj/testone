@@ -211,8 +211,11 @@ public class CustomerPortalController {
 					FacesUtil.addError("Error in persisting the Data");
 				}
 
-				Claim claim=onlineClaimsWS.getClaim(passengerBean.getPassengerData(),passengerBean.getPassengers().get(0).getLastName(), passengerBean.getPassengers().get(0).getFirstName());
-				passengerBean = onlineClaimsWS.getPassengerData(passengerBean.getPassengerData(),claim);
+				WSPVAdvancedIncident passData = getPassengerData();
+				Claim claim=onlineClaimsWS.getClaim(passData,passengerBean.getPassengers().get(0).getLastName(), passengerBean.getPassengers().get(0).getFirstName());
+				passengerBean = onlineClaimsWS.getPassengerData(passData,claim);
+				passengerBean.setPassengerData(passData);
+				passengerBean.setIncidentID(passData.getIncidentID());
 				session.setAttribute("claim", claim);
 				session.setAttribute("passengerBean", passengerBean);
 				
