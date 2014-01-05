@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.actions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +28,7 @@ import com.bagnet.nettracer.tracing.forms.UnassignedInboundQueueForm;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.tracing.utils.taskmanager.InboundTasksUtils;
+import com.bagnet.nettracer.tracing.utils.taskmanager.UnassignedIncidentElement;
 
 public class UnassignedInboundQueueAction extends Action {
 	private final Logger log = LoggerFactory.getLogger(getClass());
@@ -60,24 +62,37 @@ public class UnassignedInboundQueueAction extends Action {
 		InboundTasksDTO dto = initDTO();
 		
 		if (request.getParameter("autoassign") != null){
-			List<InboundQueueTask> tasks = InboundTasksUtils.autoAssignedTasks(theForm.getAgentMatrix(), theForm.getTaskList());
-			theForm.setTaskList(InboundTasksUtils.sortTaskList(tasks, sort, dir));
+			List<UnassignedIncidentElement> incidentList = theForm.getIncidentList();
+			List<InboundQueueTask> taskList = new ArrayList<InboundQueueTask>();
+			if(incidentList != null){
+				for(UnassignedIncidentElement incident:incidentList){
+					if(incident.getTasks() != null){
+						taskList.addAll(incident.getTasks());
+					}
+				}
+			}
+			InboundTasksUtils.autoAssignedTasks(theForm.getAgentMatrix(), taskList);
+			theForm.setIncidentList(InboundTasksUtils.sortTaskList(incidentList, sort, dir));
 			return mapping.findForward(TracingConstants.UNASSIGNED_INBOUND_QUEUE);
 		}
 		
 		if (request.getParameter("update") != null){
-			String[] agentAssignedIDs = request.getParameterValues("task.inboundqueue.incident.agentassigned.agent_ID");
-			if(agentAssignedIDs == null || agentAssignedIDs.length < 1 || theForm.getTaskList().size() != agentAssignedIDs.length){
+			String[] agentAssignedIDs = request.getParameterValues("incident.incident.agentassigned.agent_ID");
+			if(agentAssignedIDs == null || agentAssignedIDs.length < 1 || theForm.getIncidentList().size() != agentAssignedIDs.length){
 				log.error("Failed to reassign agent. Agents Assigned IDs = {}", (agentAssignedIDs == null) ? null : agentAssignedIDs.length);
 				
 				ActionMessage error = new ActionMessage("error.no.agent");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
 			} else {			
-				for(int i = 0; i < theForm.getTaskList().size(); i++){
+				for(int i = 0; i < theForm.getIncidentList().size(); i++){
 					Agent agent = getAgentByID(NumberUtils.toInt(agentAssignedIDs[i]), theForm.getAgentList());
-					theForm.getTaskList(i).setAssigned_agent(agent);
-					theForm.getTaskList(i).getInboundqueue().getIncident().setAgentassigned(agent);
+					theForm.getIncidentList(i).getIncident().setAgentassigned(agent);
+					if(theForm.getIncidentList(i).getTasks() != null){
+						for(InboundQueueTask task:theForm.getIncidentList(i).getTasks()){
+							task.setAssigned_agent(agent);
+						}
+					}
 				}
 			}
 			
@@ -85,33 +100,40 @@ public class UnassignedInboundQueueAction extends Action {
 		}
 		
 		if (request.getParameter("commit") != null){
-			List<InboundQueueTask> tasks = theForm.getTaskList();
-			if(tasks != null){
-				for(InboundQueueTask task:tasks){
-					InboundTasksUtils.saveTask(task, user);
+			List<UnassignedIncidentElement> incidentList = theForm.getIncidentList();
+			
+			if(incidentList != null){
+				for(UnassignedIncidentElement incident:incidentList){
+					if(incident.getTasks() != null){
+						for(InboundQueueTask task:incident.getTasks()){
+							InboundTasksUtils.saveTask(task, user);
+						}
+					}
 				}
 			}
-			List<InboundQueueTask> updatedTasks = InboundTasksUtils.getTasks(dto, user);
-			theForm.setTaskList(InboundTasksUtils.sortTaskList(updatedTasks, sort, dir));
+			List<UnassignedIncidentElement> updatedTasks = InboundTasksUtils.getUnassignedIncidents(dto, user);
+			theForm.setIncidentList(InboundTasksUtils.sortTaskList(updatedTasks, sort, dir));
 			return mapping.findForward(TracingConstants.UNASSIGNED_INBOUND_QUEUE);
 		}
 		
 		if (request.getParameter("reset") != null){
-			List<InboundQueueTask> tasks = theForm.getTaskList();
-			if(tasks != null){
-				for(InboundQueueTask task:tasks){
-					task.setAssigned_agent(null);
-					task.getInboundqueue().getIncident().setAgentassigned(null);
+			List<UnassignedIncidentElement> incidentList = theForm.getIncidentList();
+			if(incidentList != null){
+				for(UnassignedIncidentElement incident:incidentList){
+					incident.getIncident().setAgentassigned(null);
+					if(incident.getTasks() != null){
+						for(InboundQueueTask task: incident.getTasks()){
+							task.setAssigned_agent(null);
+						}
+					}
 				}
 			}
-			InboundTasksUtils.sortTaskList(tasks, sort, dir);
+			InboundTasksUtils.sortTaskList(incidentList, sort, dir);
 			return mapping.findForward(TracingConstants.UNASSIGNED_INBOUND_QUEUE);
 		}
 		
-		//fetch all unassigned items
-		List<InboundQueueTask> tasks = InboundTasksUtils.getTasks(dto, user);
-		theForm.setTaskList(InboundTasksUtils.sortTaskList(tasks, sort, dir));
-		
+		List<UnassignedIncidentElement> incidentList = InboundTasksUtils.getUnassignedIncidents(dto, user); 
+		theForm.setIncidentList(InboundTasksUtils.sortTaskList(incidentList, sort, dir));
 		theForm.setAgentList(InboundTasksUtils.getInboundAgentList());
 		theForm.setAgentMatrix(InboundTasksUtils.getInboundAgentMatrixList());
 		return mapping.findForward(TracingConstants.UNASSIGNED_INBOUND_QUEUE);

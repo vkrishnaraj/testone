@@ -99,16 +99,16 @@
         </h1>
         </div>
   		<br/>
-           <display:table requestURI="/unassignedInboundQueue.do" name="unassignedInboundQueueForm.taskList" class="form2" cellspacing="0" cellpadding="0" id="task" >
+           <display:table requestURI="/unassignedInboundQueue.do" name="unassignedInboundQueueForm.incidentList" class="form2" cellspacing="0" cellpadding="0" id="incident" >
 	       	<display:setProperty name="basic.empty.showtable" value="true"/>
 	       	
 	       	<display:column style="width:25%;" titleKey="agent" sortable="true" sortName="username" headerClass="header">
-	       		<select name="task.inboundqueue.incident.agentassigned.agent_ID" class="dropdown">
+	       		<select name="incident.incident.agentassigned.agent_ID" class="dropdown">
                 	<option value="-1">Select</option>
 			       		<c:forEach var="agentElement" items="${unassignedInboundQueueForm.agentMatrix}">
 			       			<c:if test="${not empty agentElement.agent and not empty agentElement.agent.username}">
 			       				<option value="${agentElement.agent.agent_ID}"
-					       			<c:if test="${not empty task.inboundqueue.incident.agentassigned and not empty task.inboundqueue.incident.agentassigned.username and task.inboundqueue.incident.agentassigned.username.equalsIgnoreCase(agentElement.agent.username)}">
+					       			<c:if test="${not empty incident.incident.agentassigned and not empty incident.incident.agentassigned.username and incident.incident.agentassigned.username.equalsIgnoreCase(agentElement.agent.username)}">
 					       				selected
 					       			</c:if>
 							    	>${agentElement.agent.username}
@@ -119,10 +119,10 @@
 	       	</display:column>
 	       	
 	       	<display:column style="width:25%;" titleKey="colname.incident_num" headerClass="header" sortable="true" sortName="incident">
-	       		<a href="<c:url value="/searchIncident.do?incident=${task.inboundqueue.incident.incident_ID}"/>">${task.inboundqueue.incident.incident_ID}</a>
+	       		<a href="<c:url value="/searchIncident.do?incident=${incident.incident.incident_ID}"/>">${incident.incident.incident_ID}</a>
 	       	</display:column>
-	       	<display:column style="width:25%;" titleKey="colname.unassignedinbound.tasktype" value="${task.description}&nbsp;" sortable="true" sortName="type" headerClass="header" />
-	       	<display:column style="width:25%;" titleKey="colname.unassignedinbound.createtimestamp" value="${task.dispOpened_timestamp}&nbsp;" sortable="true" sortName="date" headerClass="header" />
+	       	<display:column style="width:25%;" titleKey="colname.unassignedinbound.tasktype" value="${incident.dispTaskList}&nbsp;" sortable="true" sortName="type" headerClass="header" />
+	       	<display:column style="width:25%;" titleKey="colname.unassignedinbound.createtimestamp" value="${incident.oldestTask.dispOpened_timestamp}&nbsp;" sortable="true" sortName="date" headerClass="header" />
 	       	
 	       <display:footer>
 			    <tr>

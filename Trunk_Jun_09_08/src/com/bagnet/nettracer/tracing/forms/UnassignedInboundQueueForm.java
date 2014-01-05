@@ -10,6 +10,7 @@ import org.apache.struts.validator.ValidatorForm;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.taskmanager.InboundQueueTask;
 import com.bagnet.nettracer.tracing.utils.taskmanager.UnassignedInboundAgentElement;
+import com.bagnet.nettracer.tracing.utils.taskmanager.UnassignedIncidentElement;
 
 public class UnassignedInboundQueueForm extends ValidatorForm {
 	private static final long serialVersionUID = -2791233648024154545L;
@@ -18,7 +19,9 @@ public class UnassignedInboundQueueForm extends ValidatorForm {
 	
 	private List<UnassignedInboundAgentElement> agentMatrix;
 	private List<Agent> agentList;
-	private List<InboundQueueTask> taskList;
+	
+	private List<UnassignedIncidentElement> incidentList;
+	
 	public List<UnassignedInboundAgentElement> getAgentMatrix() {
 		return agentMatrix;
 	}
@@ -31,13 +34,6 @@ public class UnassignedInboundQueueForm extends ValidatorForm {
 	public void setAgentList(List<Agent> agentList) {
 		this.agentList = agentList;
 	}
-	public List<InboundQueueTask> getTaskList() {
-		return taskList;
-	}
-	public void setTaskList(List<InboundQueueTask> taskList) {
-		this.taskList = taskList;
-	}
-
 	
 	public void reset(ActionMapping mapping, 
 			HttpServletRequest request) {
@@ -66,9 +62,16 @@ public class UnassignedInboundQueueForm extends ValidatorForm {
 		}
 	}
 	
-	public InboundQueueTask getTaskList(int i){
-		if(taskList != null && taskList.size() > i){
-			return taskList.get(i);
+	public List<UnassignedIncidentElement> getIncidentList() {
+		return incidentList;
+	}
+	public void setIncidentList(List<UnassignedIncidentElement> incidentList) {
+		this.incidentList = incidentList;
+	}
+	
+	public UnassignedIncidentElement getIncidentList(int i){
+		if(incidentList != null && incidentList.size() > i){
+			return incidentList.get(i);
 		} else {
 			return null;
 		}

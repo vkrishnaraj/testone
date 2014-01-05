@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -27,6 +28,8 @@ import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 public class InboundTasksUtils {
+	
+	@SuppressWarnings("unused")
 	private static Logger logger = Logger.getLogger(InboundTasksUtils.class);
 	
 	
@@ -49,7 +52,7 @@ public class InboundTasksUtils {
 	 * @param bmo
 	 */
 	protected void setInboundTasksBMO(InboundTasksBMO bmo){
-		this.bmo = bmo;
+		InboundTasksUtils.bmo = bmo;
 	}
 	
 	/**
@@ -113,6 +116,46 @@ public class InboundTasksUtils {
 			}
 		}
 		return taskList;
+	}
+	
+	
+	/**
+	 * Returns a list of UnassignedIncidentElements based on the current list of unassigned InboundQueueTasks
+	 * 
+	 * @param dto
+	 * @param agent
+	 * @return
+	 */
+	public static List<UnassignedIncidentElement> getUnassignedIncidents(InboundTasksDTO dto, Agent agent){
+		List<InboundQueueTask> taskList = getTasks(dto, agent);
+		HashMap<String,List<InboundQueueTask>> taskMap = new HashMap<String,List<InboundQueueTask>>();
+		
+		List<UnassignedIncidentElement> returnList = new ArrayList<UnassignedIncidentElement>();
+		
+		if(taskList != null){
+			for(InboundQueueTask task:taskList){
+				String key = task.getInboundqueue().getIncident().getIncident_ID();
+				List<InboundQueueTask> t = null;
+				if(taskMap.containsKey(key)){
+					t = taskMap.get(key);
+				}
+				if(t == null){
+					t = new ArrayList<InboundQueueTask>();
+				}
+				
+				t.add(task);
+				taskMap.put(key, t);
+			}
+			
+			for(List<InboundQueueTask> tlist:taskMap.values()){
+				UnassignedIncidentElement toAdd = new UnassignedIncidentElement();
+				toAdd.setIncident(tlist.get(0).getInboundqueue().getIncident());
+				toAdd.setTasks(tlist);	
+				returnList.add(toAdd);
+			}
+			
+		}
+		return returnList;
 	}
 	
 	/**
@@ -487,7 +530,7 @@ public class InboundTasksUtils {
 	
 
 
-	public static List<InboundQueueTask> sortTaskList(List<InboundQueueTask> tasks, String sort, String dir){
+	public static List<UnassignedIncidentElement> sortTaskList(List<UnassignedIncidentElement> tasks, String sort, String dir){
 		if(tasks != null){
 			InboundTasksUtils utils = new InboundTasksUtils();
 			InboundTasksUtils.Sort c = utils.new Sort(sort,dir);
@@ -497,7 +540,7 @@ public class InboundTasksUtils {
 		return tasks;
 	}
 	
-	private class Sort implements Comparator<InboundQueueTask>{
+	private class Sort implements Comparator<UnassignedIncidentElement>{
 		String sort;
 		String dir;
 		
@@ -507,19 +550,19 @@ public class InboundTasksUtils {
 		}
 		
 		@Override
-		public int compare(InboundQueueTask o1, InboundQueueTask o2) {
+		public int compare(UnassignedIncidentElement o1, UnassignedIncidentElement o2) {
 			int ret = 0;
 			
 			if("username".equals(sort)){
-				ret = o1.getInboundqueue().getIncident().getAgent().getUsername().compareTo(o2.getInboundqueue().getIncident().getAgent().getUsername());
+				ret = o1.getIncident().getAgent().getUsername().compareTo(o2.getIncident().getAgent().getUsername());
 			} else if ("type".equals(sort)){
-				ret =  o1.getDescription().compareTo(o2.getDescription());
+				ret =  o1.getDispTaskList().compareTo(o2.getDispTaskList());
 			} else if ("date".equals(sort)){
-				ret =  o1.getOpened_timestamp().compareTo(o2.getOpened_timestamp());
+				ret =  o1.getOldestTaskDate().compareTo(o2.getOldestTaskDate());
 			} else if ("incident".equals(sort)){
-				ret =  o1.getInboundqueue().getIncident().getIncident_ID().compareTo(o2.getInboundqueue().getIncident().getIncident_ID());
+				ret =  o1.getIncident().getIncident_ID().compareTo(o2.getIncident().getIncident_ID());
 			} else {
-				ret = o1.getInboundqueue().getIncident().getAgent().getUsername().compareTo(o2.getInboundqueue().getIncident().getAgent().getUsername());
+				ret = o1.getIncident().getAgent().getUsername().compareTo(o2.getIncident().getAgent().getUsername());
 			}
 
 			ret = "asc".equals(dir)?ret:-ret;
