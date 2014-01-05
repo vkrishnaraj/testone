@@ -212,6 +212,7 @@ public class SamlUtils implements SsoUtils{
 			try
 			{
 				signatureValidator.validate(signature);
+				System.out.println("Signature is valid");
 				return true;
 			}
 			catch (ValidationException ve)
