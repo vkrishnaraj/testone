@@ -83,7 +83,7 @@ public class IncidentActivityAction extends CheckedAction {
 			success = incidentActivityId > 0;
 			if(success){
 				IncidentActivity ia = incidentActivityService.load(incidentActivityId);
-				success = createOCMessage(user, ia, messages, activity);
+				success = createOCMessage(user, ia, messages, myform.getOutMessage());
 			}
 			
 		} else if (TracingConstants.COMMAND_CREATE.equalsIgnoreCase(command)) {

@@ -194,7 +194,11 @@ public class CustomerCommunicationsAction extends CheckedAction {
 			long id = Long.valueOf(request.getParameter("communicationsId"));
 			IncidentActivity ia = incidentActivityService.load(id);
 			
-			if(TracingConstants.ACTIVITY_CODE_INBOUND_PORTAL.equals(ia.getActivity().getCode())){
+			if(TracingConstants.ACTIVITY_CODE_INBOUND_CURE.equals(ia.getActivity().getCode()) ||
+			   TracingConstants.ACTIVITY_CODE_INBOUND_FAX.equals(ia.getActivity().getCode()) ||
+			   TracingConstants.ACTIVITY_CODE_INBOUND_MAIL.equals(ia.getActivity().getCode()) ||
+			   TracingConstants.ACTIVITY_CODE_INBOUND_PORTAL.equals(ia.getActivity().getCode()) ||
+			   TracingConstants.ACTIVITY_CODE_RECEIVED_DAMAGED_ITEM.equals(ia.getActivity().getCode())){
 				success=OnlineClaimsDao.acknowledgeMessages(ia);
 
 				if(!success){
