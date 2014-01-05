@@ -66,7 +66,7 @@ public class UnassignedInboundQueueAction extends Action {
 		}
 		
 		if (request.getParameter("update") != null){
-			String[] agentAssignedIDs = request.getParameterValues("task.inicident.agentassigned.agent_ID");
+			String[] agentAssignedIDs = request.getParameterValues("task.inboundqueue.incident.agentassigned.agent_ID");
 			if(agentAssignedIDs == null || agentAssignedIDs.length < 1 || theForm.getTaskList().size() != agentAssignedIDs.length){
 				log.error("Failed to reassign agent. Agents Assigned IDs = {}", (agentAssignedIDs == null) ? null : agentAssignedIDs.length);
 				

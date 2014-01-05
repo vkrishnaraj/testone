@@ -184,7 +184,8 @@ public class IncidentActivityAction extends CheckedAction {
 			
 			if (!success) {
 				messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.unable.to.create.message", new Object[] { ia.getActivity().getDescription() }));
-			} else if(ia.getIncident().getCustCommId()==TracingConstants.CUST_COMM_WEB_PORTAL) {
+			} else if(ia.getIncident().getCustCommId()==TracingConstants.CUST_COMM_WEB_PORTAL
+					&& TracingConstants.OUTBOUND_CORRESPONDANCE.equals(ia.getActivity().getCode())) {
 
 				ServletContext sc = getServlet().getServletContext();
 				String realpath = sc.getRealPath("/");

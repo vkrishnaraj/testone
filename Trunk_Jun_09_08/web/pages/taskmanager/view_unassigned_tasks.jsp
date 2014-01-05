@@ -103,7 +103,7 @@
 	       	<display:setProperty name="basic.empty.showtable" value="true"/>
 	       	
 	       	<display:column style="width:25%;" titleKey="agent" sortable="true" sortName="username" headerClass="header">
-	       		<select name="task.inboundqueue.inicident.agentassigned.agent_ID" class="dropdown">
+	       		<select name="task.inboundqueue.incident.agentassigned.agent_ID" class="dropdown">
                 	<option value="-1">Select</option>
 			       		<c:forEach var="agentElement" items="${unassignedInboundQueueForm.agentMatrix}">
 			       			<c:if test="${not empty agentElement.agent and not empty agentElement.agent.username}">
