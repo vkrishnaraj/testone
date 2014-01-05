@@ -277,7 +277,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 		
 		if (currMessage != null && currMessage.trim().length() > 0) {
 			message = new Message();
-			message.setMessage(currMessage);
+			message.setMessage(currMessage.replaceAll("\r\n", "<BR>"));
 			message.setDateCreated(Calendar.getInstance());
 			message.setPublish(true);
 			message.setStatusId(0);

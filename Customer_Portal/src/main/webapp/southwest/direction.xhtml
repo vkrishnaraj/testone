@@ -109,7 +109,7 @@
 				<t:dataTable width="80%" align="center" id="messageTable" value="#{customerPortal.passengerBean.messages}" var="message">
 						
 					<h:column rendered="#{message.publish}">
-						<h:outputText value="#{message.formattedMessage}" style="padding:10px;"/>
+						<h:outputText value="#{message.message}" style="padding:10px;"/>
 					</h:column>
 					<h:column rendered="#{message.publish}">
 						<rich:spacer width="50" title=""/>

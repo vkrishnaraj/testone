@@ -219,6 +219,14 @@ public class CustomerPortalController {
 				FacesUtil.addError("Connection failure, Please try again");
 				return null;
 			}
+			passengerBean.setCurrentMessage("");
+			if (passengerBean.getFiles() != null && passengerBean.getFiles().size() > 0) {
+				for (File file : passengerBean.getFiles()) {
+					if (file.getStatus() == 0) {
+						file.setStatus(3);
+					}
+				}
+			}
 			return null;
 	}
 
