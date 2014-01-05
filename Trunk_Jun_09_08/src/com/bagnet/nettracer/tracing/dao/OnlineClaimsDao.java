@@ -185,7 +185,7 @@ public class OnlineClaimsDao {
 			sess = HibernateWrapper.getSession().openSession();
 			t = sess.beginTransaction();
 			for(OCFile file:files){
-				sess.merge(file);
+				sess.saveOrUpdate(file);
 				sess.flush();
 				sess.clear();
 			}

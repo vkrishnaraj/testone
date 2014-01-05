@@ -212,12 +212,16 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 				incidentActivity.getMessages().remove(message);
 				
 				message.setIncAct(null);
+				message.setPublish(false);
+				message.setStatusId(TracingConstants.OC_STATUS_UNPUBLISHED);
 				session.merge(message);
 			}
 			List<OCFile>  fileList=new ArrayList<OCFile>(incidentActivity.getFiles());
 			for(OCFile file:fileList){
 				incidentActivity.getFiles().remove(file);
 				file.setIncAct(null);
+				file.setPublish(false);
+				file.setStatusId(TracingConstants.OC_STATUS_UNPUBLISHED);
 				session.merge(file);
 			}
 			
