@@ -20,8 +20,12 @@ import com.bagnet.nettracer.tracing.db.OHD_Passenger;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.communications.Activity;
+import com.bagnet.nettracer.tracing.service.IncidentActivityService;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
+import com.bagnet.nettracer.tracing.utils.DomainUtils;
 import com.bagnet.nettracer.tracing.utils.OHDUtils;
+import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.taskmanager.InboundTasksUtils;
 import com.bagnet.nettracer.ws.core.WSCoreOHDUtil;
@@ -40,6 +44,8 @@ import com.bagnet.nettracer.ws.wn.onhandscanning.pojo.xsd.ServiceResponse;
 public class OnhandScanningServiceImplementation extends OnhandScanningServiceSkeleton{
 	
 	private static Logger logger = Logger.getLogger(OnhandScanningServiceImplementation.class);
+	
+	private IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
 	
 	public static String STATUS_CREATE = "CREATE";
 	public static String STATUS_UPDATE = "UPDATE";
@@ -807,7 +813,13 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 			e.printStackTrace();
 			return null;
 		}
-		InboundTasksUtils.createDamagedTask(inc, agent);
+		Activity activity = incidentActivityService.getActivity(TracingConstants.ACTIVITY_CODE_RECEIVED_DAMAGED_ITEM);
+		long activityId = incidentActivityService.save(DomainUtils.createIncidentActivity(inc, activity, agent));
+		
+		if(activityId > 0){
+			InboundTasksUtils.createDamagedTask(inc, agent, activity, activityId);
+		}
+		
 		return copyIncidentToOHD(inc);
 	}
 

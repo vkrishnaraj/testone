@@ -10,22 +10,24 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Proxy;
 
-import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.InboundQueue;
 
 @Entity
 @Proxy(lazy = true)
 public class InboundQueueTask extends GeneralTask {
 	
-	Incident incident;
-	
-	@ManyToOne(targetEntity = Incident.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER)
-	@JoinColumn(name = "incident_id")
+	private InboundQueue inboundqueue;
+
+	@ManyToOne(targetEntity = InboundQueue.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@JoinColumn(name = "inboundqueue_id")
 	@Fetch(FetchMode.SELECT)
-	public Incident getIncident() {
-		return incident;
+	public InboundQueue getInboundqueue() {
+		return inboundqueue;
 	}
 
-	public void setIncident(Incident incident) {
-		this.incident = incident;
+	public void setInboundqueue(InboundQueue inboundqueue) {
+		this.inboundqueue = inboundqueue;
 	}
+	
+	
 }

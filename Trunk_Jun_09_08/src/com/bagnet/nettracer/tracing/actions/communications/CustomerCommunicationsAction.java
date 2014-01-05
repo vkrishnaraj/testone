@@ -50,6 +50,7 @@ import com.bagnet.nettracer.tracing.utils.ExpenseUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
+import com.bagnet.nettracer.tracing.utils.taskmanager.InboundTasksUtils;
 
 public class CustomerCommunicationsAction extends CheckedAction {
 
@@ -192,10 +193,22 @@ public class CustomerCommunicationsAction extends CheckedAction {
 
 			long id = Long.valueOf(request.getParameter("communicationsId"));
 			IncidentActivity ia = incidentActivityService.load(id);
-			success=OnlineClaimsDao.acknowledgeMessages(ia);
+			
+			if(TracingConstants.ACTIVITY_CODE_INBOUND_PORTAL.equals(ia.getActivity().getCode())){
+				success=OnlineClaimsDao.acknowledgeMessages(ia);
 
-			if(!success){
-				logger.error("Failed to acknowledge messages for IncidentActivity with id: " + id);
+				if(!success){
+					logger.error("Failed to acknowledge messages for IncidentActivity with id: " + id);
+				}
+			}
+			
+			if(TracingConstants.ACTIVITY_CODE_INBOUND_CURE.equals(ia.getActivity().getCode()) ||
+			   TracingConstants.ACTIVITY_CODE_INBOUND_FAX.equals(ia.getActivity().getCode()) ||
+			   TracingConstants.ACTIVITY_CODE_INBOUND_MAIL.equals(ia.getActivity().getCode()) ||
+			   TracingConstants.ACTIVITY_CODE_INBOUND_PORTAL.equals(ia.getActivity().getCode()) ||
+			   TracingConstants.ACTIVITY_CODE_RECEIVED_DAMAGED_ITEM.equals(ia.getActivity().getCode())){
+
+				InboundTasksUtils.closeTaskByIncidentActivityId(id, user);
 			}
 
 			response.sendRedirect("searchIncident.do?incident="

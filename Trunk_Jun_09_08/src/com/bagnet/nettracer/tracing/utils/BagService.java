@@ -116,6 +116,7 @@ import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.tracing.forms.RequestOnHandForm;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.forms.SearchLostFoundForm;
+import com.bagnet.nettracer.tracing.utils.taskmanager.InboundTasksUtils;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 
 /**
@@ -1665,6 +1666,20 @@ public class BagService {
 						toBeAcknowledged = true;
 					}
 				}
+			}
+			
+			if(activity.getActivity() != null){
+				String code = activity.getActivity().getCode();
+				if(TracingConstants.ACTIVITY_CODE_INBOUND_CURE.equals(code) ||
+						TracingConstants.ACTIVITY_CODE_INBOUND_FAX.equals(code) ||
+						TracingConstants.ACTIVITY_CODE_INBOUND_MAIL.equals(code) ||
+						TracingConstants.ACTIVITY_CODE_INBOUND_PORTAL.equals(code) ||
+						TracingConstants.ACTIVITY_CODE_RECEIVED_DAMAGED_ITEM.equals(code)){
+					if(InboundTasksUtils.hasOpenInboundTaskByActivityId(activity.getId())){
+						toBeAcknowledged = true;
+					}
+				}
+
 			}
 
 			dto.setPublished(published);

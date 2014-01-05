@@ -103,12 +103,12 @@
 	       	<display:setProperty name="basic.empty.showtable" value="true"/>
 	       	
 	       	<display:column style="width:25%;" titleKey="agent" sortable="true" sortName="username" headerClass="header">
-	       		<select name="task.inicident.agentassigned.agent_ID" class="dropdown">
+	       		<select name="task.inboundqueue.inicident.agentassigned.agent_ID" class="dropdown">
                 	<option value="-1">Select</option>
 			       		<c:forEach var="agentElement" items="${unassignedInboundQueueForm.agentMatrix}">
 			       			<c:if test="${not empty agentElement.agent and not empty agentElement.agent.username}">
 			       				<option value="${agentElement.agent.agent_ID}"
-					       			<c:if test="${not empty task.incident.agentassigned and not empty task.incident.agentassigned.username and task.incident.agentassigned.username.equalsIgnoreCase(agentElement.agent.username)}">
+					       			<c:if test="${not empty task.inboundqueue.incident.agentassigned and not empty task.inboundqueue.incident.agentassigned.username and task.inboundqueue.incident.agentassigned.username.equalsIgnoreCase(agentElement.agent.username)}">
 					       				selected
 					       			</c:if>
 							    	>${agentElement.agent.username}
@@ -119,7 +119,7 @@
 	       	</display:column>
 	       	
 	       	<display:column style="width:25%;" titleKey="colname.incident_num" headerClass="header" sortable="true" sortName="incident">
-	       		<a href="<c:url value="/searchIncident.do?incident=${task.incident.incident_ID}"/>">${task.incident.incident_ID}</a>
+	       		<a href="<c:url value="/searchIncident.do?incident=${task.inboundqueue.incident.incident_ID}"/>">${task.inboundqueue.incident.incident_ID}</a>
 	       	</display:column>
 	       	<display:column style="width:25%;" titleKey="colname.unassignedinbound.tasktype" value="${task.description}&nbsp;" sortable="true" sortName="type" headerClass="header" />
 	       	<display:column style="width:25%;" titleKey="colname.unassignedinbound.createtimestamp" value="${task.dispOpened_timestamp}&nbsp;" sortable="true" sortName="date" headerClass="header" />

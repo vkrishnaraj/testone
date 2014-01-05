@@ -10,11 +10,14 @@ import java.util.TimeZone;
 import org.apache.log4j.Logger;
 
 import com.bagnet.nettracer.tracing.bmo.InboundTasksBMO;
+import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.InboundQueue;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.communications.Activity;
 import com.bagnet.nettracer.tracing.db.taskmanager.AcaaTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.DamagedTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.InboundQueueTask;
@@ -55,7 +58,13 @@ public class InboundTasksUtils {
 	 * @return
 	 */
 	public static int getUnassignedTasksCount(){
-		return getAssignedTasksCount(null);
+		InboundTasksDTO dto = new InboundTasksDTO();
+		dto.setAssigned_agent(null);
+		dto.setSearchUnassignedTasks(true);
+		Status status = new Status();
+		status.setStatus_ID(TracingConstants.TASK_MANAGER_OPEN);
+		dto.setStatus(status);
+		return (int)getInboundTasksBMO().getTasksCount(dto);
 	}
 	
 	/**
@@ -69,6 +78,7 @@ public class InboundTasksUtils {
 		dto.setAssigned_agent(agent);
 		Status status = new Status();
 		status.setStatus_ID(TracingConstants.TASK_MANAGER_OPEN);
+		dto.setStatus(status);
 		return (int)getInboundTasksBMO().getTasksCount(dto);
 	}
 	
@@ -131,10 +141,10 @@ public class InboundTasksUtils {
 	public static InboundQueueTask getNextAssignedTask(Agent agent){
 		InboundTasksDTO dto = new InboundTasksDTO();
 		dto.setAssigned_agent(agent);
-		Status status = new Status();
 		dto.setSort("opened_timestamp");
 		dto.setDir("desc");
 		dto.setMaxResults(1);
+		Status status = new Status();
 		status.setStatus_ID(TracingConstants.TASK_MANAGER_OPEN);
 		List<InboundQueueTask> taskList = getInboundTasksBMO().getTasks(dto);
 		if(taskList != null && taskList.size() > 0){
@@ -160,6 +170,43 @@ public class InboundTasksUtils {
 	}
 	
 	/**
+	 * Closes the corresponding InboundQueueTask for the provided IncidentActivity ID
+	 * 
+	 * @param id
+	 * @param status
+	 * @return
+	 */
+	public static boolean closeTaskByIncidentActivityId(long id, Agent agent){
+		InboundTasksDTO dto = new InboundTasksDTO();
+		dto.setIncidentActivityId(id);
+		Status status = new Status();
+		status.setStatus_ID(TracingConstants.TASK_MANAGER_OPEN);
+		dto.setStatus(status);
+		List<InboundQueueTask> taskList = getInboundTasksBMO().getTasks(dto);
+		if(taskList != null && taskList.size() == 1){
+					taskList.get(0);
+					return closeTask(taskList.get(0), agent);
+		} else {
+			return false;
+		}
+	}
+	
+	public static boolean hasOpenInboundTaskByActivityId(long id){
+		InboundTasksDTO dto = new InboundTasksDTO();
+		dto.setIncidentActivityId(id);
+		Status status = new Status();
+		status.setStatus_ID(TracingConstants.TASK_MANAGER_OPEN);
+		dto.setStatus(status);
+		List<InboundQueueTask> taskList = getInboundTasksBMO().getTasks(dto);
+		if(taskList != null && taskList.size() > 0){
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	
+	/**
 	 * saves the provided task
 	 * 
 	 * @param task
@@ -167,6 +214,12 @@ public class InboundTasksUtils {
 	 * @return
 	 */
 	public static long saveTask(InboundQueueTask task, Agent agent){
+		if(task != null && task.getInboundqueue() != null && task.getInboundqueue().getIncident() != null){
+			Incident incident = IncidentBMO.getIncidentByID(task.getInboundqueue().getIncident().getIncident_ID(), null);
+			incident.setAgentassigned(task.getInboundqueue().getIncident().getAgentassigned());
+			task.getInboundqueue().setIncident(incident);
+		}
+
 		return getInboundTasksBMO().saveTask(task, agent);
 	}
 	
@@ -179,12 +232,12 @@ public class InboundTasksUtils {
 	 * @param agent
 	 * @return
 	 */
-	public static long createInboundTask(Incident incident, Agent agent){
+	public static long createInboundTask(Incident incident, Agent agent, Activity activity, long incidentActivityId){
 		if(isAcaa(incident)){
-			return createAcaaTask(incident, agent);
+			return createAcaaTask(incident, agent, activity, incidentActivityId);
 		}
 		InboundTask task = new InboundTask();
-		return createInboundQueueTask(task, incident, agent);
+		return createInboundQueueTask(task, incident, agent, activity, incidentActivityId);
 	}
 	
 	
@@ -195,9 +248,9 @@ public class InboundTasksUtils {
 	 * @param agent
 	 * @return
 	 */
-	public static long createAcaaTask(Incident incident, Agent agent){
+	public static long createAcaaTask(Incident incident, Agent agent, Activity activity, long incidentActivityId){
 		AcaaTask task = new AcaaTask();
-		return createInboundQueueTask(task, incident, agent);
+		return createInboundQueueTask(task, incident, agent, activity, incidentActivityId);
 	}
 	
 	/**
@@ -207,9 +260,9 @@ public class InboundTasksUtils {
 	 * @param agent
 	 * @return
 	 */
-	public static long createDamagedTask(Incident incident, Agent agent){
+	public static long createDamagedTask(Incident incident, Agent agent, Activity activity, long incidentActivityId){
 		DamagedTask task = new DamagedTask();
-		return createInboundQueueTask(task, incident, agent);
+		return createInboundQueueTask(task, incident, agent, activity, incidentActivityId);
 	}
 	
 	/**
@@ -220,8 +273,12 @@ public class InboundTasksUtils {
 	 * @param agent
 	 * @return
 	 */
-	private static long createInboundQueueTask(InboundQueueTask task, Incident incident, Agent agent){
-		task.setIncident(incident);
+	private static long createInboundQueueTask(InboundQueueTask task, Incident incident, Agent agent, Activity activity, long incidentActivityId){
+		InboundQueue inboundqueue = new InboundQueue();
+		task.setInboundqueue(inboundqueue);
+		inboundqueue.setIncident(incident);
+		inboundqueue.setActivity(activity);
+		inboundqueue.setIncidentActivityId(incidentActivityId);
 		Status status = new Status();
 		status.setStatus_ID(TracingConstants.TASK_MANAGER_OPEN);
 		task.setStatus(status);
@@ -307,10 +364,10 @@ public class InboundTasksUtils {
 					}
 					agent.getTaskList().add(task);
 					task.setAssigned_agent(agent.getAgent());
-					task.getIncident().setAgentassigned(agent.getAgent());
+					task.getInboundqueue().getIncident().setAgentassigned(agent.getAgent());
 				} else {
 					task.setAssigned_agent(null);
-					task.getIncident().setAgentassigned(null);
+					task.getInboundqueue().getIncident().setAgentassigned(null);
 					returnList.add(task);//unassignable
 				}
 			}
@@ -454,15 +511,15 @@ public class InboundTasksUtils {
 			int ret = 0;
 			
 			if("username".equals(sort)){
-				ret = o1.getIncident().getAgent().getUsername().compareTo(o2.getIncident().getAgent().getUsername());
+				ret = o1.getInboundqueue().getIncident().getAgent().getUsername().compareTo(o2.getInboundqueue().getIncident().getAgent().getUsername());
 			} else if ("type".equals(sort)){
 				ret =  o1.getDescription().compareTo(o2.getDescription());
 			} else if ("date".equals(sort)){
 				ret =  o1.getOpened_timestamp().compareTo(o2.getOpened_timestamp());
 			} else if ("incident".equals(sort)){
-				ret =  o1.getIncident().getIncident_ID().compareTo(o2.getIncident().getIncident_ID());
+				ret =  o1.getInboundqueue().getIncident().getIncident_ID().compareTo(o2.getInboundqueue().getIncident().getIncident_ID());
 			} else {
-				ret = o1.getIncident().getAgent().getUsername().compareTo(o2.getIncident().getAgent().getUsername());
+				ret = o1.getInboundqueue().getIncident().getAgent().getUsername().compareTo(o2.getInboundqueue().getIncident().getAgent().getUsername());
 			}
 
 			ret = "asc".equals(dir)?ret:-ret;

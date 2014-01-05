@@ -482,3 +482,13 @@ alter table agent add column inboundQueue tinyint(1) default 0;
 alter table audit_agent add column inboundQueue tinyint(1) default 0;
 
 alter table task modify column agent_id int(11);
+
+alter table task add column inboundqueue_id bigint;
+
+create table inboundqueue(
+    id bigint auto_increment not null,
+    incident_id varchar(13),
+    activity_id bigint,
+    incidentActivityId bigint,
+    primary key (id));
+    

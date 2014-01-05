@@ -55,15 +55,18 @@ import com.bagnet.nettracer.tracing.db.OtherSystemInformation;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Task;
+import com.bagnet.nettracer.tracing.db.communications.Activity;
 import com.bagnet.nettracer.tracing.db.dr.Dispute;
 import com.bagnet.nettracer.tracing.db.dr.DisputeUtils;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.history.IncidentHistoryObject;
+import com.bagnet.nettracer.tracing.service.IncidentActivityService;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.ClientUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.DisputeResolutionUtils;
+import com.bagnet.nettracer.tracing.utils.DomainUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.HistoryUtils;
 import com.bagnet.nettracer.tracing.utils.ImageUtils;
@@ -84,6 +87,8 @@ import com.bagnet.nettracer.tracing.utils.taskmanager.InboundTasksUtils;
  */
 public class DamagedAction extends CheckedAction {
 	private static Logger logger = Logger.getLogger(DamagedAction.class);
+
+	private IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -113,7 +118,11 @@ public class DamagedAction extends CheckedAction {
 				if (iBmo.insertIncident(false, incident, null, user) == 1) {
 					theform.setRxTimestamp(rxTimestamp);
 					theform.setLastupdated(incident.getLastupdated());
-					InboundTasksUtils.createDamagedTask(incident, user);
+					Activity activity = incidentActivityService.getActivity(TracingConstants.ACTIVITY_CODE_RECEIVED_DAMAGED_ITEM);
+					long activityId = incidentActivityService.save(DomainUtils.createIncidentActivity(incident, activity, user));
+					if(activityId > 0){
+						InboundTasksUtils.createDamagedTask(incident, user, activity ,activityId);
+					}
 				} else {
 					request.setAttribute("error", "error.message.set.rx.timestamp.failed");
 					logger.error("An error occurred while trying to set the receive Date/Time for incident: " + incidentId);

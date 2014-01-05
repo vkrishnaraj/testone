@@ -51,14 +51,14 @@ public class PersonalTasksAction extends Action {
 		
 		if (request.getParameter("getNext") != null){
 			InboundQueueTask task = InboundTasksUtils.getNextAssignedTask(user);
-			if(task == null || task.getIncident() == null){
+			if(task == null || task.getInboundqueue() == null || task.getInboundqueue().getIncident() == null){
 				ActionMessage error = new ActionMessage("personaltask.error.notaskavailable");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
 				theForm.setTaskList(getPaginatedList(request, theForm, user, dto));
 				return mapping.findForward(TracingConstants.PERSONAL_TASKS);
 			}
-			response.sendRedirect("searchIncident.do?incident=" + task.getIncident().getIncident_ID());
+			response.sendRedirect("searchIncident.do?incident=" + task.getInboundqueue().getIncident().getIncident_ID());
 		}
 		
 		if (request.getParameter("closeTaskId") != null){

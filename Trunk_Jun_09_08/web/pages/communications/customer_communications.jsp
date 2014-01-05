@@ -375,6 +375,19 @@
 								</logic:equal>
 							</logic:equal>
 						</logic:equal>
+						
+							<% if(TracingConstants.ACTIVITY_CODE_INBOUND_CURE.equals(activity.getActivityCode()) ||
+								  TracingConstants.ACTIVITY_CODE_INBOUND_FAX.equals(activity.getActivityCode()) ||
+								  TracingConstants.ACTIVITY_CODE_INBOUND_MAIL.equals(activity.getActivityCode()) ||
+								  TracingConstants.ACTIVITY_CODE_RECEIVED_DAMAGED_ITEM.equals(activity.getActivityCode())){
+							%>
+								<logic:equal name="activity" property="toBeAcknowledged" value="true">
+									<a href="customerCommunications.do?command=<%=TracingConstants.COMMAND_ACKNOWLEDGE_INBOUND %>&communicationsId=<%=String.valueOf(activity.getId()) %>&incident=<bean:write name="incidentForm" property="incident_ID" />" >
+										<bean:message key="customer.communication.action.acknowledge" />
+									</a><br>
+								</logic:equal>
+							<%} %>
+						
 						<logic:equal name="activity" property="statusId" value="0" >
 							<% if (canDelete) { %>
 								<a href="incidentActivity.do?command=<%=TracingConstants.COMMAND_DELETE %>&activity=<%=String.valueOf(activity.getId()) %>&incident=<bean:write name="incidentForm" property="incident_ID" />" onclick="return verifyDelete();" >

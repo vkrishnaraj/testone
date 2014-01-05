@@ -27,8 +27,9 @@ public class InboundTasksBMO {
 	
 	static {
 		map.put("opened_timestamp",	"t.opened_timestamp");
-		map.put("incident_id",		"t.incident.incident_ID");
+		map.put("incident_id",		"t.inboundqueue.sincident.incident_ID");
 		map.put("type",				"t.description");
+		map.put("origin",			"t.inboundqueue.activity.description");
 	}
 	
 	public long getTasksCount(InboundTasksDTO dto){
@@ -95,15 +96,18 @@ public class InboundTasksBMO {
 			}
 			
 			if(dto.isSearchUnassignedTasks()){
-				sql += "and t.incident.agentassigned = null ";
+				sql += "and t.inboundqueue.incident.agentassigned = null ";
 			} else if(dto.getAssigned_agent() != null){
-				sql += "and t.incident.agentassigned.agent_ID = :agent_ID ";
+				sql += "and t.inboundqueue.incident.agentassigned.agent_ID = :agent_ID ";
 				params.put("agent_ID", dto.getAssigned_agent().getAgent_ID());
 			}
-			
 			if(dto.getStatus() != null){
 				sql += "and t.status.status_ID = :status_ID ";
 				params.put("status_ID", dto.getStatus().getStatus_ID());
+			}
+			if(dto.getIncidentActivityId() > 0){
+				sql += "and t.inboundqueue.incidentActivityId = :incidentActivityId ";
+				params.put("incidentActivityId", dto.getIncidentActivityId());
 			}
 			if(dto.getSort() != null){
 				sql += "order by " + (InboundTasksBMO.map.get(dto.getSort())!=null?InboundTasksBMO.map.get(dto.getSort()):"t.opened_timestamp");

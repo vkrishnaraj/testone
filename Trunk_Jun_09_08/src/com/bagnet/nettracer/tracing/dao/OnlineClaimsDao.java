@@ -724,7 +724,7 @@ public class OnlineClaimsDao {
 				}
 				if(hasNewInfo){
 					ias.save(ia);
-					InboundTasksUtils.createInboundTask(ia.getIncident(), activityagent);
+					InboundTasksUtils.createInboundTask(ia.getIncident(), activityagent, ia.getActivity(), ia.getId());
 				}
 			} catch(Exception e){
 				e.printStackTrace();

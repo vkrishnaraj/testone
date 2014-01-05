@@ -457,4 +457,14 @@ public class StringUtils {
 	  return null;
   }
   
+  public static long getLong(String longString){
+		try {
+			return Long.parseLong(longString);
+
+		} catch (NumberFormatException nfe) {
+			logger.error(nfe.getMessage());
+			return -1;
+		}
+  }
+  
 }

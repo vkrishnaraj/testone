@@ -77,7 +77,7 @@ public class UnassignedInboundQueueAction extends Action {
 				for(int i = 0; i < theForm.getTaskList().size(); i++){
 					Agent agent = getAgentByID(NumberUtils.toInt(agentAssignedIDs[i]), theForm.getAgentList());
 					theForm.getTaskList(i).setAssigned_agent(agent);
-					theForm.getTaskList(i).getIncident().setAgentassigned(agent);
+					theForm.getTaskList(i).getInboundqueue().getIncident().setAgentassigned(agent);
 				}
 			}
 			
@@ -101,7 +101,7 @@ public class UnassignedInboundQueueAction extends Action {
 			if(tasks != null){
 				for(InboundQueueTask task:tasks){
 					task.setAssigned_agent(null);
-					task.getIncident().setAgentassigned(null);
+					task.getInboundqueue().getIncident().setAgentassigned(null);
 				}
 			}
 			InboundTasksUtils.sortTaskList(tasks, sort, dir);

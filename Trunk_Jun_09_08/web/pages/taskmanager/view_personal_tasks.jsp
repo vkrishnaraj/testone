@@ -76,20 +76,21 @@ function updatePagination() {
            <display:table requestURI="/personalTasks.do" name="personalTasksForm.taskList" class="form2" cellspacing="0" cellpadding="0" id="task" >
 	       	<display:setProperty name="basic.empty.showtable" value="true"/>
 	       	<display:column style="width:25%;" titleKey="colname.incident_num" sortable="true" sortName="incident_id" headerClass="header">
-	       		<a href="<c:url value="/searchIncident.do?incident=${task.incident.incident_ID}"/>">${task.incident.incident_ID}</a>
+	       		<a href="<c:url value="/searchIncident.do?incident=${task.inboundqueue.incident.incident_ID}"/>">${task.inboundqueue.incident.incident_ID}</a>
 	       	</display:column>
 	       	<display:column style="width:25%;" titleKey="colname.unassignedinbound.tasktype" value="${task.description}&nbsp;" sortable="true" sortName="type" headerClass="header" />
+	       	<display:column style="width:25%;" titleKey="colname.unassignedinbound.origin" value="${task.inboundqueue.activity.description}&nbsp;" sortable="true" sortName="origin" headerClass="header" />
 	       	<display:column style="width:25%;" titleKey="colname.unassignedinbound.createtimestamp" value="${task.dispOpened_timestamp}&nbsp;" sortable="true" sortName="opened_timestamp" headerClass="header" />
 	       	
 	       <display:footer>
 			    <tr>
-					<td colspan="3">
+					<td colspan="4">
 				       	<jsp:include page="/pages/includes/pagination_incl.jsp" />
 					</td>
 			    </tr>
 			   <logic:equal name="personalTasksForm" property="hasNextTask" value="true">
 			    <tr>
-					<td colspan="3" align="center">
+					<td colspan="4" align="center">
 					<html:submit styleId="button" property="getNext" >
                 		<bean:message key="button.personaltask.getnext" />
               		</html:submit>

@@ -1505,6 +1505,13 @@ public class TracingConstants {
 	public static final String VIEW_CORRESPONDENCE = "viewCorrespondence"; //For Paxview Correspondence Task
 	public static final String DOCUMENT_PRINT_COMMUNICATIONS = "documentPrintCommunications";
 	
+	public static final String ACTIVITY_CODE_INBOUND_MAIL = "99";
+	public static final String ACTIVITY_CODE_INBOUND_FAX = "99F";
+	public static final String ACTIVITY_CODE_INBOUND_CURE = "99C";
+	public static final String ACTIVITY_CODE_INBOUND_PORTAL = "99E";
+	public static final String ACTIVITY_CODE_RECEIVED_DAMAGED_ITEM = "10";
+	
+	
 	public static final String TASKS_VIEW_PENDING = "viewPendingTasks";
 
 	public static final int CLAIM_CHECK = 3;

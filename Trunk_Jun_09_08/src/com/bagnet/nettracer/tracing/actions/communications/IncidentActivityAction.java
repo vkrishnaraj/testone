@@ -32,8 +32,10 @@ import com.bagnet.nettracer.tracing.service.IncidentActivityService;
 import com.bagnet.nettracer.tracing.utils.DomainUtils;
 import com.bagnet.nettracer.tracing.utils.EmailUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
+import com.bagnet.nettracer.tracing.utils.StringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
+import com.bagnet.nettracer.tracing.utils.taskmanager.InboundTasksUtils;
 
 public class IncidentActivityAction extends CheckedAction {
 	
@@ -77,13 +79,32 @@ public class IncidentActivityAction extends CheckedAction {
 			response.sendRedirect("customerCommunications.do?incident="+incidentId+"&expense="+expenseId+"&templateId="+request.getParameter("templateId"));
 			return null;
 		} else if(TracingConstants.OUTBOUND_CORRESPONDANCE.equals(activity)){
-
-			success = createActivity(incidentId, activity, user, messages, myform.getOutMessage());
+			long incidentActivityId = createActivity(incidentId, activity, user, messages, myform.getOutMessage());
+			success = incidentActivityId > 0;
+			if(success){
+				IncidentActivity ia = incidentActivityService.load(incidentActivityId);
+				success = createOCMessage(user, ia, messages, activity);
+			}
+			
 		} else if (TracingConstants.COMMAND_CREATE.equalsIgnoreCase(command)) {
-			success = createActivity(incidentId, activity, user, messages, null);
+			long incidentActivityId = createActivity(incidentId, activity, user, messages, null);
+			success = incidentActivityId > 0;
+			if(success){
+				IncidentActivity ia = incidentActivityService.load(incidentActivityId);
+				success = createOCMessage(user, ia, messages, activity);
+				if(success){
+					createInboundTask(user, ia);
+				}
+			}			
 		} else if (TracingConstants.COMMAND_DELETE.equalsIgnoreCase(command)
 				&& UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_DELETE, user)) {
-			success = deleteActivity(request.getParameter("activity"), incidentId, messages);
+			
+			long activityId = StringUtils.getLong(request.getParameter("activity"));
+			success = deleteActivity(activityId, incidentId, messages);
+			if(success){
+				InboundTasksUtils.closeTaskByIncidentActivityId(activityId, user);
+			}
+			
 		}
 		
 		if (!messages.isEmpty()) {
@@ -95,19 +116,19 @@ public class IncidentActivityAction extends CheckedAction {
 		return null;
 	}
 	
-	private boolean createActivity(String incidentId, String activityId, Agent user, ActionMessages messages, String message) {
-		boolean success = false;
+	private long createActivity(String incidentId, String activityId, Agent user, ActionMessages messages, String message) {
+		long incidentActivityID = -1;
 		
 		Activity activity = getActivityFromParam(activityId, messages);
 		if (activity == null) {
 			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.unable.to.find.activity"));
-			return success;
+			return -1;
 		}
 		
 		Incident incident = new IncidentBMO().findIncidentByID(incidentId);
 		if (incident == null) {
 			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.unable.to.find.incident", new Object[] { incidentId }));
-			return success;
+			return -1;
 		}
 		
 		IncidentActivity ia = DomainUtils.createIncidentActivity(incident, activity, user);
@@ -115,26 +136,30 @@ public class IncidentActivityAction extends CheckedAction {
 			ia.setPublishedDate(new Date());
 		}
 		
-		success = incidentActivityService.save(ia) != 0;
-		if (!success) {
+		incidentActivityID = incidentActivityService.save(ia);
+		if (incidentActivityID <= 0) {
 			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.unable.to.create", new Object[] { activity.getDescription() }));
 		}
-
-		if(message!=null && !message.isEmpty()){
+		return incidentActivityID;
+	}
+	
+	private boolean createOCMessage(Agent user, IncidentActivity ia, ActionMessages messages, String message){
+		boolean success = false;
+		if(message!=null && !message.isEmpty() && ia != null && ia.getIncident() != null){
 			OnlineClaimsDao dao=new OnlineClaimsDao();
-			OnlineClaim c=dao.getOnlineClaim(incidentId);
+			OnlineClaim c=dao.getOnlineClaim(ia.getIncident().getIncident_ID());
 			if (c == null) {
 				try {
 					String fName="";
 					String name="";
-					if(incident.getPassenger_list()!=null && incident.getPassenger_list().get(0)!=null){
-						Passenger p=incident.getPassenger_list().get(0);
+					if(ia.getIncident().getPassenger_list()!=null && ia.getIncident().getPassenger_list().get(0)!=null){
+						Passenger p=ia.getIncident().getPassenger_list().get(0);
 						fName=p.getFirstname();
 						name=p.getLastname();
 					}
-					c = dao.createOnlineClaim(incidentId, null, fName, name);
+					c = dao.createOnlineClaim(ia.getIncident().getIncident_ID(), null, fName, name);
 	
-					dao.saveOnlineClaimWsUseOnly(c, incidentId, null, null);
+					dao.saveOnlineClaimWsUseOnly(c, ia.getIncident().getIncident_ID(), null, null);
 					
 				} catch (AuthorizationException e) {
 					// TODO Auto-generated catch block
@@ -147,17 +172,19 @@ public class IncidentActivityAction extends CheckedAction {
 			newmessage.setUsername(user.getFirstname()+" "+user.getLastname());
 			newmessage.setIncAct(ia);
 			newmessage.setClaim(c);
-			if(incident.getCustCommId()==TracingConstants.CUST_COMM_WEB_PORTAL) {
+			if(ia.getIncident().getCustCommId()==TracingConstants.CUST_COMM_WEB_PORTAL) {
 				newmessage.setPublish(true);
 				newmessage.setStatusId(TracingConstants.OC_STATUS_PUBLISHED);
 			} else {
 				newmessage.setPublish(false);
 				newmessage.setStatusId(TracingConstants.OC_STATUS_UNPUBLISHED);
 			}
+			
 			success=dao.saveMessage(newmessage);
+			
 			if (!success) {
-				messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.unable.to.create.message", new Object[] { activity.getDescription() }));
-			} else if(incident.getCustCommId()==TracingConstants.CUST_COMM_WEB_PORTAL) {
+				messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.unable.to.create.message", new Object[] { ia.getActivity().getDescription() }));
+			} else if(ia.getIncident().getCustCommId()==TracingConstants.CUST_COMM_WEB_PORTAL) {
 
 				ServletContext sc = getServlet().getServletContext();
 				String realpath = sc.getRealPath("/");
@@ -169,19 +196,23 @@ public class IncidentActivityAction extends CheckedAction {
 				}
 			}
 		}
-		
 		return success;
 	}
 	
-	private boolean deleteActivity(String activityId, String incidentId, ActionMessages messages) {
+	private void createInboundTask(Agent user, IncidentActivity ia){
+		String code = ia.getActivity().getCode();
+		if(TracingConstants.ACTIVITY_CODE_INBOUND_CURE.equals(code) ||
+		   TracingConstants.ACTIVITY_CODE_INBOUND_FAX.equals(code) ||
+		   TracingConstants.ACTIVITY_CODE_INBOUND_MAIL.equals(code) ||
+		   TracingConstants.ACTIVITY_CODE_INBOUND_PORTAL.equals(code)){
+			InboundTasksUtils.createInboundTask(ia.getIncident(), user, ia.getActivity(), ia.getId());
+		}
+	}
+
+	private boolean deleteActivity(long activityId, String incidentId, ActionMessages messages) {
 		boolean success = false;
-		try {
-			long iaId = Long.parseLong(activityId);
-			if (incidentActivityService.activityBelongsToIncident(iaId, incidentId)) {
-				incidentActivityService.delete(iaId);
-			}
-		} catch (NumberFormatException nfe) {
-			logger.error("Could not delete activity with id: " + activityId, nfe);
+		if (incidentActivityService.activityBelongsToIncident(activityId, incidentId)) {
+			success = incidentActivityService.delete(activityId);
 		}
 		return success;
 	}

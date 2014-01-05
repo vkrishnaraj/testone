@@ -10,6 +10,7 @@ public class InboundTasksDTO {
 	private Agent assigned_agent;
 	private boolean searchUnassignedTasks;
 	private Status status;
+	private long incidentActivityId;
 	
 	private int startIndex;
 	private int maxResults;
@@ -65,5 +66,11 @@ public class InboundTasksDTO {
 	}
 	public void setSearchUnassignedTasks(boolean searchUnassignedTasks) {
 		this.searchUnassignedTasks = searchUnassignedTasks;
+	}
+	public long getIncidentActivityId() {
+		return incidentActivityId;
+	}
+	public void setIncidentActivityId(long incidentActivityId) {
+		this.incidentActivityId = incidentActivityId;
 	}
 }
