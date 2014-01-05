@@ -2,6 +2,7 @@ package aero.nettracer.portal.control;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -127,6 +128,8 @@ public class CustomerPortalController {
 							FileHelper.saveImage(passengerBean.getIncidentID(),
 									fileName, data);
 							file.setPath(FileHelper.getPath());
+					        file.setPublish(true);
+					        file.setDateUploaded(Calendar.getInstance());
 							passengerBean.getFiles().add(file);
 							fileDataModelList = new ListDataModel(
 									passengerBean.getFiles());

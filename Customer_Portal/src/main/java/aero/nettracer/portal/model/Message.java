@@ -54,6 +54,12 @@ public class Message {
 	public void setStatusId(int statusId) {
 		this.statusId = statusId;
 	}
+	public String getFormattedMessage() {
+		if (getMessage() != null) {
+			return getMessage().replaceAll("\n", "<br/>");
+		}
+		return "";
+	}
 	
 	
 }
