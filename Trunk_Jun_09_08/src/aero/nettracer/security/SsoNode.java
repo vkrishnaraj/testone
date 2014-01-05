@@ -1,10 +1,10 @@
 package aero.nettracer.security;
 
+
 public class SsoNode {
 	private String companycode;
 	private String username;
 	private boolean validAssertion;
-	private boolean autoProvision;
 	private String group;
 	private String station;
 	private String firstname;
@@ -50,5 +50,17 @@ public class SsoNode {
 	}
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
+	}
+	
+	public String toString(){
+		String s = "";
+		s += "username: " 	+ username	+ "\n";
+		s += "station: " 	+ station 	+ "\n";
+		s += "group: "	 	+ group 	+ "\n";
+		s += "firstname: "	+ firstname + "\n";
+		s += "lastname: "   + lastname  + "\n";
+		s += "isValid: "    + validAssertion  + "\n";
+		return s;
+
 	}
 }

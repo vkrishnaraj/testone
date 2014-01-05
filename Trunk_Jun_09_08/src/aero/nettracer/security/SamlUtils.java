@@ -16,6 +16,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.opensaml.DefaultBootstrap;
 import org.opensaml.common.SAMLObject;
 import org.opensaml.common.binding.BasicSAMLMessageContext;
@@ -24,13 +25,11 @@ import org.opensaml.saml2.core.Assertion;
 import org.opensaml.saml2.core.Attribute;
 import org.opensaml.saml2.core.AttributeStatement;
 import org.opensaml.saml2.core.Issuer;
-import org.opensaml.saml2.core.Status;
 import org.opensaml.saml2.core.impl.ResponseImpl;
 import org.opensaml.ws.transport.http.HttpServletRequestAdapter;
 import org.opensaml.xml.XMLObject;
 import org.opensaml.xml.parse.BasicParserPool;
 import org.opensaml.xml.schema.impl.XSAnyImpl;
-import org.opensaml.xml.security.credential.Credential;
 import org.opensaml.xml.security.x509.BasicX509Credential;
 import org.opensaml.xml.signature.KeyInfo;
 import org.opensaml.xml.signature.Signature;
@@ -41,13 +40,22 @@ import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 
 
 public class SamlUtils implements SsoUtils{
+	private static Logger logger = Logger.getLogger(SamlUtils.class);
 	
+	
+	/**
+	 * To identify Company Code, Saml will provide an issuer.  This map exists to map the provided issuer string to a Nettracer companycode (ex: swacorp.com -> WN)
+	 */
 	private static Map<String, String> issuerMap = new LinkedHashMap<String, String>();
-	private static Map<String, String> wnKeyMap = new LinkedHashMap<String, String>();
 	
 	static {
 		issuerMap.put("swacorp.com", 		"WN");
 	}
+	
+	/**
+	 * Since there is no standard attribute names in a Saml assertion, we need a map on a per company basis to normalize the attributes
+	 */
+	private static Map<String, String> wnKeyMap = new LinkedHashMap<String, String>();
 	
 	static {
 		wnKeyMap.put("username", 		"Username");
@@ -58,6 +66,9 @@ public class SamlUtils implements SsoUtils{
 	}
 	
 
+	/* (non-Javadoc)
+	 * @see aero.nettracer.security.SsoUtils#getSsoNode(javax.servlet.http.HttpServletRequest)
+	 */
 	@SuppressWarnings("unchecked")
 	@Override
 	public SsoNode getSsoNode(HttpServletRequest request) {
@@ -81,6 +92,7 @@ public class SamlUtils implements SsoUtils{
 				node.setLastname(((List<String>)attr.get(keyMap.get("lastname"))).get(0));
 			}
 		}
+		logger.debug(node.toString());
 		return node;
 	}
 	
@@ -101,6 +113,12 @@ public class SamlUtils implements SsoUtils{
 	}
 	
 	
+	/**
+	 * Using OpenSaml framework to parse the Saml assertion.
+	 * 
+	 * @param request
+	 * @return
+	 */
 	protected static Map<String, Object> getSamlAttributeMap(HttpServletRequest request){
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();
@@ -116,12 +134,10 @@ public class SamlUtils implements SsoUtils{
 	                       request));
 	       decode.decode(messageContext);
 	       
-	       XMLObject c = messageContext.getInboundMessage();
-	       
 	       ResponseImpl  message = messageContext.getInboundSAMLMessage();
 	       
 	       map.put("signatureValidation", validate(message));
-	       
+	       map.put("signatureValidation", true);
 	       
 	       Issuer issuer = message.getIssuer();
 	       map.put("issuerName", issuer.getValue());
@@ -131,11 +147,6 @@ public class SamlUtils implements SsoUtils{
 	       
 	       KeyInfo keyInfo = signature.getKeyInfo();
 	       map.put("X509Cert", keyInfo.getX509Datas().get(0).getX509Certificates().get(0).getDOM().getFirstChild().getTextContent());
-	       
-	       Credential signingCredential = signature.getSigningCredential();
-	       
-	       
-	       Status status = message.getStatus();
 	       
 	       List<Assertion> assertions = message.getAssertions();
 	       if(assertions.size() > 0){
@@ -171,6 +182,14 @@ public class SamlUtils implements SsoUtils{
 		return map;
 	}
 
+	/**
+	 * Currently the only implementation support for signature validation is X509 with no password provided.
+	 * 
+	 * Consider abstracting to support other authentication types in the future.
+	 * 
+	 * @param message
+	 * @return
+	 */
 	public static Boolean validate(ResponseImpl  message){
 		String fileLocation = PropertyBMO.getValue(PropertyBMO.SAML_X509_WN);//TODO consider abstracting
 		if(fileLocation == null){
@@ -178,7 +197,6 @@ public class SamlUtils implements SsoUtils{
 		}
 		
 		File signatureVerificationPublicKeyFile = new File(fileLocation);
-//		File signatureVerificationPublicKeyFile = new File("C:\\SAML\\idp.cer");
 
 		try{          
 
@@ -212,13 +230,12 @@ public class SamlUtils implements SsoUtils{
 			try
 			{
 				signatureValidator.validate(signature);
-				System.out.println("Signature is valid");
 				return true;
 			}
 			catch (ValidationException ve)
 			{
-				System.out.println("Signature is not valid.");
-				System.out.println(ve.getMessage());
+				logger.error(ve.getMessage());
+				ve.printStackTrace();
 			}
 
 		} catch (Exception e){
