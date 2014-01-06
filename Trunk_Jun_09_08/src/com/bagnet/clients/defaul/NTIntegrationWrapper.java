@@ -166,7 +166,7 @@ public class NTIntegrationWrapper extends IntegrationWrapper {
 			Voucher voucher = voucherDoc.addNewVoucher();
 
 			voucher.setPnr((inc.getRecordlocator() != null) ? inc.getRecordlocator() : "");//ntvoucher.getPnr();
-			String stationId = inc.getStation_ID() + "";
+			String stationId = Integer.toString(epf.getExpenselocation_ID());
 			Station station = StationBMO.getStation(stationId);
 
 			voucher.setStation((station.getStationcode() != null) ? station.getStationcode() : "");
