@@ -234,6 +234,20 @@ public class InboundTasksUtils {
 		}
 	}
 	
+	public static InboundQueueTask getInboundTaskByActivityId(long id){
+		InboundTasksDTO dto = new InboundTasksDTO();
+		dto.setIncidentActivityId(id);
+		Status status = new Status();
+		status.setStatus_ID(TracingConstants.TASK_MANAGER_OPEN);
+		dto.setStatus(status);
+		List<InboundQueueTask> taskList = getInboundTasksBMO().getTasks(dto);
+		if(taskList != null && taskList.size() == 1){
+					return taskList.get(0);
+		} else {
+			return null;
+		}
+	}
+	
 	public static boolean hasOpenInboundTaskByActivityId(long id){
 		InboundTasksDTO dto = new InboundTasksDTO();
 		dto.setIncidentActivityId(id);
