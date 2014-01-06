@@ -437,7 +437,7 @@
 		<tr>
 			<td style="width:50%;text-align:right;">Enter Outbound message:<br/></td>
 			<td>
-				<textarea id="outboundMessage" rows="4" cols="50" styleClass="textfield"           
+				<textarea id="outboundMessage" rows="4" cols="40" styleClass="textfield"           
 					onkeydown="textCounter(outboundMessage, counter, 10000); insertNewLine3();" 
     								onkeyup="textCounter(outboundMessage, counter, 10000);"></textarea>
 				<input id="counter" value="10000" size="4" disabled />

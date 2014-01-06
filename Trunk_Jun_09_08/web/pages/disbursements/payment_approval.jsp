@@ -292,7 +292,7 @@ function sortTable(sortOrder) {
 			<tr>
 				<td class="header"><bean:message key="colname.remark" /></td>
 				<td>
-					<textarea id="taskRemark" rows="4" cols="50" maxlength="255" styleClass="textfield"           
+					<textarea id="taskRemark" rows="4" cols="40" maxlength="255" styleClass="textfield"           
 						onkeydown="textCounter(taskRemark, counter, 255);" 
      								onkeyup="textCounter(taskRemark, counter, 255);"></textarea>
 					<input id="counter" value="255" size="4" disabled />
