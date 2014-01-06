@@ -174,7 +174,6 @@ public class SamlUtils implements SsoUtils{
 	       ResponseImpl  message = messageContext.getInboundSAMLMessage();
 	       
 	       map.put("signatureValidation", validate(message));
-	       map.put("signatureValidation", true);
 	       
 	       Issuer issuer = message.getIssuer();
 	       map.put("issuerName", issuer.getValue());
