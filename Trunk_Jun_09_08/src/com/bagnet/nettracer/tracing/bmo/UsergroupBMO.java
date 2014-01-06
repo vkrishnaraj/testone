@@ -87,11 +87,13 @@ public class UsergroupBMO {
 				return nameMap;
 			}
 		} catch (Exception e) {
-			logger.error("unable to retrieve usergroup from database: " + e);
+			logger.error("unable to retrieve usergroupnamemap from database: " + e);
 			e.printStackTrace();
 			return null;
 		} finally {
-			sess.close();
+			if(sess!=null && sess.isOpen()){
+				sess.close();
+			}
 		}
 		return null;
 	}
