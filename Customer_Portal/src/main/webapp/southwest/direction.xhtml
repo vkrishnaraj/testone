@@ -106,9 +106,9 @@
 			
 			<rich:spacer width="100%" height="10" title=""/>
 				
-			<p><t:outputText value="#{msg.status_text_past_msgs}" /></p>
+			<t:outputText value="#{msg.status_text_past_msgs}" rendered="#{not empty customerPortal.previousObjects}"/>
 			
-			<rich:spacer width="100%" height="10" title=""/>
+			<rich:spacer width="100%" height="10" title="" rendered="#{not empty customerPortal.previousObjects}"/>
 			
 			<a4j:outputPanel id="messagePanel" ajaxRendered="true">
 				<t:dataTable width="80%" align="center" id="messageTable" value="#{customerPortal.previousObjects}" var="obj" rowClasses="baginfo-row-a,baginfo-row-b">
@@ -131,7 +131,7 @@
 				
 			</a4j:outputPanel>
 				
-			<rich:spacer width="100%" height="30" title=""/>
+			<rich:spacer width="100%" height="30" title="" rendered="#{not empty customerPortal.previousObjects}"/>
 			
 			<p class="contentSubHeader"><t:outputText value="#{msg.status_title_files}" />	</p>
 			
