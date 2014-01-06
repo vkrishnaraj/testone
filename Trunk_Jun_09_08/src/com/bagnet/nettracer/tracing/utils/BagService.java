@@ -99,6 +99,7 @@ import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemIncident;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OCFile;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OCMessage;
+import com.bagnet.nettracer.tracing.db.taskmanager.InboundQueueTask;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCloseOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqOhdAction;
 import com.bagnet.nettracer.tracing.dto.FileDTO;
@@ -845,8 +846,14 @@ public class BagService {
 				ep.setExpensepayout_ID(0);
 			}
 			
+			HashMap<IncidentActivity, InboundQueueTask> inboundMap = new HashMap<IncidentActivity, InboundQueueTask>();
+			
 			if(iDTO.getActivities()!=null){
 				for(IncidentActivity ia: iDTO.getActivities()){
+					InboundQueueTask task = InboundTasksUtils.getInboundTaskByActivityId(ia.getId());
+					if(task != null){
+						inboundMap.put(ia, task);
+					}
 					ia.setId(0); 
 					ia.setIncident(iDTO);
 				}
@@ -870,17 +877,21 @@ public class BagService {
 						&& iDTO.getStatus().getStatus_ID()==13 && mod_agent.getStation().getStation_ID() == theform.getFaultstation_id() );
 				if (stationLock) { // If true save remarks and loss code. Otherwise just save remarks.
 					result = iBMO.updateRemarksAndLossCodeOnly(iDTO.getIncident_ID(), iDTO.getRemarks(), mod_agent, iDTO.getLoss_code());
+					updateInboundQueueTasks(iDTO.getIncident_ID(), inboundMap);
 				} else if(theform.getAllow_remark_update() == 1) {
 					result = iBMO.updateRemarksOnly(iDTO.getIncident_ID(), iDTO.getRemarks(), mod_agent);
+					updateInboundQueueTasks(iDTO.getIncident_ID(), inboundMap);
 				}
 			}
 			else {
 				try{
 					if(setToClosedStatus && checkClosedStatus) {
 						result = iBMO.insertIncident(true, iDTO, theform.getAssoc_ID(), mod_agent, true);
+						updateInboundQueueTasks(iDTO.getIncident_ID(), inboundMap);
 					}
 					else {
 						result = iBMO.insertIncident(true, iDTO, theform.getAssoc_ID(), mod_agent, false);
+						updateInboundQueueTasks(iDTO.getIncident_ID(), inboundMap);
 					}
 					
 					if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_CREATE, mod_agent)) {
@@ -1221,6 +1232,7 @@ public class BagService {
 			BeanUtils.copyProperties(iDTO, theform);
 			Incident oInc=IncidentBMO.getIncidentByID(iDTO.getIncident_ID(), null);
 			
+			HashMap<IncidentActivity, InboundQueueTask> inboundMap = new HashMap<IncidentActivity, InboundQueueTask>();
 			
 			if(iDTO.getAgentassigned() == null || iDTO.getAgentassigned().getAgent_ID() == 0)
 				iDTO.setAgentassigned(null);
@@ -1403,9 +1415,14 @@ public class BagService {
 					ep.setIncident(iDTO);
 					ep.setExpensepayout_ID(0);
 				}
-
+				
 				if(iDTO.getActivities()!=null){
 					for(IncidentActivity ia: iDTO.getActivities()){
+						//need to save InboundQueueTask to update with new IncidentActivity ids
+						InboundQueueTask task = InboundTasksUtils.getInboundTaskByActivityId(ia.getId());
+						if(task != null){
+							inboundMap.put(ia, task);
+						}
 						ia.setId(0); 
 						ia.setIncident(iDTO);
 					}
@@ -1420,6 +1437,7 @@ public class BagService {
 				int result = -1;
 				try{
 					result=iBMO.insertItemContents(true, ilist,mod_agent, iDTO);
+					updateInboundQueueTasks(iDTO.getIncident_ID(), inboundMap);
 				} catch(Exception e){
 					e.printStackTrace();
 				}
@@ -1429,6 +1447,7 @@ public class BagService {
 					else
 						return new ActionMessage("error.unable_to_insert_incident");
 				}
+				
 				
 			}
 			return null;
@@ -2717,7 +2736,37 @@ public class BagService {
 			e.printStackTrace();
 			return false;
 		}
+
 	}
 
+	
+	public void updateInboundQueueTasks(String incidentId, HashMap<IncidentActivity, InboundQueueTask> inboundMap){
+		try{
+			if(inboundMap == null || inboundMap.size() == 0){
+				return;
+			}
+			Incident inboundIncident = IncidentBMO.getIncidentByID(incidentId, null);
+			Set<IncidentActivity> updatedActivities = inboundIncident.getActivities();
+			if(updatedActivities != null){
+				for(IncidentActivity ia:inboundMap.keySet()){
+					InboundQueueTask task = inboundMap.get(ia);
+					if(task != null){
+						for(IncidentActivity uia:updatedActivities){
+							if(uia.getActivity().getCode().equals(ia.getActivity().getCode()) &&
+									uia.getCreateDate().equals(ia.getCreateDate())){
+								task.getInboundqueue().setIncidentActivityId(uia.getId());
+								InboundTasksUtils.saveTask(task, null);
+							}
+						}
+					}
+				}
+			}
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	
 
 }
+
+
