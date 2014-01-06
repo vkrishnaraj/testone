@@ -69,9 +69,10 @@ public class CustomerPortalController {
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
 			baggageState = (Long) session.getAttribute("baggageState");
 			passengerBean = (PassengerBean) session.getAttribute("passengerBean");
-			if (null != passengerBean.getNewFiles() && passengerBean.getNewFiles().size() > 0) {
-				fileDataModelList = new ListDataModel<File>(passengerBean.getNewFiles());
+			if (null == passengerBean.getNewFiles()) {
+				passengerBean.setNewFiles(new ArrayList<File>());
 			}
+			fileDataModelList = new ListDataModel<File>(passengerBean.getNewFiles());
 			previousObjects = generatePreviousList();
 		} else {
 			FacesUtil.addError("Your session has been expired. Please log in again");
@@ -267,9 +268,10 @@ public class CustomerPortalController {
 				passengerBean.setIncidentID(passData.getIncidentID());
 				session.setAttribute("claim", claim);
 				session.setAttribute("passengerBean", passengerBean);
-				if (null != passengerBean.getNewFiles() && passengerBean.getNewFiles().size() > 0) {
-					fileDataModelList = new ListDataModel<File>(passengerBean.getNewFiles());
+				if (null == passengerBean.getNewFiles()) {
+					passengerBean.setNewFiles(new ArrayList<File>());
 				}
+				fileDataModelList = new ListDataModel<File>(passengerBean.getNewFiles());
 				previousObjects = generatePreviousList();
 				
 				return null;
