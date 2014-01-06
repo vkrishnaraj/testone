@@ -129,7 +129,7 @@ public class SamlUtils implements SsoUtils{
 			
 			node.setValidAssertion(validAssertion && validAttributes);
 		}
-		logger.debug(node.toString());
+		logger.info(node.toString());
 		return node;
 	}
 	
@@ -213,6 +213,7 @@ public class SamlUtils implements SsoUtils{
 	       
 	       
 		}catch (Exception e){
+			map.put("signatureValidation", false);
 			e.printStackTrace();
 		}
 		return map;
