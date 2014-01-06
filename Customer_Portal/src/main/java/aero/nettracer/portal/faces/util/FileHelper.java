@@ -6,8 +6,10 @@ import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import aero.nettracer.portal.utils.ClaimsProperties;
+
 public class FileHelper {
-	public static final String BASE_PATH = "C:/nettracer_claims_files/";
+	public static final String BASE_PATH = ClaimsProperties.get(ClaimsProperties.FILE_SERVER);
 	private static String path;
 	
 	private static String getFilePath(String incidentId) {

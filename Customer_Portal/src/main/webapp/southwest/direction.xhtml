@@ -111,7 +111,7 @@
 			<rich:spacer width="100%" height="10" title=""/>
 			
 			<a4j:outputPanel id="messagePanel" ajaxRendered="true">
-				<t:dataTable width="80%" align="center" id="messageTable" value="#{customerPortal.previousObjects}" var="obj" border="1">
+				<t:dataTable width="80%" align="center" id="messageTable" value="#{customerPortal.previousObjects}" var="obj" rowClasses="baginfo-row-a,baginfo-row-b">
 						
 					<f:facet name="spacer">
           				<f:verbatim>&amp;#160;</f:verbatim>
@@ -120,16 +120,11 @@
 				        <f:facet name="header">
 				            <h:outputText value="#{msg.status_column_message}"/>
 				        </f:facet>
+						<h:outputText value="#{obj.username}#{obj.dispDateCreated}" style="font-weight:bold;"/><br/>
 						<h:outputLink value="/customer-portal/showImage?ID=#{obj.path}/#{obj.column1}" rendered="#{obj.downloadable}" target="blank">
 							<h:outputText value="#{obj.column1}" />
 						</h:outputLink>
-						<h:outputText value="#{obj.column1}" rendered="#{!obj.downloadable}" escape="false"/>
-					</h:column>
-					<h:column rendered="#{obj.publish}">
-				        <f:facet name="header">
-				            <h:outputText value="#{msg.status_column_sender}"/>
-				        </f:facet>
-						<h:outputText value="#{obj.username}#{obj.dispDateCreated}" />
+						<h:outputText value="#{obj.column1}" rendered="#{!obj.downloadable}" escape="false"/><br/><br/>
 					</h:column>
 					
 				</t:dataTable>
@@ -141,9 +136,18 @@
 			<p class="contentSubHeader"><t:outputText value="#{msg.status_title_files}" />	</p>
 			
 			<rich:spacer width="100%" height="10" title=""/>
+				
+			<p><t:outputText value="#{msg.status_text_msg_directions}" /></p>
+			
+			<rich:spacer width="100%" height="20" title=""/>
+			
+			<t:inputTextarea value="#{customerPortal.passengerBean.currentMessage}" style="width:100%;"/>
+			
+			<rich:spacer width="100%" height="10" title=""/>
 			
 			<a4j:outputPanel id="filePanel" ajaxRendered="true">
-				<t:dataTable width="100%" align="center" id="fileTable" 
+			<div style="width:100%;text-align:center;">	
+				<t:dataTable width="80%" id="fileTable" 
 						value="#{customerPortal.fileDataModelList}" var="file">
 					<f:facet name="spacer">
           				<f:verbatim>&amp;#160;</f:verbatim>
@@ -175,24 +179,23 @@
 					</h:column>
 					
 				</t:dataTable>
+			</div>
 				
 			</a4j:outputPanel>
 			
 			<rich:spacer width="100%" height="20" title=""/>
-				
-			<table style="width:100%"><tr>
-				<td><t:inputFileUpload id="fileupload" value="#{customerPortal.upFile}" size="60" /></td>
-				<td><div style="width:100%;text-align:right;">
-					<h:commandButton value="#{msg.status_button_add}" 
-						 	action="#{customerPortal.upload}" styleClass="submitButtonOrange" >
-						 	<a4j:support event="onclick" reRender="filePanel" limitToList="true"/>
-					</h:commandButton>
-				</div></td>
-			</tr></table>
 			
-			<rich:spacer width="100%" height="20" title=""/>
-			
-			<t:inputTextarea value="#{customerPortal.passengerBean.currentMessage}" style="width:100%;"/>
+			<div style="width:100%;text-align:center;">	
+				<table style="width:80%"><tr>
+					<td><t:inputFileUpload id="fileupload" value="#{customerPortal.upFile}" size="60" /></td>
+					<td><div style="width:100%;text-align:right;">
+						<h:commandButton value="#{msg.status_button_add}" 
+							 	action="#{customerPortal.upload}" styleClass="submitButtonOrange" >
+							 	<a4j:support event="onclick" reRender="filePanel" limitToList="true"/>
+						</h:commandButton>
+					</div></td>
+				</tr></table>
+			</div>
 				
 			<rich:spacer width="100%" height="30" title=""/>
 

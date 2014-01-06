@@ -244,8 +244,13 @@ public class CustomerPortalController {
 
 	public String saveToNT(HttpSession session) {
 		logger.debug("saveToNT method is called");
+		if (passengerBean.getCurrentMessage() == null || passengerBean.getCurrentMessage().trim().length() == 0) {
+			FacesUtil.addError("Message is required to send data to Southwest.");
+			return null;
+		}
 		
 			try {
+				
 				boolean saveFile = onlineClaimsWS.sendToNT(passengerBean, (Claim) session.getAttribute("claim"));
 				if (saveFile) {
 					FacesUtil.addInfo("File infomation saved successfully.");
