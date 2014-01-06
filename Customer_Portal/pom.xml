@@ -14,9 +14,53 @@
 	<properties>
 		<org.springframework.version>3.0.5.RELEASE</org.springframework.version>
 	</properties>
+	
+    <profiles>
+      	<profile>
+      		<id>local</id>
+      		<properties>
+        		<ws.location>http\://localhost:8080/ntsouthwest/services/OnlineClaimsService</ws.location>
+        		<file.server>C\:\\nettracer_claims_files\\</file.server>
+      		</properties>
+    	</profile>
+      	<profile>
+      		<id>hudson</id>
+      		<properties>
+        		<ws.location>http\://hudson.nettracer.aero/ntsouthwest/services/OnlineClaimsService</ws.location>
+        		<file.server>\\\\drad.nettracer.aero\\nettracer_claims_files\\hudson\\</file.server>
+      		</properties>
+    	</profile>
+      	<profile>
+      		<id>testing</id>
+      		<properties>
+        		<ws.location>http\://testing.nettracer.aero/ntsouthwest/services/OnlineClaimsService</ws.location>
+        		<file.server>\\\\drad.nettracer.aero\\nettracer_claims_files\\testing\\</file.server>
+      		</properties>
+    	</profile>
+      	<profile>
+      		<id>training</id>
+      		<properties>
+        		<ws.location>http\://training.nettracer.aero/ntsouthwest/services/OnlineClaimsService</ws.location>
+        		<file.server>\\\\drad.nettracer.aero\\nettracer_claims_files\\training\\</file.server>
+      		</properties>
+    	</profile>
+      	<profile>
+      		<id>production</id>
+      		<properties>
+        		<ws.location>http\://live.nettracer.aero/ntsouthwest/services/OnlineClaimsService</ws.location>
+        		<file.server>\\\\file.nettracer.aero\\nettracer_claims_files\\production\\</file.server>
+      		</properties>
+    	</profile>
+    </profiles>
 
 	<build>
 		<finalName>customer_portal</finalName>
+	    <resources>
+	      <resource>
+	        <directory>src/main/resources</directory>
+	        <filtering>true</filtering>
+	      </resource>
+	    </resources>
 		<plugins>
 
 			<plugin>
