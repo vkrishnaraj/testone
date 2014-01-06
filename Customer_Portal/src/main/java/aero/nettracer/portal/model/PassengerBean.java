@@ -84,6 +84,7 @@ public class PassengerBean {
 	
 	//File Upload
 	private List<File> files = new ArrayList<File>();
+	private List<File> newFiles = new ArrayList<File>();
 	
 	//Messages
 	private List<Message> messages = new ArrayList<Message>();
@@ -446,6 +447,14 @@ public class PassengerBean {
 	public void setFiles(List<File> files) {
 		this.files = files;
 	}
+	public List<File> getNewFiles() {
+		return newFiles;
+	}
+
+	public void setNewFiles(List<File> newFiles) {
+		this.newFiles = newFiles;
+	}
+
 	public String getStatus() {
 		return status;
 	}

@@ -150,7 +150,7 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 
 		setWSPassengers(passengerBean.getPassengers(), claim);
 
-		setWSFiles(passengerBean.getFiles(), claim);
+		setWSFiles(passengerBean.getNewFiles(), passengerBean.getFiles(), claim);
 
 		setWSMessages(passengerBean.getCurrentMessage(), passengerBean.getMessages(), claim);
 		
@@ -242,10 +242,19 @@ public class OnlineClaimsWSImpl implements OnlineClaimsWS {
 
 	}
 	
-	private void setWSFiles(List<File> files, Claim claim) {
+	private void setWSFiles(List<File> newFiles, List<File> files, Claim claim) {
 		com.bagnet.nettracer.ws.onlineclaims.xsd.File[] wsFileArray=null;
 		com.bagnet.nettracer.ws.onlineclaims.xsd.File wsFile=null;
 		File file=null;
+		
+		if (newFiles != null && newFiles.size() > 0) {
+			for (File newFile : newFiles) {
+				if (files == null) {
+					files = new ArrayList<File>();
+				}
+				files.add(newFile);
+			}
+		}
 
 		if(null != files && files.size() >0){
 			wsFileArray = new com.bagnet.nettracer.ws.onlineclaims.xsd.File[files.size()];

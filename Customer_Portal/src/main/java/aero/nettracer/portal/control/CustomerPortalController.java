@@ -69,8 +69,8 @@ public class CustomerPortalController {
 		if (null != session && null != session.getAttribute("loggedPassenger")) {
 			baggageState = (Long) session.getAttribute("baggageState");
 			passengerBean = (PassengerBean) session.getAttribute("passengerBean");
-			if (null != passengerBean.getFiles() && passengerBean.getFiles().size() > 0) {
-				fileDataModelList = new ListDataModel<File>(new ArrayList<File>());
+			if (null != passengerBean.getNewFiles() && passengerBean.getNewFiles().size() > 0) {
+				fileDataModelList = new ListDataModel<File>(passengerBean.getNewFiles());
 			}
 			previousObjects = generatePreviousList();
 		} else {
@@ -161,8 +161,8 @@ public class CustomerPortalController {
 						file.setLength(upFile.getSize());
 						file.setData(data);
 						// file.setId(fileId++);
-						if (passengerBean.getFiles() != null) {
-							List<File> existingFiles = passengerBean.getFiles();
+						if (passengerBean.getNewFiles() != null) {
+							List<File> existingFiles = passengerBean.getNewFiles();
 							for (File existingFile : existingFiles) {
 								if (fileName.equals(existingFile.getName())) {
 									logger.warn("File is already existing");
@@ -176,9 +176,9 @@ public class CustomerPortalController {
 							file.setPath(FileHelper.getPath());
 					        file.setPublish(true);
 					        file.setDateUploaded(Calendar.getInstance());
-							passengerBean.getFiles().add(file);
+							passengerBean.getNewFiles().add(file);
 							fileDataModelList = new ListDataModel<File>(
-									passengerBean.getFiles());
+									passengerBean.getNewFiles());
 							logger.info("File Uploaded Successfully.");
 						}
 						file = null;
@@ -208,18 +208,18 @@ public class CustomerPortalController {
 	public void removeFileListener(ActionEvent event) {
 		logger.info("removeFileListener called");
 		File file = (File) fileDataModelList.getRowData();
-		List<File> files = passengerBean.getFiles();
+		List<File> files = passengerBean.getNewFiles();
 		int fileSize = files.size();
 		try {
 			FileHelper.deleteImage(passengerBean.getIncidentID(), file.getName(), file.getPath());
 			for (int i = fileSize - 1; i >= 0; i--) {
 				File f = files.get(i);
 				if (f.getName().equals(file.getName())) {
-					passengerBean.getFiles().remove(i);
+					passengerBean.getNewFiles().remove(i);
 				}
 			}
 			fileDataModelList = null;
-			fileDataModelList = new ListDataModel<File>(passengerBean.getFiles());
+			fileDataModelList = new ListDataModel<File>(passengerBean.getNewFiles());
 		} catch (IOException e) {
 			logger.info("File can not be deleted");
 			e.printStackTrace();
@@ -267,6 +267,10 @@ public class CustomerPortalController {
 				passengerBean.setIncidentID(passData.getIncidentID());
 				session.setAttribute("claim", claim);
 				session.setAttribute("passengerBean", passengerBean);
+				if (null != passengerBean.getNewFiles() && passengerBean.getNewFiles().size() > 0) {
+					fileDataModelList = new ListDataModel<File>(passengerBean.getNewFiles());
+				}
+				previousObjects = generatePreviousList();
 				
 				return null;
 			} catch (AxisFault e) {
