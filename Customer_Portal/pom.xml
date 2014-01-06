@@ -38,6 +38,13 @@
       		</properties>
     	</profile>
       	<profile>
+      		<id>testing2</id>
+      		<properties>
+        		<ws.location>http\://testing2.nettracer.aero/ntsouthwest/services/OnlineClaimsService</ws.location>
+        		<file.server>\\\\drad.nettracer.aero\\nettracer_claims_files\\testing2\\</file.server>
+      		</properties>
+    	</profile>
+      	<profile>
       		<id>training</id>
       		<properties>
         		<ws.location>http\://training.nettracer.aero/ntsouthwest/services/OnlineClaimsService</ws.location>
@@ -339,7 +346,7 @@
 			<version>1.0</version>
 			<scope>provided</scope>
 		</dependency>
-<!--  		<dependency>
+<!-- 		<dependency>
    			<groupId>org.apache.axis2</groupId>
 			<artifactId>axis2-parent</artifactId>
 			<version>1.5.1</version>
