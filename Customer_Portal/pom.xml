@@ -33,28 +33,28 @@
       	<profile>
       		<id>testing</id>
       		<properties>
-        		<ws.location>http\://testing.nettracer.aero/ntsouthwest/services/OnlineClaimsService</ws.location>
+        		<ws.location>http\://172.30.68.2:8280/ntsouthwest/services/OnlineClaimsService</ws.location>
         		<file.server>\\\\drad.nettracer.aero\\nettracer_claims_files\\testing\\</file.server>
       		</properties>
     	</profile>
       	<profile>
       		<id>testing2</id>
       		<properties>
-        		<ws.location>http\://testing2.nettracer.aero/ntsouthwest/services/OnlineClaimsService</ws.location>
+        		<ws.location>http\://172.30.68.2:8080/ntsouthwest/services/OnlineClaimsService</ws.location>
         		<file.server>\\\\drad.nettracer.aero\\nettracer_claims_files\\testing2\\</file.server>
       		</properties>
     	</profile>
       	<profile>
       		<id>training</id>
       		<properties>
-        		<ws.location>http\://training.nettracer.aero/ntsouthwest/services/OnlineClaimsService</ws.location>
+        		<ws.location>http\://172.30.68.2:8780/ntsouthwest/services/OnlineClaimsService</ws.location>
         		<file.server>\\\\drad.nettracer.aero\\nettracer_claims_files\\training\\</file.server>
       		</properties>
     	</profile>
       	<profile>
       		<id>production</id>
       		<properties>
-        		<ws.location>http\://live.nettracer.aero/ntsouthwest/services/OnlineClaimsService</ws.location>
+        		<ws.location>https\://live.nettracer.aero/ntsouthwest/services/OnlineClaimsService</ws.location>
         		<file.server>\\\\file.nettracer.aero\\nettracer_claims_files\\production\\</file.server>
       		</properties>
     	</profile>
