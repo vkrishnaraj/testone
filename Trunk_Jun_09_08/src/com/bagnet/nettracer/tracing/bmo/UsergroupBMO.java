@@ -73,18 +73,25 @@ public class UsergroupBMO {
 	@SuppressWarnings("unchecked")
 	private static Map<String,Integer> getUsergroupMapNames(){
 		Map<String,Integer> nameMap=new HashMap<String,Integer>();
-
-		List<UsergroupNameMap> retrieval = null;
-		String hql="from UsergroupNameMap";
-		
-		Session sess = HibernateWrapper.getSession().openSession();
-		Query q=sess.createQuery(hql);
-		retrieval = q.list();
-		if(retrieval!=null){
-			for(UsergroupNameMap name:retrieval){
-				nameMap.put(name.getLdapName(), name.getNtGroupId());
+		Session sess = null;
+		try {
+			List<UsergroupNameMap> retrieval = null;
+			String hql = "from UsergroupNameMap";
+			sess = HibernateWrapper.getSession().openSession();
+			Query q = sess.createQuery(hql);
+			retrieval = q.list();
+			if (retrieval != null) {
+				for (UsergroupNameMap name : retrieval) {
+					nameMap.put(name.getLdapName(), name.getNtGroupId());
+				}
+				return nameMap;
 			}
-			return nameMap;
+		} catch (Exception e) {
+			logger.error("unable to retrieve usergroup from database: " + e);
+			e.printStackTrace();
+			return null;
+		} finally {
+			sess.close();
 		}
 		return null;
 	}
