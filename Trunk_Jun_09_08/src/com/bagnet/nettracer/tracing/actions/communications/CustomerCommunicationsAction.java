@@ -60,6 +60,9 @@ public class CustomerCommunicationsAction extends CheckedAction {
 	private final Status STATUS_PENDING = new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING);
 	private final Status STATUS_FRAUD_REVIEW = new Status(TracingConstants.FINANCE_STATUS_FRAUD_REVIEW);
 	private final Status STATUS_SUPERVISOR_REVIEW = new Status(TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW);
+	private final Status STATUS_AWAITING_DISBURSEMENT = new Status(TracingConstants.FINANCE_STATUS_AWAITING_DISBURSEMENT);
+	private final Status STATUS_PENDING_PRINT = new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING_PRINT);
+	private final Status STATUS_PENDING_WP = new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING_WP);
 	
 	private Logger logger = Logger.getLogger(CustomerCommunicationsAction.class);
 	
@@ -402,17 +405,69 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		
 		boolean success = incidentActivityId != 0;
 		messages.add(ActionMessages.GLOBAL_MESSAGE, getActionMessage(TracingConstants.COMMAND_CREATE, success, ccf.getDocumentTitle()));
-		if (success && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL, user)) {
+		if (success) {
 			if (!incidentActivityService.hasIncidentActivityTask(incidentActivity)) {
-
-				Status s=STATUS_PENDING;
-				if(incidentActivity.getActivity()!=null && incidentActivity.getActivity().getCode().equals(TracingConstants.CREATE_SETTLEMENT_ACTIVITY)){
-					if(user.getStation().getCompany().getVariable().isFraudReview()){
-						s=STATUS_FRAUD_REVIEW;
-					} else {
-						s=STATUS_SUPERVISOR_REVIEW;
+				/** SF:move cust_comm_approval check here to determine what status the task should get
+				 * If They don't have the cust comm approval permission, create as normal
+				 * if they do have the cust comm approval permission, create as a Print or WP Pending task and create the file, but don't publish it
+				 * Added additional logic for fraud/supervisor/awaiting disbursement reviewers
+				 */
+				boolean custCommApprove=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL, user);
+				boolean fraudReview=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_FRAUD_REVIEW, user);
+				boolean supervisorReview=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SUPERVISOR_REVIEW, user);
+				boolean paymentReview=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAYMENT_APPROVAL, user);
+				boolean isClaimSettlement=incidentActivity.getActivity()!=null && incidentActivity.getActivity().getCode().equals(TracingConstants.CREATE_SETTLEMENT_ACTIVITY);
+				Status s=null;
+				
+				if(!custCommApprove && !fraudReview && !supervisorReview && !paymentReview){
+					s=STATUS_PENDING;
+					if(isClaimSettlement){
+						if(user.getStation().getCompany().getVariable().isFraudReview()){
+							s=STATUS_FRAUD_REVIEW;
+						} else {
+							s=STATUS_SUPERVISOR_REVIEW;
+						}
 					}
+				} else if((supervisorReview || paymentReview) && isClaimSettlement) {
+					/**
+					 * SF: If the User is a Payment Approver user, the task will
+					 * be put into the payment approval queue because the
+					 * expense still needs a draft number, draft date, and mail
+					 * date
+					 **/
+					s=STATUS_AWAITING_DISBURSEMENT;
+				} else if(fraudReview && isClaimSettlement) {
+					s=STATUS_SUPERVISOR_REVIEW;
+				} else if(custCommApprove) {
+					/**
+					 * SF: If the User is a Cust Comm Approver user, but they're
+					 * creating a Claim Settlement Letter, then it should apply
+					 * to the Payment Approval Process not the Letter Approval
+					 * Process
+					 **/
+					if(isClaimSettlement){
+						if(user.getStation().getCompany().getVariable().isFraudReview()){
+							s=STATUS_FRAUD_REVIEW;
+						} else {
+							s=STATUS_SUPERVISOR_REVIEW;
+						}
+					} else {
+						switch(incidentActivity.getCustCommId()) {
+							case TracingConstants.CUST_COMM_POSTAL_MAIL:
+								s=STATUS_PENDING_PRINT;
+								break;
+							case TracingConstants.CUST_COMM_WEB_PORTAL:
+								s=STATUS_PENDING_WP;
+								break;
+							default:
+								logger.error("Invalid value found for customer communication method id: " + incidentActivity.getCustCommId());
+								return false;
+						}
+					}
+				} else {
+					s=STATUS_PENDING;
 				}
+				
 				if (!incidentActivityService.createTask(incidentActivity, s)) {
 					logger.error("Failed to create a task for IncidentActivity with id: " + incidentActivityId);
 				}
@@ -432,21 +487,48 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		
 		boolean success = incidentActivityService.update(incidentActivity);
 		messages.add(ActionMessages.GLOBAL_MESSAGE, getActionMessage(TracingConstants.COMMAND_UPDATE, success, ccf.getDocumentTitle()));
-
-		if (success && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL, user) && 
-				!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_FRAUD_REVIEW, user) &&
-				!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SUPERVISOR_REVIEW, user) &&
-				!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAYMENT_APPROVAL, user)) {
+		boolean fraudReview=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_FRAUD_REVIEW, user);
+		boolean supervisorReview=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SUPERVISOR_REVIEW, user);
+		boolean paymentReview=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAYMENT_APPROVAL, user);
+		boolean paymentApprover=fraudReview || supervisorReview || paymentReview;
+		
+		boolean isClaimSettlement=incidentActivity.getActivity()!=null && incidentActivity.getActivity().getCode().equals(TracingConstants.CREATE_SETTLEMENT_ACTIVITY);
+		/**
+		 * SF: If the user is a part of the payment approval process (Fraud
+		 * Review, Supervisor Review or Payment Approval, then they have to be
+		 * the original creator to make a new task
+		 **/
+		boolean makeNewTask=(!fraudReview && !supervisorReview && !paymentReview) || incidentActivity.getAgent().getAgent_ID()==user.getAgent_ID();
+		if (success && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL, user) && makeNewTask){
 			if (ccf.getTaskId() > 0 && !incidentActivityService.closeTask(ccf.getTaskId())) {
 				logger.error("Failed to close the task for IncidentActivity with id: " + incidentActivity.getId());
 			}
-			Status s=STATUS_PENDING;
-			if(incidentActivity.getActivity()!=null && incidentActivity.getActivity().getCode().equals(TracingConstants.CREATE_SETTLEMENT_ACTIVITY)){
-				if(user.getStation().getCompany().getVariable().isFraudReview()){
-					s=STATUS_FRAUD_REVIEW;
-				} else {
-					s=STATUS_SUPERVISOR_REVIEW;
+			Status s=null;
+			if(!paymentApprover){
+				s=STATUS_PENDING;
+				if(isClaimSettlement){
+					if(user.getStation().getCompany().getVariable().isFraudReview()){
+						s=STATUS_FRAUD_REVIEW;
+					} else {
+						s=STATUS_SUPERVISOR_REVIEW;
+					}
 				}
+			}  else if((supervisorReview || paymentReview) && isClaimSettlement) {
+				/**
+				 * SF: If the User is a Payment Approver user, the task will
+				 * be put into the payment approval queue because the
+				 * expense still needs a draft number, draft date, and mail
+				 * date
+				 **/
+				s=STATUS_AWAITING_DISBURSEMENT;
+			} else if(fraudReview && isClaimSettlement) {
+				s=STATUS_SUPERVISOR_REVIEW;
+			} else {
+				/**
+				 * SF: If it's not a claim settlement letter creating a pending
+				 * task for the Customer Communications Approval queue
+				 **/
+				s=STATUS_PENDING;
 			}
 
 			if (!incidentActivityService.hasIncidentActivityTask(incidentActivity) && !incidentActivityService.createTask(incidentActivity, s)) {
