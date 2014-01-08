@@ -79,7 +79,7 @@
               <bean:message key='colname.scharrtime'/>
             </td>
             <td>
-            <bean:write name="bagDropForm" property="editBagDrop.dispSchArrivalDateTimeCell" />
+            <bean:write name="bagDropForm" property="editBagDrop.dispSchArrivalDateTime" />
             </td>
           </tr>
           
@@ -110,6 +110,14 @@
             <td>
               <html:text name="bagDropForm" property="editBagDrop.dispBagDropTime" size="12" maxlength="11" styleClass="textfield" />
             </td>
+          </tr>
+          <tr>
+          	<td>
+          		<bean:message key='colname.bagdrop.carouseltime'/>
+          	</td>
+          	<td>
+          		<bean:write name="bagDropForm" property="editBagDrop.dispTimeToCarousel" />
+          	</td>
           </tr>
        
           <tr>

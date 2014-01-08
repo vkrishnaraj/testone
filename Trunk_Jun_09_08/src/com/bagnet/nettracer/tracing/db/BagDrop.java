@@ -124,7 +124,7 @@ public class BagDrop {
 	 */
 	public String getDispTimeToCarousel(){
 		if(bagDropTime == null || (actArrivalDate == null && schArrivalDate == null)){
-			return "&nbsp;";//needed for displaying empty cells in DisplayTag
+			return "";
 		}
 		
 		long time = getTimeToCarousel();
@@ -190,34 +190,14 @@ public class BagDrop {
 		this._TIMEZONE = _TIMEZONE;
 	}
 	
-	/**
-	 * This is needed in order to empty cells to display properly in DisplayTags tables since the show empty cell flag apparently does not work with IE
-	 * 
-	 * @return
-	 */
-	public String getDispActArrivalDateTimeCell(){
-		String s = DateUtils.formatDate(getActArrivalDate(), _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
-		return s!=null?s:"&nbsp;";
-	}
-	
-	/**
-	 * This is needed in order to empty cells to display properly in DisplayTags tables since the show empty cell flag apparently does not work with IE
-	 * 
-	 * @return
-	 */
-	public String getDispSchArrivalDateTimeCell(){
+	public String getDispSchArrivalDateTime(){
 		String s = DateUtils.formatDate(getSchArrivalDate(), _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
-		return s!=null?s:"&nbsp;";
+		return s!=null?s:"";
 	}
 	
-	/**
-	 * This is needed in order to empty cells to display properly in DisplayTags tables since the show empty cell flag apparently does not work with IE
-	 * 
-	 * @return
-	 */
-	public String getDispBagDropDateTimeCell() {
+	public String getDispBagDropDateTime() {
 		String s = DateUtils.formatDate(getBagDropTime(), _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
-		return s!=null?s:"&nbsp;";
+		return s!=null?s:"";
 	}
 
 	public String getDispActArrivalDateTime(){

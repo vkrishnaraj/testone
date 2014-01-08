@@ -140,16 +140,16 @@
        	<bean:message key='bagdrop.avgtime'/> &nbsp; <bean:write name="bagDropForm" property="dispAvgTimeToCarousel"/>
 		<br/>
 		<br/>
-        
-	    <display:table requestURI="/bagDrop.do" name="bagDropForm.bagDropList" sort="external" class="form2" cellspacing="0" cellpadding="0" id="<%=TracingConstants.TABLE_ID_BAG_DROP %>" defaultsort="1"  >
+		
+	    <display:table requestURI="/bagDrop.do" name="bagDropForm.bagDropList" sort="external" class="form2" cellspacing="0" cellpadding="0" id="bagDrop" defaultsort="1"  >
 	       	<display:setProperty name="basic.empty.showtable" value="true"/>
 	       	<display:column style="width:10%;" titleKey="colname.bagdrop.origin" value="${bagDrop.originStationCode}&nbsp;" sortable="true" sortName="origin"/>
-	        <display:column style="width:10%;" titleKey="colname.bagdrop.dest" property="arrivalStationCode" sortable="true" sortName="dest"/>
-	        <display:column style="width:10%;" titleKey="itin_flightnum" property="flight" sortable="true" sortName="flight"/>
-	        <display:column style="width:20%;" titleKey="colname.scharrtime" property="dispSchArrivalDateTimeCell" sortable="true" sortName="scharr" />
-	        <display:column style="width:20%;" titleKey="colname.actarrtime" property="dispActArrivalDateTimeCell" sortable="true" sortName="actarr" />
-	        <display:column style="width:20%;" titleKey="colname.bagdrop.bagdroptime" property="dispBagDropDateTimeCell" sortable="true" sortName="bagdrop" />
-	        <display:column style="width:20%;" titleKey="colname.bagdrop.carouseltime" property="dispTimeToCarousel" paramId="carousel" paramProperty="carousel" sortable="false" />
+	        <display:column style="width:10%;" titleKey="colname.bagdrop.dest"   value="${bagDrop.arrivalStationCode}&nbsp;" sortable="true" sortName="dest"/>
+	        <display:column style="width:10%;" titleKey="itin_flightnum"         value="${bagDrop.flight}&nbsp;" sortable="true" sortName="flight"/>
+	        <display:column style="width:20%;" titleKey="colname.scharrtime"     value="${bagDrop.dispSchArrivalDateTime}&nbsp;" sortable="true" sortName="scharr" />
+	        <display:column style="width:20%;" titleKey="colname.actarrtime"     value="${bagDrop.dispActArrivalDateTime}&nbsp;" sortable="true" sortName="actarr" />
+	        <display:column style="width:20%;" titleKey="colname.bagdrop.bagdroptime"  value="${bagDrop.dispBagDropDateTime}&nbsp;" sortable="true" sortName="bagdrop" />
+	        <display:column style="width:20%;" titleKey="colname.bagdrop.carouseltime" value="${bagDrop.dispTimeToCarousel}&nbsp;" paramId="carousel" paramProperty="carousel" sortable="false" />
 	        <display:column style="width:20%;" titleKey="colname.action" value="Edit" href="bagDrop.do" paramId="editId" paramProperty="id" sortable="false"/>
 	 		<display:footer>
 			    <tr>

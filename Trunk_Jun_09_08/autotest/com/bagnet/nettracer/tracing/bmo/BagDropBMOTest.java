@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import aero.nettracer.general.services.GeneralServiceBean;
 
+import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BagDrop;
 import com.bagnet.nettracer.tracing.dto.BagDropDTO;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
@@ -28,7 +29,7 @@ public class BagDropBMOTest {
 	@Test
 	public void saveLoadTest(){
 		BagDropBMO bdbmo = new BagDropBMO();
-		long id = bdbmo.insertBagDrop(createBagDrop(),null);
+		long id = bdbmo.insertBagDrop(createBagDrop(),getWNAgent());
 		assertTrue(id > 0);
 		BagDrop db = bdbmo.getBagDropByID(id);
 		assertTrue(db.getCreateDate().getTime() == now.getTime());
@@ -40,7 +41,7 @@ public class BagDropBMOTest {
 	@Test
 	public void getBagDropTest(){
 		BagDropBMO bdbmo = new BagDropBMO();
-		long id = bdbmo.insertBagDrop(createBagDrop(),null);
+		long id = bdbmo.insertBagDrop(createBagDrop(),getWNAgent());
 		assertTrue(id > 0);
 		
 		GregorianCalendar start = new GregorianCalendar();
@@ -88,7 +89,7 @@ public class BagDropBMOTest {
 		BagDropBMO bdbmo = new BagDropBMO();
 		BagDrop toSave = createBagDrop();
 		toSave.setSchArrivalDate(cnow.getTime());
-		long id = bdbmo.insertBagDrop(toSave,null);
+		long id = bdbmo.insertBagDrop(toSave,getWNAgent());
 		assertTrue(id > 0);
 		
 		GregorianCalendar start = new GregorianCalendar();
@@ -110,7 +111,7 @@ public class BagDropBMOTest {
 		BagDrop bagdrop = new BagDrop();
 		
 		//test null case
-		assertTrue("&nbsp;".equals(bagdrop.getDispTimeToCarousel()));
+		assertTrue("".equals(bagdrop.getDispTimeToCarousel()));
 		
 		//test 15mins
 		Date now = new Date();
@@ -156,5 +157,10 @@ public class BagDropBMOTest {
 		bagdrop.setFlight("123");
 		
 		return bagdrop;
+	}
+	
+	private Agent getWNAgent(){
+		GeneralServiceBean gbean = new GeneralServiceBean();
+		return gbean.getAgent("ntadmin", "WN");
 	}
 }
