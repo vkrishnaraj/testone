@@ -610,14 +610,12 @@ function gotoHistoricalReport() {
         <td>
         	<bean:message key="colname.found_station_nobr" /> <br>
         	<input type="text" size="10" class="textfield" disabled="disabled"
-        			value="<bean:write name="OnHandForm" property="found_company"/>
-        					<bean:write name="OnHandForm" property="found_station"/>"/>
+        			value="<bean:write name="OnHandForm" property="found_company"/> <bean:write name="OnHandForm" property="found_station"/>"/>
         </td>
         <td>
         	<bean:message key="colname.holding_station_nobr" /> <br>
         	<input type="text" size="10" class="textfield" disabled="disabled"
-        		value="<bean:write name="OnHandForm" property="holding_company"/>
-        				<bean:write name="OnHandForm" property="holding_station"/>"/>
+        		value="<bean:write name="OnHandForm" property="holding_company"/> <bean:write name="OnHandForm" property="holding_station"/>"/>
         </td>
         
         <c:set var="form2_ohd_colspan" value="3" scope="request"/>
