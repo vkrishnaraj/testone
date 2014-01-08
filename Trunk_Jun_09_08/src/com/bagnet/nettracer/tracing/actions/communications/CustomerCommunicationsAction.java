@@ -398,7 +398,16 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		IncidentActivity incidentActivity = DomainUtils.fromForm(ccf, user);
 		incidentActivity.setAgent(user);
 		incidentActivity.setCreateDate(DateUtils.convertToGMTDate(new Date()));
+		boolean custCommApprove=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL, user);
+		boolean fraudReview=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_FRAUD_REVIEW, user);
+		boolean supervisorReview=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SUPERVISOR_REVIEW, user);
+		boolean paymentReview=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAYMENT_APPROVAL, user);
+		boolean isClaimSettlement=incidentActivity.getActivity()!=null && incidentActivity.getActivity().getCode().equals(TracingConstants.CREATE_SETTLEMENT_ACTIVITY);
 		
+		if((custCommApprove && !isClaimSettlement) || 
+				((fraudReview || supervisorReview || paymentReview) && isClaimSettlement)){
+			incidentActivity.setApprovalAgent(user);
+		}
 		long incidentActivityId = incidentActivityService.save(incidentActivity);
 		ccf.setId(incidentActivity.getId());
 		ccf.setDocumentId(incidentActivity.getDocument().getId());
@@ -412,11 +421,6 @@ public class CustomerCommunicationsAction extends CheckedAction {
 				 * if they do have the cust comm approval permission, create as a Print or WP Pending task and create the file, but don't publish it
 				 * Added additional logic for fraud/supervisor/awaiting disbursement reviewers
 				 */
-				boolean custCommApprove=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL, user);
-				boolean fraudReview=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_FRAUD_REVIEW, user);
-				boolean supervisorReview=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SUPERVISOR_REVIEW, user);
-				boolean paymentReview=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAYMENT_APPROVAL, user);
-				boolean isClaimSettlement=incidentActivity.getActivity()!=null && incidentActivity.getActivity().getCode().equals(TracingConstants.CREATE_SETTLEMENT_ACTIVITY);
 				Status s=null;
 				
 				if(!custCommApprove && !fraudReview && !supervisorReview && !paymentReview){

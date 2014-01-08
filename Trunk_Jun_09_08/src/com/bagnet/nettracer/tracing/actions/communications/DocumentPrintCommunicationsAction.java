@@ -112,11 +112,6 @@ public class DocumentPrintCommunicationsAction extends Action {
 			
 		List<IncidentActivity> incidentActivitylist = incidentActivityService.getIncidentActivitiesByTaskStatus(status, sortBy);
 		if (incidentActivitylist == null || incidentActivitylist.isEmpty()) {
-			int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_SEARCH_PAGES, session);
-			request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
-
-			Integer currpage = NumberUtils.toInt(request.getParameter("currpage"));
-			request.setAttribute("currpage", currpage.toString());
 
 			if (errors == null) {
 				errors = new ActionMessages();
@@ -191,47 +186,6 @@ public class DocumentPrintCommunicationsAction extends Action {
 			return mapping.findForward(TracingConstants.DOCUMENT_PRINT_COMMUNICATIONS);
 		}		
 
-		Integer rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_SEARCH_PAGES, session);
-		request.setAttribute("rowsperpage", rowsperpage.toString());
-
-		Integer currpage = NumberUtils.toInt(request.getParameter("currpage"));
-		if (StringUtils.equals("1", request.getParameter("nextpage"))) {
-			currpage++;
-		}
-		if (StringUtils.equals("1", request.getParameter("prevpage"))) {
-			currpage--;
-		}
-		request.setAttribute("currpage", currpage.toString());
-		
-		// get row count
-		Integer rowcount = incidentActivitylist.size();
-		if(rowcount != 0) {
-			request.setAttribute("rowcount", rowcount.toString());
-		} else {
-			request.setAttribute("rowcount", "0");
-		}
-		
-		// find out total pages
-		Integer totalpages = (int) Math.ceil((double) rowcount / (double) rowsperpage);
-		if (totalpages <= currpage) {
-			currpage = 0;
-			request.setAttribute("currpage", "0");
-		}
-
-		//find the paginated on hand bags
-		if (currpage + 1 == totalpages) {
-			request.setAttribute("end", "1");
-		}
-		
-		if (totalpages > 1) {
-			ArrayList<String> al = new ArrayList<String>();
-			for (int i = 0; i < totalpages; i++) {
-				al.add(Integer.toString(i));
-			}
-			request.setAttribute("pages", al);
-		}
-		/** ************ end of pagination ************* */
-		
 		if (errors != null && !errors.isEmpty()) {
 			saveMessages(request, errors);
 		}

@@ -16,34 +16,6 @@
 	PropertyMessageResources myMessages = (PropertyMessageResources) request.getAttribute("org.apache.struts.action.MESSAGE");
 %>
 <script type="text/javascript">
-<!--
-function goprev() {
-  o = document.deliverForm;
-  o.prevpage.value = "1";
-  o.pagination.value="1";
-  o.sortBy.value="<%=sortBy%>"
-  o.submit();
-}
-
-function gonext() {
-  o = document.deliverForm;
-  o.nextpage.value="1";
-  o.pagination.value="1";
-  o.sortBy.value="<%=sortBy%>"
-  o.submit();
-}
-
-function gopage(i) {
-  o = document.deliverForm;
-  o.currpage.value = i;
-  o.pagination.value="1";
-  o.sortBy.value="<%=sortBy%>"
-  o.submit();
-
-}
-function updatePagination() {
-    return true;
-}
 
 function previewDocuments(checkboxName) {
 	if (!validateCheckboxes(checkboxName)) {
@@ -162,9 +134,7 @@ function validateCheckboxes(checkboxName) {
 	        </c:if>
 		        
 			<c:if test="${not empty incidentActivitylist}">
-				<display:table id="incidentActivity" name="requestScope.incidentActivitylist" requestURI="/documentPrintCommunications.do" sort="external" 
-		          		size="<%=NumberUtils.toInt((String)request.getAttribute("rowcount"))%>" pagesize="<%=NumberUtils.toInt((String)request.getAttribute("rowsperpage"))%>"
-		          		class="form2" cellspacing="0" cellpadding="0" partialList="true">
+				<display:table id="incidentActivity" name="requestScope.incidentActivitylist" requestURI="/documentPrintCommunications.do" sort="external" class="form2" cellspacing="0" cellpadding="0" >
 		          		
 		          		<display:column titleKey="colname.select" headerClass="header">
 		          			<input type="checkbox" name="incident_activity_task_id" value="${incidentActivity.tasks[fn:length(incidentActivity.tasks) - 1].task_id}"/>
