@@ -633,7 +633,13 @@
             	<% } %>
 	              <tr>
 	                <td>
-	                  <bean:message key="colname.category" /><br>
+	                  <% if(request.getAttribute("lostdelay")!=null){ %>
+	                  	<bean:message key="colname.category.req" />
+	                  <% } else { %>
+	                  	<bean:message key="colname.category" />
+	                  <% } %>
+	                  
+	                  <br>
 	                  <%	if (UserPermissions.hasIncidentSavePermission(a, theitem.getIncident())	|| (canAddContents && inventorylist.getInventory_ID() == 0)) { %>
 							<html:select property='<%="inventorylist["+ (i.intValue() * 20 + j.intValue())+ "].categorytype_ID"%>'	styleClass="dropdown">
 								<html:option value="">

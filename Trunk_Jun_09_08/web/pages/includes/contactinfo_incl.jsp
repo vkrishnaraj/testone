@@ -439,7 +439,14 @@
                   <br>
                   <html:text property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].dispvalid_edate" %>' size="20" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2<%= i %>" name="calendar2<%= i %>" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select2(document.incidentForm, '<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].dispvalid_edate" %>','calendar2<%= i %>','<%= a.getDateformat().getFormat() %>'); return false;"></td>
                 <td>
-            			<html:checkbox property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].permanent" %>' styleId='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].permanent" %>' styleClass="textfield" />  <b><bean:message key="colname.is_permanent" /></b>
+            			<html:checkbox property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].permanent" %>' styleId='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].permanent" %>' styleClass="textfield" />  
+            			<b>
+            				<% if(i==0){ %>
+            					<bean:message key="colname.is_permanent.req"/>
+            				<% } else { %>
+            					<bean:message key="colname.is_permanent" />
+            				<% } %>
+            			</b>
             		</td>
               </tr>
               <tr>
