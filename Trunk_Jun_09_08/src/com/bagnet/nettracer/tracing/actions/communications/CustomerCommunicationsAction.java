@@ -408,11 +408,19 @@ public class CustomerCommunicationsAction extends CheckedAction {
 				((fraudReview || supervisorReview || paymentReview) && isClaimSettlement)){
 			incidentActivity.setApprovalAgent(user);
 		}
+		
+		boolean success = documentService.hasCustomerCommunicationRequiredInformation(incidentActivity.getDocument());
+		if (!success) {
+			messages.add(ActionMessages.GLOBAL_MESSAGE, getActionMessage(TracingConstants.COMMAND_CREATE, success, ccf.getDocumentTitle()));
+			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("customer.communication.missing.required.information", new Object[] { documentService.getMissingRequiredVariable(incidentActivity.getDocument()) }));
+			return success;
+		}
+		
 		long incidentActivityId = incidentActivityService.save(incidentActivity);
 		ccf.setId(incidentActivity.getId());
 		ccf.setDocumentId(incidentActivity.getDocument().getId());
 		
-		boolean success = incidentActivityId != 0;
+		success = incidentActivityId != 0;
 		messages.add(ActionMessages.GLOBAL_MESSAGE, getActionMessage(TracingConstants.COMMAND_CREATE, success, ccf.getDocumentTitle()));
 		if (success) {
 			if (!incidentActivityService.hasIncidentActivityTask(incidentActivity)) {

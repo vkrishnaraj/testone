@@ -360,5 +360,30 @@ public class DocumentServiceImpl implements DocumentService {
 		}
 		return file;
 	}
+
+	@Override
+	public boolean hasCustomerCommunicationRequiredInformation(Document document) {
+		return getMissingRequiredVariable(document) == null;
+	}
+	
+	@Override
+	public String getMissingRequiredVariable(Document document) {
+		if (document == null || document.getContent() == null) return null;
+		
+		String[] varData = StringUtils.substringsBetween(document.getContent(), "{", "}");
+		if (varData == null || varData.length == 0) {
+			return null;
+		}
+		
+		String toReturn = null;
+		String regex = "([a-z]+)([\\.]{1}?)([a-z]+)([0-9]*)?";
+		for (String var: varData) {
+			if ((var = StringUtils.deleteWhitespace(var)) != null && var.toLowerCase().matches(regex)) {
+				toReturn = var;
+				break;
+			}
+		}
+		return toReturn;
+	}
 	
 }

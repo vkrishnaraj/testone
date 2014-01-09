@@ -99,4 +99,20 @@ public interface DocumentService {
 	 * root path to the file share being supplied
 	 */
 	public OCFile publishDocument(IncidentActivity ia) throws InsufficientInformationException;
+	
+	/**
+	 * This method ensures that the text of the document contains no variables, which should have been 
+	 * merged from their data source.
+	 * @param document to check for un-substituted variable data
+	 * @return true if all the variables have been replaced with data, false otherwise.
+	 */
+	public boolean hasCustomerCommunicationRequiredInformation(Document document);
+	
+	/**
+	 * This method gets the first variable in the text of the document which should have been replaced 
+	 * with application data.
+	 * @param document to check for un-substituted variable data
+	 * @return the name of the first variable found, null otherwise.
+	 */
+	public String getMissingRequiredVariable(Document document);
 }
