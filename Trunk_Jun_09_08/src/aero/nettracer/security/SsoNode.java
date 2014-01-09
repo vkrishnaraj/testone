@@ -9,6 +9,9 @@ public class SsoNode {
 	private String station;
 	private String firstname;
 	private String lastname;
+	
+	private String originalGroup;
+	
 	public String getCompanycode() {
 		return companycode;
 	}
@@ -60,7 +63,14 @@ public class SsoNode {
 		s += "firstname: "	+ firstname + "\n";
 		s += "lastname: "   + lastname  + "\n";
 		s += "isValid: "    + validAssertion  + "\n";
+		s += "originalGroup: " + originalGroup + "\n";
 		return s;
 
+	}
+	public String getOriginalGroup() {
+		return originalGroup;
+	}
+	public void setOriginalGroup(String originalGroup) {
+		this.originalGroup = originalGroup;
 	}
 }

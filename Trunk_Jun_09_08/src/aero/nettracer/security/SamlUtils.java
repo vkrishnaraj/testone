@@ -16,6 +16,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.opensaml.DefaultBootstrap;
 import org.opensaml.common.SAMLObject;
@@ -40,7 +41,7 @@ import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 
 
 public class SamlUtils implements SsoUtils{
-	private static Logger logger = Logger.getLogger(SamlUtils.class);
+	private static final Logger authenlog = Logger.getLogger("authentication");
 	
 	
 	/**
@@ -91,23 +92,26 @@ public class SamlUtils implements SsoUtils{
 					node.setUsername(username.get(0));
 				} else {
 					validAttributes = false;
-					logger.debug("Incorrect number of username attribute values");
+					authenlog.debug("Incorrect number of username attribute values");
 				}
-				
+
 				List<String> group = ((List<String>)attr.get(keyMap.get("group"))); 
-				if(group != null && group.size() == 1){
-					node.setGroup(group.get(0));
-				} else {
-					validAttributes = false;
-					logger.debug("Incorrect number of group attribute values");
+				if(group != null){
+					node.setOriginalGroup(StringUtils.join(group, ", "));
+					if(group.size() == 1){
+						node.setGroup(group.get(0));
+					} else {
+						validAttributes = false;
+						authenlog.debug("Incorrect number of group attribute values");
+					}
 				}
-				
+
 				List<String> stationcode = ((List<String>)attr.get(keyMap.get("stationcode"))); 
 				if(stationcode != null && stationcode.size() == 1){
 					node.setStation(stationcode.get(0));
 				} else {
 					validAttributes = false;
-					logger.debug("Incorrect number of stationcode attribute values");
+					authenlog.debug("Incorrect number of stationcode attribute values");
 				}
 				
 				List<String> firstname = ((List<String>)attr.get(keyMap.get("firstname"))); 
@@ -115,7 +119,7 @@ public class SamlUtils implements SsoUtils{
 					node.setFirstname(firstname.get(0));
 				} else {
 					validAttributes = false;
-					logger.debug("Incorrect number of firstname attribute values");
+					authenlog.debug("Incorrect number of firstname attribute values");
 				}
 				
 				List<String> lastname = ((List<String>)attr.get(keyMap.get("lastname"))); 
@@ -123,13 +127,12 @@ public class SamlUtils implements SsoUtils{
 					node.setLastname(lastname.get(0));
 				} else {
 					validAttributes = false;
-					logger.debug("Incorrect number of lastname attribute values");
+					authenlog.debug("Incorrect number of lastname attribute values");
 				}
 			}
-			
 			node.setValidAssertion(validAssertion && validAttributes);
+			authenlog.info(node.toString());
 		}
-		logger.info(node.toString());
 		return node;
 	}
 	
@@ -271,7 +274,7 @@ public class SamlUtils implements SsoUtils{
 			}
 			catch (ValidationException ve)
 			{
-				logger.error(ve.getMessage());
+				authenlog.error(ve.getMessage());
 				ve.printStackTrace();
 			}
 
