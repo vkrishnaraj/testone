@@ -316,7 +316,6 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 			waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
 					verifyEquals("Fraud Review", selenium.getText("//div[@id='maincontent']/h1"));
-					verifyEquals("No Fraud Reviews at this time.", selenium.getText("//div[@id='maincontent']/div"));
 				} else {
 					System.out.println("!!!!!!!!!!!!!!!! Failed to approve the fraud review task.");
 					verifyTrue(false);
@@ -436,7 +435,6 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 			waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
 					verifyEquals("Supervisor Review", selenium.getText("//div[@id='maincontent']/h1"));
-					verifyEquals("No Supervisor Reviews at this time.", selenium.getText("//div[@id='maincontent']/div"));
 				} else {
 					System.out.println("!!!!!!!!!!!!!!!! Failed to approve the supervisor review task.");
 					verifyTrue(false);
@@ -529,7 +527,6 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 			waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
 					verifyEquals("Supervisor Review", selenium.getText("//div[@id='maincontent']/h1"));
-					verifyEquals("No Supervisor Reviews at this time.", selenium.getText("//div[@id='maincontent']/div"));
 				} else {
 					System.out.println("!!!!!!!!!!!!!!!! Failed to approve the supervisor review task.");
 					verifyTrue(false);
