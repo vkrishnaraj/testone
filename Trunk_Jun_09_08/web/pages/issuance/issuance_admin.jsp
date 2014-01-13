@@ -258,6 +258,15 @@
 		return false;
 	}
 
+	function validateCost(costField) {
+		if (!(costField.value && costField.value.match(/^\d*\.?\d+$/))) {
+			alert("<bean:message key="issuance.item.cost" /> <bean:message key="error.validation.float" />");
+			costField.focus();
+			return false;
+		}
+		return true;
+	}
+
 </SCRIPT>
 
         <html:form action="issuanceItemAdmin.do" method="post" enctype="multipart/form-data" >
@@ -483,7 +492,7 @@
 	                  </td>
 	                  	 <% if (globalAdmin) { %>
 	                  <td>
-	                     <input type="text" name="item_cost_<%=i_item.getId() %>" value="<%=i_item.getCost()%>" size="6" class="textfield" />
+	                     <input type="text" id="item_cost_<%=i_item.getId() %>" name="item_cost_<%=i_item.getId() %>" value="<%=i_item.getCost()%>" size="6" class="textfield" />
 	                  </td>	                  	 
 	                  <td>
 	                     <input type="text" name="item_desc_<%=i_item.getId() %>" value="<%=i_item.getDescription()%>" size="10" class="textfield" />
@@ -501,7 +510,7 @@
 	                     </select>
 	                  </td>
 	                  <td>
-	                     <input type="submit" name="inventory_edit_<%=i_item.getId()%>" id="button" onclick="this.form.editinventory.value = <%=i_item.getId()%>; this.form.editinventory.disabled = false;" 
+	                     <input type="submit" name="inventory_edit_<%=i_item.getId()%>" id="button" onclick="if (validateCost(document.getElementById('item_cost_<%=i_item.getId() %>'))) {this.form.editinventory.value = <%=i_item.getId()%>; this.form.editinventory.disabled = false;} else {return false;}" 
 							value="<bean:message key="issuance.item.button.edit" />" >
 						 </input>
 	                  </td>
@@ -597,7 +606,7 @@
 	                     	</select>
 	                  	</td>
 	                  	<td>
-	                     	<input type="text" name="item_cost" value="" size="6" maxlength="20" class="textfield" />
+	                     	<input type="text" id="item_cost" name="item_cost" value="0" size="6" maxlength="20" class="textfield" />
 	                  	</td>	                  	
 	                  	<td>
 	                     	<input type="text" name="item_desc" value="" size="10" class="textfield" />
@@ -615,7 +624,7 @@
 	                     </select>
 	                  	</td>
 						<td>
-			                  <html:submit property="addinventory" styleId="button">
+			                  <html:submit property="addinventory" styleId="button" onclick="return validateCost(document.getElementById('item_cost'))">
 			                    <bean:message key="issuance.item.inventory.button.add" />
 			                  </html:submit>
 			            </td>
