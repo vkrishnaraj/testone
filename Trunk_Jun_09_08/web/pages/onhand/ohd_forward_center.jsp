@@ -131,13 +131,7 @@
                   :
                 </td>
                 <td>
-                	<html:select name="forwardOnHandForm" property="companyCode" styleClass="dropdown" onchange="submit()" >
-                    	<html:options collection="companylistById" property="companyCode_ID" labelProperty="companyCode_ID" />
-                  	</html:select>
-                  	
-                  &nbsp;
-
-                    <logic:present name="stationList" scope="request">
+                	<logic:present name="stationList" scope="request">
                       <html:select name="forwardOnHandForm" styleClass="dropdown" property="destStation">
                         <logic:empty name="forwardOnHandForm" property="destStation">
                           <html:option value="">
