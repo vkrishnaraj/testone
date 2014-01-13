@@ -23,6 +23,7 @@ import com.bagnet.nettracer.tracing.db.Comment;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.ExpenseType;
 import com.bagnet.nettracer.tracing.db.Passenger;
+import com.bagnet.nettracer.tracing.db.PassengerExp;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.forms.ExpensePayoutForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
@@ -156,6 +157,7 @@ public abstract class BaseExpenseAction extends CheckedAction {
 		}
 
 		epform.setHasIncidentActivity(ExpenseUtils.hasActivity(ep));
+		epform.setPassengerlist(new ArrayList<PassengerExp>(ep.getPassengerexp()));
 				
 	}
 

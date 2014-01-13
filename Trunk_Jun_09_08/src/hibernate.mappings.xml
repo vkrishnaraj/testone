@@ -340,4 +340,6 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.communications.IncidentActivityRemark" />		
 			
 		<mapping class="com.bagnet.nettracer.tracing.db.UsergroupNameMap" />	
-		<mapping class="com.bagnet.nettracer.tracing.db.InboundQueue" />	
+		<mapping class="com.bagnet.nettracer.tracing.db.InboundQueue" />
+		<mapping class="com.bagnet.nettracer.tracing.db.PassengerExp" />	
+			

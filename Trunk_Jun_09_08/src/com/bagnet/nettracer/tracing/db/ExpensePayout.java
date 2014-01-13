@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.TimeZone;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -26,6 +27,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -81,6 +83,7 @@ public class ExpensePayout implements Serializable {
 	private String cancelreason;
 	private int cancelcount;
 	private int issuanceItem;
+	private Set<PassengerExp> passengerexp;
 
 	//not part of the model
 	private String _DATEFORMAT;
@@ -539,4 +542,24 @@ public class ExpensePayout implements Serializable {
 	public void setMaildate(Date maildate) {
 		this.maildate = maildate;
 	}
+
+	/**
+	 * @return Returns the passengerexp.
+	 */
+	@OneToMany(mappedBy = "expensepayout", cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+	@org.hibernate.annotations.OrderBy(clause = "passengerexp_id")
+	@Fetch(FetchMode.SELECT)
+	public Set<PassengerExp> getPassengerexp() {
+		return passengerexp;
+	}
+
+	/**
+	 * @param passengerexp
+	 *          The passengerexp to set.
+	 */
+	public void setPassengerexp(Set<PassengerExp> passengerexp) {
+		this.passengerexp = passengerexp;
+		//this.passenger_list = (passengers != null ? new ArrayList<Passenger>(passengers) : new ArrayList<Passenger>());
+	}
+
 }

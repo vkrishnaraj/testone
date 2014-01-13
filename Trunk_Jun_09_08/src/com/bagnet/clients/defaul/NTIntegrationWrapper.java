@@ -41,6 +41,7 @@ import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.forms.ExpensePayoutForm;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
+import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 
 public class NTIntegrationWrapper extends IntegrationWrapper {
@@ -186,22 +187,22 @@ public class NTIntegrationWrapper extends IntegrationWrapper {
 				voucher.setOrderNumber((ep.getOrdernum() != null) ? ep.getOrdernum() : "");
 			}
 			Passenger pax = voucher.addNewPassenger();
-			if (inc.getPassengers() != null && inc.getPassengers().size() > 0) {
-				for (com.bagnet.nettracer.tracing.db.Passenger pa : inc.getPassengers()) {
-					pa.setPassenger_ID(0);
+			if (epf.getPassengerlist() != null && epf.getPassengerlist().size() > 0) {
+				for (com.bagnet.nettracer.tracing.db.PassengerExp pa : epf.getPassengerlist()) {
+
 					pax.setFirstname((pa.getFirstname() != null) ? pa.getFirstname() : "");
 					pax.setLastname((pa.getLastname() != null) ? pa.getLastname() : "");
 					Address addr = pax.addNewAddresses();
-					addr.setAddress1((pa.getAddress(0).getAddress1() != null) ? pa.getAddress(0).getAddress1() : "");
-					addr.setAddress2((pa.getAddress(0).getAddress2() != null) ? pa.getAddress(0).getAddress2() : "");
-					addr.setCity((pa.getAddress(0).getCity() != null) ? pa.getAddress(0).getCity() : "");
-					addr.setState((pa.getAddress(0).getState_ID() != null) ? pa.getAddress(0).getState_ID() : "");
-					addr.setZip((pa.getAddress(0).getZip() != null) ? pa.getAddress(0).getZip() : "");
-					addr.setCountry((pa.getAddress(0).getCountrycode_ID() != null) ? pa.getAddress(0).getCountrycode_ID() : "");
-					addr.setHomePhone((pa.getAddress(0).getHomephone_norm() != null) ? pa.getAddress(0).getHomephone_norm() : "");
-					addr.setWorkPhone((pa.getAddress(0).getWorkphone_norm() != null) ? pa.getAddress(0).getWorkphone_norm() : "");
-					addr.setMobilePhone((pa.getAddress(0).getMobile_norm() != null) ? pa.getAddress(0).getMobile_norm() : "");
-					addr.setEmailAddress((pa.getAddress(0).getEmail() != null) ? pa.getAddress(0).getEmail() : "");
+					addr.setAddress1((pa.getAddress1() != null) ? pa.getAddress1() : "");
+					addr.setAddress2((pa.getAddress2() != null) ? pa.getAddress2() : "");
+					addr.setCity((pa.getCity() != null) ? pa.getCity() : "");
+					addr.setState((pa.getState_ID() != null) ? pa.getState_ID() : "");
+					addr.setZip((pa.getZip() != null) ? pa.getZip() : "");
+					addr.setCountry((pa.getCountrycode_ID() != null) ? pa.getCountrycode_ID() : "");
+					addr.setHomePhone((pa.getHomephone() != null) ? TracerUtils.normalizePhoneNumber(pa.getHomephone()) : "");
+					addr.setWorkPhone((pa.getWorkphone()!= null) ? TracerUtils.normalizePhoneNumber(pa.getWorkphone()) : "");
+					addr.setMobilePhone((pa.getMobile() != null) ? TracerUtils.normalizePhoneNumber(pa.getMobile()) : "");
+					addr.setEmailAddress((pa.getEmail() != null) ? pa.getEmail() : "");
 					
 					break;
 				}

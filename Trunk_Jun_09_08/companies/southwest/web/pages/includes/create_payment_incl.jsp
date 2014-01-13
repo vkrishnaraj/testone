@@ -94,7 +94,7 @@ function updatePaymentFields(newType) {
 	<td id="distributedmethod" style="display:none;">
 		<bean:message key="colname.distribution_method" />
 		<br />
-		<html:select property="distributemethod" styleClass="dropdown" disabled="disabled">
+		<html:select styleId="distributemethod" property="distributemethod" styleClass="dropdown" disabled="disabled">
 			<% if(hasImmFulfillPermission) { %>		
 			<html:option value="IMME">
 				<bean:message key="Immediate.fulfill" />

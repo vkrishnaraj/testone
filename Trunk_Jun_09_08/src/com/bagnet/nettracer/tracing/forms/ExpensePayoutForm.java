@@ -2,6 +2,7 @@ package com.bagnet.nettracer.tracing.forms;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -13,10 +14,10 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
-
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Comment;
+import com.bagnet.nettracer.tracing.db.PassengerExp;
 
 public class ExpensePayoutForm extends ActionForm {
 
@@ -57,7 +58,7 @@ public class ExpensePayoutForm extends ActionForm {
 	private int cancelcount;
 	private String errormsg;
 	private int showsuccess=0;
-
+	
 	//displayed - need conversion
 	private String incident_ID;
 	private String createUser;
@@ -87,6 +88,11 @@ public class ExpensePayoutForm extends ActionForm {
 	private String toremark;
 	
 	private boolean hasIncidentActivity;
+
+	@SuppressWarnings("unused")
+	private String language;
+	private List<PassengerExp> passengerlist = new ArrayList<PassengerExp>();
+	private String _DATEFORMAT; // current login agent's date format
 
 	public int getShowsuccess() {
 		return showsuccess;
@@ -506,5 +512,51 @@ public class ExpensePayoutForm extends ActionForm {
 	public void setHasIncidentActivity(boolean hasIncidentActivity) {
 		this.hasIncidentActivity = hasIncidentActivity;
 	}
-	
+
+	@Override
+	public void reset(org.apache.struts.action.ActionMapping mapping, javax.servlet.http.HttpServletRequest request) {
+		super.reset(mapping, request);
+		Agent agent = (Agent)request.getSession().getAttribute("user");
+		if(agent != null) {
+			if(agent.getStation() != null) {
+				language = agent.getStation().getEmailLanguage();
+			}
+		}
+
+		
+	}	
+	public List<PassengerExp> getPassengerlist() {
+		return passengerlist;
+	}
+
+	public void setPassengerlist(List<PassengerExp> passengerlist) {
+		this.passengerlist = passengerlist;
+	}
+
+	public PassengerExp getPassenger(int index) {
+		if (index < 0) index = 0;
+		if (this.passengerlist.size() <= index) {
+			while (this.passengerlist.size() <= index) {				
+			this.passengerlist.add(new PassengerExp());
+			}
+		}
+
+		return this.passengerlist.get(index);
+	}
+
+	/**
+	 * @return Returns the _DATEFORMAT.
+	 */
+	public String get_DATEFORMAT() {
+		return _DATEFORMAT;
+	}
+
+	/**
+	 * @param _dateformat
+	 *          The _DATEFORMAT to set.
+	 */
+	public void set_DATEFORMAT(String _dateformat) {
+		_DATEFORMAT = _dateformat;
+	}
+
 }

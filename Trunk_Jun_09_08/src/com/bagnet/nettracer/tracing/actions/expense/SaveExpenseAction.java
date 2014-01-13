@@ -1,6 +1,8 @@
 package com.bagnet.nettracer.tracing.actions.expense;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,19 +13,20 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
-
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.UsergroupBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
+import com.bagnet.nettracer.tracing.db.PassengerExp;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.UserGroup;
 import com.bagnet.nettracer.tracing.forms.ExpensePayoutForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
+import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
 public class SaveExpenseAction extends BaseExpenseAction {
@@ -165,7 +168,17 @@ public class SaveExpenseAction extends BaseExpenseAction {
 				return mapping.findForward(CREATE_SUCCESS);
 			}				
 		}
-
+		//set expensepayout and normalize phone number for passengerlist
+		if (expenseForm.getPassengerlist() != null && expenseForm.getPassengerlist().size() > 0) {
+			for (com.bagnet.nettracer.tracing.db.PassengerExp pa : expenseForm.getPassengerlist()) {
+				pa.setExpensepayout(ep);
+				pa.setHomephone(TracerUtils.normalizePhoneNumber(pa.getHomephone()));
+				pa.setWorkphone(TracerUtils.normalizePhoneNumber(pa.getWorkphone()));
+				pa.setMobile(TracerUtils.normalizePhoneNumber(pa.getMobile()));
+			}
+		}
+		Set<PassengerExp> passengerexp = new HashSet<PassengerExp>(expenseForm.getPassengerlist());
+		ep.setPassengerexp(passengerexp);
 		ep.setStatus(st);
 		ibmo.saveExpense(ep, incidentId, user);
 		request.getSession().setAttribute("getclaimfa", "1");
