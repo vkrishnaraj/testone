@@ -659,7 +659,7 @@
 	                </td>
 	                <td colspan="4">
 	                  <% if (report_type == 1) { %>
-	                  <bean:message key="colname.ld.description" />
+	                  <bean:message key="colname.ld.description.req" />
 	                  <% } else if (report_type == 2) { %>
 	                  <bean:message key="colname.pil.description" />
 	                  <% } else {%>
