@@ -30,6 +30,10 @@ public class BagDropForm extends ValidatorForm{
 	private List <BagDrop> bagDropList;
 	private BagDropDTO dto;
 	private BagDrop editBagDrop;
+	
+	private String editBagDropDate;
+	private String editBagDropTime;
+	
 	private List<Audit_BagDrop> auditList;
 	
 	private int avgTimeToCarousel;
@@ -158,20 +162,6 @@ public class BagDropForm extends ValidatorForm{
 		}
 	}
 
-	public String getBagDropDate() {
-		if(editBagDrop != null){
-			return editBagDrop.getDispBagDropDate();
-		} else {
-			return "";
-		}
-	}
-
-	public void setBagDropDate(String bagDropDate) {
-		if(editBagDrop != null){
-			editBagDrop.setDispBagDropDate(bagDropDate);
-		}
-	}
-
 	public int getAvgTimeToCarousel() {
 		return avgTimeToCarousel;
 	}
@@ -189,6 +179,22 @@ public class BagDropForm extends ValidatorForm{
 		long hours = avgTimeToCarousel/60;
 		
 		return String.format("%02d:%02d", hours, mins);
+	}
+
+	public String getEditBagDropDate() {
+		return editBagDropDate;
+	}
+
+	public void setEditBagDropDate(String editBagDropDate) {
+		this.editBagDropDate = editBagDropDate;
+	}
+
+	public String getEditBagDropTime() {
+		return editBagDropTime;
+	}
+
+	public void setEditBagDropTime(String editBagDropTime) {
+		this.editBagDropTime = editBagDropTime;
 	}
 	
 }

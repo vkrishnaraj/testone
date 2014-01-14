@@ -104,11 +104,27 @@ public class BagDropAction extends Action{
 			long bagDropID = new Long(request.getParameter("editId"));
 			bdform.setEditBagDrop(BagDropUtils.getBagDropById(user,bagDropID));
 			bdform.setAuditList(BagDropUtils.getAuditBagDropList(user, bagDropID));
+			/** set bagdrop date/time on form **/
+			if(bdform.getEditBagDrop() != null && bdform.getEditBagDrop().getBagDropTime() != null){
+				bdform.setEditBagDropDate(bdform.getEditBagDrop().getDispBagDropDate());
+				bdform.setEditBagDropTime(bdform.getEditBagDrop().getDispBagDropTime());
+			} else {
+				/** Default date to current day and time to empty string **/
+				Date today = DateUtils.convertToGMTDate(new Date());
+				TimeZone timeZone = TimeZone
+						.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
+				bdform.setEditBagDropDate(DateUtils.formatDate(today, user.getDateformat().getFormat(), null, timeZone));
+				bdform.setEditBagDropTime("");
+			}
 			return mapping.findForward(TracingConstants.BAGDROPEDIT);
 		}
 		
 		if (request.getParameter("save") != null){
 			BagDrop bagDrop = bdform.getEditBagDrop(); 
+			/** set date/time from form **/
+			bagDrop.setDispBagDropDate(bdform.getEditBagDropDate());
+			bagDrop.setDispBagDropTime(bdform.getEditBagDropTime());
+			
 			bagDrop.setEntryMethod(TracingConstants.BAGDROP_ENTRY_METHOD_WEB);
 			boolean success = true;
 			try{
@@ -180,16 +196,9 @@ public class BagDropAction extends Action{
 			dto.setAirlineCode(user.getCompanycode_ID());
 			dto.setArrivalStation(getCurrentStation(cbroStation, user));
 			
-			//initializing date range to start of day in GMT
-			Calendar startOfDayCal = GregorianCalendar.getInstance();
-			startOfDayCal.set(Calendar.HOUR, 0);
-			startOfDayCal.set(Calendar.MINUTE, 0);
-			startOfDayCal.set(Calendar.SECOND, 0);
-			startOfDayCal.set(Calendar.AM_PM, Calendar.AM);
-			Date startOfDayGMTDate = DateUtils.convertToGMTDate(startOfDayCal.getTime());
+			Date startOfDayGMTDate = getStartOfDayGMT(user);
 			dto.setStartScheduleArrivalDate(startOfDayGMTDate);
 			dto.setEndScheduleArrivalDate(startOfDayGMTDate);
-			
 			
 			TimeZone timeZone = TimeZone
 					.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
@@ -304,5 +313,16 @@ public class BagDropAction extends Action{
 		} else {
 			return agent.getStation().getStationcode();
 		}
+	}
+	
+	private Date getStartOfDayGMT(Agent agent){
+		//initializing date range to start of day in GMT
+		Calendar startOfDayCal = GregorianCalendar.getInstance();
+		startOfDayCal.set(Calendar.HOUR, 0);
+		startOfDayCal.set(Calendar.MINUTE, 0);
+		startOfDayCal.set(Calendar.SECOND, 0);
+		startOfDayCal.set(Calendar.AM_PM, Calendar.AM);
+		Date startOfDayGMTDate = DateUtils.convertToGMTDate(startOfDayCal.getTime());
+		return startOfDayGMTDate;
 	}
 }
