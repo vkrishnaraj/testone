@@ -328,12 +328,12 @@
          		<table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
          			<tr>
 			            <td colspan=2>
-			              <bean:message key="colname.last_name.req" />
+			              <bean:message key="colname.last_name.found.req" />
 			              <br>
 			              <html:text name="foundItemForm" property="found.client.lastName" styleId="lastname" size="20" maxlength="20" styleClass="textfield" />
 			            </td>
 			            <td nowrap colspan="2">
-			              <bean:message key="colname.first_name.req" />
+			              <bean:message key="colname.first_name.found.req" />
 			              <br>
 			              <html:text name="foundItemForm" property="found.client.firstName" styleId="firstname"  size="20" maxlength="20" styleClass="textfield" />
 			            </td>

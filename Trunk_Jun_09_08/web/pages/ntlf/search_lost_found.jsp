@@ -158,12 +158,12 @@
            			</tr>
            			<tr>
            				<td>
-			              <bean:message key="colname.last_name.req" />
+			              <bean:message key="colname.last_name.found.req" />
 			              <br>
 			              <html:text name="searchLostFoundForm" property="lastName" size="15" maxlength="20" styleClass="textfield" />
 			            </td>
 			            <td>
-			              <bean:message key="colname.first_name.req" />
+			              <bean:message key="colname.first_name.found.req" />
 			              <br>
 			              <html:text name="searchLostFoundForm" property="firstName" size="15" maxlength="20" styleClass="textfield" />
 			            </td>
