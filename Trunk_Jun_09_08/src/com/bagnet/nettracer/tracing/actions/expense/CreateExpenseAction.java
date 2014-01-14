@@ -58,8 +58,8 @@ public class CreateExpenseAction extends BaseExpenseAction {
 	private List<PassengerExp> preparePassengerlist(List<Passenger> passengerlist) {
         List<PassengerExp> passengerexp= new ArrayList<PassengerExp>();
 		if (passengerlist != null && passengerlist.size() > 0) {
-			for (int i=0;i<passengerlist.size();i++) { 
-	        	Passenger pa = passengerlist.get(i);
+//			for (int i=0;i<passengerlist.size();i++) { 
+	        	Passenger pa = passengerlist.get(0);
 	        	PassengerExp paexp = new PassengerExp();
         		paexp.setLastname((pa.getLastname() != null) ? pa.getLastname() : "");
         		paexp.setFirstname((pa.getFirstname() != null) ? pa.getFirstname() : "");
@@ -75,8 +75,8 @@ public class CreateExpenseAction extends BaseExpenseAction {
         		paexp.setZip((pa.getAddress(0).getZip()!= null) ? pa.getAddress(0).getZip() : "");
         		paexp.setCountrycode_ID((pa.getAddress(0).getCountrycode_ID()!= null) ? pa.getAddress(0).getCountrycode_ID() : "");
         		paexp.setEmail((pa.getAddress(0).getEmail()!= null) ? pa.getAddress(0).getEmail() : "");
-        		passengerexp.add(i, paexp);
-	        }
+        		passengerexp.add(0, paexp);
+//	        }
 		}
 		return passengerexp;
 	}
