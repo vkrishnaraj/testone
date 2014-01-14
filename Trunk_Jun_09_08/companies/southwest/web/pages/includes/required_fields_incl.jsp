@@ -34,32 +34,15 @@
   function  validatereqOHDFields(form) {
 	 var closed = false;
 	 
-	 for (var j=0;j < form.length; j++) {
-     	currentElement = form.elements[j];
+    for (var j=0;j < form.length; j++) {
+	    currentElement = form.elements[j];
+	    currentElementName=currentElement.name;
 		if (currentElement.name == "status.status_ID") {
 			statusId = currentElement.options[currentElement.selectedIndex].value;
 			if (statusId == <%= TracingConstants.OHD_STATUS_CLOSED %>) {
     			closed = true;
   			}
-		}
-	 } 
-	 if (closed == true) {
-		 for (var j=0; j < form.length; j++) {
-		 	currentElement = form.elements[j];
-		 	currentElementName=currentElement.name;
-		    if (currentElement.name == "disposal_status.status_ID" && currentElement.options[currentElement.selectedIndex].value == "") {
-		    	alert('<%=(String) bundle.getString("colname.disposal_status") + " " + bundle.getString("error.validation.isRequired") %>');
-            	currentElement.focus();
-            	return false;
-		    }
-		 }
-	 }
-    
-    for (var j=0;j < form.length; j++) {
-	    currentElement = form.elements[j];
-	    currentElementName=currentElement.name;
-		
-		if (currentElementName.indexOf("bagColor") != -1) {
+		} else if (currentElementName.indexOf("bagColor") != -1) {
 			if (currentElement.value.length == 0) {
 		        alert("<%=(String) bundle.getString(
 										"colname.color")%>" + " <%=(String) bundle.getString("error.validation.isRequired")%>");
@@ -73,6 +56,18 @@
 		        return false;
 			}
 	     }
+	 }
+	 
+	 if (closed == true) {
+		 for (var j=0; j < form.length; j++) {
+		 	currentElement = form.elements[j];
+		 	currentElementName=currentElement.name;
+		    if (currentElement.name == "disposal_status.status_ID" && currentElement.options[currentElement.selectedIndex].value == "") {
+		    	alert('<%=(String) bundle.getString("colname.disposal_status") + " " + bundle.getString("error.validation.isRequired") %>');
+            	currentElement.focus();
+            	return false;
+		    }
+		 }
 	 }
 	 
 	 return true;
