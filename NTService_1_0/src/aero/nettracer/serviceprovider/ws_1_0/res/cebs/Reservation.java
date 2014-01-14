@@ -333,10 +333,7 @@ public class Reservation implements ReservationInterface {
 		
 		// DATE
 		if (flight.getDepartureDate() != null) {
-			Calendar depDate = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-			Calendar provDate = flight.getDepartureDate();
-			depDate.set(provDate.get(Calendar.YEAR), provDate.get(Calendar.MONTH), provDate.get(Calendar.DATE));
-			i.setSchdeparttime(depDate);
+			i.setSchdeparttime(flight.getDepartureDate());
 		}
 	}
 }

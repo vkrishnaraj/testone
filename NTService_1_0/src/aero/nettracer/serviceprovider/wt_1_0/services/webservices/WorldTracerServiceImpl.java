@@ -2681,7 +2681,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				}
 			}
 
-			d1.addNewRushFlights();
 			RushBagTags rbt = d1.addNewRushBagTags();
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.XT);

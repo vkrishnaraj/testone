@@ -76,7 +76,22 @@ public class Reservation implements ReservationInterface {
 	private static final String SECURITY = "Security";
 	private static final String APACHE_RAMPART_INFLOW_HANDLER = "Apache Rampart inflow handler";
 	
+	private int contract_version = 0;
 	
+	
+	
+	public int getContract_version(User user) {
+		if (contract_version == 0) {
+			String temp = user.getProfile().getParameters().get(ParameterType.CONTRACT_VERSION);
+			if (temp != null) {
+				contract_version = Integer.parseInt(temp);
+			} else {
+				contract_version = CONTRACT_VERSION;
+			}
+		}
+		return contract_version;
+	}
+
 	@Override
 	public EnplanementResponse getEnplanements(User user) throws UnexpectedException {
 		return null;
@@ -166,16 +181,17 @@ public class Reservation implements ReservationInterface {
 			// CREATE OUTGOING DOCUMENT
 			String resUser = user.getProfile().getParameters().get(ParameterType.RESERVATION_USER);
 			String pass = user.getProfile().getParameters().get(ParameterType.RESERVATION_PASS);
+			String domain = user.getProfile().getParameters().get(ParameterType.DOMAIN_CODE);
 			LogonRequestDocument bi = LogonRequestDocument.Factory.newInstance();
 			LogonRequest bi2 = bi.addNewLogonRequest();
 			LogonRequestData bi3 = bi2.addNewLogonRequestData();
 			bi3.setAgentName(resUser != null ? resUser: AGENT_NAME);
 			bi3.setPassword(pass != null ? pass : PASSWORD);
-			bi3.setDomainCode(DOMAIN_CODE);
+			bi3.setDomainCode(domain != null ? domain : DOMAIN_CODE);
 			
 			// CREATE CONTRACT VERSION
 			ContractVersionDocument cv = ContractVersionDocument.Factory.newInstance();
-			cv.setContractVersion(CONTRACT_VERSION);
+			cv.setContractVersion(getContract_version(user));
 			
 			// MAKE REQUEST WITH STUB
 			LogonResponseDocument docRes = stub.logon(bi, cv);
@@ -200,14 +216,12 @@ public class Reservation implements ReservationInterface {
 			configureClient(stub);
 
 			// CREATE OUTGOING DOCUMENT
-			String resUser = user.getProfile().getParameters().get(ParameterType.RESERVATION_USER);
-			String pass = user.getProfile().getParameters().get(ParameterType.RESERVATION_PASS);
 			LogoutRequestDocument bi = LogoutRequestDocument.Factory.newInstance();
-			LogoutRequest bi2 = bi.addNewLogoutRequest();
+			bi.addNewLogoutRequest();
 			
 			// CREATE CONTRACT VERSION
 			ContractVersionDocument cv = ContractVersionDocument.Factory.newInstance();
-			cv.setContractVersion(CONTRACT_VERSION);
+			cv.setContractVersion(getContract_version(user));
 			
 			// CREATE SIGNATURE
 			SignatureDocument sig = SignatureDocument.Factory.newInstance();
@@ -241,7 +255,7 @@ public class Reservation implements ReservationInterface {
 			
 			// CREATE CONTRACT VERSION
 			ContractVersionDocument cv = ContractVersionDocument.Factory.newInstance();
-			cv.setContractVersion(CONTRACT_VERSION);
+			cv.setContractVersion(getContract_version(user));
 			
 			// CREATE SIGNATURE
 			SignatureDocument sig = SignatureDocument.Factory.newInstance();
@@ -479,7 +493,7 @@ public class Reservation implements ReservationInterface {
 			
 			// CREATE CONTRACT VERSION
 			ContractVersionDocument cv = ContractVersionDocument.Factory.newInstance();
-			cv.setContractVersion(CONTRACT_VERSION);
+			cv.setContractVersion(getContract_version(user));
 			
 			// CREATE SIGNATURE
 			SignatureDocument sig = SignatureDocument.Factory.newInstance();
