@@ -73,7 +73,7 @@ public class IssuanceItemAdminAction extends Action {
 		
 		if (request.getParameter("historyquantity") != null) {
 			String qID = request.getParameter("historyquantity");
-			if (qID.matches("^\\d+$")) {
+			if (qID.matches(TracingConstants.REGEX_INTEGER)) {
 				response.sendRedirect("auditIssuanceItemAdmin.do?type=Q&id=" + qID + "&station=" + searchStation.getStationcode());
 				return null;
 			}
@@ -86,7 +86,7 @@ public class IssuanceItemAdminAction extends Action {
 		
 		if (request.getParameter("historyinventory") != null) {
 			String qID = request.getParameter("historyinventory");
-			if (qID.matches("^\\d+$")) {
+			if (qID.matches(TracingConstants.REGEX_INTEGER)) {
 				response.sendRedirect("auditIssuanceItemAdmin.do?type=I&id=" + qID + "&station=" + searchStation.getStationcode());
 				return null;
 			}
@@ -96,14 +96,14 @@ public class IssuanceItemAdminAction extends Action {
 		
 		if (request.getParameter("editquantity") != null) {
 			String qID = request.getParameter("editquantity");
-			if (qID.matches("^\\d+$")) {
+			if (qID.matches(TracingConstants.REGEX_INTEGER)) {
 				String newQuantity = request.getParameter("item_quantity_" + qID);
 				String newMinQuantity = request.getParameter("item_minquantity_" + qID);
 				int intMinQuantity = -1;
-				if (newMinQuantity != null && newMinQuantity.matches("^\\d+$")) {
+				if (newMinQuantity != null && newMinQuantity.matches(TracingConstants.REGEX_INTEGER)) {
 					intMinQuantity = Integer.parseInt(newMinQuantity);
 				}
-				if (newQuantity != null && newQuantity.matches("^\\d+$")) {
+				if (newQuantity != null && newQuantity.matches(TracingConstants.REGEX_INTEGER)) {
 					IssuanceItemBMO.editQuantifiedItem(Long.parseLong(qID), Integer.parseInt(newQuantity), intMinQuantity, user, null);
 				}
 			}
@@ -111,7 +111,7 @@ public class IssuanceItemAdminAction extends Action {
 		
 		if (request.getParameter("issuequantity") != null) {
 			String qID = request.getParameter("issuequantity");
-			if (qID.matches("^\\d+$")) {
+			if (qID.matches(TracingConstants.REGEX_INTEGER)) {
 				String incID = request.getParameter("item_incid_" + qID);
 				IssuanceItemBMO.editQuantifiedItem(Long.parseLong(qID), -1, -1, user, incID);
 			}
@@ -125,19 +125,19 @@ public class IssuanceItemAdminAction extends Action {
 			String newDesc = (String) request.getParameter("item_desc");
 			String newBarcode = (String) request.getParameter("item_barcode");
 			String newTradetype = (String) request.getParameter("item_tradetype");
-			if (newTradetype != null && newTradetype.matches("^\\d+$") && newCost != null && newCost.matches("^\\d*\\.?\\d+$")) {
+			if (newTradetype != null && newTradetype.matches(TracingConstants.REGEX_INTEGER) && newCost != null && newCost.matches(TracingConstants.REGEX_DOUBLE)) {
 				IssuanceItemBMO.addInventoriedItem(Long.parseLong(newType), newDesc, newBarcode, Integer.parseInt(newTradetype), user, searchStation, Double.parseDouble(newCost));
 			}
 		}
 		
 		if (request.getParameter("editinventory") != null) {
 			String qID = request.getParameter("editinventory");
-			if (qID.matches("^\\d+$")) {
+			if (qID.matches(TracingConstants.REGEX_INTEGER)) {
 				String newDesc = request.getParameter("item_desc_" + qID);
 				String newBarcode = request.getParameter("item_barcode_" + qID);
 				String newTradetype = request.getParameter("item_tradetype_" + qID);
 				String newCost = request.getParameter("item_cost_" + qID);
-				if (newTradetype != null && newTradetype.matches("^\\d+$") && newCost != null && newCost.matches("^\\d*\\.?\\d+$")) {
+				if (newTradetype != null && newTradetype.matches(TracingConstants.REGEX_INTEGER) && newCost != null && newCost.matches(TracingConstants.REGEX_DOUBLE)) {
 					IssuanceItemBMO.editInventoriedItem(Long.parseLong(qID), newDesc, newBarcode, Integer.parseInt(newTradetype), user, Double.parseDouble(newCost));
 				}
 			}
@@ -145,7 +145,7 @@ public class IssuanceItemAdminAction extends Action {
 		
 		if (request.getParameter("issueinventory") != null) {
 			String qID = request.getParameter("issueinventory");
-			if (qID.matches("^\\d+$")) {
+			if (qID.matches(TracingConstants.REGEX_INTEGER)) {
 				String incID = request.getParameter("inv_item_incid_" + qID);
 				IssuanceItemBMO.moveInventoriedItem(Long.parseLong(qID), TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_ISSUED, user, incID, "Issued Item");
 			}
@@ -153,7 +153,7 @@ public class IssuanceItemAdminAction extends Action {
 		
 		if (request.getParameter("loaninventory") != null) {
 			String qID = request.getParameter("loaninventory");
-			if (qID.matches("^\\d+$")) {
+			if (qID.matches(TracingConstants.REGEX_INTEGER)) {
 				String incID = request.getParameter("inv_item_incid_" + qID);
 				IssuanceItemBMO.moveInventoriedItem(Long.parseLong(qID), TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_ONLOAN, user, incID, "Loaned Item");
 			}
@@ -161,7 +161,7 @@ public class IssuanceItemAdminAction extends Action {
 		
 		if (request.getParameter("snloaninventory") != null) {
 			String qID = request.getParameter("snloaninventory");
-			if (qID.matches("^\\d+$")) {
+			if (qID.matches(TracingConstants.REGEX_INTEGER)) {
 				String snFName = (String) request.getParameter("snFName");
 				String snLName = (String) request.getParameter("snLName");
 				String snAddr1 = (String) request.getParameter("snAddr1");
@@ -180,14 +180,14 @@ public class IssuanceItemAdminAction extends Action {
 		
 		if (request.getParameter("returninventory") != null) {
 			String qID = request.getParameter("returninventory");
-			if (qID.matches("^\\d+$")) {
+			if (qID.matches(TracingConstants.REGEX_INTEGER)) {
 				IssuanceItemBMO.moveInventoriedItem(Long.parseLong(qID), TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_AVAILABLE, user, null, "Returned Item");
 			}
 		}
 		
 		if (request.getParameter("discardinventory") != null) {
 			String qID = request.getParameter("discardinventory");
-			if (qID.matches("^\\d+$")) {
+			if (qID.matches(TracingConstants.REGEX_INTEGER)) {
 				String reason = request.getParameter("discardreason");
 				IssuanceItemBMO.moveInventoriedItem(Long.parseLong(qID), TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_DISCARDED, user, null, "Discarded Item: " + reason);
 			}
@@ -195,7 +195,7 @@ public class IssuanceItemAdminAction extends Action {
 		
 		if (request.getParameter("convertinventory") != null) {
 			String qID = request.getParameter("convertinventory");
-			if (qID.matches("^\\d+$")) {
+			if (qID.matches(TracingConstants.REGEX_INTEGER)) {
 				IssuanceItemBMO.moveInventoriedItem(Long.parseLong(qID), TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_ISSUED, user, null, "Converted Item to Tradeout");
 			}
 		}

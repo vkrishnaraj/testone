@@ -1551,6 +1551,9 @@ public class TracingConstants {
 	
 	public static final String SUBJECT_CLAIM_STATUS_CHANGED = "email.subjectline.claim.status.changed";
 	
+	public static final String REGEX_INTEGER = "^\\d+$";
+	public static final String REGEX_DOUBLE = "^\\d*\\.?\\d+$";
+	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {
 			return DB_DATEFORMAT_MSSQL;
