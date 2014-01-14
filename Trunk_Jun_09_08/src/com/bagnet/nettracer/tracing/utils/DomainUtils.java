@@ -368,6 +368,7 @@ public class DomainUtils {
 		lfAddress.setDecryptedCity("Atlanta");
 		lfAddress.setDecryptedState("GA");
 		lfAddress.setDecryptedZip("30339");
+		lfAddress.setCountry("US");
 		
 		LFPhone home = new LFPhone();
 		home.setNumberType(LFPhone.HOME);
@@ -435,6 +436,7 @@ public class DomainUtils {
 		claimAddress.setCity("Atlanta");
 		claimAddress.setState("GA");
 		claimAddress.setZip("30339");
+		claimAddress.setCountry("US");
 		Set<FsAddress> claimAddresses = new LinkedHashSet<FsAddress>();
 		claimAddresses.add(claimAddress);
 		
@@ -499,6 +501,7 @@ public class DomainUtils {
 		incidentAddress.setHomephone("404 555-1234");
 		incidentAddress.setWorkphone("404 555-1234");
 		incidentAddress.setMobile("404 555-1234");
+		incidentAddress.setCountrycode_ID("US");
 		
 		Set<Address> incidentAddresses = new LinkedHashSet<Address>();
 		incidentAddresses.add(incidentAddress);
