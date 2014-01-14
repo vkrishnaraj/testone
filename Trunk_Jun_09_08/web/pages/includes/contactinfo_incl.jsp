@@ -5,6 +5,9 @@
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.forms.IncidentForm" %>
@@ -12,11 +15,12 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 
 
-<%@page import="org.apache.struts.util.LabelValueBean"%><SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
-<SCRIPT LANGUAGE="JavaScript">
+<%@page import="org.apache.struts.util.LabelValueBean"%>
+<script src="deployment/main/js/date.js"></script>
+<script src="deployment/main/js/AnchorPosition.js"></script>
+<script src="deployment/main/js/PopupWindow.js"></script>
+<script src="deployment/main/js/popcalendar.js"></script>
+<script>
   
 	var cal1xx = new CalendarPopup();	
 
@@ -50,7 +54,7 @@
 
 	
 
-</SCRIPT>
+</script>
 
 
 <%
@@ -512,12 +516,13 @@
                       <b><bean:message key="colname.report_email_cus" /></b>
                       </td>
                       <td width="17%">
-                      <% String userLocale = a.getDefaultlocale();	%>
+                      <c:set var="userLocale"><%=a.getDefaultlocale()%></c:set>
                       <bean:message key="colname.email.language" />
                       <br />
                     <select name="language" class="dropdown">
                       <logic:iterate id="locale" name="receiptLocaleList" scope="session">
-                        <option value='<bean:write name="locale" property="value"/>' <%=(((LabelValueBean)locale).getValue().equals(userLocale)? "selected" : "") %>>
+                        <c:set var="localeValue">${locale.value}</c:set>
+                        <option value='<bean:write name="locale" property="value"/>' ${(0 < fn:length(incidentForm.language) and localeValue == incidentForm.language or fn:length(incidentForm.language) < 2 and localeValue  == userLocale) ? "selected" : ""}>
                         <bean:write name="locale" property="label" />
                       </logic:iterate>
                     </select>
