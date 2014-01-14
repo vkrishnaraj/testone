@@ -1,11 +1,16 @@
 package com.bagnet.nettracer.tracing.adapter.impl;
 
+import java.lang.reflect.Method;
 import java.util.Date;
+
+import org.apache.log4j.Logger;
 
 import com.bagnet.nettracer.tracing.adapter.TemplateAdapter;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 public class TemplateAdapterImpl implements TemplateAdapter {
+	
+	private Logger logger = Logger.getLogger(TemplateAdapterImpl.class);
 	
 	private String dateFormat;
 	
@@ -23,7 +28,9 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	private String claimAddress2 = "";
 	private String claimCity = "";
 	private String claimState = "";
+	private String claimProvince = "";
 	private String claimZip = "";
+	private String claimCountry = "";
 	private String claimHomePhone = "";
 	private String claimBusinessPhone = "";
 	private String claimMobilePhone = "";
@@ -41,6 +48,8 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	private String foundItemAddress2 = "";
 	private String foundItemCity = "";
 	private String foundItemState = "";
+	private String foundItemProvince = "";
+	private String foundItemCountry = "";
 	private String foundItemZip = "";
 	private String foundItemHomePhone = "";
 	private String foundItemBusinessPhone = "";
@@ -55,6 +64,8 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	private String incidentAddress2 = "";
 	private String incidentCity = "";
 	private String incidentState = "";
+	private String incidentProvince = "";
+	private String incidentCountry = "";
 	private String incidentZip = "";
 	private String incidentHomePhone = "";
 	private String incidentBusinessPhone = "";
@@ -127,6 +138,10 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 		this.claimLastName = claimLastName;
 	}
 
+	public String getClaimFullAddress() {
+		return getFullAddress("Claim");
+	}
+
 	public String getClaimAddress1() {
 		return claimAddress1 != null ? claimAddress1 : "";
 	}
@@ -159,12 +174,28 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 		this.claimState = claimState;
 	}
 
+	public String getClaimProvince() {
+		return claimProvince != null ? claimProvince : "";
+	}
+
+	public void setClaimProvince(String claimProvince) {
+		this.claimProvince = claimProvince;
+	}
+
 	public String getClaimZip() {
 		return claimZip != null ? claimZip : "";
 	}
 
 	public void setClaimZip(String claimZip) {
 		this.claimZip = claimZip;
+	}
+
+	public String getClaimCountry() {
+		return claimCountry != null ? claimCountry : "";
+	}
+
+	public void setClaimCountry(String claimCountry) {
+		this.claimCountry = claimCountry;
 	}
 
 	public String getClaimHomePhone() {
@@ -254,6 +285,10 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	public void setFoundItemLastName(String foundItemLastName) {
 		this.foundItemLastName = foundItemLastName;
 	}
+	
+	public String getFoundItemFullAddress(){
+		return getFullAddress("FoundItem");
+	}
 
 	public String getFoundItemAddress1() {
 		return foundItemAddress1 != null ? foundItemAddress1 : "";
@@ -285,6 +320,22 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 
 	public void setFoundItemState(String foundItemState) {
 		this.foundItemState = foundItemState;
+	}
+
+	public String getFoundItemProvince() {
+		return foundItemProvince != null ? foundItemProvince : "";
+	}
+
+	public void setFoundItemProvince(String foundItemProvince) {
+		this.foundItemProvince = foundItemProvince;
+	}
+
+	public String getFoundItemCountry() {
+		return foundItemCountry != null ? foundItemCountry : "";
+	}
+
+	public void setFoundItemCountry(String foundItemCountry) {
+		this.foundItemCountry = foundItemCountry;
 	}
 
 	public String getFoundItemZip() {
@@ -350,6 +401,10 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	public void setIncidentLastName(String incidentLastName) {
 		this.incidentLastName = incidentLastName;
 	}
+	
+	public String getIncidentFullAddress(){
+		return this.getFullAddress("Incident");
+	}
 
 	public String getIncidentAddress1() {
 		return incidentAddress1 != null ? incidentAddress1 : "";
@@ -381,6 +436,22 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 
 	public void setIncidentState(String incidentState) {
 		this.incidentState = incidentState;
+	}
+
+	public String getIncidentProvince() {
+		return incidentProvince != null ? incidentProvince : "";
+	}
+
+	public void setIncidentProvince(String incidentProvince) {
+		this.incidentProvince = incidentProvince;
+	}
+
+	public String getIncidentCountry() {
+		return incidentCountry != null ? incidentCountry : "";
+	}
+
+	public void setIncidentCountry(String incidentCountry) {
+		this.incidentCountry = incidentCountry;
 	}
 
 	public String getIncidentZip() {
@@ -425,6 +496,48 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 
 	public void setExpenseTotalAmount(String expenseTotalAmount) {
 		this.expenseTotalAmount = expenseTotalAmount;
+	}
+
+	private String getFullAddress(String className){
+		StringBuilder fullAddress = new StringBuilder();
+		
+		String value = invokeMethod("get" + className + "Address1");
+		if(value != null && !value.isEmpty()){
+			fullAddress.append(value+"<br/>");
+		}
+		value = invokeMethod("get" + className + "Address2");
+		if(value != null && !value.isEmpty()){
+			fullAddress.append(value+"<br/>");
+		}
+		value = invokeMethod("get" + className + "City");
+		if(value != null && !value.isEmpty()){
+			fullAddress.append(value+", ");
+		}
+		value = invokeMethod("get" + className + "State");
+		if(value != null && !value.isEmpty()){
+			fullAddress.append(value+". ");
+		}
+		value = invokeMethod("get" + className + "Zip");
+		if(value != null && !value.isEmpty()){
+			fullAddress.append(value);
+		}
+		value = invokeMethod("get" + className + "Country");
+		if(value != null && !value.isEmpty()){
+			fullAddress.append("<br/>"+value);
+		}
+		
+		return fullAddress.toString();
+	}
+	
+	private String invokeMethod(String methodName) {
+		String result = null;
+		try {
+			Method getter = this.getClass().getDeclaredMethod(methodName, new Class[] { });
+			result = (String) getter.invoke(this, new Object[] { });
+		} catch (Exception e) {
+			logger.error(e);
+		}
+		return result;
 	}
 
 }

@@ -115,8 +115,17 @@ public class TemplateAdapterFactory {
 					adapter.setIncidentAddress2(a.getAddress2());				
 				if (a.getCity() != null)
 					adapter.setIncidentCity(a.getCity());				
-				if (a.getState() != null)
-					adapter.setIncidentState(a.getState());				
+				if (a.getCountry() != null){
+					adapter.setIncidentCountry(a.getCountry());
+					if (!a.getCountrycode_ID().equals("US") && a.getProvince()!=null && !a.getProvince().isEmpty()){
+						adapter.setIncidentState(a.getProvince());
+					} else if (a.getState() != null){ 
+						adapter.setIncidentState(a.getState());
+					}
+				}
+				if (a.getProvince() != null){
+					adapter.setIncidentProvince(a.getProvince());
+				}
 				if (a.getZip() != null)
 					adapter.setIncidentZip(a.getZip());				
 				if (a.getHomephone() != null)
@@ -144,7 +153,14 @@ public class TemplateAdapterFactory {
 		adapter.setClaimAddress1(a.getAddress1());
 		adapter.setClaimAddress2(a.getAddress2());
 		adapter.setClaimCity(a.getCity());
-		adapter.setClaimState(a.getState());
+		if(!a.getCountry().equals("US")){
+			adapter.setClaimState(a.getProvince());
+		} else {
+			adapter.setClaimState(a.getState());
+		}
+
+		adapter.setClaimProvince(a.getProvince());
+		adapter.setClaimCountry(a.getCountry());
 		adapter.setClaimZip(a.getZip());
 		
 		for (Phone phone: p.getPhones()) {
@@ -182,7 +198,15 @@ public class TemplateAdapterFactory {
 		adapter.setFoundItemAddress1(a.getDecryptedAddress1());
 		adapter.setFoundItemAddress2(a.getDecryptedAddress2());
 		adapter.setFoundItemCity(a.getDecryptedCity());
-		adapter.setFoundItemState(a.getDecryptedState());
+		if(a.getCountry()!=null){
+			adapter.setFoundItemCountry(a.getCountry());
+			if(!a.getCountry().equals("US")){
+				adapter.setFoundItemState(a.getDecryptedProvince());
+			} else {
+				adapter.setFoundItemState(a.getDecryptedState());
+			}
+		}
+		adapter.setFoundItemProvince(a.getDecryptedProvince());
 		adapter.setFoundItemZip(a.getDecryptedZip());
 		
 		for (LFPhone phone: p.getPhones()) {

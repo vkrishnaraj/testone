@@ -25,6 +25,7 @@ public interface TemplateAdapter {
 	public void setClaimFirstName(String claimFirstName);
 	public String getClaimLastName();
 	public void setClaimLastName(String claimLastName);
+	public String getClaimFullAddress();
 	public String getClaimAddress1();
 	public void setClaimAddress1(String claimAddress1);
 	public String getClaimAddress2();
@@ -33,8 +34,12 @@ public interface TemplateAdapter {
 	public void setClaimCity(String claimCity);
 	public String getClaimState();
 	public void setClaimState(String claimState);
+	public String getClaimProvince();
+	public void setClaimProvince(String claimProvince);
 	public String getClaimZip();
 	public void setClaimZip(String claimZip);
+	public String getClaimCountry();
+	public void setClaimCountry(String claimCountry);
 	public String getClaimHomePhone();
 	public void setClaimHomePhone(String claimHomePhone);
 	public String getClaimBusinessPhone();
@@ -59,6 +64,7 @@ public interface TemplateAdapter {
 	public void setFoundItemFirstName(String foundItemFirstName);
 	public String getFoundItemLastName();
 	public void setFoundItemLastName(String foundItemLastName);
+	public String getFoundItemFullAddress();
 	public String getFoundItemAddress1();
 	public void setFoundItemAddress1(String foundItemAddress1);
 	public String getFoundItemAddress2();
@@ -67,6 +73,10 @@ public interface TemplateAdapter {
 	public void setFoundItemCity(String foundItemCity);
 	public String getFoundItemState();
 	public void setFoundItemState(String foundItemState);
+	public String getFoundItemProvince();
+	public void setFoundItemProvince(String foundItemProvince);
+	public String getFoundItemCountry();
+	public void setFoundItemCountry(String foundItemCountry);
 	public String getFoundItemZip();
 	public void setFoundItemZip(String foundItemZip);
 	public String getFoundItemHomePhone();
@@ -85,6 +95,7 @@ public interface TemplateAdapter {
 	public void setIncidentFirstName(String incidentFirstName);
 	public String getIncidentLastName();
 	public void setIncidentLastName(String incidentLastName);
+	public String getIncidentFullAddress();
 	public String getIncidentAddress1();
 	public void setIncidentAddress1(String incidentAddress1);
 	public String getIncidentAddress2();
@@ -93,6 +104,10 @@ public interface TemplateAdapter {
 	public void setIncidentCity(String incidentCity);
 	public String getIncidentState();
 	public void setIncidentState(String incidentState);
+	public String getIncidentProvince();
+	public void setIncidentProvince(String incidentProvince);
+	public String getIncidentCountry();
+	public void setIncidentCountry(String incidentCountry);
 	public String getIncidentZip();
 	public void setIncidentZip(String incidentZip);
 	public String getIncidentHomePhone();
