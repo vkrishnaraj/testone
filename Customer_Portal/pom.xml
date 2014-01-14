@@ -33,21 +33,21 @@
       	<profile>
       		<id>testing</id>
       		<properties>
-        		<ws.location>http\://172.30.68.2:8280/ntsouthwest/services/OnlineClaimsService</ws.location>
+        		<ws.location>https\://testing.nettracer.aero/ntsouthwest/services/OnlineClaimsService</ws.location>
         		<file.server>\\\\drad.nettracer.aero\\nettracer_claims_files\\testing\\</file.server>
       		</properties>
     	</profile>
       	<profile>
       		<id>testing2</id>
       		<properties>
-        		<ws.location>http\://172.30.68.2:8080/ntsouthwest/services/OnlineClaimsService</ws.location>
+        		<ws.location>https\://testing2.nettracer.aero/ntsouthwest/services/OnlineClaimsService</ws.location>
         		<file.server>\\\\drad.nettracer.aero\\nettracer_claims_files\\testing2\\</file.server>
       		</properties>
     	</profile>
       	<profile>
       		<id>training</id>
       		<properties>
-        		<ws.location>http\://172.30.68.2:8780/ntsouthwest/services/OnlineClaimsService</ws.location>
+        		<ws.location>https\://training.nettracer.aero/ntsouthwest/services/OnlineClaimsService</ws.location>
         		<file.server>\\\\drad.nettracer.aero\\nettracer_claims_files\\training\\</file.server>
       		</properties>
     	</profile>
