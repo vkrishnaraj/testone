@@ -117,7 +117,7 @@ public class TemplateAdapterFactory {
 					adapter.setIncidentCity(a.getCity());				
 				if (a.getCountry() != null){
 					adapter.setIncidentCountry(a.getCountry());
-					if (!a.getCountrycode_ID().equals("US") && a.getProvince()!=null && !a.getProvince().isEmpty()){
+					if (!a.getCountrycode_ID().equals("US")){
 						adapter.setIncidentState(a.getProvince());
 					} else if (a.getState() != null){ 
 						adapter.setIncidentState(a.getState());
