@@ -829,6 +829,8 @@
 
         var issItemType = "0";
         var validQuantity = "0";
+        var numPass = "<%=myform.getPassengerlist().size() %>";
+        var limitByPass = "false";
 
     	function populateType() {
     		var catList=document.getElementById("issuance_category");
@@ -872,7 +874,10 @@
 									String customDesc = q_item.getIssuanceItem().getDescription() + " (" + q_item.getQuantity() + " Available)"; 
     								customDesc = customDesc.replaceAll("\"", "\\\\\"");
     								customDesc = customDesc.replaceAll("/", "\\\\/");
-									if (index == 0) { %> validQuantity = <%=q_item.getQuantity() %>;<% }%>
+									if (index == 0) { %> 
+										validQuantity = <%=q_item.getQuantity() %>;
+										limitByPass = <%=q_item.getIssuanceItem().getCategory().isLimitByPassenger() %>;
+									<% }%>
 								typeList.options[<%=index%>]=new Option("<%=customDesc%>","<%=q_item.getId()%>",false,false);
 							<% index++; } %>
 							</logic:iterate>
@@ -907,6 +912,7 @@
 				<logic:iterate indexId="i" id="q_item" name="item_quantity_resultList" type="com.bagnet.nettracer.tracing.db.issuance.IssuanceItemQuantity" >
     				if("<%=q_item.getId()%>"==selectedType) {
     					validQuantity = <%=q_item.getQuantity() %>;
+					limitByPass = <%=q_item.getIssuanceItem().getCategory().isLimitByPassenger() %>;
     				}
 				</logic:iterate>
             }
@@ -914,8 +920,12 @@
 
     	function validateIssuanceQuantity() {
 			var quantField = document.getElementById("issuance_quantity");
-			if (quantField.value > validQuantity) {
-				alert("<bean:message key='issuance.item.quantity.issued' />" + " value must be less than or equal to " + validQuantity);
+			var testQuantity = validQuantity;
+			if (limitByPass && numPass < validQuantity) {
+				testQuantity = numPass;
+			}
+			if (quantField.value > testQuantity) {
+				alert("<bean:message key='issuance.item.quantity.issued' />" + " value must be less than or equal to " + testQuantity);
 				quantField.focus();
 				return false;	
 			}
@@ -942,6 +952,7 @@
           	<td><b><bean:message key="issuance.item.edit.agent" /></b></td>
           	<td><b><bean:message key="issuance.item.edit.date" /></b></td>
           	<td><b><bean:message key="issuance.item.button.return" /></b></td>
+          	<td><b><bean:message key="colname.action" /></b></td>          	
           </tr>
       	<logic:iterate id="issuanceitem" indexId="iiIndex" name="incidentForm" property="issuanceItemIncidents" type="com.bagnet.nettracer.tracing.db.issuance.IssuanceItemIncident">
       	<% boolean quantified = issuanceitem.getIssuanceItemQuantity() != null; %>
@@ -968,7 +979,7 @@
 				<% } %>
 						<td style="text-align:left;">
 							<logic:notEmpty name="issuanceitem" property="document">
-							<a href="#" onclick="openPreviewWindow2('<bean:write name="issuanceitem" property="document.fileName" />')">
+							<a href="#" onclick="openPreviewWindow1('<bean:write name="issuanceitem" property="document.fileName" />')"> 
 																<bean:message key="link.preview" /></a>
 							</logic:notEmpty>
 							<logic:empty name="issuanceitem" property="document">

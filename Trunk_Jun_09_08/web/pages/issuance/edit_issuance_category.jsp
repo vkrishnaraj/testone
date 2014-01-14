@@ -72,6 +72,9 @@
 	                     <bean:message key="issuance.item.missing" />
 	                  </td>
 	                  <td class="header">
+	                     <bean:message key="issuance.item.limited" />
+	                  </td>
+	                  <td class="header">
 	                     <bean:message key="issuance.item.inventoried" />
 	                  </td>
 	                  <td class="header">
@@ -97,6 +100,9 @@
                       </td>
                       <td>
               			 <% if (c_item.isMissing()) { %><bean:message key="issuance.item.yes" /><% } else { %><bean:message key="issuance.item.no" /><% } %>
+                      </td>
+                      <td>
+              			 <% if (c_item.isLimitByPassenger()) { %><bean:message key="issuance.item.yes" /><% } else { %><bean:message key="issuance.item.no" /><% } %>
                       </td>
                       <td>
               			 <% if (c_item.isInventory()) { %><bean:message key="issuance.item.yes" /><% } else { %><bean:message key="issuance.item.no" /><% } %>
@@ -149,6 +155,12 @@
                       		<bean:message key="edit.issuance.category.damage" /> <br/>
                 			<html:checkbox name="editIssuanceCategoryForm" property="category.damage" />
                       	</td>
+                      	<logic:equal name="editIssuanceCategoryForm" property="category.inventory" value="false">
+	                      	<td>
+	                      		<bean:message key="edit.issuance.category.limit" /> <br/>
+	                			<html:checkbox name="editIssuanceCategoryForm" property="category.limitByPassenger" />
+	                      	</td>
+                      	</logic:equal>
 						<td>
                       		<bean:message key="edit.issuance.category.document" /> <br/>
                               <html:select name="editIssuanceCategoryForm" property="templateId" styleClass="dropdown">
@@ -168,7 +180,12 @@
                 				<html:checkbox name="editIssuanceCategoryForm" property="category.inventory" />
                       		</logic:equal>
                       		<logic:notEqual name="editIssuanceCategoryForm" property="category.id" value="0">
-                      			<bean:write name="editIssuanceCategoryForm" property="category.inventory" />
+                      			<logic:equal name="editIssuanceCategoryForm" property="category.inventory" value="true">
+              			 			<bean:message key="issuance.item.yes" />
+              			 		</logic:equal>
+                      			<logic:equal name="editIssuanceCategoryForm" property="category.inventory" value="false">
+									<bean:message key="issuance.item.no" />
+								</logic:equal>
                       		</logic:notEqual>
                       	</td>
                       </tr>

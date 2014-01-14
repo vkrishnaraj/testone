@@ -44,6 +44,8 @@ public class IssuanceCategory {
 	
 	private boolean active;
 	
+	private boolean limitByPassenger;
+	
 	@ManyToOne
 	@JoinColumn(name="company_code_id", nullable=false)
 	private Company company;
@@ -131,6 +133,14 @@ public class IssuanceCategory {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	public boolean isLimitByPassenger() {
+		return limitByPassenger;
+	}
+
+	public void setLimitByPassenger(boolean limitByPassenger) {
+		this.limitByPassenger = limitByPassenger;
 	}
 
 }

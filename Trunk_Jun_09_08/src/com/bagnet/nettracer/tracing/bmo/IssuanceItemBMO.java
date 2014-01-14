@@ -681,6 +681,9 @@ public class IssuanceItemBMO {
 	public static void saveCategory(IssuanceCategory cat, Agent user) {
 		if (cat.getId() == 0) {
 			cat.setCompany(CompanyBMO.getCompany(user.getCompanycode_ID()));
+			if (cat.isInventory()) {
+				cat.setLimitByPassenger(false);
+			}
 		}
 		if (!cat.isInventory()) {
 			List<Station> stations = TracerUtils.getStationList(user.getCompanycode_ID());
