@@ -369,11 +369,6 @@
                   <html:text styleId="email" name="passenger" property="email" size="42" maxlength="100" styleClass="textfield" indexed="true"/>
                </td>  
             </tr>
-			<tr>
-			  <td colspan="3">&nbsp;</td>
-			</tr>               
-
-
       </logic:iterate> 
       
 	<% if(swaBsoPermission){  %>

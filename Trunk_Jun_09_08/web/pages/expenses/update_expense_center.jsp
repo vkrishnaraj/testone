@@ -563,11 +563,6 @@
                   <html:text name="passenger" property="email" size="42" maxlength="100" styleClass="textfield" indexed="true" disabled="true"/>
                </td>  
             </tr>
-			<tr>
-			  <td colspan="3">&nbsp;</td>
-			</tr>               
-
-
       </logic:iterate> 
       			
 
