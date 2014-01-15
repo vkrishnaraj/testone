@@ -160,7 +160,7 @@ public class TemplateAdapterFactory {
 		}
 
 		adapter.setClaimProvince(a.getProvince());
-		adapter.setClaimCountry(a.getCountry());
+		adapter.setClaimCountry(a.getCountryName());
 		adapter.setClaimZip(a.getZip());
 		
 		for (Phone phone: p.getPhones()) {
@@ -199,7 +199,7 @@ public class TemplateAdapterFactory {
 		adapter.setFoundItemAddress2(a.getDecryptedAddress2());
 		adapter.setFoundItemCity(a.getDecryptedCity());
 		if(a.getCountry()!=null){
-			adapter.setFoundItemCountry(a.getCountry());
+			adapter.setFoundItemCountry(a.getCountryName());
 			if(!a.getCountry().equals("US")){
 				adapter.setFoundItemState(a.getDecryptedProvince());
 			} else {

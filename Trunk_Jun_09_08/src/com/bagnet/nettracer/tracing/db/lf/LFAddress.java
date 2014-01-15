@@ -9,6 +9,8 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Proxy;
 
+import com.bagnet.nettracer.tracing.utils.TracerUtils;
+
 import aero.nettracer.security.AES;
 
 @Entity
@@ -144,6 +146,13 @@ public class LFAddress implements Serializable{
 
 	public void setCountry(String country) {
 		this.country = country;
+	}
+
+	public String getCountryName() {
+		if (country != null && country.length() > 0) {
+			return TracerUtils.getCountry(country).getCountry();
+		}
+		return "";
 	}
 	
 	public String getDecryptedAddress1(){
