@@ -65,7 +65,7 @@ public final class ManageDeprecCalc extends Action {
 		
 		List<Depreciation_Category> deprecCats;
 		
-		if (request.getParameter("save") != null) {
+		if (request.getParameter("save") != null || request.getParameter("addcategory")!=null) {
 			GeneralDepreciationRules rules=CompanyBMO.getDeprecRules(companyCode);
 
 			if(rules==null){
@@ -127,6 +127,7 @@ public final class ManageDeprecCalc extends Action {
 		boolean deleteCategory = false;
 
 		String index = "0";
+		@SuppressWarnings("rawtypes")
 		Enumeration e = request.getParameterNames();
 		while (e.hasMoreElements()) {
 			String parameter = (String) e.nextElement();
