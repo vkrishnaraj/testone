@@ -6632,6 +6632,7 @@ public class ReportBMO {
 							if(passFirst){
 								passengerList+=pass.getFirstname();
 							}
+							i++;
 						}
 					}
 					
@@ -6651,6 +6652,7 @@ public class ReportBMO {
 								if(itin.getDisdepartdate()!=null && !itin.getDisdepartdate().isEmpty()){
 									itineraryList+=itin.getDisdepartdate();
 								}
+								i++;
 							}
 						}
 					}
