@@ -79,6 +79,10 @@ public class BagDropAction extends Action{
 		
 		if (request.getParameter("search") != null){
 			bdform.setBagDropList(getPaginatedList(request,bdform,user,dto,cbroStation));
+			if(bdform.getBagDropList() !=null &&bdform.getBagDropList().size() == 1){
+				/** if single response, auto load the edit page **/
+				response.sendRedirect("bagDrop.do?editId=" + bdform.getBagDropList().get(0).getId());
+			}
 			bdform.setAvgTimeToCarousel(BagDropUtils.avgTimeToCarousel(user.getCompanycode_ID(), getCurrentStation(cbroStation, user)));
 			return mapping.findForward(TracingConstants.BAGDROP);
 		}
