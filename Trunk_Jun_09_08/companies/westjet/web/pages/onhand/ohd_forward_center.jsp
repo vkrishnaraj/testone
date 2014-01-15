@@ -19,14 +19,14 @@
   boolean noticePermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_FORWARD_NOTICES, a);
 %>
 
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
+  <SCRIPT SRC="deployment/main/js/date.js"></SCRIPT>
+  <SCRIPT SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
+  <SCRIPT SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
+  <SCRIPT SRC="deployment/main/js/popcalendar.js"></SCRIPT>
   
 <%@page import="com.mysql.jdbc.IterateBlock"%>
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/field_validation.js"></SCRIPT>
-  <SCRIPT LANGUAGE="JavaScript">
+<SCRIPT SRC="deployment/main/js/field_validation.js"></SCRIPT>
+  <SCRIPT>
     function textCounter(field, countfield, maxlimit) {
       if (field.value.length > maxlimit) {
         field.value = field.value.substring(0, maxlimit);
@@ -131,13 +131,7 @@
                   :
                 </td>
                 <td>
-                	<html:select name="forwardOnHandForm" property="companyCode" styleClass="dropdown" onchange="submit()" >
-                    	<html:options collection="companylistById" property="companyCode_ID" labelProperty="companyCode_ID" />
-                  	</html:select>
-                  	
-                  &nbsp;
-
-                    <logic:present name="stationList" scope="request">
+                	<logic:present name="stationList" scope="request">
                       <html:select name="forwardOnHandForm" styleClass="dropdown" property="destStation">
                         <logic:empty name="forwardOnHandForm" property="destStation">
                           <html:option value="">
