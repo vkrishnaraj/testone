@@ -159,8 +159,8 @@
 			    </tr>
 			    <tr>
             		<td colspan="9" align="center">
-            			<html:hidden property="refreshFlightInfo" value="" disabled="true" />
-              			<html:submit styleId="button" property="getFlightData" onclick="this.form.refreshFlightInfo.disabled = true;">
+            			<html:hidden property="getFlightData" value="1" disabled="true" />
+              			<html:submit styleId="button" property="getFlightData" onclick="this.disabled=true; this.form.getFlightData.disabled = false; this.value='Please wait'; this.form.submit();">
                 			<bean:message key="button.bagdrop.refreshflightinfo" />
               			</html:submit>
             		</td>
