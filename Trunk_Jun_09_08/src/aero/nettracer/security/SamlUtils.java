@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.opensaml.DefaultBootstrap;
 import org.opensaml.common.SAMLObject;
 import org.opensaml.common.binding.BasicSAMLMessageContext;
@@ -32,7 +33,6 @@ import org.opensaml.xml.XMLObject;
 import org.opensaml.xml.parse.BasicParserPool;
 import org.opensaml.xml.schema.impl.XSAnyImpl;
 import org.opensaml.xml.security.x509.BasicX509Credential;
-import org.opensaml.xml.signature.KeyInfo;
 import org.opensaml.xml.signature.Signature;
 import org.opensaml.xml.signature.SignatureValidator;
 import org.opensaml.xml.validation.ValidationException;
@@ -181,12 +181,6 @@ public class SamlUtils implements SsoUtils{
 	       Issuer issuer = message.getIssuer();
 	       map.put("issuerName", issuer.getValue());
 	       
-	       Signature signature = message.getSignature();
-	       map.put("signatureAlgorithm", signature.getSignatureAlgorithm());
-	       
-	       KeyInfo keyInfo = signature.getKeyInfo();
-	       map.put("X509Cert", keyInfo.getX509Datas().get(0).getX509Certificates().get(0).getDOM().getFirstChild().getTextContent());
-	       
 	       List<Assertion> assertions = message.getAssertions();
 	       if(assertions.size() > 0){
 	    	   //there should only be one assertion
@@ -231,6 +225,8 @@ public class SamlUtils implements SsoUtils{
 	 * @return
 	 */
 	public static Boolean validate(ResponseImpl  message){
+		boolean valid = true;
+		
 		String fileLocation = PropertyBMO.getValue(PropertyBMO.SAML_X509_WN);//TODO consider abstracting
 		if(fileLocation == null){
 			return false;
@@ -267,21 +263,37 @@ public class SamlUtils implements SsoUtils{
 			Signature signature = message.getSignature();
 
 			//try to validate
-			try
-			{
+			try {
+				/** validate is a void method, if the signature is invalid, a validation exception is thrown **/
 				signatureValidator.validate(signature);
-				return true;
-			}
-			catch (ValidationException ve)
-			{
+				
+				/** checking the condition to determine if the assertion was receive in the appropriate time window **/
+				if(message.getAssertions() != null && message.getAssertions().size() == 1){//there should only ever be one assertion provided
+					if(message.getAssertions().get(0).getConditions() != null){
+						DateTime condition = message.getAssertions().get(0).getConditions().getNotOnOrAfter();
+						if(condition.isBeforeNow()){
+							authenlog.error("assertion past condition notOnOrAfter datetime: " + condition.toString());
+							valid = false;
+						}
+					} else {
+						authenlog.error("No assertion conditions provided");
+						valid = false;
+					}
+				} else {
+					authenlog.error("Expecting single assertion, either 0 or more than one assertion provided");
+					valid = false;
+				}
+			} catch (ValidationException ve) {
 				authenlog.error(ve.getMessage());
 				ve.printStackTrace();
+				valid = false;
 			}
 
 		} catch (Exception e){
 			e.printStackTrace();
+			valid = false;
 		}
-		return false;
+		return valid;
 	}
 
 

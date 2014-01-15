@@ -180,5 +180,6 @@
 	<classpathentry kind="lib" path="lib/provided/opensaml-2.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/provided/openws-1.5.1.jar"/>
 	<classpathentry kind="lib" path="lib/provided/xmltooling-1.4.1.jar"/>
+	<classpathentry kind="lib" path="lib/provided/joda-time-1.6.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

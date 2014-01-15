@@ -471,7 +471,8 @@
 	    		org.jboss.xnio,
 	    		org.jboss.xnio.nio,
 	    		user.ntcore,
-	    		org.javassist"/>
+	    		org.javassist,
+	    		org.joda.time"/>
 	    </manifest>
 
 		<mkdir dir="${build.dir}/${ant_project_name}/webxml" />
