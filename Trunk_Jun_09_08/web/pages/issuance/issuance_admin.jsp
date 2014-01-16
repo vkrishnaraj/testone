@@ -1,3 +1,4 @@
+<%@page import="com.bagnet.nettracer.tracing.bmo.IssuanceItemBMO"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.apache.struts.util.LabelValueBean"%>
 <%@page import="com.bagnet.nettracer.tracing.db.issuance.IssuanceItem"%>
@@ -295,6 +296,10 @@
               <td id="middlecolumn">
                 
                 <div id="maincontent">
+
+		          	<font color=red>
+		            	<logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
+					</font>
                 	<table cellspacing="0" cellpadding="0" width="100%">
                 	<tr>
                 		<td>
@@ -311,9 +316,6 @@
                         <% } %>
                     </tr>
                     </table>
-                    <font color=red>
-                      <logic:messagesPresent message="true"><html:messages id="msg" message="true"><bean:write name="msg"/><br/><br/></html:messages></logic:messagesPresent>
-                    </font>
                     <html:hidden property="editquantity" value="" disabled="true"/>
                     <html:hidden property="issuequantity" value="" disabled="true"/>
                     <html:hidden property="historyquantity" value="" disabled="true"/>
@@ -402,9 +404,6 @@
                     <h1 class="green">
                       <bean:message key="issuance.item.inventory.header" />
                     </h1>
-                    <font color=red>
-                      <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
-                    </font>
                     <br />
                     <html:hidden property="editinventory" value="" disabled="true"/>
                     <html:hidden property="issueinventory" value="" disabled="true"/>
@@ -550,9 +549,6 @@
                     <h1 class="green">
                       <bean:message key="issuance.item.add.inventory.header" />
                     </h1>
-                    <font color=red>
-                      <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
-                    </font>
                     <br />
                     <table class="form2" cellspacing="0" cellpadding="0" width="100%">
                   <tr>
@@ -635,9 +631,6 @@
                     <h1 class="green">
                       <bean:message key="issuance.item.loaned.inventory.header" />
                     </h1>
-                    <font color=red>
-                      <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
-                    </font>
                     <br />
                     <table class="form2" cellspacing="0" cellpadding="0" width="100%">
               <tr>
@@ -675,7 +668,7 @@
 	                  <td>
 	                  	 <% if (i_item.isVerifiedIncident()) { %>
 	                  	 	<a href="<%="searchIncident.do?incident=" + i_item.getIncidentID() %>" ><%=i_item.getIncidentID() %></a>
-	                     <% } else if (i_item.getIncidentID() != null && i_item.getIncidentID().equals("$SNITEM$")) { 
+	                     <% } else if (i_item.getIncidentID() != null && i_item.getIncidentID().equals(IssuanceItemBMO.SPECIAL_LOAN_ID)) { 
 	                     		String fn = i_item.getFirstName() != null ? i_item.getFirstName().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
 	                     		String ln = i_item.getLastName() != null ? i_item.getLastName().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
 	                     		String ad1 = i_item.getAddress1() != null ? i_item.getAddress1().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
@@ -779,6 +772,21 @@
 	                  <td>
 	                  	 <% if (i_item.isVerifiedIncident()) { %>
 	                  	 	<a href="<%="searchIncident.do?incident=" + i_item.getIncidentID() %>" ><%=i_item.getIncidentID() %></a>
+	                     <% } else if (i_item.getIncidentID() != null && i_item.getIncidentID().equals(IssuanceItemBMO.SPECIAL_LOAN_ID)) { 
+	                     		String fn = i_item.getFirstName() != null ? i_item.getFirstName().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
+	                     		String ln = i_item.getLastName() != null ? i_item.getLastName().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
+	                     		String ad1 = i_item.getAddress1() != null ? i_item.getAddress1().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
+	                     		String ad2 = i_item.getAddress2() != null ? i_item.getAddress2().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
+	                     		String ct = i_item.getCity() != null ? i_item.getCity().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
+	                     		String st = i_item.getState() != null ? i_item.getState().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
+	                     		String pv = i_item.getProvince() != null ? i_item.getProvince().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
+	                     		String zp = i_item.getZip() != null ? i_item.getZip().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
+	                     		String ctry = i_item.getCountry() != null ? i_item.getCountry().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
+	                     		String pn = i_item.getPhoneNumber() != null ? i_item.getPhoneNumber().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
+	                     		String desc = i_item.getSpecialNeedDescription() != null ? i_item.getSpecialNeedDescription().replace("'", "\\\\'").replace("/", "\\\\/") : ""; %>
+	                     	<a href="###" 
+	                     	onclick="loadSpecialNeedViewModal('<%=fn %>', '<%=ln %>', '<%=ad1 %>', '<%=ad2 %>', '<%=ct %>', '<%=st %>', '<%=pv %>', '<%=zp %>', '<%=ctry %>', '<%=pn %>', '<%=desc %>')"
+	                     	><bean:message key="issuance.item.button.snloan" /></a>
 	                     <% } else { %>
 	                     	<%=i_item.getIncidentID() %>
 	                     <% } %>
@@ -823,9 +831,6 @@
                     <h1 class="green">
                       <bean:message key="issuance.item.discarded.inventory.header" />
                     </h1>
-                    <font color=red>
-                      <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
-                    </font>
                     <br />
                     <table class="form2" cellspacing="0" cellpadding="0" width="100%">
               <tr>

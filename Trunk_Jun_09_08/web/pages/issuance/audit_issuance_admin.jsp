@@ -1,3 +1,4 @@
+<%@page import="com.bagnet.nettracer.tracing.bmo.IssuanceItemBMO"%>
 <%@page import="com.bagnet.nettracer.tracing.forms.issuance.AuditIssuanceItemAdminForm"%>
 <%@page import="com.bagnet.nettracer.tracing.forms.ClaimForm"%>
 <%@ page language="java" %>
@@ -315,7 +316,7 @@
 	                  	 <% String incID = (i_item.getIncidentID() != null ? i_item.getIncidentID() : ""); %>
 	                  	 <% if (i_item.isVerifiedIncident()) { %>
 	                  	 	<a href="<%="searchIncident.do?incident=" + incID %>" ><%=incID %></a>
-	                     <% } else if (i_item.getIncidentID() != null && i_item.getIncidentID().equals("$SNITEM$")) { 
+	                     <% } else if (i_item.getIncidentID() != null && i_item.getIncidentID().equals(IssuanceItemBMO.SPECIAL_LOAN_ID)) { 
 	                     		String fn = i_item.getFirstName() != null ? i_item.getFirstName().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
 	                     		String ln = i_item.getLastName() != null ? i_item.getLastName().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
 	                     		String ad1 = i_item.getAddress1() != null ? i_item.getAddress1().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 

@@ -19,6 +19,8 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.tracing.bmo.IssuanceItemBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
@@ -45,6 +47,8 @@ public class IssuanceItemAdminAction extends Action {
 
 		// check session
 		TracerUtils.checkSession(session);
+		
+		ActionMessages errors = new ActionMessages();
 
 		Agent user = (Agent) session.getAttribute("user");
 		if (user == null || form == null) {
@@ -113,7 +117,12 @@ public class IssuanceItemAdminAction extends Action {
 			String qID = request.getParameter("issuequantity");
 			if (qID.matches(TracingConstants.REGEX_INTEGER)) {
 				String incID = request.getParameter("item_incid_" + qID);
-				IssuanceItemBMO.editQuantifiedItem(Long.parseLong(qID), -1, -1, user, incID);
+				int success = IssuanceItemBMO.editQuantifiedItem(Long.parseLong(qID), -1, -1, user, incID);
+				if (success < 0) {
+					ActionMessage error = new ActionMessage(IssuanceItemBMO.getError(success));
+					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+					saveMessages(request, errors);
+				}
 			}
 		}
 		
@@ -147,7 +156,12 @@ public class IssuanceItemAdminAction extends Action {
 			String qID = request.getParameter("issueinventory");
 			if (qID.matches(TracingConstants.REGEX_INTEGER)) {
 				String incID = request.getParameter("inv_item_incid_" + qID);
-				IssuanceItemBMO.moveInventoriedItem(Long.parseLong(qID), TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_ISSUED, user, incID, "Issued Item");
+				int success = IssuanceItemBMO.moveInventoriedItem(Long.parseLong(qID), TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_ISSUED, user, incID, "Issued Item");
+				if (success < 0) {
+					ActionMessage error = new ActionMessage(IssuanceItemBMO.getError(success));
+					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+					saveMessages(request, errors);
+				}
 			}
 		}
 		
@@ -155,7 +169,12 @@ public class IssuanceItemAdminAction extends Action {
 			String qID = request.getParameter("loaninventory");
 			if (qID.matches(TracingConstants.REGEX_INTEGER)) {
 				String incID = request.getParameter("inv_item_incid_" + qID);
-				IssuanceItemBMO.moveInventoriedItem(Long.parseLong(qID), TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_ONLOAN, user, incID, "Loaned Item");
+				int success = IssuanceItemBMO.moveInventoriedItem(Long.parseLong(qID), TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_ONLOAN, user, incID, "Loaned Item");
+				if (success < 0) {
+					ActionMessage error = new ActionMessage(IssuanceItemBMO.getError(success));
+					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+					saveMessages(request, errors);
+				}
 			}
 		}
 		
@@ -173,7 +192,7 @@ public class IssuanceItemAdminAction extends Action {
 				String snCtry = (String) request.getParameter("snCtry");
 				String snPhone = (String) request.getParameter("snPhone");
 				String snDesc = (String) request.getParameter("snDesc");
-				IssuanceItemBMO.moveInventoriedItem(Long.parseLong(qID), TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_ONLOAN, user, "$SNITEM$", "SN Loaned Item",
+				IssuanceItemBMO.moveInventoriedItem(Long.parseLong(qID), TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_ONLOAN, user, IssuanceItemBMO.SPECIAL_LOAN_ID, "SN Loaned Item",
 						true, snFName, snLName, snAddr1, snAddr2, snCity, snState, snProv, snZip, snCtry, snPhone, snDesc);
 			}
 		}

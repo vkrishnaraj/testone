@@ -47,6 +47,13 @@ public class IssuanceItemBMO {
 
 	private static Logger logger = Logger.getLogger(IssuanceItemBMO.class);
 	
+	public static final String SPECIAL_LOAN_ID = "$SNITEM$";
+	public static final String ERROR_INVALID_INCIDENT_PROP = "error.invalid.incident";
+	public static final String ERROR_UNKNOWN_PROP = "error.unknown";
+	public static final int ERROR_INVALID_INCIDENT = -1;
+	public static final int ERROR_UNKNOWN = -2;
+	public static final int SUCCESSFUL_SAVE = 1;
+	
 	/**
 	 * Get an IssuanceItemQuantity by id. 
 	 * @param id
@@ -365,8 +372,8 @@ public class IssuanceItemBMO {
 	 * @param user
 	 * @param incID
 	 */
-	public static void editQuantifiedItem(long id, int quantity, int minQuantity, Agent user, String incID) {
-		editQuantifiedItem(id, quantity, minQuantity, user, incID, true);
+	public static int editQuantifiedItem(long id, int quantity, int minQuantity, Agent user, String incID) {
+		return editQuantifiedItem(id, quantity, minQuantity, user, incID, true);
 	}
 	
 	/**
@@ -381,7 +388,7 @@ public class IssuanceItemBMO {
 	 * @param incID
 	 * @param fromAdmin
 	 */
-	public static void editQuantifiedItem(long id, int quantity, int minQuantity, Agent user, String incID, boolean fromAdmin) {
+	public static int editQuantifiedItem(long id, int quantity, int minQuantity, Agent user, String incID, boolean fromAdmin) {
 			Session sess = null;
 			Transaction t = null;
 			boolean issued = false;
@@ -413,18 +420,23 @@ public class IssuanceItemBMO {
 					auditQItem.setVerifiedIncident(inc != null);
 				}
 				auditQItem.setQuantityChange(qItem.getQuantity() - oldQuant);
-				t = sess.beginTransaction();
-				sess.update(qItem);
-				sess.save(auditQItem);
-				t.commit();
-				if (fromAdmin && auditQItem.isVerifiedIncident() && issued) {
-					if (!saveIssuanceItemIncident(qItem, null, user, inc)) {
-						t.rollback();
+				if (!issued || inc != null) {
+					t = sess.beginTransaction();
+					sess.update(qItem);
+					sess.save(auditQItem);
+					t.commit();
+					if (fromAdmin && auditQItem.isVerifiedIncident() && issued) {
+						if (!saveIssuanceItemIncident(qItem, null, user, inc)) {
+							t.rollback();
+						}
 					}
+				} else { //BEING ISSUED BUT NOT A VALID INCIDENT
+					return ERROR_INVALID_INCIDENT;
 				}
 			} catch (Exception e) {
 				logger.fatal(e.getMessage());
 				t.rollback();
+				return ERROR_UNKNOWN;
 			} finally {
 				if (sess != null) {
 					try {
@@ -434,6 +446,7 @@ public class IssuanceItemBMO {
 					}
 				}
 			}
+			return SUCCESSFUL_SAVE;
 	}
 	
 	/**
@@ -536,8 +549,8 @@ public class IssuanceItemBMO {
 	 * @param incID
 	 * @param reason
 	 */
-	public static void moveInventoriedItem(long id, int status_id, Agent user, String incID, String reason) {
-		moveInventoriedItem(id, status_id, user, incID, reason, true);
+	public static int moveInventoriedItem(long id, int status_id, Agent user, String incID, String reason) {
+		return moveInventoriedItem(id, status_id, user, incID, reason, true);
 	}
 	
 	/**
@@ -549,8 +562,8 @@ public class IssuanceItemBMO {
 	 * @param reason
 	 * @param fromAdmin
 	 */
-	public static void moveInventoriedItem(long id, int status_id, Agent user, String incID, String reason, boolean fromAdmin) {
-		moveInventoriedItem(id, status_id, user, incID, reason, fromAdmin, null, null, null, null, null, null, null, null, null, null, null);
+	public static int moveInventoriedItem(long id, int status_id, Agent user, String incID, String reason, boolean fromAdmin) {
+		return moveInventoriedItem(id, status_id, user, incID, reason, fromAdmin, null, null, null, null, null, null, null, null, null, null, null);
 	}
 	
 	/**
@@ -573,7 +586,7 @@ public class IssuanceItemBMO {
 	 * @param phone
 	 * @param desc
 	 */
-	public static void moveInventoriedItem(long id, int status_id, Agent user, String incID, String reason, boolean fromAdmin,
+	public static int moveInventoriedItem(long id, int status_id, Agent user, String incID, String reason, boolean fromAdmin,
 			String fName, String lName, String addr1, String addr2, String city, String state, String prov, String zip, String ctry, String phone, String desc) {
 			Session sess = null;
 			Transaction t = null;
@@ -581,86 +594,95 @@ public class IssuanceItemBMO {
 				sess = HibernateWrapper.getSession().openSession();
 				IssuanceItemInventory iItem = (IssuanceItemInventory) sess.load(IssuanceItemInventory.class, id);
 				if (iItem.getInventoryStatus().getStatus_ID() != status_id) {
-					iItem.setInventoryStatus(StatusBMO.getStatus(status_id));
-					if (incID != null && incID.length() > 0) {
-						iItem.setIncidentID(incID);
-					} else if (status_id == TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_AVAILABLE
-							|| status_id == TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_DISCARDED) {
-						incID = iItem.getIncidentID();
-						iItem.setIncidentID(null);
-					}
-					if (status_id == TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_ISSUED
-							|| status_id == TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_DISCARDED) {
-						iItem.setIssueDate(TracerDateTime.getGMTDate());
-					} else {
-						iItem.setIssueDate(null);
-					}
-					iItem.setFirstName(fName);
-					iItem.setLastName(lName);
-					iItem.setAddress1(addr1);
-					iItem.setAddress2(addr2);
-					iItem.setCity(city);
-					iItem.setState(state);
-					iItem.setProvince(prov);
-					iItem.setZip(zip);
-					iItem.setCountry(ctry);
-					iItem.setPhoneNumber(phone);
-					iItem.setSpecialNeedDescription(desc);
 					IncidentBMO bmo = new IncidentBMO();
 					Incident inc = bmo.findIncidentByID(incID);
-					iItem.setVerifiedIncident(inc != null);
-					Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
-					AuditIssuanceItemInventory auditIItem = mapper.map(iItem, AuditIssuanceItemInventory.class);
-					auditIItem.setEditAgent(user);
-					auditIItem.setEditDate(TracerDateTime.getGMTDate());
-					auditIItem.setReason(reason);
-					t = sess.beginTransaction();
-					sess.update(iItem);
-					sess.save(auditIItem);
-					t.commit();
-					if (fromAdmin && iItem.isVerifiedIncident() && status_id != TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_DISCARDED) {
-						boolean success = true;
-						if (status_id == TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_AVAILABLE) {
-							success = updateIssuanceItemIncident(iItem, user, incID);
+					if (incID == null || incID.equals(SPECIAL_LOAN_ID) || inc != null) {
+						boolean beingConverted = iItem.getInventoryStatus().getStatus_ID() == TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_ONLOAN &&
+								status_id == TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_ISSUED;
+						iItem.setInventoryStatus(StatusBMO.getStatus(status_id));
+						if (incID != null && incID.length() > 0) {
+							iItem.setIncidentID(incID);
+						} else if (status_id == TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_AVAILABLE
+								|| status_id == TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_DISCARDED) {
+							incID = iItem.getIncidentID();
+							iItem.setIncidentID(null);
+						}
+						if (status_id == TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_ISSUED
+								|| status_id == TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_DISCARDED) {
+							iItem.setIssueDate(TracerDateTime.getGMTDate());
 						} else {
-							success = saveIssuanceItemIncident(null, iItem, user, inc);
+							iItem.setIssueDate(null);
 						}
-						if (!success) {
-							t.rollback();
+						if (!beingConverted) { // CG 1/15/14: This allows Special Need loans to be converted to tradeouts and retain their special need info.
+							iItem.setFirstName(fName);
+							iItem.setLastName(lName);
+							iItem.setAddress1(addr1);
+							iItem.setAddress2(addr2);
+							iItem.setCity(city);
+							iItem.setState(state);
+							iItem.setProvince(prov);
+							iItem.setZip(zip);
+							iItem.setCountry(ctry);
+							iItem.setPhoneNumber(phone);
+							iItem.setSpecialNeedDescription(desc);
 						}
-					}
-					//Add expense
-					if (inc != null && iItem.getCost() > 0 && reason.equals("Issued Item")) {
-						ExpensePayout ep = new ExpensePayout();
-
-						ep.setPaycode("ADV");
-						ep.setAgent(user);	
-						ep.setCurrency(Currency.getInstance("USD"));
-						ep.setCreatedate(new Date());
-						
-						ExpenseType et = new ExpenseType();
-						et.setExpensetype_ID(3);
-						ep.setExpensetype(et);
-						ep.getAgent().setAgent_ID(inc.getAgent().getAgent_ID());
-						Status s = new Status();
-						s.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_PAID);
-						ep.setStatus(s);
-						ep.setCheckamt(iItem.getCost());
-						ep.setVoucheramt(0);
-						ep.setMileageamt(0);
-						ep.setDistributemethod("");
-						ep.setPaytype("DRAFT");
-						ep.setStation(user.getStation());
-						ep.setExpenselocation(user.getStation());
-						ep.setIssuanceItem(1);
-						
-						bmo.saveExpense(ep, incID, user);
+						iItem.setVerifiedIncident(inc != null);
+						Mapper mapper = DozerBeanMapperSingletonWrapper.getInstance();
+						AuditIssuanceItemInventory auditIItem = mapper.map(iItem, AuditIssuanceItemInventory.class);
+						auditIItem.setEditAgent(user);
+						auditIItem.setEditDate(TracerDateTime.getGMTDate());
+						auditIItem.setReason(reason);
+						t = sess.beginTransaction();
+						sess.update(iItem);
+						sess.save(auditIItem);
+						t.commit();
+						if (fromAdmin && iItem.isVerifiedIncident() && status_id != TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_DISCARDED) {
+							boolean success = true;
+							if (status_id == TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_AVAILABLE) {
+								success = updateIssuanceItemIncident(iItem, user, incID);
+							} else {
+								success = saveIssuanceItemIncident(null, iItem, user, inc);
+							}
+							if (!success) {
+								t.rollback();
+							}
+						}
+						//Add expense
+						if (inc != null && iItem.getCost() > 0 && status_id == TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_ISSUED) {
+							ExpensePayout ep = new ExpensePayout();
+	
+							ep.setPaycode("ADV");
+							ep.setAgent(user);	
+							ep.setCurrency(Currency.getInstance("USD"));
+							ep.setCreatedate(new Date());
+							
+							ExpenseType et = new ExpenseType();
+							et.setExpensetype_ID(3);
+							ep.setExpensetype(et);
+							ep.getAgent().setAgent_ID(inc.getAgent().getAgent_ID());
+							Status s = new Status();
+							s.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_PAID);
+							ep.setStatus(s);
+							ep.setCheckamt(iItem.getCost());
+							ep.setVoucheramt(0);
+							ep.setMileageamt(0);
+							ep.setDistributemethod("");
+							ep.setPaytype("DRAFT");
+							ep.setStation(user.getStation());
+							ep.setExpenselocation(user.getStation());
+							ep.setIssuanceItem(1);
+							
+							bmo.saveExpense(ep, incID, user);
+						}
+					} else { // NOT A SPECIAL NEED LOAN AND NOT A VALID INCIDENT ID
+						return ERROR_INVALID_INCIDENT;
 					}
 						
 				}
 			} catch (Exception e) {
 				logger.fatal(e.getMessage());
 				t.rollback();
+				return ERROR_UNKNOWN;
 			} finally {
 				if (sess != null) {
 					try {
@@ -670,6 +692,7 @@ public class IssuanceItemBMO {
 					}
 				}
 			}
+			return SUCCESSFUL_SAVE;
 	}
 
 	/**
@@ -875,6 +898,17 @@ public class IssuanceItemBMO {
 					logger.error(e.getMessage());
 				}
 			}
+		}
+	}
+	
+	public static String getError(int code) {
+		switch (code) {
+			case (ERROR_INVALID_INCIDENT):
+				return ERROR_INVALID_INCIDENT_PROP;
+			case (ERROR_UNKNOWN):
+				return ERROR_UNKNOWN_PROP;
+			default:
+				return null;
 		}
 	}
 
