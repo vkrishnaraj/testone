@@ -8,6 +8,7 @@ package com.bagnet.nettracer.reporting;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -18,6 +19,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.util.MessageResources;
 
@@ -60,7 +62,10 @@ public class LUVReceipt_Mail {
 		parameters.put("incident_num", incident_id);
 		parameters.put("createdate1", new SimpleDateFormat("MMM dd, yyyy").format(theform.getCreatedate()));
 		parameters.put("createdate", new SimpleDateFormat("MM/dd/yyyy").format(theform.getCreatedate()));
-		
+		Date today = new Date();
+		Date expdate = DateUtils.addDays(today, 365);
+	    parameters.put("expdate", new SimpleDateFormat("MM/dd/yyyy").format(expdate));
+	    
 		Incident inc = IncidentBMO.getIncidentByID(incident_id, null);
 		if (inc.getPassengers() != null && inc.getPassengers().size() > 0) {
 			for (Passenger pa : inc.getPassengers()) {

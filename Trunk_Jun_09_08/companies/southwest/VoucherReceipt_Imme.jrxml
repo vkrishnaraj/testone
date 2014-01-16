@@ -21,6 +21,7 @@
 	<parameter name="createdate1" class="java.lang.String"/>
 	<parameter name="voucher_num" class="java.lang.String"/>
 	<parameter name="sec_code" class="java.lang.String"/>
+	<parameter name="expdate" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select incident_ID from incident]]>
 	</queryString>
@@ -178,7 +179,7 @@
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="11" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{createdate}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{expdate}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-8" mode="Opaque" x="72" y="379" width="114" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
