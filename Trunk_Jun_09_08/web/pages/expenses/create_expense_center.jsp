@@ -47,7 +47,30 @@
 	        } else {
 	          countfield.value = maxlimit - field.value.length;
 	        }
-	      }	    
+	      }	
+	    
+		function confirmPrint(message){
+			var currentForm;
+		    jQuery('<div></div>').appendTo('body')
+		                    .html('<div><h6>'+message+'?</h6></div>')
+		                    .dialog({
+								height: 50,
+								width: 350,
+								modal: true,
+		                        buttons: {
+		                            Yes: function () {
+		                                jQuery(this).dialog("close");
+		                            	expensePayoutForm.submit();
+		                            },
+		                            No: function () {
+		                            	jQuery(this).dialog("close");
+		                            }
+		                        }
+
+		                    });
+
+
+		    };		    
 	    
   </SCRIPT>
 
@@ -60,7 +83,7 @@
 	boolean swaBsoPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, a) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN,a);
 	ExpensePayoutForm epf = (ExpensePayoutForm) request.getAttribute("expensePayoutForm");
 %>
-<html:form action="SaveExpense.do" method="post" onsubmit="if (issue_voucher) { return window.confirm('Are you sure you want to Issue this LUV Voucher?'); }">
+<html:form action="SaveExpense.do" method="post" onsubmit="if (issue_voucher) { confirmPrint('Are you sure you want to Issue this LUV Voucher?'); return false; }">
 	
 	<fmt:timeZone value="${expensePayoutForm.tz}">
 		<tr>
