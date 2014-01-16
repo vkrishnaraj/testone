@@ -106,7 +106,7 @@ public class NTIntegrationWrapper extends IntegrationWrapper {
 		} else if (resDoc.getGetReservationDataResponse().getReturn().getError() != null) {
 			String error = resDoc.getGetReservationDataResponse().getReturn().getError().getDescription();
 			if (error != null) {
-				this.setErrorMessage(error);
+				this.setErrorMessage(error.replaceAll(" ", "_"));
 				if (error.equals("PNR NOT VALID")) {
 					this.setErrorMessage("error.pnr.not.available");
 				}
