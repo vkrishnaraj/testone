@@ -6614,7 +6614,7 @@ public class ReportBMO {
 							boolean passFirst=false;
 
 							if(i!=0 && !passengerList.isEmpty()){
-								passengerList+="\n";
+								passengerList+="; ";
 							}
 
 							if(pass.getLastname()!=null && !pass.getLastname().isEmpty()){
