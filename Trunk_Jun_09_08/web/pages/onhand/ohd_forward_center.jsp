@@ -5,6 +5,7 @@
 <%@ taglib uri="/tags/struts-logic" prefix="logic" %>
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <%@ page import="com.bagnet.nettracer.tracing.forms.ForwardOnHandForm" %> 
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
@@ -80,24 +81,22 @@
 						Map<String, OHD> ohdMap = (Map<String, OHD>)request.getAttribute("ohdMap");
 						OHD ohdObj = (ohdMap == null || ohd.getLabel() == null) ? null : ohdMap.get(ohd.getLabel());
 						if (ohdObj != null) {
-							String bagTag =  StringUtils.stripToEmpty(ohdObj.getClaimchecknum_bagnumber());
+							String bagTag =  StringUtils.stripToEmpty(ohdObj.getClaimnum());
 							String color =  StringUtils.stripToEmpty(ohdObj.getColor());
 							String type =  StringUtils.stripToEmpty(ohdObj.getType());
-							String firstname =  StringUtils.stripToEmpty(ohdObj.getFirstname());
-							String middlename =  StringUtils.stripToEmpty(ohdObj.getMiddlename());
-							String lastname =  StringUtils.stripToEmpty(ohdObj.getLastname());
 		                    %>
 							<div style="float:right; width:200px;">
 								<% if (!bagTag.isEmpty()) {%>
-				        			<b>Bag Tag:</b> <span style="padding:18px;"><%=bagTag%></span><br/>
+				        			<b>Bag Tag:</b><span style="padding:18px;"><%=bagTag%></span><br/>
 				        		<%}%>
 				        		
 								<% if (!color.isEmpty() || !type.isEmpty()) {%>
 				        			<b>Color/Type:</b> <%=color%>/<%=type%><br/>
 				        		<%}%>
 				        		
-								<% if (!firstname.isEmpty() || !middlename.isEmpty() || !lastname.isEmpty()) {%>
-				            		<b>Name:</b> <span style="padding:27px;"><%=firstname%> <%=middlename%> <%=lastname%></span>
+								<% if (!ohdObj.getFullName().isEmpty()) {%>
+				            		<b>Name:</b> 
+				            		<span style="padding:27px;"><c:out value="<%=ohdObj.getFullName()%>" /></span>
 				        		<%}%>
 				           </div>
 				     <%}%>                  

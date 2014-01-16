@@ -1205,4 +1205,35 @@ public class OHD implements Serializable {
 		this.specialCondition = specialCondition;
 	}
 	
+	public String getFullName() {
+		StringBuilder fullName = new StringBuilder();
+		boolean haveLast = lastname != null && !lastname.isEmpty();
+		boolean haveFirst = firstname != null && !firstname.isEmpty();
+		boolean haveMiddle = middlename != null && !middlename.isEmpty();
+		
+		if (haveLast) {
+			fullName.append(getLastname());
+		}
+		
+		if (haveLast && haveFirst) {
+			fullName.append(",");
+		}
+		
+		if (haveFirst) {
+			if (haveLast) {
+				fullName.append(" ");
+			}
+			fullName.append(getFirstname());
+		}
+		
+		if (haveMiddle) {
+			if (haveLast || haveFirst) {
+				fullName.append(" ");
+			}
+			fullName.append(getMiddlename());
+		}
+		
+		return fullName.toString();
+	}
+	
 }
