@@ -7,3 +7,5 @@ insert into svc_profile_parameters values (23, 'D1007', 'RESERVATION_USER');
 insert into svc_profile_parameters values (23, 'Volaris1912!', 'RESERVATION_PASS');
 insert into svc_profile_parameters values (23, 'NAVITAIRE', 'RESERVATION_SYSTEM_TYPE');
 insert into svc_profile_parameters values (23, 'https://Y4testr3xapi.navitaire.com/SessionManager.svc', 'RES_SESSION_ENDPOINT');
+insert into svc_profile_parameters values (23, 'DEF', 'DOMAIN_CODE');
+insert into svc_profile_parameters values (23, '346', 'CONTRACT_VERSION');
