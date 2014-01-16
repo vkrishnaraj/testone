@@ -28,7 +28,16 @@ public class BagDropForm extends ValidatorForm{
 	private java.util.TimeZone _TIMEZONE;
 	
 	private List <BagDrop> bagDropList;
+	
 	private BagDropDTO dto;
+	
+	/**
+	 * In order to support a "back" button form the edit page, 
+	 * we need to save the last DTO that did not result
+	 * in a single BagDrop since we auto load single results.
+	 */
+	private BagDropDTO lastNonSingleDTO;
+	
 	private BagDrop editBagDrop;
 	
 	private String editBagDropDate;
@@ -170,15 +179,17 @@ public class BagDropForm extends ValidatorForm{
 		this.avgTimeToCarousel = avgTimeToCarousel;
 	}
 
-	public String getDispAvgTimeToCarousel(){
-		if(avgTimeToCarousel <= 0){
-			return "00:00";
+	public String getDispAvgTimeToCarousel(){	
+		long absAvg = Math.abs(avgTimeToCarousel);
+		long mins = absAvg%60;
+		long hours = absAvg/60;
+		
+		String ret = "";
+		if(avgTimeToCarousel < 0){
+			ret = "-";
 		}
 		
-		long mins = avgTimeToCarousel%60;
-		long hours = avgTimeToCarousel/60;
-		
-		return String.format("%02d:%02d", hours, mins);
+		return ret += String.format("%02d:%02d", hours, mins);
 	}
 
 	public String getEditBagDropDate() {
@@ -195,6 +206,14 @@ public class BagDropForm extends ValidatorForm{
 
 	public void setEditBagDropTime(String editBagDropTime) {
 		this.editBagDropTime = editBagDropTime;
+	}
+
+	public BagDropDTO getLastNonSingleDTO() {
+		return lastNonSingleDTO;
+	}
+
+	public void setLastNonSingleDTO(BagDropDTO lastNonSingleDTO) {
+		this.lastNonSingleDTO = lastNonSingleDTO;
 	}
 	
 }

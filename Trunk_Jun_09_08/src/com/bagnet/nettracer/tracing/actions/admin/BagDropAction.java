@@ -78,7 +78,7 @@ public class BagDropAction extends Action{
 		
 		
 		if (request.getParameter("search") != null){
-			bdform.setBagDropList(getPaginatedList(request,bdform,user,dto,cbroStation));
+			bdform.setBagDropList(getPaginatedList(request,bdform,user,dto,cbroStation, false));
 			if(bdform.getBagDropList() !=null &&bdform.getBagDropList().size() == 1){
 				/** if single response, auto load the edit page **/
 				response.sendRedirect("bagDrop.do?editId=" + bdform.getBagDropList().get(0).getId());
@@ -99,7 +99,7 @@ public class BagDropAction extends Action{
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
 			}
-			bdform.setBagDropList(getPaginatedList(request,bdform,user,dto,cbroStation));
+			bdform.setBagDropList(getPaginatedList(request,bdform,user,dto,cbroStation, false));
 			bdform.setAvgTimeToCarousel(BagDropUtils.avgTimeToCarousel(user.getCompanycode_ID(), getCurrentStation(cbroStation, user)));
 			return mapping.findForward(TracingConstants.BAGDROP);
 		}
@@ -133,7 +133,8 @@ public class BagDropAction extends Action{
 			boolean success = true;
 			try{
 				BagDropUtils.saveOrUpdateBagDrop(user, bagDrop);
-				if(bagDrop.getTimeToCarousel() > 120){
+				/** According to SWA, you can have a negative time to carousel, thus need to compare the absolute time **/
+				if(Math.abs(bagDrop.getTimeToCarousel()) > 120){
 					ActionMessage error = new ActionMessage("bagdrop.error.120");
 					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 					saveMessages(request, errors);
@@ -161,7 +162,7 @@ public class BagDropAction extends Action{
 				success = false;
 			}
 			if(success){
-				bdform.setBagDropList(getPaginatedList(request,bdform,user,dto,cbroStation));
+				bdform.setBagDropList(getPaginatedList(request,bdform,user,dto,cbroStation, true));
 				bdform.setAvgTimeToCarousel(BagDropUtils.avgTimeToCarousel(user.getCompanycode_ID(), getCurrentStation(cbroStation, user)));
 				return mapping.findForward(TracingConstants.BAGDROP);
 			} else {
@@ -169,10 +170,15 @@ public class BagDropAction extends Action{
 			}
 		}
 		
+		if (request.getParameter("back") != null){
+			bdform.setBagDropList(getPaginatedList(request,bdform,user,dto,cbroStation, true));
+			bdform.setAvgTimeToCarousel(BagDropUtils.avgTimeToCarousel(user.getCompanycode_ID(), getCurrentStation(cbroStation, user)));
+			return mapping.findForward(TracingConstants.BAGDROP);
+		}
+		
 		if (request.getParameter("reset") != null){
 			//first time loading page, create new dto with default values
 			dto = initDTO(dto,user,cbroStation);
-			request.setAttribute("reset", null);
 		}
 
 		try{
@@ -183,7 +189,7 @@ public class BagDropAction extends Action{
 			saveMessages(request, errors);
 		}
 		bdform.setDto(dto);
-		bdform.setBagDropList(getPaginatedList(request,bdform,user,dto,cbroStation));
+		bdform.setBagDropList(getPaginatedList(request,bdform,user,dto,cbroStation, false));
 		bdform.setAvgTimeToCarousel(BagDropUtils.avgTimeToCarousel(user.getCompanycode_ID(), getCurrentStation(cbroStation, user)));
 		return mapping.findForward(TracingConstants.BAGDROP);
 	}
@@ -213,6 +219,38 @@ public class BagDropAction extends Action{
 	}
 	
 	/**
+	 * Traditionally the application had always used the browser.back for the back button of a page.  However, since it is a browser back, 
+	 * if the page that we are currently on has been reloaded multiple times, you have to click the back button the same corrisponding number of times.
+	 * 
+	 * The return the search page when the back button is pressed from the edit page, we have re-query the database using the previous DTO.  Since the application
+	 * auto load DTOs that resulted in a single bagdrop, we must use the most recent DTO that did not result in a single bagdrop.
+	 * 
+	 * @param request
+	 * @param theForm
+	 * @param agent
+	 * @param dto
+	 * @param cbroStation
+	 * @param loadPreviousNonSingle
+	 * @return
+	 */
+	private List<BagDrop> getPaginatedList(HttpServletRequest request, BagDropForm theForm, Agent agent, BagDropDTO dto, Station cbroStation, boolean loadPreviousNonSingle){
+		if(loadPreviousNonSingle){
+			if(theForm.getLastNonSingleDTO() != null){
+				return getPaginatedList(request, theForm, agent, theForm.getLastNonSingleDTO(), cbroStation);
+			} else {
+				BagDropDTO newDto = null;
+				newDto = initDTO(newDto, agent, cbroStation);
+				theForm.setDto(newDto);
+				return getPaginatedList(request, theForm, agent, newDto, cbroStation);
+			}
+		} else {
+			/** Set sort params from display tag request into DTO **/
+			getSortCriteria(dto, request);
+			return getPaginatedList(request, theForm, agent, dto, cbroStation);
+		}
+	}
+	
+	/**
 	 * Returns a paginated list of bagdrop elements based on the given search and sort criteria specified by BagDropDTO and DisplayTag
 	 * 
 	 * @param request
@@ -234,11 +272,15 @@ public class BagDropAction extends Action{
 		
 		dto.setArrivalStation(getCurrentStation(cbroStation, agent));
 		
-		//zero out limits and sort for count
-		dto.setMaxResults(0);
-		dto.setStartIndex(0);
-		dto.setSort(null);
-		long rowcount = BagDropUtils.searchBagdropCount(dto);
+		/** 
+		 *  For the count, we need all the search params from the dto, however, sort and pagination zeroed out.
+		 *  Since we want to preserve the sort, clone the dto for the count
+		 **/
+		BagDropDTO countDto = dto.clone();
+		countDto.setMaxResults(0);
+		countDto.setStartIndex(0);
+		countDto.setSort(null);
+		long rowcount = BagDropUtils.searchBagdropCount(countDto);
 		
 		int totalpages = (int) Math.ceil((double) rowcount / (double) rowsperpage);
 
@@ -257,8 +299,11 @@ public class BagDropAction extends Action{
 			request.setAttribute("pages", al);
 		}
 		
-		//set limits and sort for list
-		getSortCriteria(dto, request);
+		if(rowcount > 1){
+			/** Since we autoload single results, saving the DTO that resulted in a non-single result to support use of back button **/
+			theForm.setLastNonSingleDTO(dto.clone());
+		} 
+
 		dto.setMaxResults(rowsperpage);
 		dto.setStartIndex(currpage*rowsperpage);
 		return BagDropUtils.searchBagdrop(agent, dto);
@@ -273,7 +318,7 @@ public class BagDropAction extends Action{
 	private void getSortCriteria(BagDropDTO dto, HttpServletRequest request) {
 		ParamEncoder encoder = new ParamEncoder(TracingConstants.TABLE_ID_BAG_DROP);
 		String sort = request.getParameter(encoder.encodeParameterName(TableTagParameters.PARAMETER_SORT));
-		dto.setSort(sort != null ? sort : "id");
+		dto.setSort(sort != null ? sort : "scharr");
 		
 		String dir = request.getParameter(encoder.encodeParameterName(TableTagParameters.PARAMETER_ORDER));
 		dto.setDir(dir != null ? dir : TracingConstants.SORT_ASCENDING);		

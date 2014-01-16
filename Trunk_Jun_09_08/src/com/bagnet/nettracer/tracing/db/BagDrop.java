@@ -116,7 +116,7 @@ public class BagDrop {
 	 * Returns a String in the format hh:mm representing the time to carousel (bagdrop time minus arrival)
 	 * If either bagDropTime or actArrivalTime (and schArrivalTime) are null, return empty string
 	 * If actArrivalTime exist, use actArrivalTime for calculation, otherwise use schArrivalTime
-	 * If negative time, return 00:00
+	 * If negative time, return -hh:mm
 	 * 
 	 * TODO consider using Joda
 	 * 
@@ -128,14 +128,16 @@ public class BagDrop {
 		}
 		
 		long time = getTimeToCarousel();
-		if(time <= 0){
-			return "00:00";
+		long absTime = Math.abs(time);
+		
+		long mins = absTime%60;
+		long hours = absTime/60;
+
+		String retString = "";
+		if(time < 0){
+			retString = "-";
 		}
-		
-		long mins = time%60;
-		long hours = time/60;
-		
-		return String.format("%02d:%02d", hours, mins);
+		return retString + String.format("%02d:%02d", hours, mins);
 	}
 	
 	/**

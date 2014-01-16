@@ -141,7 +141,7 @@
 		<br/>
 		<br/>
 		
-	    <display:table requestURI="/bagDrop.do" name="bagDropForm.bagDropList" sort="external" class="form2" cellspacing="0" cellpadding="0" id="bagDrop" defaultsort="1"  >
+	    <display:table requestURI="/bagDrop.do" name="bagDropForm.bagDropList" sort="external" class="form2" cellspacing="0" cellpadding="0" id="bagDrop" defaultsort="1" excludedParams="*" >
 	       	<display:setProperty name="basic.empty.showtable" value="true"/>
 	       	<display:column style="width:10%;" titleKey="colname.bagdrop.origin" value="${bagDrop.originStationCode}&nbsp;" sortable="true" sortName="origin"/>
 	        <display:column style="width:10%;" titleKey="colname.bagdrop.dest"   value="${bagDrop.arrivalStationCode}&nbsp;" sortable="true" sortName="dest"/>

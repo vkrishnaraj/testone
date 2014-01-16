@@ -140,7 +140,7 @@ public class BagDropBMOTest {
 		future.setTime(now.getTime() + (10*60*1000));
 		bagdrop.setActArrivalDate(future);
 		bagdrop.setBagDropTime(now);
-		assertTrue("00:00".equals(bagdrop.getDispTimeToCarousel()));	
+		assertTrue("-00:10".equals(bagdrop.getDispTimeToCarousel()));	
 	}
 	
 	private BagDrop createBagDrop(){

@@ -3,7 +3,7 @@ package com.bagnet.nettracer.tracing.dto;
 import java.util.Date;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
-public class BagDropDTO {
+public class BagDropDTO implements Cloneable{
 	private long id;
 	private String airlineCode;
 	private String flightNumber;
@@ -125,5 +125,15 @@ public class BagDropDTO {
 	}
 	public void setDir(String dir) {
 		this.dir = dir;
+	}
+	
+	@Override
+	public BagDropDTO clone(){
+		try {
+			return (BagDropDTO) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

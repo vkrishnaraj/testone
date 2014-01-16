@@ -122,8 +122,10 @@
        
           <tr>
           <td align="center" colspan="2">
-            <INPUT type="button" Id="button" value="Back" onClick="history.back()">
-            &nbsp;
+               <html:submit styleId="button" property="back">
+                <bean:message key="button.bagdrop.back" />
+              </html:submit>
+               &nbsp;
               <html:submit styleId="button" property="save">
                 <bean:message key="button.save" />
               </html:submit>
