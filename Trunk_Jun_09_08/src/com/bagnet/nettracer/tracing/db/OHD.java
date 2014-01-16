@@ -1215,13 +1215,9 @@ public class OHD implements Serializable {
 			fullName.append(getLastname());
 		}
 		
-		if (haveLast && haveFirst) {
-			fullName.append(",");
-		}
-		
 		if (haveFirst) {
 			if (haveLast) {
-				fullName.append(" ");
+				fullName.append(", ");
 			}
 			fullName.append(getFirstname());
 		}
