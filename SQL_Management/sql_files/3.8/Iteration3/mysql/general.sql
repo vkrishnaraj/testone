@@ -470,5 +470,3 @@ create table inboundqueue(
     activity_id bigint,
     incidentActivityId bigint,
     primary key (id));
-    
-alter table issuance_category add limitByPassenger bit not null default 0;

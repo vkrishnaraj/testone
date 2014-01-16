@@ -28,3 +28,5 @@ insert into template_var (displayTag,associatedClass) VALUES
 `countrycode_ID` varchar(3) DEFAULT NULL, 
 PRIMARY KEY (`PassengerExp_ID`),   
 KEY `expensepayout_ID` (`expensepayout_ID`) ) ;
+    
+alter table issuance_category add limitByPassenger bit not null default 0;
