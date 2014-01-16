@@ -192,3 +192,5 @@ insert into usergroupnamemap (ldapName,ntName,ntGroupId) VALUES ('NetTracer_Stat
 insert into usergroupnamemap (ldapName,ntName,ntGroupId) VALUES ('NetTracer_Station_Supervisor_S','Station Supervisor',18);
 insert into usergroupnamemap (ldapName,ntName,ntGroupId) VALUES ('NetTracer_Technology_S','Technology',19);
  
+
+insert into properties (keystr, valuestr) values ('sso.auto.provision', 1);

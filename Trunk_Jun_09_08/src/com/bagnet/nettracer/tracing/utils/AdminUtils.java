@@ -44,6 +44,7 @@ import com.bagnet.nettracer.tracing.db.TimeZone;
 import com.bagnet.nettracer.tracing.db.UserGroup;
 import com.bagnet.nettracer.tracing.db.Work_Shift;
 import com.bagnet.nettracer.tracing.db.Link;
+import com.bagnet.nettracer.tracing.db.audit.Audit_Agent;
 import com.bagnet.nettracer.tracing.db.audit.Audit_GroupComponentPolicy;
 import com.bagnet.nettracer.tracing.db.audit.Audit_UserGroup;
 import com.bagnet.nettracer.tracing.db.lf.Subcompany;
@@ -54,6 +55,7 @@ import com.bagnet.nettracer.tracing.forms.MaintainDeliveryCompanyForm;
 import com.bagnet.nettracer.tracing.forms.SubCompanyForm;
 import com.bagnet.nettracer.tracing.forms.UserActivityForm;
 import com.bagnet.nettracer.tracing.performance.Cache;
+import com.bagnet.nettracer.tracing.utils.audit.AuditAgentUtils;
 
 /**
  * @author Ankur Gupta
@@ -1962,6 +1964,20 @@ public class AdminUtils {
 		}
 	}
 	
+	/**
+	 * Creates a new Agent provided that an agent for the given username does not already exists.
+	 * 
+	 * Bases defaults (language, currency, dateformat) from the ntadmin account of the given company 
+	 * (may need to refactor in future if defaults are provided through assertion)
+	 * 
+	 * @param username
+	 * @param fname
+	 * @param lname
+	 * @param groupNames
+	 * @param stationCode
+	 * @param compCode
+	 * @return
+	 */
 	public static Agent createAgent(String username, String fname, String lname, List<String> groupNames,
 			String stationCode, String compCode) {
 
@@ -1972,7 +1988,13 @@ public class AdminUtils {
 			return null;
 		}
 		
+		/** load ntadmin account for given company and populate defaults **/
 		Agent ntuser = getAgentBasedOnUsername("ntadmin", compCode);
+		if(ntuser == null){
+			//could not load defaults
+			return null;
+		}
+		
 		Agent u=new Agent();
 
 		u.setUsername(username);
@@ -2008,6 +2030,7 @@ public class AdminUtils {
 		
 		u.setActive(true);
 		u.setWeb_enabled(true);
+		u.setWs_enabled(true);
 		
 		/** Default other values to blank or ntadmin values **/
 		u.setDefaultlocale(ntuser.getDefaultlocale());
@@ -2026,6 +2049,19 @@ public class AdminUtils {
 		
 		HibernateUtils.save(u);
 		if(u.getAgent_ID()>0){
+			//check if audit is enabled for this company....
+			if (AdminUtils.getCompVariable(u.getCompanycode_ID()).getAudit_agent() == 1) {
+				Audit_Agent audit_agent;
+				try {
+					/** Since this an auto-provision agent, the mod agent is the agent that is being created **/
+					audit_agent = AuditAgentUtils.getAuditAgent(u, u);
+					if (audit_agent != null) {
+						HibernateUtils.saveNew(audit_agent);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 			return u;
 		} else {
 			return null;

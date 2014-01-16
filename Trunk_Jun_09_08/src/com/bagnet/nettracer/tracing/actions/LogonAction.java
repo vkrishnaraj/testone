@@ -160,9 +160,8 @@ public class LogonAction extends Action {
 		SsoUtils ssoUtils = new SamlUtils();//TODO consider spring injection
 		SsoNode ssoNode = ssoUtils.getSsoNode(request);
 		
-		boolean hasSSO=ssoNode.isValidAssertion(); //TODO: Add check if the agent is logging in through the assertion
 		
-		//TODO SAML failed assertion, do we need special error message
+		boolean hasSSO=ssoNode.isValidAssertion();
 		
 		if (!hasSSO && username.length() == 0 && password.length() == 0) {
 			session.invalidate();
@@ -178,7 +177,8 @@ public class LogonAction extends Action {
 		}
 		authenlog.info("Authenticating User: "+username+". Company Code: "+companyCode+". Instance: "+instance);
 		if(hasSSO){
-			agent = SecurityUtils.authUserNoPassword(ssoNode.getUsername(), ssoNode.getCompanycode(), 0, errors, true, ssoNode);
+			boolean autoProvision = PropertyBMO.isTrue(PropertyBMO.SSO_AUTO_PROVISION);
+			agent = SecurityUtils.authUserNoPassword(ssoNode.getUsername(), ssoNode.getCompanycode(), 0, errors, autoProvision, ssoNode);
 		} else {
 			agent = SecurityUtils.authUser(username, password, companyCode, 0, errors);
 		}
