@@ -81,7 +81,6 @@
     returnValue = true;
 
 	var isEdit = false;
-	var isClosing = false;
     var hasRemarkText  = false;
 	var baggageItinerary = false;
     var hasPassengerItinerary = false;
@@ -198,12 +197,10 @@
 	      	}
 	   } else if (currentElementName == 'incident_ID' && 0 < currentElement.value.length) {
 	    	isEdit = true;
-	   } else if (currentElementName == 'status_ID' && currentElement.value == '13') {
-	    	isClosing = true;
 	   }
     }
     
-    if (!hasRemarkText && (isClosing || !isEdit)) {
+    if (!hasRemarkText && !isEdit) {
 		alert("<%= (String)bundle.getString( "colname.remark") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
 		currentElement = document.getElementById('addremark');
 		if (currentElement) {
@@ -294,7 +291,7 @@
 		}
 		
 		//remark validation
-		else if (currentElementName.indexOf("remarktext") != -1 && (isClosing || !isEdit)) {  
+		else if (currentElementName.indexOf("remarktext") != -1 && !isEdit) {  
 		      if (currentElement.value.length == 0) {
 		        alert("<%= (String)bundle.getString( "colname.remark") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
 			    currentElement.focus();
