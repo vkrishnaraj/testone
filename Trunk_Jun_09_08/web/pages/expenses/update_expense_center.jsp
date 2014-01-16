@@ -169,15 +169,15 @@
     		templateSelectDialog.dialog("open");
     	}
 
-	    function ReSubmitWS() {
+	    function reSubmitWS() {
 	    	alert('Error in submitting Web Service. Please Resubmit or Call Administrator for connection issue.');
 	    };  
 	    
-	    function SubmitOK(ordernum) {
+	    function submitOK(ordernum) {
 	    	alert('The Southwest LUV Voucher has been cancelled. Order Number: '+ ordernum);
 	    };   	    
 		
-		function DoPrint(message){
+		function doPrint(message){
 	    	
 		    jQuery('<div></div>').appendTo('body')
 		                    .html('<div><h6>'+message+'?</h6></div>')
@@ -303,7 +303,7 @@
 					</div>
 					<div align="right" width="100%" >
 					<% if (showprint && showcancel) { %>
-						<a name="printrpt" href='#' onclick="DoPrint('Did the Southwest LUV Voucher print correctly')">
+						<a name="printrpt" href='#' onclick="doPrint('Did the Southwest LUV Voucher print correctly? If the answer is No, correct the printer issue and select No to print again.')">
 						<bean:message key="button.bdo_sendprint" />
 						</a>
 						&nbsp;&nbsp;
@@ -663,8 +663,8 @@
     <% } %>
 </html:form>
 <c:if test="${expensePayoutForm.wssubmitc == 'no'}">
-    <script type="text/javascript">ReSubmitWS();</script>
+    <script type="text/javascript">reSubmitWS();</script>
  </c:if>
  <c:if test="${expensePayoutForm.wssubmitc == 'yes' and expensePayoutForm.cancelcount == 1}">
-    <script type="text/javascript">SubmitOK('<c:out value="${expensePayoutForm.ordernum}" />');</script>
+    <script type="text/javascript">submitOK('<c:out value="${expensePayoutForm.ordernum}" />');</script>
  </c:if>
