@@ -268,6 +268,8 @@ public class PropertyBMO {
 	
 	public static final String SSO_AUTO_PROVISION = "sso.auto.provision";
 	
+	public static final String POPULATE_ITIN_DATEONLY = "populate.itinerary.dateonly";
+	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;
 		if(key != null && value != null){

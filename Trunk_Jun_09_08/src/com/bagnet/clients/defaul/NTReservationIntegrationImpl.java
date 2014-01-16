@@ -335,19 +335,20 @@ public class NTReservationIntegrationImpl extends
 								itin.getAirline()));
 						fitin.setFlightnum(fMap.mapStringAndTrim(
 								NetTracerField.FLIGHT, itin.getFlightnum()));
-						fitin
-								.setDepartdate(processDate(itin
+						fitin.setDepartdate(processDate(itin
 										.getSchdeparttime()));
-						fitin.setSchdeparttime(processDate(itin
-								.getSchdeparttime()));
+						fitin.setArrivedate(processDate(itin
+								.getScharrivetime()));
 						fitin.setLegfrom(fMap.mapStringAndTrim(NetTracerField.AIRPORT,
 								itin.getDepartureCity()));
 						fitin.setLegto(fMap.mapStringAndTrim(NetTracerField.AIRPORT,
 								itin.getArrivalCity()));
-						fitin.setSchdeparttime(processDate(itin
-								.getSchdeparttime()));
-						fitin.setScharrivetime(processDate(itin
-								.getScharrivetime()));
+						if (!PropertyBMO.isTrue(PropertyBMO.POPULATE_ITIN_DATEONLY)) {
+							fitin.setSchdeparttime(processDate(itin
+									.getSchdeparttime()));
+							fitin.setScharrivetime(processDate(itin
+									.getScharrivetime()));
+						}
 						noneAdded = false;
 					}
 				}
