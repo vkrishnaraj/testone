@@ -299,7 +299,7 @@ alter table expensepayout add column issuanceItem int default 0;
 insert into status (Status_ID,description,table_ID) VALUES (94,'Cancelled',11);
 
 #Label Queue
-insert into properties (ID, keyStr, valueStr) VALUES (140,'label.queue',1);
+insert into properties ( keyStr, valueStr) VALUES ('label.queue',1);
 insert into systemcomponents (component_id, component_name, component_desc, parent_component_id, component_action_link,display ,sort_order,sort_group) 
 VALUES (1500, 'Label Queue', 'Label Queue', 15, 'label.do', 1, 100, 4);
 
@@ -387,13 +387,13 @@ insert into status (Status_ID,description,table_ID) VALUES (1419,'Supervisor App
 insert into activity (code, description) VALUES ("55C","CREATE CLAIM SETTLEMENT LETTER");
 insert into template_type (ordinal,defaultName) VALUES (5,'Expense');
 
-insert into properties (ID, keyStr, valueStr) VALUES (142,'mishandling.attachment.at.creation',1);
+insert into properties ( keyStr, valueStr) VALUES ('mishandling.attachment.at.creation',1);
 
 insert into activity (code,description) VALUES ('99E','INBOUND WEB PORTAL MESSAGE');
 insert into activity (code,description) VALUES ('99O','OUTBOUND WEB PORTAL MESSAGE');
 
 #Incident Activity Document Print Queue
-insert into properties (ID, keyStr, valueStr) VALUES (141,'document.print.queue',1);
+insert into properties ( keyStr, valueStr) VALUES ('document.print.queue',1);
 insert into systemcomponents (component_id, component_name, component_desc, parent_component_id, component_action_link,display ,sort_order,sort_group) 
 VALUES (1501, 'Document Print Queue', 'Approved incident activity documents pending print', 15, 'documentPrintCommunications.do', 1, 101, 4);
 
