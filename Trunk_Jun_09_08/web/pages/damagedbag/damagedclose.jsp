@@ -40,6 +40,7 @@
 
   <script language="javascript">
 	var doCheck = 0;
+	var doSaveCheck = 0;
     
     <jsp:include page="/pages/includes/damageclose.jsp" />
     
@@ -150,8 +151,8 @@
 		                    <input type="submit" id="button" value='<bean:message key="button.dispute.fault" />' onclick='document.location.href="disputeResolution.do?id=<bean:write name="incident" scope="request"/>&actionType=start";return false;'>
 		                     <% } 
 		                    } %>
-	                  </logic:equal>                
-                    <html:submit property="save" styleId="button">
+	                  </logic:equal>            
+                    <html:submit property="save" styleId="button" onclick="anyLossCodeChanges(); doSaveCheck=1;">
                       <bean:message key="button.save" />
                     </html:submit>
                   </logic:equal>
@@ -167,11 +168,12 @@
 	                  </logic:equal>
 	                <% } 
                      if (TracerProperties.isTrue(a.getCompanycode_ID(),TracerProperties.SAVE_ON_CLOSE_PAGE)) { %>
-                      <html:submit property="save" styleId="button">
+                     
+                      <html:submit property="save" styleId="button" onclick="anyLossCodeChanges(); doSaveCheck=1;">
                         <bean:message key="button.save" />
                       </html:submit>
                     <% } %>
-                    <html:submit property="doclose" styleId="button" onclick="doCheck=1;">
+                    <html:submit property="doclose" styleId="button" onclick="anyLossCodeChanges(); doCheck=1;">
                       <bean:message key="button.closereport" />
                     </html:submit>
                   </logic:notEqual>

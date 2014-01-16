@@ -39,6 +39,7 @@
 
   <script language="javascript">
 	var doCheck = 0;
+	var doSaveCheck = 0;
     
     <jsp:include page="/pages/includes/missingclose.jsp" />
     
@@ -153,7 +154,7 @@
 		                     <% } 
 		                    } %>
 	                  </logic:equal>  
-                    <html:submit property="save" styleId="button">
+                    <html:submit property="save" styleId="button" onclick="anyLossCodeChanges(); doSaveCheck=1;">
                       <bean:message key="button.save" />
                     </html:submit>
                   </logic:equal>
@@ -171,7 +172,7 @@
 	                  </logic:equal>
 	                <% } 
                      if (TracerProperties.isTrue(a.getCompanycode_ID(),TracerProperties.SAVE_ON_CLOSE_PAGE)) { %>
-                      <html:submit property="save" styleId="button">
+                    <html:submit property="save" styleId="button" onclick="anyLossCodeChanges(); doSaveCheck=1;">
                         <bean:message key="button.save" />
                       </html:submit>
                     <% } %>
