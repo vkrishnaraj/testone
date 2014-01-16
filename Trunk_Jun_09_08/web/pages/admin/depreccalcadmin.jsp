@@ -20,24 +20,28 @@
   <td id="middlecolumn">
     
 	  <div id="maincontent">
-	  
-          <font color=red>
-            <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
-          </font>
-          <logic:present name="saved" scope="request">
-          <br>
-          <center><font color=green>
-            <bean:message key="deprec.calc.rules.saved" />
-          </font></center>
-        </logic:present>
-        	<logic:present name="catDeleted" scope="request">
-	          <br>
-	          <center><font color=green>
-	            <bean:message key="deprec.category.deleted" />
-	          </font></center>
-        	
-        	</logic:present>
-        <br>
+
+
+			<logic:present name="saved" scope="request">
+				<font color=green> <bean:message
+						key="deprec.calc.rules.saved" />
+				</font>
+				<br />
+			</logic:present>
+			<logic:present name="catDeleted" scope="request">
+				<font color=green> <bean:message
+						key="deprec.category.deleted" />
+				</font>
+				<br />
+			</logic:present>
+			<font color=red> 
+				<logic:messagesPresent message="true">
+					<html:messages id="msg" message="true">
+						<bean:write name="msg" />
+						<br />
+					</html:messages>
+				</logic:messagesPresent>
+			</font> <br>
 
 <!--  POC0 -->
 

@@ -85,14 +85,18 @@ public final class ManageDeprecCalc extends Action {
 				saveMessages(request, errors);
 			}
 			for(Depreciation_Category dc:theform.getCategories()){
-				
-				dc.setCompanyCode(companyCode);
-							
-				try {
-					HibernateUtils.saveDepreciationCategory(dc, user);
-					request.setAttribute("saved", 1);
-				} catch (Exception ex) {
-					ActionMessage error = new ActionMessage("error.creating.deprec.cat");
+				if(dc.getName()!=null && !dc.getName().isEmpty()){
+					dc.setCompanyCode(companyCode);
+					try {
+						HibernateUtils.saveDepreciationCategory(dc, user);
+						request.setAttribute("saved", 1);
+					} catch (Exception ex) {
+						ActionMessage error = new ActionMessage("error.creating.deprec.cat");
+						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+						saveMessages(request, errors);
+					}
+				} else {
+					ActionMessage error = new ActionMessage("error.creating.deprec.cat.name");
 					errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 					saveMessages(request, errors);
 				}
