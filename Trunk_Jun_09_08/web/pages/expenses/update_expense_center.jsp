@@ -563,6 +563,19 @@
                   <html:text name="passenger" property="email" size="42" maxlength="100" styleClass="textfield" indexed="true" disabled="true"/>
                </td>  
             </tr>
+            
+        	<html:hidden name="passenger" property="email"/>
+			<html:hidden name="passenger" property="countrycode_ID"/>
+			<html:hidden name="passenger" property="state_ID"/>
+			<html:hidden name="passenger" property="address2"/>
+			<html:hidden name="passenger" property="address1"/>
+			<html:hidden name="passenger" property="province"/>
+			<html:hidden name="passenger" property="city"/>
+			<html:hidden name="passenger" property="zip"/>
+        	<html:hidden name="passenger" property="lastname"/>
+			<html:hidden name="passenger" property="firstname"/>
+			<html:hidden name="passenger" property="middlename"/>
+			
       </logic:iterate> 
       			
 
