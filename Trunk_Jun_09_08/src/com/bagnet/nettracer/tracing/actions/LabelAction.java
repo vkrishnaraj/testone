@@ -73,7 +73,7 @@ public class LabelAction extends Action {
 			Incident incident = (Incident) session.getAttribute("incidentObj");
 			if (incident !=null && incidentId.equalsIgnoreCase(incident.getIncident_ID())
 					&& (passengers = incident.getPassenger_list()) != null && !passengers.isEmpty()) {
-				String date = DateUtils.formatDate(new Date(), "MM/dd/yy", null, null);
+				String date = DateUtils.formatDate(incident.getCreatedate(), "MM/dd/yy", null, null);
 				for (Passenger passenger : passengers) {
 					String text = String.format("%s, %s\n%s %s", passenger.getLastname(), passenger.getFirstname(),//
 							date, agent.getStation().getStationcode());
