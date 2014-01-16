@@ -726,9 +726,6 @@
                     <h1 class="green">
                       <bean:message key="issuance.item.issued.inventory.header" />
                     </h1>
-                    <font color=red>
-                      <logic:messagesPresent message="true"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></logic:messagesPresent>
-                    </font>
                     <br />
                     <table class="form2" cellspacing="0" cellpadding="0" width="100%">
               <tr>
