@@ -180,7 +180,7 @@
 		function doPrint(message){
 	    	
 		    jQuery('<div></div>').appendTo('body')
-		                    .html('<div><h6>'+message+'?</h6></div>')
+		                    .html('<div><h6>'+message+'</h6></div>')
 		                    .dialog({
 								height: 50,
 								width: 350,
