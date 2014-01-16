@@ -37,10 +37,10 @@
 		            <logic:iterate id="link" name="linkList">
 		              <tr>
 		                <td class="link_image">
-		                  <A HREF="<bean:write name="link" property="link_address"/>"><img src="deployment/main/images/nettracer/<bean:write name="link" property="image"/>"> </A>
+		                  <A HREF="<bean:write name="link" property="link_address"/>" target="blank" ><img src="deployment/main/images/nettracer/<bean:write name="link" property="image"/>"> </A>
 		                </td>
 		                <td class="link_description">
-		                  <A HREF="<bean:write name="link" property="link_address"/>"><bean:write name="link" property="description"/> </A>
+		                  <A HREF="<bean:write name="link" property="link_address"/>" target="blank" ><bean:write name="link" property="description"/> </A>
 		                </td>
 		              </tr>
 		            </logic:iterate>
