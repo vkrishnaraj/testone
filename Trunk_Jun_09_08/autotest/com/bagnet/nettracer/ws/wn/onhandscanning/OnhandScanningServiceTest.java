@@ -26,6 +26,7 @@ import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.SecurityUtils;
+import com.bagnet.nettracer.ws.core.WSCoreOHDUtil;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSItinerary;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSPassenger;
@@ -86,7 +87,7 @@ public class OnhandScanningServiceTest {
 		auth.setSystemPassword("fdasfs");
 		auth.setAirlineCode(companycode);
 		response = service.isValidUser(doc);
-		assertTrue(!response.getIsValidUserResponse().getReturn()
+		assertTrue(response.getIsValidUserResponse().getReturn()//as per SWA, since they use SSO, we no longer authenticate passwords
 				.getValidUser());
 
 		// disable webservice user
@@ -588,9 +589,15 @@ public class OnhandScanningServiceTest {
 			}
 		}
 		assertTrue(lzret.getReturn().getSuccess());
-		assertTrue(OnhandScanningServiceImplementation.STATUS_RETURN_LZ_UPDATE_REQUIRED
+		assertTrue(OnhandScanningServiceImplementation.STATUS_RETURN_LZ_UPDATE_ITEM_TYPE_REQUIRED
 				.equals(lzret.getReturn().getReturnStatus()));
 
+		//since we are not longer receiving the forward, we need to receive it here before closing
+		WSCoreOHDUtil util = new WSCoreOHDUtil();
+		toRecieve = OhdBMO.getOHDByID(retohd.getOHDID(), null);
+		Station holdingstation = StationBMO.getStationByCode(altStationcode, agent.getCompanycode_ID());
+		util.properlyHandleForwardedOnHand(toRecieve, agent, holdingstation);
+		
 		// closing ohd
 		OHD toClose = OhdBMO.getOHDByID(retohd.getOHDID(), null);
 		toClose.getStatus().setStatus_ID(4);

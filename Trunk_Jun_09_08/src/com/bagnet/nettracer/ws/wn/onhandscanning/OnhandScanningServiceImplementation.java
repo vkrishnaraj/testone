@@ -45,7 +45,26 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 	
 	private static Logger logger = Logger.getLogger(OnhandScanningServiceImplementation.class);
 	
-	private IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
+	
+	/**
+	 * Since IncidentActivityService uses spring to instantiate and currently our junit test suite does not support spring,
+	 * we need to provided a setter to allow junit to set a mock IncidentActivityService
+	 */
+	private IncidentActivityService incidentActivityService;
+	
+	public IncidentActivityService getIncidentActivityService() {
+		if(incidentActivityService == null){
+			incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
+		}
+		return incidentActivityService;
+	}
+
+
+	public void setIncidentActivityService(
+			IncidentActivityService incidentActivityService) {
+		this.incidentActivityService = incidentActivityService;
+	}
+	
 	
 	public static String STATUS_CREATE = "CREATE";
 	public static String STATUS_UPDATE = "UPDATE";
@@ -53,6 +72,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 	public static String STATUS_RETURN_ASSOCIATED_REPORT = "Cannot Return, associated report";
 	public static String STATUS_RETURN_NO_OHD = "Cannot Return, does not exist";
 	public static String STATUS_RETURN_LZ_UPDATE_REQUIRED = "LZ Update Required";
+	public static String STATUS_RETURN_LZ_UPDATE_ITEM_TYPE_REQUIRED = "Type of Item Update Required";
 	public static String STATUS_RETURN_UPDATE_SUCCESS = "Successful Update";
 	public static String STATUS_RETURN_CREATE_UPDATE_SUCCESS = "Successful Create/Update";
 	public static String STATUS_RETURN_CREATE_OHD = "Create OHD";
@@ -674,16 +694,18 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 			return resDoc;
 		}
 		
-		
-		WSCoreOHDUtil util = new WSCoreOHDUtil();
-		
 		//Handle incoming OHD
 		OHD incomingOHD = OHDUtils.getBagTagNumberIncomingToStation(lookupOnhandLZ.getLookupOnhandLZ().getTagNumber(),holdingstation);
 		if(incomingOHD != null){
-			//receive OHD
-			util.properlyHandleForwardedOnHand(incomingOHD, agent, holdingstation);
+			/** 
+			 * per SWA requirement, NetTracer is to not receive the bag, only to acknowledge it by updating the lastModified datetime (NT-1991) 
+			 * 
+			 * the lastModified is automatically updated whenever the OHD is saved, thus save the OHD we just loaded
+			 **/
+			OhdBMO obmo = new OhdBMO();
+			obmo.insertOHD(incomingOHD, agent);
+
 			try{
-				OhdBMO obmo = new OhdBMO();
 				serviceResponse = ohdToWSOHD(obmo.findOHDByID(incomingOHD.getOHD_ID()),serviceResponse);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -693,8 +715,8 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 				return resDoc;
 			}
 			serviceResponse.setSuccess(true);
-			serviceResponse.setCreateUpdateIndicator(STATUS_UPDATE);
-			serviceResponse.setReturnStatus(STATUS_RETURN_LZ_UPDATE_REQUIRED);
+			serviceResponse.setCreateUpdateIndicator("");//as per SWA requirement, returning a empty string for the indicator NT-1991
+			serviceResponse.setReturnStatus(STATUS_RETURN_LZ_UPDATE_ITEM_TYPE_REQUIRED);
 			logger.info(resDoc);
 			return resDoc;
 		}
