@@ -466,5 +466,19 @@ public class StringUtils {
 			return -1;
 		}
   }
+
+	public static String sanitizeForSingleQuoteJavascript(String toSanitize) {
+		if (toSanitize != null) {
+			return toSanitize.replace("'", "\\\\'").replace("/", "\\\\/");
+		}
+		return "";
+	}
+
+	public static String sanitizeForDoubleQuoteJavascript(String toSanitize) {
+		if (toSanitize != null) {
+			return toSanitize.replace("\"", "\\\\\"").replace("/", "\\\\/");
+		}
+		return "";
+	}
   
 }

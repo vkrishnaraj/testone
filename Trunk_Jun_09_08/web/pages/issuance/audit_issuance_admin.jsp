@@ -316,20 +316,11 @@
 	                  	 <% String incID = (i_item.getIncidentID() != null ? i_item.getIncidentID() : ""); %>
 	                  	 <% if (i_item.isVerifiedIncident()) { %>
 	                  	 	<a href="<%="searchIncident.do?incident=" + incID %>" ><%=incID %></a>
-	                     <% } else if (i_item.getIncidentID() != null && i_item.getIncidentID().equals(IssuanceItemBMO.SPECIAL_LOAN_ID)) { 
-	                     		String fn = i_item.getFirstName() != null ? i_item.getFirstName().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
-	                     		String ln = i_item.getLastName() != null ? i_item.getLastName().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
-	                     		String ad1 = i_item.getAddress1() != null ? i_item.getAddress1().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
-	                     		String ad2 = i_item.getAddress2() != null ? i_item.getAddress2().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
-	                     		String ct = i_item.getCity() != null ? i_item.getCity().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
-	                     		String st = i_item.getState() != null ? i_item.getState().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
-	                     		String pv = i_item.getProvince() != null ? i_item.getProvince().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
-	                     		String zp = i_item.getZip() != null ? i_item.getZip().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
-	                     		String ctry = i_item.getCountry() != null ? i_item.getCountry().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
-	                     		String pn = i_item.getPhoneNumber() != null ? i_item.getPhoneNumber().replace("'", "\\\\'").replace("/", "\\\\/") : ""; 
-	                     		String desc = i_item.getSpecialNeedDescription() != null ? i_item.getSpecialNeedDescription().replace("'", "\\\\'").replace("/", "\\\\/") : ""; %>
+	                     <% } else if (i_item.getIncidentID() != null && i_item.getIncidentID().equals(IssuanceItemBMO.SPECIAL_LOAN_ID)) { %>
 	                     	<a href="###" 
-	                     	onclick="loadSpecialNeedViewModal('<%=fn %>', '<%=ln %>', '<%=ad1 %>', '<%=ad2 %>', '<%=ct %>', '<%=st %>', '<%=pv %>', '<%=zp %>', '<%=ctry %>', '<%=pn %>', '<%=desc %>')"
+	                     	onclick="loadSpecialNeedViewModal('<%=i_item.getFirstNameJavascript() %>', '<%=i_item.getLastNameJavascript() %>', '<%=i_item.getAddress1Javascript() %>', 
+	                     			'<%=i_item.getAddress2Javascript() %>', '<%=i_item.getCityJavascript() %>', '<%=i_item.getStateJavascript() %>', '<%=i_item.getProvinceJavascript() %>', 
+	                     			'<%=i_item.getZipJavascript() %>', '<%=i_item.getCountryJavascript() %>', '<%=i_item.getPhoneNumberJavascript() %>', '<%=i_item.getSpecialNeedDescriptionJavascript() %>')"
 	                     	><bean:message key="issuance.item.button.snloan" /></a>
 	                     <% } else { %>
 	                     	<%=incID %>

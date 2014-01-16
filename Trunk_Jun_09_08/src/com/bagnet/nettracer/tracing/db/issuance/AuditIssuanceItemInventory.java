@@ -17,6 +17,7 @@ import org.hibernate.annotations.Proxy;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.utils.StringUtils;
 
 @Entity
 @Proxy(lazy = false)
@@ -314,6 +315,50 @@ public class AuditIssuanceItemInventory {
 
 	public void setSpecialNeedDescription(String specialNeedDescription) {
 		this.specialNeedDescription = specialNeedDescription;
+	}
+
+	public String getFirstNameJavascript() {
+		return firstName != null ? StringUtils.sanitizeForSingleQuoteJavascript(firstName) : "";
+	}
+
+	public String getLastNameJavascript() {
+		return lastName != null ? StringUtils.sanitizeForSingleQuoteJavascript(lastName) : "";
+	}
+
+	public String getCountryJavascript() {
+		return country != null ? StringUtils.sanitizeForSingleQuoteJavascript(country) : "";
+	}
+
+	public String getPhoneNumberJavascript() {
+		return phoneNumber != null ? StringUtils.sanitizeForSingleQuoteJavascript(phoneNumber) : "";
+	}
+
+	public String getAddress1Javascript() {
+		return address1 != null ? StringUtils.sanitizeForSingleQuoteJavascript(address1) : "";
+	}
+
+	public String getAddress2Javascript() {
+		return address2 != null ? StringUtils.sanitizeForSingleQuoteJavascript(address2) : "";
+	}
+
+	public String getCityJavascript() {
+		return city != null ? StringUtils.sanitizeForSingleQuoteJavascript(city) : "";
+	}
+
+	public String getStateJavascript() {
+		return state != null ? StringUtils.sanitizeForSingleQuoteJavascript(state) : "";
+	}
+	
+	public String getProvinceJavascript() {
+		return province != null ? StringUtils.sanitizeForSingleQuoteJavascript(province) : "";
+	}
+
+	public String getZipJavascript() {
+		return zip != null ? StringUtils.sanitizeForSingleQuoteJavascript(zip) : "";
+	}
+
+	public String getSpecialNeedDescriptionJavascript() {
+		return specialNeedDescription != null ? StringUtils.sanitizeForSingleQuoteJavascript(specialNeedDescription) : "";
 	}
 	
 }
