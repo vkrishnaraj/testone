@@ -44,7 +44,6 @@ inc.checkedlocation, (case inc.checkedlocation when not 0 then cat.description e
                 WHERE it.itinerarytype=0 and it.departdate >= :startDate and it.departdate <= :endDate
                   ORDER BY it.incident_id, it.itinerary_id ASC) itin1 
                   GROUP BY incident_id) as itinRoutes
-  
   on itinRoutes.incident_ID = i.incident_ID
   inner join station s on s.Station_ID = inc.stationassigned_ID inner join Company_irregularity_codes c on i.lossCode= c.loss_code 
   left outer join category cat on cat.categoryVal=inc.checkedlocation and cat.type=4
