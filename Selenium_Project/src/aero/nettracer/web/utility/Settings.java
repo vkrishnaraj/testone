@@ -57,11 +57,11 @@ public class Settings {
 //	public static final String USERNAME_ADMIN = "ntadmin";
 	public static final String USERNAME_OGADMIN = "ogadmin";
 	public static final String USERNAME_TEST = "nttestauto";
-	public static final String PASSWORD_ADMIN = "IpoL!Jan7";
+	public static final String PASSWORD_ADMIN = "wnI3onJan8!";
 //	public static final String PASSWORD_ADMIN = "SoftSprint1011";
-	public static final String PASSWORD_OGADMIN = "Ladendead51!";
+	public static final String PASSWORD_OGADMIN = "wnI3onJan8!";
 //	public static final String PASSWORD_OGADMIN = "InstaNokia41!";
-	public static final String PASSWORD_TEST = "nttest@Hud1";
+	public static final String PASSWORD_TEST = "wnI3onJan8!";
 	public static final String PASSWORD_CHANGE = "nttest@Hud2";
 //	public static final String USERNAME_ADMIN = "ntadmin";
 //	public static final String PASSWORD_ADMIN = "InstaNokia41!";
