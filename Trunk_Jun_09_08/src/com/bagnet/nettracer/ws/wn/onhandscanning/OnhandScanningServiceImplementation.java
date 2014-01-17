@@ -835,8 +835,8 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 			e.printStackTrace();
 			return null;
 		}
-		Activity activity = incidentActivityService.getActivity(TracingConstants.ACTIVITY_CODE_RECEIVED_DAMAGED_ITEM);
-		long activityId = incidentActivityService.save(DomainUtils.createIncidentActivity(inc, activity, agent));
+		Activity activity = getIncidentActivityService().getActivity(TracingConstants.ACTIVITY_CODE_RECEIVED_DAMAGED_ITEM);
+		long activityId = getIncidentActivityService().save(DomainUtils.createIncidentActivity(inc, activity, agent));
 		
 		if(activityId > 0){
 			InboundTasksUtils.createDamagedTask(inc, agent, activity, activityId);
