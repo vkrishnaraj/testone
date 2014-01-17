@@ -72,7 +72,7 @@
 				<input name="<%= remarkDescription + "2" %>" type="text"
 					value="1500" size="4" maxlength="4" disabled="true" /> <br>
 				<html:submit styleId="button" property="deleteCloseRemark"
-					indexed="true">
+					indexed="true" onclick="doCheck=0; doSaveCheck=0; return true;">
 					<bean:message key="button.delete_remark" />
 				</html:submit> 
 			</td>
@@ -80,7 +80,7 @@
 		</logic:equal>
 	</logic:iterate>
 </table>
-<center><html:submit property="addcloseremark" styleId="button" onclick="lossCodeChange=false; return true;">
+<center><html:submit property="addcloseremark" styleId="button" onclick="doCheck=0; doSaveCheck=0; lossCodeChange=false; return true;">
 	<bean:message key="button.add_remark" />
 </html:submit></center>
 
