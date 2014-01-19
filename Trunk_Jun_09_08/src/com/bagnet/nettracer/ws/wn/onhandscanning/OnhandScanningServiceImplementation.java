@@ -15,8 +15,10 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD;
+import com.bagnet.nettracer.tracing.db.OHD_Address;
 import com.bagnet.nettracer.tracing.db.OHD_Itinerary;
 import com.bagnet.nettracer.tracing.db.OHD_Passenger;
+import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
@@ -944,6 +946,43 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		if(inc.getPassengers() != null && inc.getPassengers().size() > 0){
 			ohd.setFirstname(inc.getPassengers().iterator().next().getFirstname());
 			ohd.setLastname(inc.getPassengers().iterator().next().getLastname());
+			
+			for(Passenger incPax:inc.getPassengers()){
+				OHD_Passenger newPax = new OHD_Passenger();
+				newPax.setFirstname(incPax.getFirstname());
+				newPax.setLastname(incPax.getLastname());
+				newPax.setMiddlename(incPax.getMiddlename());
+
+				if(incPax.getAddresses() != null && incPax.getAddresses().size() > 0){
+					for(com.bagnet.nettracer.tracing.db.Address incAddr:incPax.getAddresses()){
+						OHD_Address newAddr = new OHD_Address();
+						newAddr.setAddress1(incAddr.getAddress1());
+						newAddr.setAddress2(incAddr.getAddress2());
+						newAddr.setCity(incAddr.getCity());
+						newAddr.setState_ID(incAddr.getState_ID());
+						newAddr.setProvince(incAddr.getProvince());
+						newAddr.setZip(incAddr.getZip());
+						newAddr.setCountrycode_ID(incAddr.getCountrycode_ID());
+						newAddr.setAddresstype(incAddr.getAddresstype());
+						
+						newAddr.setEmail(incAddr.getEmail());
+						newAddr.setAltphone(incAddr.getAltphone());
+						newAddr.setHomephone(incAddr.getHomephone());
+						newAddr.setMobile(incAddr.getMobile());
+						newAddr.setPager(incAddr.getPager());
+						newAddr.setWorkphone(incAddr.getWorkphone());
+						
+						newAddr.setOhd_passenger(newPax);
+						newPax.addAddress(newAddr);
+					}
+				}
+
+				if(ohd.getPassengers() == null){
+					ohd.setPassengers(new LinkedHashSet<OHD_Passenger>());
+				}
+				newPax.setOhd(ohd);
+				ohd.getPassengers().add(newPax);
+			}
 		}
 		
 		//have to manually copy itin since incidents and ohds uses two different Itinerary objects

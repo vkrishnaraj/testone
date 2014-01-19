@@ -7,22 +7,12 @@
 package com.bagnet.nettracer.tracing.db;
 
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Set;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.ShortBufferException;
 
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
@@ -54,7 +44,7 @@ public class Passenger implements Serializable {
 	private String countryofissue;
 	private int isprimary;
 	private AirlineMembership membership;
-	private Set addresses;
+	private Set<Address> addresses;
 	private Incident incident;
 	private int numRonKitsIssued;
 	private String languageKey;
@@ -69,7 +59,7 @@ public class Passenger implements Serializable {
 	public JRBeanCollectionDataSource getAddressesForReport() {
 		if (addresses == null || addresses.size() < 1) return null;
 
-		return new JRBeanCollectionDataSource(new ArrayList(addresses));
+		return new JRBeanCollectionDataSource(new ArrayList<Address>(addresses));
 	}
 
 	public String toXML() {
@@ -98,7 +88,8 @@ public class Passenger implements Serializable {
 		}
 		sb.append("<addresses>");
 		if (getAddresses() != null && getAddresses().size() > 0) {
-			for (Iterator j = getAddresses().iterator(); j.hasNext();) {
+			for (@SuppressWarnings("rawtypes")
+			Iterator j = getAddresses().iterator(); j.hasNext();) {
 				Address addr = (Address) j.next();
 				sb.append(addr.toXML());
 			}
@@ -112,11 +103,12 @@ public class Passenger implements Serializable {
 	public static Passenger XMLtoObject(ElementNode root) {
 		Passenger obj = new Passenger();
 
-		ElementNode child = null, grandchild = null, ggrandchild = null, gggrandchild = null;
+		ElementNode child = null;
 		AirlineMembership am = new AirlineMembership();
 		
 		
-		for (ListIterator i = root.get_children().listIterator(); i.hasNext();) {
+		for (@SuppressWarnings("rawtypes")
+		ListIterator i = root.get_children().listIterator(); i.hasNext();) {
 			child = (ElementNode) i.next();
 			if (child.getType().equals("Passenger_ID")) {
 				obj.setPassenger_ID(NumberUtils.parseInt(child.getTextContents()));
@@ -149,12 +141,13 @@ public class Passenger implements Serializable {
 			} else if (child.getType().equals("airlinemembership_company")) {
 				am.setCompanycode_ID(child.getTextContents());
 			} else if (child.getType().equals("addresses")) {
-				ArrayList al = new ArrayList();
+				ArrayList<Address> al = new ArrayList<Address>();
+				@SuppressWarnings({ "rawtypes" })
 				ArrayList c = (ArrayList)child.getChildren();
 				for (int z=0;z<c.size();z++) {
 					al.add(Address.XMLtoObject((ElementNode)c.get(z)));
 				}
-				obj.setAddresses(new HashSet(al));
+				obj.setAddresses(new HashSet<Address>(al));
 			}
 			obj.setMembership(am);
 
@@ -224,7 +217,7 @@ public class Passenger implements Serializable {
 	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.Address"
 	 * @return Returns the addresses.
 	 */
-	public Set getAddresses() {
+	public Set <Address> getAddresses() {
 		return addresses;
 	}
 
@@ -232,7 +225,7 @@ public class Passenger implements Serializable {
 	 * @param addresses
 	 *          The addresses to set.
 	 */
-	public void setAddresses(Set addresses) {
+	public void setAddresses(Set<Address> addresses) {
 		this.addresses = addresses;
 	}
 	
@@ -490,19 +483,19 @@ public class Passenger implements Serializable {
 
 	public Address getAddress(int i) {
 		if (this.getAddresses() != null) {
-			ArrayList t = new ArrayList(this.getAddresses());
+			ArrayList<Address> t = new ArrayList<Address>(this.getAddresses());
 			while (t.size() <= i) {
 				Address adddd = new Address();
 				adddd.setPassenger(this);
 				addAddress(adddd);
-				t = new ArrayList(this.getAddresses());
+				t = new ArrayList<Address>(this.getAddresses());
 			}
 			return (Address) t.get(i);
 		} else return null;
 	}
 
 	public void addAddress(Address address) {
-		if (this.getAddresses() == null) this.setAddresses(new HashSet());
+		if (this.getAddresses() == null) this.setAddresses(new HashSet<Address>());
 		this.getAddresses().add(address);
 	}
 
