@@ -129,42 +129,6 @@ public class OnhandScanningServiceTest {
 	}
 
 	@Test
-	public void saveBagDropTimeTest() {
-		// null Authentication object
-		SaveBagDropTimeDocument doc = SaveBagDropTimeDocument.Factory
-				.newInstance();
-		SaveBagDropTimeResponseDocument response = service.saveBagDropTime(doc);
-		assertTrue(!response.getSaveBagDropTimeResponse().getReturn()
-				.getSuccess());
-		assertTrue(!response.getSaveBagDropTimeResponse().getReturn()
-				.getValidUser());
-
-		// test happy path since BagDrop is not implemented until a later ticket
-		SaveBagDropTime savebagdrop = doc.addNewSaveBagDropTime();
-		Authentication auth = savebagdrop.addNewAuthentication();
-		auth.setSystemName(username);
-		auth.setSystemPassword(password);
-		auth.setAirlineCode(companycode);
-		BagDrop bagdrop = savebagdrop.addNewBagDrop();
-		bagdrop.setAirlineCode("WN");
-		bagdrop.setArrivalStationCode("ATL");
-		bagdrop.setFlightNumber("WN123");
-		bagdrop.setBagDropDatetime(new GregorianCalendar());
-		bagdrop.setPreviouslyEnteredFlag(false);
-		bagdrop.setScheduleArrivalDatetime(new GregorianCalendar());
-
-		response = service.saveBagDropTime(doc);
-		ServiceResponse ret = response.getSaveBagDropTimeResponse().getReturn();
-		assertTrue(ret.getSuccess());
-		assertTrue(ret.getValidUser());
-		BagDrop retBag = ret.getBagDrop();
-		assertTrue("WN".equals(retBag.getAirlineCode()));
-		assertTrue("ATL".equals(retBag.getArrivalStationCode()));
-		assertTrue("WN123".equals(retBag.getFlightNumber()));
-
-	}
-
-	@Test
 	public void createOnhandTest() {
 		CreateUpdateOnhandDocument doc = getBlankOhdDocuement();
 
