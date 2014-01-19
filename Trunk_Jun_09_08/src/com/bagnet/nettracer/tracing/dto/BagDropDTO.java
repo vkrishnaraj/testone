@@ -1,6 +1,9 @@
 package com.bagnet.nettracer.tracing.dto;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 public class BagDropDTO implements Cloneable{
@@ -74,13 +77,29 @@ public class BagDropDTO implements Cloneable{
 		}
 	}
 
+	/**
+	 * The search end search date in the search dto has one calendar day added in order to make the search inclusive of that day,
+	 * however, for display purposes this come across as confusing to users.  Thus for the display getter/setter, we must subtract or add one day respectively.
+	 * 
+	 * @return
+	 */
 	public String getDispEndScheduleArrivalDate(){
-		return DateUtils.formatDate(getEndScheduleArrivalDate(), _DATEFORMAT, null, _TIMEZONE);
+		if(getEndScheduleArrivalDate() != null){
+			Calendar cal = GregorianCalendar.getInstance();
+			cal.setTime(getEndScheduleArrivalDate());
+			cal.add(Calendar.DATE, -1);
+			return DateUtils.formatDate(cal.getTime(), _DATEFORMAT, null, _TIMEZONE);
+		} else {
+			return "";
+		}
 	}
 	public void setDispEndScheduleArrivalDate(String date){
 		Date end = DateUtils.convertToGMTDate(date, _DATEFORMAT, _TIMEZONE);
 		if(end != null){
-			setEndScheduleArrivalDate(end);
+			Calendar cal = GregorianCalendar.getInstance();
+			cal.setTime(end);
+			cal.add(Calendar.DATE, 1);
+			setEndScheduleArrivalDate(cal.getTime());
 		}
 	}
 	

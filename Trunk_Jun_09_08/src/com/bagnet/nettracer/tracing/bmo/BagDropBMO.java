@@ -197,11 +197,7 @@ public class BagDropBMO {
 			}
 			if(dto.getEndScheduleArrivalDate() != null){
 				sql += "and b.schArrivalDate <= :endSchArrivalDate ";
-				//adding one day to allow the search to be inclusive of the provided end date
-				Calendar cal = GregorianCalendar.getInstance();
-				cal.setTime(dto.getEndScheduleArrivalDate());
-				cal.add(Calendar.DATE, 1);
-				params.put("endSchArrivalDate", cal.getTime());
+				params.put("endSchArrivalDate", dto.getEndScheduleArrivalDate());
 			}
 			if(dto.getFlightNumber() != null && dto.getFlightNumber().trim().length() > 0){
 				sql += "and b.flight like :flight ";

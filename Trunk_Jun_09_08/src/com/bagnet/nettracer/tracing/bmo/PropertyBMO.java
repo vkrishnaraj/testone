@@ -270,6 +270,10 @@ public class PropertyBMO {
 	
 	public static final String POPULATE_ITIN_DATEONLY = "populate.itinerary.dateonly";
 	
+	public static final String BAGDROP_OFFSET_START = "bagdrop.offset.start";
+	public static final String BAGDROP_OFFSET_END = "bagdrop.offset.end";
+	
+	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;
 		if(key != null && value != null){

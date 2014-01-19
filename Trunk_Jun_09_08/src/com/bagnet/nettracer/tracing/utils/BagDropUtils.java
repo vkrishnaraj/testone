@@ -13,6 +13,7 @@ import org.apache.struts.util.MessageResources;
 import aero.nettracer.general.services.GeneralServiceBean;
 
 import com.bagnet.nettracer.tracing.bmo.BagDropBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BagDrop;
@@ -23,6 +24,7 @@ import com.bagnet.nettracer.tracing.dto.BagDropDTO;
 import com.bagnet.nettracer.exceptions.InvalidDateRangeException;
 import com.bagnet.nettracer.exceptions.InvalidStationException;
 import com.bagnet.nettracer.exceptions.MissingRequiredFieldsException;
+import com.bagnet.nettracer.exceptions.ObjectDoesNotExistException;
 
 /**
  * @author Loupas
@@ -32,6 +34,9 @@ public class BagDropUtils {
 
 	@SuppressWarnings("unused")
 	private static Logger logger = Logger.getLogger(BagDropUtils.class);
+	
+	public static final int DEFAULT_START_OFFSET = 4;
+	public static final int DEFAULT_END_OFFSET = 4;
 	
 	private static MessageResources messages = null;
 	
@@ -68,7 +73,7 @@ public class BagDropUtils {
 	/**
 	 * Determines if a bag drop exists for the given airline, flight number, arrival station and scheduled arrival date
 	 * 
-	 * The schedule arrival date range is defined as the beginning of the specified day to the beginning of the next day
+	 * The schedule arrival date range is defined by the offset provided through the property table.
 	 * Assumes that the date provided has already been converted to GMT (currently the only two methods for creating a new
 	 * BagDrop is the scanner implementation and reservation implementation, both of which converts to GMT before invoking 
 	 * this method)
@@ -86,18 +91,15 @@ public class BagDropUtils {
 		
 		GregorianCalendar start = new GregorianCalendar();
 		start.setTime(date);
-		start.set(Calendar.HOUR_OF_DAY, 0);
-		start.set(Calendar.MINUTE, 0);
-		start.set(Calendar.SECOND, 0);
-		start.set(Calendar.MILLISECOND, 0);
+		int startOffset = PropertyBMO.getValueAsInt(PropertyBMO.BAGDROP_OFFSET_START);
+		startOffset = startOffset>0?startOffset:DEFAULT_START_OFFSET;
+		start.add(Calendar.HOUR, -startOffset);
 		
 		GregorianCalendar end = new GregorianCalendar();
 		end.setTime(date);
-		end.add(Calendar.DATE, 1);
-		end.set(Calendar.HOUR_OF_DAY, 0);
-		end.set(Calendar.MINUTE, 0);
-		end.set(Calendar.SECOND, 0);
-		end.set(Calendar.MILLISECOND, 0);
+		int endOffset = PropertyBMO.getValueAsInt(PropertyBMO.BAGDROP_OFFSET_END);
+		endOffset = endOffset>0?endOffset:DEFAULT_END_OFFSET;
+		end.add(Calendar.HOUR, endOffset);
 		
 		return getBagDropBMO().getBagDropID(companycode, flightNum, stationcode, start.getTime(), end.getTime());
 	}
@@ -109,7 +111,20 @@ public class BagDropUtils {
 	 * @param bagdrop
 	 * @return
 	 */
-	public static long saveOrUpdateBagDrop(Agent agent, BagDrop bagdrop) {
+	public static long saveOrUpdateBagDrop(Agent agent, BagDrop bagdrop){
+		return saveOrUpdateBagDrop(agent, bagdrop, false);
+	}
+	
+	/**
+	 * Updates an existing bag drop if it exists, otherwise insert new bag drop only if updateOnly is set to false.  Otherwise
+	 * throw an ObjectDoesNotExistException.
+	 * 
+	 * @param agent
+	 * @param bagdrop
+	 * @param updateOnly
+	 * @return
+	 */
+	public static long saveOrUpdateBagDrop(Agent agent, BagDrop bagdrop, boolean updateOnly) {
 		if(bagdrop == null){
 			throw new MissingRequiredFieldsException();
 		}
@@ -124,7 +139,11 @@ public class BagDropUtils {
 			bagdrop.setId(id);
 			return updateBagDrop(agent, bagdrop);	
 		} else {
-			return saveNewBagDrop(agent, bagdrop);
+			if(!updateOnly){
+				return saveNewBagDrop(agent, bagdrop);
+			} else {
+				throw new ObjectDoesNotExistException();
+			}
 		}
 	}
 	
@@ -144,6 +163,9 @@ public class BagDropUtils {
 	/**
 	 * Update a BagDrop if allowed (currently only a date restriction applies)
 	 * 
+	 * The only fields that can be updated are the actual arrival time, bagdrop time and entry method
+	 * Only update if provided.
+	 * 
 	 * @param agent
 	 * @param bagdrop
 	 * @return
@@ -160,17 +182,17 @@ public class BagDropUtils {
 			throw new InvalidStationException();
 		}
 
-		/**Do not overwrite original createAgent and createDate**/
 		BagDrop old = getBagDropBMO().getBagDropByID(bagdrop.getId());
-		bagdrop.setCreateAgent(old.getCreateAgent());
-		bagdrop.setCreateDate(old.getCreateDate());
-		
-		/**Do not overwrite bagdrop time with null when refreshing flight info**/
-		if(bagdrop.getBagDropTime() == null){
-			bagdrop.setBagDropTime(old.getBagDropTime());
-		}
 
-		return getBagDropBMO().insertBagDrop(bagdrop, agent);
+		if(bagdrop.getBagDropTime() != null){
+			old.setBagDropTime(bagdrop.getBagDropTime());
+		}
+		if(bagdrop.getActArrivalDate() != null){
+			old.setActArrivalDate(bagdrop.getActArrivalDate());
+		}
+		old.setEntryMethod(bagdrop.getEntryMethod());
+		
+		return getBagDropBMO().insertBagDrop(old, agent);
 	}
 	
 	/**

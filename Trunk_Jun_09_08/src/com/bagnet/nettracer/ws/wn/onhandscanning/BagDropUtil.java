@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import com.bagnet.nettracer.exceptions.InvalidDateRangeException;
 import com.bagnet.nettracer.exceptions.InvalidStationException;
+import com.bagnet.nettracer.exceptions.ObjectDoesNotExistException;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.utils.BagDropUtils;
@@ -126,6 +127,9 @@ public class BagDropUtil {
 			}
 			if(wsbagdrop.getScheduleArrivalDatetime() != null){
 				ntbagdrop.setSchArrivalDate(DateUtils.convertToGMTDate(wsbagdrop.getScheduleArrivalDatetime().getTime()));
+			} else {
+				/** As per SWA requirements, if a scheduled arrival date is not provided, use the current date (NT-2010)**/
+				ntbagdrop.setSchArrivalDate(DateUtils.convertToGMTDate(new Date()));
 			}
 			ntbagdrop.setArrivalStationCode(wsbagdrop.getArrivalStationCode());
 			ntbagdrop.setCreateDate(DateUtils.convertToGMTDate(new Date()));
@@ -188,11 +192,13 @@ public class BagDropUtil {
 	 */
 	private static boolean saveBagDrop(Agent agent, com.bagnet.nettracer.tracing.db.BagDrop ntbagdrop, com.bagnet.nettracer.ws.wn.onhandscanning.pojo.xsd.ServiceResponse serviceResponse){
 		try{
-			if(BagDropUtils.saveOrUpdateBagDrop(agent, ntbagdrop) > 0){
+			if(BagDropUtils.saveOrUpdateBagDrop(agent, ntbagdrop, true) > 0){
 				return true;
 			} else {
 				serviceResponse.addError("Error updating bagdrop");
 			}
+		} catch (ObjectDoesNotExistException odnee){
+			serviceResponse.addError("Unable to update, a BagDrop entry does not exist for the provided flight and arrival station");
 		} catch (InvalidDateRangeException idre){
 			serviceResponse.addError("Unable to update BagDrop, outside of acceptable date range");
 		} catch (InvalidStationException ise){

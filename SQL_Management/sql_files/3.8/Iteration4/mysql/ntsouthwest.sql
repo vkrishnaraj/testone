@@ -8,3 +8,6 @@ update properties set valueStr = '12' where keyStr = 'reservation.hours.forward'
 #update properties set valueStr = 'http://drapp2.nettracer.aero:8680/NTServices_1_0/services/ReservationService_1_0' where keyStr = 'booking.nt.endpoint';
 #NEW TRAINING SERVICE FOR SOUTHWEST
 #update properties set valueStr = 'http://drapp2.nettracer.aero:8780/NTServices_1_0/services/ReservationService_1_0' where keyStr = 'booking.nt.endpoint';
+
+insert into properties (keyStr, valueStr) values ('bagdrop.offset.start',8);
+insert into properties (keyStr, valueStr) values ('bagdrop.offset.end',6);
