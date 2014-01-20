@@ -66,36 +66,19 @@ public class BagDropUtil {
 		if(saveBagDropTime != null && saveBagDropTime.getSaveBagDropTime() != null && saveBagDropTime.getSaveBagDropTime().getBagDrop() != null
 				&& saveBagDropTime.getSaveBagDropTime().getBagDrop().getBagDropDatetime() != null){
 
-			wsbagdrop = saveBagDropTime.getSaveBagDropTime().getBagDrop();			
-			long bagDropId = BagDropUtils.bagdropExists(
-					wsbagdrop.getAirlineCode(), 
-					wsbagdrop.getFlightNumber(), 
-					wsbagdrop.getArrivalStationCode(), 
-					wsbagdrop.getScheduleArrivalDatetime()!=null?DateUtils.convertToGMTDate(wsbagdrop.getScheduleArrivalDatetime().getTime()):null);
-			if(bagDropId > 0){
-				//update existing bagdrop
-				ntbagdrop = BagDropUtils.getBagDropById(agent, bagDropId);
-				ntbagdrop.setEntryMethod(TracingConstants.BAGDROP_ENTRY_METHOD_SCANNER);
-				ntbagdrop.setBagDropTime(DateUtils.convertToGMTDate(wsbagdrop.getBagDropDatetime().getTime()));
-				if(saveBagDrop(agent, ntbagdrop, serviceResponse)){
-					serviceResponse.setCreateUpdateIndicator(OnhandScanningServiceImplementation.STATUS_UPDATE);
-					previouslyEntered = true;
-				} else {
-					logger.info(resDoc);
-					return resDoc;
-				}
+			wsbagdrop = saveBagDropTime.getSaveBagDropTime().getBagDrop();
+			
+			ntbagdrop = wsToNtBagDrop(wsbagdrop);
+			ntbagdrop.setCreateAgent(agent);
+			ntbagdrop.setEntryMethod(TracingConstants.BAGDROP_ENTRY_METHOD_SCANNER);
+			if(saveBagDrop(agent, ntbagdrop, serviceResponse)){
+				serviceResponse.setCreateUpdateIndicator(OnhandScanningServiceImplementation.STATUS_UPDATE);
+				previouslyEntered = true;
 			} else {
-				//create new bagdrop
-				ntbagdrop = wsToNtBagDrop(wsbagdrop);
-				ntbagdrop.setCreateAgent(agent);
-				ntbagdrop.setEntryMethod(TracingConstants.BAGDROP_ENTRY_METHOD_SCANNER);
-				if(saveBagDrop(agent, ntbagdrop, serviceResponse)){
-					serviceResponse.setCreateUpdateIndicator(OnhandScanningServiceImplementation.STATUS_CREATE);
-				} else {
-					logger.info(resDoc);
-					return resDoc;
-				}
-			}
+				logger.info(resDoc);
+				return resDoc;
+			}	
+	
 		} else {
 			serviceResponse.setSuccess(false);
 			serviceResponse.addError("Please provide bagdrop time");

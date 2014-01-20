@@ -41,7 +41,6 @@ public class BagDropUtilTest {
 		//test failure to update bagdrop that doesn't exist
 		SaveBagDropTimeDocument saveBagDropNew = createDoc();
 		saveBagDropNew.getSaveBagDropTime().getBagDrop().setBagDropDatetime(now);
-		saveBagDropNew.getSaveBagDropTime().getBagDrop().setScheduleArrivalDatetime(now);
 		SaveBagDropTimeResponseDocument response = BagDropUtil.saveBagDropTime(saveBagDropNew);
 		ServiceResponse ret = response.getSaveBagDropTimeResponse().getReturn();
 		
