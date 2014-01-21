@@ -12,3 +12,18 @@ update properties set valueStr = '12' where keyStr = 'reservation.hours.forward'
 
 insert into properties (keyStr, valueStr) values ('bagdrop.offset.start',8);
 insert into properties (keyStr, valueStr) values ('bagdrop.offset.end',6);
+
+#TESTING
+#insert into properties (keystr, valuestr) values ('nt.central.endpoint','http://drapp2.nettracer.aero:8680/NTServices_1_0/services/WorldTracerService');
+#insert into properties (keystr, valuestr) values ('nt.central.username','southwest_test');
+#insert into properties (keystr, valuestr) values ('nt.central.password','WNpass1!');
+
+#TRAINING
+#insert into properties (keystr, valuestr) values ('nt.central.endpoint','http://drapp2.nettracer.aero:8780/NTServices_1_0/services/WorldTracerService');
+#insert into properties (keystr, valuestr) values ('nt.central.username','southwest_test');
+#insert into properties (keystr, valuestr) values ('nt.central.password','WNpass1!');
+
+#PROD - TODO need to confirm prod central endpoint for swa
+#insert into properties (keystr, valuestr) values ('nt.central.endpoint','');
+#insert into properties (keystr, valuestr) values ('nt.central.username','southwest_prod');
+#insert into properties (keystr, valuestr) values ('nt.central.password','WNpass1!');
