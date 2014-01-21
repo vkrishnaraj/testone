@@ -54,6 +54,8 @@ import com.bagnet.nettracer.tracing.utils.SpringUtils;
 @Proxy(lazy = false)
 public class Incident implements Serializable {
 
+	private static final long serialVersionUID = -1325304028074169696L;
+
 	private int version;
 
 	private String Incident_ID;

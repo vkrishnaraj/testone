@@ -8,6 +8,8 @@ import com.bagnet.nettracer.tracing.db.communications.Activity;
 import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
 import com.bagnet.nettracer.tracing.db.communications.IncidentActivityRemark;
 import com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask;
+import com.bagnet.nettracer.tracing.db.taskmanager.TaskType;
+import com.bagnet.nettracer.tracing.db.taskmanager.VTaskNotInWork;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskSearchDTO;
 
 public interface IncidentActivityDAO {
@@ -55,5 +57,8 @@ public interface IncidentActivityDAO {
 	public IncidentActivityTask getTask(Status status);
 
 	public int getIncidentActivityTaskNotInWorkCount(IncidentActivityTaskSearchDTO dto);
-	public List<IncidentActivityTask> getIncidentActivitiesNotInWork(IncidentActivityTaskSearchDTO dto);
+	public List<VTaskNotInWork> getIncidentActivitiesNotInWork(IncidentActivityTaskSearchDTO dto);
+	
+	public List<TaskType> getTaskTypes();
+	public List<Status> getWorkableStatuses();
 }

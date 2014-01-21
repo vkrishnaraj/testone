@@ -9,6 +9,11 @@ a:active {
 	color:#006699;
 	text-decoration: none;
 }
+
+td.header a, td#header a, th.header a, th#header a {
+	color:#ffffff;
+}
+
 body,td,input {
 	font-family:Arial, Helvetica, sans-serif;
 	color: #000000;
@@ -126,12 +131,12 @@ td.white{
 	height:10px;
 }
 
-td.header{
+td.header, th.header{
 	background-color:#006699;
 	color:#fff;
 }
 
-td#header {
+td#header, th#header {
 	height: 78px;
 }
 td#header.cssstandardthreecolumn { 

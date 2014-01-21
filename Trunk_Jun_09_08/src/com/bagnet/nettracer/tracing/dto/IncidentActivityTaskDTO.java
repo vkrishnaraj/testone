@@ -21,6 +21,7 @@ public class IncidentActivityTaskDTO {
 	private int expenseId;
 	private String description;
 	private String agent;
+	private String taskType;
 	private String status;
 	private Date taskDate;
 	private String lastPrinted;
@@ -143,6 +144,14 @@ public class IncidentActivityTaskDTO {
 
 	public void setExpenseId(int expenseId) {
 		this.expenseId = expenseId;
+	}
+
+	public String getTaskType() {
+		return taskType != null ? taskType : "&nbsp;";
+	}
+
+	public void setTaskType(String taskType) {
+		this.taskType = taskType;
 	}
 
 	public String getStatus() {

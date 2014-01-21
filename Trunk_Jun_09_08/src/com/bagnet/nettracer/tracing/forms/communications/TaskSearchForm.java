@@ -9,6 +9,7 @@ public class TaskSearchForm extends IncidentActivityTaskForm {
 	private String agentName;
 	private String passengerLastName;
 	private String passengerFirstName;
+	private int taskType;
 	private int status;
 
 	public String getAgentName() {
@@ -33,6 +34,14 @@ public class TaskSearchForm extends IncidentActivityTaskForm {
 
 	public void setPassengerFirstName(String passengerFirstName) {
 		this.passengerFirstName = passengerFirstName;
+	}
+
+	public int getTaskType() {
+		return taskType;
+	}
+
+	public void setTaskType(int taskType) {
+		this.taskType = taskType;
 	}
 
 	public int getStatus() {

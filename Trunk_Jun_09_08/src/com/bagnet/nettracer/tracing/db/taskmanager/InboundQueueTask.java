@@ -17,6 +17,7 @@ import com.bagnet.nettracer.tracing.db.InboundQueue;
 public class InboundQueueTask extends GeneralTask {
 	
 	private InboundQueue inboundqueue;
+	private TaskType taskType;
 
 	@ManyToOne(targetEntity = InboundQueue.class, cascade = CascadeType.ALL, fetch=FetchType.EAGER)
 	@JoinColumn(name = "inboundqueue_id")
@@ -28,6 +29,15 @@ public class InboundQueueTask extends GeneralTask {
 	public void setInboundqueue(InboundQueue inboundqueue) {
 		this.inboundqueue = inboundqueue;
 	}
-	
+
+	@ManyToOne
+	@JoinColumn(name="task_type_id")
+	public TaskType getTaskType() {
+		return taskType;
+	}
+
+	public void setTaskType(TaskType taskType) {
+		this.taskType = taskType;
+	}
 	
 }

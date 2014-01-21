@@ -1,8 +1,11 @@
 package com.bagnet.nettracer.tracing.service;
 
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.util.LabelValueBean;
 
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Status;
@@ -79,4 +82,7 @@ public interface IncidentActivityService {
 	public boolean handleTask(long incidentActivityTaskId, boolean approved);
 	public boolean handleRemark(long incidentActivityTaskId, String remark, Agent madeBy);
 	public IncidentActivityTask startTask(IncidentActivityTask task, Agent agent);
+	
+	public List<LabelValueBean> getTaskTypes(Locale locale);
+	public List<LabelValueBean> getWorkableStatuses(Locale locale);
 }

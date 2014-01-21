@@ -4,11 +4,13 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.apache.struts.util.LabelValueBean;
 
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -26,6 +28,8 @@ import com.bagnet.nettracer.tracing.db.communications.IncidentActivityRemark;
 import com.bagnet.nettracer.tracing.db.documents.Document;
 import com.bagnet.nettracer.tracing.db.documents.templates.Template;
 import com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask;
+import com.bagnet.nettracer.tracing.db.taskmanager.TaskType;
+import com.bagnet.nettracer.tracing.db.taskmanager.VTaskNotInWork;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskDTO;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskSearchDTO;
 import com.bagnet.nettracer.tracing.dto.OptionDTO;
@@ -237,6 +241,7 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 		if (incidentActivity == null || withStatus == null) return false;
 		IncidentActivityTask iat = DomainUtils.createIncidentActivityTask(incidentActivity, withStatus, active);
 		iat.setAssigned_agent(forAgent);
+		iat.setTaskType(getTaskTypeFromStatus(withStatus));
 		boolean success = saveTask(iat) != 0;
 		incidentActivity.getTasks().add(iat);
 		return success;
@@ -401,22 +406,28 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 	@Override
 	public List<IncidentActivityTaskDTO> listIncidentActivitiesNotInWork(IncidentActivityTaskSearchDTO dto) {
 		List<IncidentActivityTaskDTO> dtos = new ArrayList<IncidentActivityTaskDTO>();
-		List<IncidentActivityTask> fromDb = incidentActivityDao.getIncidentActivitiesNotInWork(dto);
+		List<VTaskNotInWork> fromDb = incidentActivityDao.getIncidentActivitiesNotInWork(dto);
 		ResourceBundle bundle = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", dto.getAgentLocale());
-		for (IncidentActivityTask iat: fromDb) {
+		for (VTaskNotInWork vtniw: fromDb) {
 			IncidentActivityTaskDTO iatdto = createIncidentActivityTaskDTO(dto);
-			Incident i = iat.getIncidentActivity().getIncident();
-			iatdto.setIncidentId(i.getIncident_ID());
-			iatdto.setAgent(i.getAgent().getUsername());
+			iatdto.setIncidentId(vtniw.getIncident().getIncident_ID());
+			iatdto.setAgent(vtniw.getAgent().getUsername());
 			iatdto.setAgentLocale(dto.getAgentLocale());
-			Passenger p = i.getPassenger_list().get(0);
-			iatdto.setLastName(p.getLastname());
-			iatdto.setFirstName(p.getFirstname());
-			iatdto.setTaskDate(iat.getOpened_timestamp());
+			iatdto.setLastName(vtniw.getLastname());
+			iatdto.setFirstName(vtniw.getFirstname());
+			iatdto.setTaskDate(vtniw.getOpened_timestamp());
 			try {
-				iatdto.setStatus(bundle.getString(iat.getStatus().getKey()));
+				iatdto.setStatus(bundle.getString(vtniw.getStatus().getKey()));
 			} catch (Exception e) {
-				logger.error("Could not find description for status: " + iat.getStatus().getKey(), e);
+				logger.error("Could not find description for status: " + vtniw.getStatus().getKey(), e);
+			}
+
+			try {
+				if (vtniw.getTaskType() != null) {
+					iatdto.setTaskType(bundle.getString(vtniw.getTaskType().getKey()));
+				}
+			} catch (Exception e) {
+				logger.error("Could not find description for status: " + vtniw.getStatus().getKey(), e);
 			}
 			dtos.add(iatdto);
 		}
@@ -439,6 +450,54 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 		}
 		
 		return null;
+	}
+	
+	@Override
+	public List<LabelValueBean> getTaskTypes(Locale locale) {
+		List<LabelValueBean> types = new ArrayList<LabelValueBean>();
+		if (locale == null) {
+			logger.error("Cannot get task types without a Locale.");
+			return types;
+		}
+		
+		ResourceBundle bundle = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", locale);
+		List<TaskType> fromDb = incidentActivityDao.getTaskTypes();
+		for (TaskType type: fromDb) {
+			try {
+				LabelValueBean bean = new LabelValueBean();
+				bean.setValue(String.valueOf(type.getCode()));
+				bean.setLabel(bundle.getString(type.getKey()));
+				types.add(bean);
+			} catch (Exception e) {
+				logger.error("Failed to load resource value for key: " + type.getKey(), e);
+			}
+		}
+		
+		return types;
+	}
+	
+	@Override
+	public List<LabelValueBean> getWorkableStatuses(Locale locale) {
+		List<LabelValueBean> statuses = new ArrayList<LabelValueBean>();
+		List<Status> fromDb = incidentActivityDao.getWorkableStatuses();
+		if (locale == null) {
+			logger.error("Cannot get task types without a Locale.");
+			return statuses;
+		}
+		
+		ResourceBundle bundle = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", locale);
+		for (Status s: fromDb) {
+			try {
+				LabelValueBean bean = new LabelValueBean();
+				bean.setValue(String.valueOf(s.getStatus_ID()));
+				bean.setLabel(bundle.getString(s.getKey()));
+				statuses.add(bean);
+			} catch (Exception e) {
+				logger.error("Failed to load resource value for key: " + s.getKey(), e);
+			}
+		}
+		
+		return statuses;
 	}
 	
 	private IncidentActivityTaskDTO createIncidentActivityTaskDTO(IncidentActivityTaskSearchDTO dto) {
@@ -572,5 +631,34 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 		return false;
 	}
 	
+	private TaskType getTaskTypeFromStatus(Status status) {
+		switch (status.getStatus_ID()) {
+			case TracingConstants.STATUS_CUSTOMER_COMM_PENDING:
+			case TracingConstants.STATUS_CUSTOMER_COMM_APPROVED:
+			case TracingConstants.STATUS_CUSTOMER_COMM_DENIED:
+			case TracingConstants.STATUS_CUSTOMER_COMM_PENDING_PRINT:
+			case TracingConstants.STATUS_CUSTOMER_COMM_PENDING_WP:
+			case TracingConstants.STATUS_CUSTOMER_COMM_PUBLISHED:
+				return new TaskType(TracingConstants.TASK_TYPE_CODE_CUSTOMER_COMMUNICATION);
+				
+			case TracingConstants.FINANCE_STATUS_AWAITING_DISBURSEMENT:
+			case TracingConstants.FINANCE_STATUS_FINANCE_APPROVED:
+			case TracingConstants.FINANCE_STATUS_FINANCE_REJECTED:
+				return new TaskType(TracingConstants.TASK_TYPE_CODE_DISBURSEMENT);
+				
+			case TracingConstants.FINANCE_STATUS_FRAUD_REVIEW:
+			case TracingConstants.FINANCE_STATUS_FRAUD_APPROVED:
+			case TracingConstants.FINANCE_STATUS_FRAUD_REJECTED:
+				return new TaskType(TracingConstants.TASK_TYPE_CODE_FRAUD_REVIEW);
+				
+			case TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW:
+			case TracingConstants.FINANCE_STATUS_SUPERVISOR_APPROVED:
+			case TracingConstants.FINANCE_STATUS_SUPERVISOR_REJECTED:
+				return new TaskType(TracingConstants.TASK_TYPE_CODE_SUPERVISOR_REVIEW);
+				
+			default:
+				return null;
+		}
+	}
 
 }

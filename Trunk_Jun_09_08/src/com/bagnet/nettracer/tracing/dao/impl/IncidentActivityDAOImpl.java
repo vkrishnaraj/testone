@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Conjunction;
@@ -31,6 +32,8 @@ import com.bagnet.nettracer.tracing.db.communications.IncidentActivityRemark;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OCFile;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OCMessage;
 import com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask;
+import com.bagnet.nettracer.tracing.db.taskmanager.TaskType;
+import com.bagnet.nettracer.tracing.db.taskmanager.VTaskNotInWork;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskSearchDTO;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
@@ -40,6 +43,7 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 	
 	private static Map<String, String> map = new LinkedHashMap<String, String>();
 	private static Map<Integer, String> financestatusmap = new LinkedHashMap<Integer, String>();
+	private static List<Integer> workableStatusList = new ArrayList<Integer>();
 	
 	static {		
 		map.put("id", 			"iat.id");
@@ -60,6 +64,16 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 		map.put("openDate",		"iat.opened_timestamp");
 		map.put("incidentAgent","i.agent");
 		map.put("statusDesc",	"s.description");
+		map.put("taskType", 	"t.description");
+
+		map.put("vtniwid", 					"vtniw.task_id");
+		map.put("vtniwopenDate",			"vtniw.opened_timestamp");
+		map.put("vtniwincidentAgent",		"vtniw.agent");
+		map.put("vtniwstatusDesc",			"s.description");
+		map.put("vtniwtaskType", 			"t.description");
+		map.put("vtniwincidentId", 			"i.incident_ID");
+		map.put("vtniwpassengerFirstName",	"vtniw.firstname");
+		map.put("vtniwpassengerLastName",	"vtniw.lastname");
 		
 		financestatusmap.put(TracingConstants.FINANCE_STATUS_AWAITING_DISBURSEMENT, "1");
 		financestatusmap.put(TracingConstants.FINANCE_STATUS_FINANCE_APPROVED, "1");
@@ -71,6 +85,17 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 		financestatusmap.put(TracingConstants.FINANCE_STATUS_SUPERVISOR_REJECTED, "1");
 		financestatusmap.put(TracingConstants.FINANCE_STATUS_SUPERVISOR_APPROVED, "1");
 		financestatusmap.put(TracingConstants.FINANCE_STATUS_FRAUD_APPROVED, "1");
+		
+		workableStatusList.add(TracingConstants.STATUS_CUSTOMER_COMM_PENDING);
+		workableStatusList.add(TracingConstants.STATUS_CUSTOMER_COMM_DENIED);
+		workableStatusList.add(TracingConstants.STATUS_CUSTOMER_COMM_PENDING_PRINT);
+		workableStatusList.add(TracingConstants.FINANCE_STATUS_FRAUD_REVIEW);
+		workableStatusList.add(TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW);
+		workableStatusList.add(TracingConstants.FINANCE_STATUS_AWAITING_DISBURSEMENT);
+		workableStatusList.add(TracingConstants.FINANCE_STATUS_FRAUD_REJECTED);
+		workableStatusList.add(TracingConstants.FINANCE_STATUS_SUPERVISOR_REJECTED);
+		workableStatusList.add(TracingConstants.FINANCE_STATUS_FINANCE_REJECTED);
+		workableStatusList.add(TracingConstants.TASK_MANAGER_OPEN);
 	}
 	
 	@Override
@@ -604,7 +629,7 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			Criteria criteria = getCriteriaFromDto(session, dto);
-			applyOrder(dto, criteria);
+			applyOrder(dto, criteria, IncidentActivityTask.class);
 			criteria.setProjection(Projections.projectionList()
 					.add(Projections.groupProperty("iat.task_id").as("task_id"))
 					.add(Projections.property("iat.opened_timestamp").as("opened_timestamp"))
@@ -903,11 +928,14 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 		return criteria;
 	}
 	
-	private void applyOrder(IncidentActivityTaskSearchDTO dto, Criteria criteria) {
-		String orderVar = IncidentActivityDAOImpl.map.get(dto.getSort());
+	private void applyOrder(IncidentActivityTaskSearchDTO dto, Criteria criteria, Class<?> clazz) {
+		String alias = clazz == VTaskNotInWork.class ? "vtniw" : "iat";		
+		String prefix = clazz == VTaskNotInWork.class ? "vtniw" : "";
+		
+		String orderVar = IncidentActivityDAOImpl.map.get(prefix + dto.getSort());
 		if (orderVar == null) {
-			orderVar = "iat.task_id";
-			logger.warn("Illegal sort value found for incident activity tasks: " + dto.getSort());
+			orderVar = alias + ".task_id";
+			logger.warn("Illegal sort value found for incident activity tasks: " + prefix + dto.getSort());
 		}
 		
 		String dir = dto.getDir();
@@ -986,12 +1014,13 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 	@Override
 	public int getIncidentActivityTaskNotInWorkCount(IncidentActivityTaskSearchDTO dto) {
 		int count = 0;
+		if (!updateTasksNotInWorkView()) return count;
 		Session session = null;
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			Criteria criteria = getCriteriaForNotInWorkTasks(session, dto);
-			applyOrder(dto, criteria);
-			criteria.setProjection(Projections.countDistinct("iat.task_id"));
+			applyOrder(dto, criteria, VTaskNotInWork.class);
+			criteria.setProjection(Projections.countDistinct("vtniw.task_id"));
 			Long result = (Long) criteria.uniqueResult();
 			if (result != null) {
 				count = result.intValue();
@@ -1008,14 +1037,15 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 	
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<IncidentActivityTask> getIncidentActivitiesNotInWork(IncidentActivityTaskSearchDTO dto) {
-		List<IncidentActivityTask> results = new ArrayList<IncidentActivityTask>();
+	public List<VTaskNotInWork> getIncidentActivitiesNotInWork(IncidentActivityTaskSearchDTO dto) {
+		List<VTaskNotInWork> results = new ArrayList<VTaskNotInWork>();
+		if (!updateTasksNotInWorkView()) return results;
 		Session session = null;
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			Criteria criteria = getCriteriaForNotInWorkTasks(session, dto);
-			applyOrder(dto, criteria);
-			results = (List<IncidentActivityTask>) criteria.list();
+			applyOrder(dto, criteria, VTaskNotInWork.class);
+			results = (List<VTaskNotInWork>) criteria.list();
 		} catch (Exception e) {
 			logger.error("An error occurred while attempting to get the incident activity tasks.", e);
 		} finally {
@@ -1027,41 +1057,42 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 	}
 	
 	private Criteria getCriteriaForNotInWorkTasks(Session session, IncidentActivityTaskSearchDTO dto) {
-		Criteria criteria = session.createCriteria(IncidentActivityTask.class, "iat");
-		criteria.createAlias("iat.status", "s");
-		criteria.createAlias("iat.incidentActivity", "ia");
-		criteria.createAlias("ia.incident", "i");
+		Criteria criteria = session.createCriteria(VTaskNotInWork.class, "vtniw");
+		criteria.createAlias("vtniw.status", "s");
+		criteria.createAlias("vtniw.taskType", "t");
+		criteria.createAlias("vtniw.incident", "i");
 		
 		if (dto.getAgent() != null) {
-			criteria.add(Restrictions.eq("i.agent", dto.getAgent()));
+			criteria.add(Restrictions.eq("vtniw.agent", dto.getAgent()));
 		}
 		
 		if (dto.getPassengerFirstName() != null || dto.getPassengerLastName() != null) {
-			criteria.createAlias("i.passengers", "p");
 			if (dto.getPassengerFirstName() != null && !dto.getPassengerFirstName().isEmpty()) {
-				criteria.add(Restrictions.ilike("p.firstname", dto.getPassengerFirstName()));
+				criteria.add(Restrictions.ilike("vtniw.firstname", dto.getPassengerFirstName()));
 			}
 
 			if (dto.getPassengerLastName() != null && !dto.getPassengerLastName().isEmpty()) {
-				criteria.add(Restrictions.ilike("p.lastname", dto.getPassengerLastName()));
+				criteria.add(Restrictions.ilike("vtniw.lastname", dto.getPassengerLastName()));
 			}
 		}
 		
 		Date start = dto.getStartCreateDate();
 		Date end = dto.getEndCreateDate();
 		if (start != null && end != null) {
-			criteria.add(Restrictions.between("iat.opened_timestamp", start, end));
+			criteria.add(Restrictions.between("vtniw.opened_timestamp", start, end));
 		} else if (start != null) {
-			criteria.add(Restrictions.ge("iat.opened_timestamp", start));
+			criteria.add(Restrictions.ge("vtniw.opened_timestamp", start));
 		} else if (end != null) {
-			criteria.add(Restrictions.lt("iat.opened_timestamp", end));
+			criteria.add(Restrictions.lt("vtniw.opened_timestamp", end));
+		}
+		
+		if (dto.getTaskType() != null) {
+			criteria.add(Restrictions.eq("vtniw.taskType", dto.getTaskType()));
 		}
 		
 		if (dto.getStatus() != null) {
-			criteria.add(Restrictions.eq("iat.status", dto.getStatus()));
+			criteria.add(Restrictions.eq("vtniw.status", dto.getStatus()));
 		}
-		
-		criteria.add(Restrictions.eq("iat.active", true));
 		
 		if (dto.getRowsPerPage() > 0) {
 			criteria.setFirstResult(dto.getCurrentPage() * dto.getRowsPerPage());
@@ -1070,5 +1101,81 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 		
 		return criteria;
 	}
-
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<TaskType> getTaskTypes() {
+		List<TaskType> results = new ArrayList<TaskType>();
+		Session session = null;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			Criteria criteria = session.createCriteria(TaskType.class, "tt");
+			criteria.addOrder(Order.asc("tt.description"));
+			results = (List<TaskType>) criteria.list();
+		} catch (Exception e) {
+			logger.error("An error occurred while attempting to get the task types.", e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return results;
+	}
+	
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Status> getWorkableStatuses() {
+		List<Status> results = new ArrayList<Status>();
+		Session session = null;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			Criteria criteria = session.createCriteria(Status.class, "s");
+			criteria.add(Restrictions.in("s.status_ID", workableStatusList));
+			criteria.addOrder(Order.asc("s.description"));
+			results = (List<Status>) criteria.list();
+		} catch (Exception e) {
+			logger.error("An error occurred while attempting to get the workable statuses.", e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return results;
+	}
+	
+	private boolean updateTasksNotInWorkView() {
+		String sql = "CREATE OR REPLACE VIEW view_tasks_not_in_work AS " +
+					 "(select t.task_id,t.task_type_id,t.opened_timestamp,i.agent_ID,t.status_ID,i.Incident_ID,p.lastname,p.firstname from task t " +
+					 "join incident_activity ia on t.incidentActivityId = ia.id " +
+					 "join incident i on ia.incident = i.Incident_ID " +
+					 "join passenger p on i.Incident_ID = p.incident_ID " +
+					 "where t.active = 1 " +
+					 "and t.agent_id = 1 or t.agent_id = i.agent_ID is null " +
+					 "and task_type in ('INCACTIVITYTASK','INBOUND','DAMAGED') " +
+					 "group by t.opened_timestamp, i.agent_ID, t.status_ID, i.Incident_ID, p.lastname, p.firstname) " +
+					 "union all " +
+					 "(select t.task_id,t.task_type_id,t.opened_timestamp,i.agent_ID,t.status_ID,i.Incident_ID,p.lastname,p.firstname from task t " +
+					 "join inboundqueue iq on t.inboundqueue_id = iq.id " +
+					 "join incident i on iq.incident_id = i.Incident_ID " +
+					 "join passenger p on i.Incident_ID = p.incident_ID " +
+					 "where t.active = 1 " +
+					 "and t.agent_id = 1 or t.agent_id = i.agent_ID is null " +
+					 "and task_type in ('INCACTIVITYTASK','INBOUND','DAMAGED') " +
+					 "group by t.opened_timestamp, i.agent_ID, t.status_ID, i.Incident_ID, p.lastname, p.firstname) " +
+					 "order by opened_timestamp";
+		Session session = null;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			SQLQuery query = session.createSQLQuery(sql);
+			query.executeUpdate();
+		} catch (Exception e) {
+			logger.error("An error occurred while attempting to update the tasks not in work view.", e);
+			return false;
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return true;
+	}
 }

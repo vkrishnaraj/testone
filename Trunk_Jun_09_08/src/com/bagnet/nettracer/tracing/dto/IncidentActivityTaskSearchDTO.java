@@ -6,6 +6,7 @@ import java.util.TimeZone;
 
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.taskmanager.TaskType;
 
 public class IncidentActivityTaskSearchDTO {
 	
@@ -15,6 +16,7 @@ public class IncidentActivityTaskSearchDTO {
 	private Locale agentLocale;
 
 	private Agent agent;
+	private TaskType taskType;
 	private Status status;
 	
 	private String sort;
@@ -78,6 +80,14 @@ public class IncidentActivityTaskSearchDTO {
 
 	public void setAgent(Agent agent) {
 		this.agent = agent;
+	}
+
+	public TaskType getTaskType() {
+		return taskType;
+	}
+
+	public void setTaskType(TaskType taskType) {
+		this.taskType = taskType;
 	}
 
 	public Status getStatus() {

@@ -19,6 +19,8 @@ import com.bagnet.nettracer.tracing.db.lf.Subcompany;
  */
 public class Agent implements Serializable {
 
+	private static final long serialVersionUID = 6039540000777064696L;
+
 	private int Agent_ID;
 	private Station station;
 	private Subcompany subcompany;

@@ -1554,6 +1554,14 @@ public class TracingConstants {
 	public static final String REGEX_INTEGER = "^\\d+$";
 	public static final String REGEX_DOUBLE = "^\\d*\\.?\\d+$";
 	
+	public static final int TASK_TYPE_CODE_INBOUND_PHYSICAL = 1;
+	public static final int TASK_TYPE_CODE_INBOUND_ELECTRONIC = 2;
+	public static final int TASK_TYPE_CODE_CUSTOMER_COMMUNICATION = 3;
+	public static final int TASK_TYPE_CODE_DISBURSEMENT = 4;
+	public static final int TASK_TYPE_CODE_FRAUD_REVIEW = 5;
+	public static final int TASK_TYPE_CODE_SUPERVISOR_REVIEW = 6;
+	public static final int TASK_TYPE_CODE_INBOUND_DAMAGED = 7;
+	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {
 			return DB_DATEFORMAT_MSSQL;

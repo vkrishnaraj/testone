@@ -238,6 +238,7 @@ public class DomainUtils {
 		form.setS_createtime(null);
 		form.setE_createtime(null);
 		form.setStatus(0);
+		form.setTaskType(0);
 	}
 	
 	public static void resetSearchForm(CustomerCommunicationsTaskForm form) {

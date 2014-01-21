@@ -19,6 +19,7 @@ import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.taskmanager.TaskType;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskDTO;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityTaskSearchDTO;
 import com.bagnet.nettracer.tracing.forms.communications.TaskSearchForm;
@@ -47,10 +48,11 @@ public class ViewPendingTasksAction extends CheckedAction {
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
 		
 		TaskSearchForm tsf = (TaskSearchForm) form;
+		Locale userLocale = new Locale(user.getCurrentlocale());
 
 		List<IncidentActivityTaskDTO> results = new ArrayList<IncidentActivityTaskDTO>();
 		IncidentActivityTaskSearchDTO dto = DomainUtils.fromForm(tsf);
-		dto.setAgentLocale(new Locale(user.getCurrentlocale()));
+		dto.setAgentLocale(userLocale);
 		setSearchSpecificInfoOnDto(tsf, dto, user);
 		getSortCriteria(dto, request);
 		
@@ -97,8 +99,12 @@ public class ViewPendingTasksAction extends CheckedAction {
 			DomainUtils.resetTaskForm(tsf);
 		}
 		
+		if (session.getAttribute("taskTypesList") == null) {
+			session.setAttribute("taskTypesList", incidentActivityService.getTaskTypes(userLocale));
+		}
+
 		if (session.getAttribute("incidentActivityStatusList") == null) {
-			session.setAttribute("incidentActivityStatusList", TracerUtils.getStatusList(TracingConstants.TABLE_COMMUNICATIONS_STATUS, user.getDefaultlocale(), "description"));
+			session.setAttribute("incidentActivityStatusList", incidentActivityService.getWorkableStatuses(userLocale));
 		}
 		
 		request.setAttribute("rowsperpage", Integer.toString(rowsperpage));
@@ -114,9 +120,15 @@ public class ViewPendingTasksAction extends CheckedAction {
 		if (tsf.getAgentName() != null && !tsf.getAgentName().isEmpty()) {
 			dto.setAgent(AdminUtils.getAgentBasedOnUsername(tsf.getAgentName(), user.getCompanycode_ID()));
 		}
+
+		if (tsf.getTaskType() > 0) {
+			dto.setTaskType(new TaskType(tsf.getTaskType()));
+		}
+		
 		if (tsf.getStatus() > 0) {
 			dto.setStatus(new Status(tsf.getStatus()));
 		}
+		
 		dto.setPassengerLastName(tsf.getPassengerLastName());
 		dto.setPassengerFirstName(tsf.getPassengerFirstName());
 	}

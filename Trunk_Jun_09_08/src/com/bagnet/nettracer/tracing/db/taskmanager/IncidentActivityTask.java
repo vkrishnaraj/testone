@@ -18,6 +18,7 @@ public class IncidentActivityTask extends GeneralTask {
 
 	private boolean active;
 	private IncidentActivity incidentActivity;
+	private TaskType taskType;
 	
 	@ManyToOne(targetEntity = IncidentActivity.class, fetch = FetchType.EAGER)
 	@JoinColumn(name = "incidentActivityId", nullable = false)
@@ -36,6 +37,16 @@ public class IncidentActivityTask extends GeneralTask {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	@ManyToOne
+	@JoinColumn(name="task_type_id")
+	public TaskType getTaskType() {
+		return taskType;
+	}
+
+	public void setTaskType(TaskType taskType) {
+		this.taskType = taskType;
 	}
 
 }

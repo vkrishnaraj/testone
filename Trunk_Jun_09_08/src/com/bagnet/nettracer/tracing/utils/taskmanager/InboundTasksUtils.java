@@ -23,6 +23,7 @@ import com.bagnet.nettracer.tracing.db.taskmanager.AcaaTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.DamagedTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.InboundQueueTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.InboundTask;
+import com.bagnet.nettracer.tracing.db.taskmanager.TaskType;
 import com.bagnet.nettracer.tracing.dto.InboundTasksDTO;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
@@ -340,6 +341,7 @@ public class InboundTasksUtils {
 		status.setStatus_ID(TracingConstants.TASK_MANAGER_OPEN);
 		task.setStatus(status);
 		task.setOpened_timestamp(DateUtils.convertToGMTDate(new Date()));
+		task.setTaskType(getTaskTypeForInboundQueueTask(activity));
 		return saveTask(task, agent);
 	}
 	
@@ -553,6 +555,22 @@ public class InboundTasksUtils {
 		}
 		return tasks;
 	}
+
+	private static TaskType getTaskTypeForInboundQueueTask(Activity activity) {
+		TaskType toReturn = null;
+		String activityCode = activity.getCode();
+		if (TracingConstants.ACTIVITY_CODE_INBOUND_CURE.equals(activityCode)
+				|| TracingConstants.ACTIVITY_CODE_INBOUND_MAIL.equals(activityCode)) {
+			toReturn = new TaskType(TracingConstants.TASK_TYPE_CODE_INBOUND_PHYSICAL);
+		} else if (TracingConstants.ACTIVITY_CODE_INBOUND_FAX.equals(activityCode)
+				|| TracingConstants.ACTIVITY_CODE_INBOUND_PORTAL.equals(activityCode)) {
+			toReturn = new TaskType(TracingConstants.TASK_TYPE_CODE_INBOUND_ELECTRONIC);
+		} else if (TracingConstants.ACTIVITY_CODE_RECEIVED_DAMAGED_ITEM.equals(activityCode)) {
+			toReturn = new TaskType(TracingConstants.TASK_TYPE_CODE_INBOUND_DAMAGED);
+		}
+		
+		return toReturn;
+	}
 	
 	private class Sort implements Comparator<UnassignedIncidentElement>{
 		String sort;
@@ -583,4 +601,5 @@ public class InboundTasksUtils {
 			return ret;
 		}
 	}
+
 }

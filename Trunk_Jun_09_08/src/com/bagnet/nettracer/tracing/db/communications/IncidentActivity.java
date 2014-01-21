@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.db.communications;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,7 +32,9 @@ import com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask;
 
 @Entity
 @Table(name = "incident_activity")
-public class IncidentActivity {
+public class IncidentActivity implements Serializable {
+
+	private static final long serialVersionUID = -7194092797476837039L;
 
 	@Id
 	@GeneratedValue
