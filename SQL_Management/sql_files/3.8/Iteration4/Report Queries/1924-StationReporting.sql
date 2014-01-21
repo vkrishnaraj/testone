@@ -10,7 +10,7 @@ select et.description, e.Incident_ID, p.lastname, p.firstname, e.draft, e.create
         order by e.paytype;
 #--------------------------------------------------------------------
 
-#Station Summary Report - Is based on and returns GMT Time
+#Station Summary Report - Is based on and returns GMT Time - Broken into three queries because it is three separate types of information
 select (case i.itemtype_ID when 1 then "Lost/Delay" when 2 then "Missing Article" when 3 then "Damaged" else "" end) as incType, count(*) from incident i inner join Station s on i.stationassigned_ID=s.Station_ID where i.createdate >= :startDate and i.createdate <=:endDate and s.stationcode = :stationCode  group by i.itemtype_ID order by i.itemtype_ID;
 
 select et.description, sum(e.voucheramt) as luvvoucher,  sum(case paytype when 'DRAFT' then e.checkamt else 0 end ) as draft, sum(case paytype when 'INVOICE' then e.checkamt else 0 end ) as invoice
@@ -23,15 +23,16 @@ from expensepayout e inner join incident i on e.incident_ID = i.Incident_ID inne
 select count(b.BDO_ID) as Deliveries, sum(e.checkamt) as DeliveryCosts from bdo b inner join expensepayout e on e.bdo_id = b.BDO_ID inner join Station s on b.station_ID = s.Station_ID where b.deliverydate >= :startDate and b.deliverydate <=:endDate and s.stationcode = :stationCode ;
 #--------------------------------------------------------------------
 
-#Station Chargeback Summary Report - Is based on and returns GMT Time
+#Station Chargeback Summary Report - Is based on and returns GMT Time. Detail vs Summary should control which query is ran
 select i.lossCode, c.description, c.controllable, count(*) from item i inner join incident inc on i.incident_ID = inc.Incident_ID 
   inner join station s on s.Station_ID = inc.stationassigned_ID inner join Company_irregularity_codes c on i.lossCode= c.loss_code 
   where inc.createdate >= :startDate and inc.createdate <=:endDate and s.stationcode = :stationCode and find_in_set(i.lossCode, :lossCodes)
   and c.companycode_ID='WN' and c.report_type=i.itemtype_ID
   group by i.lossCode;
-#--------------------------------------------------------------------
   
-#Station Chargeback Detail Report - Is based on and returns GMT Time. Combines Itinerary routes as a single column. Combines Itinerary Flightnums as a single column. Combines Itinerary departdates as a single column. 
+#Station Chargeback Detail Report - Is based on and returns GMT Time. 
+#Combines Itinerary routes as a single column. Combines Itinerary Flightnums as a single column. Combines Itinerary departdates as a single column.
+#Detail vs Summary should control which query is ran
 select i.lossCode,  cat.id , c.description, c.controllable, itinRoutes.initialDepartDate, 
 itinRoutes.departDates, itinRoutes.route, itinRoutes.flightnums,
 inc.checkedlocation, (case inc.checkedlocation when not 0 then cat.description else "" end ) as checkLocation, i.incident_ID
@@ -66,19 +67,23 @@ select inv.barcode, inv.description, (case inv.inventory_status_id when 701 then
     group by inv.id;
 #--------------------------------------------------------------------
     
-#Qualified Mileage Deliveries Detail - Is based on and returns GMT Time
-select (case b.incident_ID when null then b.OHD_ID else b.incident_ID end) as reference, b.deliverydate, a.username, concat(p.lastname,", ",p.firstname) as passenger, 
+#Qualified Mileage Deliveries Detail - Is based on and returns GMT Time. 
+#Because distance is not returned from the Home Serv service, will still use the $80 limit, but added a check for if there is a distance greater than 0.
+select b.BDO_ID, s.stationcode, (case b.incident_ID when null then b.OHD_ID else b.incident_ID end) as reference, b.deliverydate, a.username, concat(p.lastname,", ",p.firstname) as passenger, 
   d.integration_key , e.checkamt
   from bdo b inner join agent a on b.agent_ID = a.Agent_ID
   inner join bdo_passenger p on p.bdo_ID = b.BDO_ID
   inner join delivercompany d on d.delivercompany_ID = b.delivercompany_ID
   inner join expensepayout e on e.bdo_id = b.BDO_ID 
   inner join station s on s.Station_ID = b.station_ID
-    where b.createdate >=:startdate and b.createdate <=:enddate and s.stationCode=:stationCode and not isnull(d.integration_key) and d.integration_key!=''
-    and b.canceled=0;
+    where b.createdate >=:startdate and b.createdate <=:enddate
+    and s.stationCode=:stationCode
+    and not isnull(d.integration_key) and d.integration_key!=''
+    and b.canceled=0 and (case when b.distance>0 then b.distance >60 else e.checkamt >80 end);
 #--------------------------------------------------------------------
     
 #Qualified Mileage Deliveries Summary - Is based on and returns GMT Time. Includes hard-coded fedex holiday dates to exclude from the query.
+#includes logic for if distance is greater than 0
 select ss.stationCode, 
   (case when not isnull(summaryList.fedexdeliveries) then summaryList.fedexdeliveries else 0 end) as fedexdeliveries, 
   (case when not isnull(summaryList.fedexcost) then summaryList.fedexcost else 0 end) as  fedexcost,
@@ -87,9 +92,9 @@ select ss.stationCode,
   (case when not isnull(summaryList.potentialCost) then summaryList.potentialCost else 0 end) as potentialCost,
   (case when not isnull(summaryList.potentialSavings) then summaryList.potentialSavings else 0 end) as potentialSavings
   from station ss left outer join
-  (select s.Station_ID, s.stationCode, sum(case when e.checkamt<=80 then 1 else 0 end) as fedexdeliveries, 
+  (select s.Station_ID, s.stationCode, sum(case when e.checkamt<=80 or (b.distance>0 and b.distance<=60) then 1 else 0 end) as fedexdeliveries, 
   sum(case when e.checkamt<=80 then e.checkamt else 0 end) as fedexcost,
-  sum(case when e.checkamt>80 then 1 else 0 end) as nonfedexdeliveries, sum(case when e.checkamt>80 then e.checkamt else 0 end) as nonfedexcost,
+  sum(case when e.checkamt>80 or (b.distance>0 and b.distance>60) then 1 else 0 end) as nonfedexdeliveries, sum(case when e.checkamt>80 then e.checkamt else 0 end) as nonfedexcost,
   round(sum(case when e.checkamt<=80 then e.checkamt else 0 end)/sum(case when e.checkamt<=80 then 1 else 0 end),2)*sum(case when e.checkamt>80 then 1 else 0 end) as potentialCost,
   sum(case when e.checkamt>80 then e.checkamt else 0 end)-(round(sum(case when e.checkamt<=80 then e.checkamt else 0 end)/sum(case when e.checkamt<=80 then 1 else 0 end),2)*sum(case when e.checkamt>80 then 1 else 0 end)) as potentialSavings
   from station s left outer join  bdo b on s.Station_ID = b.station_ID
@@ -149,24 +154,28 @@ select i.incident_ID, (case b.deliverydate when null then i.close_date else b.de
     inner join station cs on cs.Station_ID = a.station_ID
     left outer join bdo b on b.incident_ID = i.Incident_ID
       where ai.lossCode>0 and ai.item_id>0 and
-      i.modify_time >= :startDate and i.modify_time <=:endDate and fs.stationcode=:chargedStation and cs.stationcode =:changingStation and not isnull((case b.deliverydate when null then i.close_date else b.deliverydate end)) 
+      i.modify_time >= :startDate and i.modify_time <=:endDate and fs.stationcode=:chargedStation and cs.stationcode =:changingStation 
+      and not isnull((case b.deliverydate when null then i.close_date else b.deliverydate end)) 
       group by i.Incident_ID, concat(ai.lossCode, "/",fs.stationcode)
       order by i.incident_id,  i.modify_time;
 #--------------------------------------------------------------------
 
-#On Hand Scanner Usage Summary - Is based on and returns GMT Time. Proceeding as normal until Auto vs Manual question is resolved
+#On Hand Scanner Usage Summary - Is based on and returns GMT Time. Proceeding as normal until Auto vs Manual question is resolved.
+#Detail vs Summary selection should determine which query is run
 select s.stationCode, sum(case o.creationMethod when 1 then 1 else 0 end) as scanned, sum(case o.creationMethod when 0 then 1 else 0 end) as manual, 
 	(sum(case o.creationMethod when 1 then 1 else 0 end)/count(o.OHD_ID)*100) as scanPercent
 		from ohd o inner join Station s on s.Station_ID=o.found_station_ID where o.founddate >=:startDate and o.founddate <=:endDate group by s.stationCode;
 
 #On Hand Scanner Usage Detail - Is based on and returns GMT Time. Proceeding as normal until Auto vs Manual question is resolved
+#Detail vs Summary selection should determine which query is run
 select date(o.founddate) as dateEntered, sum(case o.creationMethod when 1 then 1 else 0 end) as scanned, sum(case o.creationMethod when 0 then 1 else 0 end) as manual, 
   (sum(case o.creationMethod when 1 then 1 else 0 end)/count(o.OHD_ID)*100) as scanPercent
     from ohd o inner join Station s on s.Station_ID=o.found_station_ID where o.founddate >=:startDate 
     and o.founddate <=:endDate and s.stationcode=:stationcode group by date(o.founddate);
 #--------------------------------------------------------------------
 
-#Trade Out, Emergency Bag, Toiletry, Loaner Report - Is based on and returns GMT Time. Made one large Loaner, Trade Out, Emergency Bag, and Toiletry Kit Report. Please Inform if there is any information missing
+#Trade Out, Emergency Bag, Toiletry, Loaner Report - Is based on and returns GMT Time.
+#Made one large Loaner, Trade Out, Emergency Bag, and Toiletry Kit Report. Please Inform if there is any information missing
 select inv.id, inv.editdate, inv.inventory_status_id, (case inv.trade_type when 0 then "Both" when 1 then "Tradeout Only" when 2 then "Loan Only" else "" end) as tradeType, inv.barcode, inv.description, 
   (case inv.inventory_status_id when 701 then "Y" else "N" end) as loanIndicator,
   (case inv.inventory_status_id when 702 then "Y" else "N" end) as issuedIndicator,
