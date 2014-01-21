@@ -572,7 +572,7 @@
 			<html:hidden name="passenger" property="province"/>
 			<html:hidden name="passenger" property="city"/>
 			<html:hidden name="passenger" property="zip"/>
-        	if(!swaIsInBSO){%>
+        	<% if(!swaIsInBSO){%>
 				<html:hidden name="passenger" property="lastname"/>
 				<html:hidden name="passenger" property="firstname"/>
 				<html:hidden name="passenger" property="middlename"/>
