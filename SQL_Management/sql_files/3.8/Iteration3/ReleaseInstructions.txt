@@ -7,3 +7,8 @@ Add the following directories to the appropriate path on the production file ser
 letters
 receipts
 temp
+
+Customer Portal:
+Add the following files to the root directory for online claims files:
+swa_claim_form.pdf
+swa_faq.pdf
