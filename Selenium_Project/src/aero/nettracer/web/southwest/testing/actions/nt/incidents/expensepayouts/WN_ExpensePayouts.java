@@ -14,7 +14,7 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 
 	@Test
 	public void testSetBSOLimit(){
-		verifyTrue(setPermissions(new String[] { "681"}, new boolean[] { true}));
+		verifyTrue(setPermissions(new String[] { "681","682", "684","685","687","688","671"}, new boolean[] { true,false,false,false,false,false,false}));
 		clickMenu("menucol_10.3");
 
 		if (checkNoErrorPage()) {
@@ -74,9 +74,6 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 			verifyTrue(isEditable(By.name("dispDraftpaiddate")));
 			verifyTrue(isEditable(By.name("checkamt")));
 			verifyTrue(isEditable(By.name("newComment")));
-			verifyTrue(isEditable(By.name("lastname")));
-			verifyTrue(isEditable(By.name("firstname")));
-			verifyTrue(isEditable(By.name("middlename")));
 		    type(By.name("checkamt"),"151");
 		    click(By.id("button"));
 		    assertEquals("Unable to Create Expense Payout. Draft Amount is over the BSO Limit: 150",getAlert());
@@ -87,6 +84,7 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 		}
 
 		if (checkNoErrorPage()) {
+			waitForPageToLoadImproved(3000);
 			goToTaskManager();
 			selenium.select("name=cbroStation", "label=ATL");
 		} else {
@@ -105,9 +103,6 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 			verifyFalse(isEditable(By.name("dispDraftpaiddate")));
 			verifyFalse(isEditable(By.name("checkamt")));
 			verifyFalse(isEditable(By.name("newComment")));
-			verifyFalse(isEditable(By.name("lastname")));
-			verifyFalse(isEditable(By.name("firstname")));
-			verifyFalse(isEditable(By.name("middlename")));
 			goToTaskManager();
 			selenium.select("name=cbroStation", "label=LZ");
 			
@@ -141,9 +136,6 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 			verifyTrue(isEditable(By.name("dispDraftpaiddate")));
 			verifyTrue(isEditable(By.name("checkamt")));
 			verifyTrue(isEditable(By.name("newComment")));
-			verifyTrue(isEditable(By.name("lastname")));
-			verifyTrue(isEditable(By.name("firstname")));
-			verifyTrue(isEditable(By.name("middlename")));
 			verifyFalse(isTextPresent("Unable to Create Expense Payout. Draft Amount is over the BSO Limit: 150"));
 		    type(By.name("voucheramt"),"150");
 		    click(By.id("button"));
