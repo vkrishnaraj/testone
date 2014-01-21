@@ -30,3 +30,24 @@ PRIMARY KEY (`PassengerExp_ID`),
 KEY `expensepayout_ID` (`expensepayout_ID`) ) ;
     
 alter table issuance_category add limitByPassenger bit not null default 0;
+
+update status set description = 'Letter Pending Approval' where Status_ID = '1400';
+update status set description = 'Letter Rejected' where Status_ID = '1402';
+
+create table task_type (
+  id bigint not null auto_increment,
+  code int not null,
+  description varchar(255) not null,
+  primary key(id)
+);
+
+insert into task_type (code,description) values
+(1,'Inbound Physical'),
+(2,'Inbound Electronic'),
+(3,'Customer Communication'),
+(4,'Disbursement'),
+(5,'Fraud Review'),
+(6,'Supervisor Review'),
+(7,'Inbound Damaged');
+
+alter table task add task_type_id bigint default null;
