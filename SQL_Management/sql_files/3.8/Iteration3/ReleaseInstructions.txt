@@ -1,3 +1,9 @@
 Cron libs:
 ReservationService_1_0.jar
 onlineclaims_schemas.jar
+
+Template Management:
+Add the following directories to the appropriate path on the production file server:
+letters
+receipts
+temp
