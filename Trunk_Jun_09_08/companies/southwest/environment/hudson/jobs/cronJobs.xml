@@ -29,6 +29,7 @@
 				<ref bean="cssExpireTrigger" />
 				<ref bean="cssCreateTrigger" />
 				<ref bean="cronWtQueueTrigger" /> 
+				<ref bean="cronMoveToWtTrigger" /> 
 				<ref bean="bagDropFlightInfoTrigger" />
 			</list>
 		</property>
