@@ -1,4 +1,6 @@
-# Admin Activity Summary Report - Detail and Summary - Is based on and returns GMT Time. The query should return all the information needed for both Detail and Summary Reports
+# Admin Activity Summary Report - Detail and Summary - Is based on and returns GMT Time. 
+#The query should return all the information needed for both Detail and Summary Reports. 
+#The detail vs summary selection should mainly control how the values are summed up and displayed
 select count(ia.id), act.code, act.description, concat(a.firstname," ",a.lastname) as agentname, a.username
   from incident_activity ia 
     inner join activity act on ia.activity = act.id 
@@ -8,7 +10,6 @@ select count(ia.id), act.code, act.description, concat(a.firstname," ",a.lastnam
       order by concat(a.firstname," ",a.lastname), act.code;
 #----------------------------------
 
-      
 #Assigned Claims by Representative - Is based on and returns GMT Time
 select concat(a.firstname," ",a.lastname) as agentname, a.username, 
   inc.Incident_ID, inc.createdate, (case inc.itemtype_ID when 1 then "Lost" when 2 then "Missing" when 3 then "Damage" else "" end) as type 
@@ -18,7 +19,7 @@ select concat(a.firstname," ",a.lastname) as agentname, a.username,
       order by a.firstname, (case inc.itemtype_ID when 1 then "Lost" when 2 then "Missing" when 3 then "Damage" else "" end);
 #----------------------------------
 
-#Agent Audit Report -Is based on and returns GMT Time
+#Agent Audit Report -Is based on and returns GMT Time. Is a Procedure based on percentage requirements
 drop procedure getAgentAuditReport;
 DELIMITER //
 create procedure getAgentAuditReport (in startDate datetime, in endDate datetime, in agentlist varchar(100), in percent varchar(3))
@@ -62,10 +63,11 @@ select a.username,concat(a.firstname," ",a.lastname) as agentName, ep.incident_I
 #----------------------------------
 
 #CBS SLV Issuance Report - Is based on and returns GMT Time
-select concat(a.firstname," ",a.lastname) as agentName, ep.createdate, concat(a.firstname," ",pe.lastname) as custName, ep.incident_id, inc.recordlocator, ep.paycode, (case inc.itemtype_ID when 1 then "LOST" when 2 then "MISSING" when 3 then "DAMAGE" else "" end) as reportType,
+select concat(a.firstname," ",a.lastname) as agentName, ep.createdate, concat(a.firstname," ",pe.lastname) as custName, ep.incident_id, inc.recordlocator, ep.paycode, 
+(case inc.itemtype_ID when 1 then "LOST" when 2 then "MISSING" when 3 then "DAMAGE" else "" end) as reportType,
 (case ep.status_id when 54 then "DENY" when 55 then "SETTLE" else "PENDING" end) as resolveType, ep.voucheramt
   from expensepayout ep inner join agent a on a.Agent_ID = ep.agent_ID inner join passengerexp pe on pe.expensepayout_ID=ep.Expensepayout_ID inner join incident inc on inc.Incident_ID = ep.incident_ID
-	where ep.voucheramt>0 and ep.createdate>=:startDate and ep.createdate<=:endDate order by concat(a.firstname," ",a.lastname);
+	where ep.voucheramt>0 and ep.createdate>=:startDate and ep.createdate<=:endDate and find_in_set(a.username, :agentlist) order by concat(a.firstname," ",a.lastname), inc.incident_ID;
 #----------------------------------
 
 #Individual Activity Report - Is based on and returns GMT Time
