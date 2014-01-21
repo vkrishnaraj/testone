@@ -343,3 +343,5 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.InboundQueue" />
 		<mapping class="com.bagnet.nettracer.tracing.db.PassengerExp" />	
 			
+		<mapping class="com.bagnet.nettracer.tracing.db.taskmanager.TaskType" />	
+		<mapping class="com.bagnet.nettracer.tracing.db.taskmanager.VTaskNotInWork" />	
