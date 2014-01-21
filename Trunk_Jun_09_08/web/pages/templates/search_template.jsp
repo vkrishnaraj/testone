@@ -122,9 +122,9 @@
 		                <bean:message key="colname.date_range" />
 		                (<%= a.getDateformat().getFormat() %>)
 		                <br>
-		                <html:text property="s_createtime" size="10" maxlength="10" styleId="s_createtime" styleClass="textfield" />&nbsp;<img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.documentTemplateSearchForm.s_createtime,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">
+		                <html:text property="s_createtime" size="10" maxlength="10" styleId="s_createtime" styleClass="textfield" />&nbsp;<img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar" name="calendar" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.templateSearchForm.s_createtime,'calendar','<%= a.getDateformat().getFormat() %>'); return false;">
 		                &nbsp;-&nbsp;
-		                <html:text property="e_createtime" size="10" maxlength="10" styleId="e_createtime" styleClass="textfield" />&nbsp;<img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.documentTemplateSearchForm.e_createtime,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;">
+		                <html:text property="e_createtime" size="10" maxlength="10" styleId="e_createtime" styleClass="textfield" />&nbsp;<img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.templateSearchForm.e_createtime,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;">
 	                </td>
             		<td>
             			<bean:message key="colname.template.active" />
