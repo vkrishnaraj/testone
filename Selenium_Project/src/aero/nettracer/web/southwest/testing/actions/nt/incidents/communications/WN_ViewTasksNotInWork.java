@@ -78,7 +78,7 @@ public class WN_ViewTasksNotInWork extends WN_SeleniumTest {
 				verifyTrue(false);
 			}
 
-			selenium.select("id=status", "label=Pending");
+			selenium.select("id=status", "label=Letter Pending Approval");
 			click(By.id("searchButton"));
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
