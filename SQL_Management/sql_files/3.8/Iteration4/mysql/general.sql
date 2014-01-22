@@ -51,3 +51,6 @@ insert into task_type (code,description) values
 (7,'Inbound Damaged');
 
 alter table task add task_type_id bigint default null;
+
+alter table bdo add column distance double default 0;
+update bdo set distance=0;
