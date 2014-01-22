@@ -75,4 +75,63 @@ from
  
 #------------------------------------------------------------------------------------
       
-   
+#Tested the remaining manually with Toad
+#Damage Report Expense by Bag Type. Takes in and returns GMT Date
+select ep.incident_id, s.stationcode, concat(p.lastname," ",p.firstname) as name, itin.legfrom, 
+(case inc.courtesyreport when 1 then "Y" else "N" end) as CA, it.bagtype, ep.paytype, et.description,
+(case ep.paytype when 'DRAFT' or 'INVOICE' or 'PSO' then ep.checkamt when 'VOUCH' then ep.voucheramt when 'MILE' then ep.mileageamt else 0 end) as amount
+  from expensepayout ep 
+    inner join incident inc on inc.Incident_ID = ep.incident_ID
+    inner join item it on it.Item_ID = (select min(ite.item_id) from item ite where ite.incident_id=inc.Incident_ID limit 1)
+    inner join station s on s.Station_ID=inc.stationcreated_ID
+    left outer join passengerexp p on p.expensepayout_ID=ep.Expensepayout_ID
+    inner join itinerary itin on itin.incident_ID = ep.incident_ID and itin.itinerarytype=0 and itin.legfrom_type=1
+    inner join expensetype et on et.Expensetype_ID = ep.expensetype_ID
+      where find_in_set(it.bagtype,:bagtype) and ep.createdate >=:startDate and ep.createdate<=:endDate
+      and inc.itemtype_ID = 3;
+  
+#------------------------------------------------------------------------------------
+          
+#Missing Article Detail Report by Flight Type. Takes in and returns GMT Date.
+# as a note: This query seems oddly similar to the one in Corporate Security Reporting, despite the different columns of data.
+select inc.Incident_ID, (case inc.itemtype_ID when 1 then "L" when 2 then "M" when 3 then "D" else "" end) as incType, concat(p.lastname,", ",p.firstname) as name,
+inc.createdate, oc.categorytype , iv.description, (case :itintype when '1' then 'O' when '2' then 'T' when '3' then 'D' end) as flightType,
+itinroutes.route, itinroutes.flightnums
+from incident inc 
+inner join itinerary itin  on inc.Incident_ID = itin.incident_ID and itin.itinerarytype=0
+inner join passenger p on p.incident_ID = inc.Incident_ID and p.isprimary=true
+inner join item ite on ite.incident_ID = inc.Incident_ID 
+inner join item_inventory iv on iv.item_ID = ite.Item_ID
+inner join ohd_categorytype oc on iv.categorytype_ID = oc.OHD_CategoryType_ID
+left outer join 
+        (SELECT incident_id, departdate as initialDepartDate, 
+          GROUP_CONCAT(legs ORDER BY incident_id ASC, itinerary_id ASC) route, 
+          group_concat(departdate ORDER BY incident_id ASC, itinerary_id ASC) departdates, 
+          group_concat(flightnum ORDER BY incident_id ASC, itinerary_id ASC) flightnums 
+            FROM (SELECT it.incident_id,it.itinerary_id,it.departdate, it.flightnum, 
+            concat(it.legfrom, '-', it.legto) legs
+              FROM itinerary it inner join incident i on i.incident_id=it.incident_ID 
+                WHERE it.itinerarytype=0 and i.createdate>=:startDate and i.createdate<=:endDate 
+                  ORDER BY it.incident_id, it.itinerary_id ASC) itin1 
+                  GROUP BY incident_id) as itinRoutes on itinRoutes.incident_id=inc.incident_id
+  where inc.createdate>=:startDate and inc.createdate<=:endDate and
+  (case :itintype 
+  when '3' then 
+    itin.legto_type=3 and itin.legto=:stationcode
+  when '1' then
+   itin.legfrom_type=1 and itin.legfrom=:stationcode
+  when '2' then 
+    ((itin.legto_type=2 and itin.legto=:stationcode) or (itin.legfrom_type=2 and itin.legfrom=:stationcode))
+  end) and
+   inc.itemtype_ID=2 group by iv.inventory_ID;
+ 
+#------------------------------------------------------------------------------------
+      
+#Chargeback by Station. Takes in and returns GMT Date
+select s.stationcode, i.lossCode, c.description, count(*) 
+from item i inner join incident inc on i.incident_ID = inc.Incident_ID 
+  inner join station s on s.Station_ID = inc.stationassigned_ID inner join Company_irregularity_codes c on i.lossCode= c.loss_code 
+  where inc.createdate >= :startDate and inc.createdate <=:endDate and find_in_set(c.loss_Code, :lossCodes)
+  and c.companycode_ID='WN' and c.report_type=i.itemtype_ID and
+  (case :controllable when 0 then c.controllable=0 when 1 then c.controllable=1 else 1=1 end)
+  group by s.stationcode, c.loss_Code;
