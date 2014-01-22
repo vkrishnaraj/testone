@@ -69,6 +69,7 @@ public final class BDOForm extends ValidatorForm {
 
 
 	private double origDelivCost;
+	private double distance;
 	
     private String wt_id;
 	/**
@@ -598,6 +599,14 @@ public final class BDOForm extends ValidatorForm {
 
 	public void setExistItemList(List existItemList) {
 		this.existItemList = existItemList;
+	}
+
+	public double getDistance() {
+		return distance;
+	}
+
+	public void setDistance(double distance) {
+		this.distance = distance;
 	}
 
 }

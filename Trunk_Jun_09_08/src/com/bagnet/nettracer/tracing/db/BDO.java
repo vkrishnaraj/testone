@@ -73,6 +73,7 @@ public class BDO implements Serializable {
 	private DeliveryStatusType deliveryStatus;
 	
 	private double origDelivCost;
+	private double distance;
 	/**
 	 * 
 	 * @hibernate.property type="timestamp"
@@ -614,6 +615,14 @@ public class BDO implements Serializable {
 	 */
 	public void setOrigDelivCost(double origDelivCost) {
 		this.origDelivCost = origDelivCost;
+	}
+
+	public double getDistance() {
+		return distance;
+	}
+
+	public void setDistance(double distance) {
+		this.distance = distance;
 	}
 
 }
