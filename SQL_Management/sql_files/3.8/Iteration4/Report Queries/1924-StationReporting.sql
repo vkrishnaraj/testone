@@ -1,8 +1,7 @@
-#Station Payment Report first draft - Is based on and returns GMT Time
-select et.description, e.Incident_ID, p.lastname, p.firstname, e.draft, e.createdate, a.username, 
+#Station Payment Report - Is based on and returns GMT Time
+select et.description, e.Incident_ID, e.lastname, e.firstname, e.draft, e.createdate, a.username, 
   (case paytype when 'DRAFT' or 'INVOICE' or 'PSO' then checkamt when 'VOUCH' then voucheramt when 'MILE' then mileageamt else 0 end) as amount, e.paytype
     from expensepayout e left outer join agent a on e.agent_ID = a.Agent_ID 
-    left outer join passengerexp p on p.PassengerExp_ID = (select pp.PassengerExp_ID from passengerexp pp where e.Expensepayout_ID = pp.expensepayout_ID)
     inner join expensetype et on et.Expensetype_ID = e.expensetype_ID inner join station s on s.Station_ID = e.station_ID
       where e.createdate  >= :startDate and e.createdate  <=:endDate and s.stationcode = :stationCode 
       and (case paytype when 'DRAFT' or 'INVOICE' or 'PSO' then checkamt when 'VOUCH' then voucheramt when 'MILE' then mileageamt else 0 end) > 0
@@ -207,14 +206,14 @@ concat(a.firstname," ",a.lastname) as cancelAgent
     where e.paytype='VOUCH' and e.voucheramt>0 and e.status_ID=94 and aep.modify_time >=:startDate and aep.modify_time <=:endDate and find_in_set(s.stationcode, :stationCodes);
 #--------------------------------------------------------------------
 
+       
 #Southwest LUV Voucher Detail Report - Is based on and returns GMT Time
-select i.Incident_ID, e.createdate as issuedate, e.ordernum, i.recordlocator, concat(a.firstname," ",a.lastname) as issueAgent, s.stationcode, concat(pe.firstname," ",pe.lastname) as custName, ep.paytype #Identity To be answered
+select i.Incident_ID, e.createdate as issuedate, e.ordernum, i.recordlocator, concat(a.firstname," ",a.lastname) as issueAgent, s.stationcode, concat(e.firstname," ",e.lastname) as custName, e.paytype #Identity To be answered
 , e.voucheramt
   from expensepayout e 
   inner join incident i on i.Incident_ID = e.incident_ID 
   inner join Station s on s.Station_ID = e.station_ID
   inner join Agent a on a.Agent_ID = e.agent_ID
-  left outer join passengerexp pe on pe.expensepayout_id=e.Expensepayout_ID
     where e.paytype='VOUCH' and e.voucheramt>0 and e.status_ID=55 and e.createdate >=:startDate and e.createdate <=:endDate and find_in_set(s.stationcode, :stationCodes) order by concat(a.firstname," ",a.lastname);
 #--------------------------------------------------------------------
 
