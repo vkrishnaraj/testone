@@ -13,12 +13,15 @@ import org.apache.log4j.Logger;
 
 import aero.nettracer.serviceprovider.ws_1_0.GetFlightDataDocument;
 import aero.nettracer.serviceprovider.ws_1_0.GetFlightDataDocument.GetFlightData;
+import aero.nettracer.serviceprovider.ws_1_0.GetFlightDataResponseDocument;
 import aero.nettracer.serviceprovider.ws_1_0.GetReservationDataDocument;
+import aero.nettracer.serviceprovider.ws_1_0.GetReservationDataDocument.GetReservationData;
 import aero.nettracer.serviceprovider.ws_1_0.GetReservationDataResponseDocument;
 import aero.nettracer.serviceprovider.ws_1_0.ReservationService_1_0Stub;
+import aero.nettracer.serviceprovider.ws_1_0.SubmitVoucherDocument;
 import aero.nettracer.serviceprovider.ws_1_0.SubmitVoucherDocument.SubmitVoucher;
+import aero.nettracer.serviceprovider.ws_1_0.SubmitVoucherResponseDocument;
 import aero.nettracer.serviceprovider.ws_1_0.WriteRemarkDocument;
-import aero.nettracer.serviceprovider.ws_1_0.GetReservationDataDocument.GetReservationData;
 import aero.nettracer.serviceprovider.ws_1_0.WriteRemarkDocument.WriteRemark;
 import aero.nettracer.serviceprovider.ws_1_0.common.xsd.Address;
 import aero.nettracer.serviceprovider.ws_1_0.common.xsd.Itinerary;
@@ -27,9 +30,6 @@ import aero.nettracer.serviceprovider.ws_1_0.common.xsd.RequestHeader;
 import aero.nettracer.serviceprovider.ws_1_0.common.xsd.Reservation;
 import aero.nettracer.serviceprovider.ws_1_0.common.xsd.Voucher;
 import aero.nettracer.serviceprovider.ws_1_0.response.xsd.FlightDataResponse;
-import aero.nettracer.serviceprovider.ws_1_0.GetFlightDataResponseDocument;
-import aero.nettracer.serviceprovider.ws_1_0.SubmitVoucherDocument;
-import aero.nettracer.serviceprovider.ws_1_0.SubmitVoucherResponseDocument;
 
 import com.bagnet.nettracer.exceptions.BagtagException;
 import com.bagnet.nettracer.tracing.bmo.ExpensePayoutBMO;
@@ -38,7 +38,6 @@ import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.BagDrop;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
-import com.bagnet.nettracer.tracing.db.PassengerExp;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.forms.ExpensePayoutForm;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
@@ -188,33 +187,24 @@ public class NTIntegrationWrapper extends IntegrationWrapper {
 				ExpensePayout ep = ExpensePayoutBMO.findExpensePayout(epf.getExpensepayout_ID());
 				voucher.setOrderNumber(StringUtils.trimToEmpty(ep.getOrdernum()));
 			}
+			Passenger pax = voucher.addNewPassenger();
+			Address addr = pax.addNewAddresses();
 			
-			if (epf.getPassengerlist() != null && !epf.getPassengerlist().isEmpty()) {
-				Passenger pax = voucher.addNewPassenger();
-				for (PassengerExp pa : epf.getPassengerlist()) {
-					Address addr = pax.addNewAddresses();
-					if (addr == null) {
-						continue;
-					}
-
-					pax.setFirstname(StringUtils.trimToEmpty(pa.getFirstname()));
-					pax.setLastname(StringUtils.trimToEmpty(pa.getLastname()));
-					
-					addr.setAddress1(StringUtils.trimToEmpty(pa.getAddress1()));
-					addr.setAddress2(StringUtils.trimToEmpty(pa.getAddress2()));
-					addr.setCity(StringUtils.trimToEmpty(pa.getCity()));
-					addr.setState(StringUtils.trimToEmpty(pa.getState_ID()));
-					addr.setZip(StringUtils.trimToEmpty(pa.getZip()));
-					addr.setCountry(StringUtils.trimToEmpty(pa.getCountrycode_ID()));
-					addr.setHomePhone(StringUtils.trimToEmpty(TracerUtils.normalizePhoneNumber(pa.getHomephone())));
-					addr.setWorkPhone(StringUtils.trimToEmpty(TracerUtils.normalizePhoneNumber(pa.getWorkphone())));
-					addr.setMobilePhone(StringUtils.trimToEmpty(TracerUtils.normalizePhoneNumber(pa.getMobile())));
-					addr.setEmailAddress(StringUtils.trimToEmpty(pa.getEmail()));
-					
-					break;
-				}
-			}			
+			pax.setFirstname(StringUtils.trimToEmpty(epf.getFirstname()));
+			pax.setLastname(StringUtils.trimToEmpty(epf.getLastname()));
 			
+			addr.setAddress1(StringUtils.trimToEmpty(epf.getAddress1()));
+			addr.setAddress2(StringUtils.trimToEmpty(epf.getAddress2()));
+			addr.setCity(StringUtils.trimToEmpty(epf.getCity()));
+			addr.setState(StringUtils.trimToEmpty(epf.getState_ID()));
+			addr.setProvince(StringUtils.trimToEmpty(epf.getProvince()));
+			addr.setZip(StringUtils.trimToEmpty(epf.getZip()));
+			addr.setCountry(StringUtils.trimToEmpty(epf.getCountrycode_ID()));
+			addr.setHomePhone(StringUtils.trimToEmpty(TracerUtils.normalizePhoneNumber(epf.getHomephone())));
+			addr.setWorkPhone(StringUtils.trimToEmpty(TracerUtils.normalizePhoneNumber(epf.getWorkphone())));
+			addr.setMobilePhone(StringUtils.trimToEmpty(TracerUtils.normalizePhoneNumber(epf.getMobile())));
+			addr.setEmailAddress(StringUtils.trimToEmpty(epf.getEmail()));
+					
 
 			logger.info(doc);
 			

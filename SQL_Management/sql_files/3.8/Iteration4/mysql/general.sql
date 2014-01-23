@@ -56,3 +56,37 @@ alter table bdo add column distance double default 0;
 update bdo set distance=0;
 
 insert into properties (keyStr,valueStr) VALUES ('issue.voucher.expiration.offset.days','365');
+
+alter table expensepayout add `firstname` varchar(20) DEFAULT NULL;
+alter table expensepayout add `middlename` varchar(20) DEFAULT NULL;   
+alter table expensepayout add `lastname` varchar(20) DEFAULT NULL;  
+alter table expensepayout add `address1` varchar(50) DEFAULT NULL;   
+alter table expensepayout add `address2` varchar(50) DEFAULT NULL;   
+alter table expensepayout add `city` varchar(50) DEFAULT NULL;   
+alter table expensepayout add `state_ID` varchar(2) DEFAULT NULL;   
+alter table expensepayout add `province` varchar(100) DEFAULT '';   
+alter table expensepayout add `zip` varchar(11) DEFAULT NULL;   
+alter table expensepayout add `homephone` varchar(50) DEFAULT NULL;
+alter table expensepayout add `workphone` varchar(50) DEFAULT NULL;
+alter table expensepayout add `mobile` varchar(50) DEFAULT NULL;
+alter table expensepayout add `email` varchar(100) DEFAULT NULL;     
+alter table expensepayout add `countrycode_ID` varchar(3) DEFAULT NULL; 
+
+update expensepayout e, passengerexp p set 
+e.firstname = p.firstname,
+e.middlename = p.middlename,
+e.lastname = p.lastname,
+e.address1 = p.address1,
+e.address2 = p.address2,
+e.city = p.city,
+e.state_ID = p.state_ID,
+e.province = p.province,
+e.zip = p.zip,
+e.homephone = p.homephone,
+e.workphone = p.workphone,
+e.mobile = p.mobile,
+e.email = p.email,
+e.countrycode_ID = p.countrycode_ID
+where e.expensepayout_ID = p.expensepayout_ID;
+
+drop table passengerexp;

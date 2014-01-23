@@ -26,8 +26,9 @@
 	boolean canEdit = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_EXPENSE, a);
 	boolean canApprove = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_APPROVE_EXPENSE, a);
 	boolean canPay = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_EXPENSE, a);
-	boolean swaBsoPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, a) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN,a);
+	boolean bsoPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, a) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN,a);
 	ExpensePayoutForm epf = (ExpensePayoutForm) request.getAttribute("expensePayoutForm");
+	boolean passDataInExp = PropertyBMO.isTrue(PropertyBMO.PASSENGER_DATA_IN_EXPENSE);
 	
 	Locale myLocale = (Locale) session.getAttribute("org.apache.struts.action.LOCALE");
 	PropertyMessageResources myMessages = (PropertyMessageResources) request.getAttribute("org.apache.struts.action.MESSAGE");
@@ -189,7 +190,7 @@
 							<td>
 								<bean:message key="colname.expense_loc" />
 								<br />
-								<html:select property="expenselocation_ID" styleClass="dropdown" disabled="<%=swaBsoPermission %>">
+								<html:select property="expenselocation_ID" styleClass="dropdown" disabled="<%=bsoPermission %>">
 									<html:options collection="stationlist" property="station_ID"
 										labelProperty="stationcode" />
 								</html:select>
@@ -210,7 +211,7 @@
 
 								<bean:message key="colname.paycode" />
 								<br />
-								<html:select property="paycode" styleClass="dropdown"  disabled="<%=swaBsoPermission %>">
+								<html:select property="paycode" styleClass="dropdown"  disabled="<%=bsoPermission %>">
 									<html:option value="ADV">
 										<bean:message key="claim.interim" />
 									</html:option>
@@ -229,7 +230,7 @@
 								</html:select>
 							</td>
 						</tr>
-						<% if(swaBsoPermission){ %>
+						<% if(bsoPermission){ %>
 					 	<tr>
 					    	<td>
 					        	<bean:message key="colname.draft" />
@@ -271,66 +272,66 @@
 									size="4" maxlength="4" disabled="disabled"/>
 							</td>
 						</tr>
-			
-     <logic:iterate id="passenger" name="expensePayoutForm" property="passengerlist" indexId="i" type="com.bagnet.nettracer.tracing.db.PassengerExp">
+	
+	<% if (passDataInExp) { %>		
 
           <tr>
             <td nowrap >
               <bean:message key="colname.last_name" />
               <br>
-              <html:text name="passenger" property="lastname" size="20" maxlength="20"  styleClass="textfield" indexed="true"/>
+              <html:text property="lastname" size="20" maxlength="20"  styleClass="textfield" />
             </td>
             <td nowrap >
               <bean:message key="colname.first_name" />
               <br>
-              <html:text name="passenger" property="firstname" size="20" maxlength="20"  styleClass="textfield" indexed="true"/>
+              <html:text property="firstname" size="20" maxlength="20"  styleClass="textfield" />
             </td>
             <td>
               <bean:message key="colname.mid_initial" />
               <br>
-              <html:text name="passenger" property="middlename" size="1" maxlength="1"  styleClass="textfield" indexed="true"/>
+              <html:text property="middlename" size="1" maxlength="1"  styleClass="textfield" />
             </td>
           </tr>
       	  <tr>
             <td colspan=2 >
               <bean:message key="colname.street_addr1" />
               <br>
-              <html:text name="passenger" property="address1" size="45" maxlength="50" styleClass="textfield" indexed="true"/>
+              <html:text property="address1" size="45" maxlength="50" styleClass="textfield" />
             </td>
             <td nowrap >
               <bean:message key="colname.street_addr2" />
               <br>
-              <html:text name="passenger" property="address2" size="45" maxlength="50" styleClass="textfield" indexed="true"/>
+              <html:text property="address2" size="45" maxlength="50" styleClass="textfield" />
             </td>
           </tr>
           <tr>
           	<td>
              <bean:message key="colname.city" />
              <br>
-             <html:text name="passenger" property="city" size="15" maxlength="50" styleClass="textfield" indexed="true"/>
+             <html:text property="city" size="15" maxlength="50" styleClass="textfield" />
             </td>
             <td>
              <bean:message key="colname.state" />
              <br />
-             <logic:equal name="passenger" property="countrycode_ID" value="US">
-               <html:select  name="passenger" property="state_ID" styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'countrycode_ID', 'province');" indexed="true" >
+             <logic:equal name="expensePayoutForm" property="countrycode_ID" value="US">
+               <html:select  property="state_ID" styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'countrycode_ID', 'province');" >
                  <html:option value="">
                    <bean:message key="select.none" />
                      </html:option>
                      <html:options collection="statelist" property="value" labelProperty="label" />
                </html:select>
              </logic:equal>
-             <logic:equal name="passenger" property="countrycode_ID" value="">
-               <html:select name="passenger" property="state_ID" styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'countrycode_ID', 'province');" indexed="true" >
+             <logic:equal name="expensePayoutForm" property="countrycode_ID" value="">
+               <html:select property="state_ID" styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'countrycode_ID', 'province');" >
                  <html:option value="">
                    <bean:message key="select.none" />
                       </html:option>
                       <html:options collection="statelist" property="value" labelProperty="label" />
                  </html:select>
              </logic:equal>
-             <logic:notEqual name="passenger" property="countrycode_ID" value="">
-                <logic:notEqual name="passenger" property="countrycode_ID" value="US">
-                  <html:select name="passenger" property="state_ID" styleClass="dropdown" disabled="true" onchange="updateCountryUS(this, this.form, 'countrycode_ID', 'province');" indexed="true">
+             <logic:notEqual name="expensePayoutForm" property="countrycode_ID" value="">
+                <logic:notEqual name="expensePayoutForm" property="countrycode_ID" value="US">
+                  <html:select property="state_ID" styleClass="dropdown" disabled="true" onchange="updateCountryUS(this, this.form, 'countrycode_ID', 'province');" >
                      <html:option value="">
                           <bean:message key="select.none" />
                         </html:option>
@@ -342,15 +343,15 @@
             <td>
               <bean:message key="colname.province" />
               <br />
-                <logic:equal name="passenger" property="countrycode_ID" value="US">
-                  <html:text name="passenger" property="province" size="15" maxlength="100" styleClass="disabledtextfield" disabled="true" indexed="true"/>
+                <logic:equal name="expensePayoutForm" property="countrycode_ID" value="US">
+                  <html:text property="province" size="15" maxlength="100" styleClass="disabledtextfield" disabled="true" />
                     </logic:equal>
-                      <logic:equal name="passenger" property="countrycode_ID" value="">
-                  <html:text name="passenger" property="province" size="15" maxlength="100" styleClass="textfield" indexed="true"/>
+                      <logic:equal name="expensePayoutForm" property="countrycode_ID" value="">
+                  <html:text property="province" size="15" maxlength="100" styleClass="textfield" />
                       </logic:equal>
-                      <logic:notEqual name="passenger" property="countrycode_ID" value="">
-                        <logic:notEqual name="passenger" property="countrycode_ID" value="US">
-                  <html:text name="passenger" property="province" size="15" maxlength="100" styleClass="textfield" indexed="true"/>
+                      <logic:notEqual name="expensePayoutForm" property="countrycode_ID" value="">
+                        <logic:notEqual name="expensePayoutForm" property="countrycode_ID" value="US">
+                  <html:text property="province" size="15" maxlength="100" styleClass="textfield" />
                          </logic:notEqual>
                       </logic:notEqual>
              </td>
@@ -359,29 +360,29 @@
              <td>
                <bean:message key="colname.home_ph" />
                <br>
-               <html:text name="passenger" property="homephone" size="15" maxlength="25" styleClass="textfield" indexed="true"/>
+               <html:text property="homephone" size="15" maxlength="25" styleClass="textfield" />
              </td>
              <td>
                <bean:message key="colname.business_ph" />
                <br>
-               <html:text name="passenger" property="workphone" size="15" maxlength="25" styleClass="textfield" indexed="true"/>
+               <html:text property="workphone" size="15" maxlength="25" styleClass="textfield" />
              </td>
              <td>
                <bean:message key="colname.mobile_ph" />
                <br>
-               <html:text name="passenger" property="mobile" size="15" maxlength="25" styleClass="textfield" indexed="true"/>
+               <html:text property="mobile" size="15" maxlength="25" styleClass="textfield" />
              </td>
            </tr>           
            <tr>
              <td colspan=2>
                <bean:message key="colname.zip" />
                <br>
-                 <html:text name="passenger" property="zip" size="15" maxlength="11" styleClass="textfield" indexed="true"/>
+                 <html:text property="zip" size="15" maxlength="11" styleClass="textfield" />
              </td>
              <td>
                <bean:message key="colname.country" />
                <br>
-                 <html:select name="passenger" property="countrycode_ID" styleClass="dropdown" onchange="checkstate(this,this.form,'state_ID', 'province');" indexed="true">
+                 <html:select property="countrycode_ID" styleClass="dropdown" onchange="checkstate(this,this.form,'state_ID', 'province');" >
                    <html:option value="">
                       <bean:message key="select.none" />
                    </html:option>
@@ -393,12 +394,12 @@
                <td colspan="2" width="33%">
                   <bean:message key="colname.email" />
                   <br>
-                  <html:text styleId="email" name="passenger" property="email" size="42" maxlength="100" styleClass="textfield" indexed="true"/>
+                  <html:text styleId="email" property="email" size="42" maxlength="100" styleClass="textfield" />
                </td>  
-            </tr>
-      </logic:iterate> 
+            </tr>	
+<% } %>
       
-	<% if(swaBsoPermission){  %>
+	<% if(bsoPermission){  %>
         	<html:hidden property="paycode" name="expensePayoutForm" value="ADV"/> <!-- Default value, will save as blank otherwise -->
         	<html:hidden property="expenselocation_ID" name="expensePayoutForm"/>
     <% } %>

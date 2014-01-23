@@ -2,7 +2,6 @@ package com.bagnet.nettracer.tracing.forms;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -14,10 +13,10 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Comment;
-import com.bagnet.nettracer.tracing.db.PassengerExp;
 
 public class ExpensePayoutForm extends ActionForm {
 
@@ -87,11 +86,26 @@ public class ExpensePayoutForm extends ActionForm {
 	private String dispVoucherExpirationDate;
 	private String toremark;
 	
+	// Passenger Expense Data
+	private String firstname;
+	private String middlename;
+	private String lastname;
+	private String address1;
+	private String address2;
+	private String city;
+	private String zip;
+	private String homephone;
+	private String workphone;
+	private String mobile;
+	private String email;
+	private String state_ID;
+	private String countrycode_ID;
+	private String province;
+	
 	private boolean hasIncidentActivity;
 
 	@SuppressWarnings("unused")
 	private String language;
-	private List<PassengerExp> passengerlist = new ArrayList<PassengerExp>();
 	private String _DATEFORMAT; // current login agent's date format
 
 	public int getShowsuccess() {
@@ -524,26 +538,120 @@ public class ExpensePayoutForm extends ActionForm {
 		}
 
 		
-	}	
-	public List<PassengerExp> getPassengerlist() {
-		return passengerlist;
 	}
 
-	public void setPassengerlist(List<PassengerExp> passengerlist) {
-		this.passengerlist = passengerlist;
+	public String getFirstname() {
+		return firstname;
 	}
-
-	public PassengerExp getPassenger(int index) {
-		if (index < 0) index = 0;
-		if (this.passengerlist.size() <= index) {
-			while (this.passengerlist.size() <= index) {				
-			this.passengerlist.add(new PassengerExp());
-			}
-		}
-
-		return this.passengerlist.get(index);
+	
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
 	}
-
+	
+	public String getMiddlename() {
+		return middlename;
+	}
+	
+	public void setMiddlename(String middlename) {
+		this.middlename = middlename;
+	}
+	
+	public String getLastname() {
+		return lastname;
+	}
+	
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
+	
+	public String getAddress1() {
+		return address1;
+	}
+	
+	public void setAddress1(String address1) {
+		this.address1 = address1;
+	}
+	
+	public String getAddress2() {
+		return address2;
+	}
+	
+	public void setAddress2(String address2) {
+		this.address2 = address2;
+	}
+	
+	public String getCity() {
+		return city;
+	}
+	
+	public void setCity(String city) {
+		this.city = city;
+	}
+	
+	public String getZip() {
+		return zip;
+	}
+	
+	public void setZip(String zip) {
+		this.zip = zip;
+	}
+	
+	public String getHomephone() {
+		return homephone;
+	}
+	
+	public void setHomephone(String homephone) {
+		this.homephone = homephone;
+	}
+	
+	public String getWorkphone() {
+		return workphone;
+	}
+	
+	public void setWorkphone(String workphone) {
+		this.workphone = workphone;
+	}
+	
+	public String getMobile() {
+		return mobile;
+	}
+	
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
+	}
+	
+	public String getEmail() {
+		return email;
+	}
+	
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	public String getState_ID() {
+		return state_ID;
+	}
+	
+	public void setState_ID(String state_ID) {
+		this.state_ID = state_ID;
+	}
+	
+	public String getCountrycode_ID() {
+		return countrycode_ID;
+	}
+	
+	public void setCountrycode_ID(String countrycode_ID) {
+		this.countrycode_ID = countrycode_ID;
+	}
+	
+	public String getProvince() {
+		return province;
+	}
+	
+	public void setProvince(String province) {
+		this.province = province;
+	}
+	
 	/**
 	 * @return Returns the _DATEFORMAT.
 	 */

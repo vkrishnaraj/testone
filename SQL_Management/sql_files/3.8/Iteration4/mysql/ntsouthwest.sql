@@ -27,3 +27,5 @@ insert into properties (keyStr, valueStr) values ('bagdrop.offset.end',6);
 #insert into properties (keystr, valuestr) values ('nt.central.endpoint','');
 #insert into properties (keystr, valuestr) values ('nt.central.username','southwest_prod');
 #insert into properties (keystr, valuestr) values ('nt.central.password','WNpass1!');
+
+insert into properties (keyStr, valueStr) values ('passenger.data.in.expense','1');
