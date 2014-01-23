@@ -144,7 +144,7 @@ select inc.createDate, inc.incident_id, st.description
   inner join station s on inc.stationassigned_ID=s.Station_ID 
   inner join item it on it.item_id = (select min(ii.item_id) from item ii where ii.incident_id=inc.Incident_ID limit 1)
   inner join status st on st.Status_ID = it.status_ID
-    where inc.incident_ID='LZWN000003095' and inc.status_id=13 and (it.status_ID=50 or it.status_ID=59) and inc.close_date>=:startDate and inc.close_date<=:endDate and find_in_set(s.stationcode, :stationcodes);
+    where inc.status_id=13 and (it.status_ID=50 or it.status_ID=59) and inc.close_date>=:startDate and inc.close_date<=:endDate and find_in_set(s.stationcode, :stationcodes);
       
 #Incident Return Type Report Summary
 select s.stationcode, count(*) totalClosed, 
