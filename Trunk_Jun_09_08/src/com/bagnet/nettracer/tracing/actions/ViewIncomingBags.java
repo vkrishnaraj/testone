@@ -88,7 +88,7 @@ public class ViewIncomingBags extends CheckedAction {
 
 		String sort = request.getParameter("sort");
 
-		if (sort != null && sort.length() > 0) request.setAttribute("sort", sort);
+		if (sort != null && sort.length() > 0 && com.bagnet.nettracer.tracing.constant.TracingConstants.SortParam.isValid(sort)) request.setAttribute("sort", sort);
 
 		Station agent_station = null;
 		if (session.getAttribute("cbroStationID") != null) {

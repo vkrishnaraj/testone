@@ -4,6 +4,8 @@
 <%@ taglib uri="/tags/struts-logic" prefix="logic" %>
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.TracerProperties"%>
@@ -235,7 +237,7 @@ function sortIncomingBags(sortOrder) {
                 <b><bean:message key="colname.ld_report_num" /></b>
               </td>
               <td>
-                <b><a href="#" onclick="sortIncomingBags('expedite');"><bean:message key="header.expedite" /></a></b>
+                <b><a href="#" onclick="sortIncomingBags('expedite_tag');"><bean:message key="header.expedite" /></a></b>
               </td>
               <td>
                 <b><a href="#" onclick="sortIncomingBags('bagtag');"><bean:message key="colname.bag_tag_number" /></a></b>
@@ -247,7 +249,10 @@ function sortIncomingBags(sortOrder) {
                 <b><bean:message key="colname.flight.num" /></b>
               </td> 
               <td>
-                <b><bean:message key="colname.forwarddate" /></b>
+                <b><a href="#" onclick="sortIncomingBags('name');"><bean:message key="colname.name" /></a></b>
+              </td> 
+              <td>
+                <b><a href="#" onclick="sortIncomingBags('createdate');"><bean:message key="colname.forwarddate" /></a></b>
               </td>                            
               <td>
                 <b><bean:message key="header.forward_details" /></b>
@@ -328,7 +333,16 @@ function sortIncomingBags(sortOrder) {
                       &nbsp;
                     </logic:empty>
                     <bean:write name="forwardLog" property="dispDestinationFlightnum" />
-                  </td> 
+                  </td>
+                  
+                  <td>                  
+                    <% if(forwardLog.ohd.getPassenger().getFirstname()!=null && !forwardLog.ohd.getPassenger().getFirstname().isEmpty()){ %>
+						<c:out value="${forwardLog.ohd.passenger.lastname}, ${forwardLog.ohd.passenger.firstname} ${forwardLog.ohd.passenger.middlename}"/>&nbsp;
+					<% } else { %>
+						<c:out value="${forwardLog.ohd.passenger.lastname}"/>&nbsp;
+					<% } %>
+                  </td>
+                   
                   <td>
                     <logic:empty name="forwardLog" property="dispForwardTime">
                       &nbsp;

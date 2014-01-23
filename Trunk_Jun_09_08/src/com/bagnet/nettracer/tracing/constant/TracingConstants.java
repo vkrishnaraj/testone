@@ -34,7 +34,9 @@ public class TracingConstants {
 		FILE_REF_NUMBER ("file_ref_number"),
 		STATUS ("status"),
 		PRIORITY ("priority"),
-		ASSIGNED_TO ("assigned_to"), 
+		ASSIGNED_TO ("assigned_to"),
+		BAGTAG ("bagtag"),
+		EXPEDITE_TAG ("expedite_tag"),
 
 		/*
 		 * Incident Activity Sort columns

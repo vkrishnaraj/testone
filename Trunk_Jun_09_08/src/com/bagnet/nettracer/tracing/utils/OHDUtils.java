@@ -9,8 +9,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -61,6 +63,18 @@ import com.bagnet.nettracer.tracing.utils.lookup.LookupAirlineCodes;
 public class OHDUtils {
 	private static Logger logger = Logger.getLogger(OHDUtils.class);
 
+	/**
+	 * Maps the sort parameters to the appropriate database fields.
+	 */
+	private static Map<String, String> incomingBagsSortMap = new LinkedHashMap<String, String>();
+	
+	static {
+		incomingBagsSortMap.put("ohd", 			"log.ohd.OHD_ID asc");
+		incomingBagsSortMap.put("expedite_tag",	"log.expeditenum asc");
+		incomingBagsSortMap.put("bagtag", 		"log.ohd.claimnum asc");
+		incomingBagsSortMap.put("createdate", 	"log.forward_time desc");
+	}
+	
 	@SuppressWarnings("rawtypes")
 	public static List getRequests(int station_id, ViewRequestForm form, String sort,
 			int rowsperpage, int currpage) {
@@ -776,19 +790,9 @@ public class OHDUtils {
 			}
 
 			if (sort != null && sort.length() > 0) {
-				if (sort.equalsIgnoreCase("ohd")) {
-					sql += " order by log.ohd.OHD_ID  asc ";
-				} else {
-					if (sort.equalsIgnoreCase("expedite")) {
-						sql += " order by log.expeditenum asc ";
-					} else {
-						if (sort.equalsIgnoreCase("bagtag")) {
-							sql += " order by log.ohd.claimnum asc ";
-						}
-					}
-				}
+				sql += "order by " + (OHDUtils.incomingBagsSortMap.get(sort)!=null?OHDUtils.incomingBagsSortMap.get(sort):"log.forward_time desc");
 			} else {
-				sql += " order by log.forward_time desc ";
+				sql += "order by log.forward_time desc";
 			}
 
 			Query q = sess.createQuery(sql);
