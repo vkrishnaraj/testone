@@ -45,7 +45,7 @@ public class Audit_ExpensePayout implements Serializable {
 	private Date voucherExpirationDate;
 	
 	
-	private String approval_date;
+	private Date approval_date;
 
 
 	private Agent agent;
@@ -412,13 +412,13 @@ public class Audit_ExpensePayout implements Serializable {
 	 * 
 	 * @hibernate.property type="timestamp" column="approval_date"
 	 */
-	public String getApproval_date() {
+	public Date getApproval_date() {
 		return approval_date;
 	}
 	/**
 	 * @param approval_date The approval_date to set.
 	 */
-	public void setApproval_date(String approval_date) {
+	public void setApproval_date(Date approval_date) {
 		this.approval_date = approval_date;
 	}
 	

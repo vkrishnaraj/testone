@@ -8,7 +8,6 @@ package com.bagnet.nettracer.reporting;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -21,12 +20,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.util.MessageResources;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang.time.DateUtils;
 
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
-import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Passenger;
@@ -48,24 +47,18 @@ public class LUVReceipt_Imme {
 	
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static HashMap getParameters(ExpensePayoutForm theform, MessageResources messages, String language, Agent user, String titleProperty) {
+	public static HashMap getParameters(ExpensePayoutForm theform, Agent user, String titleProperty) {
 		HashMap parameters = new HashMap();
-		
-		if (messages == null) {
-			messages = MessageResources.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
-		}
-		
-		if (language == null) {
-			language = TracingConstants.DEFAULT_LOCALE;
-		}
 		
 		String incident_id = theform.getIncident_ID();
 		parameters.put("amount", String.format("%.2f", theform.getVoucheramt()));
 		parameters.put("incident_num", incident_id);
 		parameters.put("createdate1", new SimpleDateFormat("MMM dd, yyyy").format(theform.getCreatedate()));
 		parameters.put("createdate", new SimpleDateFormat("MM/dd/yyyy").format(theform.getCreatedate()));
+		
 		Date today = new Date();
-		Date expdate = DateUtils.addDays(today, 365);
+		int offsetDays = NumberUtils.toInt(PropertyBMO.getValue(PropertyBMO.ISSUE_VOUCHER_EXPIRATION_OFFSET_DAYS), 365); //default to 1 year = 365 days
+		Date expdate = DateUtils.addDays(today, offsetDays);
 	    parameters.put("expdate", new SimpleDateFormat("MM/dd/yyyy").format(expdate));
 		
 		Incident inc = IncidentBMO.getIncidentByID(incident_id, null);
@@ -93,10 +86,9 @@ public class LUVReceipt_Imme {
 
 			HttpSession session = request.getSession();
 			Agent user = (Agent) session.getAttribute("user");
-			MessageResources messages = MessageResources.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
 
 			@SuppressWarnings("rawtypes")
-			Map parameters = getParameters(theform, messages, language, user, "luv voucher Imme receipt");
+			Map parameters = getParameters(theform, user, "luv voucher Imme receipt");
 
 			ResourceBundle myResources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(language));
 			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);

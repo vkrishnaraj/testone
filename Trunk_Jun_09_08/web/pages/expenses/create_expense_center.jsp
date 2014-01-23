@@ -1,11 +1,13 @@
 <%@ page language="java"%>
 <%@ page import="com.bagnet.nettracer.tracing.db.ExpensePayout"%>
-<%@page import="com.bagnet.nettracer.tracing.forms.ExpensePayoutForm"%>
+<%@ page import="com.bagnet.nettracer.tracing.forms.ExpensePayoutForm"%>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
-<%@page import="com.bagnet.nettracer.tracing.db.Agent"%>
-<%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
+<%@ page import="com.bagnet.nettracer.tracing.db.Agent"%>
+<%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 <%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
-<%@page import="org.apache.struts.util.LabelValueBean"%>
+<%@ page import="org.apache.struts.util.LabelValueBean"%>
+<%@ page import="java.util.Locale, org.apache.struts.util.PropertyMessageResources"%>
+
 <%@ taglib uri="/tags/struts-bean" prefix="bean"%>
 <%@ taglib uri="/tags/struts-html" prefix="html"%>
 <%@ taglib uri="/tags/struts-logic" prefix="logic"%>
@@ -15,17 +17,28 @@
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested"%>
 
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
-<SCRIPT LANGUAGE="JavaScript">
+<script src="deployment/main/js/date.js"></script>
+<script src="deployment/main/js/AnchorPosition.js"></script>
+<script src="deployment/main/js/PopupWindow.js"></script>
+<script src="deployment/main/js/popcalendar.js"></script>
+<%
+	Agent a = (Agent) request.getSession().getAttribute("user");
+	boolean canEdit = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_EXPENSE, a);
+	boolean canApprove = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_APPROVE_EXPENSE, a);
+	boolean canPay = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_EXPENSE, a);
+	boolean swaBsoPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, a) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN,a);
+	ExpensePayoutForm epf = (ExpensePayoutForm) request.getAttribute("expensePayoutForm");
+	
+	Locale myLocale = (Locale) session.getAttribute("org.apache.struts.action.LOCALE");
+	PropertyMessageResources myMessages = (PropertyMessageResources) request.getAttribute("org.apache.struts.action.MESSAGE");
+%>
+<script>
    
     var issue_voucher = false;
 	var cal1xx = new CalendarPopup();
 
 	    function ReSubmitWS() {
-	    	alert('Error in submitting Web Service. Please Resubmit or Call Administrator for connection issue.');
+	    	alert('<%=myMessages.getMessage(myLocale, "voucher.alert.error.webservice")%>');
 	    };
 	    
 	    function validateEmail() {
@@ -35,9 +48,10 @@
 	    	var templateSelect2 = document.getElementById("email");
 			templateId2 = templateSelect2.value;
 			if (templateId == "EMAIL" && templateId2 == "" ){
-	    		 alert('Email address is required.'); 
+	    		 alert('<%=myMessages.getMessage(myLocale, "voucher.alert.email.required")%>'); 
 	    		 return false;
 	    	}
+			
 	    	return true;
 	    };	
 	    
@@ -50,20 +64,19 @@
 	      }	
 	    
 		function confirmPrint(message){
-			var currentForm;
 		    jQuery('<div></div>').appendTo('body')
-		                    .html('<div><h6>'+message+'?</h6></div>')
+		                    .html('<div><h6>'+message+'</h6></div>')
 		                    .dialog({
 								height: 50,
 								width: 350,
 								modal: true,
 		                        buttons: {
+		                            No: function () {
+		                            	jQuery(this).dialog("close");
+		                            },
 		                            Yes: function () {
 		                                jQuery(this).dialog("close");
 		                            	expensePayoutForm.submit();
-		                            },
-		                            No: function () {
-		                            	jQuery(this).dialog("close");
 		                            }
 		                        }
 
@@ -72,18 +85,9 @@
 
 		    };		    
 	    
-  </SCRIPT>
-
-
-<%
-	Agent a = (Agent)request.getSession().getAttribute("user");
-	boolean canEdit = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_EXPENSE, a);
-	boolean canApprove = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_APPROVE_EXPENSE, a);
-	boolean canPay = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_EXPENSE, a);
-	boolean swaBsoPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, a) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN,a);
-	ExpensePayoutForm epf = (ExpensePayoutForm) request.getAttribute("expensePayoutForm");
-%>
-<html:form action="SaveExpense.do" method="post" onsubmit="if (issue_voucher) { confirmPrint('Are you sure you want to Issue this LUV Voucher?'); return false; }">
+  </script>
+  
+<html:form action="SaveExpense.do" method="post" onsubmit="<%="if (issue_voucher) { confirmPrint('"+myMessages.getMessage(myLocale, "message.confirm.issue.voucher")+"'); return false; }"%>">
 	
 	<fmt:timeZone value="${expensePayoutForm.tz}">
 		<tr>
@@ -395,7 +399,6 @@
       </logic:iterate> 
       
 	<% if(swaBsoPermission){  %>
-        
         	<html:hidden property="paycode" name="expensePayoutForm" value="ADV"/> <!-- Default value, will save as blank otherwise -->
         	<html:hidden property="expenselocation_ID" name="expensePayoutForm"/>
     <% } %>
@@ -421,8 +424,10 @@
 	</fmt:timeZone>
 </html:form>
  <script type="text/javascript">
-var selectlist = document.getElementById('getpaymenttype');
-updatePaymentFields(selectlist.options[selectlist.selectedIndex].value);
+	var selectlist = document.getElementById('getpaymenttype');
+	if (selectlist) {
+		updatePaymentFields(selectlist.options[selectlist.selectedIndex].value);
+	}
 </script >	
 <c:if test="${expensePayoutForm.wssubmitp == 'no'}">
     <script type="text/javascript">ReSubmitWS();</script>

@@ -8,6 +8,7 @@ import org.apache.axis2.AxisFault;
 import org.apache.axis2.client.Options;
 import org.apache.axis2.client.ServiceClient;
 import org.apache.axis2.transport.http.HTTPConstants;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import aero.nettracer.serviceprovider.ws_1_0.GetFlightDataDocument;
@@ -37,6 +38,7 @@ import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.BagDrop;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
+import com.bagnet.nettracer.tracing.db.PassengerExp;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.forms.ExpensePayoutForm;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
@@ -65,7 +67,7 @@ public class NTIntegrationWrapper extends IntegrationWrapper {
 			stub._getServiceClient().getOptions().setProperty(HTTPConstants.SO_TIMEOUT, new Integer(1 * 60 * 1000));
 			stub._getServiceClient().getOptions().setProperty(HTTPConstants.CONNECTION_TIMEOUT, new Integer(1 * 60 * 1000));
 		} catch (AxisFault e1) {
-			e1.printStackTrace();
+			logger.error(e1);
 		}
 		
 		GetReservationDataDocument getResDataDoc = GetReservationDataDocument.Factory
@@ -136,12 +138,12 @@ public class NTIntegrationWrapper extends IntegrationWrapper {
 				writeRem.setRemark(comment);
 				
 				stub.writeRemark(writeDoc);
-				
-				System.out.println("Writing Comments Complete...");
+
+				logger.info("Writing Comments Complete...");
 				
 			} catch (Exception e) {
-				e.printStackTrace();
 				setErrorMessage("Error calling webservice: " + e.toString());
+				logger.error(e);
 				return false;
 			}
 			return true;
@@ -166,83 +168,81 @@ public class NTIntegrationWrapper extends IntegrationWrapper {
 			
 			Voucher voucher = voucherDoc.addNewVoucher();
 
-			voucher.setPnr((inc.getRecordlocator() != null) ? inc.getRecordlocator() : "");//ntvoucher.getPnr();
+			voucher.setPnr(StringUtils.trimToEmpty(inc.getRecordlocator()));//ntvoucher.getPnr();
 			String stationId = Integer.toString(epf.getExpenselocation_ID());
 			Station station = StationBMO.getStation(stationId);
 
-			voucher.setStation((station.getStationcode() != null) ? station.getStationcode() : "");
+			voucher.setStation(StringUtils.trimToEmpty(station.getStationcode()));
 			voucher.setStatus(status);
-			voucher.setAgentUserName((inc.getAgent_username() != null) ? inc.getAgent_username() : "");
+			voucher.setAgentUserName(StringUtils.trimToEmpty(inc.getAgent_username()));
 			voucher.setAmount((epf.getCheckamt() != 0) ? epf.getCheckamt() : 0);
-//			voucher.setDepartment(null);//ignore
-			String distributemethod = (epf.getDistributemethod() != null) ? epf.getDistributemethod() : "" ;
-			if (distributemethod.equals("IMME")) distributemethod = "IMMEDIATE";
-			if (distributemethod.equals("MAIL")) distributemethod = "USPS";
+			
+			String distributemethod = StringUtils.trimToEmpty(epf.getDistributemethod());
+			if ("IMME".equalsIgnoreCase(distributemethod)) distributemethod = "IMMEDIATE";
+			else if ("MAIL".equalsIgnoreCase(distributemethod)) distributemethod = "USPS";
 
 			voucher.setDistributionMethod(distributemethod);
-			voucher.setNtIncidentId((inc.getIncident_ID() != null) ? inc.getIncident_ID() : "");
+			voucher.setNtIncidentId(StringUtils.trimToEmpty(inc.getIncident_ID()));
 			if (status.equals("cancel")){
-				voucher.setRemark((epf.getCancelreason() != null) ? epf.getCancelreason() : "");//cancel reason for cancel status
+				voucher.setRemark(StringUtils.trimToEmpty(epf.getCancelreason()));//cancel reason for cancel status
 				ExpensePayout ep = ExpensePayoutBMO.findExpensePayout(epf.getExpensepayout_ID());
-				voucher.setOrderNumber((ep.getOrdernum() != null) ? ep.getOrdernum() : "");
+				voucher.setOrderNumber(StringUtils.trimToEmpty(ep.getOrdernum()));
 			}
-			Passenger pax = voucher.addNewPassenger();
-			if (epf.getPassengerlist() != null && epf.getPassengerlist().size() > 0) {
-				for (com.bagnet.nettracer.tracing.db.PassengerExp pa : epf.getPassengerlist()) {
-
-					pax.setFirstname((pa.getFirstname() != null) ? pa.getFirstname() : "");
-					pax.setLastname((pa.getLastname() != null) ? pa.getLastname() : "");
+			
+			if (epf.getPassengerlist() != null && !epf.getPassengerlist().isEmpty()) {
+				Passenger pax = voucher.addNewPassenger();
+				for (PassengerExp pa : epf.getPassengerlist()) {
 					Address addr = pax.addNewAddresses();
-					addr.setAddress1((pa.getAddress1() != null) ? pa.getAddress1() : "");
-					addr.setAddress2((pa.getAddress2() != null) ? pa.getAddress2() : "");
-					addr.setCity((pa.getCity() != null) ? pa.getCity() : "");
-					addr.setState((pa.getState_ID() != null) ? pa.getState_ID() : "");
-					addr.setZip((pa.getZip() != null) ? pa.getZip() : "");
-					addr.setCountry((pa.getCountrycode_ID() != null) ? pa.getCountrycode_ID() : "");
-					addr.setHomePhone((pa.getHomephone() != null) ? TracerUtils.normalizePhoneNumber(pa.getHomephone()) : "");
-					addr.setWorkPhone((pa.getWorkphone()!= null) ? TracerUtils.normalizePhoneNumber(pa.getWorkphone()) : "");
-					addr.setMobilePhone((pa.getMobile() != null) ? TracerUtils.normalizePhoneNumber(pa.getMobile()) : "");
-					addr.setEmailAddress((pa.getEmail() != null) ? pa.getEmail() : "");
+					if (addr == null) {
+						continue;
+					}
+
+					pax.setFirstname(StringUtils.trimToEmpty(pa.getFirstname()));
+					pax.setLastname(StringUtils.trimToEmpty(pa.getLastname()));
+					
+					addr.setAddress1(StringUtils.trimToEmpty(pa.getAddress1()));
+					addr.setAddress2(StringUtils.trimToEmpty(pa.getAddress2()));
+					addr.setCity(StringUtils.trimToEmpty(pa.getCity()));
+					addr.setState(StringUtils.trimToEmpty(pa.getState_ID()));
+					addr.setZip(StringUtils.trimToEmpty(pa.getZip()));
+					addr.setCountry(StringUtils.trimToEmpty(pa.getCountrycode_ID()));
+					addr.setHomePhone(StringUtils.trimToEmpty(TracerUtils.normalizePhoneNumber(pa.getHomephone())));
+					addr.setWorkPhone(StringUtils.trimToEmpty(TracerUtils.normalizePhoneNumber(pa.getWorkphone())));
+					addr.setMobilePhone(StringUtils.trimToEmpty(TracerUtils.normalizePhoneNumber(pa.getMobile())));
+					addr.setEmailAddress(StringUtils.trimToEmpty(pa.getEmail()));
 					
 					break;
 				}
 			}			
 			
 
-			System.out.println(doc);
+			logger.info(doc);
+			
 			SubmitVoucherResponseDocument response = stub.submitVoucher(doc);
-			System.out.println(response);
-			ArrayList<String> ret = new ArrayList<String>();
+			
+			logger.info(response);
+			
+			ArrayList<String> ret = null;
 			if (response != null && response.getSubmitVoucherResponse() != null && response.getSubmitVoucherResponse().getReturn() != null) {
+				ret = new ArrayList<String>();
 				String success = (response.getSubmitVoucherResponse().getReturn().getSuccess()) ? "true" : "false" ;
 				ret.add(success);
-				if (response.getSubmitVoucherResponse().getReturn().getOrderNumber() !=null ) {
-					ret.add(response.getSubmitVoucherResponse().getReturn().getOrderNumber());					
-				} else {
-					ret.add("");
-				}
-				if (response.getSubmitVoucherResponse().getReturn().getCardNumber() != null) {
-					ret.add(response.getSubmitVoucherResponse().getReturn().getCardNumber());					
-				} else {
-					ret.add("");
-				}
-				if (response.getSubmitVoucherResponse().getReturn().getSecurityCode() !=null ) {
-					ret.add(response.getSubmitVoucherResponse().getReturn().getSecurityCode());					
-				} else {
-					ret.add("");
-				}
-				if (response.getSubmitVoucherResponse().getReturn().getError() !=null && response.getSubmitVoucherResponse().getReturn().getError().getDescription() != null ) {
+				
+				ret.add((response.getSubmitVoucherResponse().getReturn().getOrderNumber() == null) ? "" : response.getSubmitVoucherResponse().getReturn().getOrderNumber());					
+				ret.add((response.getSubmitVoucherResponse().getReturn().getCardNumber() == null) ? "" : response.getSubmitVoucherResponse().getReturn().getCardNumber());					
+				ret.add((response.getSubmitVoucherResponse().getReturn().getSecurityCode() == null) ? "" : response.getSubmitVoucherResponse().getReturn().getSecurityCode());					
+				
+				if (response.getSubmitVoucherResponse().getReturn().getError() != null && response.getSubmitVoucherResponse().getReturn().getError().getDescription() != null) {
 					ret.add(response.getSubmitVoucherResponse().getReturn().getError().getDescription());					
 				} else {
 					ret.add("");
-				}				
-			} else 
-				ret=null;
-
+				}
+			}
+			
 			return ret;
 		} catch (Exception e){
-			e.printStackTrace();
 			setErrorMessage("Error calling webservice: " + e.toString());
+			logger.error(e);
 			return null;
 		}
 
@@ -286,7 +286,7 @@ public class NTIntegrationWrapper extends IntegrationWrapper {
 			return bagDropList;
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 			setErrorMessage("Error calling webservice: " + e.toString());
 			return null;
 		}

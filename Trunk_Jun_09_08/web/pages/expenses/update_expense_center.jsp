@@ -1,16 +1,18 @@
 <%@ page language="java"%>
 <%@ page import="com.bagnet.nettracer.tracing.db.ExpensePayout"%>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
-<%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
-<%@page import="com.bagnet.nettracer.tracing.db.Agent"%>
-<%@page import="com.bagnet.nettracer.tracing.forms.ExpensePayoutForm"%>
-<%@page import="com.bagnet.nettracer.tracing.bmo.ExpensePayoutBMO"%>
-<%@page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
-<%@page import="com.bagnet.nettracer.reporting.ReportingConstants"%>
-<%@page import="org.apache.struts.util.LabelValueBean"%>
-<%@page import="java.text.SimpleDateFormat"%>
-<%@page import="java.util.Calendar"%>
-<%@page import="com.bagnet.nettracer.tracing.enums.TemplateType"%>
+<%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
+<%@ page import="com.bagnet.nettracer.tracing.db.Agent"%>
+<%@ page import="com.bagnet.nettracer.tracing.forms.ExpensePayoutForm"%>
+<%@ page import="com.bagnet.nettracer.tracing.bmo.ExpensePayoutBMO"%>
+<%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO"%>
+<%@ page import="com.bagnet.nettracer.reporting.ReportingConstants"%>
+<%@ page import="org.apache.struts.util.LabelValueBean"%>
+<%@ page import="java.text.SimpleDateFormat"%>
+<%@ page import="java.util.Calendar"%>
+<%@ page import="java.util.Locale, org.apache.struts.util.PropertyMessageResources"%>
+<%@ page import="com.bagnet.nettracer.tracing.enums.TemplateType"%>
+
 <%@ taglib uri="/tags/struts-bean" prefix="bean"%>
 <%@ taglib uri="/tags/struts-html" prefix="html"%>
 <%@ taglib uri="/tags/struts-logic" prefix="logic"%>
@@ -20,11 +22,11 @@
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested"%>
 
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/field_validation.js"></SCRIPT>
+<script src="deployment/main/js/date.js"></script>
+<script src="deployment/main/js/AnchorPosition.js"></script>
+<script src="deployment/main/js/PopupWindow.js"></script>
+<script src="deployment/main/js/popcalendar.js"></script>
+<script src="deployment/main/js/field_validation.js"></script>
 <%
 	Agent a = (Agent) request.getSession().getAttribute("user");
 	boolean canEdit = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CREATE_EXPENSE, a);
@@ -44,13 +46,11 @@
 	boolean swaPayApproveCreatePerm = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAYMENT_APPROVAL_CREATE, a) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAYMENT_APPROVAL_ADMIN,a);
 	boolean swaIsInBSO=(epf!=null && a!=null && a.getStation()!=null && epf.getExpenselocation_ID()==a.getStation().getStation_ID());
 	
-	org.apache.struts.util.PropertyMessageResources myMessages = (org.apache.struts.util.PropertyMessageResources) request
-			.getAttribute("org.apache.struts.action.MESSAGE");
-	java.util.Locale myLocale = (java.util.Locale) session
-			.getAttribute("org.apache.struts.action.LOCALE");
+	Locale myLocale = (Locale) session.getAttribute("org.apache.struts.action.LOCALE");
+	PropertyMessageResources myMessages = (PropertyMessageResources) request.getAttribute("org.apache.struts.action.MESSAGE");
 %>
 
-    <script language="javascript">
+    <script>
     
 	 var cal1xx = new CalendarPopup();	
 
@@ -116,7 +116,7 @@
    			var claimSettleSelectDialog = jQuery("#claimSettleSelectDiv").dialog({
  										height: 50,
  										width: 350,
- 										title: 'Select Document',
+ 										title: '<%=myMessages.getMessage(myLocale, "voucher.title.select.document")%>',
  										modal: true,
  										buttons: {
  											Submit: function() {
@@ -124,7 +124,7 @@
  												var claimSettleSelect = document.getElementById("claimSettleSelect");
  												claimSettleId = claimSettleSelect.options[claimSettleSelect.selectedIndex].value;
  												if (claimSettleId == "") {
- 													alert('You must select a Claim Settlement Letter Document.');
+ 													alert('<%=myMessages.getMessage(myLocale, "voucher.select.document")%>');
  													return;
  												}
  												submitRequest(claimSettleId);
@@ -146,19 +146,19 @@
     	}
 
       function showTemplateSelectDialog() {
-    	alert('Please choose a reason for cancelling the Southwest LUV Voucher.');
+    	alert('<%=myMessages.getMessage(myLocale, "voucher.alert.cancel")%>');
    		var templateSelectDialog = jQuery("#templateSelectDiv").dialog({
     										height: 50,
     										width: 350,
-    										title: 'Select Cancel Reason',
+    										title: '<%=myMessages.getMessage(myLocale, "voucher.title.cancel")%>',
     										modal: true,
     										buttons: {
     											Submit: function() {
     												jQuery(this).dialog("close");
     												var templateSelect = document.getElementById("templateSelect");
     												templateId = templateSelect.options[templateSelect.selectedIndex].value;
-    												if (templateId == "") {
-    													alert('You must select a cancel reason.');
+    												if (templateId.length < 1) {
+    													alert('<%=myMessages.getMessage(myLocale, "voucher.cancel.reason")%>');
     													return;
     												}
     												document.expensePayoutForm.cancelreason.value=templateId;
@@ -170,42 +170,40 @@
     	}
 
 	    function reSubmitWS() {
-	    	alert('Error in submitting Web Service. Please Resubmit or Call Administrator for connection issue.');
+	    	alert('<%=myMessages.getMessage(myLocale, "voucher.alert.error.webservice")%>');
 	    };  
 	    
 	    function submitOK(ordernum) {
-	    	alert('The Southwest LUV Voucher has been cancelled. Order Number: '+ ordernum);
+	    	alert('<%=myMessages.getMessage(myLocale, "voucher.alert.cancelled")%>'+ ordernum);
 	    };   	    
 		
 		function doPrint(message){
-	    	
-		    jQuery('<div></div>').appendTo('body')
+			jQuery('<div></div>').appendTo('body')
 		                    .html('<div><h6>'+message+'</h6></div>')
 		                    .dialog({
 								height: 50,
 								width: 350,
 								modal: true,
 		                        buttons: {
-		                            Yes: function () {
-		                                jQuery(this).dialog("close");
-//		                                document.getElementById("printrpt").setAttribute( 'style', 'display:none' );
-//		                     	    	document.getElementById("printrpt").style.display= 'none';
-		                      	    	document.expensePayoutForm.printcount.value="1";
-		                      	    	document.expensePayoutForm.submit();
-		                            },
 		                            No: function () {
 		                            	jQuery(this).dialog("close");
 		                            	document.expensePayoutForm.toremark.value="yes";
 		                    			document.expensePayoutForm.submit();
+		                            },
+		                            Yes: function () {
+		                                jQuery(this).dialog("close");
+		                      	    	document.expensePayoutForm.printcount.value="1";
+		                      	    	document.expensePayoutForm.submit();
 		                            }
 		                        }
 
 		                    });
-		    openReportWindow('reporting?print=<%=ReportingConstants.EXP_LUV %>&outputtype=0',800,600);
-		    };
+			
+			openReportWindow('reporting?print=<%=ReportingConstants.EXP_LUV %>&outputtype=0',800,600);
+		 };
 		    
     </script>
-<html:form action="UpdateExpense.do" method="post" onsubmit="return validateExpense(this);">
+	<html:form action="UpdateExpense.do" method="post" onsubmit="return validateExpense(this);">
 	<html:hidden name="expensePayoutForm" property="dateFormat" value="<%= a.getDateformat().getFormat() %>"/>
 	<html:hidden name="expensePayoutForm" property="tz" value="<%= a.getCurrenttimezone() %>" />
 	<html:hidden name="expensePayoutForm" property="expensepayout_ID" />
@@ -303,7 +301,7 @@
 					</div>
 					<div align="right" width="100%" >
 					<% if (showprint && showcancel) { %>
-						<a name="printrpt" href='#' onclick="doPrint('Did the Southwest LUV Voucher print correctly? If the answer is No, correct the printer issue and select No to print again.')">
+						<a name="printrpt" href='#' onclick="doPrint('<%=myMessages.getMessage(myLocale, "message.confirm.print.voucher")%>')">
 						<bean:message key="button.bdo_sendprint" />
 						</a>
 						&nbsp;&nbsp;
@@ -572,17 +570,13 @@
 			<html:hidden name="passenger" property="province"/>
 			<html:hidden name="passenger" property="city"/>
 			<html:hidden name="passenger" property="zip"/>
-        	<% if(!swaIsInBSO){%>
+        	<% if(!swaIsInBSO) {%>
 				<html:hidden name="passenger" property="lastname"/>
 				<html:hidden name="passenger" property="firstname"/>
 				<html:hidden name="passenger" property="middlename"/>
 			<% } %>
 			
-      </logic:iterate> 
-      			
-
-					
-					
+      </logic:iterate>
 						<tr>
 							<td align="center" valign="top" colspan="3">
 								<%
@@ -655,7 +649,6 @@
 	</fmt:timeZone>
 	<% if(swaBsoPermission){ 
         	if(!swaIsInBSO){%>
-        	
         		<html:hidden property="expensetype_id"/>
 				<html:hidden property="newComment"/>
         	<% } %>

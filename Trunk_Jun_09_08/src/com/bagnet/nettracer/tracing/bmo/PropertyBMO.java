@@ -272,6 +272,8 @@ public class PropertyBMO {
 	
 	public static final String BAGDROP_OFFSET_START = "bagdrop.offset.start";
 	public static final String BAGDROP_OFFSET_END = "bagdrop.offset.end";
+
+	public static final String ISSUE_VOUCHER_EXPIRATION_OFFSET_DAYS = "issue.voucher.expiration.offset.days";
 	
 	
 	public static boolean updateProperty(String key, String value){
