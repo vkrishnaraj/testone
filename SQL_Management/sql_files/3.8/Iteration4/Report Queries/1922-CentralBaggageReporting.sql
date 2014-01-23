@@ -135,3 +135,38 @@ from item i inner join incident inc on i.incident_ID = inc.Incident_ID
   and c.companycode_ID='WN' and c.report_type=i.itemtype_ID and
   (case :controllable when 0 then c.controllable=0 when 1 then c.controllable=1 else 1=1 end)
   group by s.stationcode, c.loss_Code;
+ 
+#------------------------------------------------------------------------------------
+
+#Incident Return Type Report Detail
+select inc.createDate, inc.incident_id, st.description
+  from incident inc 
+  inner join station s on inc.stationassigned_ID=s.Station_ID 
+  inner join item it on it.item_id = (select min(ii.item_id) from item ii where ii.incident_id=inc.Incident_ID limit 1)
+  inner join status st on st.Status_ID = it.status_ID
+    where inc.incident_ID='LZWN000003095' and inc.status_id=13 and (it.status_ID=50 or it.status_ID=59) and inc.close_date>=:startDate and inc.close_date<=:endDate and find_in_set(s.stationcode, :stationcodes);
+      
+#Incident Return Type Report Summary
+select s.stationcode, count(*) totalClosed, 
+  sum(case it.status_id when 50 then 1 else 0 end) as deliveryCount, 
+  sum(case it.status_id when 59 then 1 else 0 end) as ppuCount 
+  from incident inc 
+  inner join station s on inc.stationassigned_ID=s.Station_ID 
+  inner join item it on it.item_id = (select min(ii.item_id) from item ii where ii.incident_id=inc.Incident_ID limit 1)
+    where inc.status_id=13 and (it.status_ID=50 or it.status_ID=59) and inc.close_date>=:startDate and inc.close_date<=:endDate and find_in_set(s.stationcode, :stationcodes)
+  group by s.stationCode;
+  
+#------------------------------------------------------------------------------------
+      
+#Bag Drop Compliance Summary 
+select b.arrivalStationCode, count(*), sum(case when not isNull(b.bagDropTime) and b.bagDropTime!='' then 1 else 0 end) as dropTimes,
+(count(distinct case when not isNull(b.bagDropTime) and b.bagDropTime!='' then 1 else 0 end)/count(*)) * 100 as dropPercent,
+ avg(timestampdiff(MINUTE, case when actArrivalDate is null then schArrivalDate else actArrivalDate end, bagdroptime)) avgtime
+  from bagdrop b 
+  where b.schArrivalDate>=:startDate and b.schArrivalDate<=:endDate and find_in_set(b.arrivalStationCode, :stationCodes) group by b.arrivalStationCode;
+ 
+#Bag Drop Compliance Detail 
+select b.arrivalStationCode, b.schArrivalDate, b.flight, b.actArrivalDate, b.bagDropTime,
+  timestampdiff(MINUTE, case when actArrivalDate is null then schArrivalDate else actArrivalDate end, bagdroptime) as timeInMinToCarousel 
+  from bagdrop b 
+  where b.schArrivalDate>=:startDate and b.schArrivalDate<=:endDate and find_in_set(b.arrivalStationCode, :stationCodes) and bagDropTime!='' group by b.id;
