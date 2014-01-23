@@ -227,6 +227,9 @@ public class BDOAction extends Action {
 			CostServiceUtils.calculateDeliveryCost(theform, user,messages);
 			saveMessages(request, messages);
 			request.setAttribute("showbdo", "1");
+			if(theform.getBDO_ID()>0){
+				request.setAttribute("showprint", "1");
+			}
 			return (mapping.findForward(TracingConstants.BDO_MAIN));
 		}
 		
