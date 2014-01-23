@@ -77,14 +77,13 @@ from
       
 #Tested the remaining manually with Toad
 #Damage Report Expense by Bag Type. Takes in and returns GMT Date
-select ep.incident_id, s.stationcode, concat(p.lastname," ",p.firstname) as name, itin.legfrom, 
+select ep.incident_id, s.stationcode, concat(ep.lastname," ",ep.firstname) as name, itin.legfrom, 
 (case inc.courtesyreport when 1 then "Y" else "N" end) as CA, it.bagtype, ep.paytype, et.description,
 (case ep.paytype when 'DRAFT' or 'INVOICE' or 'PSO' then ep.checkamt when 'VOUCH' then ep.voucheramt when 'MILE' then ep.mileageamt else 0 end) as amount
   from expensepayout ep 
     inner join incident inc on inc.Incident_ID = ep.incident_ID
     inner join item it on it.Item_ID = (select min(ite.item_id) from item ite where ite.incident_id=inc.Incident_ID limit 1)
     inner join station s on s.Station_ID=inc.stationcreated_ID
-    left outer join passengerexp p on p.expensepayout_ID=ep.Expensepayout_ID
     inner join itinerary itin on itin.incident_ID = ep.incident_ID and itin.itinerarytype=0 and itin.legfrom_type=1
     inner join expensetype et on et.Expensetype_ID = ep.expensetype_ID
       where find_in_set(it.bagtype,:bagtype) and ep.createdate >=:startDate and ep.createdate<=:endDate
