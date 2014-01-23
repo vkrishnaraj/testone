@@ -33,6 +33,7 @@ import com.bagnet.nettracer.tracing.bmo.ProactiveNotificationBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.constant.TracingConstants.SortParam;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
@@ -73,6 +74,7 @@ public class OHDUtils {
 		incomingBagsSortMap.put("expedite_tag",	"log.expeditenum asc");
 		incomingBagsSortMap.put("bagtag", 		"log.ohd.claimnum asc");
 		incomingBagsSortMap.put("createdate", 	"log.forward_time desc");
+		incomingBagsSortMap.put("lastname",     "passengers.lastname asc");
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -771,8 +773,13 @@ public class OHDUtils {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			String sql = "select log from com.bagnet.nettracer.tracing.db.OHD_Log log where 1=1 ";
-			sql += " and log.destStationCode = :station_ID";
+			String sql = "select log from com.bagnet.nettracer.tracing.db.OHD_Log log  ";
+			
+			if ((sort != null && (sort.equalsIgnoreCase(SortParam.LASTNAME.getParamString())))) {
+				sql += " left outer join log.ohd.passengers passengers ";
+			}
+			
+			sql += " where log.destStationCode = :station_ID";
 			sql += " and (log.ohd.status.status_ID = :status_ID or log.ohd.status.status_ID = :status_ID2)";
 			sql += " and log.log_status <> " + TracingConstants.LOG_RECEIVED;
 			sql += " and log.log_status <> " + TracingConstants.LOG_CANCELLED;

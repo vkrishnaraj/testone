@@ -249,7 +249,7 @@ function sortIncomingBags(sortOrder) {
                 <b><bean:message key="colname.flight.num" /></b>
               </td> 
               <td>
-                <b><a href="#" onclick="sortIncomingBags('name');"><bean:message key="colname.name" /></a></b>
+                <b><a href="#" onclick="sortIncomingBags('lastname');"><bean:message key="colname.name" /></a></b>
               </td> 
               <td>
                 <b><a href="#" onclick="sortIncomingBags('createdate');"><bean:message key="colname.forwarddate" /></a></b>
