@@ -1,4 +1,4 @@
-####tested with: nettracer_demo, ad/b6/*nk*/ws_hudson
+####tested with: nettracer_demo, ad/b6/*nk*/ws_hudson - Worked on by Peter Kibaki
 
 #sample datetime with 24 hours format for time example 21:59
 set @startdatetime = '2000/06/23'; 
@@ -75,7 +75,7 @@ from
  
 #------------------------------------------------------------------------------------
       
-#Tested the remaining manually with Toad
+#Tested the remaining manually with Toad - Worked on by Sean Fine
 #Damage Report Expense by Bag Type. Takes in and returns GMT Date
 select ep.incident_id, s.stationcode, concat(ep.lastname," ",ep.firstname) as name, itin.legfrom, 
 (case inc.courtesyreport when 1 then "Y" else "N" end) as CA, it.bagtype, ep.paytype, et.description,
