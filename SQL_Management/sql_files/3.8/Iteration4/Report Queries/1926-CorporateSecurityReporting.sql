@@ -1,13 +1,11 @@
 #Missing Article Detail Report by Flight Type
 select inc.Incident_ID, concat(p.lastname,", ",p.firstname) as name,
-inc.createdate, oc.categorytype , iv.description, 
+inc.createdate, art.article, art.description, 
 itinroutes.route, itinroutes.flightnums, itinroutes.departdates, itinRoutes.initialDepartDate
 from incident inc 
 inner join itinerary itin  on inc.Incident_ID = itin.incident_ID and itin.itinerarytype=0
 inner join passenger p on p.incident_ID = inc.Incident_ID and p.isprimary=true
-inner join item ite on ite.incident_ID = inc.Incident_ID 
-inner join item_inventory iv on iv.item_ID = ite.Item_ID
-inner join ohd_categorytype oc on iv.categorytype_ID = oc.OHD_CategoryType_ID
+inner join articles art on inc.Incident_ID = art.incident_ID
 left outer join 
         (SELECT incident_id, departdate as initialDepartDate, 
           GROUP_CONCAT(legs ORDER BY incident_id ASC, itinerary_id ASC) route, 
@@ -28,4 +26,4 @@ left outer join
   when 'T' then 
     ((itin.legto_type=2 and itin.legto=:stationcode) or (itin.legfrom_type=2 and itin.legfrom=:stationcode))
   end) and
-   inc.itemtype_ID=2 group by iv.inventory_ID;
+   inc.itemtype_ID=2 group by art.Articles_ID;
