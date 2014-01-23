@@ -208,7 +208,7 @@ concat(a.firstname," ",a.lastname) as cancelAgent
 #--------------------------------------------------------------------
 
 #Southwest LUV Voucher Detail Report - Is based on and returns GMT Time
-select i.Incident_ID, e.createdate as issuedate, e.ordernum, i.recordlocator, concat(a.firstname," ",a.lastname) as issueAgent, s.stationcode, concat(pe.firstname," ",pe.lastname) as custName, "Type" #Identity To be answered
+select i.Incident_ID, e.createdate as issuedate, e.ordernum, i.recordlocator, concat(a.firstname," ",a.lastname) as issueAgent, s.stationcode, concat(pe.firstname," ",pe.lastname) as custName, ep.paytype #Identity To be answered
 , e.voucheramt
   from expensepayout e 
   inner join incident i on i.Incident_ID = e.incident_ID 
