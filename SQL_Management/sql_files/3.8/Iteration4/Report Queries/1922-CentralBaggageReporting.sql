@@ -86,7 +86,8 @@ select ep.incident_id, s.stationcode, concat(ep.lastname," ",ep.firstname) as na
     inner join station s on s.Station_ID=inc.stationcreated_ID
     inner join itinerary itin on itin.incident_ID = ep.incident_ID and itin.itinerarytype=0 and itin.legfrom_type=1
     inner join expensetype et on et.Expensetype_ID = ep.expensetype_ID
-      where find_in_set(it.bagtype,:bagtype) and ep.createdate >=:startDate and ep.createdate<=:endDate
+      where find_in_set(it.bagtype,:bagtype) and ep.createdate >=:startDate and ep.createdate<=:endDate 
+      and (ep.status_id = 54 or ep.status_id=55)
       and inc.itemtype_ID = 3;
   
 #------------------------------------------------------------------------------------
