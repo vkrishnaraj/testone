@@ -17,6 +17,7 @@ from expensepayout e inner join incident i on e.incident_ID = i.Incident_ID inne
     inner join station s on s.Station_ID = e.station_ID
     inner join expensetype et on et.Expensetype_ID = e.expensetype_ID
       where e.createdate >= :startDate and e.createdate <=:endDate and s.stationcode = :stationCode 
+      and (ep.status_id = 54 or ep.status_id=55)
         group by e.expensetype_ID;
         
 select count(b.BDO_ID) as Deliveries, sum(e.checkamt) as DeliveryCosts from bdo b inner join expensepayout e on e.bdo_id = b.BDO_ID inner join Station s on b.station_ID = s.Station_ID where b.deliverydate >= :startDate and b.deliverydate <=:endDate and s.stationcode = :stationCode ;
