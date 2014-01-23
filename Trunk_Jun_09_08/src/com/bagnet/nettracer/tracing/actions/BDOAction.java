@@ -10,18 +10,20 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+
 import com.bagnet.nettracer.integrations.delivery.DeliveryIntegrationResponse;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
@@ -29,12 +31,14 @@ import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
+import com.bagnet.nettracer.tracing.db.Company;
+import com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code;
 import com.bagnet.nettracer.tracing.db.DeliveryInstructions;
+import com.bagnet.nettracer.tracing.db.DeliveryIntegrationType;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.ExpenseType;
 import com.bagnet.nettracer.tracing.db.Incident;
-import com.bagnet.nettracer.tracing.db.Item;
-import com.bagnet.nettracer.tracing.db.Itinerary;
+import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.forms.BDOForm;
 import com.bagnet.nettracer.tracing.history.BDOHistoryObject;
@@ -93,6 +97,7 @@ public class BDOAction extends Action {
 			if (bdo_id2 != null && !"".equals(bdo_id2)) {
 				bdo_id = Integer.parseInt(bdo_id2);
 
+				@SuppressWarnings("rawtypes")
 				Iterator it = BDOUtils.findWt_id(bdo_id);
 
 				while (it.hasNext()) {
@@ -122,6 +127,7 @@ public class BDOAction extends Action {
 
 		if (theform.getDelivercompany_ID() > 0) {
 
+			@SuppressWarnings("rawtypes")
 			List servicelevels = null;
 
 			if (request.getParameter("changeservice") != null
@@ -152,9 +158,9 @@ public class BDOAction extends Action {
 			return (mapping.findForward(TracingConstants.AJAX_SERVICELEVEL));
 		}
 
-		request.setAttribute("losscodes", new ArrayList());
-		request.setAttribute("faultstationlist",  new ArrayList());
-		request.setAttribute("faultCompanyList",  new ArrayList());
+		request.setAttribute("losscodes", new ArrayList<Company_specific_irregularity_code>());
+		request.setAttribute("faultstationlist",  new ArrayList<Station>());
+		request.setAttribute("faultCompanyList",  new ArrayList<Company>());
 		
 		boolean checkLLC = false;
 		try{
@@ -175,17 +181,17 @@ public class BDOAction extends Action {
 		int incidentType=theform.getMbrType()!=0?theform.getMbrType():TracingConstants.LOST_DELAY; 
 		
 		//the company specific codes..
-		List codes = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), incidentType, true, user, checkLLC);
+		List<Company_specific_irregularity_code> codes = LossCodeBMO.getCompanyCodes(user.getStation().getCompany().getCompanyCode_ID(), incidentType, true, user, checkLLC);
 		//add to the loss codes
 		if(codes!=null)
 			request.setAttribute("losscodes", codes);
 		
 		
-		List faultstationlist = new ArrayList();
-		List faultCompanyList = new ArrayList();
+		List<Station> faultstationlist = new ArrayList<Station>();
+		List<Company> faultCompanyList = new ArrayList<Company>();
 		
 		faultstationlist = TracerUtils.getStationList(user.getStation().getCompany().getCompanyCode_ID());
-		faultCompanyList = new ArrayList();
+		faultCompanyList = new ArrayList<Company>();
 		faultCompanyList.add(user.getStation().getCompany());
 
 		if(faultstationlist!=null){
@@ -195,6 +201,7 @@ public class BDOAction extends Action {
 			request.setAttribute("faultCompanyList", faultCompanyList);
 		}
 
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		List list = new ArrayList(BDOUtils.getDeliveryCompanies(theform
 				.getStation().getStation_ID(), true));
 		if (list != null)
@@ -220,7 +227,6 @@ public class BDOAction extends Action {
 			CostServiceUtils.calculateDeliveryCost(theform, user,messages);
 			saveMessages(request, messages);
 			request.setAttribute("showbdo", "1");
-			request.setAttribute("showprint", "1");
 			return (mapping.findForward(TracingConstants.BDO_MAIN));
 		}
 		
@@ -396,7 +402,7 @@ public class BDOAction extends Action {
 				if(bdo.getIncident()!=null){
 					BDOUtils.populateFormWithExistingData(bdo.getIncident(),theform);
 				}	
-				if(bdo.getDelivery_integration_type()==bdo.getDelivery_integration_type().SERV && bdo.getDelivery_integration_id()!=null && !bdo.getDelivery_integration_id().isEmpty() && PropertyBMO.getValue(PropertyBMO.BDSI_ADDRESS_ENDPOINT)!=null){
+				if(bdo.getDelivery_integration_type()==DeliveryIntegrationType.SERV && bdo.getDelivery_integration_id()!=null && !bdo.getDelivery_integration_id().isEmpty() && PropertyBMO.getValue(PropertyBMO.BDSI_ADDRESS_ENDPOINT)!=null){
 					DecimalFormat myFormatter=new DecimalFormat("0000000000");
 					String bdoNum=myFormatter.format(bdo.getBDO_ID());
 					String stationCode="";
