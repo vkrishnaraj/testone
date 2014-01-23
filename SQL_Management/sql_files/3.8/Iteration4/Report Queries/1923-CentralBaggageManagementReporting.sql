@@ -54,20 +54,22 @@ select a.username,concat(a.firstname," ",a.lastname) as agentName, count(ep.Expe
 from  expensepayout ep inner join agent a on ep.agent_ID = a.Agent_ID where ep.createdate>=:startDate and ep.createdate <=:endDate group by a.username;
 
 #Report Claims by Agent (Detail) - Is based on and returns GMT Time 
-select a.username,concat(a.firstname," ",a.lastname) as agentName, ep.incident_ID, concat(a.firstname," ",pe.lastname) as custName, 
+select a.username,concat(a.firstname," ",a.lastname) as agentName, ep.incident_ID, concat(ep.firstname," ",ep.lastname) as custName, 
   (ep.checkamt+ep.voucheramt+ep.creditcard_refund) as total
   from expensepayout ep 
     inner join agent a on ep.agent_ID = a.Agent_ID 
-    left outer join passengerexp pe on pe.expensepayout_ID = ep.Expensepayout_ID
       where ep.createdate>=:startDate and ep.createdate <=:endDate;
 #----------------------------------
 
 #CBS SLV Issuance Report - Is based on and returns GMT Time
-select concat(a.firstname," ",a.lastname) as agentName, ep.createdate, concat(a.firstname," ",pe.lastname) as custName, ep.incident_id, inc.recordlocator, ep.paycode, 
+select concat(a.firstname," ",a.lastname) as agentName, ep.createdate, concat(ep.firstname," ",ep.lastname) as custName, ep.incident_id, inc.recordlocator, ep.paycode, 
 (case inc.itemtype_ID when 1 then "LOST" when 2 then "MISSING" when 3 then "DAMAGE" else "" end) as reportType,
 (case ep.status_id when 54 then "DENY" when 55 then "SETTLE" else "PENDING" end) as resolveType, ep.voucheramt
-  from expensepayout ep inner join agent a on a.Agent_ID = ep.agent_ID inner join passengerexp pe on pe.expensepayout_ID=ep.Expensepayout_ID inner join incident inc on inc.Incident_ID = ep.incident_ID
-	where ep.voucheramt>0 and ep.createdate>=:startDate and ep.createdate<=:endDate and find_in_set(a.username, :agentlist) order by concat(a.firstname," ",a.lastname), inc.incident_ID;
+  from expensepayout ep inner join agent a on a.Agent_ID = ep.agent_ID 
+  inner join incident inc on inc.Incident_ID = ep.incident_ID
+	where ep.voucheramt>0 and ep.createdate>=:startDate and ep.createdate<=:endDate
+  	and find_in_set(a.username, :agentlist)
+  		order by concat(a.firstname," ",a.lastname), inc.incident_ID;
 #----------------------------------
 
 #Individual Activity Report - Is based on and returns GMT Time
