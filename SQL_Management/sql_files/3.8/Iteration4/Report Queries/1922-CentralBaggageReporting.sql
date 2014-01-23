@@ -116,11 +116,11 @@ left outer join
                   GROUP BY incident_id) as itinRoutes on itinRoutes.incident_id=inc.incident_id
   where inc.createdate>=:startDate and inc.createdate<=:endDate and
   (case :itintype 
-  when '3' then 
+  when 'D' then 
     itin.legto_type=3 and itin.legto=:stationcode
-  when '1' then
+  when 'O' then
    itin.legfrom_type=1 and itin.legfrom=:stationcode
-  when '2' then 
+  when 'T' then 
     ((itin.legto_type=2 and itin.legto=:stationcode) or (itin.legfrom_type=2 and itin.legfrom=:stationcode))
   end) and
    inc.itemtype_ID=2 group by iv.inventory_ID;
