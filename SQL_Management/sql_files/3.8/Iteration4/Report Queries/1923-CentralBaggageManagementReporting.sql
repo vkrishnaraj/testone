@@ -58,7 +58,7 @@ select a.username,concat(a.firstname," ",a.lastname) as agentName, ep.incident_I
   (ep.checkamt+ep.voucheramt+ep.creditcard_refund) as total
   from expensepayout ep 
     inner join agent a on ep.agent_ID = a.Agent_ID 
-      where ep.createdate>=:startDate and ep.createdate <=:endDate;
+      where ep.createdate>=:startDate and ep.createdate <=:endDate and (ep.status_id = 54 or ep.status_id=55);
 #----------------------------------
 
 #CBS SLV Issuance Report - Is based on and returns GMT Time
@@ -67,7 +67,7 @@ select concat(a.firstname," ",a.lastname) as agentName, ep.createdate, concat(ep
 (case ep.status_id when 54 then "DENY" when 55 then "SETTLE" else "PENDING" end) as resolveType, ep.voucheramt
   from expensepayout ep inner join agent a on a.Agent_ID = ep.agent_ID 
   inner join incident inc on inc.Incident_ID = ep.incident_ID
-	where ep.voucheramt>0 and ep.createdate>=:startDate and ep.createdate<=:endDate
+	where ep.voucheramt>0 and ep.createdate>=:startDate and ep.createdate<=:endDate and (ep.status_id = 54 or ep.status_id=55)
   	and find_in_set(a.username, :agentlist)
   		order by concat(a.firstname," ",a.lastname), inc.incident_ID;
 #----------------------------------
