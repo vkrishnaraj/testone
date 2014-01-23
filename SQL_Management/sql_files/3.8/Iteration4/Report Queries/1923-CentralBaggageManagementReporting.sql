@@ -58,7 +58,7 @@ select a.username,concat(a.firstname," ",a.lastname) as agentName, ep.incident_I
   (ep.checkamt+ep.voucheramt+ep.creditcard_refund) as total
   from expensepayout ep 
     inner join agent a on ep.agent_ID = a.Agent_ID 
-      where ep.createdate>=:startDate and ep.createdate <=:endDate and (ep.status_id = 54 or ep.status_id=55);
+      where ep.createdate>=:startDate and ep.createdate <=:endDate and (ep.status_id = 53 or ep.status_id=55);
 #----------------------------------
 
 #CBS SLV Issuance Report - Is based on and returns GMT Time
