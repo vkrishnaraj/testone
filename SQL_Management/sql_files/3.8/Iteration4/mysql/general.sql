@@ -54,3 +54,5 @@ alter table task add task_type_id bigint default null;
 
 alter table bdo add column distance double default 0;
 update bdo set distance=0;
+
+insert into properties (keyStr,valueStr) VALUES ('issue.voucher.expiration.offset.days','365');
