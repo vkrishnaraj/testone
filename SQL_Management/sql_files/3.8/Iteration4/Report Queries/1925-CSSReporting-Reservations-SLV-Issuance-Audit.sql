@@ -15,7 +15,7 @@ where
 ep.paytype = 'VOUCH' and 
 ep.createdate >= :afterDate and 
 ep.createdate <= :beforeDate and 
-s.stationcode in ('CRC', 'HRC', 'ORC')
+find_in_set(s.stationcode, :stationCodes)
 
 group by ep.agent_ID
 
