@@ -71,7 +71,7 @@ select concat(a.firstname," ",a.lastname) as agentName, ep.createdate, concat(a.
 #----------------------------------
 
 #Individual Activity Report - Is based on and returns GMT Time
-select act.id, concat(a.firstname," ",a.lastname) agentname, ia.createDate, i.Incident_ID, act.code, act.description, (case act.code when "99O" then d.title else "" end) as correspondenceType from incident_activity ia 
+select concat(a.firstname," ",a.lastname) agentname, ia.createDate, i.Incident_ID, act.code, act.description, (case act.code when "55" then d.title when "55C" then d.title else "" end) as correspondenceType from incident_activity ia 
 inner join incident i on i.Incident_ID=ia.incident 
 inner join activity act on act.id = ia.activity
 inner join document d ON ia.document = d.id 
