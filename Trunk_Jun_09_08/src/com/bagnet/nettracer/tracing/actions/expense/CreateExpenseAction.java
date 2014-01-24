@@ -6,12 +6,14 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.forms.ExpensePayoutForm;
@@ -59,21 +61,28 @@ public class CreateExpenseAction extends BaseExpenseAction {
 	
 	private void preparePassengerlist(List<Passenger> passengerlist, ExpensePayoutForm epform) {
         if (passengerlist != null && passengerlist.size() > 0) {
-	        	Passenger pa = passengerlist.get(0);
-        		epform.setLastname((pa.getLastname() != null) ? pa.getLastname() : "");
-        		epform.setFirstname((pa.getFirstname() != null) ? pa.getFirstname() : "");
-        		epform.setMiddlename((pa.getMiddlename() != null) ? pa.getMiddlename() : "");
-        		epform.setAddress1((pa.getAddress(0).getAddress1() != null) ? pa.getAddress(0).getAddress1() : "");
-        		epform.setAddress2((pa.getAddress(0).getAddress2() != null) ? pa.getAddress(0).getAddress2() : "");
-        		epform.setCity((pa.getAddress(0).getCity() != null) ? pa.getAddress(0).getCity() : "");
-        		epform.setState_ID((pa.getAddress(0).getState_ID() != null) ? pa.getAddress(0).getState_ID() : "");
-        		epform.setProvince((pa.getAddress(0).getProvince()!= null) ? pa.getAddress(0).getProvince() : "");
-        		epform.setHomephone((pa.getAddress(0).getHomephone_norm()!= null) ? pa.getAddress(0).getHomephone_norm() : "");
-        		epform.setWorkphone((pa.getAddress(0).getWorkphone_norm()!= null) ? pa.getAddress(0).getWorkphone_norm() : "");
-        		epform.setMobile((pa.getAddress(0).getMobile_norm()!= null) ? pa.getAddress(0).getMobile_norm() : "");
-        		epform.setZip((pa.getAddress(0).getZip()!= null) ? pa.getAddress(0).getZip() : "");
-        		epform.setCountrycode_ID((pa.getAddress(0).getCountrycode_ID()!= null) ? pa.getAddress(0).getCountrycode_ID() : "");
-        		epform.setEmail((pa.getAddress(0).getEmail()!= null) ? pa.getAddress(0).getEmail() : "");
-		}
+	        Passenger pa = passengerlist.get(0);
+	        if (pa != null) {
+	        	epform.setLastname(StringUtils.trimToEmpty(pa.getLastname()));
+	        	epform.setFirstname(StringUtils.trimToEmpty(pa.getFirstname()));
+	        	epform.setMiddlename(StringUtils.trimToEmpty(pa.getMiddlename()));
+	        	if (pa.getAddresses() != null && pa.getAddresses().size() > 0) {
+			       	Address ad = pa.getAddress(0);
+			       	if (ad != null) {
+			       		epform.setAddress1(StringUtils.trimToEmpty(ad.getAddress1()));
+			       		epform.setAddress2(StringUtils.trimToEmpty(ad.getAddress2()));
+			       		epform.setCity(StringUtils.trimToEmpty(ad.getCity()));
+			       		epform.setState_ID(StringUtils.trimToEmpty(ad.getState_ID()));
+			       		epform.setProvince(StringUtils.trimToEmpty(ad.getProvince()));
+			       		epform.setHomephone(StringUtils.trimToEmpty(ad.getHomephone_norm()));
+			       		epform.setWorkphone(StringUtils.trimToEmpty(ad.getWorkphone_norm()));
+			       		epform.setMobile(StringUtils.trimToEmpty(ad.getMobile_norm()));
+			       		epform.setZip(StringUtils.trimToEmpty(ad.getZip()));
+			       		epform.setCountrycode_ID(StringUtils.trimToEmpty(ad.getCountrycode_ID()));
+			       		epform.setEmail(StringUtils.trimToEmpty(ad.getEmail()));
+			       	} // End address null check
+	        	} // End addresses list check
+	        } // End passenger null check
+		} // End passengerlist list check
 	}
 }

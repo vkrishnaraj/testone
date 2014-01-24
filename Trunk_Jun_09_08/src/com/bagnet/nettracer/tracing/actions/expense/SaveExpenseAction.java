@@ -132,7 +132,7 @@ public class SaveExpenseAction extends BaseExpenseAction {
 			}
 		}
 		//payment type is LUV Voucher
-		if (expenseForm.getPaymentType().equals(TracingConstants.ENUM_VOUCHER)) {
+		if (TracingConstants.ENUM_VOUCHER.equals(expenseForm.getPaymentType())) {
 			//WS submit
 			ArrayList<String> ret= null;
 			try {
