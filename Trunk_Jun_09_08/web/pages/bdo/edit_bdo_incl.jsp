@@ -218,7 +218,16 @@ function toggledc(o) {
     <td id="middlecolumn">
       
 	    <div id="maincontent">
-		    <span style="float: left">
+			<font color="red"> <logic:messagesPresent message="true">
+					<div style="display: block">
+						<html:messages id="msg" message="true">
+							<bean:write name="msg" />
+							<br />
+						</html:messages>
+					</div>
+					<br/>
+				</logic:messagesPresent>
+			</font> <span style="float: left">
 		    <% if(PropertyBMO.getValue(PropertyBMO.BDSI_ADDRESS_ENDPOINT)!=null) {%>
 		    
         
@@ -284,11 +293,8 @@ function toggledc(o) {
 			<a href="#" onclick="cancelBdo()"><bean:message key="button.cancel.bdo"/></a>
 		</logic:equal>        
         </span>
-        <font color="red">
-          <logic:messagesPresent message="true"><div style="display:block"><html:messages id="msg" message="true"><br/><bean:write name="msg"/><br/></html:messages></div></logic:messagesPresent>
-        </font>
         
-        <logic:present name="integrationResponse" scope="request">
+		<logic:present name="integrationResponse" scope="request">
           <table border="1" width = "400" align="center">
             <tr>
               <td align="center">
