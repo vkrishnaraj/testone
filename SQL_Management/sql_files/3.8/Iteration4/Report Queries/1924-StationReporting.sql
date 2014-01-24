@@ -87,7 +87,8 @@ select inv.barcode, inv.description, (case inv.inventory_status_id when 701 then
 #startDate - The beginning of the date range. DateTime variable
 #endDate - the end of the date range. DateTime variable
 #stationCode - 3 Character Station Code to check against.
-select b.BDO_ID, s.stationcode, (case b.incident_ID when null then b.OHD_ID else b.incident_ID end) as reference, b.deliverydate, a.username, concat(p.lastname,", ",p.firstname) as passenger, 
+select b.BDO_ID, s.stationcode, (case b.incident_ID when null then b.OHD_ID else b.incident_ID end) as reference, b.deliverydate, a.username, 
+p.lastname,p.firstname, 
   d.integration_key , e.checkamt
   from bdo b inner join agent a on b.agent_ID = a.Agent_ID
   inner join bdo_passenger p on p.bdo_ID = b.BDO_ID
@@ -224,7 +225,7 @@ select inv.id, inv.editdate, inv.inventory_status_id, (case inv.trade_type when 
 select i.Incident_ID, i.recordlocator, aep.modify_time as canceldate, 
 (case e.cancelreason when "INCQNT" then "INCORRECT QUANTITY" when "INCAMT" then "INCORRECT AMOUNT" when "INCNAME" then "INCORRECT NAME" else "" end) as cancelReason, 
 (case e.cancelreason when "INCQNT" then "QT" when "INCAMT" then "AM" when "INCNAME" then "NM" else "" end) as code,
-concat(a.firstname," ",a.lastname) as cancelAgent
+a.firstname,a.lastname
   from expensepayout e 
   inner join audit_expensepayout aep on aep.audit_expensepayout_id = (select max(aaep.audit_expensepayout_id) from audit_expensepayout aaep where e.Expensepayout_ID = aaep.Expensepayout_ID group by aaep.Expensepayout_ID)
   inner join incident i on i.Incident_ID = e.incident_ID 
@@ -238,8 +239,8 @@ concat(a.firstname," ",a.lastname) as cancelAgent
 #startDate - The beginning of the date range. DateTime variable
 #endDate - the end of the date range. DateTime variable
 #stationCodes - Array of 3 Character Station Codes to check against.
-select i.Incident_ID, e.createdate as issuedate, e.ordernum, i.recordlocator, concat(a.firstname," ",a.lastname) as issueAgent, s.stationcode, concat(e.firstname," ",e.lastname) as custName, e.paytype #Identity To be answered
-, e.voucheramt
+select i.Incident_ID, e.createdate as issuedate, e.ordernum, i.recordlocator, 
+a.firstname,a.lastname, s.stationcode, e.firstname,e.lastname, e.paytype, e.voucheramt
   from expensepayout e 
   inner join incident i on i.Incident_ID = e.incident_ID 
   inner join Station s on s.Station_ID = e.station_ID
@@ -264,7 +265,7 @@ select s.stationcode AS loc, s.stationdesc, sum(e.voucheramt) as bagCompensation
 #endDate - the end of the date range. DateTime variable
 #stationCode - 3 Character Station Code to check against.
 select inv.barcode, inv.description, inv.issuedate, s.stationcode, 
-  inv.editDate, inv.reason, concat(a.firstname," ",a.lastname) as agent, inv.cost
+  inv.editDate, inv.reason, a.firstname,a.lastname, inv.cost
   from audit_issuance_item_inventory inv inner join station s on inv.station_id=s.Station_ID 
   inner join Status st on st.Status_ID = inv.inventory_status_id
   inner join Agent a on a.agent_id=inv.editagent_id
@@ -281,7 +282,7 @@ select inv.barcode, inv.description, inv.issuedate, s.stationcode,
 #endDate - the end of the date range. DateTime variable
 #stationCode - 3 Character Station Code to check against.
 select inv.barcode, inv.description, 
-  inv.editDate, inv.reason, concat(a.firstname," ",a.lastname) as agent, s.stationcode
+  inv.editDate, inv.reason,a.firstname,a.lastname, s.stationcode
   from audit_issuance_item_inventory inv inner join station s on inv.station_id=s.Station_ID 
   inner join Status st on st.Status_ID = inv.inventory_status_id
   inner join Agent a on a.agent_id=inv.editagent_id
