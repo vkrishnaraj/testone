@@ -9,7 +9,7 @@ select count(ia.id) as activityCount, act.code as activityCode, act.description 
     inner join agent a on ia.agent = a.Agent_ID 
       where ia.createDate>=:startDate and ia.createDate <=:endDate and (act.code like '%99%' or act.code like '%256%' or act.code like '%55%')
       group by a.Agent_ID, act.code
-      order by concat(a.firstname," ",a.lastname), act.code;
+      order by a.firstname,a.lastname, act.code;
 #----------------------------------
 
 #Assigned Claims by Representative - Is based on and returns GMT Time
@@ -52,7 +52,7 @@ select a.firstname,a.lastname,a.username,
 #Report Claims by Agent (Summary) - Is based on and returns GMT Time 
 #startDate - The beginning of the date range. DateTime variable
 #endDate - the end of the date range. DateTime variable
-select a.username,concat(a.firstname," ",a.lastname) as agentName, count(f.id) as claimCount, sum(f.amountPaid) as total, 
+select a.username,a.firstname,a.lastname, count(f.id) as claimCount, sum(f.amountPaid) as total, 
 round(sum(f.amountPaid)/count(f.ID),2) as average 
 	from  fsclaim f inner join incident i on i.Incident_ID=f.ntIncidentId inner join agent a on i.agentassigned_id = a.Agent_ID
 		where f.claimDate>=:startDate and f.claimDate <=:endDate group by a.username;
@@ -72,21 +72,21 @@ select a.username,a.firstname,a.lastname, f.ntIncidentId, p.firstname, p.lastNam
 #startDate - The beginning of the date range. DateTime variable
 #endDate - the end of the date range. DateTime variable
 #agentlist - List of Agent Usernames to check against
-select concat(a.firstname," ",a.lastname) as agentName, ep.createdate, concat(ep.firstname," ",ep.lastname) as custName, ep.incident_id, inc.recordlocator, ep.paycode, 
+select a.firstname,a.lastname, ep.createdate, ep.firstname,ep.lastname, ep.incident_id, inc.recordlocator, ep.paycode, 
 (case inc.itemtype_ID when 1 then "LOST" when 2 then "MISSING" when 3 then "DAMAGE" else "" end) as reportType,
 (case ep.status_id when 54 then "DENY" when 55 then "SETTLE" else "PENDING" end) as resolveType, ep.voucheramt
   from expensepayout ep inner join agent a on a.Agent_ID = ep.agent_ID 
   inner join incident inc on inc.Incident_ID = ep.incident_ID
 	where ep.voucheramt>0 and ep.createdate>=:startDate and ep.createdate<=:endDate and (ep.status_id = 54 or ep.status_id=55)
   	and find_in_set(a.username, :agentlist)
-  		order by concat(a.firstname," ",a.lastname), inc.incident_ID;
+  		order by a.firstname,a.lastname, inc.incident_ID;
 #----------------------------------
 
 #Individual Activity Report - Is based on and returns GMT Time
 #startDate - The beginning of the date range. DateTime variable
 #endDate - the end of the date range. DateTime variable
 #agentlist - List of Agent Usernames to check against
-select concat(a.firstname," ",a.lastname) agentname, ia.createDate, i.Incident_ID, act.code, act.description, (case act.code when "55" then d.title when "55C" then d.title else "" end) as correspondenceType from incident_activity ia 
+select a.firstname,a.lastname, ia.createDate, i.Incident_ID, act.code, act.description, (case act.code when "55" then d.title when "55C" then d.title else "" end) as correspondenceType from incident_activity ia 
 inner join incident i on i.Incident_ID=ia.incident 
 inner join activity act on act.id = ia.activity
 inner join document d ON ia.document = d.id 
