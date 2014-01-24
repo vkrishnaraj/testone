@@ -11,27 +11,27 @@ select s.stationcode,
     from incident inc
     inner join station s on s.Station_ID=inc.stationassigned_ID
       where inc.createdate between CAST(:startdatetime AS DATETIME)
-      and CAST(:enddatetime AS DATETIME) group by inc.stationassigned_ID;
+      and CAST(:enddatetime AS DATETIME) group by inc.stationassigned_ID order by s.stationcode;
       
 #------------------------------------------------------------------------------------
 
 #Station Recovery Rate Report
 #startdatetime - Beginning of Date Range. Datetime value
 #enddatetime - End of Date Range. Datetime value
- select s.StationCode, 
+select s.StationCode, 
   count(*) as reports_taken,
   sum(case when inc.status_id=13 and s.Station_ID!=l.station_id then 1 else 0 end) as station_returned, 
   sum(case when inc.status_id=13 and s.Station_ID=l.station_id then 1 else 0 end) as cbs_returned,
   sum(case when inc.status_id!=13 then 1 else 0 end) as open_reports,
   sum(case when not isnull(ep.Expensepayout_ID) then 1 else 0 end) as reports_with_payments,
-  ROUND(sum(ep.checkamt+ep.voucheramt+ep.creditcard_refund),2) as total_payments,
-  ROUND(100 * (count(*) - sum(case when inc.status_id!=13 then 1 else 0 end)) / count(*), 2) as Recovery_ratio
+  ROUND(100 * (count(*) - sum(case when inc.status_id!=13 then 1 else 0 end)) / count(*), 2) as Recovery_ratio,
+  ROUND(sum(ep.checkamt+ep.voucheramt+ep.creditcard_refund),2) as total_payments
     from incident inc
     left outer join expensepayout ep on ep.incident_ID = inc.Incident_ID and ep.status_ID in (53,55)
-    inner join station s on s.station_id=inc.stationcreated_ID 
+    inner join station s on s.station_id=inc.stationcreated_ID and s.companycode_ID='WN'
     left outer join Lz l on l.station_id = s.Station_ID
     where
-    inc.createdate between CAST(:startdatetime AS DATETIME) and CAST(:enddatetime AS DATETIME) group by inc.stationcreated_id;
+    inc.createdate between CAST(:startdatetime AS DATETIME) and CAST(:enddatetime AS DATETIME) group by inc.stationcreated_id order by s.stationcode;
  
 #------------------------------------------------------------------------------------
  
@@ -39,7 +39,24 @@ select s.stationcode,
 #startdatetime - Beginning of Date Range. Datetime value
 #enddatetime - End of Date Range. Datetime value
 #stationCodes - Array of 3 Character stationCodes to check against
-#expenseCodes - Array of Code Descriptions (Interim, Delivery, etc...) to check against
+#expenseCodes - Array of Code Descriptions (Interim, Delivery, etc...) to check against. Valid values (based on testing environment )include:
+#	Damaged Articles
+#	Delivery
+#	Interim Expense
+#	Goodwill
+#	Lost Baggage
+#	Missing Article
+#	Unchecked L & F
+#	Other
+#	Additional Settlement
+#	Customer Inconvenience
+#	Damage Bag
+#	Dragged Bag
+#	Fish Smell
+#	Stop Payment
+#	Water Damage
+#	Cruise-Line Interim Expense
+
 select ep.incident_ID, s.stationCode, ep.lastname, ep.firstname, ep.middlename,
   ep.createdate, et.description,
   (CASE ep.paytype WHEN 'DRAFT' THEN ep.checkamt WHEN 'VOUCH' THEN ep.voucheramt WHEN 'INVOICE' THEN ep.checkamt else 0 END) as Amount,
@@ -62,7 +79,8 @@ select ep.incident_ID, s.stationCode, ep.lastname, ep.firstname, ep.middlename,
 #endDate - the end of the date range. DateTime variable
 #bagType - array of bagtypes (22, 23, etc...)
 select ep.incident_id, s.stationcode, ep.lastname,ep.firstname, itin.legfrom, 
-(case inc.courtesyreport when 1 then "Y" else "N" end) as CA, it.bagtype, ep.paytype, et.description,
+(case inc.courtesyreport when 1 then "Y" else "N" end) as CA, it.bagtype, 
+ep.paytype as type, et.description,
 (case ep.paytype when 'DRAFT' or 'INVOICE' or 'PSO' then ep.checkamt when 'VOUCH' then ep.voucheramt else ep.checkamt end) as amount,
 (CASE ep.paytype WHEN 'MILE' THEN ep.mileageamt else 0 END) as Mileage_Amount
   from expensepayout ep 
@@ -110,7 +128,7 @@ left outer join
   when 'T' then 
     ((itin.legto_type=2 and itin.legto=:stationcode) or (itin.legfrom_type=2 and itin.legfrom=:stationcode))
   end) and
-   inc.itemtype_ID=2 group by iv.inventory_ID;
+   inc.itemtype_ID=2 group by art.Articles_ID;
  
 #------------------------------------------------------------------------------------
       
@@ -133,15 +151,14 @@ from item i inner join incident inc on i.incident_ID = inc.Incident_ID
 #startDate - The beginning of the date range. DateTime variable
 #endDate - the end of the date range. DateTime variable
 #stationcodes - Array of 3 character station codes to check against. 3 character varchar
-select inc.createDate as IncidentDate, inc.incident_id, st.description as ClosureType
+select inc.createDate as IncidentDate, inc.incident_id, (case it.status_ID when 50 then "Delivery" when 59 then "PPU" else "Other" end) as ClosureType
   from incident inc 
   inner join station s on inc.stationassigned_ID=s.Station_ID 
   inner join item it on it.item_id = (select min(ii.item_id) from item ii where ii.incident_id=inc.Incident_ID limit 1)
-  inner join status st on st.Status_ID = it.status_ID
-    where inc.status_id=13 and (it.status_ID=50 or it.status_ID=59) 
+    where inc.status_id=13# and (it.status_ID=50 or it.status_ID=59) 
     and inc.close_date>=:startDate and inc.close_date<=:endDate
-    and find_in_set(s.stationcode, :stationcodes);
-      
+    and find_in_set(s.stationcode, :stationcodes) order by IncidentDate;
+    
 #Incident Return Type Report Summary
 #startDate - The beginning of the date range. DateTime variable
 #endDate - the end of the date range. DateTime variable
@@ -152,9 +169,9 @@ select s.stationcode, count(*) closedIncidents,
   from incident inc 
   inner join station s on inc.stationassigned_ID=s.Station_ID 
   inner join item it on it.item_id = (select min(ii.item_id) from item ii where ii.incident_id=inc.Incident_ID limit 1)
-    where inc.status_id=13 and (it.status_ID=50 or it.status_ID=59)
+    where inc.status_id=13
     and inc.close_date>=:startDate and inc.close_date<=:endDate and find_in_set(s.stationcode, :stationcodes)
-  group by s.stationCode;
+ 	 group by s.stationCode order by s.stationCode;
   
 #------------------------------------------------------------------------------------
       
@@ -176,7 +193,8 @@ sum(case when not isNull(b.bagDropTime) and b.bagDropTime!='' then 1 else 0 end)
 #startDate - The beginning of the date range. DateTime variable
 #endDate - the end of the date range. DateTime variable
 #stationcodes - Array of 3 character station codes to check against. 3 character varchar
-select b.schArrivalDate as FlightDate, b.flight as FlightNumber, b.actArrivalDate as ActualArrivalTime, 
+select date(b.schArrivalDate) as FlightDate, b.flight as FlightNumber,
+  b.actArrivalDate as ActualArrivalTime, b.schArrivalDate as scheduleArriveDate, b.bagDropTime as bagDropTime,
   timestampdiff(MINUTE, case when actArrivalDate is null then schArrivalDate else actArrivalDate end, bagdroptime) as timeToCarousel 
   from bagdrop b 
   	where b.schArrivalDate>=:startDate and b.schArrivalDate<=:endDate 
