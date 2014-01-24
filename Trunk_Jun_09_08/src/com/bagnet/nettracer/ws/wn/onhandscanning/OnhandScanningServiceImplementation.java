@@ -226,7 +226,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		
 		if(obmo.insertOHD(ohd, ohd.getAgent())){
 			try {
-				serviceResponse = ohdToWSOHD(OhdBMO.getOHDByID(ohd.getOHD_ID(),null), serviceResponse);
+				serviceResponse = ohdToWSOHD(OhdBMO.getOHDByID(ohd.getOHD_ID(),null), serviceResponse, holdingstation.getStation_ID());
 				serviceResponse.setSuccess(true);
 				serviceResponse.setCreateUpdateIndicator(STATUS_UPDATE);
 				logger.info(resDoc);
@@ -332,7 +332,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 			try {
 				OHD ntohd = wsohdToOHD(wsohd, posId, lateCheckInc);
 				if(updateExistingOhd(ntohd, hasLateCheckInc)){
-					serviceResponse = ohdToWSOHD(OhdBMO.getOHDByID(ntohd.getOHD_ID(),null), serviceResponse);
+					serviceResponse = ohdToWSOHD(OhdBMO.getOHDByID(ntohd.getOHD_ID(),null), serviceResponse, holdingstation.getStation_ID());
 					serviceResponse.setSuccess(true);
 					serviceResponse.setCreateUpdateIndicator(STATUS_UPDATE);
 					logger.info(resDoc);
@@ -351,7 +351,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 				OHD ntohd = wsohdToOHD(wsohd, posId, lateCheckInc);
 				if(updateExistingOhd(ntohd, hasLateCheckInc)){
 					util.properlyHandleForwardedOnHand(incomingOHD, agent, holdingstation);
-					serviceResponse = ohdToWSOHD(OhdBMO.getOHDByID(ntohd.getOHD_ID(),null), serviceResponse);
+					serviceResponse = ohdToWSOHD(OhdBMO.getOHDByID(ntohd.getOHD_ID(),null), serviceResponse, holdingstation.getStation_ID());
 					serviceResponse.setSuccess(true);
 					serviceResponse.setCreateUpdateIndicator(STATUS_UPDATE);
 					logger.info(resDoc);
@@ -376,7 +376,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 				OHD ntohd = wsohdToOHD(wsohd, posId, lateCheckInc);
 				OhdBMO obmo = new OhdBMO();
 				if(obmo.insertOHD(ntohd, ntohd.getAgent())){
-					serviceResponse = ohdToWSOHD(OhdBMO.getOHDByID(ntohd.getOHD_ID(),null), serviceResponse);
+					serviceResponse = ohdToWSOHD(OhdBMO.getOHDByID(ntohd.getOHD_ID(),null), serviceResponse, holdingstation.getStation_ID());
 					serviceResponse.setSuccess(true);
 					serviceResponse.setCreateUpdateIndicator(STATUS_CREATE);
 					logger.info(resDoc);
@@ -708,7 +708,10 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 			obmo.insertOHD(incomingOHD, agent);
 
 			try{
-				serviceResponse = ohdToWSOHD(obmo.findOHDByID(incomingOHD.getOHD_ID()),serviceResponse);
+				/**
+				 * per SWA requirements, do not search for an associated incident for lookupOnhandLZ scans
+				 */
+				serviceResponse = ohdToWSOHD(obmo.findOHDByID(incomingOHD.getOHD_ID()),serviceResponse, 0);
 			} catch (Exception e) {
 				e.printStackTrace();
 				serviceResponse.setSuccess(false);
@@ -743,7 +746,10 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		//Send web service response
 		if(ohd != null){
 			try{
-				serviceResponse = ohdToWSOHD(ohd, serviceResponse);
+				/**
+				 * per SWA requirements, do not search for an associated incident for lookupOnhandLZ scans
+				 */
+				serviceResponse = ohdToWSOHD(ohd, serviceResponse, 0);
 			} catch (Exception e) {
 				e.printStackTrace();
 				serviceResponse.setSuccess(false);
@@ -1120,7 +1126,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		} 
 		
 		try {
-			serviceResponse = ohdToWSOHD(OhdBMO.getOHDByID(ohd.getOHD_ID(),null), serviceResponse);
+			serviceResponse = ohdToWSOHD(OhdBMO.getOHDByID(ohd.getOHD_ID(),null), serviceResponse, holdingstation.getStation_ID());
 		} catch (Exception e) {
 			e.printStackTrace();
 			serviceResponse.setSuccess(false);
@@ -1252,7 +1258,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		//Handle response
 		if(ohd != null){
 			try{
-				serviceResponse = ohdToWSOHD(ohd, serviceResponse);
+				serviceResponse = ohdToWSOHD(ohd, serviceResponse, holdingstation.getStation_ID());
 			} catch (Exception e) {
 				e.printStackTrace();
 				serviceResponse.setSuccess(false);
@@ -1261,8 +1267,8 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 				logger.info(resDoc);
 				return resDoc;
 			}
-			if(ohd.getMatched_incident() != null && !ohd.getMatched_incident().isEmpty()){
-				serviceResponse.setAssoicatedIncidentId(ohd.getMatched_incident());
+
+			if(serviceResponse.getAssoicatedIncidentId() != null && !serviceResponse.getAssoicatedIncidentId().isEmpty()){
 				serviceResponse.setSuccess(true);
 				serviceResponse.setReturnStatus(STATUS_RETURN_ASSOCIATED_REPORT);
 				logger.info(resDoc);
@@ -1304,17 +1310,42 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 	 * Created customer wrapper for core mapper for the Southwest specific fields that we do not want to include in our core model
 	 * to prevent the current clients from having to re-consume the core wsdl.
 	 * 
+	 * If a holding station is provided, set the associated incident ID if one exists
+	 * 
 	 * @param ohd
 	 * @param response
 	 * @return
 	 * @throws Exception 
 	 */
-	private static ServiceResponse ohdToWSOHD(OHD ohd, ServiceResponse response) throws Exception{
+	private static ServiceResponse ohdToWSOHD(OHD ohd, ServiceResponse response, int holdingStationID) throws Exception{
 		WSCoreOHDUtil util = new WSCoreOHDUtil();
 		response.setOnhand(util.OHDtoWS_Mapping(ohd));
 		response.setPositionId(ohd.getPosId());
 		response.setLateCheckIndicator(ohd.getLateCheckInd());
+
+		if(holdingStationID > 0){
+			response.setAssoicatedIncidentId(getAssociatedIncidentId(ohd, holdingStationID));
+		}
 		return response;
+	}
+	
+	/**
+	 * SWA defines an associated incident as first being confirmed match in NetTracer.
+	 * If a confirmed match does not exist, then search for the most recently created incident that matches the following criteria:
+	 * 		Incident status is not closed
+	 * 		The incident assigned station matches the holding station
+	 * 		Bagtag numbers match
+	 * 
+	 * @param ohd
+	 * @param holdingStationID
+	 * @return
+	 */
+	private static String getAssociatedIncidentId(OHD ohd, int holdingStationID){
+		if(ohd.getMatched_incident() != null && !ohd.getMatched_incident().isEmpty()){
+			return ohd.getMatched_incident();
+		} else {
+			return OnhandScanningServiceUtil.findAssociatedIncident(ohd.getClaimnum(), holdingStationID);
+		}
 	}
 	
 }
