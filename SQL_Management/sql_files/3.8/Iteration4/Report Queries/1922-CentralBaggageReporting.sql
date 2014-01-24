@@ -9,7 +9,7 @@ select s.stationcode,
   sum(case when inc.itemtype_id=2 then 1 else 0 end) as Missing,
   count(*) as Total
     from incident inc
-    inner join station s on s.Station_ID=inc.stationassigned_ID
+    inner join station s on s.Station_ID=inc.stationassigned_ID and s.companyCode_id='WN'
       where inc.createdate between CAST(:startdatetime AS DATETIME)
       and CAST(:enddatetime AS DATETIME) group by inc.stationassigned_ID order by s.stationcode;
       
