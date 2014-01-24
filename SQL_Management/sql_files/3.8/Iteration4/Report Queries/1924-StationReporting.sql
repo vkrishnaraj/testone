@@ -1,4 +1,7 @@
 #Station Payment Report - Is based on and returns GMT Time
+#startDate - The beginning of the date range. DateTime variable
+#endDate - the end of the date range. DateTime variable
+#stationCode - 3 Character Station Code to check against.
 select et.description, e.Incident_ID, e.lastname, e.firstname, e.draft, e.createdate, a.username, 
   (case paytype when 'DRAFT' or 'INVOICE' or 'PSO' then checkamt when 'VOUCH' then voucheramt when 'MILE' then mileageamt else 0 end) as amount, e.paytype
     from expensepayout e left outer join agent a on e.agent_ID = a.Agent_ID 
@@ -10,6 +13,9 @@ select et.description, e.Incident_ID, e.lastname, e.firstname, e.draft, e.create
 #--------------------------------------------------------------------
 
 #Station Summary Report - Is based on and returns GMT Time - Broken into three queries because it is three separate types of information
+#startDate - The beginning of the date range. DateTime variable
+#endDate - the end of the date range. DateTime variable
+#stationCode - 3 Character Station Code to check against.
 select (case i.itemtype_ID when 1 then "Lost/Delay" when 2 then "Missing Article" when 3 then "Damaged" else "" end) as incType, count(*) from incident i inner join Station s on i.stationassigned_ID=s.Station_ID where i.createdate >= :startDate and i.createdate <=:endDate and s.stationcode = :stationCode  group by i.itemtype_ID order by i.itemtype_ID;
 
 select et.description, sum(e.voucheramt) as luvvoucher,  sum(case paytype when 'DRAFT' then e.checkamt else 0 end ) as draft, sum(case paytype when 'INVOICE' then e.checkamt else 0 end ) as invoice
@@ -17,13 +23,17 @@ from expensepayout e inner join incident i on e.incident_ID = i.Incident_ID inne
     inner join station s on s.Station_ID = e.station_ID
     inner join expensetype et on et.Expensetype_ID = e.expensetype_ID
       where e.createdate >= :startDate and e.createdate <=:endDate and s.stationcode = :stationCode 
-      and (ep.status_id = 53 or ep.status_id=55)
+      and (e.status_id = 53 or e.status_id=55)
         group by e.expensetype_ID;
         
 select count(b.BDO_ID) as Deliveries, sum(e.checkamt) as DeliveryCosts from bdo b inner join expensepayout e on e.bdo_id = b.BDO_ID inner join Station s on b.station_ID = s.Station_ID where b.deliverydate >= :startDate and b.deliverydate <=:endDate and s.stationcode = :stationCode ;
 #--------------------------------------------------------------------
 
 #Station Chargeback Summary Report - Is based on and returns GMT Time. Detail vs Summary should control which query is ran
+#startDate - The beginning of the date range. DateTime variable
+#endDate - the end of the date range. DateTime variable
+#stationCode - 3 Character Station Code to check against.
+#lossCodes - Array of LossCodes to check for. 
 select i.lossCode, c.description, c.controllable, count(*) from item i inner join incident inc on i.incident_ID = inc.Incident_ID 
   inner join station s on s.Station_ID = inc.stationassigned_ID inner join Company_irregularity_codes c on i.lossCode= c.loss_code 
   where inc.createdate >= :startDate and inc.createdate <=:endDate and s.stationcode = :stationCode and find_in_set(i.lossCode, :lossCodes)
@@ -33,6 +43,10 @@ select i.lossCode, c.description, c.controllable, count(*) from item i inner joi
 #Station Chargeback Detail Report - Is based on and returns GMT Time. 
 #Combines Itinerary routes as a single column. Combines Itinerary Flightnums as a single column. Combines Itinerary departdates as a single column.
 #Detail vs Summary should control which query is ran
+#startDate - The beginning of the date range. DateTime variable
+#endDate - the end of the date range. DateTime variable
+#stationCode - 3 Character Station Code to check against.
+#lossCodes - Array of LossCodes to check for. 
 select i.lossCode,  cat.id , c.description, c.controllable, itinRoutes.initialDepartDate, 
 itinRoutes.departDates, itinRoutes.route, itinRoutes.flightnums,
 inc.checkedlocation, (case inc.checkedlocation when not 0 then cat.description else "" end ) as checkLocation, i.incident_ID
@@ -58,6 +72,7 @@ inc.checkedlocation, (case inc.checkedlocation when not 0 then cat.description e
 #--------------------------------------------------------------------
 
 #Station Current Loaner Report - Is based on and returns GMT Time
+#stationCode - 3 Character Station Code to check against.
 select inv.barcode, inv.description, (case inv.inventory_status_id when 701 then "Y" else "N" end) as loanIndicator, 
   (case inv.inventory_status_id when 701 then (case inv.incident_id when "$SNITEM$" then "Special Need" else inv.incident_id end) else "" end) as incNum,
   date((case inv.inventory_status_id when 701 then inv.editDate else "" end)) as loanDate 
@@ -69,6 +84,9 @@ select inv.barcode, inv.description, (case inv.inventory_status_id when 701 then
     
 #Qualified Mileage Deliveries Detail - Is based on and returns GMT Time. 
 #Because distance is not returned from the Home Serv service, will still use the $80 limit, but added a check for if there is a distance greater than 0.
+#startDate - The beginning of the date range. DateTime variable
+#endDate - the end of the date range. DateTime variable
+#stationCode - 3 Character Station Code to check against.
 select b.BDO_ID, s.stationcode, (case b.incident_ID when null then b.OHD_ID else b.incident_ID end) as reference, b.deliverydate, a.username, concat(p.lastname,", ",p.firstname) as passenger, 
   d.integration_key , e.checkamt
   from bdo b inner join agent a on b.agent_ID = a.Agent_ID
@@ -84,6 +102,8 @@ select b.BDO_ID, s.stationcode, (case b.incident_ID when null then b.OHD_ID else
     
 #Qualified Mileage Deliveries Summary - Is based on and returns GMT Time. Includes hard-coded fedex holiday dates to exclude from the query.
 #includes logic for if distance is greater than 0
+#startDate - The beginning of the date range. DateTime variable
+#endDate - the end of the date range. DateTime variable
 select ss.stationCode, 
   (case when not isnull(summaryList.fedexdeliveries) then summaryList.fedexdeliveries else 0 end) as fedexdeliveries, 
   (case when not isnull(summaryList.fedexcost) then summaryList.fedexcost else 0 end) as  fedexcost,
@@ -117,29 +137,23 @@ select ss.stationCode,
 #--------------------------------------------------------------------
 
 #BSO Agent Audit Report - Is based on and returns GMT Time. Is a Procedure based on percentage requirements
-drop procedure getBSOAgentAuditReport;
-DELIMITER //
-create procedure getBSOAgentAuditReport (in startDate datetime, in endDate datetime, in stationcode varchar(3),in agentUsername varchar(100), in itemtype varchar(1), in percent varchar(3))
-begin
-declare percentlimit int default 0;
-set percentlimit =(SELECT ceiling((COUNT(i.incident_id)*percent/100)) FROM incident i inner join station s on i.stationassigned_ID=s.Station_ID 
-   inner join Passenger p on p.incident_ID = i.Incident_ID and p.isprimary = true
-   inner join agent a on a.agent_id=i.agentassigned_ID
-    where i.createdate>= startDate and i.createdate <= endDate and s.stationcode=stationcode
-	  and a.username=agentUsername and i.itemtype_ID=itemType);
-select i.incident_id, timestamp(i.createdate, i.createtime) as takenDate , concat(p.firstname," ",p.lastname) as customerName
-   from incident i inner join station s on i.stationassigned_ID=s.Station_ID 
-   inner join Passenger p on p.incident_ID = i.Incident_ID and p.isprimary = true
-   inner join agent a on a.agent_id=i.agentassigned_ID
-	  where i.createdate>= startdate and i.createdate <= enddate and s.stationcode=stationcode
-	  and a.username=agentUsername and i.itemtype_ID=itemType limit percentlimit;
-end //
+#startDate - The beginning of the date range. DateTime variable
+#endDate - the end of the date range. DateTime variable
+#stationCode - 3 Character Station Code to check against.
+#agentUsername - Username of Agent to get audit information
+#itemType - Report Type to reference (1 for Lost, 2 for Missing, 3 for Damage)
+#percent - Percentage of Results to get back
 call getBSOAgentAuditReport (:startDate, :endDate, :stationcode,:agentUsername, :itemtype, :percent);
 #--------------------------------------------------------------------
   
 #Chargeback Changes Report - Is based on and returns GMT Time
-select i.incident_ID, (case b.deliverydate when null then i.close_date else b.deliverydate end) as returnDate, i.modify_time, datediff(i.modify_time,(case b.deliverydate when null then i.close_date else b.deliverydate end) ) as daysToChange,
-  concat(a.firstname," ",a.lastname) as agentName, cs.stationcode, concat(ai.lossCode, "/",fs.stationcode) as chargedStation,
+#startDate - The beginning of the date range. DateTime variable
+#endDate - the end of the date range. DateTime variable
+#chargedStation - 3 Character Station Code that is charged with the fault.
+#changingStation - 3 Character Station Code that made the change
+select i.incident_ID, (case b.deliverydate when null then i.close_date else b.deliverydate end) as returnDate, i.modify_time, 
+datediff(i.modify_time,(case b.deliverydate when null then i.close_date else b.deliverydate end) ) as daysToChange,
+  a.firstname,a.lastname, cs.stationcode, ai.lossCode, fs.stationcode,
   itemIncident.bagCount
   from audit_item ai 
     inner join station fs on fs.Station_ID = ai.faultStation_id 
@@ -155,19 +169,26 @@ select i.incident_ID, (case b.deliverydate when null then i.close_date else b.de
       where ai.lossCode>0 and ai.item_id>0 and
       i.modify_time >= :startDate and i.modify_time <=:endDate and fs.stationcode=:chargedStation and cs.stationcode =:changingStation 
       and not isnull((case b.deliverydate when null then i.close_date else b.deliverydate end)) 
-      group by i.Incident_ID, concat(ai.lossCode, "/",fs.stationcode)
+      group by i.Incident_ID, ai.lossCode, fs.stationcode
       order by i.incident_id,  i.modify_time;
 #--------------------------------------------------------------------
 
 #On Hand Scanner Usage Summary - Is based on and returns GMT Time. Proceeding as normal until Auto vs Manual question is resolved.
 #Detail vs Summary selection should determine which query is run
+
+#startDate - The beginning of the date range. DateTime variable
+#endDate - the end of the date range. DateTime variable
 select s.stationCode, sum(case o.creationMethod when 1 then 1 else 0 end) as scanned, sum(case o.creationMethod when 0 then 1 else 0 end) as manual, 
 	(sum(case o.creationMethod when 1 then 1 else 0 end)/count(o.OHD_ID)*100) as scanPercent
 		from ohd o inner join Station s on s.Station_ID=o.found_station_ID where o.founddate >=:startDate and o.founddate <=:endDate group by s.stationCode;
 
 #On Hand Scanner Usage Detail - Is based on and returns GMT Time. Proceeding as normal until Auto vs Manual question is resolved
 #Detail vs Summary selection should determine which query is run
-select date(o.founddate) as dateEntered, sum(case o.creationMethod when 1 then 1 else 0 end) as scanned, sum(case o.creationMethod when 0 then 1 else 0 end) as manual, 
+#startDate - The beginning of the date range. DateTime variable
+#endDate - the end of the date range. DateTime variable
+#stationCode - 3 Character Station Code to check against.
+select date(o.founddate) as dateEntered, sum(case o.creationMethod when 1 then 1 else 0 end) as scanned, 
+	sum(case o.creationMethod when 0 then 1 else 0 end) as manual, 
   (sum(case o.creationMethod when 1 then 1 else 0 end)/count(o.OHD_ID)*100) as scanPercent
     from ohd o inner join Station s on s.Station_ID=o.found_station_ID where o.founddate >=:startDate 
     and o.founddate <=:endDate and s.stationcode=:stationcode group by date(o.founddate);
@@ -175,12 +196,15 @@ select date(o.founddate) as dateEntered, sum(case o.creationMethod when 1 then 1
 
 #Trade Out, Emergency Bag, Toiletry, Loaner Report - Is based on and returns GMT Time.
 #Made one large Loaner, Trade Out, Emergency Bag, and Toiletry Kit Report. Please Inform if there is any information missing
+#startDate - The beginning of the date range. DateTime variable
+#endDate - the end of the date range. DateTime variable
+#stationCode - 3 Character Station Code to check against.
 select inv.id, inv.editdate, inv.inventory_status_id, (case inv.trade_type when 0 then "Both" when 1 then "Tradeout Only" when 2 then "Loan Only" else "" end) as tradeType, inv.barcode, inv.description, 
   (case inv.inventory_status_id when 701 then "Y" else "N" end) as loanIndicator,
   (case inv.inventory_status_id when 702 then "Y" else "N" end) as issuedIndicator,
-  (case inv.inventory_status_id when 701 then (case inv.incident_id when "$SNITEM$" then "Special Need" else inv.incident_id end) else "" end) as incNum,
+  ifnull((case inv.incident_id when "$SNITEM$" then "Special Need" else inv.incident_id end), '') as incNum,
   timestamp((case inv.inventory_status_id when 701 then inv.editDate else "" end)) as loanDate,
-  concat(p.firstname," ",p.lastname) as custName, s.stationcode, a.username, concat(a.firstname," ",a.lastname) as agentName,
+  p.firstname,p.lastname, s.stationcode, a.username, a.firstname,a.lastname,
   timestamp((case inv.inventory_status_id when 702 then inv.issueDate else "" end)) as issueDate, inv.cost
   from audit_issuance_item_inventory inv 
   inner join station s on inv.station_id=s.Station_ID 
@@ -194,6 +218,9 @@ select inv.id, inv.editdate, inv.inventory_status_id, (case inv.trade_type when 
 #--------------------------------------------------------------------
 
 #Cancelled Southwest LUV Voucher Report - Is based on and returns GMT Time
+#startDate - The beginning of the date range. DateTime variable
+#endDate - the end of the date range. DateTime variable
+#stationCodes - Array of 3 Character Station Codes to check against.
 select i.Incident_ID, i.recordlocator, aep.modify_time as canceldate, 
 (case e.cancelreason when "INCQNT" then "INCORRECT QUANTITY" when "INCAMT" then "INCORRECT AMOUNT" when "INCNAME" then "INCORRECT NAME" else "" end) as cancelReason, 
 (case e.cancelreason when "INCQNT" then "QT" when "INCAMT" then "AM" when "INCNAME" then "NM" else "" end) as code,
@@ -208,6 +235,9 @@ concat(a.firstname," ",a.lastname) as cancelAgent
 
        
 #Southwest LUV Voucher Detail Report - Is based on and returns GMT Time
+#startDate - The beginning of the date range. DateTime variable
+#endDate - the end of the date range. DateTime variable
+#stationCodes - Array of 3 Character Station Codes to check against.
 select i.Incident_ID, e.createdate as issuedate, e.ordernum, i.recordlocator, concat(a.firstname," ",a.lastname) as issueAgent, s.stationcode, concat(e.firstname," ",e.lastname) as custName, e.paytype #Identity To be answered
 , e.voucheramt
   from expensepayout e 
@@ -218,7 +248,10 @@ select i.Incident_ID, e.createdate as issuedate, e.ordernum, i.recordlocator, co
 #--------------------------------------------------------------------
 
 #Southwest LUV Voucher Summary Report - Is based on and returns GMT Time. Baggage Compensation is all SLVs issued from incidents, which is all expenses with Voucher Amounts.
-select s.stationcode, s.stationdesc, sum(e.voucheramt), count(distinct e.Expensepayout_ID)
+#startDate - The beginning of the date range. DateTime variable
+#endDate - the end of the date range. DateTime variable
+#stationCodes - Array of 3 Character Station Codes to check against.
+select s.stationcode AS loc, s.stationdesc, sum(e.voucheramt) as bagCompensation, count(distinct e.Expensepayout_ID) as cnt
   from expensepayout e 
   inner join Station s on s.Station_ID = e.station_ID 
   where e.createdate>=:startDate and e.createdate<=:endDate and find_in_set(s.stationcode, :stationCodes)
@@ -226,6 +259,10 @@ select s.stationcode, s.stationdesc, sum(e.voucheramt), count(distinct e.Expense
 #--------------------------------------------------------------------
     
 #Station Removed Trade Out Bags - Is based on and returns GMT Time. Gets all Discarded (Removed) Trade Out Bags
+#Made one large Loaner, Trade Out, Emergency Bag, and Toiletry Kit Report. Please Inform if there is any information missing
+#startDate - The beginning of the date range. DateTime variable
+#endDate - the end of the date range. DateTime variable
+#stationCode - 3 Character Station Code to check against.
 select inv.barcode, inv.description, inv.issuedate, s.stationcode, 
   inv.editDate, inv.reason, concat(a.firstname," ",a.lastname) as agent, inv.cost
   from audit_issuance_item_inventory inv inner join station s on inv.station_id=s.Station_ID 
@@ -239,6 +276,10 @@ select inv.barcode, inv.description, inv.issuedate, s.stationcode,
 #--------------------------------------------------------------------
 
 #Station Loaner Write Off Report - Is based on and returns GMT Time. Gets all Converted (Written Off) Loaner Items
+#Made one large Loaner, Trade Out, Emergency Bag, and Toiletry Kit Report. Please Inform if there is any information missing
+#startDate - The beginning of the date range. DateTime variable
+#endDate - the end of the date range. DateTime variable
+#stationCode - 3 Character Station Code to check against.
 select inv.barcode, inv.description, 
   inv.editDate, inv.reason, concat(a.firstname," ",a.lastname) as agent, s.stationcode
   from audit_issuance_item_inventory inv inner join station s on inv.station_id=s.Station_ID 
