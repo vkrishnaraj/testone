@@ -2,8 +2,9 @@ select
 
 s.stationcode as location, 
 a.username as employeeNum, 
-concat(a.firstname,' ',a.lastname) as ccrName, 
-sum(ep.voucheramt) as amount, 
+a.firstname as ccrFName,
+a.lastname as ccrLName, 
+format(sum(ep.voucheramt), 2) as amount, 
 count(ep.Expensepayout_ID) as totalIssuance, 
 format(avg(ep.voucheramt), 2) as averageAmount
 

@@ -1,12 +1,14 @@
 select 
 
 ep.incident_ID as referenceID, 
-date_format(ep.createdate,'%m/%d/%y') as issueDate, 
+ep.createdate as issueDate, 
 ifnull(ep.ordernum,'') as orderNum, 
 ifnull(i.recordLocator, '') as pnr,
-concat(a.firstname,' ',a.lastname) as issueAgent, 
+a.firstname as issueAgentFName,
+a.lastname as issueAgentLName, 
 s.stationcode as location, 
-concat(ep.firstname,' ',ep.lastname) as customerName, 
+ep.firstname as customerFName,
+ep.lastname as customerLName, 
 ep.paytype as payType,
 format(ep.voucheramt, 2) as amount
 
