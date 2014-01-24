@@ -131,7 +131,7 @@ public class OnhandScanningServiceUtil {
 	}
 	
 	/**
-	 * Searches damage open incidents at LZ by either bagtag or expedite tag 
+	 * Searches damage, non-closed incidents at LZ by either bagtag or expedite tag 
 	 * 
 	 * @param bagtag
 	 * @return
@@ -147,7 +147,7 @@ public class OnhandScanningServiceUtil {
 					"left outer join item it on i.incident_ID = it.incident_ID  " +
 					"where (it.claimchecknum=:claimnum1 or it.claimchecknum=:claimnum2 " +
 					"or it.expediteTagNum=:claimnum1 or it.expediteTagNum=:claimnum2) " +
-					"and i.status_id =:status " +
+					"and i.status_id !=:status " +
 					"and stationassigned_id =:assignedStationID " +
 					"and i.itemtype_ID = :type " +
 					"order by createdate desc";
@@ -161,7 +161,7 @@ public class OnhandScanningServiceUtil {
 				twoCharBagTag = bagtag;
 			}
 			q.setString("claimnum2", twoCharBagTag);
-			q.setParameter("status", TracingConstants.MBR_STATUS_OPEN);
+			q.setParameter("status", TracingConstants.MBR_STATUS_CLOSED);
 			q.setParameter("assignedStationID", assignedStationID);
 			q.setParameter("type", TracingConstants.DAMAGED_BAG);
 			
@@ -189,7 +189,7 @@ public class OnhandScanningServiceUtil {
 	
 	
 	/**
-	 * Searches damaged open incidents at any station by bagtag or expedite
+	 * Searches damaged, non-closed incidents at any station by bagtag or expedite
 	 * 
 	 * @param bagtag
 	 * @return
@@ -206,7 +206,7 @@ public class OnhandScanningServiceUtil {
 					"left outer join item it on i.incident_ID = it.incident_ID  " +
 					"where (it.claimchecknum=:claimnum1 or it.claimchecknum=:claimnum2 " +
 					"or it.expediteTagNum=:claimnum1 or it.expediteTagNum=:claimnum2) "  +
-					"and i.status_id =:status " +
+					"and i.status_id !=:status " +
 					"and s.companycode_id =:companycode " +
 					"and i.itemtype_ID = :type " +
 					"order by createdate desc";
@@ -220,7 +220,7 @@ public class OnhandScanningServiceUtil {
 				twoCharBagTag = bagtag;
 			}
 			q.setString("claimnum2", twoCharBagTag);
-			q.setParameter("status", TracingConstants.MBR_STATUS_OPEN);
+			q.setParameter("status", TracingConstants.MBR_STATUS_CLOSED);
 			q.setParameter("companycode", companycode);
 			q.setParameter("type", TracingConstants.DAMAGED_BAG);
 			
@@ -300,7 +300,7 @@ public class OnhandScanningServiceUtil {
 	}
 	
 	/**
-	 * Returns the OHD_ID of an onhand that has been created less than 45 days ago that is open and in the LZ
+	 * Returns the OHD_ID of an onhand that has been created less than 45 days ago that is not closed and in the LZ
 	 * 
 	 * @param bagtag
 	 * @return
@@ -315,7 +315,7 @@ public class OnhandScanningServiceUtil {
 			String query = "select ohd_id from ohd o " +
 					"left outer join station s on o.holding_station_ID = s.station_ID " +
 					"where (claimnum=:claimnum1 or claimnum=:claimnum2) " +
-					"and status_id =:status " +
+					"and status_id !=:status " +
 					"and holding_station_ID =:holdingStationID " +
 					"and founddate > :date " +
 					"order by founddate desc";
@@ -329,7 +329,7 @@ public class OnhandScanningServiceUtil {
 				twoCharBagTag = bagtag;
 			}
 			q.setString("claimnum2", twoCharBagTag);
-			q.setParameter("status", TracingConstants.OHD_STATUS_OPEN);
+			q.setParameter("status", TracingConstants.OHD_STATUS_CLOSED);
 			q.setParameter("holdingStationID", holdingStationID);
 			
 			GregorianCalendar c = new GregorianCalendar();
@@ -360,7 +360,7 @@ public class OnhandScanningServiceUtil {
 	}
 	
 	/**
-	 * Search for existing bagtag. An OHD is said to exist if there is a matching bagtag, matching holdingStation and with a status of open
+	 * Search for existing bagtag. An OHD is said to exist if there is a matching bagtag, matching holdingStation and with a status of not closed
 	 * 
 	 * @param bagtag
 	 * @param holdingStation
@@ -375,7 +375,7 @@ public class OnhandScanningServiceUtil {
 		try {
 			String query = "select ohd_id from ohd " +
 					"where (claimnum=:claimnum1 or claimnum=:claimnum2) " +
-					"and status_id =:status " +
+					"and status_id !=:status " +
 					"and holding_station_ID =:holding_station_ID " +
 					"order by founddate desc";
 			sess = HibernateWrapper.getSession().openSession();
@@ -388,7 +388,7 @@ public class OnhandScanningServiceUtil {
 				twoCharBagTag = bagtag;
 			}
 			q.setString("claimnum2", twoCharBagTag);
-			q.setParameter("status", TracingConstants.OHD_STATUS_OPEN);
+			q.setParameter("status", TracingConstants.OHD_STATUS_CLOSED);
 			q.setParameter("holding_station_ID", holdingStation);
 			@SuppressWarnings("unchecked")
 			List<String> list = (List<String>)q.list();

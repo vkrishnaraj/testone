@@ -450,6 +450,9 @@ public class OnhandScanningServiceTest {
 		OHD updateOhd = OhdBMO.getOHDByID(ohdId, null);
 		assertTrue(updateOhd.getCreationMethod() == TracingConstants.FILE_CREATION_METHOD_WEBSERVICE);
 		updateOhd.setMatched_incident("ACYWN00000001");
+		Status status = new Status();
+		status.setStatus_ID(TracingConstants.OHD_STATUS_MATCH_IN_TRANSIT);
+		updateOhd.setStatus(status);
 		HibernateUtils.save(updateOhd);
 
 		LookupOnhandReturnDocument requestdoc = LookupOnhandReturnDocument.Factory
