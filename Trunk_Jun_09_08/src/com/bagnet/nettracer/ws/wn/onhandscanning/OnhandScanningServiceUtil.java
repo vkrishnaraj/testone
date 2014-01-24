@@ -43,6 +43,7 @@ public class OnhandScanningServiceUtil {
 			ActionMessages errors = new ActionMessages();
 			agent = SecurityUtils.authUserNoPassword(auth.getSystemName(), auth.getAirlineCode(), 0, errors, false, null);
 			if(!errors.isEmpty()){
+				@SuppressWarnings("rawtypes")
 				Iterator i = errors.get();
 				while(i.hasNext()){
 					ActionMessage message = (ActionMessage)i.next();
@@ -107,7 +108,8 @@ public class OnhandScanningServiceUtil {
 			c.add(Calendar.DATE, -5);
 			
 			q.setParameter("date", c.getTime());
-			List list = q.list();
+			@SuppressWarnings("unchecked")
+			List<String> list = (List<String>)q.list();
 			if (list.size() == 0) {
 				logger.debug("unable to find ohd with bagtag: " + bagtag);
 				return null;
@@ -163,7 +165,8 @@ public class OnhandScanningServiceUtil {
 			q.setParameter("assignedStationID", assignedStationID);
 			q.setParameter("type", TracingConstants.DAMAGED_BAG);
 			
-			List list = q.list();
+			@SuppressWarnings("unchecked")
+			List<String> list = (List<String>)q.list();
 			if (list.size() == 0) {
 				logger.debug("unable to find incident with bagtag: " + bagtag);
 				return null;
@@ -221,7 +224,8 @@ public class OnhandScanningServiceUtil {
 			q.setParameter("companycode", companycode);
 			q.setParameter("type", TracingConstants.DAMAGED_BAG);
 			
-			List list = q.list();
+			@SuppressWarnings("unchecked")
+			List<String> list = (List<String>)q.list();
 			if (list.size() == 0) {
 				logger.debug("unable to find incident with bagtag: " + bagtag);
 				return null;
@@ -273,7 +277,8 @@ public class OnhandScanningServiceUtil {
 			q.setString("claimnum2", twoCharBagTag);
 			q.setParameter("status", TracingConstants.OHD_STATUS_TO_BE_INVENTORIED);
 			q.setParameter("holding_station_ID", holdingStationID);
-			List list = q.list();
+			@SuppressWarnings("unchecked")
+			List<String> list = (List<String>)q.list();
 			if (list.size() == 0) {
 				logger.debug("unable to find ohd with bagtag: " + bagtag);
 				return null;
@@ -332,7 +337,8 @@ public class OnhandScanningServiceUtil {
 			c.add(Calendar.DATE, -45);
 			
 			q.setParameter("date", c.getTime());
-			List list = q.list();
+			@SuppressWarnings("unchecked")
+			List<String> list = (List<String>)q.list();
 			if (list.size() == 0) {
 				logger.debug("unable to find ohd with bagtag: " + bagtag);
 				return null;
@@ -384,7 +390,8 @@ public class OnhandScanningServiceUtil {
 			q.setString("claimnum2", twoCharBagTag);
 			q.setParameter("status", TracingConstants.OHD_STATUS_OPEN);
 			q.setParameter("holding_station_ID", holdingStation);
-			List list = q.list();
+			@SuppressWarnings("unchecked")
+			List<String> list = (List<String>)q.list();
 			if (list.size() == 0) {
 				logger.debug("unable to find ohd with bagtag: " + bagtag);
 				return null;
@@ -404,4 +411,60 @@ public class OnhandScanningServiceUtil {
 			}
 		}
 	}
+	
+	
+
+	/**
+	 * Finds an non-closed incident for the given assigned station for the given bagtag
+	 * 
+	 * @param bagtag
+	 * @param holdingStation
+	 * @return
+	 */
+	protected static String findAssociatedIncident(String bagtag, int assignedStationID){
+		Session sess = null;
+			try {
+				String query = "select i.incident_id from incident i " +
+						"left outer join incident_claimcheck it on i.incident_ID = it.incident_ID  " +
+						"where (it.claimchecknum=:claimnum1 or it.claimchecknum=:claimnum2) " +
+						"and i.status_id !=:status " +
+						"and stationassigned_id =:assignedStationID " +
+						"and i.itemtype_ID = :type " +
+						"order by createdate desc";
+				sess = HibernateWrapper.getSession().openSession();
+				Query q = sess.createSQLQuery(query);
+				q.setParameter("claimnum1", bagtag);
+				String twoCharBagTag = null;
+				try{
+					twoCharBagTag = LookupAirlineCodes.getTwoCharacterBagTag(bagtag);
+				} catch (Exception e){
+					twoCharBagTag = bagtag;
+				}
+				q.setString("claimnum2", twoCharBagTag);
+				q.setParameter("status", TracingConstants.MBR_STATUS_CLOSED);
+				q.setParameter("assignedStationID", assignedStationID);
+				q.setParameter("type", TracingConstants.LOST_DELAY);
+
+				@SuppressWarnings("unchecked")
+				List<String> list = (List<String>)q.list();
+				if (list.size() == 0) {
+					logger.debug("unable to find incident with bagtag: " + bagtag);
+					return null;
+				}
+				return (String) list.get(0);
+			} catch (Exception e) {
+				logger.error("unable to retrieve incident: " + e);
+				e.printStackTrace();
+				return null;
+			} finally {
+				if (sess != null) {
+					try {
+						sess.close();
+					} catch (Exception e) {
+						logger.error("unable to close connection: " + e);
+					}
+				}
+			}
+		}
+	
 }
