@@ -1,7 +1,12 @@
 #Missing Article Detail Report by Flight Type
-select inc.Incident_ID, concat(p.lastname,", ",p.firstname) as name,
-inc.createdate, art.article, art.description, 
-itinroutes.route, itinroutes.flightnums, itinroutes.departdates, itinRoutes.initialDepartDate
+#itintype - the type of station on the flight itinerary - O for Origin station, T for Transfer Station, D for Destination Station. Single character variable
+#startDate - The beginning of the date range. DateTime variable
+#endDate - the end of the date range. DateTime variable
+#stationcode - the code of the Station to check against. 3 character varchar
+
+select inc.Incident_ID, p.lastname ,p.firstname,
+inc.createdate as reportDate, art.article as itemName, art.description as articleDescription, 
+itinroutes.route as Route, itinroutes.flightnums as FlightNums, itinroutes.departdates as DepDates, itinRoutes.initialDepartDate as depDate
 from incident inc 
 inner join itinerary itin  on inc.Incident_ID = itin.incident_ID and itin.itinerarytype=0
 inner join passenger p on p.incident_ID = inc.Incident_ID and p.isprimary=true
