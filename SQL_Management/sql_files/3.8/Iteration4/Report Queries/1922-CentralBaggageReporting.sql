@@ -1,77 +1,58 @@
-####tested with: nettracer_demo, ad/b6/*nk*/ws_hudson - Worked on by Peter Kibaki
-
-#sample datetime with 24 hours format for time example 21:59
-set @startdatetime = '2000/06/23'; 
-set @enddatetime   = '2014/7/17 23:59';
-
+####Worked on by Peter Kibaki
 
 # Mishandling DOT-Summary
-select * from ( #if ordering required
-
-select (select stationcode from station where station.Station_ID = mhs.stationassigned_ID) Station, 
-	(select count(itemtype_ID) from incident where itemtype_ID = 1 and stationassigned_ID = mhs.stationassigned_ID) Loss,
-	(select count(itemtype_ID) from incident where itemtype_ID = 3 and stationassigned_ID = mhs.stationassigned_ID) Damage,
-	(select count(itemtype_ID) from incident where itemtype_ID = 2 and stationassigned_ID = mhs.stationassigned_ID) Missing,
-	Total
-from 
-  (select stationassigned_ID, count(*) as Total
-    from incident
-    where createdate between CAST(@startdatetime AS DATETIME) and CAST(@enddatetime AS DATETIME)
-    group by stationassigned_ID
-    /*order by stationassigned_ID*/) as mhs
- 
- ) report order by Station; #if ordering required
- 
+#startdatetime - Beginning of Date Range. Datetime value
+#enddatetime - End of Date Range. Datetime value
+select s.stationcode, 
+  sum(case when inc.itemtype_id=1 then 1 else 0 end) as Loss, 
+  sum(case when inc.itemtype_id=3 then 1 else 0 end) as Damage, 
+  sum(case when inc.itemtype_id=2 then 1 else 0 end) as Missing,
+  count(*) as Total
+    from incident inc
+    inner join station s on s.Station_ID=inc.stationassigned_ID
+      where inc.createdate between CAST(:startdatetime AS DATETIME)
+      and CAST(:enddatetime AS DATETIME) group by inc.stationassigned_ID;
+      
 #------------------------------------------------------------------------------------
 
 #Station Recovery Rate Report
-select * from ( #if ordering required
-
-select *, CONCAT(ROUND(100 * (Reports_Taken - Open_Reports) / Reports_Taken, 2), '%') Recovery_Ratio from ( #if Recovery_Ratio required
-
-  select (select stationcode from station where station.Station_ID = mhs.stationcreated_ID) Station, 
-    Reports_Taken,
-  	(select count(*) from incident where status_id = 13 and stationcreated_ID = mhs.stationcreated_ID and stationassigned_ID not in (select station_id from lz)) Station_Returned,
-  	(select count(*) from incident where status_id = 13 and stationcreated_ID = mhs.stationcreated_ID and stationassigned_ID in (select station_id from lz)) CBS_Return,
-  	(select count(*) from incident where status_id != 13 and stationcreated_ID = mhs.stationcreated_ID) Open_Reports,
-  	
-    (select sum(amountPaid) from fsclaim where ntIncidentId in (select incident_id from incident where stationcreated_ID = mhs.stationcreated_ID)) Reports_with_Payment
-  from 
-    (select stationcreated_ID, stationassigned_ID, count(*) as Reports_Taken
-      from incident
-      where createdate between CAST(@startdatetime AS DATETIME) and CAST(@enddatetime AS DATETIME)
-      group by stationcreated_ID
-      /*order by stationcreated_ID*/) as mhs
-      
- ) WithRecoveryRatio #if Recovery_Ratio required
- 
- ) report order by Station; #if ordering required
- 
+#startdatetime - Beginning of Date Range. Datetime value
+#enddatetime - End of Date Range. Datetime value
+ select s.StationCode, 
+  count(*) as reports_taken,
+  sum(case when inc.status_id=13 and s.Station_ID!=l.station_id then 1 else 0 end) as station_returned, 
+  sum(case when inc.status_id=13 and s.Station_ID=l.station_id then 1 else 0 end) as cbs_returned,
+  sum(case when inc.status_id!=13 then 1 else 0 end) as open_reports,
+  sum(case when not isnull(ep.Expensepayout_ID) then 1 else 0 end) as reports_with_payments,
+  ROUND(sum(ep.checkamt+ep.voucheramt+ep.creditcard_refund),2) as total_payments,
+  ROUND(100 * (count(*) - sum(case when inc.status_id!=13 then 1 else 0 end)) / count(*), 2) as Recovery_ratio
+    from incident inc
+    left outer join expensepayout ep on ep.incident_ID = inc.Incident_ID and ep.status_ID in (53,55)
+    inner join station s on s.station_id=inc.stationcreated_ID 
+    left outer join Lz l on l.station_id = s.Station_ID
+    where
+    inc.createdate between CAST(:startdatetime AS DATETIME) and CAST(:enddatetime AS DATETIME) group by inc.stationcreated_id;
  
 #------------------------------------------------------------------------------------
  
 #Report Expenses by Payment Code
-select incident_id Report_Number, 
-  (select stationcode from station where station.Station_ID = epo.station_id) Station,
-  (select CONCAT(lastname, ', ', firstname, if (middlename is not null and middlename <> '', CONCAT(', ', middlename), '')) from passengerexp where expensepayout_ID = epo.expensepayout_ID limit 1) Primary_Name,
-  (select DATE_FORMAT(createdate, '%c/%e/%y') from incident where incident_ID = epo.Incident_ID) Taken_Date,
-  (select description from expensetype where expensetype_id = epo.expensetype_id) Code,
-  Type, Amount, Mileage_Amount
-from
-    (select incident_id, station_id, expensepayout_ID, expensetype_id, paytype Type, 
-      (SELECT CASE paytype WHEN 'DRAFT' THEN draft WHEN 'VOUCH' THEN voucheramt WHEN 'INVOICE' THEN checkamt END) Amount,
-      (SELECT CASE paytype WHEN 'MILE' THEN mileageamt END) Mileage_Amount
-    from expensepayout
-      where createdate between CAST(@startdatetime AS DATETIME) and CAST(@enddatetime AS DATETIME)
-    
-      and station_id in (select station_id from station where stationcode in ('LZ', 'ATL'))
-    
-      and expensetype_id in (select expensetype_id  from expensetype where description in ('other', 'Delivery'))    
-      ) epo
-      
-      
-      #where 0 < Amount or 0 < Mileage_Amount  and expensetype_id!=3
-      #order by Mileage_Amount desc, Mileage_Amount desc , code
+#startdatetime - Beginning of Date Range. Datetime value
+#enddatetime - End of Date Range. Datetime value
+#stationCodes - Array of 3 Character stationCodes to check against
+#expenseCodes - Array of Code Descriptions (Interim, Delivery, etc...) to check against
+select ep.incident_ID, s.stationCode, ep.lastname, ep.firstname, ep.middlename,
+  ep.createdate, et.description,
+  (CASE ep.paytype WHEN 'DRAFT' THEN ep.checkamt WHEN 'VOUCH' THEN ep.voucheramt WHEN 'INVOICE' THEN ep.checkamt else 0 END) as Amount,
+  (CASE ep.paytype WHEN 'MILE' THEN ep.mileageamt else 0 END) as Mileage_Amount
+  from expensepayout ep 
+  inner join station s on s.Station_ID=ep.station_ID 
+  inner join expensetype et on et.Expensetype_ID = ep.expensetype_ID
+    where createdate
+      between CAST(:startdatetime AS DATETIME) 
+      and CAST(:enddatetime AS DATETIME)
+      and find_in_set(s.stationCode,:stationCodes)
+      and find_in_set(et.description,:expenseCodes) 
+        group by ep.incident_id, ep.Expensepayout_ID;
  
 #------------------------------------------------------------------------------------
       
