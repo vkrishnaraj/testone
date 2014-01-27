@@ -53,7 +53,8 @@ set percentlimit =(SELECT ceiling((COUNT(i.incident_id)*percent/100)) FROM incid
    inner join agent a on a.agent_id=i.agentassigned_ID
     where i.createdate>= startDate and i.createdate <= endDate and s.stationcode=stationcode
 	  and a.username=agentUsername and i.itemtype_ID=itemType);
-select i.incident_id, timestamp(i.createdate, i.createtime) as takenDate , concat(p.firstname," ",p.lastname) as customerName
+select i.incident_id, timestamp(i.createdate, i.createtime) as takenDate, p.firstname as passFirstName,p.lastname as passLastName,
+	a.userName as agentUserName, a.firstname as agentFirstName, a.lastname as agentLastName
    from incident i inner join station s on i.stationassigned_ID=s.Station_ID 
    inner join Passenger p on p.incident_ID = i.Incident_ID and p.isprimary = true
    inner join agent a on a.agent_id=i.agentassigned_ID
