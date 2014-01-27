@@ -55,7 +55,7 @@ select a.firstname,a.lastname,a.username,
 select a.username,a.firstname,a.lastname, count(f.id) as claimCount, sum(f.amountPaid) as total, 
 round(sum(f.amountPaid)/count(f.ID),2) as average 
 	from  fsclaim f inner join incident i on i.Incident_ID=f.ntIncidentId inner join agent a on i.agentassigned_id = a.Agent_ID
-		where f.claimDate>=:startDate and f.claimDate <=:endDate group by a.username;
+		where f.claimDate>=:startDate and f.claimDate <=:endDate and f.status_id!=39 group by a.username;
 
 #Report Claims by Agent (Detail) - Is based on and returns GMT Time 
 #startDate - The beginning of the date range. DateTime variable
