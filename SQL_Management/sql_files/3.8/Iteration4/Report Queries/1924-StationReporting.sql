@@ -92,7 +92,7 @@ p.lastname,p.firstname,
   d.name, e.checkamt
   from bdo b inner join agent a on b.agent_ID = a.Agent_ID
   inner join bdo_passenger p on p.bdo_ID = b.BDO_ID
-  inner join delivercompany d on d.delivercompany_ID = b.delivercompany_ID
+  left outer join delivercompany d on d.delivercompany_ID = b.delivercompany_ID
   inner join expensepayout e on e.bdo_id = b.BDO_ID 
   inner join station s on s.Station_ID = b.station_ID
     where b.createdate >=:startdate and b.createdate <=:enddate
