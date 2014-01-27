@@ -89,7 +89,7 @@ select inv.barcode, inv.description, (case inv.inventory_status_id when 701 then
 #stationCode - 3 Character Station Code to check against.
 select b.BDO_ID, s.stationcode, (case b.incident_ID when null then b.OHD_ID else b.incident_ID end) as reference, b.deliverydate, a.username, 
 p.lastname,p.firstname, 
-  d.name, e.checkamt
+  d.name as deliveryCompany, e.checkamt as deliveryCost
   from bdo b inner join agent a on b.agent_ID = a.Agent_ID
   inner join bdo_passenger p on p.bdo_ID = b.BDO_ID
   left outer join delivercompany d on d.delivercompany_ID = b.delivercompany_ID
@@ -112,17 +112,19 @@ select ss.stationCode,
   (case when not isnull(summaryList.potentialCost) then summaryList.potentialCost else 0 end) as potentialCost,
   (case when not isnull(summaryList.potentialSavings) then summaryList.potentialSavings else 0 end) as potentialSavings
   from station ss left outer join
-  (select s.Station_ID, s.stationCode, sum(case when e.checkamt<=80 or (b.distance>0 and b.distance<=60) then 1 else 0 end) as fedexdeliveries, 
-  sum(case when e.checkamt<=80 then e.checkamt else 0 end) as fedexcost,
-  sum(case when e.checkamt>80 or (b.distance>0 and b.distance>60) then 1 else 0 end) as nonfedexdeliveries, sum(case when e.checkamt>80 then e.checkamt else 0 end) as nonfedexcost,
-  round(sum(case when e.checkamt<=80 then e.checkamt else 0 end)/sum(case when e.checkamt<=80 then 1 else 0 end),2)*sum(case when e.checkamt>80 then 1 else 0 end) as potentialCost,
-  sum(case when e.checkamt>80 then e.checkamt else 0 end)-(round(sum(case when e.checkamt<=80 then e.checkamt else 0 end)/sum(case when e.checkamt<=80 then 1 else 0 end),2)*sum(case when e.checkamt>80 then 1 else 0 end)) as potentialSavings
+  (select s.Station_ID, s.stationCode, sum(case when d.name like '%FedEx%' then 1 else 0 end) as fedexdeliveries, 
+  sum(case when d.name like '%FedEx%' then e.checkamt else 0 end) as fedexcost,
+  sum(case when d.name not like '%FedEx%' then 1 else 0 end) as nonfedexdeliveries, sum(case when d.name not like '%FedEx%' then e.checkamt else 0 end) as nonfedexcost,
+  round(sum(case when d.name like '%FedEx%' then e.checkamt else 0 end)/sum(case when d.name like '%FedEx%' then 1 else 0 end),2)*sum(case when d.name not like '%FedEx%' then 1 else 0 end) as potentialCost,
+  sum(case when d.name not like '%FedEx%' then e.checkamt else 0 end)-(round(sum(case when d.name like '%FedEx%' then e.checkamt else 0 end)/sum(case when d.name like '%FedEx%' then 1 else 0 end),2)*sum(case when d.name not like '%FedEx%' then 1 else 0 end)) as potentialSavings
   from station s left outer join  bdo b on s.Station_ID = b.station_ID
   left outer join agent a on b.agent_ID = a.Agent_ID
   left outer join expensepayout e on e.bdo_id = b.BDO_ID 
+  inner join deliveryCompany d on d.delivercompany_ID = b.delivercompany_ID
     where
      b.createdate >=:startdate and b.createdate <=:enddate and 
-     b.canceled=0 
+     b.canceled=0 and (e.checkamt>80 or (b.distance>60))
+     and d.name not like '%UPS%' 
      AND DAYOFWEEK(b.createdate)!=7
      AND DAYOFWEEK(b.createdate)!=0
      and b.createdate!=date('2014-01-01') and b.createdate!=date('2015-01-01') and b.createdate!=date('2016-01-01') and b.createdate!=date('2017-01-02')
@@ -192,7 +194,7 @@ select date(o.founddate) as dateEntered, sum(case o.creationMethod when 1 then 1
     and o.founddate <=:endDate and s.stationcode=:stationcode group by date(o.founddate);
 #--------------------------------------------------------------------
 
-#Trade Out, Emergency Bag, Loaner Report - Is based on and returns GMT Time.
+#Trade Out, Loaner Report - Is based on and returns GMT Time.
 #Made a combined Loaner, Emergency Bag, and Trade Out report.
 #startDate - The beginning of the date range. DateTime variable
 #endDate - the end of the date range. DateTime variable
@@ -202,7 +204,7 @@ select inv.id, inv.editdate, (case inv.trade_type when 0 then "Both" when 1 then
   (case inv.inventory_status_id when 702 then "Y" else "N" end) as issuedIndicator,
   ifnull((case inv.incident_id when "$SNITEM$" then "Special Need" else inv.incident_id end), '') as incNum,
   timestamp((case inv.inventory_status_id when 701 then inv.editDate else "" end)) as loanDate,
-  p.firstname as passFirstName,p.lastname as passLastName, s.stationcode, a.username, a.firstname as passFirstName,a.lastname as passLastName,
+  p.firstname as passFirstName,p.lastname as passLastName, s.stationcode, a.username, a.firstname as agentFirstName,a.lastname as agentLastName,
   timestamp((case inv.inventory_status_id when 702 then inv.issueDate else "" end)) as issueDate, inv.cost
   from audit_issuance_item_inventory inv 
   inner join station s on inv.station_id=s.Station_ID 
@@ -293,6 +295,31 @@ select inv.barcode, inv.description,
 #--------------------------------------------------------------------
 
 #Toiletry Kit Report Issued
+#startDate - The beginning of the date range. DateTime variable
+#endDate - the end of the date range. DateTime variable
+#stationCode - 3 Character Station Code to check against.
+select quan.incident_id, a.lastname as agentlastname, a.firstname as agentfirstname, quan.editdate as issueDate, - quan.quantity_change as quantityIssued, 
+  cat.description, iss.description
+    from audit_issuance_item_quantity quan
+    inner join agent a on a.Agent_ID=quan.editagent_id 
+    inner join station s on s.Station_ID = quan.station_id
+    inner join issuance_item iss on iss.id = quan.issuance_item_id
+    inner join issuance_category cat on cat.id = iss.issuance_category_id
+      where quan.editdate>=:startDate and quan.editdate<=:endDate and s.stationcode=:stationCode 
+      and quan.quantity_change<0 and cat.description like '%Toiletry%'
+      group by quan.incident_id, quan.id order by quan.incident_id, quan.editdate;
+
+#Total Toiletry Kit Items available
+#stationCode - 3 Character Station Code to check against.
+select sum(quan.quantity) as totalAvailable, cat.description, iss.description  from issuance_item_quantity quan
+  inner join station s on s.Station_ID = quan.station_id
+  inner join issuance_item iss on iss.id=quan.issuance_item_id
+  inner join issuance_category cat on cat.id = iss.issuance_category_id
+    where s.stationcode=:stationCode 
+    and cat.description like '%Toiletry%'
+    group by quan.id;  
+    
+#Emergency Bags Report Issued
 #QuantityIssued column reference to how many of the item was issued out or return.
 #	If issued, quantityIssued is positive. If returned, quantityIssued is negative
 #startDate - The beginning of the date range. DateTime variable
@@ -306,12 +333,15 @@ select quan.incident_id, a.lastname as agentlastname, a.firstname as agentfirstn
     inner join issuance_item iss on iss.id = quan.issuance_item_id
     inner join issuance_category cat on cat.id = iss.issuance_category_id
       where quan.editdate>=:startDate and quan.editdate<=:endDate and s.stationcode=:stationCode 
+      and quan.quantity_change<0 and cat.description like '%Emergency%'
       group by quan.incident_id, quan.id order by quan.incident_id, quan.editdate;
 
-#Total Quantified Items available
+#Emergency Bags Items available
 #stationCode - 3 Character Station Code to check against.
 select sum(quan.quantity) as totalAvailable, cat.description, iss.description  from issuance_item_quantity quan
   inner join station s on s.Station_ID = quan.station_id
   inner join issuance_item iss on iss.id=quan.issuance_item_id
   inner join issuance_category cat on cat.id = iss.issuance_category_id
-    where s.stationcode=:stationCode group by quan.id;  
+    where s.stationcode=:stationCode 
+    and cat.description like '%Emergency%'
+    group by quan.id;  
