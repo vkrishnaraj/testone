@@ -89,7 +89,7 @@ select inv.barcode, inv.description, (case inv.inventory_status_id when 701 then
 #stationCode - 3 Character Station Code to check against.
 select b.BDO_ID, s.stationcode, (case b.incident_ID when null then b.OHD_ID else b.incident_ID end) as reference, b.deliverydate, a.username, 
 p.lastname,p.firstname, 
-  d.integration_key , e.checkamt
+  d.name, e.checkamt
   from bdo b inner join agent a on b.agent_ID = a.Agent_ID
   inner join bdo_passenger p on p.bdo_ID = b.BDO_ID
   inner join delivercompany d on d.delivercompany_ID = b.delivercompany_ID
@@ -97,7 +97,6 @@ p.lastname,p.firstname,
   inner join station s on s.Station_ID = b.station_ID
     where b.createdate >=:startdate and b.createdate <=:enddate
     and s.stationCode=:stationCode
-    and not isnull(d.integration_key) and d.integration_key!=''
     and b.canceled=0 and (case when b.distance>0 then b.distance >60 else e.checkamt >80 end);
 #--------------------------------------------------------------------
     
@@ -124,7 +123,6 @@ select ss.stationCode,
   left outer join expensepayout e on e.bdo_id = b.BDO_ID 
     where
      b.createdate >=:startdate and b.createdate <=:enddate and 
-     not isnull(d.integration_key) and d.integration_key!='' and
      b.canceled=0 
      AND DAYOFWEEK(b.createdate)!=7
      AND DAYOFWEEK(b.createdate)!=0
@@ -154,7 +152,7 @@ call getBSOAgentAuditReport (:startDate, :endDate, :stationcode,:agentUsername, 
 #changingStation - 3 Character Station Code that made the change
 select i.incident_ID, (case b.deliverydate when null then i.close_date else b.deliverydate end) as returnDate, i.modify_time, 
 datediff(i.modify_time,(case b.deliverydate when null then i.close_date else b.deliverydate end) ) as daysToChange,
-  a.firstname,a.lastname, cs.stationcode, ai.lossCode, fs.stationcode,
+  a.firstname,a.lastname, cs.stationcode as changingStation, ai.lossCode, fs.stationcode as chargedStation,
   itemIncident.bagCount
   from audit_item ai 
     inner join station fs on fs.Station_ID = ai.faultStation_id 
@@ -200,12 +198,12 @@ select date(o.founddate) as dateEntered, sum(case o.creationMethod when 1 then 1
 #startDate - The beginning of the date range. DateTime variable
 #endDate - the end of the date range. DateTime variable
 #stationCode - 3 Character Station Code to check against.
-select inv.id, inv.editdate, inv.inventory_status_id, (case inv.trade_type when 0 then "Both" when 1 then "Tradeout Only" when 2 then "Loan Only" else "" end) as tradeType, inv.barcode, inv.description, 
+select inv.id, inv.editdate, (case inv.trade_type when 0 then "Both" when 1 then "Tradeout Only" when 2 then "Loan Only" else "" end) as tradeType, inv.barcode, inv.description, 
   (case inv.inventory_status_id when 701 then "Y" else "N" end) as loanIndicator,
   (case inv.inventory_status_id when 702 then "Y" else "N" end) as issuedIndicator,
   ifnull((case inv.incident_id when "$SNITEM$" then "Special Need" else inv.incident_id end), '') as incNum,
   timestamp((case inv.inventory_status_id when 701 then inv.editDate else "" end)) as loanDate,
-  p.firstname,p.lastname, s.stationcode, a.username, a.firstname,a.lastname,
+  p.firstname as passFirstName,p.lastname as passLastName, s.stationcode, a.username, a.firstname as passFirstName,a.lastname as passLastName,
   timestamp((case inv.inventory_status_id when 702 then inv.issueDate else "" end)) as issueDate, inv.cost
   from audit_issuance_item_inventory inv 
   inner join station s on inv.station_id=s.Station_ID 
