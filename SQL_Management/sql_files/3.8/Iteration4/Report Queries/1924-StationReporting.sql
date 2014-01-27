@@ -192,8 +192,8 @@ select date(o.founddate) as dateEntered, sum(case o.creationMethod when 1 then 1
     and o.founddate <=:endDate and s.stationcode=:stationcode group by date(o.founddate);
 #--------------------------------------------------------------------
 
-#Trade Out, Loaner Report - Is based on and returns GMT Time.
-#Made a combined Loaner, and Trade Out report.
+#Trade Out, Emergency Bag, Loaner Report - Is based on and returns GMT Time.
+#Made a combined Loaner, Emergency Bag, and Trade Out report.
 #startDate - The beginning of the date range. DateTime variable
 #endDate - the end of the date range. DateTime variable
 #stationCode - 3 Character Station Code to check against.
@@ -292,7 +292,7 @@ select inv.barcode, inv.description,
     
 #--------------------------------------------------------------------
 
-#Emergency Bag and Toiletry Kit Report Issued
+#Toiletry Kit Report Issued
 #QuantityIssued column reference to how many of the item was issued out or return.
 #	If issued, quantityIssued is positive. If returned, quantityIssued is negative
 #startDate - The beginning of the date range. DateTime variable
