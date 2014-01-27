@@ -20,7 +20,7 @@ select a.firstname,a.lastname, a.username,
   (case inc.itemtype_ID when 1 then "Lost" when 2 then "Missing" when 3 then "Damage" else "" end) as type 
     from incident inc 
     inner join agent a on inc.agentassigned_ID=a.Agent_ID 
-      where inc.createdate>=:startdate and inc.createdate<=:enddate and inc.status_ID=12
+      where inc.createdate>=:startdate and inc.createdate<=:enddate and inc.status_ID!=13
       order by a.firstname, (case inc.itemtype_ID when 1 then "Lost" when 2 then "Missing" when 3 then "Damage" else "" end);
       
 #----------------------------------
@@ -55,7 +55,7 @@ select a.firstname,a.lastname,a.username,
 select a.username,a.firstname,a.lastname, count(f.id) as claimCount, sum(f.amountPaid) as total, 
 round(sum(f.amountPaid)/count(f.ID),2) as average 
 	from  fsclaim f inner join incident i on i.Incident_ID=f.ntIncidentId inner join agent a on i.agentassigned_id = a.Agent_ID
-		where f.claimDate>=:startDate and f.claimDate <=:endDate and f.status_id!=39 group by a.username;
+		where f.claimDate>=:startDate and f.claimDate <=:endDate group by a.username;
 
 #Report Claims by Agent (Detail) - Is based on and returns GMT Time 
 #startDate - The beginning of the date range. DateTime variable
