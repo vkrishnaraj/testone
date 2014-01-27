@@ -192,8 +192,8 @@ select date(o.founddate) as dateEntered, sum(case o.creationMethod when 1 then 1
     and o.founddate <=:endDate and s.stationcode=:stationcode group by date(o.founddate);
 #--------------------------------------------------------------------
 
-#Trade Out, Emergency Bag, Toiletry, Loaner Report - Is based on and returns GMT Time.
-#Made one large Loaner, Trade Out, Emergency Bag, and Toiletry Kit Report. Please Inform if there is any information missing
+#Trade Out, Loaner Report - Is based on and returns GMT Time.
+#Made a combined Loaner, and Trade Out report.
 #startDate - The beginning of the date range. DateTime variable
 #endDate - the end of the date range. DateTime variable
 #stationCode - 3 Character Station Code to check against.
@@ -289,3 +289,29 @@ select inv.barcode, inv.description,
       and (inv.reason like '%Converted Item%')
       and inv.editDate >= :startDate and inv.editDate <=:endDate
     group by inv.id;
+    
+#--------------------------------------------------------------------
+
+#Emergency Bag and Toiletry Kit Report Issued
+#QuantityIssued column reference to how many of the item was issued out or return.
+#	If issued, quantityIssued is positive. If returned, quantityIssued is negative
+#startDate - The beginning of the date range. DateTime variable
+#endDate - the end of the date range. DateTime variable
+#stationCode - 3 Character Station Code to check against.
+select quan.incident_id, a.lastname as agentlastname, a.firstname as agentfirstname, quan.editdate as issueDate, - quan.quantity_change as quantityIssued, 
+  cat.description, iss.description
+    from audit_issuance_item_quantity quan
+    inner join agent a on a.Agent_ID=quan.editagent_id 
+    inner join station s on s.Station_ID = quan.station_id
+    inner join issuance_item iss on iss.id = quan.issuance_item_id
+    inner join issuance_category cat on cat.id = iss.issuance_category_id
+      where quan.editdate>=:startDate and quan.editdate<=:endDate and s.stationcode=:stationCode 
+      group by quan.incident_id, quan.id order by quan.incident_id, quan.editdate;
+
+#Total Quantified Items available
+#stationCode - 3 Character Station Code to check against.
+select sum(quan.quantity) as totalAvailable, cat.description, iss.description  from issuance_item_quantity quan
+  inner join station s on s.Station_ID = quan.station_id
+  inner join issuance_item iss on iss.id=quan.issuance_item_id
+  inner join issuance_category cat on cat.id = iss.issuance_category_id
+    where s.stationcode=:stationCode group by quan.id;  
