@@ -120,7 +120,7 @@ select ss.stationCode,
   from station s left outer join  bdo b on s.Station_ID = b.station_ID
   left outer join agent a on b.agent_ID = a.Agent_ID
   left outer join expensepayout e on e.bdo_id = b.BDO_ID 
-  inner join deliveryCompany d on d.delivercompany_ID = b.delivercompany_ID
+  inner join deliverCompany d on d.delivercompany_ID = b.delivercompany_ID
     where
      b.createdate >=:startdate and b.createdate <=:enddate and 
      b.canceled=0 and (e.checkamt>80 or (b.distance>60))
