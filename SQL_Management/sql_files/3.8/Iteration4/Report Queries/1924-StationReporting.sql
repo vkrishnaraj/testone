@@ -119,7 +119,6 @@ select ss.stationCode,
   sum(case when e.checkamt>80 then e.checkamt else 0 end)-(round(sum(case when e.checkamt<=80 then e.checkamt else 0 end)/sum(case when e.checkamt<=80 then 1 else 0 end),2)*sum(case when e.checkamt>80 then 1 else 0 end)) as potentialSavings
   from station s left outer join  bdo b on s.Station_ID = b.station_ID
   left outer join agent a on b.agent_ID = a.Agent_ID
-  left outer join delivercompany d on d.delivercompany_ID = b.delivercompany_ID
   left outer join expensepayout e on e.bdo_id = b.BDO_ID 
     where
      b.createdate >=:startdate and b.createdate <=:enddate and 
