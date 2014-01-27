@@ -60,7 +60,7 @@ round(sum(f.amountPaid)/count(f.ID),2) as average
 #Report Claims by Agent (Detail) - Is based on and returns GMT Time 
 #startDate - The beginning of the date range. DateTime variable
 #endDate - the end of the date range. DateTime variable
-select a.username,a.firstname,a.lastname, f.ntIncidentId, p.firstname, p.lastName,
+select a.username,a.firstname  as agentFirstName,a.lastname  as agentLastName, f.ntIncidentId, p.firstname  as passFirstName, p.lastName  as passFirstName,
   (f.amountPaid) as total
   from fsclaim f inner join incident i on i.Incident_ID=f.ntIncidentId 
   inner join agent a on i.agentassigned_id = a.Agent_ID
@@ -72,7 +72,7 @@ select a.username,a.firstname,a.lastname, f.ntIncidentId, p.firstname, p.lastNam
 #startDate - The beginning of the date range. DateTime variable
 #endDate - the end of the date range. DateTime variable
 #agentlist - List of Agent Usernames to check against
-select a.firstname,a.lastname, ep.createdate, ep.firstname,ep.lastname, ep.incident_id, inc.recordlocator, ep.paycode, 
+select a.firstname as agentFirstName,a.lastname  as agentLastName, ep.createdate, ep.firstname as custFirstName,ep.lastname  as custLastName, ep.incident_id, inc.recordlocator, ep.paycode, 
 (case inc.itemtype_ID when 1 then "LOST" when 2 then "MISSING" when 3 then "DAMAGE" else "" end) as reportType,
 (case ep.status_id when 54 then "DENY" when 55 then "SETTLE" else "PENDING" end) as resolveType, ep.voucheramt
   from expensepayout ep inner join agent a on a.Agent_ID = ep.agent_ID 
