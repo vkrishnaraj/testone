@@ -239,7 +239,7 @@ a.firstname,a.lastname
 #endDate - the end of the date range. DateTime variable
 #stationCodes - Array of 3 Character Station Codes to check against.
 select i.Incident_ID, e.createdate as issuedate, e.ordernum, i.recordlocator, 
-a.firstname,a.lastname, s.stationcode, e.firstname,e.lastname, e.paytype, e.voucheramt
+a.firstname as agentFirstName,a.lastname as agentFirstName, s.stationcode, e.firstname as custFirstName,e.lastname as custFirstName, e.paytype, e.voucheramt
   from expensepayout e 
   inner join incident i on i.Incident_ID = e.incident_ID 
   inner join Station s on s.Station_ID = e.station_ID
