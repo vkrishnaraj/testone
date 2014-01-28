@@ -78,11 +78,11 @@ public final class ManageLoggedUsers extends Action {
 			}
 
 			//request list
-			List agentLogList = AdminUtils.getLoggedAgents(user, (UserActivityForm) form, user
+			List<Agent_Logger> agentLogList = AdminUtils.getLoggedAgents(user, (UserActivityForm) form, user
 					.getStation().getCompany().getCompanyCode_ID(), rowsperpage, currpage);
 
 			if (agentLogList != null && agentLogList.size() > 0) {
-				for (Iterator i = agentLogList.iterator(); i.hasNext();) {
+				for (Iterator<Agent_Logger> i = agentLogList.iterator(); i.hasNext();) {
 					Agent_Logger logger = (Agent_Logger) i.next();
 					logger.set_DATEFORMAT(user.getDateformat().getFormat());
 					logger.set_TIMEFORMAT(user.getTimeformat().getFormat());
@@ -98,7 +98,7 @@ public final class ManageLoggedUsers extends Action {
 
 			if (currpage + 1 == totalpages) request.setAttribute("end", "1");
 			if (totalpages > 1) {
-				ArrayList al = new ArrayList();
+				ArrayList<String> al = new ArrayList<String>();
 				for (int i = 0; i < totalpages; i++) {
 					al.add(Integer.toString(i));
 				}

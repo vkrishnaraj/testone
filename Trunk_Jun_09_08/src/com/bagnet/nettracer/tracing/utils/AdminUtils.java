@@ -1,6 +1,7 @@
 package com.bagnet.nettracer.tracing.utils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,6 +29,7 @@ import com.bagnet.nettracer.tracing.bmo.UsergroupBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.constant.TracingConstants.SortParam;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Agent_Logger;
 import com.bagnet.nettracer.tracing.db.Airport;
 import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
@@ -124,14 +126,25 @@ public class AdminUtils {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			String sql = "select count(logger.ID) from " + "com.bagnet.nettracer.tracing.db.Agent_Logger logger where 1=1 ";
-			sql += " and logger.companycode_ID = :companycode";
 
+			StringBuilder sql = new StringBuilder();
+			sql.append("select count(logger.ID) from com.bagnet.nettracer.tracing.db.Agent_Logger logger where 1=1 "+
+					" and logger.companycode_ID = :companycode");
+			java.util.TimeZone tz = java.util.TimeZone.getTimeZone(getTimeZoneById(user.getDefaulttimezone()).getTimezone());
+			Date sdate = null, edate = null;
+			
+			@SuppressWarnings("rawtypes")
+			ArrayList dateal = null;
+			if ((dateal = IncidentUtils.calculateDateDiff(form.getS_time(),form.getE_time(), tz, user)) == null) {
+				return -1;
+			}
+			sdate = (Date) dateal.get(0);
+			edate = (Date) dateal.get(3);
 			if (form.getS_time() != null && (!form.getS_time().equals(""))) {
 				if (form.getE_time() == null || form.getE_time().equals("")) {
-					sql += " and logger.log_in_time >= :s_date";
+					sql.append(" and logger.log_in_time >= :s_date");
 				} else {
-					sql += " and logger.log_in_time >= :s_date and logger.log_in_time <= :e_date";
+					sql.append(" and logger.log_in_time >= :s_date and logger.log_in_time <= :e_date");
 				}
 			}
 			
@@ -139,15 +152,15 @@ public class AdminUtils {
 			if (form.getAgent() != null && form.getAgent().length() > 0) {
 				// get agent_id from username
 				findagent = AdminUtils.getAgentBasedOnUsername(form.getAgent(),user.getCompanycode_ID());
-				sql += " and logger.agent_ID = :agent_ID";
+				sql.append(" and logger.agent_ID = :agent_ID");
 				if (findagent == null) return 0;
 			}
 
 			//only logged on users
 			if (form.getActivity_status() == null || form.getActivity_status().length() < 1 || !form.getActivity_status().equals("-1"))
-				sql += " and logger.log_off_time is null";
+				sql.append(" and logger.log_off_time is null");
 
-			Query q = sess.createQuery(sql);
+			Query q = sess.createQuery(sql.toString());
 			q.setString("companycode", companycode);
 
 			if (form.getAgent() != null && form.getAgent().length() > 0 && findagent != null) {
@@ -156,10 +169,10 @@ public class AdminUtils {
 
 			if (form.getS_time() != null && (!form.getS_time().equals(""))) {
 				if (form.getE_time() == null || form.getE_time().equals("")) {
-					q.setDate("s_date", DateUtils.convertToDate(form.getS_time(), user.getDateformat().getFormat(), user.getCurrentlocale()));
+					q.setDate("s_date", sdate);
 				} else {
-					q.setDate("s_date", DateUtils.convertToDate(form.getS_time(), user.getDateformat().getFormat(), user.getCurrentlocale()));
-					q.setDate("e_date", DateUtils.convertToDate(form.getE_time(), user.getDateformat().getFormat(), user.getCurrentlocale()));
+					q.setDate("s_date", sdate);
+					q.setDate("e_date", edate);
 				}
 			}
 
@@ -183,20 +196,31 @@ public class AdminUtils {
 			}
 		}
 	}
-
-	@SuppressWarnings("rawtypes")
-	public static List getLoggedAgents(Agent user, UserActivityForm form, String companycode, int rowsperpage, int currpage) {
+	
+	@SuppressWarnings({ "rawtypes" })
+	public static List<Agent_Logger> getLoggedAgents(Agent user, UserActivityForm form, String companycode, int rowsperpage, int currpage) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			String sql = "select logger from " + "com.bagnet.nettracer.tracing.db.Agent_Logger logger where 1=1 ";
-			sql += " and logger.companycode_ID = :companycode";
+			
+			StringBuilder sql = new StringBuilder();
+			sql.append("select logger  from com.bagnet.nettracer.tracing.db.Agent_Logger logger where 1=1 " +
+					" and logger.companycode_ID = :companycode");
 
+			java.util.TimeZone tz = java.util.TimeZone.getTimeZone(getTimeZoneById(user.getDefaulttimezone()).getTimezone());
+			Date sdate = null, edate = null; 
+			
+			ArrayList dateal = null;
+			if ((dateal = IncidentUtils.calculateDateDiff(form.getS_time(),form.getE_time(), tz, user)) == null) {
+				return null;
+			}
+			sdate = (Date) dateal.get(0);
+			edate = (Date) dateal.get(3);
 			if (form.getS_time() != null && (!form.getS_time().equals(""))) {
 				if (form.getE_time() == null || form.getE_time().equals("")) {
-					sql += " and logger.log_in_time >= :s_date";
+					sql.append(" and logger.log_in_time >= :s_date");
 				} else {
-					sql += " and logger.log_in_time >= :s_date and logger.log_in_time <= :e_date";
+					sql.append(" and logger.log_in_time >= :s_date and logger.log_in_time <= :e_date");
 				}
 			}
 
@@ -204,18 +228,18 @@ public class AdminUtils {
 			if (form.getAgent() != null && form.getAgent().length() > 0) {
 				// get agent_id from username
 				findagent = AdminUtils.getAgentBasedOnUsername(form.getAgent(),user.getCompanycode_ID());
-				sql += " and logger.agent_ID = :agent_ID";
+				sql.append(" and logger.agent_ID = :agent_ID");
 				if (findagent == null) return null;
 			}
 
 	
 			//only logged on users
 			if (form.getActivity_status() == null || form.getActivity_status().length() < 1 || !form.getActivity_status().equals("-1"))
-				sql += " and logger.log_off_time is null";
+				sql.append(" and logger.log_off_time is null");
 
-			sql += " order by logger.log_in_time desc";
+			sql.append(" order by logger.log_in_time desc");
 
-			Query q = sess.createQuery(sql);
+			Query q = sess.createQuery(sql.toString());
 
 			if (rowsperpage > 0) {
 				int startnum = currpage * rowsperpage;
@@ -231,14 +255,15 @@ public class AdminUtils {
 			
 			if (form.getS_time() != null && (!form.getS_time().equals(""))) {
 				if (form.getE_time() == null || form.getE_time().equals("")) {
-					q.setDate("s_date", DateUtils.convertToDate(form.getS_time(), user.getDateformat().getFormat(), user.getCurrentlocale()));
+					q.setDate("s_date", sdate);
 				} else {
-					q.setDate("s_date", DateUtils.convertToDate(form.getS_time(), user.getDateformat().getFormat(), user.getCurrentlocale()));
-					q.setDate("e_date", DateUtils.convertToDate(form.getE_time(), user.getDateformat().getFormat(), user.getCurrentlocale()));
+					q.setDate("s_date", sdate);
+					q.setDate("e_date", edate);
 				}
 			}
-
-			return q.list();
+			@SuppressWarnings("unchecked")
+			List<Agent_Logger> loglist=q.list();
+			return loglist;
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -2039,6 +2064,19 @@ public class AdminUtils {
 		u.setDefaultcurrency(ntuser.getDefaultcurrency());
 		u.setDefaulttimezone(ntuser.getDefaulttimezone());
 		u.setCurrenttimezone(ntuser.getCurrenttimezone());
+		
+//		String defaulttimezone=PropertyBMO.getValue(PropertyBMO.DEFAULT_AUTOPROVISION_TIMEZONE);
+//		if(defaulttimezone==null){
+//			defaulttimezone=ntuser.getDefaulttimezone();
+//		}
+//		u.setDefaulttimezone(defaulttimezone);
+//		
+//		String currenttimezone=PropertyBMO.getValue(PropertyBMO.CURRENT_AUTOPROVISION_TIMEZONE);
+//		if(currenttimezone==null){
+//			currenttimezone=ntuser.getCurrenttimezone();
+//		}		
+//		u.setCurrenttimezone(currenttimezone);
+		
 		u.setDateformat(ntuser.getDateformat());
 		u.setTimeformat(ntuser.getTimeformat());
 		u.setTimeout(ntuser.getTimeout());
