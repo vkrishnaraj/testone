@@ -29,3 +29,5 @@ insert into properties (keyStr, valueStr) values ('bagdrop.offset.end',6);
 #insert into properties (keystr, valuestr) values ('nt.central.password','WNpass1!');
 
 insert into properties (keyStr, valueStr) values ('passenger.data.in.expense','1');
+
+insert into properties (keyStr,valueStr) VALUES ('default.autoprovision.timezone' ,'10'),('current.autoprovision.timezone','10');
