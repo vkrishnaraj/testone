@@ -276,6 +276,9 @@ public class PropertyBMO {
 	public static final String ISSUE_VOUCHER_EXPIRATION_OFFSET_DAYS = "issue.voucher.expiration.offset.days";
 	
 	public static final String PASSENGER_DATA_IN_EXPENSE = "passenger.data.in.expense";
+
+	public static final String DEFAULT_AUTOPROVISION_TIMEZONE = "default.autoprovision.timezone";
+	public static final String CURRENT_AUTOPROVISION_TIMEZONE = "current.autoprovision.timezone";
 	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;

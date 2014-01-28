@@ -24,6 +24,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.UsergroupBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -2062,20 +2063,18 @@ public class AdminUtils {
 		u.setMname("");
 		u.setCurrentlocale(ntuser.getCurrentlocale());
 		u.setDefaultcurrency(ntuser.getDefaultcurrency());
-		u.setDefaulttimezone(ntuser.getDefaulttimezone());
-		u.setCurrenttimezone(ntuser.getCurrenttimezone());
 		
-//		String defaulttimezone=PropertyBMO.getValue(PropertyBMO.DEFAULT_AUTOPROVISION_TIMEZONE);
-//		if(defaulttimezone==null){
-//			defaulttimezone=ntuser.getDefaulttimezone();
-//		}
-//		u.setDefaulttimezone(defaulttimezone);
-//		
-//		String currenttimezone=PropertyBMO.getValue(PropertyBMO.CURRENT_AUTOPROVISION_TIMEZONE);
-//		if(currenttimezone==null){
-//			currenttimezone=ntuser.getCurrenttimezone();
-//		}		
-//		u.setCurrenttimezone(currenttimezone);
+		String defaulttimezone=PropertyBMO.getValue(PropertyBMO.DEFAULT_AUTOPROVISION_TIMEZONE);
+		if(defaulttimezone==null){
+			defaulttimezone=ntuser.getDefaulttimezone();
+		}
+		u.setDefaulttimezone(defaulttimezone);
+		
+		String currenttimezone=PropertyBMO.getValue(PropertyBMO.CURRENT_AUTOPROVISION_TIMEZONE);
+		if(currenttimezone==null){
+			currenttimezone=ntuser.getCurrenttimezone();
+		}		
+		u.setCurrenttimezone(currenttimezone);
 		
 		u.setDateformat(ntuser.getDateformat());
 		u.setTimeformat(ntuser.getTimeformat());
