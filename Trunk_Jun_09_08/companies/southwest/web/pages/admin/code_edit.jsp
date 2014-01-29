@@ -149,6 +149,33 @@
           </td>
         </tr>
         <tr>
+          <td>
+            <bean:message key="header.departStation" />
+            :
+          </td>
+          <td>
+            <html:checkbox property="departStation" value="1"></html:checkbox>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <bean:message key="header.transferStation" />
+            :
+          </td>
+          <td>
+            <html:checkbox property="transferStation" value="1"></html:checkbox>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <bean:message key="header.destinationStation" />
+            :
+          </td>
+          <td>
+            <html:checkbox property="destinationStation" value="1"></html:checkbox>
+          </td>
+        </tr>
+        <tr>
           <td colspan="2">
             &nbsp;
           </td>
