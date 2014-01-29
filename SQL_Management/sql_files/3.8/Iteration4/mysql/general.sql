@@ -90,3 +90,10 @@ e.countrycode_ID = p.countrycode_ID
 where e.expensepayout_ID = p.expensepayout_ID;
 
 drop table passengerexp;
+
+alter table company_irregularity_codes add column departStation tinyint default 0;
+alter table company_irregularity_codes add column transferStation tinyint default 0;
+alter table company_irregularity_codes add column destinationStation tinyint default 0;
+update company_irregularity_codes set departStation=0;
+update company_irregularity_codes set transferStation=0;
+update company_irregularity_codes set destinationStation=0;
