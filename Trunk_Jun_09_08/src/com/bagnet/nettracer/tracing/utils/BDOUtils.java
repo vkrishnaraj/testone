@@ -1600,7 +1600,7 @@ public class BDOUtils {
 		if(itinType!=-1){
 			Item item=null;
 			Map<Integer,Company_specific_irregularity_code> codeMap=new HashMap<Integer,Company_specific_irregularity_code>();
-			if(theform.getIncident()!=null){
+			if(theform.getIncident()!=null && theform.getIncident().getIncident_ID()!=null){
 
 				List<Integer> lossCodeList=new ArrayList<Integer>();
 
