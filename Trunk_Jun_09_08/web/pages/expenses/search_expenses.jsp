@@ -213,6 +213,11 @@ function updatePagination() {
               </td>
               <td>
                 <strong>
+                  <bean:message key="colname.ohd_num" />
+                </strong>
+              </td>
+              <td>
+                <strong>
                   <bean:message key="claim" />
                 </strong>
               </td>
@@ -262,9 +267,14 @@ function updatePagination() {
                     }
                      %>
                   <td>
-                  	<logic:present name="incident" scope="expenselist">
+                  	<logic:present property="incident" name="expenselist">
                     	<a href='searchIncident.do?incident=<bean:write name="expenselist" property="incident.incident_ID"/>'><bean:write name="expenselist" property="incident.incident_ID" /></a>
-                    </logic:present>
+                    </logic:present>&nbsp;
+                  </td>
+                  <td>
+                  	<logic:present property="ohd" name="expenselist">
+                    	<a href='addOnHandBag.do?ohd_ID=<bean:write name="expenselist" property="ohd.OHD_ID"/>'><bean:write name="expenselist" property="ohd.OHD_ID" /></a>
+                    </logic:present>&nbsp;
                   </td>
                   <td>
                     <a href='EditExpense.do?expense_id=<bean:write name="expenselist" property="expensepayout_ID"/>'><bean:message key="details" /></a>
