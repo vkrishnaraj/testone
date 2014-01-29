@@ -16,6 +16,10 @@ import java.io.Serializable;
  * @hibernate.cache usage="read-write"
  */
 public class Company_specific_irregularity_code implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6577844701884219201L;
 	private int code_id;
 	private int loss_code;
 	private String description;
@@ -23,6 +27,10 @@ public class Company_specific_irregularity_code implements Serializable {
 	private boolean show_to_limited_users;
 	private boolean active;
 	private boolean controllable;
+	private boolean transferStation;
+	private boolean departStation;
+	private boolean destinationStation;
+
 
 	private Company company;
 
@@ -174,5 +182,50 @@ public class Company_specific_irregularity_code implements Serializable {
 	
 	public String getCodeDescription(){
 		return getLoss_code()+" - "+getDescription();
+	}
+
+	/**
+	 * @return whether the loss code is transferStation or not
+	 * @hibernate.property type="boolean"
+	 */
+	public boolean isTransferStation() {
+		return transferStation;
+	}
+	
+	/**
+	 * @param transferStation : the transferStation to set
+	 */
+	public void setTransferStation(boolean transferStation) {
+		this.transferStation = transferStation;
+	}
+
+	/**
+	 * @return whether the loss code is departStation or not
+	 * @hibernate.property type="boolean"
+	 */
+	public boolean isDepartStation() {
+		return departStation;
+	}
+	
+	/**
+	 * @param departStation : the departStation to set
+	 */
+	public void setDepartStation(boolean departStation) {
+		this.departStation = departStation;
+	}
+
+	/**
+	 * @return whether the loss code is destinationStation or not
+	 * @hibernate.property type="boolean"
+	 */
+	public boolean isDestinationStation() {
+		return destinationStation;
+	}
+	
+	/**
+	 * @param destinationStation : the destinationStation to set
+	 */
+	public void setDestinationStation(boolean destinationStation) {
+		this.destinationStation = destinationStation;
 	}
 }

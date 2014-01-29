@@ -62,6 +62,42 @@ public class LossCodeBMO {
 	 * @param loss_code
 	 * @return the irregularity code null if exception or not found
 	 */
+	public static List<Company_specific_irregularity_code> getLossCodes(List<Integer> loss_codes, int report_type, String companyCode) {
+		Session sess = null;
+		try {
+			if(report_type == TracingConstants.OHD) {
+				report_type = TracingConstants.LOST_DELAY;
+			}
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Company_specific_irregularity_code.class).add(Restrictions.in("loss_code", loss_codes)).add(
+					Restrictions.eq("report_type", new Integer(report_type)));
+			cri.createCriteria("company").add(Restrictions.eq("companyCode_ID", companyCode));
+			@SuppressWarnings("unchecked")
+			List<Company_specific_irregularity_code> list = cri.list();
+			if (list != null && list.size() > 0){
+				return list;
+			}
+			return null;
+		} catch (Exception e) {
+			logger.fatal(e.getMessage());
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.fatal(e.getMessage());
+				}
+			}
+		}
+	}
+
+	/**
+	 * Get the loss_code based on the passed in id
+	 * 
+	 * @param loss_code
+	 * @return the irregularity code null if exception or not found
+	 */
 	public static Company_specific_irregularity_code getCode(String code_id) {
 		Session sess = null;
 		try {

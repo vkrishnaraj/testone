@@ -732,7 +732,10 @@
 				<table class="<%=paxItinCss  %> <%=cssFormClass %>" cellspacing="0" cellpadding="0" name="hidexItinerary<%=k %>"
 					id="hidexItinerary">
 					<tr>
-						<td><bean:message key="colname.pax.fromto.req" /> <br>
+						<td>
+							<html:hidden property="legfrom_type" name="theitinerary"/>
+							<html:hidden property="legto_type" name="theitinerary"/>
+						<bean:message key="colname.pax.fromto.req" /> <br>
 							<html:text name="theitinerary" property="legfrom" size="3"
 								maxlength="3" styleClass="textfield" indexed="true" /> <a
 							href="#"

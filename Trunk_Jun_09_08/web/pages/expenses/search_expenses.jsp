@@ -262,7 +262,9 @@ function updatePagination() {
                     }
                      %>
                   <td>
-                    <a href='searchIncident.do?incident=<bean:write name="expenselist" property="incident.incident_ID"/>'><bean:write name="expenselist" property="incident.incident_ID" /></a>
+                  	<logic:present name="incident" scope="expenselist">
+                    	<a href='searchIncident.do?incident=<bean:write name="expenselist" property="incident.incident_ID"/>'><bean:write name="expenselist" property="incident.incident_ID" /></a>
+                    </logic:present>
                   </td>
                   <td>
                     <a href='EditExpense.do?expense_id=<bean:write name="expenselist" property="expensepayout_ID"/>'><bean:message key="details" /></a>

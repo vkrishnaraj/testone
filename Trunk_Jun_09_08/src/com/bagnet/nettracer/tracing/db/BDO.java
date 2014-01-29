@@ -35,6 +35,10 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
 public class BDO implements Serializable {
 
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 808096229983825702L;
 	private int BDO_ID;
 	private DeliverCompany delivercompany;
 	private Deliver_ServiceLevel servicelevel;
@@ -54,7 +58,7 @@ public class BDO implements Serializable {
 	private OHD ohd;
 	private Incident incident;
 
-	private Set passengers; // passenger name and addresses
+	private Set<BDO_Passenger> passengers; // passenger name and addresses
 //	private Set items;
 	private Set<Item_BDO> item_bdo;
 
@@ -66,7 +70,7 @@ public class BDO implements Serializable {
 	private String delivery_integration_id;
 	private int integrationDelivercompany_ID;
 	private String delivery_comments;
-	private Set expensePayouts;
+	private Set<ExpensePayout> expensePayouts;
 	private boolean canceled;
 	
 	private Date lastDeliveryUpdate;
@@ -94,7 +98,7 @@ public class BDO implements Serializable {
 	 * @hibernate.key column="bdo_ID"
 	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.BDO_Passenger"
 	 */
-	public Set getPassengers() {
+	public Set<BDO_Passenger> getPassengers() {
 		return passengers;
 	}
 
@@ -102,7 +106,7 @@ public class BDO implements Serializable {
 	 * @param passengers
 	 *          The passengers to set.
 	 */
-	public void setPassengers(Set passengers) {
+	public void setPassengers(Set<BDO_Passenger> passengers) {
 		this.passengers = passengers;
 	}
 
@@ -113,7 +117,7 @@ public class BDO implements Serializable {
 //	 * @hibernate.key column="bdo_ID"
 //	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.Item"
 //	 */
-	public Set getItems() {
+	public Set<Item> getItems() {
 		LinkedHashSet<Item> set = new LinkedHashSet<Item>();
 		if (item_bdo != null) {
 			for (Item_BDO i: item_bdo) {
@@ -422,7 +426,7 @@ public class BDO implements Serializable {
 
 	public BDO_Passenger getPassenger(int i) {
 		if (this.getPassengers() != null) {
-			ArrayList t = new ArrayList(this.getPassengers());
+			ArrayList<BDO_Passenger> t = new ArrayList<BDO_Passenger>(this.getPassengers());
 			return (BDO_Passenger) t.get(i);
 		} else return null;
 	}
@@ -543,11 +547,11 @@ public class BDO implements Serializable {
 	 * @hibernate.key column="bdo_id"
 	 * @hibernate.one-to-many class="com.bagnet.nettracer.tracing.db.ExpensePayout"
 	 */
-	public Set getExpensePayouts() {
+	public Set<ExpensePayout> getExpensePayouts() {
 		return expensePayouts;
 	}
 
-	public void setExpensePayouts(Set expensePayouts) {
+	public void setExpensePayouts(Set<ExpensePayout> expensePayouts) {
 		this.expensePayouts = expensePayouts;
 	}
 
@@ -559,7 +563,7 @@ public class BDO implements Serializable {
 	}
 
 	public void setExpensePayout(ExpensePayout createNewBdoPayout) {
-		expensePayouts = new HashSet();
+		expensePayouts = new HashSet<ExpensePayout>();
 		expensePayouts.add(createNewBdoPayout);
 	}
 

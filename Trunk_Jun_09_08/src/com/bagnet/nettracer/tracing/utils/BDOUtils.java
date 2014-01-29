@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
@@ -28,11 +29,12 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StatusBMO;
@@ -43,6 +45,7 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.BDO_Passenger;
 import com.bagnet.nettracer.tracing.db.Category;
+import com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code;
 import com.bagnet.nettracer.tracing.db.DeliverCo_Station;
 import com.bagnet.nettracer.tracing.db.DeliverCompany;
 import com.bagnet.nettracer.tracing.db.Deliver_ServiceLevel;
@@ -75,6 +78,7 @@ public class BDOUtils {
 
 	private static Logger logger = Logger.getLogger(BDOUtils.class);
 
+	@SuppressWarnings("rawtypes")
 	public static boolean createNewBDO(String ohd_ID, String incident_ID, BDOForm theform, HttpServletRequest request) throws Exception {
 		HttpSession session = request.getSession();
 
@@ -82,6 +86,7 @@ public class BDOUtils {
 
 		IncidentBMO iBMO = new IncidentBMO();
 		OhdBMO oBMO = new OhdBMO();
+		@SuppressWarnings("unused")
 		BDO bdo = null;
 
 		theform = new BDOForm();
@@ -216,13 +221,14 @@ public class BDOUtils {
 			}
 
 		}
-		List list = new ArrayList(BDOUtils.getDeliveryCompanies(theform.getStation().getStation_ID()));
+		List<DeliverCo_Station> list = new ArrayList<DeliverCo_Station>(BDOUtils.getDeliveryCompanies(theform.getStation().getStation_ID()));
 		if (list != null)
 			request.setAttribute("delivercompanies", list);
 
 		return true;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static boolean findBDO(int bdo_ID, BDOForm theform, HttpServletRequest request) throws Exception {
 		HttpSession session = request.getSession();
 		Agent user = (Agent) session.getAttribute("user");
@@ -290,13 +296,13 @@ public class BDOUtils {
 			if (theform.getIncident() == null)
 				theform.setIncident(new Incident());
 
-			List list = new ArrayList(getDeliveryCompanies(theform.getStation().getStation_ID(), bdo.getDelivercompany()));
+			List<DeliverCo_Station> list = new ArrayList<DeliverCo_Station>(getDeliveryCompanies(theform.getStation().getStation_ID(), bdo.getDelivercompany()));
 
 			if (list != null)
 				request.setAttribute("delivercompanies", list);
 
 			if (theform.getDelivercompany_ID() > 0) {
-				List servicelevels = BDOUtils.getServiceLevels(theform.getDelivercompany_ID(), bdo.getServicelevel());
+				List<Deliver_ServiceLevel> servicelevels = BDOUtils.getServiceLevels(theform.getDelivercompany_ID(), bdo.getServicelevel());
 				request.setAttribute("servicelevels", servicelevels);
 			}
 
@@ -330,13 +336,14 @@ public class BDOUtils {
 			BDOForm theform) {
 		if(inc!=null){
 			if(inc.getItemlist()!=null){
-				theform.setExistItemList(new ArrayList(inc.getItemlist()));
+				theform.setExistItemList(new ArrayList<Item>(inc.getItemlist()));
 			} else {
-				theform.setExistItemList(new ArrayList());
+				theform.setExistItemList(new ArrayList<Item>());
 			}
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public static boolean findBDOList(String ohd_ID, String incident_ID, BDOForm theform, HttpServletRequest request) throws Exception {
 
 		HttpSession session = request.getSession();
@@ -346,7 +353,7 @@ public class BDOUtils {
 		OhdBMO oBMO = new OhdBMO();
 		OHD ohd = null;
 		Incident incident = null;
-		List list = null;
+		List<BDO> list = null;
 		if (ohd_ID != null) {
 			// verifty ohd
 			ohd = oBMO.findOHDByID(ohd_ID);
@@ -384,6 +391,7 @@ public class BDOUtils {
 		return true;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static BDO createBdo(BDOForm theform, String[] bagchosen) throws Exception {
 		BDO bdo = new BDO();
 
@@ -430,6 +438,7 @@ public class BDOUtils {
 
 				// if it is lost delayed, change status to to be delivered
 				Item item = null;
+				@SuppressWarnings("unused")
 				int bagnumber;
 				OHD ohd_obj = null;
 
@@ -590,17 +599,18 @@ public class BDOUtils {
 		return true;
 	}
 
-	public static List getDeliverCompanies(int station_ID) {
+	public static List<Station> getDeliverCompanies(int station_ID) {
 		// populate delivery service
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Station.class);
 
-			cri.add(Expression.eq("station_ID", new Integer(station_ID)));
+			cri.add(Restrictions.eq("station_ID", new Integer(station_ID)));
 			cri.addOrder(Order.asc("description"));
 
-			List list = cri.list();
+			@SuppressWarnings("unchecked")
+			List<Station> list = cri.list();
 
 			return list;
 
@@ -622,17 +632,18 @@ public class BDOUtils {
 	/** 
 	 * Method to get all SERV Delivery Companies to determine the if the Request Delivery Cost button should appear
 	 */
-	public static List getSERVDeliverCompanies() {
+	public static List<DeliverCompany> getSERVDeliverCompanies() {
 		// populate delivery service
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(DeliverCompany.class);
 
-			cri.add(Expression.eq("delivery_integration_type", DeliveryIntegrationType.SERV));
+			cri.add(Restrictions.eq("delivery_integration_type", DeliveryIntegrationType.SERV));
 			cri.addOrder(Order.asc("id"));
 
-			List list = cri.list();
+			@SuppressWarnings("unchecked")
+			List<DeliverCompany> list = cri.list();
 
 			return list;
 
@@ -655,8 +666,9 @@ public class BDOUtils {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(BDO.class).add(Expression.eq("BDO_ID", new Integer(bdo_ID)));
-			List list = cri.list();
+			Criteria cri = sess.createCriteria(BDO.class).add(Restrictions.eq("BDO_ID", new Integer(bdo_ID)));
+			@SuppressWarnings("unchecked")
+			List<BDO> list = cri.list();
 
 			if (list.size() == 0) {
 				return null;
@@ -677,24 +689,26 @@ public class BDOUtils {
 		}
 	}
 
-	public static List getServiceLevels(int delivercompany_ID) {
+	public static List<Deliver_ServiceLevel> getServiceLevels(int delivercompany_ID) {
 		return getServiceLevels(delivercompany_ID, null);
 	}
 
-	public static List getServiceLevels(int delivercompany_ID, Deliver_ServiceLevel dsl) {
+	public static List<Deliver_ServiceLevel> getServiceLevels(int delivercompany_ID, Deliver_ServiceLevel dsl) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Criteria cri = sess.createCriteria(DeliverCompany.class).add(Expression.eq("delivercompany_ID", new Integer(delivercompany_ID)));
-			List list = cri.list();
+			Criteria cri = sess.createCriteria(DeliverCompany.class).add(Restrictions.eq("delivercompany_ID", new Integer(delivercompany_ID)));
+			@SuppressWarnings("unchecked")
+			List<DeliverCompany> list = cri.list();
 
 			if (list.size() == 0) {
 				logger.debug("unable to find bdo from delivercompany: " + delivercompany_ID);
 				return null;
 			}
 			DeliverCompany dc = (DeliverCompany) list.get(0);
-			ArrayList<Deliver_ServiceLevel> al = new ArrayList(dc.getServicelevels());
-			List<Deliver_ServiceLevel> nl = new ArrayList();
+			@SuppressWarnings({ "unchecked" })
+			ArrayList<Deliver_ServiceLevel> al = new ArrayList<Deliver_ServiceLevel>(dc.getServicelevels());
+			List<Deliver_ServiceLevel> nl = new ArrayList<Deliver_ServiceLevel>();
 
 			if (al.size() == 0 && dsl != null) {
 				nl.add(dsl);
@@ -730,9 +744,10 @@ public class BDOUtils {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Deliver_ServiceLevel.class);
 
-			cri.add(Expression.eq("servicelevel_ID", new Integer(serviceLevel_id)));
+			cri.add(Restrictions.eq("servicelevel_ID", new Integer(serviceLevel_id)));
 
-			List list = cri.list();
+			@SuppressWarnings("unchecked")
+			List<Deliver_ServiceLevel> list = cri.list();
 			if (list != null)
 				return (Deliver_ServiceLevel) list.get(0);
 
@@ -758,10 +773,11 @@ public class BDOUtils {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(DeliverCo_Station.class);
 
-			cri.add(Expression.eq("station_ID", new Integer(stationId)));
-			cri.add(Expression.eq("delivercompany", deliverCo));
+			cri.add(Restrictions.eq("station_ID", new Integer(stationId)));
+			cri.add(Restrictions.eq("delivercompany", deliverCo));
 
-			List list = cri.list();
+			@SuppressWarnings("unchecked")
+			List<DeliverCo_Station> list = cri.list();
 			if (list != null)
 				return (DeliverCo_Station) list.get(0);
 
@@ -780,15 +796,16 @@ public class BDOUtils {
 		return null;
 	}
 
-	public static List getStationsByDeliveryCompany(DeliverCompany delivercompany) {
+	@SuppressWarnings("unchecked")
+	public static List<Station> getStationsByDeliveryCompany(DeliverCompany delivercompany) {
 		Session sess = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(DeliverCo_Station.class);
-			cri.add(Expression.eq("delivercompany", delivercompany));
+			cri.add(Restrictions.eq("delivercompany", delivercompany));
 			List<DeliverCo_Station> delivercoStations = cri.list();
 
-			List<Integer> stationIdList = new ArrayList();
+			List<Integer> stationIdList = new ArrayList<Integer>();
 
 			for (int x = 0; x < delivercoStations.size(); x++) {
 				stationIdList.add(new Integer(delivercoStations.get(x).getStation_ID()));
@@ -796,8 +813,8 @@ public class BDOUtils {
 
 			if (stationIdList.size() > 0) {
 				cri = sess.createCriteria(Station.class);
-				cri.add(Expression.in("station_ID", stationIdList));
-				cri.add(Expression.eq("active", true));
+				cri.add(Restrictions.in("station_ID", stationIdList));
+				cri.add(Restrictions.eq("active", true));
 				cri.addOrder(Order.asc("stationcode"));
 			} else {
 				return null;
@@ -818,27 +835,28 @@ public class BDOUtils {
 		}
 	}
 
-	public static List getDeliveryCompanies(int station_ID) {
+	public static List<DeliverCo_Station> getDeliveryCompanies(int station_ID) {
 		return getDeliveryCompanies(station_ID, false);
 	}
 
-	public static List getDeliveryCompanies(int station_ID, boolean dirtyRead) {
+	public static List<DeliverCo_Station> getDeliveryCompanies(int station_ID, boolean dirtyRead) {
 		return getDeliveryCompanies(station_ID, null, false);
 	}
 
-	public static List getDeliveryCompanies(int station_ID, DeliverCompany dc) {
+	public static List<DeliverCo_Station> getDeliveryCompanies(int station_ID, DeliverCompany dc) {
 		return getDeliveryCompanies(station_ID, dc, false);
 	}
 
-	public static List getDeliveryCompanies(int station_ID, DeliverCompany dc, boolean dirtyRead) {
+	public static List<DeliverCo_Station> getDeliveryCompanies(int station_ID, DeliverCompany dc, boolean dirtyRead) {
 		Session sess = null;
 		try {
 
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(DeliverCo_Station.class);
-			cri.add(Expression.eq("station_ID", new Integer(station_ID)));
+			cri.add(Restrictions.eq("station_ID", new Integer(station_ID)));
+			@SuppressWarnings("unchecked")
 			List<DeliverCo_Station> ol = cri.list();
-			List nl = new ArrayList();
+			List<DeliverCo_Station> nl = new ArrayList<DeliverCo_Station>();
 
 			for (int x = 0; x < ol.size(); ++x) {
 				DeliverCo_Station tmp = ol.get(x);
@@ -986,6 +1004,7 @@ public class BDOUtils {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("rawtypes")
 	public static ArrayList searchBDOs(SearchBDOForm siDTO, Agent user, int rowsperpage, int currpage, boolean iscount) throws HibernateException {
 		Session sess = HibernateWrapper.getSession().openSession();
 		Query q = null;
@@ -1017,6 +1036,7 @@ public class BDOUtils {
 			Date sdate1 = null, edate1 = null; // add one for timezone
 			Date stime = null; // time to compare (04:00 if eastern, for
 			// example)
+			@SuppressWarnings("unused")
 			String dateq = "";
 
 			ArrayList dateal = null;
@@ -1158,7 +1178,9 @@ public class BDOUtils {
 			if (siDTO.getAgent().length() > 0)
 				q.setString("agent", siDTO.getAgent());
 
+			@SuppressWarnings({ "unchecked" })
 			LinkedHashSet qlhs = new LinkedHashSet(q.list());
+			@SuppressWarnings({ "unchecked" })
 			ArrayList al = new ArrayList(qlhs);
 			return al;
 		} catch (Exception e) {
@@ -1177,8 +1199,9 @@ public class BDOUtils {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(DeliverCompany.class);
 
-			cri.add(Expression.eq("delivercompany_ID", new Integer(delivercompany_id)));
+			cri.add(Restrictions.eq("delivercompany_ID", new Integer(delivercompany_id)));
 
+			@SuppressWarnings("rawtypes")
 			List list = cri.list();
 			if (list != null)
 				return (DeliverCompany) list.get(0);
@@ -1210,7 +1233,8 @@ public class BDOUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Item.class);
-			cri.add(Expression.eq("OHD_ID", ohd_id));
+			cri.add(Restrictions.eq("OHD_ID", ohd_id));
+			@SuppressWarnings("rawtypes")
 			List result = cri.list();
 			if (result != null && result.size() > 0)
 				return (Item) result.get(0);
@@ -1235,6 +1259,7 @@ public class BDOUtils {
 	 * 
 	 * @param bdo_id
 	 */
+	@SuppressWarnings("rawtypes")
 	public static Iterator findWt_id(int bdo_id) {
 
 		SessionFactory sessionFactory = HibernateWrapper.getSession();
@@ -1501,13 +1526,14 @@ public class BDOUtils {
 	/**
 	 * Method to get Categories that pertain to BDOs - Type "1"
 	 */
-	public static List getBDOCategories() {
+	public static List<Category> getBDOCategories() {
 		Session sess = null;
 		try {
 
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Category.class);
-			cri.add(Expression.eq("type", new Integer(TracingConstants.BDO_TYPE)));
+			cri.add(Restrictions.eq("type", new Integer(TracingConstants.BDO_TYPE)));
+			@SuppressWarnings("unchecked")
 			List<Category> ol = cri.list();
 			return ol;
 		} catch (Exception e) {
@@ -1536,6 +1562,7 @@ public class BDOUtils {
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(sql);
 			q.setParameter("itemid", item_ID);
+			@SuppressWarnings("rawtypes")
 			List ibdocount=  q.list();
 			if(ibdocount!=null)
 				return (Long)ibdocount.get(0);
@@ -1571,24 +1598,47 @@ public class BDOUtils {
 		int itinType=PropertyBMO.getValueAsInt(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES_ITIN_CHECK);
 		boolean inPaxItin=true;
 		if(itinType!=-1){
+			Item item=null;
+			Map<Integer,Company_specific_irregularity_code> codeMap=new HashMap<Integer,Company_specific_irregularity_code>();
 			if(theform.getIncident()!=null){
+
+				List<Integer> lossCodeList=new ArrayList<Integer>();
+
+				for(Object obj:theform.getItemlist()){
+					item=(Item) obj;
+					lossCodeList.add(item.getLossCode());
+				}
+				List<Company_specific_irregularity_code> codeList=LossCodeBMO.getLossCodes(lossCodeList, theform.getIncident().getItemtype_ID(), theform.getCompanycode_ID());
+				
 				for(Itinerary itin:theform.getIncident().getItinerary_list()){
-					if(itin.getItinerarytype()==TracingConstants.PASSENGER_ROUTING){
-						if(paxItinMap.get(itin.getLegfrom())==null){
-							paxItinMap.put(itin.getLegfrom(), "1");
-						}
-						if(paxItinMap.get(itin.getLegto())==null){
-							paxItinMap.put(itin.getLegto(), "1");
+					if(itin.getItinerarytype()==itinType){
+						for(Company_specific_irregularity_code code:codeList){
+							if(paxItinMap.get(itin.getLegfrom())==null
+									&& ((itin.getLegfrom_type()==TracingConstants.LEG_B_STATION && code.isDepartStation())
+											|| (itin.getLegfrom_type()==TracingConstants.LEG_T_STATION && code.isTransferStation())
+											|| (itin.getLegfrom_type()==TracingConstants.LEG_E_STATION && code.isDestinationStation()))){
+								paxItinMap.put(itin.getLegfrom()+code.getLoss_code(), "1");
+							}
+							if(paxItinMap.get(itin.getLegto())==null
+									&& ((itin.getLegto_type()==TracingConstants.LEG_B_STATION && code.isDepartStation())
+											|| (itin.getLegto_type()==TracingConstants.LEG_T_STATION && code.isTransferStation())
+											|| (itin.getLegto_type()==TracingConstants.LEG_E_STATION && code.isDestinationStation()))){
+								paxItinMap.put(itin.getLegto()+code.getLoss_code(), "1");
+							}
+							codeMap.put(code.getLoss_code(),code);
 						}
 					}
 				}
 			}
-			Item item=null;
+			item=null;
 			for(Object obj:theform.getItemlist()){
 				item=(Item) obj;
 				if(item.getFaultStation()!=null && item.getFaultStation().getStationcode()!=null
-						&& item.getFaultStation().getStationcode().length()>0){
-					if(paxItinMap.get(item.getFaultStation().getStationcode())==null){
+						&& item.getFaultStation().getStationcode().length()>0
+						&& item.getLossCode()>0){
+					Company_specific_irregularity_code code=codeMap.get(item.getLossCode());
+					if(paxItinMap.get(item.getFaultStation().getStationcode()+item.getLossCode())==null
+							&& !(!code.isDestinationStation() && !code.isTransferStation() && !code.isDepartStation())){
 						inPaxItin=false;
 						break;
 					}

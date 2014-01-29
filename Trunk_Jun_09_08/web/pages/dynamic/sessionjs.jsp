@@ -473,7 +473,7 @@
       }
     }
     
-    else if (currentElementName.indexOf("legfrom") != -1)
+    else if (currentElementName.indexOf("legfrom") != -1 && currentElementName.indexOf("legfrom_type") == -1)
     {
       if (currentElement.value.length > 0 && !checkLegFrom(currentElement.value))
       {
@@ -482,7 +482,7 @@
         return false;
       }
     }
-    else if (currentElementName.indexOf("legto") != -1)
+    else if (currentElementName.indexOf("legto") != -1 && currentElementName.indexOf("legto_type") == -1)
     {
       if (currentElement.value.length > 0 && !checkLegFrom(currentElement.value))
       {

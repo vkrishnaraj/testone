@@ -11,6 +11,7 @@
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Item" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code"%>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%@ page import="com.bagnet.nettracer.tracing.forms.IncidentForm" %>
@@ -101,7 +102,15 @@
   var lossCodeChange=false;
   var cal1xx = new CalendarPopup();	
   var ppucheck=-1;
-  
+  var codeStationMap=new Object();
+  <% List losscodes=(List)request.getAttribute("losscodes");
+  Company_specific_irregularity_code code=null;
+  for(Object obj:losscodes){
+	  code=(Company_specific_irregularity_code)obj;%>
+	  codeStationMap["<%=code.getLoss_code()%>depart"]=<%=code.isDepartStation()%>;
+	  codeStationMap["<%=code.getLoss_code()%>transfer"]=<%=code.isTransferStation()%>;
+	  codeStationMap["<%=code.getLoss_code()%>destination"]=<%=code.isDestinationStation()%>;
+  <%}%>
   function textCounter3(field, maxlimit) {
     if (field.value.length > maxlimit) {
       field.value = field.value.substring(0, maxlimit);

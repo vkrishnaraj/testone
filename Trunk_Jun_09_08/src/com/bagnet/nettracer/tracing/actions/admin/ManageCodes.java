@@ -26,6 +26,7 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code;
+import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Company_specific_irregularity_code;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
@@ -59,7 +60,7 @@ public final class ManageCodes extends Action {
 		ActionMessages errors = new ActionMessages();
 		DynaValidatorForm dForm = (DynaValidatorForm) form;
 
-		List reportTypes = IncidentUtils.retrieveItemTypes();
+		List<ItemType> reportTypes = IncidentUtils.retrieveItemTypes();
 		request.setAttribute("reportTypes", reportTypes);
 
 		String companyCode = "";
@@ -86,6 +87,9 @@ public final class ManageCodes extends Action {
 			dForm.set("visibleToLimited", visible);
 			dForm.set("active", code.isActive() ? "1" : "");
 			dForm.set("controllable", code.isControllable() ? "1" : "");
+			dForm.set("departStation", code.isDepartStation() ? "1" : "");
+			dForm.set("transferStation", code.isTransferStation() ? "1" : "");
+			dForm.set("destinationStation", code.isDestinationStation() ? "1" : "");
 			return mapping.findForward(TracingConstants.EDIT_CODE);
 		}
 
@@ -101,6 +105,7 @@ public final class ManageCodes extends Action {
 			boolean error = false;
 			int i = 0;
 
+			@SuppressWarnings("unused")
 			String error_ids = "";
 
 			while (true) {
@@ -198,6 +203,24 @@ public final class ManageCodes extends Action {
 			}
 			s.setControllable(controllable);
 			
+			boolean departStation = false;
+			if (((String)dForm.get("departStation")).equals("1")) {
+				departStation = true;
+			}
+			s.setDepartStation(departStation);
+			
+			boolean transferStation = false;
+			if (((String)dForm.get("transferStation")).equals("1")) {
+				transferStation = true;
+			}
+			s.setTransferStation(transferStation);
+			
+			boolean destinationStation = false;
+			if (((String)dForm.get("destinationStation")).equals("1")) {
+				destinationStation = true;
+			}
+			s.setDestinationStation(destinationStation);
+			
 			try {
 				HibernateUtils.saveCode(s, isNew);
 
@@ -222,7 +245,7 @@ public final class ManageCodes extends Action {
 
 		if (report_type == null || report_type.equals("-1")) report_type = "";
 
-		List codeList = LossCodeBMO.getCodes(companyCode, report_type, dForm, 0, 0);
+		List<Company_specific_irregularity_code> codeList = LossCodeBMO.getCodes(companyCode, report_type, dForm, 0, 0);
 		if (codeList != null && codeList.size() > 0) {
 			/** ************ pagination ************* */
 			int rowcount = -1;
@@ -251,7 +274,7 @@ public final class ManageCodes extends Action {
 
 			if (currpage + 1 == totalpages) request.setAttribute("end", "1");
 			if (totalpages > 1) {
-				ArrayList al = new ArrayList();
+				ArrayList<String> al = new ArrayList<String>();
 				for (int i = 0; i < totalpages; i++) {
 					al.add(Integer.toString(i));
 				}

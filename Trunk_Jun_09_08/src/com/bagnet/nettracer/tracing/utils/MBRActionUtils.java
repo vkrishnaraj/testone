@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
 
@@ -26,13 +27,14 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.criterion.Expression;
+import org.hibernate.criterion.Restrictions;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.actions.templates.DocumentTemplateResult;
 import com.bagnet.nettracer.tracing.adapter.TemplateAdapter;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.IssuanceItemBMO;
+import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
 import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.bmo.OtherSystemInformationBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
@@ -45,7 +47,9 @@ import com.bagnet.nettracer.tracing.db.AirlineMembership;
 import com.bagnet.nettracer.tracing.db.Articles;
 import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.Category;
+import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
+import com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code;
 import com.bagnet.nettracer.tracing.db.DeliveryInstructions;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
@@ -118,7 +122,9 @@ public class MBRActionUtils {
 			
 		int numberToAdd = 1;
 		int fileindex = -1;
+		@SuppressWarnings("unused")
 		StringTokenizer stt = null;
+		@SuppressWarnings("rawtypes")
 		Enumeration e = request.getParameterNames();
 		if (editIncident || editContents) {
 			// Adding contents to items.
@@ -371,6 +377,7 @@ public class MBRActionUtils {
 	}
 	
 	private static IssuanceItemQuantity getQuantifiedItem(HttpServletRequest request, String id) {
+		@SuppressWarnings("unchecked")
 		List<IssuanceItemQuantity> returnQList = (ArrayList<IssuanceItemQuantity>) request.getAttribute("item_quantity_resultList");
 		long qID = Long.parseLong(id);
 		for (IssuanceItemQuantity lQItem : returnQList) { // Find item and either adjust quantity or remove from list
@@ -382,6 +389,7 @@ public class MBRActionUtils {
 	}
 	
 	private static IssuanceItemInventory getInventoriedItem(HttpServletRequest request, String id) {
+		@SuppressWarnings("unchecked")
 		List<IssuanceItemInventory> returnIList = (ArrayList<IssuanceItemInventory>) request.getAttribute("item_inventory_resultList");
 		long iID = Long.parseLong(id);
 		for (IssuanceItemInventory lIItem : returnIList) { // Find item and either adjust quantity or remove from list
@@ -393,7 +401,9 @@ public class MBRActionUtils {
 	}
 	
 	private static void adjustIssuanceLists(HttpServletRequest request, IssuanceItemQuantity qItem, IssuanceItemInventory iItem, IssuanceItemIncident item) {
+		@SuppressWarnings("unchecked")
 		List<IssuanceItemQuantity> returnQList = (ArrayList<IssuanceItemQuantity>) request.getAttribute("item_quantity_resultList");
+		@SuppressWarnings("unchecked")
 		List<IssuanceItemInventory> returnIList = (ArrayList<IssuanceItemInventory>) request.getAttribute("item_inventory_resultList");
 		List<IssuanceCategory> returnCList = new ArrayList<IssuanceCategory>();
 		boolean remove = true;
@@ -577,8 +587,8 @@ public class MBRActionUtils {
 			String[] elements = deleteTheseElements.split(",");
 			boolean itemsDeleted = false;
 			
-			HashMap<String, ArrayList<Integer>> elementBreakdown = new HashMap();
-			HashMap<Integer, ArrayList<Integer>> inventoryBreakdown = new HashMap();
+			HashMap<String, ArrayList<Integer>> elementBreakdown = new HashMap<String,ArrayList<Integer>>();
+			HashMap<Integer, ArrayList<Integer>> inventoryBreakdown = new HashMap<Integer,ArrayList<Integer>>();
 			
 			// Iterate through elements and sort into types
 			for (String element: elements) {
@@ -600,6 +610,7 @@ public class MBRActionUtils {
 				Collections.sort(list, Collections.reverseOrder());
 				
 				for (int inventoryIndex: list) {
+					@SuppressWarnings("unused")
 					Item_Inventory ii = (Item_Inventory) theform.getItem(itemIndex, -1).getInventorylist().get(inventoryIndex);
 					theform.getItem(itemIndex, -1).getInventorylist().remove(inventoryIndex);
 				}
@@ -614,19 +625,19 @@ public class MBRActionUtils {
 				for (int index: list) {
 					
 					if(key.equals(TracingConstants.JSP_DELETE_ITINERARY)) {
-						List itinerarylist = theform.getItinerarylist();
+						List<Itinerary> itinerarylist = theform.getItinerarylist();
 						if (itinerarylist != null)
 							itinerarylist.remove(index);
 					} 
 
 					if(key.equals(TracingConstants.JSP_DELETE_CLAIMCHECK)) {
-						List claimchecklist = theform.getClaimchecklist();
+						List<Incident_Claimcheck> claimchecklist = theform.getClaimchecklist();
 						if (claimchecklist != null)
 							claimchecklist.remove(index);
 					} 
 
 					if(key.equals(TracingConstants.JSP_DELETE_ITEM)) {
-						List itemList = theform.getItemlist();
+						List<Item> itemList = theform.getItemlist();
 						if (itemList != null) {
 							itemList.remove(index);
 							itemsDeleted = true;
@@ -634,13 +645,13 @@ public class MBRActionUtils {
 					}
 					
 					if(key.equals(TracingConstants.JSP_DELETE_PAX)) {
-						List passList = theform.getPassengerlist();
+						List<Passenger> passList = theform.getPassengerlist();
 						if (passList != null)
 							passList.remove(index);
 					}
 					
 					if(key.equals(TracingConstants.JSP_DELETE_ARTICLE)) {
-						List articleList = theform.getArticlelist();
+						List<Articles> articleList = theform.getArticlelist();
 						if (articleList != null)
 							articleList.remove(index);
 					} 		
@@ -648,7 +659,7 @@ public class MBRActionUtils {
 			}
 			
 			if (itemsDeleted) {
-				List itemList = theform.getItemlist();
+				List<Item> itemList = theform.getItemlist();
 				for (int i = 0; i < itemList.size(); i++) {
 					Item item = (Item) itemList.get(i);
 					item.setBagnumber(i);					
@@ -665,6 +676,7 @@ public class MBRActionUtils {
 			theform.setEmail_customer(0);
 
 		String index = "0";
+		@SuppressWarnings("rawtypes")
 		Enumeration e = request.getParameterNames();
 		while (e.hasMoreElements()) {
 			String parameter = (String) e.nextElement();
@@ -677,7 +689,7 @@ public class MBRActionUtils {
 			}
 		}
 		if (deleteRemark) {
-			List remarkList = theform.getRemarklist();
+			List<Remark> remarkList = theform.getRemarklist();
 			if (remarkList != null)
 				remarkList.remove(Integer.parseInt(index));
 			request.setAttribute("remark", Integer.toString(theform.getRemarklist().size() - 1));
@@ -694,7 +706,7 @@ public class MBRActionUtils {
 			internalList = typeBreakdown.get(key);
 			internalList.add(value);
 		} else {
-			internalList = new ArrayList();
+			internalList = new ArrayList<Integer>();
 			internalList.add(value);
 			typeBreakdown.put(key, internalList);
 		}
@@ -709,12 +721,13 @@ public class MBRActionUtils {
 			internalList = typeBreakdown.get(key);
 			internalList.add(value);
 		} else {
-			internalList = new ArrayList();
+			internalList = new ArrayList<Integer>();
 			internalList.add(value);
 			typeBreakdown.put(key, internalList);
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public static boolean actionClose(IncidentForm theform, HttpServletRequest request, Agent user, ActionMessages errors) throws Exception {
 		String incident = request.getParameter("incident_ID");
 		
@@ -726,8 +739,8 @@ public class MBRActionUtils {
 			inc = IncidentBMO.getIncidentByID(theform.getIncident_ID(), null); 
 		}
 		
-		List faultstationlist = null;
-		List faultCompanyList = null;
+		List<Station> faultstationlist = null;
+		List<Company> faultCompanyList = null;
 		if (theform.getFaultcompany_id() != null && !theform.getFaultcompany_id().equals("")) {
 			if (TracerProperties.isTrue(user.getCompanycode_ID(),TracerProperties.SET_DEFAULT_AIRLINE) && (theform.getFaultcompany_id() == null || theform.getFaultcompany_id().equals(""))) {
 				theform.setFaultcompany_id(user.getCompanycode_ID());
@@ -736,15 +749,15 @@ public class MBRActionUtils {
 
 			if (UserPermissions.hasLimitedSavePermission(user, inc)) {
 				faultstationlist = UserPermissions.getLimitedSaveStations(user, theform.getIncident_ID());
-				faultCompanyList = new ArrayList();
+				faultCompanyList = new ArrayList<Company>();
 				faultCompanyList.add(user.getStation().getCompany());
 			} else if (inc != null && UserPermissions.hasLimitedFaultAirlinesByType(user, inc.getItemtype().getItemType_ID())) {
 				faultstationlist = TracerUtils.getStationList(theform.getFaultcompany_id());
-				faultCompanyList = new ArrayList();
+				faultCompanyList = new ArrayList<Company>();
 				faultCompanyList.add(user.getStation().getCompany());
 			} else {
 				faultstationlist = TracerUtils.getStationList(theform.getFaultcompany_id());
-				faultCompanyList = (List) request.getSession().getAttribute("companylistByName");
+				faultCompanyList = (List<Company>) request.getSession().getAttribute("companylistByName");
 			}
 
 
@@ -799,20 +812,41 @@ public class MBRActionUtils {
 					 */
 					int itinType=PropertyBMO.getValueAsInt(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES_ITIN_CHECK);
 					if(itinType!=-1){
+						Map<Integer,Company_specific_irregularity_code> codeMap=new HashMap<Integer,Company_specific_irregularity_code>();
+						List<Integer> lossCodeList=new ArrayList<Integer>();
+						Item item=null;
+						for(Object obj:theform.getItemlist()){
+							item=(Item) obj;
+							lossCodeList.add(item.getLossCode());
+						}
+						List<Company_specific_irregularity_code> codeList=LossCodeBMO.getLossCodes(lossCodeList, inc.getItemtype_ID(), inc.getStationcreated().getCompany().getCompanyCode_ID());
+						
 						for(Itinerary itin:theform.getItinerarylist()){
 							if(itin.getItinerarytype()==itinType){
-								if(paxItinMap.get(itin.getLegfrom())==null){
-									paxItinMap.put(itin.getLegfrom(), "1");
-								}
-								if(paxItinMap.get(itin.getLegto())==null){
-									paxItinMap.put(itin.getLegto(), "1");
+								for(Company_specific_irregularity_code code:codeList){
+									if(paxItinMap.get(itin.getLegfrom())==null
+											&& ((itin.getLegfrom_type()==TracingConstants.LEG_B_STATION && code.isDepartStation())
+											|| (itin.getLegfrom_type()==TracingConstants.LEG_T_STATION && code.isTransferStation())
+											|| (itin.getLegfrom_type()==TracingConstants.LEG_E_STATION && code.isDestinationStation()))){
+										paxItinMap.put(itin.getLegfrom()+code.getLoss_code(), "1");
+									}
+									if(paxItinMap.get(itin.getLegto())==null
+											&& ((itin.getLegto_type()==TracingConstants.LEG_B_STATION && code.isDepartStation())
+													|| (itin.getLegto_type()==TracingConstants.LEG_T_STATION && code.isTransferStation())
+													|| (itin.getLegto_type()==TracingConstants.LEG_E_STATION && code.isDestinationStation()))){
+										paxItinMap.put(itin.getLegto()+code.getLoss_code(), "1");
+									}
+									codeMap.put(code.getLoss_code(), code);
 								}
 							}
 						}
 						boolean inPaxItin=true;
 						for(Item it:theform.getItemlist()){
-							if(it.getFaultStation()!=null && it.getFaultStation().getStationcode()!=null && it.getFaultStation().getStationcode().length()>0){
-								if(paxItinMap.get(it.getFaultStation().getStationcode())==null){
+							if(it.getFaultStation()!=null && it.getFaultStation().getStationcode()!=null 
+									&& it.getFaultStation().getStationcode().length()>0 && it.getLossCode()>0){
+								Company_specific_irregularity_code code=codeMap.get(it.getLossCode());
+								if(paxItinMap.get(it.getFaultStation().getStationcode()+it.getLossCode())==null
+										&& !(!code.isDestinationStation() && !code.isTransferStation() && !code.isDepartStation())){
 									inPaxItin=false;
 									break;
 								}
@@ -870,6 +904,7 @@ public class MBRActionUtils {
 		// delete closing remark
 		boolean deleteremark = false;
 		String index = "0";
+		@SuppressWarnings("rawtypes")
 		Enumeration e = request.getParameterNames();
 		while (e.hasMoreElements()) {
 			String parameter = (String) e.nextElement();
@@ -882,7 +917,7 @@ public class MBRActionUtils {
 			}
 		}
 		if (deleteremark) {
-			List remarkList = theform.getRemarklist();
+			List<Remark> remarkList = theform.getRemarklist();
 			if (remarkList != null)
 				remarkList.remove(Integer.parseInt(index));
 			request.setAttribute("markDirty", 1);
@@ -936,7 +971,7 @@ public class MBRActionUtils {
 			if (theform.getFaultcompany_id() == null)
 				return true;
 
-			List faultstationlist = TracerUtils.getStationList(theform.getFaultcompany_id());
+			List<Station> faultstationlist = TracerUtils.getStationList(theform.getFaultcompany_id());
 			request.setAttribute("faultstationlist", faultstationlist);
 			return true;
 		}
@@ -952,6 +987,7 @@ public class MBRActionUtils {
 	 * @return @throws
 	 *         Exception
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static String actionAddAssoc(IncidentForm theform, HttpServletRequest request, Agent user) throws Exception {
 		String loc = null;
 		int type = 0; 
@@ -1438,6 +1474,7 @@ public class MBRActionUtils {
 		
 		// Passenger Picked Up is clicked
 		try{
+			//Potential TODO: Add logic to check for Station here
 			for (int i = 0; i < theform.getItemlist().size(); i++) {
 				if (request.getParameter("passengerpickedup" + i) != null) {
 					item = (Item) theform.getItem(i, 0);
@@ -1474,12 +1511,8 @@ public class MBRActionUtils {
 	
 	public static ActionMessage checkOHDEntered(IncidentForm theform, HttpServletRequest request, Agent user, ServletContext sc) throws Exception {
 
-		BagService bs = new BagService();
 		Incident_Claimcheck ic = null;
 		Item item = null;
-		OhdBMO oBMO = new OhdBMO();
-
-		OHD ohd_obj = null;
 
 		ActionMessage error = null;
 
@@ -1511,7 +1544,7 @@ public class MBRActionUtils {
 		// change up service level
 		if (request.getParameter("changeassignedstation") != null && request.getParameter("changeassignedstation").equals("1")) {
 			if (theform.getStationassigned_ID() > 0) {
-				List agentassignedlist = TracerUtils.getAgentlist(theform.getStationassigned_ID());
+				List<Agent> agentassignedlist = TracerUtils.getAgentlist(theform.getStationassigned_ID());
 				// AJAX CALL
 				request.setAttribute("agentassignedlist", agentassignedlist);
 				return true;
@@ -1553,13 +1586,14 @@ public class MBRActionUtils {
 	/**
 	 * Method to get Assist Device Types - Category Type "2"
 	 */
-	public static List getAssistDeviceTypes() {
+	public static List<Category> getAssistDeviceTypes() {
 		Session sess = null;
 		try {
 
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Category.class);
-			cri.add(Expression.eq("type", new Integer(TracingConstants.ASSIST_DEVICE_TYPE)));
+			cri.add(Restrictions.eq("type", new Integer(TracingConstants.ASSIST_DEVICE_TYPE)));
+			@SuppressWarnings("unchecked")
 			List<Category> ol = cri.list();
 			return ol;
 		} catch (Exception e) {

@@ -25,6 +25,11 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
  */
 public final class BDOForm extends ValidatorForm {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1160581155964741859L;
+
 	// if choosebags = 1; get bag and passenger info to select from incident or
 	// ohd
 	private int choosebags;
@@ -48,9 +53,9 @@ public final class BDOForm extends ValidatorForm {
 	private Date pickupdate;
 	private Date pickuptime;	
 
-	private List passengerlist = new ArrayList();
-	private List itemlist = new ArrayList();
-	private List existItemList = new ArrayList();
+	private List<BDO_Passenger> passengerlist = new ArrayList<BDO_Passenger>();
+	private List<Item> itemlist = new ArrayList<Item>();
+	private List<Item> existItemList = new ArrayList<Item>();
 
 	private String _DATEFORMAT; // current login agent's date format
 	private String _TIMEFORMAT; // current login agent's time format
@@ -101,11 +106,11 @@ public final class BDOForm extends ValidatorForm {
 		this.choosebags = choosebags;
 	}
 
-	public List getPassengerlist() {
+	public List<BDO_Passenger> getPassengerlist() {
 		return passengerlist;
 	}
 
-	public void setPassengerlist(List passengerlist) {
+	public void setPassengerlist(List<BDO_Passenger> passengerlist) {
 		this.passengerlist = passengerlist;
 	}
 
@@ -118,11 +123,11 @@ public final class BDOForm extends ValidatorForm {
 		return (BDO_Passenger) this.passengerlist.get(index);
 	}
 
-	public List getItemlist() {
+	public List<Item> getItemlist() {
 		return itemlist;
 	}
 
-	public void setItemlist(List itemlist) {
+	public void setItemlist(List<Item> itemlist) {
 		this.itemlist = itemlist;
 	}
 
@@ -593,11 +598,11 @@ public final class BDOForm extends ValidatorForm {
 		
 	}
 
-	public List getExistItemList() {
+	public List<Item> getExistItemList() {
 		return existItemList;
 	}
 
-	public void setExistItemList(List existItemList) {
+	public void setExistItemList(List<Item> existItemList) {
 		this.existItemList = existItemList;
 	}
 
