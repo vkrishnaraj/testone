@@ -248,6 +248,7 @@
 			<td colspan="3" id="navmenucell">
 				<div class="menu">
 					<dl>
+						<logic:present property="incident_ID" name="expensePayoutForm">
 						<dd>
 							<a
 								href='searchIncident.do?incident=<c:out value="${expensePayoutForm.incident_ID}" />'><span
@@ -255,7 +256,7 @@
 										key="menu.incident_info" /> </span> <span class="cc">&nbsp; <br />
 									&nbsp;</span> </a>
 						</dd>
-
+						</logic:present>
 						<dd>
 							<a href="#"><span class="aab">&nbsp; <br /> &nbsp;</span> <span
 								class="bbb"><bean:message key="menu.interim_expense" />

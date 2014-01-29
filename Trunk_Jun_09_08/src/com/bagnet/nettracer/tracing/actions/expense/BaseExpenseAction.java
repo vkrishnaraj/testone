@@ -130,7 +130,9 @@ public abstract class BaseExpenseAction extends CheckedAction {
 		epform.setDateFormat(user.getDateformat().getFormat());
 		epform.setExpenselocation_ID(ep.getExpenselocation().getStation_ID());
 		epform.setExpensetype_id(ep.getExpensetype().getExpensetype_ID());
-		epform.setIncident_ID(ep.getIncident().getIncident_ID());
+		if(ep.getIncident()!=null){
+			epform.setIncident_ID(ep.getIncident().getIncident_ID());
+		} 
 		epform.setOldComments(new ArrayList<Comment>(ep.getComments()));
 		epform.setStatus_id(ep.getStatus().getStatus_ID());
 		epform.setTz(user.getCurrenttimezone());
