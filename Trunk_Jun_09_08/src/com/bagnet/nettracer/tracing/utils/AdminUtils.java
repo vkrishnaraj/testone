@@ -147,6 +147,8 @@ public class AdminUtils {
 				} else {
 					sql.append(" and logger.log_in_time >= :s_date and logger.log_in_time <= :e_date");
 				}
+			} else if(form.getE_time()!=null && (!form.getE_time().equals(""))){
+				sql.append(" and logger.log_in_time <= :e_date");
 			}
 			
 			Agent findagent = null;
@@ -175,6 +177,8 @@ public class AdminUtils {
 					q.setDate("s_date", sdate);
 					q.setDate("e_date", edate);
 				}
+			} else if(form.getE_time()!=null && (!form.getE_time().equals(""))){
+				q.setDate("e_date", edate);
 			}
 
 			@SuppressWarnings("rawtypes")
@@ -223,6 +227,8 @@ public class AdminUtils {
 				} else {
 					sql.append(" and logger.log_in_time >= :s_date and logger.log_in_time <= :e_date");
 				}
+			} else if(form.getE_time()!=null && (!form.getE_time().equals(""))){
+				sql.append(" and logger.log_in_time <= :e_date");
 			}
 
 			Agent findagent = null;
@@ -261,6 +267,8 @@ public class AdminUtils {
 					q.setDate("s_date", sdate);
 					q.setDate("e_date", edate);
 				}
+			} else if(form.getE_time()!=null && (!form.getE_time().equals(""))){
+				q.setDate("e_date", edate);
 			}
 			@SuppressWarnings("unchecked")
 			List<Agent_Logger> loglist=q.list();
