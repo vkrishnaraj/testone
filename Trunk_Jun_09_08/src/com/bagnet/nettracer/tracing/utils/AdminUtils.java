@@ -2065,12 +2065,27 @@ public class AdminUtils {
 		u.setActive(true);
 		u.setWeb_enabled(true);
 		u.setWs_enabled(true);
-		
-		/** Default other values to blank or ntadmin values **/
-		u.setDefaultlocale(ntuser.getDefaultlocale());
 		u.setMname("");
-		u.setCurrentlocale(ntuser.getCurrentlocale());
-		u.setDefaultcurrency(ntuser.getDefaultcurrency());
+		
+		/** Default other values to blank or property values. If no property values exist, then default to NtAdmin**/
+
+		String defaultlocale=PropertyBMO.getValue(PropertyBMO.DEFAULT_AUTOPROVISION_LOCALE);
+		if(defaultlocale==null){
+			defaultlocale=ntuser.getDefaultlocale();
+		}
+		u.setDefaultlocale(defaultlocale);
+		
+		String currentlocale=PropertyBMO.getValue(PropertyBMO.CURRENT_AUTOPROVISION_LOCALE);
+		if(currentlocale==null){
+			currentlocale=ntuser.getCurrentlocale();
+		}
+		u.setCurrentlocale(currentlocale);
+		
+		String defaultcurrency=PropertyBMO.getValue(PropertyBMO.DEFAULT_AUTOPROVISION_CURRENCY);
+		if(defaultcurrency==null){
+			defaultcurrency=ntuser.getDefaultcurrency();
+		}
+		u.setDefaultcurrency(defaultcurrency);
 		
 		String defaulttimezone=PropertyBMO.getValue(PropertyBMO.DEFAULT_AUTOPROVISION_TIMEZONE);
 		if(defaulttimezone==null){
@@ -2083,10 +2098,24 @@ public class AdminUtils {
 			currenttimezone=ntuser.getCurrenttimezone();
 		}		
 		u.setCurrenttimezone(currenttimezone);
+
+		String dateformat=PropertyBMO.getValue(PropertyBMO.DEFAULT_AUTOPROVISION_DATEFORMAT);
+		if(dateformat==null){
+			dateformat=String.valueOf(ntuser.getDateformat().getDateformat_ID());
+		}		
+		u.setDateformat(getDateFormat(dateformat));
+
+		String timeformat=PropertyBMO.getValue(PropertyBMO.DEFAULT_AUTOPROVISION_TIMEFORMAT);
+		if(timeformat==null){
+			timeformat=String.valueOf(ntuser.getTimeformat().getTimeformat_ID());
+		}		
+		u.setTimeformat(getTimeFormat(timeformat));
 		
-		u.setDateformat(ntuser.getDateformat());
-		u.setTimeformat(ntuser.getTimeformat());
-		u.setTimeout(ntuser.getTimeout());
+		int timeout=PropertyBMO.getValueAsInt(PropertyBMO.DEFAULT_AUTOPROVISION_TIMEOUT);
+		if(timeout==0){
+			timeout=ntuser.getTimeout();
+		}
+		u.setTimeout(timeout);
 		
 		String pass=StringUtils.sha1_256("ntp@ssw0rd"); //Default Password
 		u.setPassword(pass);
