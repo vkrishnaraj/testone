@@ -90,6 +90,7 @@ public final class ManageCodes extends Action {
 			dForm.set("departStation", code.isDepartStation() ? "1" : "");
 			dForm.set("transferStation", code.isTransferStation() ? "1" : "");
 			dForm.set("destinationStation", code.isDestinationStation() ? "1" : "");
+			dForm.set("anyStation", code.isAnyStation() ? "1" : "");
 			return mapping.findForward(TracingConstants.EDIT_CODE);
 		}
 
@@ -220,6 +221,12 @@ public final class ManageCodes extends Action {
 				destinationStation = true;
 			}
 			s.setDestinationStation(destinationStation);
+			
+			boolean anyStation = false;
+			if (((String)dForm.get("anyStation")).equals("1")) {
+				anyStation = true;
+			}
+			s.setAnyStation(anyStation);
 			
 			try {
 				HibernateUtils.saveCode(s, isNew);

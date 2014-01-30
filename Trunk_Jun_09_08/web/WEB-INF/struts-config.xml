@@ -217,6 +217,7 @@
 			<form-property name="destinationStation" type="java.lang.String" />
 			<form-property name="departStation" type="java.lang.String" />
 			<form-property name="transferStation" type="java.lang.String" />
+			<form-property name="anyStation" type="java.lang.String" />
 		</form-bean>
 		<form-bean name="searchBDOForm" type="com.bagnet.nettracer.tracing.forms.SearchBDOForm" />
 		<form-bean name="auditOHDForm" type="com.bagnet.nettracer.tracing.forms.audit.AuditOnHandForm" />

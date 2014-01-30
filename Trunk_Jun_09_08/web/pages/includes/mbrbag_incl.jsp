@@ -110,6 +110,7 @@
 	  codeStationMap["<%=code.getLoss_code()%>depart"]=<%=code.isDepartStation()%>;
 	  codeStationMap["<%=code.getLoss_code()%>transfer"]=<%=code.isTransferStation()%>;
 	  codeStationMap["<%=code.getLoss_code()%>destination"]=<%=code.isDestinationStation()%>;
+	  codeStationMap["<%=code.getLoss_code()%>any"]=<%=code.isAnyStation()%>;
   <%}%>
   function textCounter3(field, maxlimit) {
     if (field.value.length > maxlimit) {

@@ -3,10 +3,37 @@
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
 <%@ taglib uri="/tags/struts-logic" prefix="logic" %>
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.Agent"%>
+<%@ page import="java.util.ResourceBundle" %>
+<%@ page import="java.util.Locale" %>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="org.apache.struts.action.DynaActionForm" %>
-<html:form action="codeAdmin.do" method="post" onsubmit="return validateCodeForm(this);">
+<%
+	Agent a = (Agent) session.getAttribute("user");
+	ResourceBundle bundle = ResourceBundle.getBundle(
+			"com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
+%>
+<script language="javascript">
+	function checkStationBoxes(){
+		var anyStationChecked=document.getElementById("anyStation").checked;
+		var departStationChecked=document.getElementById("departStation").checked;
+		var transferStationChecked=document.getElementById("transferStation").checked;
+		var destinationStationChecked=document.getElementById("destinationStation").checked;
+		
+		if(!departStationChecked && !transferStationChecked && !destinationStationChecked && !anyStationChecked){
+			alert("<%=(String) bundle
+					.getString( "error.loss.code.station.rule")%>");
+     		
+  				return false;
+		}
+		return true;
+		
+	}
+
+</script>
+
+<html:form action="codeAdmin.do" method="post" onsubmit="return checkStationBoxes() && validateCodeForm(this);">
   <html:javascript formName="codeForm" />
   <tr>
     <td colspan="3" id="pageheadercell">
@@ -173,6 +200,15 @@
           </td>
           <td>
             <html:checkbox property="destinationStation" value="1"></html:checkbox>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <bean:message key="header.anyStation" />
+            :
+          </td>
+          <td>
+            <html:checkbox property="anyStation" value="1"></html:checkbox>
           </td>
         </tr>
         <tr>

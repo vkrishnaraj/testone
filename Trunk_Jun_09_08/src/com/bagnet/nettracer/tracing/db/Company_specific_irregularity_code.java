@@ -30,6 +30,7 @@ public class Company_specific_irregularity_code implements Serializable {
 	private boolean transferStation;
 	private boolean departStation;
 	private boolean destinationStation;
+	private boolean anyStation;
 
 
 	private Company company;
@@ -227,5 +228,20 @@ public class Company_specific_irregularity_code implements Serializable {
 	 */
 	public void setDestinationStation(boolean destinationStation) {
 		this.destinationStation = destinationStation;
+	}
+
+	/**
+	 * @return whether the loss code is anyStation or not
+	 * @hibernate.property type="boolean"
+	 */
+	public boolean isAnyStation() {
+		return anyStation;
+	}
+	
+	/**
+	 * @param anyStation : the anyStation to set
+	 */
+	public void setAnyStation(boolean anyStation) {
+		this.anyStation = anyStation;
 	}
 }

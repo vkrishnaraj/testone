@@ -846,7 +846,7 @@ public class MBRActionUtils {
 									&& it.getFaultStation().getStationcode().length()>0 && it.getLossCode()>0){
 								Company_specific_irregularity_code code=codeMap.get(it.getLossCode());
 								if(paxItinMap.get(it.getFaultStation().getStationcode()+it.getLossCode())==null
-										&& !(!code.isDestinationStation() && !code.isTransferStation() && !code.isDepartStation())){
+										&& !(code.isAnyStation())){
 									inPaxItin=false;
 									break;
 								}

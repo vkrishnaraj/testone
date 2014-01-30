@@ -1638,7 +1638,7 @@ public class BDOUtils {
 						&& item.getLossCode()>0){
 					Company_specific_irregularity_code code=codeMap.get(item.getLossCode());
 					if(paxItinMap.get(item.getFaultStation().getStationcode()+item.getLossCode())==null
-							&& !(!code.isDestinationStation() && !code.isTransferStation() && !code.isDepartStation())){
+							&& !(code.isAnyStation())){
 						inPaxItin=false;
 						break;
 					}

@@ -1,12 +1,15 @@
 <%@page import="java.text.MessageFormat"%>
 <%@ page contentType="text/javascript" %> 
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent"%>
+<%@ page import="com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code"%>
 <%@ page import="org.apache.struts.action.Action"%>
 <%@ page import="java.util.ResourceBundle" %>
 <%@ page import="java.util.Locale" %>
+<%@ page import="java.util.List" %>
 
 <%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
 <%@page import="com.bagnet.nettracer.tracing.utils.OHDUtils"%>
+<%@page import="com.bagnet.nettracer.tracing.bmo.LossCodeBMO"%>
 <%@page import="com.bagnet.nettracer.tracing.db.OHD"%>
 <%
 	Agent a = (Agent) session.getAttribute("user");
@@ -92,6 +95,10 @@
     var firstItemIndex = -1;
     var firstClaimcheckIndex = -1;
     var i = -1;
+    var departStation=false;
+    var transStation=false;
+    var destStation=false;
+    var anyStation=false;
     
     for (var j=0;j < form.length; j++) {
       currentElement = form.elements[j];
@@ -127,6 +134,11 @@
 	          currentElement.focus();
 	          return false;
         	}
+        	
+        	departStation=codeStationMap[currentElement.value+"depart"];
+        	transStation=codeStationMap[currentElement.value+"transfer"];
+        	destStation=codeStationMap[currentElement.value+"destination"];
+        	anyStation=codeStationMap[currentElement.value+"any"];
         } else if (currentElementName.indexOf("].faultStation_id") != -1) {
       		if(currentElement.value!=null && currentElement.value.length>0){
 	      		hasPaxItin=false;
@@ -138,21 +150,44 @@
 		      		for(var m=0; m < paxItinList.childNodes.length; m++){
 		      			if(m%2!=0){
 		      				var paxItin=paxItinList.children[m];
+		      				var checkFromStation=false;
+		      				var checkToStation=false;
 				      		for (var k=0; k < paxItin.children[1].children[0].children[0].children[0].childNodes.length; k++) {
 						      itinElement = paxItin.children[1].children[0].children[0].children[0].children[k];
 						      itinElementName=null;
 						      if(typeof itinElement != "undefined")
 						      	itinElementName=itinElement.name;
 						      	
+						      	if(typeof itinElementName != "undefined" && itinElementName != null 
+				      				&& (itinElementName.indexOf("legto_type") != -1)){
+				      				if((departStation && itinElement.value=="<%=TracingConstants.LEG_B_STATION%>") 
+				      					|| (transStation && itinElement.value=="<%=TracingConstants.LEG_T_STATION%>")
+				      					|| (destStation && itinElement.value=="<%=TracingConstants.LEG_E_STATION%>")){
+				      					checkToStation=true;
+				      				}
+				      			}
+				      			if(typeof itinElementName != "undefined" && itinElementName != null 
+				      				&& (itinElementName.indexOf("legfrom_type") != -1)){
+				      				if((departStation && itinElement.value=="<%=TracingConstants.LEG_B_STATION%>") 
+				      					|| (transStation && itinElement.value=="<%=TracingConstants.LEG_T_STATION%>")
+				      					|| (destStation && itinElement.value=="<%=TracingConstants.LEG_E_STATION%>")){
+				      					checkFromStation=true;
+				      				}
+				      			}
+				      				      			
 				      			if(typeof itinElementName != "undefined" && itinElementName != null && itinElementName.indexOf("].legfrom") != -1){
-				      				if(itinElement.value.toUpperCase()==faultStationCode){
+				      				if(itinElement.value.toUpperCase()==faultStationCode && checkFromStation){
 				      					hasPaxItin=true;
 				      				}
 				      			}
 				      			if(typeof itinElementName != "undefined" && itinElementName != null && itinElementName.indexOf("].legto") != -1){
-				      				if(itinElement.value.toUpperCase()==faultStationCode){
+				      				if(itinElement.value.toUpperCase()==faultStationCode && checkToStation){
 				      					hasPaxItin=true;
 				      				}
+				      			}
+				      			
+				      			if(anyStation){
+				      				hasPaxItin=true;
 				      			}
 				      		}
 			      		}
@@ -448,3 +483,4 @@
   
   function checkDeleteCount(bagNum, report_type) { return true; }
   function checkOhdDeleteCount(bagNum) { return true; }
+  function validateClose(){ return true; }
