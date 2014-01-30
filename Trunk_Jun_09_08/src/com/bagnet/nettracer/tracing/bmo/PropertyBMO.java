@@ -279,6 +279,12 @@ public class PropertyBMO {
 
 	public static final String DEFAULT_AUTOPROVISION_TIMEZONE = "default.autoprovision.timezone";
 	public static final String CURRENT_AUTOPROVISION_TIMEZONE = "current.autoprovision.timezone";
+	public static final String DEFAULT_AUTOPROVISION_TIMEOUT = "default.autoprovision.timeout";
+	public static final String DEFAULT_AUTOPROVISION_TIMEFORMAT = "default.autoprovision.timeformat";
+	public static final String DEFAULT_AUTOPROVISION_DATEFORMAT = "default.autoprovision.dateformat";
+	public static final String DEFAULT_AUTOPROVISION_CURRENCY = "default.autoprovision.currency";
+	public static final String DEFAULT_AUTOPROVISION_LOCALE = "default.autoprovision.locale";
+	public static final String CURRENT_AUTOPROVISION_LOCALE = "current.autoprovision.locale";
 	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;
