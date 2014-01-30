@@ -43,6 +43,7 @@ import com.bagnet.nettracer.tracing.db.DeliverCompany;
 import com.bagnet.nettracer.tracing.db.DeliveryIntegrationType;
 import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.forms.BDOForm;
+import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
@@ -62,9 +63,13 @@ public class CostServiceUtils {
 		if(dc!=null && dc.getDelivery_integration_type().equals(DeliveryIntegrationType.SERV)){
 			// If there has been a previous successful message, error out.
 
+			@SuppressWarnings("unused")
 			String delCompany1 = "";
+			@SuppressWarnings("unused")
 			String delCompany2 = dc.getName();
+			@SuppressWarnings("unused")
 			String phoneNumber1 = "";
+			@SuppressWarnings("unused")
 			String phoneNumber2 = dc.getPhone();
 			String noticeText = null;
 			 
@@ -166,8 +171,9 @@ public class CostServiceUtils {
 				bdo.set_TIMEZONE(TimeZone.getTimeZone("GMT")); //agent.getCurrenttimezone()
 				Calendar createCal = Calendar.getInstance();
 				createCal.setTime(DateUtils.convertToDate(bdo.getDispcreatetime(), bdo.get_DATEFORMAT() + " " + bdo.get_TIMEFORMAT(), null,null));
-				
 				request.setCreatedDate(fixTimeZone(createCal,"GMT"));
+				
+				createCal.setTime(DateUtils.convertToDate(bdo.getDisppickupdate(), bdo.get_DATEFORMAT() + " " + bdo.get_TIMEFORMAT(), null,null));
 				request.setPickUpDate(fixTimeZone(createCal,"GMT"));
 				
 				ArrayOfItemData array = request.addNewItemsData();
@@ -302,12 +308,10 @@ public class CostServiceUtils {
 			}
 			id.setStandard(form.getOhd().isNoAddFees());
 		}
-
-		form.set_DATEFORMAT(TracingConstants.DISPLAY_DATEFORMAT);
-		form.set_TIMEFORMAT(TracingConstants.DISPLAY_TIMEFORMAT_B);
-		form.set_TIMEZONE(TimeZone.getTimeZone("GMT")); //agent.getCurrenttimezone()
-		Calendar createCal = Calendar.getInstance();
-		createCal.setTime(DateUtils.convertToDate(form.getDispcreatetime(), form.get_DATEFORMAT() + " " + form.get_TIMEFORMAT(), null,null));
+		
+		form.set_DATEFORMAT(user.getDateformat().getFormat());
+		form.set_TIMEFORMAT(user.getTimeformat().getFormat());
+		form.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
 		
 	    try {
 	    	logger.info(validate);

@@ -407,7 +407,7 @@ public final class BDOForm extends ValidatorForm {
 		Date tempdate = DateUtils.convertToDate( DateUtils.formatDate(getPickupdate(), TracingConstants.DB_DATEFORMAT, null, null) + " "
 				+ DateUtils.formatDate(getPickuptime(), TracingConstants.DB_TIMEFORMAT, null, null),TracingConstants.DB_DATETIMEFORMAT,null);
 		
-		return DateUtils.formatDate(tempdate, _TIMEFORMAT, null, _TIMEZONE);		
+		return DateUtils.formatDate(tempdate, _TIMEFORMAT, null, null);		
 	}
 
 	/**

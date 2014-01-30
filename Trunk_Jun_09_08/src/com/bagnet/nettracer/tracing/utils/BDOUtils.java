@@ -408,13 +408,8 @@ public class BDOUtils {
 				bdo.setPassengers(new LinkedHashSet(theform.getPassengerlist()));
 			}
 			if(theform.getPickupdate()!=null && theform.getPickuptime()!=null){
-				// do the  GMT conversion for pickupdate and pickuptime
-				String strDate = DateUtils.formatDate(theform.getPickupdate(), TracingConstants.DB_DATEFORMAT, null, null);
-				String strTime = DateUtils.formatDate(theform.getPickuptime(), TracingConstants.DB_TIMEFORMAT, null, null);
-				Date tempdate = DateUtils.convertToGMTDate(strDate + " " + strTime,TracingConstants.DB_DATETIMEFORMAT2, null);
-				
-				bdo.setPickuptime(DateUtils.convertToDate(DateUtils.formatDate(tempdate, TracingConstants.DB_TIMEFORMAT, null, null), TracingConstants.DB_TIMEFORMAT, null));
-				bdo.setPickupdate(DateUtils.convertToDate(DateUtils.formatDate(tempdate, TracingConstants.DISPLAY_DATETIMEFORMAT, null, null), TracingConstants.DISPLAY_DATETIMEFORMAT, null));
+				bdo.setPickuptime(DateUtils.convertToDate(DateUtils.formatDate(theform.getPickuptime(), TracingConstants.DB_TIMEFORMAT, null, null), TracingConstants.DB_TIMEFORMAT, null));
+				bdo.setPickupdate(DateUtils.convertToDate(DateUtils.formatDate(theform.getPickupdate(), TracingConstants.DISPLAY_DATETIMEFORMAT, null, null), TracingConstants.DISPLAY_DATETIMEFORMAT, null));
 			} else {
 				bdo.setPickuptime(null);
 				bdo.setPickupdate(null);
