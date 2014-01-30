@@ -43,15 +43,23 @@
 	    };
 	    
 	    function validateEmail() {
-	    	var selectlist = document.getElementById("distributemethod");
-	    	templateId = selectlist.options[selectlist.selectedIndex].value;
-	    	    	 
-	    	var templateSelect2 = document.getElementById("email");
-			templateId2 = templateSelect2.value;
-			if (templateId == "EMAIL" && templateId2 == "" ){
-	    		 alert('<%=myMessages.getMessage(myLocale, "voucher.alert.email.required")%>'); 
-	    		 return false;
-	    	}
+	    	var distributeMethod = document.getElementById("distributemethod");
+			if (distributeMethod.options[distributeMethod.selectedIndex].value != "EMAIL"){
+		    	return true;
+			}
+	    
+	    	var email = document.getElementById("email");
+ 			if (email.value.length < 1){
+				alert('<%=myMessages.getMessage(myLocale, "voucher.alert.email.required")%>');
+ 	    		email.focus();
+				return false;
+ 	    	}
+
+ 			if (!checkEmail(email.value)){
+ 				alert('<%=myMessages.getMessage(myLocale, "colname.email")%> ' + '<%=myMessages.getMessage(myLocale, "error.validation.email")%>'); 
+ 	    		email.focus();
+ 	    		return false;
+ 	    	}
 			
 	    	return true;
 	    };	
@@ -410,8 +418,7 @@
 						 %>
 						<tr>
 							<td align="center" valign="top" colspan="3">
-
-								<html:submit  property="createExpense" styleId="button" onclick="return validateEmail() && validateRequiredFields();"> 
+								<html:submit  property="createExpense" styleId="button" onclick="return validateRequiredFields() && validateEmail();"> 
 									<bean:message key="button.request_for_approval" />
 								</html:submit>
 							</td>

@@ -33,7 +33,7 @@ function getStatusIds(type) {
 			window.alert("NO PERMISSION");
 			issue_voucher = false;
 		}
-	} else if (type!='VOUCH'){
+	} else {
 			document.getElementById("amountColumn").value='<bean:message key="draft.amount"/>' +
 			'<br />' +
 			'<html:text property="checkamt" maxlength="20" styleClass="textfield"></html:text>';
@@ -65,13 +65,55 @@ function updatePaymentFields(newType) {
 }
 
 function validateRequiredFields() {
-	if (document.getElementById("button").value == '<bean:message key="button.issue.voucher"/>') {
-		var minimumValue = 1;
-		var checkamt = document.getElementsByName('checkamt')[0];
-		if (0 < checkamt.value.length && !checkFloatGreaterThanMinimumValue(checkamt.value, minimumValue)) {
-	        alert('<bean:message key="error.validation.minimum.amount"/>');
-			checkamt.focus();
-		    return false;
+	if (document.getElementById("button").value != "<bean:message key="button.issue.voucher"/>") {
+		return true;
+	}
+	
+	var minimumValue = 1;
+	var checkamt = document.getElementsByName("checkamt")[0];
+	if (0 < checkamt.value.length && !checkFloatGreaterThanMinimumValue(checkamt.value, minimumValue)) {
+        alert("<bean:message key="error.validation.minimum.amount"/>");
+		checkamt.focus();
+	    return false;
+	}
+	
+	var distributeMethod = document.getElementById("distributemethod");
+	if (distributeMethod.options[distributeMethod.selectedIndex].value == "MAIL") {
+    	var address1 = document.getElementsByName("address1")[0];
+		if (address1.value.length < 1){
+			alert("<bean:message key='colname.street_addr'/>" + " <bean:message key='error.validation.isRequired'/>");
+			address1.focus();
+			return false;
+		}
+		
+    	var city = document.getElementsByName("city")[0];
+		if (city.value.length < 1){
+			alert("<bean:message key='colname.city'/>" + " <bean:message key='error.validation.isRequired'/>");
+			city.focus();
+			return false;
+		}
+		
+    	var countrycodeId = document.getElementsByName("countrycode_ID")[0];
+		if (countrycodeId.value.length < 1){
+			alert("<bean:message key='colname.country'/>" + " <bean:message key='error.validation.isRequired'/>");
+			countrycodeId.focus();
+			return false;
+		} 
+
+		if (countrycodeId.value == "US") {
+			var stateId = document.getElementsByName("state_ID")[0];
+			if (stateId.value.length < 1){
+				alert("<bean:message key='colname.state'/>" + " <bean:message key='error.state.required'/>");
+				stateId.focus();
+				return false;
+			}
+			
+			var zip = document.getElementsByName("zip")[0];
+			if (zip.value.length < 1){
+				alert("<bean:message key='colname.zip'/>" + " <bean:message key='error.state.required'/>");
+				zip.focus();
+				return false;
+			}
 		}
 	}
 	
