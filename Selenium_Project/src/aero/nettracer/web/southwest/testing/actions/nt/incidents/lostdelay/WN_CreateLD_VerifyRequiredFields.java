@@ -682,7 +682,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 			assertEquals("Remark for Loss Code Change is required.", selenium.getAlert());
 			selenium.type("id=remark[2]", "Loss Code Change Remark");
 			selenium.click("name=saveButton");
-			assertEquals("Fault Station must be in Passenger Itinerary", selenium.getAlert());
+			assertEquals("Fault Station must follow the Loss Code's Itinerary Rules", selenium.getAlert());
 			selenium.select("name=theitem[0].faultStation_id", "label=ATL");
 			selenium.click("name=saveButton");
 			waitForPageToLoadImproved();
