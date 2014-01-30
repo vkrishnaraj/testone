@@ -428,7 +428,53 @@
     for (var j=0;j < form.length;j++) {
       currentElement = form.elements[j];
       currentElementName=currentElement.name;
-      if (currentElementName.indexOf("].lossCode") != -1){
+      
+	  if (currentElementName.indexOf("disppickupdate") != -1)
+      {
+      		if(currentElement.value.length == 0){
+	      		alert("<%= (String)bundle.getString("colname.pickupdatetime") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+	          	currentElement.focus();
+	          	return false;
+      		} else if (!checkDate(currentElement.value)) {
+			        alert("<%= (String)bundle.getString("colname.pickupdatetime") %>" + " <%= (String)bundle.getString("error.validation.date") %>");
+			        currentElement.focus();
+			        return false;
+		    }
+      } else if(currentElementName.indexOf("disppickuptime") != -1){
+     		if(currentElement.value.length == 0){
+	      		alert("<%= (String)bundle.getString("colname.pickupdatetime") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
+	          	currentElement.focus();
+	          	return false;
+      		} else if (!checkTime(currentElement.value)) {
+			        alert("<%= (String)bundle.getString("colname.pickupdatetime") %>" + " <%= (String)bundle.getString("error.validation.time") %>");
+			        currentElement.focus();
+			        return false;
+		    }
+      } else if(currentElementName.indexOf("].noAddFees") != -1){
+     	otherSelect=document.getElementById("theitem["+i+"].other");
+      	specialConditions=document.getElementById("theitem["+i+"].specialCondition");
+      	
+      	if(currentElement.checked && (otherSelect.value!="0" || specialConditions.value!="0")){
+      		alert("<%= (String)bundle.getString("error.noadds.with.otherselect") %>");
+			        currentElement.focus();
+			        return false;
+      	}
+      	
+      	if(!currentElement.checked && otherSelect.value=="0" && specialConditions.value=="0"){
+      		alert("<%= (String)bundle.getString("error.must.select.noadds.other") %>");
+			        currentElement.focus();
+			        return false;
+      	}
+	    
+      } else if(currentElementName.indexOf("].specialCondition") != -1 || currentElementName.indexOf("].other") != -1){
+      	noAddFees=document.getElementById("theitem["+i+"].noAddFees");
+      	if(currentElement.value!="0" && noAddFees.checked){
+      		alert("<%= (String)bundle.getString("error.noadds.with.otherselect") %>");
+			        currentElement.focus();
+			        return false;
+      	}
+      
+      } else if (currentElementName.indexOf("].lossCode") != -1){
         var isbagchosen=document.getElementById("bagchosen"+i);
         if ((isbagchosen==null || isbagchosen.checked==true) && currentElement!=null && currentElement.value=="0"){
           alert("<%= (String)bundle.getString("colname.loss.code") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
