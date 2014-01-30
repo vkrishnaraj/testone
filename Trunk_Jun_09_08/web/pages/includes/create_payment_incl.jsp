@@ -20,6 +20,11 @@ function updatePaymentFields(newType) {
 		break;
 	}
 }
+
+function validateRequiredFields() {
+	return true;
+}
+
 </script>
 <tr>
 	<td>
