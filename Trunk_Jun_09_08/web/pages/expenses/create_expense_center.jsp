@@ -411,7 +411,7 @@
 						<tr>
 							<td align="center" valign="top" colspan="3">
 
-								<html:submit  property="createExpense" styleId="button" onclick="return validateEmail();"> 
+								<html:submit  property="createExpense" styleId="button" onclick="return validateEmail() && validateRequiredFields();"> 
 									<bean:message key="button.request_for_approval" />
 								</html:submit>
 							</td>

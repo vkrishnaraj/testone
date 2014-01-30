@@ -63,6 +63,35 @@ function updatePaymentFields(newType) {
 	}
 	getStatusIds(newType);
 }
+
+function validateRequiredFields() {
+	if (document.getElementById("button").value == '<bean:message key="button.issue.voucher"/>') {
+		var minimumValue = 1;
+		var checkamt = document.getElementsByName('checkamt')[0];
+		if (0 < checkamt.value.length && !checkFloatGreaterThanMinimumValue(checkamt.value, minimumValue)) {
+	        alert('<bean:message key="error.validation.minimum.amount"/>');
+			checkamt.focus();
+		    return false;
+		}
+	}
+	
+	return true;
+}
+
+
+function checkFloatGreaterThanMinimumValue(value, minimumValue) { 
+    // remove '.' before checking digits
+    var tempArray = value.split('.');
+    var joinedString= tempArray.join('');
+
+    if (!checkInteger(joinedString)) {
+      return false;
+    }
+
+    var iValue = parseFloat(value);
+    return (minimumValue <= iValue);
+}
+
 </script>
 <tr>
 	<td>
