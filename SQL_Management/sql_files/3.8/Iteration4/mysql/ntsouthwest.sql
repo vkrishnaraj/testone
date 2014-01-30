@@ -30,4 +30,12 @@ insert into properties (keyStr, valueStr) values ('bagdrop.offset.end',6);
 
 insert into properties (keyStr, valueStr) values ('passenger.data.in.expense','1');
 
-insert into properties (keyStr,valueStr) VALUES ('default.autoprovision.timezone' ,'10'),('current.autoprovision.timezone','10');
+insert into properties (keyStr,valueStr) VALUES 
+('default.autoprovision.timezone' ,'10'),
+('current.autoprovision.timezone','10'),
+('default.autoprovision.locale' ,'en'),
+('current.autoprovision.locale' ,'en'),
+('default.autoprovision.currency' ,'USD'),
+('default.autoprovision.dateformat' ,'1'),
+('default.autoprovision.timeformat' ,'1'),
+('default.autoprovision.timeout' ,'30');
