@@ -63,14 +63,6 @@ public class CostServiceUtils {
 		if(dc!=null && dc.getDelivery_integration_type().equals(DeliveryIntegrationType.SERV)){
 			// If there has been a previous successful message, error out.
 
-			@SuppressWarnings("unused")
-			String delCompany1 = "";
-			@SuppressWarnings("unused")
-			String delCompany2 = dc.getName();
-			@SuppressWarnings("unused")
-			String phoneNumber1 = "";
-			@SuppressWarnings("unused")
-			String phoneNumber2 = dc.getPhone();
 			String noticeText = null;
 			 
 			if (bdo.getDelivery_integration_type() != null) {
@@ -80,8 +72,6 @@ public class CostServiceUtils {
 				
 				if (originalCompanyId != 0) {
 					integrationDeliveryCompany = DelivercompanyBMO.getDeliveryCompany("" + originalCompanyId);
-					delCompany1 = integrationDeliveryCompany.getName();
-					phoneNumber1 = integrationDeliveryCompany.getPhone();
 				}
 
 				// If the delivery companies have changed, send response.
