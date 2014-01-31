@@ -722,6 +722,14 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 			selenium.select("name=theitem[0].faultStation_id", "label=Please Select");
 			waitForPageToLoadImproved(1000,false);
 			selenium.click("id=button");
+			assertEquals("Pickup Date Time is required.", selenium.getAlert());
+			selenium.click("id=calendar");
+			selenium.click("link=Today");
+			selenium.click("id=button");
+			assertEquals("Pickup Date Time is required.", selenium.getAlert());
+			selenium.type("name=disppickuptime","12:00");
+			selenium.check("name=theitem[0].noAddFees");
+			selenium.click("id=button");
 			assertEquals("Fault Code is required.", selenium.getAlert());
 			selenium.select("name=theitem[0].lossCode", "value=11");
 			waitForPageToLoadImproved(1000,false);
