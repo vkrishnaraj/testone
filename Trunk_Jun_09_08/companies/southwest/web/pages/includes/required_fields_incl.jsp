@@ -195,9 +195,8 @@
 		      		
 		      		if(!hasPaxItin){
 		  				alert("<%=(String) bundle
-							.getString( "colname.fault.station")%>" + " <%=(String) bundle.getString(
-							"error.match.pax.itin")%>");
-		     		
+							.getString( "error.fault.pax.itin")%>");
+		     			currentElement.focus();
 		  				return false;
 		  			}
 	  			}
