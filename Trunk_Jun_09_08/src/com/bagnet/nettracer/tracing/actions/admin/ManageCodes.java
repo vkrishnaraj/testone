@@ -205,25 +205,25 @@ public final class ManageCodes extends Action {
 			s.setControllable(controllable);
 			
 			boolean departStation = false;
-			if (((String)dForm.get("departStation")).equals("1")) {
+			if (("1").equals((String)dForm.get("departStation"))) {
 				departStation = true;
 			}
 			s.setDepartStation(departStation);
 			
 			boolean transferStation = false;
-			if (((String)dForm.get("transferStation")).equals("1")) {
+			if (("1").equals((String)dForm.get("transferStation"))) {
 				transferStation = true;
 			}
 			s.setTransferStation(transferStation);
 			
 			boolean destinationStation = false;
-			if (((String)dForm.get("destinationStation")).equals("1")) {
+			if (("1").equals((String)dForm.get("destinationStation"))) {
 				destinationStation = true;
 			}
 			s.setDestinationStation(destinationStation);
 			
 			boolean anyStation = false;
-			if (((String)dForm.get("anyStation")).equals("1")) {
+			if (("1").equals((String)dForm.get("anyStation"))) {
 				anyStation = true;
 			}
 			s.setAnyStation(anyStation);
