@@ -1,7 +1,6 @@
 <%@page import="java.text.MessageFormat"%>
 <%@ page contentType="text/javascript" %> 
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent"%>
-<%@ page import="com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code"%>
 <%@ page import="org.apache.struts.action.Action"%>
 <%@ page import="java.util.ResourceBundle" %>
 <%@ page import="java.util.Locale" %>
@@ -9,7 +8,6 @@
 
 <%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
 <%@page import="com.bagnet.nettracer.tracing.utils.OHDUtils"%>
-<%@page import="com.bagnet.nettracer.tracing.bmo.LossCodeBMO"%>
 <%@page import="com.bagnet.nettracer.tracing.db.OHD"%>
 <%
 	Agent a = (Agent) session.getAttribute("user");
