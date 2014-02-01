@@ -235,14 +235,23 @@ public class InboundTasksUtils {
 		}
 	}
 	
+	/**
+	 * Returns the Inbound Task associated with the given Incident Activity ID
+	 * Return Inbound Task regardless of Inbound Task status
+	 * 
+	 * There should only ever be a one to one mapping of an IncidentActivity to an InboundQueueTask
+	 * If for some reason more than one task is returned, return most recent task
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public static InboundQueueTask getInboundTaskByActivityId(long id){
 		InboundTasksDTO dto = new InboundTasksDTO();
 		dto.setIncidentActivityId(id);
-		Status status = new Status();
-		status.setStatus_ID(TracingConstants.TASK_MANAGER_OPEN);
-		dto.setStatus(status);
+		dto.setSort("opened_timestamp");
+		dto.setDir("desc");
 		List<InboundQueueTask> taskList = getInboundTasksBMO().getTasks(dto);
-		if(taskList != null && taskList.size() == 1){
+		if(taskList != null && taskList.size() > 0){
 					return taskList.get(0);
 		} else {
 			return null;
