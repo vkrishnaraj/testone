@@ -61,7 +61,6 @@ public class BagDropUtil {
 
 		BagDrop wsbagdrop = null;
 		com.bagnet.nettracer.tracing.db.BagDrop ntbagdrop = null;
-		boolean previouslyEntered = false;
 
 		if(saveBagDropTime != null && saveBagDropTime.getSaveBagDropTime() != null && saveBagDropTime.getSaveBagDropTime().getBagDrop() != null
 				&& saveBagDropTime.getSaveBagDropTime().getBagDrop().getBagDropDatetime() != null){
@@ -71,9 +70,8 @@ public class BagDropUtil {
 			ntbagdrop = wsToNtBagDrop(wsbagdrop);
 			ntbagdrop.setCreateAgent(agent);
 			ntbagdrop.setEntryMethod(TracingConstants.BAGDROP_ENTRY_METHOD_SCANNER);
-			if(saveBagDrop(agent, ntbagdrop, serviceResponse)){
+			if(saveBagDrop(agent, ntbagdrop, serviceResponse, wsbagdrop.getPreviouslyEnteredFlag())){
 				serviceResponse.setCreateUpdateIndicator(OnhandScanningServiceImplementation.STATUS_UPDATE);
-				previouslyEntered = true;
 			} else {
 				logger.info(resDoc);
 				return resDoc;
@@ -88,7 +86,7 @@ public class BagDropUtil {
 
 		//Return copy of ntbagdrop
 		serviceResponse.setBagDrop(ntToWsBagDrop(BagDropUtils.getBagDropById(agent, ntbagdrop.getId())));
-		serviceResponse.getBagDrop().setPreviouslyEnteredFlag(previouslyEntered);
+		serviceResponse.getBagDrop().setPreviouslyEnteredFlag(ntbagdrop.isPreviouslyEntered());
 		serviceResponse.setSuccess(true);
 		logger.info(resDoc);
 		return resDoc;
@@ -173,9 +171,9 @@ public class BagDropUtil {
 	 * @param serviceResponse
 	 * @return
 	 */
-	private static boolean saveBagDrop(Agent agent, com.bagnet.nettracer.tracing.db.BagDrop ntbagdrop, com.bagnet.nettracer.ws.wn.onhandscanning.pojo.xsd.ServiceResponse serviceResponse){
+	private static boolean saveBagDrop(Agent agent, com.bagnet.nettracer.tracing.db.BagDrop ntbagdrop, com.bagnet.nettracer.ws.wn.onhandscanning.pojo.xsd.ServiceResponse serviceResponse, boolean forceUpdateBagDropTime){
 		try{
-			if(BagDropUtils.saveOrUpdateBagDrop(agent, ntbagdrop, true) > 0){
+			if(BagDropUtils.saveOrUpdateBagDrop(agent, ntbagdrop, true, forceUpdateBagDropTime) > 0){
 				return true;
 			} else {
 				serviceResponse.addError("Error updating bagdrop");

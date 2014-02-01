@@ -155,6 +155,21 @@ public class BagDrop {
 		return (bagDropTime.getTime() - arrivalTime)/60000;
 	}
 	
+	
+	/**
+	 * The boolean set to true while updating a bagdrop if a previous bagdrop time existed
+	 */
+	@Transient
+	private boolean previouslyEntered;
+	
+	public boolean isPreviouslyEntered() {
+		return previouslyEntered;
+	}
+	public void setPreviouslyEntered(boolean previouslyEntered) {
+		this.previouslyEntered = previouslyEntered;
+	}
+	
+	
 	/**
 	 * ************************************************
 	 * The following are for date/time display purposes
@@ -234,4 +249,5 @@ public class BagDrop {
 			sbagDropDate=null;
 		}
 	}
+
 }

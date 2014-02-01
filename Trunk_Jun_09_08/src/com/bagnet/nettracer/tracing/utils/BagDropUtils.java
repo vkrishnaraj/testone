@@ -107,12 +107,15 @@ public class BagDropUtils {
 	/**
 	 * Updates an existing bag drop if it exists, otherwise insert new bag drop
 	 * 
+	 * This is the primary save method used by the reservation integration and the BagDrop action.  By default updateOnly=false and 
+	 * updatePreviousTime=true.  These flags are only used for the scanner integration.
+	 * 
 	 * @param agent
 	 * @param bagdrop
 	 * @return
 	 */
 	public static long saveOrUpdateBagDrop(Agent agent, BagDrop bagdrop){
-		return saveOrUpdateBagDrop(agent, bagdrop, false);
+		return saveOrUpdateBagDrop(agent, bagdrop, false, true);
 	}
 	
 	/**
@@ -122,22 +125,23 @@ public class BagDropUtils {
 	 * @param agent
 	 * @param bagdrop
 	 * @param updateOnly
+	 * @param updatePreviousTime
 	 * @return
 	 */
-	public static long saveOrUpdateBagDrop(Agent agent, BagDrop bagdrop, boolean updateOnly) {
+	public static long saveOrUpdateBagDrop(Agent agent, BagDrop bagdrop, boolean updateOnly, boolean updatePreviousTime) {
 		if(bagdrop == null){
 			throw new MissingRequiredFieldsException();
 		}
 		long id = 0;
 		if(bagdrop.getId() > 0){
-			return updateBagDrop(agent, bagdrop);
+			return updateBagDrop(agent, bagdrop, updatePreviousTime);
 		} else if ((id = bagdropExists(
 				bagdrop.getAirline(), 
 				bagdrop.getFlight(), 
 				bagdrop.getArrivalStationCode(), 
 				bagdrop.getSchArrivalDate())) > 0){
 			bagdrop.setId(id);
-			return updateBagDrop(agent, bagdrop);	
+			return updateBagDrop(agent, bagdrop, updatePreviousTime);	
 		} else {
 			if(!updateOnly){
 				return saveNewBagDrop(agent, bagdrop);
@@ -166,12 +170,19 @@ public class BagDropUtils {
 	 * The only fields that can be updated are the actual arrival time, bagdrop time and entry method
 	 * Only update if provided.
 	 * 
+	 * Update the bagdrop time if under the following criteria:
+	 * 		if bagdropTime is not null
+	 * 		if there was not previous bagdrop time or if the updatePreviousTime flag is set to true
+	 * 
+	 * If a bagDropTime already exists, set the transient boolean previouslyEntered on the provided bagdrop to true.
+	 * This is needed for Scanners
+	 * 
 	 * @param agent
 	 * @param bagdrop
 	 * @return
 	 * @throws InvalidDateRangeException
 	 */
-	public static long updateBagDrop(Agent agent, BagDrop bagdrop) throws InvalidDateRangeException, InvalidStationException{
+	public static long updateBagDrop(Agent agent, BagDrop bagdrop, boolean updatePreviousTime) throws InvalidDateRangeException, InvalidStationException{
 		if(agent == null || bagdrop == null){
 			throw new MissingRequiredFieldsException();
 		}
@@ -184,8 +195,16 @@ public class BagDropUtils {
 
 		BagDrop old = getBagDropBMO().getBagDropByID(bagdrop.getId());
 
+		if(old.getBagDropTime() != null){
+			bagdrop.setPreviouslyEntered(true);
+		} else {
+			bagdrop.setPreviouslyEntered(false);
+		}
+		
 		if(bagdrop.getBagDropTime() != null){
-			old.setBagDropTime(bagdrop.getBagDropTime());
+			if(!bagdrop.isPreviouslyEntered() || updatePreviousTime){
+				old.setBagDropTime(bagdrop.getBagDropTime());
+			}
 		}
 		if(bagdrop.getActArrivalDate() != null){
 			old.setActArrivalDate(bagdrop.getActArrivalDate());
