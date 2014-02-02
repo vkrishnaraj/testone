@@ -832,4 +832,38 @@ public class PassengerBean {
 		}
 		return false;
 	}
+	
+	public boolean isCommunicationAvailable() {
+		if (passengerData != null) {
+			if (isShowClaimStatus()) {
+				return true;
+			}
+			if (passengerData.getCreatedate() != null) {
+				int day = 0;
+				if (isLostDelay()) {
+					day = -5;
+				}
+				Calendar toCompare = Calendar.getInstance();
+				toCompare.add(Calendar.DATE, day);
+				return toCompare.after(passengerData.getCreatedate());
+			}
+		}
+		return true;
+	}
+	
+	public boolean isShowLDNoCom() {
+		return (isLostDelay() && !isCommunicationAvailable());
+	}
+	
+	public boolean isShowLD() {
+		return (isLostDelay() && isCommunicationAvailable());
+	}
+	
+	public boolean isShowDam() {
+		return (isDamage());
+	}
+	
+	public boolean isShowMA() {
+		return (isMissing());
+	}
 }

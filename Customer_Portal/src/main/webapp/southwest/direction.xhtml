@@ -22,17 +22,22 @@
 			
 			<rich:spacer width="100%" height="10" title=""/>
 
-			<p class="contentSubHeader"><h:outputText value="#{msg.status_text_desc}" /></p>
+			<p class="contentSubHeader">
+				<h:outputText value="#{msg.status_text_ld_desc_no_com}" rendered="#{customerPortal.passengerBean.showLDNoCom}" />
+				<h:outputText value="#{msg.status_text_ld_desc}" rendered="#{customerPortal.passengerBean.showLD}" />
+				<h:outputText value="#{msg.status_text_dam_desc}" rendered="#{customerPortal.passengerBean.showDam}" />
+				<h:outputText value="#{msg.status_text_ma_desc}" rendered="#{customerPortal.passengerBean.showMA}" />
+			</p>
 			
-			<rich:spacer width="100%" height="20" title=""/>
+			<rich:spacer width="100%" height="20" title="" rendered="#{customerPortal.passengerBean.communicationAvailable}"/>
 			
-			<h:outputLink value="/customer-portal/showImage?ID=swa_faq.pdf" target="blank" >
+			<h:outputLink value="/customer-portal/showImage?ID=swa_faq.pdf" target="blank" rendered="#{customerPortal.passengerBean.communicationAvailable}" >
 				<h:outputText value="#{msg.status_link_faq}" />
 			</h:outputLink>
 			
-			<rich:spacer width="100%" height="20" title=""/>
+			<rich:spacer width="100%" height="20" title="" rendered="#{customerPortal.passengerBean.showLD}"/>
 			
-			<h:outputLink value="/customer-portal/showImage?ID=swa_claim_form.pdf" target="blank" >
+			<h:outputLink value="/customer-portal/showImage?ID=swa_claim_form.pdf" target="blank" rendered="#{customerPortal.passengerBean.showLD}" >
 				<h:outputText value="#{msg.status_link_claim_form}" />
 			</h:outputLink>
 			
@@ -99,6 +104,8 @@
 				<td class="baginfo-column-b"><h:outputText value="#{item.bagstatus}" />
 				</td></tr></table>
 			</a4j:repeat>
+			
+			<h:panelGroup rendered="#{customerPortal.passengerBean.communicationAvailable}">
 			
 			<rich:spacer width="100%" height="20" title=""/>
 			
@@ -196,13 +203,15 @@
 					</div></td>
 				</tr></table>
 			</div>
+			
+			</h:panelGroup>
 				
 			<rich:spacer width="100%" height="30" title=""/>
 
 			<div align="right">
 				<h:commandButton value="#{msg.status_button_back}" action="login?faces-redirect=true" styleClass="submitButtonWhite" >
 				</h:commandButton>&#160;&#160;&#160;
-				<h:commandButton value="#{msg.status_button_send}" action="#{customerPortal.sendToNT}" styleClass="submitButtonOrange" >
+				<h:commandButton value="#{msg.status_button_send}" action="#{customerPortal.sendToNT}" styleClass="submitButtonOrange" rendered="#{customerPortal.passengerBean.communicationAvailable}" >
 				</h:commandButton>
 			</div>
 				

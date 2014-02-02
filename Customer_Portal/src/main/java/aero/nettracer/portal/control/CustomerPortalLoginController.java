@@ -2,6 +2,7 @@ package aero.nettracer.portal.control;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.util.Calendar;
 
 import javax.annotation.PostConstruct;
 import javax.faces.component.UIViewRoot;
@@ -111,6 +112,15 @@ public class CustomerPortalLoginController {
 				PassengerView passengerView = onlineClaimsWS.getPassengerView(loginBean.getClaimNumber(), loginBean.getLastName(), loginBean.getFirstName());
 	
 				if (passengerView.getAuthenticationSuccess()) {
+					if (disabledIncident(passengerView.getData())) {
+						FacesUtil.addError("Incident ID is too old.");
+						if (captchaBean.check().equalsIgnoreCase(CAPTCHA_STATUS)) {
+							captchaBean.setStatus("");
+						}
+						clearInputCache();
+						clearCaptchaCache();
+						return null;
+					}
 						FacesContext context = FacesUtil.getFacesContext();
 						HttpSession session = (HttpSession) context.getExternalContext().getSession(false);
 						if (!isMobile()) {
@@ -237,6 +247,24 @@ public class CustomerPortalLoginController {
 
 	public void setPassengerBean(PassengerBean passengerBean) {
 		this.passengerBean = passengerBean;
+	}
+	
+	private boolean disabledIncident(WSPVAdvancedIncident inc) {
+		if (inc != null && inc.getCreatedate() != null) {
+			Calendar ninetyDay = Calendar.getInstance();
+			ninetyDay.add(Calendar.DATE, -90);
+			if (ninetyDay.after(inc.getCreatedate())) {
+				return true;
+			}
+			if (inc.getClosedate() != null) {
+				Calendar fifteenDay = Calendar.getInstance();
+				fifteenDay.add(Calendar.DATE, -15);
+				if (fifteenDay.after(inc.getClosedate())) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 }
