@@ -39,3 +39,5 @@ insert into properties (keyStr,valueStr) VALUES
 ('default.autoprovision.dateformat' ,'1'),
 ('default.autoprovision.timeformat' ,'1'),
 ('default.autoprovision.timeout' ,'30');
+
+insert into properties (keyStr, valueStr) values ('create.call.task.timezone','CST');
