@@ -515,6 +515,9 @@
 	                  </td>
 	                  	 <% } else { %>
 	                  <td>
+	                     <%=i_item.getCost() %>
+	                  </td>	
+	                  <td>
 	                     <%=i_item.getDescription() %>
 	                  </td>
 	                  <td>
