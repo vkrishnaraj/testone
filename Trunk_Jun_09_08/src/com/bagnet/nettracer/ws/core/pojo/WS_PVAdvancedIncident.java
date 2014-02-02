@@ -15,6 +15,7 @@ public class WS_PVAdvancedIncident {
 	private String incident_status;
 	private int itemType;
 	private Calendar createdate;
+	private Calendar closedate;
 	private boolean canCreateClaim;
 	
 	private WS_PVPassenger[] passengers = null;
@@ -171,4 +172,13 @@ public class WS_PVAdvancedIncident {
 	public void setClaimChecks(WS_ClaimCheck[] checks) {
 		this.checks = checks;
 	}
+
+	public Calendar getClosedate() {
+		return closedate;
+	}
+
+	public void setClosedate(Calendar closedate) {
+		this.closedate = closedate;
+	}
+	
 }

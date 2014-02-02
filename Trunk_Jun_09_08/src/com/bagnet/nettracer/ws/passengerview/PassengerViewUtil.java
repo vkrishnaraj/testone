@@ -467,6 +467,11 @@ public class PassengerViewUtil {
 		Calendar createCal = new GregorianCalendar();
 		createCal.setTime(iDTO.getCreatedate());
 		si.setCreatedate(createCal);
+		if (iDTO.getClosedate() != null) {
+			Calendar closeCal = new GregorianCalendar();
+			closeCal.setTime(iDTO.getClosedate());
+			si.setClosedate(closeCal);
+		}
 		si.setItemType(iDTO.getItemtype_ID());
 		si.setIncidentStatus(iDTO.getStatus().getTextDescription(null));
 

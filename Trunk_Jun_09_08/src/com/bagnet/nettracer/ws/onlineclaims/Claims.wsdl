@@ -112,6 +112,7 @@
                 <xs:sequence>
                     <xs:element minOccurs="0" name="canCreateClaim" type="xs:boolean"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="claimChecks" nillable="true" type="ax23:WS_ClaimCheck"/>
+                    <xs:element minOccurs="0" name="closedate" nillable="true" type="xs:dateTime"/>
                     <xs:element minOccurs="0" name="comments" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="companycode_id" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="createdate" nillable="true" type="xs:dateTime"/>

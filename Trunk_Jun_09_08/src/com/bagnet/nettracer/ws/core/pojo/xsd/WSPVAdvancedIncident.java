@@ -16,7 +16,7 @@ package com.bagnet.nettracer.ws.core.pojo.xsd;
 public interface WSPVAdvancedIncident extends org.apache.xmlbeans.XmlObject
 {
     public static final org.apache.xmlbeans.SchemaType type = (org.apache.xmlbeans.SchemaType)
-        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WSPVAdvancedIncident.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.sB19FE03AAADC8EF07F1707671AB638D5").resolveHandle("wspvadvancedincident350dtype");
+        org.apache.xmlbeans.XmlBeans.typeSystemForClassLoader(WSPVAdvancedIncident.class.getClassLoader(), "schemaorg_apache_xmlbeans.system.sECB0ECF159DBAD03265284E0F73AEDC5").resolveHandle("wspvadvancedincident350dtype");
     
     /**
      * Gets the "canCreateClaim" element
@@ -97,6 +97,46 @@ public interface WSPVAdvancedIncident extends org.apache.xmlbeans.XmlObject
      * Removes the ith "claimChecks" element
      */
     void removeClaimChecks(int i);
+    
+    /**
+     * Gets the "closedate" element
+     */
+    java.util.Calendar getClosedate();
+    
+    /**
+     * Gets (as xml) the "closedate" element
+     */
+    org.apache.xmlbeans.XmlDateTime xgetClosedate();
+    
+    /**
+     * Tests for nil "closedate" element
+     */
+    boolean isNilClosedate();
+    
+    /**
+     * True if has "closedate" element
+     */
+    boolean isSetClosedate();
+    
+    /**
+     * Sets the "closedate" element
+     */
+    void setClosedate(java.util.Calendar closedate);
+    
+    /**
+     * Sets (as xml) the "closedate" element
+     */
+    void xsetClosedate(org.apache.xmlbeans.XmlDateTime closedate);
+    
+    /**
+     * Nils the "closedate" element
+     */
+    void setNilClosedate();
+    
+    /**
+     * Unsets the "closedate" element
+     */
+    void unsetClosedate();
     
     /**
      * Gets the "comments" element
