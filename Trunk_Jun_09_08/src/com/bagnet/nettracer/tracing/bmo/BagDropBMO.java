@@ -50,6 +50,7 @@ public class BagDropBMO {
 		map.put("scharr", 		"b.schArrivalDate");
 		map.put("actarr", 		"b.actArrivalDate");
 		map.put("bagdrop", 		"b.bagDropTime");
+		map.put("airline", 		"b.airline");
 	}
 	
 	/**
@@ -188,7 +189,7 @@ public class BagDropBMO {
 				return sql;//unique id, no need to add any additional search criteria
 			}
 			if(dto.getAirlineCode() != null && dto.getAirlineCode().trim().length() > 0){
-				sql += "and b.airline = :airline ";
+				sql += "and b.airline like :airline ";
 				params.put("airline", dto.getAirlineCode().trim());
 			}
 			if(dto.getStartScheduleArrivalDate() != null){

@@ -106,6 +106,11 @@
           </font>
           <tr>
             <td>
+               <bean:message key='itin_airline'/>
+              <br/>
+                <html:text name="bagDropForm" property="dto.airlineCode" size="4" maxlength="4" styleClass="textfield" />
+            </td>
+            <td>
                <bean:message key='itin_flightnum'/>
               <br/>
                 <html:text name="bagDropForm" property="dto.flightNumber" size="12" maxlength="15" styleClass="textfield" />
@@ -119,7 +124,7 @@
             </td>
           </tr>
           <tr>
-            <td colspan="4" align="center">
+            <td colspan="5" align="center">
               <br>
               <html:submit styleId="button" property="search">
                 <bean:message key="button.search" />
@@ -145,6 +150,7 @@
 	       	<display:setProperty name="basic.empty.showtable" value="true"/>
 	       	<display:column style="width:10%;" titleKey="colname.bagdrop.origin" value="${bagDrop.originStationCode}&nbsp;" sortable="true" sortName="origin"/>
 	        <display:column style="width:10%;" titleKey="colname.bagdrop.dest"   value="${bagDrop.arrivalStationCode}&nbsp;" sortable="true" sortName="dest"/>
+	        <display:column style="width:10%;" titleKey="itin_airline"     		 value="${bagDrop.airline}&nbsp;" sortable="true" sortName="airline"/>
 	        <display:column style="width:10%;" titleKey="itin_flightnum"         value="${bagDrop.flight}&nbsp;" sortable="true" sortName="flight"/>
 	        <display:column style="width:20%;" titleKey="colname.scharrtime"     value="${bagDrop.dispSchArrivalDateTime}&nbsp;" sortable="true" sortName="scharr" />
 	        <display:column style="width:20%;" titleKey="colname.actarrtime"     value="${bagDrop.dispActArrivalDateTime}&nbsp;" sortable="true" sortName="actarr" />
