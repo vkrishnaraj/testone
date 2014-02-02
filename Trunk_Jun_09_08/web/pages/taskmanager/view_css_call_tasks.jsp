@@ -2,6 +2,7 @@
 <%@page import="com.bagnet.nettracer.tracing.db.taskmanager.FiveDayTask"%>
 <%@page import="com.bagnet.nettracer.tracing.db.taskmanager.ThreeDayTask"%>
 <%@page import="com.bagnet.nettracer.tracing.db.taskmanager.TwoDayTask"%>
+<%@page import="com.bagnet.nettracer.tracing.db.taskmanager.OneDayTask"%>
 <%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
 <%@ page language="java" %>
 <%@ taglib uri="/tags/struts-bean" prefix="bean" %>
@@ -155,7 +156,9 @@ function updatePagination() {
                       &nbsp;
                     </td>
                     <td>
-                      <% if (results instanceof TwoDayTask) { %>
+                      <% if (results instanceof OneDayTask) { %>
+                      	<bean:message key="TASK_LABEL_1DAY" />
+                      <% } else if (results instanceof TwoDayTask) { %>
                       	<bean:message key="TASK_LABEL_2DAY" />
                       <% } else if (results instanceof ThreeDayTask) { %>
                       	<bean:message key="TASK_LABEL_3DAY" />

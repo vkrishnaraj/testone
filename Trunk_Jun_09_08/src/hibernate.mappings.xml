@@ -226,6 +226,7 @@
 		<mapping class="com.bagnet.nettracer.tracing.db.taskmanager.GeneralTask" />
 		<mapping class="com.bagnet.nettracer.tracing.db.taskmanager.TaskActivity" />
 		<mapping class="com.bagnet.nettracer.tracing.db.taskmanager.MorningDutiesTask" />	
+		<mapping class="com.bagnet.nettracer.tracing.db.taskmanager.OneDayTask" />	
 		<mapping class="com.bagnet.nettracer.tracing.db.taskmanager.TwoDayTask" />	
 		<mapping class="com.bagnet.nettracer.tracing.db.taskmanager.ThreeDayTask" />	
 		<mapping class="com.bagnet.nettracer.tracing.db.taskmanager.FourDayTask" />		

@@ -286,6 +286,8 @@ public class PropertyBMO {
 	public static final String DEFAULT_AUTOPROVISION_LOCALE = "default.autoprovision.locale";
 	public static final String CURRENT_AUTOPROVISION_LOCALE = "current.autoprovision.locale";
 	
+	public static final String CREATE_CALL_TASK_TIMEZONE = "create.call.task.timezone";
+	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;
 		if(key != null && value != null){

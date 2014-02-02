@@ -18,6 +18,7 @@ import org.hibernate.Session;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.TaskManagerBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -28,6 +29,7 @@ import com.bagnet.nettracer.tracing.db.taskmanager.FiveDayTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.FourDayTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.GeneralTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.MorningDutiesTask;
+import com.bagnet.nettracer.tracing.db.taskmanager.OneDayTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.ThreeDayTask;
 import com.bagnet.nettracer.tracing.db.taskmanager.TwoDayTask;
 import com.bagnet.nettracer.tracing.dto.CSSStationsDTO;
@@ -41,6 +43,7 @@ public class CSSCallsUtil extends TaskManagerUtil {
 	private static Logger logger = Logger.getLogger(CSSCallsUtil.class);
 
 	public static final int ALLDAYS = -1;
+	public static final int ONEDAY = 1;
 	public static final int TWODAY = 2;
 	public static final int THREEDAY = 3;
 	public static final int FOURDAY = 4;
@@ -64,6 +67,9 @@ public class CSSCallsUtil extends TaskManagerUtil {
 	public static GeneralTask createTask(Agent agent, Incident inc, int day, Date sDate, String start, Date eDate, String expire) {
 		MorningDutiesTask mdt = null;
 		switch(day){
+		case ONEDAY:
+			mdt = new OneDayTask();
+			break;
 		case TWODAY:
 			mdt = new TwoDayTask();
 			break;
@@ -168,6 +174,8 @@ public class CSSCallsUtil extends TaskManagerUtil {
 	private static String generateTopLineRemark(MorningDutiesTask task, String action) {
 		String remark = "";
 		switch(getDay(task)) {
+		case ONEDAY:
+			return remark + "CS&S One Day Call - " + action + "\n";
 		case TWODAY:
 			return remark + "CS&S Two Day Call - " + action + "\n";
 		case THREEDAY:
@@ -260,7 +268,7 @@ public class CSSCallsUtil extends TaskManagerUtil {
 		String sql = "from com.bagnet.nettracer.tracing.db.taskmanager.MorningDutiesTask mdt " +
 				"where (mdt.status.status_ID = :openStatus" + workSql + ") and " +
 				"mdt.incident.stationassigned.stationcode in :codeList " +
-				"order by mdt.opened_timestamp, mdt.incident.stationassigned.stationcode, mdt.class desc, mdt.incident.incident_ID";
+				"order by mdt.opened_timestamp, mdt.incident.stationassigned.stationcode, mdt.class, mdt.incident.incident_ID";
 		return sql;
 	}
 	
@@ -379,6 +387,11 @@ public class CSSCallsUtil extends TaskManagerUtil {
 				switch (day){
 				case ALLDAYS:
 					return task;
+				case ONEDAY:
+					if(task instanceof com.bagnet.nettracer.tracing.db.taskmanager.OneDayTask ){
+						return task;
+					}
+					break;
 				case TWODAY:
 					if(task instanceof com.bagnet.nettracer.tracing.db.taskmanager.TwoDayTask ){
 						return task;
@@ -426,8 +439,11 @@ public class CSSCallsUtil extends TaskManagerUtil {
 	 * Returns the GMT start of the day. Used in the getDateRange.
 	 */
 	protected static Date getStartOfDay(){
-		GregorianCalendar now = new GregorianCalendar(new SimpleTimeZone(
-				-(3600000 * 12), "-12GMT"));
+		String timezone = PropertyBMO.getValue(PropertyBMO.CREATE_CALL_TASK_TIMEZONE);
+		if (timezone == null || timezone.trim().length() == 0) {
+			timezone = "GMT";
+		}
+		GregorianCalendar now = new GregorianCalendar(TimeZone.getTimeZone(timezone));
 		now.set(Calendar.SECOND, 0);
 		now.set(Calendar.MILLISECOND, 0);
 		now.set(Calendar.MINUTE, 0);
@@ -457,7 +473,7 @@ public class CSSCallsUtil extends TaskManagerUtil {
 	/**
 	 * Returns a sql string for getting a date range in an incident object. Takes in an additional offset value.
 	 */
-	protected static String getDateRange(int day, int report_offset) {
+	public static String getDateRange(int day, int report_offset) {
 		Date startOfDay = getStartOfDay();
 
 		GregorianCalendar start = new GregorianCalendar(
@@ -471,14 +487,14 @@ public class CSSCallsUtil extends TaskManagerUtil {
 		start.add(Calendar.DATE, -report_offset);
 		end.add(Calendar.DATE, -report_offset);
 		
-		Date stime = MorningDutiesUtil.time1970(start.getTime());
-		Date etime = MorningDutiesUtil.time1970(end.getTime());
+		Date stime = time1970(start.getTime());
+		Date etime = time1970(end.getTime());
 		
 		return getDateRangeString(stime, etime, start, end, day);
 	}
 	
 	private static String getDateRangeString(Date stime, Date etime, Calendar start, Calendar end, int day) {
-		if (day != TWODAY && day != THREEDAY && day != FOURDAY && day != FIVEDAY) {
+		if (day != ONEDAY && day != TWODAY && day != THREEDAY && day != FOURDAY && day != FIVEDAY) {
 			return "1=1";
 		}
 		int sDay = -1 * day;
@@ -504,6 +520,8 @@ public class CSSCallsUtil extends TaskManagerUtil {
 		switch(day){
 		case ALLDAYS: // Return task regardless of day
 			return "com.bagnet.nettracer.tracing.db.taskmanager.MorningDutiesTask";
+		case ONEDAY:
+			return "com.bagnet.nettracer.tracing.db.taskmanager.OneDayTask";
 		case TWODAY:
 			return "com.bagnet.nettracer.tracing.db.taskmanager.TwoDayTask";
 		case THREEDAY:
@@ -559,7 +577,7 @@ public class CSSCallsUtil extends TaskManagerUtil {
 				"left outer join task t on t.incident_id = i.incident_id and " +
 				"t.status_ID = " + TracingConstants.TASK_MANAGER_OPEN + " where " +
 				"s.active = 1 and s.companycode_ID = '" + agent.getCompanycode_ID() + "' and " +
-				"t.task_type in ('TWODAYTASK', 'THREEDAYTASK', 'FOURDAYTASK', 'FIVEDAYTASK') " +
+				"t.task_type in ('1DAYTASK', '2DAYTASK', '3DAYTASK', '4DAYTASK', '5DAYTASK') " +
 				"group by s.Station_ID " +
 				"UNION " +
 				"select z.aCode as code, z.aCount as theCount from " +
@@ -647,6 +665,9 @@ public class CSSCallsUtil extends TaskManagerUtil {
 	 */
 	private static int getDay(MorningDutiesTask task){
 		int day = 0;
+		if(task instanceof com.bagnet.nettracer.tracing.db.taskmanager.OneDayTask ){
+			day = ONEDAY;
+		}
 		if(task instanceof com.bagnet.nettracer.tracing.db.taskmanager.TwoDayTask ){
 			day = TWODAY;
 		}
@@ -709,6 +730,7 @@ public class CSSCallsUtil extends TaskManagerUtil {
 		Agent agent = AdminUtils.getAgentBasedOnUsername("ntadmin", company);
 		Calendar eCal = Calendar.getInstance();
 		eCal.add(Calendar.DATE, 1);
+		createTasks(agent, getTaskList(agent, ONEDAY), ONEDAY, new Date(), eCal.getTime());
 		createTasks(agent, getTaskList(agent, TWODAY), TWODAY, new Date(), eCal.getTime());
 		createTasks(agent, getTaskList(agent, THREEDAY), THREEDAY, new Date(), eCal.getTime());
 		createTasks(agent, getTaskList(agent, FOURDAY), FOURDAY, new Date(), eCal.getTime());

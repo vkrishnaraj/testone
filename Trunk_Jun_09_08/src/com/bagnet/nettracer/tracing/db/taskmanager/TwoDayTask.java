@@ -9,7 +9,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.hibernate.annotations.Proxy;
 
 @Entity
-@DiscriminatorValue("TWODAYTASK")
+@DiscriminatorValue("2DAYTASK")
 @Proxy(lazy = true)
 public class TwoDayTask extends MorningDutiesTask {
 	
