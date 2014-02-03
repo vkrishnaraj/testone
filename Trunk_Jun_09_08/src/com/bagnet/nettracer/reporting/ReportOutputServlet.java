@@ -162,7 +162,7 @@ public class ReportOutputServlet extends HttpServlet {
 					case ReportingConstants.CRAP_SHEET:
 						iFile = FileShareUtils.getFile(CRAPReport.createReport(cform, sc, request, outputtype,language),sc);
 						break;
-					case ReportingConstants.EXP_LUV:
+					case ReportingConstants.EXPENSE_LUV_VOUCHER:
 						ExpensePayoutForm epform = (ExpensePayoutForm) request.getSession().getAttribute("expensepayoutform");
 						if (epform.getDistributemethod().equals(TracingConstants.DISTR_EMAIL) || epform.getDistributemethod().equals(TracingConstants.DISTR_MAIL)) { 
 							iFile = FileShareUtils.getFile(LUVReceipt_Mail.createReport(epform, sc, request, outputtype,language),sc);

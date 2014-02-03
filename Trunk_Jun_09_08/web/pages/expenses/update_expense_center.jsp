@@ -200,7 +200,7 @@
 
 		                    });
 			
-			openReportWindow('reporting?print=<%=ReportingConstants.EXP_LUV %>&outputtype=0',800,600);
+			openReportWindow('reporting?print=<%=ReportingConstants.EXPENSE_LUV_VOUCHER%>&outputtype=0',800,600);
 		 };
 		    
     </script>
@@ -659,8 +659,13 @@
     <% } %>
 </html:form>
 <c:if test="${expensePayoutForm.wssubmitc == 'no'}">
-    <script type="text/javascript">reSubmitWS();</script>
- </c:if>
- <c:if test="${expensePayoutForm.wssubmitc == 'yes' and expensePayoutForm.cancelcount == 1}">
-    <script type="text/javascript">submitOK('<c:out value="${expensePayoutForm.ordernum}" />');</script>
- </c:if>
+	<script type="text/javascript">reSubmitWS();</script>
+</c:if>
+<c:if test="${expensePayoutForm.wssubmitc == 'yes' and expensePayoutForm.cancelcount == 1}">
+	<script type="text/javascript">submitOK('<c:out value="${expensePayoutForm.ordernum}" />');</script>
+</c:if>
+<c:if test="${expensePayoutForm.toremark == 'yes'}">
+	<%epf.setToremark(null);%>
+	<script type="text/javascript">doPrint('<%=myMessages.getMessage(myLocale, "message.confirm.print.voucher")%>');</script>
+</c:if>
+

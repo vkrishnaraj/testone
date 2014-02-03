@@ -55,7 +55,7 @@ public class ReportingConstants {
 	public static final int PPLC_RPT = 19;
 	public static final int DEPREC_SUMMARY = 20;
 	public static final int CRAP_SHEET = 21; //For NT-751, Not NT-772
-	public static final int EXP_LUV = 22; 
+	public static final int EXPENSE_LUV_VOUCHER = 22; 
 	
 	// report titles
 	public static String CLAIM_PAYOUT_TITLE = "Claim Payout";

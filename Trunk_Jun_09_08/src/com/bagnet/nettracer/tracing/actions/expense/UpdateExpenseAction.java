@@ -164,17 +164,20 @@ public class UpdateExpenseAction extends BaseExpenseAction {
 				}				
 			}			
 			st.setStatus_ID(expenseForm.getStatus_id());
-			if (expenseForm.getPrintcount() > 0 ) 
+			if (expenseForm.getPrintcount() > 0 ) {
 				ep.setPrintcount(expenseForm.getPrintcount());
+			}
+			
 			//Added to remark when print status is "No"
-			if (expenseForm.getToremark().equals("yes")) {
+			if ("yes".equals(expenseForm.getToremark())) {
 				String incidentId = ((IncidentForm) request.getSession().getAttribute("incidentForm")).getIncident_ID();
 				IncidentBMO ibmo = new IncidentBMO();
 		        SimpleDateFormat df2 = new SimpleDateFormat("MMM dd, yyyy hh:mm");
 		        String dateText = df2.format(new Date(System.currentTimeMillis()));
-				String contents= "User Name: " + user.getUsername() + "\n" + 
-		                 "LUV Voucher Reprinted at " + dateText;
-				ibmo.insertRemark(contents,incidentId, user, TracingConstants.REMARK_REGULAR);
+				String contents= String.format("User Name: %s\nLUV Voucher Reprinted at %s", user.getUsername(),  dateText);
+				ibmo.insertRemark(contents,incidentId, user, TracingConstants.REMARK_REGULAR);				
+
+				request.getSession().setAttribute("printToremark", expenseForm.getToremark());	
 			}
 		}
 

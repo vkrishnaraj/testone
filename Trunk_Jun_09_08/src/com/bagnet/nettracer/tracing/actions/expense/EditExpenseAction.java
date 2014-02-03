@@ -53,6 +53,12 @@ public class EditExpenseAction extends BaseExpenseAction {
 			String contents= "The Southwest LUV Voucher has been cancelled. Order Number: " + ep.getOrdernum();
 			ibmo.insertRemark(contents,incidentId, user, TracingConstants.REMARK_REGULAR);			
 		}
+
+		if (epform.getToremark() == null && "yes".equals((String) request.getSession().getAttribute("printToremark"))) {
+			epform.setToremark("yes");
+			request.getSession().setAttribute("printToremark", null);	
+		}
+		
 		request.getSession().setAttribute("expensepayoutform", epform);	
 		return mapping.findForward(EDIT_SUCCESS);
 	}
