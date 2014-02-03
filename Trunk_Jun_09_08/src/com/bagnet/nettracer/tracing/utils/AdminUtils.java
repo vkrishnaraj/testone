@@ -1,8 +1,10 @@
 package com.bagnet.nettracer.tracing.utils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -131,16 +133,8 @@ public class AdminUtils {
 			StringBuilder sql = new StringBuilder();
 			sql.append("select count(logger.ID) from com.bagnet.nettracer.tracing.db.Agent_Logger logger where 1=1 "+
 					" and logger.companycode_ID = :companycode");
-			java.util.TimeZone tz = java.util.TimeZone.getTimeZone(getTimeZoneById(user.getDefaulttimezone()).getTimezone());
 			Date sdate = null, edate = null;
 			
-			@SuppressWarnings("rawtypes")
-			ArrayList dateal = null;
-			if ((dateal = IncidentUtils.calculateDateDiff(form.getS_time(),form.getE_time(), tz, user)) == null) {
-				return -1;
-			}
-			sdate = (Date) dateal.get(0);
-			edate = (Date) dateal.get(3);
 			if (form.getS_time() != null && (!form.getS_time().equals(""))) {
 				if (form.getE_time() == null || form.getE_time().equals("")) {
 					sql.append(" and logger.log_in_time >= :s_date");
@@ -170,15 +164,31 @@ public class AdminUtils {
 				q.setInteger("agent_ID", findagent.getAgent_ID());
 			}
 
+			Calendar cal = new GregorianCalendar();
+			if (form.getS_time() != null && (!form.getS_time().equals(""))) {
+				sdate = DateUtils.convertToGMTDate(form.getS_time(), user.getDateformat().getFormat());
+				cal.setTime(sdate);
+				sdate=cal.getTime();
+			}
+			
+
+			if (form.getE_time() != null && (!form.getE_time().equals(""))) {
+				edate = DateUtils.convertToGMTDate(form.getE_time(), user.getDateformat().getFormat());
+				cal = new GregorianCalendar();
+				cal.setTime(edate);
+				cal.add(Calendar.DAY_OF_MONTH, 1);
+				edate=cal.getTime();
+			}
+
 			if (form.getS_time() != null && (!form.getS_time().equals(""))) {
 				if (form.getE_time() == null || form.getE_time().equals("")) {
-					q.setDate("s_date", sdate);
+					q.setTimestamp("s_date", sdate);
 				} else {
-					q.setDate("s_date", sdate);
-					q.setDate("e_date", edate);
+					q.setTimestamp("s_date", sdate);
+					q.setTimestamp("e_date", edate);
 				}
 			} else if(form.getE_time()!=null && (!form.getE_time().equals(""))){
-				q.setDate("e_date", edate);
+				q.setTimestamp("e_date", edate);
 			}
 
 			@SuppressWarnings("rawtypes")
@@ -202,7 +212,6 @@ public class AdminUtils {
 		}
 	}
 	
-	@SuppressWarnings({ "rawtypes" })
 	public static List<Agent_Logger> getLoggedAgents(Agent user, UserActivityForm form, String companycode, int rowsperpage, int currpage) {
 		Session sess = null;
 		try {
@@ -212,15 +221,8 @@ public class AdminUtils {
 			sql.append("select logger  from com.bagnet.nettracer.tracing.db.Agent_Logger logger where 1=1 " +
 					" and logger.companycode_ID = :companycode");
 
-			java.util.TimeZone tz = java.util.TimeZone.getTimeZone(getTimeZoneById(user.getDefaulttimezone()).getTimezone());
-			Date sdate = null, edate = null; 
+			Date sdate = null, edate = null;
 			
-			ArrayList dateal = null;
-			if ((dateal = IncidentUtils.calculateDateDiff(form.getS_time(),form.getE_time(), tz, user)) == null) {
-				return null;
-			}
-			sdate = (Date) dateal.get(0);
-			edate = (Date) dateal.get(3);
 			if (form.getS_time() != null && (!form.getS_time().equals(""))) {
 				if (form.getE_time() == null || form.getE_time().equals("")) {
 					sql.append(" and logger.log_in_time >= :s_date");
@@ -259,16 +261,32 @@ public class AdminUtils {
 			if (form.getAgent() != null && form.getAgent().length() > 0 && findagent != null) {
 				q.setInteger("agent_ID", findagent.getAgent_ID());
 			}
+
+			Calendar cal = new GregorianCalendar();
+			if (form.getS_time() != null && (!form.getS_time().equals(""))) {
+				sdate = DateUtils.convertToGMTDate(form.getS_time(), user.getDateformat().getFormat());
+				cal.setTime(sdate);
+				sdate=cal.getTime();
+			}
+			
+
+			if (form.getE_time() != null && (!form.getE_time().equals(""))) {
+				edate = DateUtils.convertToGMTDate(form.getE_time(), user.getDateformat().getFormat());
+				cal = new GregorianCalendar();
+				cal.setTime(edate);
+				cal.add(Calendar.DAY_OF_MONTH, 1);
+				edate=cal.getTime();
+			}
 			
 			if (form.getS_time() != null && (!form.getS_time().equals(""))) {
 				if (form.getE_time() == null || form.getE_time().equals("")) {
-					q.setDate("s_date", sdate);
+					q.setTimestamp("s_date", sdate);
 				} else {
-					q.setDate("s_date", sdate);
-					q.setDate("e_date", edate);
+					q.setTimestamp("s_date", sdate);
+					q.setTimestamp("e_date", edate);
 				}
 			} else if(form.getE_time()!=null && (!form.getE_time().equals(""))){
-				q.setDate("e_date", edate);
+				q.setTimestamp("e_date", edate);
 			}
 			@SuppressWarnings("unchecked")
 			List<Agent_Logger> loglist=q.list();
