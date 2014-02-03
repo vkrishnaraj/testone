@@ -22,7 +22,7 @@
 	boolean ntUser = PropertyBMO.isTrue("nt.user");
 	boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
 	boolean globalAdmin = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_GLOBAL_ADMIN, a);
-	DecimalFormat df = new DecimalFormat("#.##");
+	DecimalFormat df = new DecimalFormat("##.00");
 %>
   
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
