@@ -411,7 +411,7 @@ public class PassengerViewUtil {
 		
 		Set<Remark> remarks = iDTO.getRemarks();
 		remarks.add(r);
-		iBMO.updateRemarksOnly(iDTO.getIncident_ID(), remarks, agent);
+		iBMO.updateRemarksOnly(iDTO.getIncident_ID(), remarks, agent, true);
  	}
  	
  	private com.bagnet.nettracer.ws.core.pojo.xsd.WSPVAdvancedIncident populateAdvancedIncident(Incident iDTO) {

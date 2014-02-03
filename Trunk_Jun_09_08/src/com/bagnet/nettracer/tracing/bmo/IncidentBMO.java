@@ -583,11 +583,19 @@ public class IncidentBMO {
 		return true;
 	}
 
-	public int updateRemarksOnly(String incident_id, Set<Remark> remarks, Agent mod_agent) throws HibernateException {
-		return updateRemarksAndLossCodeOnly(incident_id, remarks, mod_agent, -99);
+	/**
+	 * @param incident_id
+	 * @param remarks
+	 * @param mod_agent
+	 * @param updateLastUpdatedTimestamp - update the lastUpdated timestamp for an incident.  Certain automated crons we do not want the remark to updated this timestamp
+	 * @return
+	 * @throws HibernateException
+	 */
+	public int updateRemarksOnly(String incident_id, Set<Remark> remarks, Agent mod_agent, boolean updateLastUpdatedTimestamp) throws HibernateException {
+		return updateRemarksAndLossCodeOnly(incident_id, remarks, mod_agent, -99, updateLastUpdatedTimestamp);
 	}
 
-	public int updateRemarksAndLossCodeOnly(String incident_id, Set<Remark> remarks, Agent mod_agent, int losscode) throws HibernateException {
+	public int updateRemarksAndLossCodeOnly(String incident_id, Set<Remark> remarks, Agent mod_agent, int losscode, boolean updateLastUpdatedTimestamp) throws HibernateException {
 		//do not check for stale states on remark only saves
 		Transaction t = null;
 		Session sess = HibernateWrapper.getSession().openSession();
@@ -605,7 +613,9 @@ public class IncidentBMO {
 			t = sess.beginTransaction();
 			// save incident
 			if (oldinc.getIncident_ID() != null) {
-				oldinc.setLastupdated(TracerDateTime.getGMTDate());
+				if(updateLastUpdatedTimestamp){
+					oldinc.setLastupdated(TracerDateTime.getGMTDate());
+				}
 
 				if (remarks != null) {
 					oldinc.setRemarks(remarks);
@@ -2592,9 +2602,10 @@ public class IncidentBMO {
 	 * @param incidentId
 	 * @param agent
 	 * @param remarkType
+	 * @param updateLastUpdatedTimestamp - update the lastUpdated timestamp for an incident.  Certain automated crons we do not want the remark to updated this timestamp
 	 * @return boolean
 	 */
-	public boolean insertRemark(String remarkText, String incidentId, Agent agent, int remarkType){
+	public boolean insertRemark(String remarkText, String incidentId, Agent agent, int remarkType, boolean updateLastUpdatedTimestamp){
 		Incident incident = findIncidentByID(incidentId);
 		if(incident == null){
 			return false;
@@ -2613,7 +2624,7 @@ public class IncidentBMO {
 		r.setRemarktext(remarkText);
 		incident.getRemarks().add(r);
 
-		if(updateRemarksOnly(incident.getIncident_ID(), incident.getRemarks(), agent) > 0){
+		if(updateRemarksOnly(incident.getIncident_ID(), incident.getRemarks(), agent, updateLastUpdatedTimestamp) > 0){
 			//remarks were updated successfully
 			return true;
 		} else {

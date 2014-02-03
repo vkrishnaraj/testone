@@ -876,10 +876,10 @@ public class BagService {
 				boolean stationLock=(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LIMITED_LOSS_CODES, mod_agent) 
 						&& iDTO.getStatus().getStatus_ID()==13 && mod_agent.getStation().getStation_ID() == theform.getFaultstation_id() );
 				if (stationLock) { // If true save remarks and loss code. Otherwise just save remarks.
-					result = iBMO.updateRemarksAndLossCodeOnly(iDTO.getIncident_ID(), iDTO.getRemarks(), mod_agent, iDTO.getLoss_code());
+					result = iBMO.updateRemarksAndLossCodeOnly(iDTO.getIncident_ID(), iDTO.getRemarks(), mod_agent, iDTO.getLoss_code(), true);
 					updateInboundQueueTasks(iDTO.getIncident_ID(), inboundMap);
 				} else if(theform.getAllow_remark_update() == 1) {
-					result = iBMO.updateRemarksOnly(iDTO.getIncident_ID(), iDTO.getRemarks(), mod_agent);
+					result = iBMO.updateRemarksOnly(iDTO.getIncident_ID(), iDTO.getRemarks(), mod_agent, true);
 					updateInboundQueueTasks(iDTO.getIncident_ID(), inboundMap);
 				}
 			}
@@ -2333,7 +2333,7 @@ public class BagService {
 									}
 									i++;
 								}
-								iBMO.updateRemarksOnly(oDTO.getMatched_incident(), inc.getRemarks(), mod_agent);
+								iBMO.updateRemarksOnly(oDTO.getMatched_incident(), inc.getRemarks(), mod_agent, true);
 							}
 						}
 					}
@@ -2344,7 +2344,7 @@ public class BagService {
 				// if it is readonly and update remark then only update remark
 				if(theform.getReadonly() == 1) {
 					if(theform.getAllow_remark_update() == 1) {
-						result = oBMO.updateRemarksOnly(oDTO.getOHD_ID(), oDTO.getRemarks(), mod_agent);
+						result = oBMO.updateRemarksOnly(oDTO.getOHD_ID(), oDTO.getRemarks(), mod_agent, true);
 					}
 				}
 				else {

@@ -188,7 +188,7 @@ public class CS2ServiceImpl extends CS2ServiceSkeleton {
 		Set<Remark> remarks = inc.getRemarks();
 		remarks.add(remark);
 		
-		int check = bmo.updateRemarksOnly(inc.getIncident_ID(), remarks, agent);
+		int check = bmo.updateRemarksOnly(inc.getIncident_ID(), remarks, agent, true);
 		if (check < 1) {
 			return false;
 		}

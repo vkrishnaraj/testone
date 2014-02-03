@@ -285,7 +285,15 @@ public class OhdBMO {
 		return true;
 	}
 	
-	public boolean updateRemarksOnly(String incident_id, Set<Remark> remarks, Agent mod_agent) throws HibernateException {
+	/**
+	 * @param incident_id
+	 * @param remarks
+	 * @param mod_agent
+	 * @param updateLastUpdatedTimestamp - update the lastUpdated timestamp for an ohd.  Certain automated crons we do not want the remark to updated this timestamp
+	 * @return
+	 * @throws HibernateException
+	 */
+	public boolean updateRemarksOnly(String incident_id, Set<Remark> remarks, Agent mod_agent, boolean updateLastUpdatedTimestamp) throws HibernateException {
 		Transaction t = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
@@ -300,9 +308,11 @@ public class OhdBMO {
 			}
 			
 			t = sess.beginTransaction();
-			// save incident
+			// save ohd
 			if (oldinc.getOHD_ID() != null) {
-				oldinc.setLastupdated(TracerDateTime.getGMTDate());
+				if(updateLastUpdatedTimestamp){
+					oldinc.setLastupdated(TracerDateTime.getGMTDate());
+				}
 				
 				if(mod_agent != null){
 					oldinc.setModifiedBy(mod_agent.getUsername());
@@ -2260,10 +2270,11 @@ public class OhdBMO {
 		 * @param ohdId
 		 * @param agent
 		 * @param remarkType
+		 * @param updateLastUpdatedTimestamp - update the lastUpdated timestamp for an ohd.  Certain automated crons we do not want the remark to updated this timestamp
 		 * @return boolean
 		 */
 		
-		public boolean insertRemark(String remarkText, String ohdId, Agent agent, int remarkType){
+		public boolean insertRemark(String remarkText, String ohdId, Agent agent, int remarkType, boolean updateLastUpdatedTimestamp){
 			OHD ohd = findOHDByID(ohdId);
 			if(ohd == null){
 				return false;
@@ -2286,6 +2297,6 @@ public class OhdBMO {
 			r.setRemarktext(remarkText);
 			ohd.getRemarks().add(r);
 
-			return updateRemarksOnly(ohd.getOHD_ID(), ohd.getRemarks(), agent);
+			return updateRemarksOnly(ohd.getOHD_ID(), ohd.getRemarks(), agent, updateLastUpdatedTimestamp);
 		}
 }

@@ -220,7 +220,7 @@ public class CSSCallsUtil extends TaskManagerUtil {
 			r.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(agent.getDefaulttimezone()).getTimezone()));
 			r.setIncident(i);
 			i.getRemarks().add(r);
-			bmo.updateRemarksOnly(i.getIncident_ID(), i.getRemarks(), agent);
+			bmo.updateRemarksOnly(i.getIncident_ID(), i.getRemarks(), agent, true);
 		}
 	}
 	
