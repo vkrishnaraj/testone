@@ -126,9 +126,10 @@
                 <bean:message key="button.bagdrop.back" />
               </html:submit>
                &nbsp;
-              <html:submit styleId="button" property="save">
+              <html:hidden property="save" value="1" disabled="true" />
+              <html:button styleId="button" property="saveButton" onclick="if(validateEditBagDrop()){this.form.save.disabled=false;this.form.submit();}">
                 <bean:message key="button.save" />
-              </html:submit>
+              </html:button>
             </td>
           </tr>
         </table>

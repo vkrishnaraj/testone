@@ -1515,6 +1515,19 @@
   }
 
 
+function validateEditBagDrop(){
+	if (!checkTime(document.getElementsByName("editBagDropTime")[0].value)){
+		  alert("<%= (String)bundle.getString("colname.bagdrop.bagdroptime") %>" + " <%= (String)bundle.getString("error.validation.time") %>"); 
+		  currentElement.focus();
+		  return false;
+	}
+	if (!checkDate(document.getElementsByName("editBagDropDate")[0].value)){
+		  alert("<%= (String)bundle.getString("colname.bagdrop.bagdropdate") %>" + " <%= (String)bundle.getString("error.validation.date") %>"); 
+		  currentElement.focus();
+		  return false;
+	}
+	return true;
+}
 
 var fsar = ['.7em', '.75em', '.8em', '.85em'];
 <% 
