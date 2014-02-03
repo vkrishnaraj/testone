@@ -37,6 +37,10 @@ public class BagDropUtilTest {
 		Agent agent = gbean.getAgent("ntadmin", "WN");
 		
 		Calendar now = GregorianCalendar.getInstance();
+		Calendar nowPlus1 = GregorianCalendar.getInstance();
+		nowPlus1.add(Calendar.HOUR, 1);
+		Calendar nowPlus2 = GregorianCalendar.getInstance();
+		nowPlus2.add(Calendar.HOUR, 2);
 		
 		//test failure to update bagdrop that doesn't exist
 		SaveBagDropTimeDocument saveBagDropNew = createDoc();
@@ -53,7 +57,7 @@ public class BagDropUtilTest {
 		bagdrop.setAirline(companycode);
 		bagdrop.setFlight(getFlightNumber());
 		bagdrop.setArrivalStationCode(stationcode);
-		bagdrop.setBagDropTime(DateUtils.convertToGMTDate(now.getTime()));
+		bagdrop.setBagDropTime(null);//initial save needs to be null to test prevouslyUpdate flag
 		bagdrop.setCreateAgent(agent);
 		bagdrop.setEntryMethod(TracingConstants.BAGDROP_ENTRY_METHOD_WEB);
 		bagdrop.setOriginStationCode("LAX");
@@ -64,10 +68,10 @@ public class BagDropUtilTest {
 		assertTrue(id > 0);
 		assertTrue(BagDropUtils.bagdropExists(companycode, getFlightNumber(), stationcode, DateUtils.convertToGMTDate(now.getTime())) == id);
 		
-		//test updating bagdrop
-		now.add(Calendar.HOUR, 1);
+		//test updating bagdrop - first time, previously entered flag is false
 		SaveBagDropTimeDocument saveBagDropUpdate = createDoc();
 		saveBagDropUpdate.getSaveBagDropTime().getBagDrop().setBagDropDatetime(now);
+		saveBagDropUpdate.getSaveBagDropTime().getBagDrop().setPreviouslyEnteredFlag(false);
 		saveBagDropUpdate.getSaveBagDropTime().getBagDrop().setFlightNumber(
 				saveBagDropNew.getSaveBagDropTime().getBagDrop().getFlightNumber());
 		SaveBagDropTimeResponseDocument responseUpdate = BagDropUtil.saveBagDropTime(saveBagDropUpdate);
@@ -78,8 +82,44 @@ public class BagDropUtilTest {
 		assertTrue(retUpdate.getBagDrop().getAirlineCode().equals(companycode));
 		assertTrue(retUpdate.getBagDrop().getArrivalStationCode().equals(stationcode));
 		assertTrue(retUpdate.getBagDrop().getFlightNumber().equals(saveBagDropNew.getSaveBagDropTime().getBagDrop().getFlightNumber()));
+		assertTrue(retUpdate.getBagDrop().getPreviouslyEnteredFlag() == false);
+		assertTrue(retUpdate.getBagDrop().getBagDropDatetime().getTime().toString().equals(now.getTime().toString()));
+		
+		
+		//test updating bagdrop - second time, previously entered flag is false
+		saveBagDropUpdate = createDoc();
+		saveBagDropUpdate.getSaveBagDropTime().getBagDrop().setBagDropDatetime(nowPlus1);
+		saveBagDropUpdate.getSaveBagDropTime().getBagDrop().setPreviouslyEnteredFlag(false);
+		saveBagDropUpdate.getSaveBagDropTime().getBagDrop().setFlightNumber(
+				saveBagDropNew.getSaveBagDropTime().getBagDrop().getFlightNumber());
+		responseUpdate = BagDropUtil.saveBagDropTime(saveBagDropUpdate);
+		retUpdate = responseUpdate.getSaveBagDropTimeResponse().getReturn();
+		
+		assertTrue(retUpdate.getSuccess());
+		assertTrue(retUpdate.getCreateUpdateIndicator().equals(OnhandScanningServiceImplementation.STATUS_UPDATE));
+		assertTrue(retUpdate.getBagDrop().getAirlineCode().equals(companycode));
+		assertTrue(retUpdate.getBagDrop().getArrivalStationCode().equals(stationcode));
+		assertTrue(retUpdate.getBagDrop().getFlightNumber().equals(saveBagDropNew.getSaveBagDropTime().getBagDrop().getFlightNumber()));
 		assertTrue(retUpdate.getBagDrop().getPreviouslyEnteredFlag() == true);
 		assertTrue(retUpdate.getBagDrop().getBagDropDatetime().getTime().toString().equals(now.getTime().toString()));
+		
+		//test updating bagdrop - third time, previously entered flag is true
+		saveBagDropUpdate = createDoc();
+		saveBagDropUpdate.getSaveBagDropTime().getBagDrop().setBagDropDatetime(nowPlus2);
+		saveBagDropUpdate.getSaveBagDropTime().getBagDrop().setPreviouslyEnteredFlag(true);
+		saveBagDropUpdate.getSaveBagDropTime().getBagDrop().setFlightNumber(
+				saveBagDropNew.getSaveBagDropTime().getBagDrop().getFlightNumber());
+		responseUpdate = BagDropUtil.saveBagDropTime(saveBagDropUpdate);
+		retUpdate = responseUpdate.getSaveBagDropTimeResponse().getReturn();
+		
+		assertTrue(retUpdate.getSuccess());
+		assertTrue(retUpdate.getCreateUpdateIndicator().equals(OnhandScanningServiceImplementation.STATUS_UPDATE));
+		assertTrue(retUpdate.getBagDrop().getAirlineCode().equals(companycode));
+		assertTrue(retUpdate.getBagDrop().getArrivalStationCode().equals(stationcode));
+		assertTrue(retUpdate.getBagDrop().getFlightNumber().equals(saveBagDropNew.getSaveBagDropTime().getBagDrop().getFlightNumber()));
+		assertTrue(retUpdate.getBagDrop().getPreviouslyEnteredFlag() == true);
+		assertTrue(retUpdate.getBagDrop().getBagDropDatetime().getTime().toString().equals(nowPlus2.getTime().toString()));
+		
 	}
 	
 	private SaveBagDropTimeDocument createDoc(){
