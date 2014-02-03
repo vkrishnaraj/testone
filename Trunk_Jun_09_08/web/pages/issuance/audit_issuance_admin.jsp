@@ -1,3 +1,4 @@
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="com.bagnet.nettracer.tracing.bmo.IssuanceItemBMO"%>
 <%@page import="com.bagnet.nettracer.tracing.forms.issuance.AuditIssuanceItemAdminForm"%>
 <%@page import="com.bagnet.nettracer.tracing.forms.ClaimForm"%>
@@ -20,6 +21,7 @@
 	boolean ntUser = PropertyBMO.isTrue("nt.user");
 	boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
 	boolean globalAdmin = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_GLOBAL_ADMIN, a);
+	DecimalFormat df = new DecimalFormat("#.##");
     long currentID = -1;
  	if (request.getAttribute("id") != null) {
  		currentID = (Long) request.getAttribute("id");
@@ -298,7 +300,7 @@
 	                     <%=i_item.getIssuanceItem().getDescription()%>
 	                  </td>
 	                  <td>
-	                     <%=i_item.getCost()%>
+	                     <%=df.format(i_item.getCost())%>
 	                  </td>	                  
 	                  <td>
 	                     <%=i_item.getDescription()%>

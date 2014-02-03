@@ -1,3 +1,4 @@
+<%@page import="java.text.DecimalFormat"%>
 <%@page import="com.bagnet.nettracer.tracing.bmo.IssuanceItemBMO"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.apache.struts.util.LabelValueBean"%>
@@ -21,6 +22,7 @@
 	boolean ntUser = PropertyBMO.isTrue("nt.user");
 	boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
 	boolean globalAdmin = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_GLOBAL_ADMIN, a);
+	DecimalFormat df = new DecimalFormat("#.##");
 %>
   
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
@@ -491,7 +493,7 @@
 	                  </td>
 	                  	 <% if (globalAdmin) { %>
 	                  <td>
-	                     <input type="text" id="item_cost_<%=i_item.getId() %>" name="item_cost_<%=i_item.getId() %>" value="<%=i_item.getCost()%>" size="6" class="textfield" />
+	                     <input type="text" id="item_cost_<%=i_item.getId() %>" name="item_cost_<%=i_item.getId() %>" value="<%=df.format(i_item.getCost()) %>" size="6" class="textfield" />
 	                  </td>	                  	 
 	                  <td>
 	                     <input type="text" name="item_desc_<%=i_item.getId() %>" value="<%=i_item.getDescription()%>" size="10" class="textfield" />
@@ -515,7 +517,7 @@
 	                  </td>
 	                  	 <% } else { %>
 	                  <td>
-	                     <%=i_item.getCost() %>
+	                     <%=df.format(i_item.getCost()) %>
 	                  </td>	
 	                  <td>
 	                     <%=i_item.getDescription() %>
@@ -538,9 +540,9 @@
                 </logic:iterate> 
 					  <tr>
 	                  	 <% if (globalAdmin) { %>
-		                <td colspan="11" align="center" valign="top">
+		                <td colspan="12" align="center" valign="top">
 		                <% } else { %>
-		                <td colspan="9" align="center" valign="top">
+		                <td colspan="10" align="center" valign="top">
 		                <% } %>
 			                  <html:submit property="inventory_history" styleId="button">
 			                    <bean:message key="issuance.item.inventory.button.history" />
@@ -707,7 +709,7 @@
 	                     <%=i_item.getIssuanceItem().getDescription()%>
 	                  </td>
 	                  <td>
-	                     <%=i_item.getCost() %>
+	                     <%=df.format(i_item.getCost()) %>
 	                  </td>	                  
 	                  <td>
 	                     <%=i_item.getDescription() %>
@@ -791,7 +793,7 @@
 	                     <%=i_item.getIssuanceItem().getDescription()%>
 	                  </td>
 	                  <td>
-	                     <%=i_item.getCost() %>
+	                     <%=df.format(i_item.getCost()) %>
 	                  </td>	                  
 	                  <td>
 	                     <%=i_item.getDescription() %>
@@ -859,7 +861,7 @@
 	                     <%=i_item.getIssuanceItem().getDescription()%>
 	                  </td>
 	                  <td>
-	                     <%=i_item.getCost() %>
+	                     <%=df.format(i_item.getCost()) %>
 	                  </td>	                  
 	                  <td>
 	                     <%=i_item.getDescription() %>
