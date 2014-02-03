@@ -534,7 +534,6 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 			selenium.click("id=button");
 			assertEquals("Pickup Date Time is required.", selenium.getAlert());
 			selenium.type("name=disppickuptime","12:00");
-			selenium.check("name=theitem[0].noAddFees");
 			selenium.click("id=button");
 			assertEquals("Fault Code is required.", selenium.getAlert());
 			selenium.select("name=theitem[0].lossCode", "value=11");
