@@ -36,9 +36,10 @@ public class ServiceResponse {
 	private String createUpdateIndicator;
 	private String returnStatus;
 	private String assoicatedIncidentId;
-	private boolean TBI;
+	private boolean tbi;
 	private String positionId; 
 	private boolean lateCheckIndicator;
+	private String ohdId;
 	
 	public String getClaimCheckInd() {
 		return claimCheckInd;
@@ -76,11 +77,11 @@ public class ServiceResponse {
 	public void setAssoicatedIncidentId(String assoicatedIncidentId) {
 		this.assoicatedIncidentId = assoicatedIncidentId;
 	}
-	public boolean isTBI() {
-		return TBI;
+	public boolean isTbi() {
+		return tbi;
 	}
-	public void setTBI(boolean tBI) {
-		TBI = tBI;
+	public void setTbi(boolean tbi) {
+		this.tbi = tbi;
 	}
 	public String getPositionId() {
 		return positionId;
@@ -93,6 +94,12 @@ public class ServiceResponse {
 	}
 	public void setLateCheckIndicator(boolean lateCheckIndicator) {
 		this.lateCheckIndicator = lateCheckIndicator;
+	}
+	public String getOhdId() {
+		return ohdId;
+	}
+	public void setOhdId(String ohdId) {
+		this.ohdId = ohdId;
 	}
 	private String positiveIdInd;
 	

@@ -694,7 +694,7 @@ public class OnhandScanningServiceTest {
 		WSOHD ohd = addBagForLZ.addNewOnhand();
 		populateWSOHDObject(ohd, bagtag);
 
-		addBagForLZ.setTBI(true);
+		addBagForLZ.setTbi(true);
 		addBagForLZ.setPositionId(posId);
 		addBagForLZ.setLateCheckIndicator(true);
 		
@@ -744,7 +744,7 @@ public class OnhandScanningServiceTest {
 		ohd.getItinerariesArray(0).setLegfrom("XAX");
 		ohd.getItinerariesArray(0).setLegto("AXA");
 
-		addBagForLZ.setTBI(false);
+		addBagForLZ.setTbi(false);
 		addBagForLZ.setPositionId(posId);
 		addBagForLZ.setLateCheckIndicator(true);
 

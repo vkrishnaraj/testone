@@ -1059,7 +1059,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		serviceResponse.setValidUser(true);
 		
 		WSOHD wsohd = addBagForLZ.getAddBagForLZ().getOnhand();
-		boolean TBI = addBagForLZ.getAddBagForLZ().getTBI();
+		boolean tbi = addBagForLZ.getAddBagForLZ().getTbi();
 		String posId = addBagForLZ.getAddBagForLZ().getPositionId();
 		boolean lateCheckInc = addBagForLZ.getAddBagForLZ().getLateCheckIndicator();
 		
@@ -1092,16 +1092,16 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		//add/update ohd
 		if(wsohd.getOHDID() != null && wsohd.getOHDID().length() > 0){
 			ohd = OhdBMO.getOHDByID(wsohd.getOHDID(), null);
-			updateLzOHD(wsohd, ohd, agent, TBI);
+			updateLzOHD(wsohd, ohd, agent, tbi);
 			serviceResponse.setCreateUpdateIndicator(STATUS_UPDATE);
 		} else if ((ohdId = OnhandScanningServiceUtil.lookupBagtag(wsohd.getBagtagnum(), holdingstation.getStation_ID())) != null){
 			ohd = OhdBMO.getOHDByID(ohdId, null);
-			updateLzOHD(wsohd, ohd, agent, TBI);
+			updateLzOHD(wsohd, ohd, agent, tbi);
 			serviceResponse.setCreateUpdateIndicator(STATUS_UPDATE);
 		} else if ((incomingOHD = OHDUtils.getBagTagNumberIncomingToStation(wsohd.getBagtagnum(),holdingstation)) != null){
 			util.properlyHandleForwardedOnHand(incomingOHD, agent, holdingstation);
 			ohd = OhdBMO.getOHDByID(incomingOHD.getOHD_ID(), null);
-			updateLzOHD(wsohd, ohd, agent, TBI);
+			updateLzOHD(wsohd, ohd, agent, tbi);
 			serviceResponse.setCreateUpdateIndicator(STATUS_UPDATE);
 		} else {
 			populateMissingOHDFields(wsohd, agent);
@@ -1113,7 +1113,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 			}
 			try {
 				ohd = wsohdToOHD(wsohd, posId, lateCheckInc);
-				handleTBI(ohd, TBI);
+				handleTBI(ohd, tbi);
 				obmo.insertOHD(ohd, ohd.getAgent());
 				serviceResponse.setCreateUpdateIndicator(STATUS_CREATE);
 			} catch (Exception e) {
@@ -1141,9 +1141,9 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		return resDoc;
 	}
 	
-	private void handleTBI(OHD ohd, boolean TBI){
+	private void handleTBI(OHD ohd, boolean tbi){
 		Status status = new Status();
-		if(TBI){
+		if(tbi){
 			status.setStatus_ID(TracingConstants.OHD_STATUS_TO_BE_INVENTORIED);
 			ohd.setStatus(status);
 		} else {
@@ -1158,9 +1158,9 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 	 * @param wsohd
 	 * @param ohd
 	 * @param agent
-	 * @param TBI
+	 * @param tbi
 	 */
-	private void updateLzOHD(WSOHD wsohd, OHD ohd, Agent agent, boolean TBI){
+	private void updateLzOHD(WSOHD wsohd, OHD ohd, Agent agent, boolean tbi){
 		if(ohd != null){
 			OhdBMO obmo = new OhdBMO();
 			try {
@@ -1168,7 +1168,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 					WSCoreOHDUtil util = new WSCoreOHDUtil();
 					util.WStoOHDItinMapping(wsohd, ohd);
 				}
-				handleTBI(ohd, TBI);
+				handleTBI(ohd, tbi);
 				addOHDUpdateRemark(ohd, agent, REMARK_SCANNED);
 				obmo.insertOHD(ohd, agent);
 			} catch (Exception e) {
@@ -1322,6 +1322,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		response.setOnhand(util.OHDtoWS_Mapping(ohd));
 		response.setPositionId(ohd.getPosId());
 		response.setLateCheckIndicator(ohd.getLateCheckInd());
+		response.setOhdId(ohd.getOHD_ID());
 
 		if(holdingStationID > 0){
 			response.setAssoicatedIncidentId(getAssociatedIncidentId(ohd, holdingStationID));
