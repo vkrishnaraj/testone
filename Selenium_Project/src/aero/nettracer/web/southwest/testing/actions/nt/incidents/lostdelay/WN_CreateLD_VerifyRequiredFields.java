@@ -723,7 +723,7 @@ public class WN_CreateLD_VerifyRequiredFields extends WN_SeleniumTest {
 			waitForPageToLoadImproved(1000,false);
 			selenium.click("id=button");
 			assertEquals("Pickup Date Time is required.", selenium.getAlert());
-			selenium.click("id=calendar");
+			selenium.click("id=calendar2");
 			selenium.click("link=Today");
 			selenium.click("id=button");
 			assertEquals("Pickup Date Time is required.", selenium.getAlert());
