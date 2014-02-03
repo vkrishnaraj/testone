@@ -105,6 +105,8 @@
 	            <h1 class="green">
 	                <bean:message key="header.search_result" />
 	            </h1>
+	            <br/>
+                <input type="checkbox" name="select_all" id="select_all" /><bean:message key="css.select.all" />
               	<table class="<%=cssFormClass %>" cellpadding="0" cellspacing="0" >
               		<tr>
               			<td class="header" style="width:5%;">
@@ -207,6 +209,7 @@
            			</tr>
 				</table>
 				<script language="Javascript">
+	            	
 					function validateShipping() {
 						var trackingElem = document.getElementById("trackingNumber");
 						var tracking = trackingElem.value.replace(/^\s+|\s+$/g, '');
@@ -216,6 +219,13 @@
 							return false;
 						}
 					}
+					
+	              	jQuery("#select_all").click(function(source) { 
+	            	    checkboxes = jQuery('input[type="checkbox"]');
+	            	    for(var i in checkboxes){
+	            	        checkboxes[i].checked = source.target.checked;
+	            	    }
+	            	});
 				
 				</script>
    			</div>
