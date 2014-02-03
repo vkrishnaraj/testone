@@ -51,7 +51,7 @@ public class EditExpenseAction extends BaseExpenseAction {
 			IncidentBMO ibmo = new IncidentBMO();
 			String incidentId = ((IncidentForm) request.getSession().getAttribute("incidentForm")).getIncident_ID();
 			String contents= "The Southwest LUV Voucher has been cancelled. Order Number: " + ep.getOrdernum();
-			ibmo.insertRemark(contents,incidentId, user, TracingConstants.REMARK_REGULAR);			
+			ibmo.insertRemark(contents,incidentId, user, TracingConstants.REMARK_REGULAR, true);			
 		}
 
 		if (epform.getToremark() == null && "yes".equals((String) request.getSession().getAttribute("printToremark"))) {

@@ -197,7 +197,7 @@ public class WorldTracerQueueWorker implements Runnable {
 			}
 		} else if(queue.getStatus().equals(WtqStatus.FAIL)) {
 			//only write remark if queue status is failed
-			iBmo.insertRemark(error, incident.getIncident_ID(), null, TracingConstants.REMARK_REGULAR);
+			iBmo.insertRemark(error, incident.getIncident_ID(), null, TracingConstants.REMARK_REGULAR, false);
 		}
 	}
 	
@@ -306,7 +306,7 @@ public class WorldTracerQueueWorker implements Runnable {
 			ohdBmo.updateOhdNoAudit(ohd);
 		} else if (queue.getStatus().equals(WtqStatus.FAIL)){
 			//only write remark if queue status is failed
-			ohdBmo.insertRemark(error, ohd.getOHD_ID(), null, TracingConstants.REMARK_REGULAR);
+			ohdBmo.insertRemark(error, ohd.getOHD_ID(), null, TracingConstants.REMARK_REGULAR, false);
 		}
 	}
 	
@@ -366,7 +366,7 @@ public class WorldTracerQueueWorker implements Runnable {
 			}
 		} else if(queue.getStatus().equals(WtqStatus.FAIL)) {
 			//only write remark if queue status is failed
-			iBmo.insertRemark(error, incident.getIncident_ID(), null, TracingConstants.REMARK_REGULAR);
+			iBmo.insertRemark(error, incident.getIncident_ID(), null, TracingConstants.REMARK_REGULAR, false);
 		}
 	}
 	
@@ -419,7 +419,7 @@ public class WorldTracerQueueWorker implements Runnable {
 			ohdBmo.updateOhdNoAudit(ohd);
 		} else if (queue.getStatus().equals(WtqStatus.FAIL)){
 			//only write remark if queue status is failed
-			ohdBmo.insertRemark(error, ohd.getOHD_ID(), null, TracingConstants.REMARK_REGULAR);
+			ohdBmo.insertRemark(error, ohd.getOHD_ID(), null, TracingConstants.REMARK_REGULAR, false);
 		}
 	}
 	
@@ -502,7 +502,7 @@ public class WorldTracerQueueWorker implements Runnable {
 			}
 		} else if(queue.getStatus().equals(WtqStatus.FAIL)) {
 			//only write remark if queue status is failed
-			iBmo.insertRemark(error, incident.getIncident_ID(), null, TracingConstants.REMARK_REGULAR);
+			iBmo.insertRemark(error, incident.getIncident_ID(), null, TracingConstants.REMARK_REGULAR, false);
 		}
 	}
 	
@@ -563,7 +563,7 @@ public class WorldTracerQueueWorker implements Runnable {
 			}
 		} else if(queue.getStatus().equals(WtqStatus.FAIL)) {
 			//only write remark if queue status is failed
-			iBmo.insertRemark(error, incident.getIncident_ID(), null, TracingConstants.REMARK_REGULAR);
+			iBmo.insertRemark(error, incident.getIncident_ID(), null, TracingConstants.REMARK_REGULAR, false);
 		}
 	}
 	
@@ -624,7 +624,7 @@ public class WorldTracerQueueWorker implements Runnable {
 			ohdBmo.updateOhdNoAudit(ohd);
 		} else if (queue.getStatus().equals(WtqStatus.FAIL)){
 			//only write remark if queue status is failed
-			ohdBmo.insertRemark(error, ohd.getOHD_ID(), null, TracingConstants.REMARK_REGULAR);
+			ohdBmo.insertRemark(error, ohd.getOHD_ID(), null, TracingConstants.REMARK_REGULAR, false);
 		}
 	}
 	
@@ -677,7 +677,7 @@ public class WorldTracerQueueWorker implements Runnable {
 			ohdBmo.updateOhdNoAudit(ohd);
 		} else if (queue.getStatus().equals(WtqStatus.FAIL)){
 			//only write remark if queue status is failed
-			ohdBmo.insertRemark(error, ohd.getOHD_ID(), null, TracingConstants.REMARK_REGULAR);
+			ohdBmo.insertRemark(error, ohd.getOHD_ID(), null, TracingConstants.REMARK_REGULAR, false);
 		}
 	}
 	
@@ -774,7 +774,7 @@ public class WorldTracerQueueWorker implements Runnable {
 			wtqBmo.updateQueue(queue);
 		} else if (queue.getStatus().equals(WtqStatus.FAIL)){
 			//only write remark if queue status is failed
-			ohdBmo.insertRemark(error, ohd.getOHD_ID(), null, TracingConstants.REMARK_REGULAR);
+			ohdBmo.insertRemark(error, ohd.getOHD_ID(), null, TracingConstants.REMARK_REGULAR, false);
 		}
 
 	}
@@ -961,7 +961,7 @@ public class WorldTracerQueueWorker implements Runnable {
 			wtqBmo.updateQueue(queue);
 		} else if(queue.getStatus().equals(WtqStatus.FAIL)) {
 			//only write remark if queue status is failed
-			iBmo.insertRemark(error, incident.getIncident_ID(), null, TracingConstants.REMARK_REGULAR);
+			iBmo.insertRemark(error, incident.getIncident_ID(), null, TracingConstants.REMARK_REGULAR, false);
 		}
 	}
 	
@@ -1014,7 +1014,7 @@ public class WorldTracerQueueWorker implements Runnable {
 			wtqBmo.updateQueue(queue);
 		} else if (queue.getStatus().equals(WtqStatus.FAIL)){
 			//only write remark if queue status is failed
-			ohdBmo.insertRemark(error, ohd.getOHD_ID(), null, TracingConstants.REMARK_REGULAR);
+			ohdBmo.insertRemark(error, ohd.getOHD_ID(), null, TracingConstants.REMARK_REGULAR, false);
 		}
 	}
 	

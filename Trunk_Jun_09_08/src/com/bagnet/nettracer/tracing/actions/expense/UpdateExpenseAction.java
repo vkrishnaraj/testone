@@ -175,7 +175,7 @@ public class UpdateExpenseAction extends BaseExpenseAction {
 		        SimpleDateFormat df2 = new SimpleDateFormat("MMM dd, yyyy hh:mm");
 		        String dateText = df2.format(new Date(System.currentTimeMillis()));
 				String contents= String.format("User Name: %s\nLUV Voucher Reprinted at %s", user.getUsername(),  dateText);
-				ibmo.insertRemark(contents,incidentId, user, TracingConstants.REMARK_REGULAR);				
+				ibmo.insertRemark(contents,incidentId, user, TracingConstants.REMARK_REGULAR, true);				
 
 				request.getSession().setAttribute("printToremark", expenseForm.getToremark());	
 			}

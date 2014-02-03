@@ -151,7 +151,7 @@ public class SaveExpenseAction extends BaseExpenseAction {
 				expenseForm.setWssubmitp("yes");
 				request.getSession().setAttribute("showsubmit", "1");
 				String contents= String.format("Voucher Issue Amount: $%s\nAgent Comments: %s", String.valueOf(expenseForm.getCheckamt()), expenseForm.getNewComment());
-				ibmo.insertRemark(contents, incidentId, user, TracingConstants.REMARK_REGULAR);
+				ibmo.insertRemark(contents, incidentId, user, TracingConstants.REMARK_REGULAR, true);
 				st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_PAID);
 			} else {
 				request.getSession().setAttribute("wssubmitp", "no");
