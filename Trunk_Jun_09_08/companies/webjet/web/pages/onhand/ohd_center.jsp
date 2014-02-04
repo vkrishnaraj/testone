@@ -565,11 +565,11 @@ function gotoHistoricalReport() {
       </tr>
       <tr>
         <td><bean:message key="colname.last_name_onbag" /> <br>
-        <html:text name="OnHandForm" property="lastname" size="20"
-          maxlength="20" styleClass="textfield" /></td>
+        <html:text name="OnHandForm" property="lastname" size="30"
+          maxlength="30" styleClass="textfield" /></td>
         <td><bean:message key="colname.first_name_onbag" /> <br>
-        <html:text name="OnHandForm" property="firstname" size="20"
-          maxlength="20" styleClass="textfield" /></td>
+        <html:text name="OnHandForm" property="firstname" size="30"
+          maxlength="30" styleClass="textfield" /></td>
         <td><bean:message key="colname.mid_initial_onbag" /> <br>
         <html:text name="OnHandForm" property="middlename" size="4"
           maxlength="1" styleClass="textfield" /></td>
@@ -708,12 +708,12 @@ function gotoHistoricalReport() {
         </tr>
         <tr>
           <td colspan="2"><bean:message key="colname.last_name" /> <br>
-          <html:text name="passenger" property="lastname" size="20"
-            maxlength="20" indexed="true" styleClass="textfield" /></td>
+          <html:text name="passenger" property="lastname" size="30"
+            maxlength="30" indexed="true" styleClass="textfield" /></td>
           <td colspan="2"><bean:message key="colname.first_name" />
           <br>
-          <html:text name="passenger" property="firstname" size="20"
-            maxlength="20" indexed="true" styleClass="textfield" /></td>
+          <html:text name="passenger" property="firstname" size="30"
+            maxlength="30" indexed="true" styleClass="textfield" /></td>
           <td><bean:message key="colname.mid_initial" /> <br>
           <html:text name="passenger" property="middlename" size="1"
             maxlength="1" indexed="true" styleClass="textfield" /></td>

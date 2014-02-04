@@ -160,12 +160,12 @@
                 <td colspan=2>
                   <bean:message key="colname.last_name" />
                   <br>
-                  <html:text name="passenger" property="lastname" size="25" maxlength="20" indexed="true" styleClass="textfield" />
+                  <html:text name="passenger" property="lastname" size="30" maxlength="30" indexed="true" styleClass="textfield" />
                 </td>
                 <td colspan=2>
                   <bean:message key="colname.first_name" />
                   <br>
-                  <html:text name="passenger" property="firstname" size="25" maxlength="20" indexed="true" styleClass="textfield" />
+                  <html:text name="passenger" property="firstname" size="30" maxlength="30" indexed="true" styleClass="textfield" />
                 </td>
                 <td>
                   <bean:message key="colname.mid_initial" />
