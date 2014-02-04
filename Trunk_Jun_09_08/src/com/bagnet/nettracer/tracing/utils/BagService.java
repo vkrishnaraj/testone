@@ -200,10 +200,8 @@ public class BagService {
 					try {
 						BeanUtils.copyProperties(oli, (OHD_Log_Itinerary) i.next());
 					} catch (IllegalAccessException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					} catch (InvocationTargetException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					
@@ -388,10 +386,8 @@ public class BagService {
 			try {
 				BeanUtils.copyProperties(oo, (OHD_Itinerary) i.next());
 			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			oo.setOhd(oDTO);
@@ -456,10 +452,8 @@ public class BagService {
 				try {
 					BeanUtils.copyProperties(oli, (OHD_Log_Itinerary) itinList.get(i));
 				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (InvocationTargetException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				oli.setLog(log);
@@ -1014,14 +1008,13 @@ public class BagService {
 							String tmpHtmlFileName = null;
 							boolean embedImage = true;
 							
-							HashMap<String,String> h = new HashMap<String,String>();
+							HashMap<String, String> h = new HashMap<String, String>();
 							h.put("PASS_NAME", passname);
 
 							File file = null;
 							String myEmailSubjectLine = null;
 							if(iDTO.getItemtype_ID() == TracingConstants.LOST_DELAY) {
-								h.put("REPORT_TYPE", messages.getMessage(
-										new Locale(currentLocale), "email.mishandled"));
+								h.put("REPORT_TYPE", messages.getMessage(new Locale(currentLocale), "email.mishandled"));
 								
 								tmpHtmlFileName = TracerProperties.get(theform.getAgent().getStation().getCompany().getCompanyCode_ID(),TracerProperties.EMAIL_REPORT_LD);
 								embedImage = !TracerProperties.isTrue(theform.getAgent().getStation().getCompany().getCompanyCode_ID(),TracerProperties.EMAIL_REPORT_LD_DISABLE_IMAGE);
@@ -1230,7 +1223,7 @@ public class BagService {
 			IncidentBMO iBMO = new IncidentBMO(); // init lostdelay pojo or ejb
 			// copy into incident bean
 			BeanUtils.copyProperties(iDTO, theform);
-			Incident oInc=IncidentBMO.getIncidentByID(iDTO.getIncident_ID(), null);
+			Incident oInc= IncidentBMO.getIncidentByID(iDTO.getIncident_ID(), null);
 			
 			HashMap<IncidentActivity, InboundQueueTask> inboundMap = new HashMap<IncidentActivity, InboundQueueTask>();
 			
@@ -1478,6 +1471,7 @@ public class BagService {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void populateIncidentFormFromIncidentObj(String incident_ID, IncidentForm theform, Agent user,
 			int itemtype, IncidentBMO iBMO, Incident iDTO, boolean doNotEmail)
 			throws IllegalAccessException, InvocationTargetException {
@@ -1739,7 +1733,6 @@ public class BagService {
 		}
 
 		if (incident_ID != null) {
-			@SuppressWarnings("rawtypes")
 			ArrayList al = iBMO.getAssocReports(incident_ID);
 			Incident_Assoc ia = null;
 			if(al != null && al.size() > 0) {
@@ -1771,6 +1764,7 @@ public class BagService {
 	 * @param theform
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public boolean findIncidentForPVO(String incident_ID, String name, IncidentForm theform, HttpServletRequest request) {
 		try {
 			if(name == null || name.length() == 0 || incident_ID == null || incident_ID.length() == 0)
@@ -1803,11 +1797,12 @@ public class BagService {
 			}
 
 			ArrayList<Articles> al = new ArrayList<Articles>(iDTO.getArticles());
-			if(al.size() <= 0)
+			if(al.size() <= 0) {
 				theform.getArticle(0);
-			else
+			} else {
 				theform.setArticlelist(al);
-
+			}
+			
 			Agent user = iDTO.getAgent();
 
 			Item item = null;
@@ -1964,7 +1959,6 @@ public class BagService {
 			theform.setReadonly(1);
 
 			// get associating reports
-			@SuppressWarnings("unchecked")
 			ArrayList<Incident_Assoc> al2 = iBMO.getAssocReports(incident_ID);
 			Incident_Assoc ia = null;
 			if(al2 != null && al2.size() > 0) {
@@ -2571,7 +2565,6 @@ public class BagService {
 			theform.getPassenger(theform.getPassengerList().size());
 		}
 
-		// TODO: HERE
 		if (iDTO.getPhotos() != null) {
 			theform.setPhotoList(new ArrayList(iDTO.getPhotos()));
 		} else {
@@ -2657,7 +2650,6 @@ public class BagService {
 	 * 
 	 *         create date - Aug 3, 2004
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public boolean insertClaim(Claim cDTO, ClaimForm cform, HttpSession session, boolean isinterim, String incident_ID) {
 		try {
 			Agent user = (Agent) session.getAttribute("user");
@@ -2678,7 +2670,7 @@ public class BagService {
 				BeanUtils.copyProperties(a_cp, cp);
 				Prorate_Itinerary pi = null;
 				Audit_Prorate_Itinerary a_pi = null;
-				ArrayList pilist = new ArrayList();
+				ArrayList<Audit_Prorate_Itinerary> pilist = new ArrayList<Audit_Prorate_Itinerary>();
 				if(cp.getProrate_itineraries() != null) {
 					for(int i = 0; i < cp.getPi_list().size(); i++) {
 						pi = (Prorate_Itinerary) cp.getPi_list().get(i);
@@ -2688,7 +2680,7 @@ public class BagService {
 						a_pi.setAudit_claimprorate(a_cp);
 						pilist.add(a_pi);
 					}
-					a_cp.setProrate_itineraries(new LinkedHashSet(pilist));
+					a_cp.setProrate_itineraries(new LinkedHashSet<Audit_Prorate_Itinerary>(pilist));
 				}
 				acDTO.setAudit_claimprorate(a_cp);
 			}

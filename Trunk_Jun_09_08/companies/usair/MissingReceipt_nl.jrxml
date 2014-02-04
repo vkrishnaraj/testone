@@ -4,7 +4,7 @@
 	<property name="ireport.encoding" value="UTF-8"/>
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="123"/>
+	<property name="ireport.y" value="0"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -58,7 +58,7 @@
 				</graphicElement>
 			</line>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-10" mode="Opaque" x="123" y="448" width="101" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-10" mode="Opaque" x="123" y="430" width="101" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -71,7 +71,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{file_reference}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-11" mode="Opaque" x="123" y="465" width="240" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-11" mode="Opaque" x="123" y="447" width="341" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -84,7 +84,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{pass_name}]]></textFieldExpression>
 			</textField>
 			<textField pattern="(###)###-####" isBlankWhenNull="false">
-				<reportElement key="textField-12" mode="Opaque" x="123" y="482" width="165" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-12" mode="Opaque" x="123" y="464" width="165" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -97,7 +97,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{phone}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-13" mode="Opaque" x="123" y="500" width="345" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-13" mode="Opaque" x="123" y="482" width="345" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -110,7 +110,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{address1}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-14" mode="Opaque" x="123" y="517" width="344" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-14" mode="Opaque" x="123" y="499" width="344" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -123,7 +123,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{address2}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-15" mode="Opaque" x="123" y="535" width="341" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-15" mode="Opaque" x="123" y="517" width="341" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -136,7 +136,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{city_st_zip}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-16" mode="Opaque" x="468" y="466" width="76" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-16" mode="Opaque" x="123" y="536" width="343" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -161,49 +161,49 @@
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement key="textField-19" mode="Opaque" x="9" y="429" width="238" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-19" mode="Opaque" x="9" y="411" width="238" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Klanteninformatie:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-22" mode="Opaque" x="8" y="448" width="105" height="17" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-22" mode="Opaque" x="8" y="430" width="105" height="17" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[DOSSIERNUMMER]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-23" mode="Opaque" x="8" y="466" width="101" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-23" mode="Opaque" x="8" y="448" width="101" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[NAAM]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-24" mode="Opaque" x="8" y="483" width="94" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-24" mode="Opaque" x="8" y="465" width="94" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[TELEFOON]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-25" mode="Opaque" x="8" y="500" width="94" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-25" mode="Opaque" x="8" y="482" width="94" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[ADRES 1]]></text>
+				<text><![CDATA[ADRES]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-26" mode="Opaque" x="8" y="535" width="115" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-26" mode="Opaque" x="8" y="517" width="115" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[STAD + POSTCODE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-27" mode="Opaque" x="368" y="466" width="92" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-27" mode="Opaque" x="8" y="536" width="94" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
@@ -241,7 +241,7 @@ Het is in uw eigen belang voor de snelle afhandeling van uw dossier, dat u dit P
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-45" mode="Opaque" x="9" y="325" width="506" height="46" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-45" mode="Opaque" x="9" y="332" width="506" height="46" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
@@ -273,7 +273,7 @@ FAX: (001) 480-693-2305
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[EXTRA INFORMATIE: ]]></text>
+				<text><![CDATA[BIJKOMENDE INFORMATIE:]]></text>
 			</staticText>
 			<ellipse>
 				<reportElement key="ellipse-3" mode="Opaque" x="35" y="576" width="3" height="3" forecolor="#000000" backcolor="#000000"/>
@@ -286,13 +286,13 @@ FAX: (001) 480-693-2305
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[Met dit rapport erkennen wij geen aansprakelijkheid.
+				<text><![CDATA[Ce rapport n’engage aucune responsabilité
 
-Aansprakelijkheid voor verlies, vertraging of schade aan ingecheckte bagage is beperkt in overeenstemming met de bepalingen van de US Airways Terms of Transportation. Deze informatie kunt u vinden via de website www.usairways.com.
+La responsabilité du dommage ou de la perte d’un baggage enregistré est limitée en concordance avec les conditions de voyage de US Airways.
 
-US Airways is niet verantwoordelijk voor waardevolle/verhandelbare goederen , inclusief maar niet gelimiteerd: geld, waardepapieren, effecten, onvervangbare zakelijke documenten, boekmanuscripten, boeken, publicaties, fotografische of elektronische apparatuur, muziekinstrumenten, juwelen, tafelzilver, kostbare metalen, bontjassen, antiek, kunstobjecten, schilderijen en  kunstwerken, medicijnen die van  levensbelang zijn en bedrijfsmonsters in ingecheckte en/of  handbagage.
+US Airways n’assure aucune responsabilité pour les objets de valeur/commerciaux dans les baggages enregistrés et non-registrés ,  comme mais ne se limitant pas a: argent documents, valeurs mobilières, négociables, documents professionels irremplacables, livres, manuscrits, publications, equipment photographique ou electronique, instruments musicaux, bijoux, argenterie, metaux précieux, fourrures, antiquités, objets artistiques, peintures et autres, médicaments indispensables.
 
-Tenzij u vantevoren een schriftelijke verklaring van uw waardevolle spullen heeft opgemaakt, is de verantwoordelijkheid voor zichtbare schade voortkomend uit verlies, vertraging, of beschadiging in US Airways’ bezit gelimiteerd tot $3300 USD voor reizen binnen de Verenigde Staten. Voor internationale reizen, inclusief binnenlandse vluchten op internationale reizen, verwijzen wij u naar de informatie US Airways Terms of Transportation.
+Sauf si la valeur suplementaire a été declaré, la responsabilité concernant la perte, le retard, le dommage d’un baggage sous l’autorité de US Airways,  est limitée a $3,400 USD pour un voyage entre les points domestiques dans les Etats Unis. Pour un voyage international, comprenant les portions domestiques de sejours internationaux, veuillez-vous referrer aux conditions de transport de US Airways.
 ]]></text>
 			</staticText>
 			<image scaleImage="RetainShape">
@@ -308,7 +308,7 @@ Tenzij u vantevoren een schriftelijke verklaring van uw waardevolle spullen heef
 				<imageExpression class="java.lang.String"><![CDATA[$P{powered}]]></imageExpression>
 			</image>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-57" mode="Opaque" x="504" y="449" width="40" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-57" mode="Opaque" x="504" y="431" width="40" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -321,14 +321,14 @@ Tenzij u vantevoren een schriftelijke verklaring van uw waardevolle spullen heef
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{stationname}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement key="textField-58" mode="Opaque" x="370" y="449" width="124" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-58" mode="Opaque" x="370" y="431" width="124" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[PLAATS VAN AANGIFTE]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-59" mode="Opaque" x="272" y="449" width="96" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-59" mode="Opaque" x="272" y="431" width="96" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -341,7 +341,7 @@ Tenzij u vantevoren een schriftelijke verklaring van uw waardevolle spullen heef
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{createdate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement key="textField-60" mode="Opaque" x="231" y="449" width="38" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-60" mode="Opaque" x="231" y="431" width="38" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
@@ -365,29 +365,6 @@ Tenzij u vantevoren een schriftelijke verklaring van uw waardevolle spullen heef
 					<pen lineWidth="2.0" lineStyle="Solid"/>
 				</graphicElement>
 			</line>
-			<staticText>
-				<reportElement key="textField-45" mode="Opaque" x="9" y="380" width="506" height="23" forecolor="#000000" backcolor="#FFFFFF"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
-					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-				</textElement>
-				<text><![CDATA[Voor passagiers die “Bagage VIP Afgifte Service” gekocht hebben en hierover nog vragen/klachten hebben, neem a.u.b. contact op met:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="textField-45" mode="Opaque" x="9" y="403" width="506" height="23" forecolor="#000000" backcolor="#FFFFFF"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
-					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-				</textElement>
-				<text><![CDATA[VIP Delivery Customer Service Vertegenwoordiger: 1-877-847-0045
-Of per email bagsvip@maketraveleasier.com
-]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="textField-25" mode="Opaque" x="8" y="517" width="94" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
-					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-				</textElement>
-				<text><![CDATA[ADRES 2]]></text>
-			</staticText>
 		</band>
 	</pageHeader>
 	<columnHeader>

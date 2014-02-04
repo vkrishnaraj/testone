@@ -50,5 +50,11 @@
          <context-root>aircanada</context-root>
      </web>
   </module>
+   <module>
+     <web>
+         <web-uri>volaris_testing.war</web-uri>
+         <context-root>volaris</context-root>
+     </web>
+  </module>
 
 </application> 

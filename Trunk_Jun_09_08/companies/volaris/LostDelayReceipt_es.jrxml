@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LostDelayReceipt" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="airline" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="createdate" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["09/01/2013 10:17"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="pass_name" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["JONES, OSMOSIS"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="file_reference" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["ATLWN00001234"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="claim_check_num" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="airline_addr" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="phone" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["(123) 555-1234"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="address1" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["2675 Paces Ferry Rd"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="address2" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Suite 240"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="city_st_zip" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Atlanta, GA 30339"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="station" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="station_city" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="station_phone" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="airline_phone" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="airline_email" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="logo" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:/workspace/Trunk/companies/southwest/web/reports/logo.jpg"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="stationname" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["ATL"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="prettydate" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["09/01/2013 10:19"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="powered" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="pnr" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["TESTER"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="country" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["UNITED STATES"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="bag_description" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["0526894561-DESCRIPTION, DESCRIPTION, REALLY REALLY REALLY LONG DESCRIPTION AND I'M DONE"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="articles" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["ARTICLES, ARTICLES, LOTS AND LOTS OF ARTICLES"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select incident_ID from incident]]>
+	</queryString>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band/>
+	</title>
+	<pageHeader>
+		<band height="729">
+			<staticText>
+				<reportElement key="textField-2" mode="Opaque" x="148" y="5" width="393" height="54" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="Tahoma" size="20" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[RECIBO DE IRREGULARIDADES DE EQUIPAJE]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line-1" mode="Opaque" x="0" y="66" width="550" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
+				<graphicElement fill="Solid">
+					<pen lineWidth="2.0" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement key="line-2" mode="Opaque" x="0" y="67" width="1" height="661" forecolor="#000000" backcolor="#FFFFFF"/>
+				<graphicElement fill="Solid">
+					<pen lineWidth="2.0" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-10" mode="Opaque" x="163" y="618" width="80" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+					<font fontName="Tahoma" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{file_reference}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-11" mode="Opaque" x="163" y="632" width="347" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+					<font fontName="Tahoma" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{pass_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="(###)###-####" isBlankWhenNull="false">
+				<reportElement key="textField-12" mode="Opaque" x="163" y="646" width="165" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+					<font fontName="Tahoma" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{phone}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-13" mode="Opaque" x="163" y="660" width="345" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+					<font fontName="Tahoma" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{address1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-14" mode="Opaque" x="163" y="674" width="344" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+					<font fontName="Tahoma" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{address2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-15" mode="Opaque" x="163" y="688" width="346" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+					<font fontName="Tahoma" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{city_st_zip}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement key="line-8" mode="Opaque" x="0" y="728" width="549" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
+				<graphicElement fill="Solid">
+					<pen lineWidth="2.0" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement key="line-9" mode="Opaque" x="550" y="67" width="1" height="661" forecolor="#000000" backcolor="#FFFFFF"/>
+				<graphicElement fill="Solid">
+					<pen lineWidth="2.0" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement key="textField-22" mode="Opaque" x="11" y="618" width="150" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="Tahoma" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Número de incidente:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="textField-23" mode="Opaque" x="11" y="632" width="150" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="Tahoma" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Nombre del cliente:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="textField-24" mode="Opaque" x="11" y="646" width="150" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="Tahoma" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Teléfono:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="textField-25" mode="Opaque" x="11" y="660" width="150" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="Tahoma" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Dirección 1:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="textField-26" mode="Opaque" x="11" y="688" width="150" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="Tahoma" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Ciudad, Estado, Código Postal:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="textField-28" mode="Opaque" x="11" y="674" width="150" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="Tahoma" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Dirección 2:]]></text>
+			</staticText>
+			<image scaleImage="RetainShape" onErrorType="Blank">
+				<reportElement key="image-1" x="2" y="2" width="137" height="62">
+					<printWhenExpression><![CDATA[new Boolean($P{logo}.length() > 0)]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<imageExpression class="java.lang.String"><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement key="textField-48" positionType="Float" mode="Opaque" x="9" y="67" width="532" height="525" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="styled">
+					<font fontName="Tahoma" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[IMPORTANTE: GUARDA LA CONTRASEÑA DE TU EQUIPAJE. LEE CUIDADOSAMENTE LAS INSTRUCCIONES DE ESTE DOCUMENTO. ESTE RECIBO NO IMPLICA NINGÚN RECONOCIMIENTO DE RESPONSABILIDAD.
+
+Estimado Cliente Volaris,
+
+Te ofrecemos disculpas por los inconvenientes causados por la incidencia con tu equipaje. Puedes comunicarte con la Oficina de Servicio de Equipaje al teléfono 01 800 122 8000 (opción 4, solicita hablar con el área de Equipajes)
+
+<style isBold="true" pdfFontName="Helvetica-Bold" isUnderline="true">Pasos para presentar tu reclamo</style>
+
+<style isBold="true" pdfFontName="Helvetica-Bold">Demora de equipaje:</style> Si no llega tu equipaje, el Asesor de Servicio al Cliente levantará un Reporte de Irregularidades de Equipaje. Haremos todo lo posible para que tu equipaje se entregue en un lapso no mayor a 48 horas después de la llegada de tu vuelo. Puedes visitar nuestro sitio web o marcar al 01 800 122 8000 para mayor información sobre el seguimiento de tu equipaje.
+
+Volaris puede otorgar una compensación de acuerdo a lo establecido en el Contrato de Servicio para los clientes cuyo equipaje no llega al destino. Consulta nuestro Contrato en http://volaris.com/es/conocenos/informacion-legal/
+
+<style isBold="true" pdfFontName="Helvetica-Bold">Pérdida de equipaje:</style> Si después de tres (3) días a partir de la fecha de llegada no hemos localizado el equipaje, puedes obtener el Formato de Reclamo en el aeropuerto destino o solicitarlo a: equipajes.cc@volaris.com. Reenvía a esta dirección de correo electrónico o entrega en el aeropuerto el Formato de Reclamo lleno, comprobantes de compra de los artículos reclamados, pase de abordar, identificación, contraseña valida del equipaje y el Reporte de Irregularidad de Equipaje que te entregaron en el aeropuerto.
+
+A partir de la recepción de tus documentos, en breve nos comunicaremos contigo o si prefieres puedes comunicarte al 01 800 122 8000 para mayor información sobre el proceso de búsqueda o en su caso, de indemnización.
+
+<style isBold="true" pdfFontName="Helvetica-Bold">Equipaje dañado:</style> Presenta tu reclamo inicial del daño en cuanto llegues de tu vuelo, el Asesor de Servicio al Cliente levantará un Reporte de irregularidades de Equipaje. Si reportas el daño posteriormente, Volaris realizará las investigaciones pertinentes a tu reclamo, sin embargo, no está sujeto a una compensación. Puedes obtener el Formato de Reclamo en el aeropuerto destino o solicitarlo a: equipajes.cc@volaris.com. Reenvía a esta dirección de correo electrónico o entrega en el aeropuerto el Formato de Reclamo lleno, pase de abordar, identificación, contraseña valida del equipaje y el Reporte de Irregularidad de Equipaje que te entregaron en el aeropuerto.
+
+A partir de la recepción de tus documentos, en breve nos comunicaremos contigo o si prefieres puedes comunicarte al 01 800 122 8000 para mayor información sobre el proceso de indemnización.
+
+Debido al manejo normal del equipaje, este puede presentar pequeños rasguños, abolladuras, ruedas rotas, zippers rotos o suciedad, Volaris no se hace responsable por este tipo de daños, así como daños que puedan resultar por excesos en contenido del equipaje, artículos frágiles o empacados inadecuadamente.
+
+<style isBold="true" pdfFontName="Helvetica-Bold" isUnderline="true">Limites de Responsabilidad</style>
+
+<style isBold="true" pdfFontName="Helvetica-Bold">Vuelos Nacionales:</style> La máxima responsabilidad por equipaje perdido o dañado será de acuerdo a la Ley de Aviación Civil en México. Volaris no asume ninguna responsabilidad por artículos frágiles o perecederos, cualquier artículo donde se firmó una exoneración de responsabilidad, objetos de valor, incluyendo los artículos que se encuentran en nuestro Contrato. Visita http://volaris.com/es/conocenos/informacion-legal/ para mayor información.
+
+<style isBold="true" pdfFontName="Helvetica-Bold">Vuelos Internacionales:</style> El límite de responsabilidad en vuelos internacionales, es considerado por el Convenio de Montreal. Consulta en la página de Volaris el Contrato de Vuelos Internacionales para más detalles.
+]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-54" mode="Opaque" x="515" y="618" width="20" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+					<font fontName="Tahoma" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{station}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="textField-55" mode="Opaque" x="415" y="618" width="98" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="Tahoma" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Incidentes Estación]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-56" mode="Opaque" x="331" y="618" width="84" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+					<font fontName="Tahoma" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{createdate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="textField-57" mode="Opaque" x="246" y="618" width="84" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="Tahoma" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Incidente Fecha:]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line-8" mode="Opaque" x="5" y="721" width="541" height="1" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<graphicElement fill="Solid">
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement key="line-8" mode="Opaque" x="5" y="592" width="541" height="1" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<graphicElement fill="Solid">
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement key="line-8" mode="Opaque" x="5" y="593" width="1" height="128" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<graphicElement fill="Solid">
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement key="line-8" mode="Opaque" x="545" y="593" width="1" height="128" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<graphicElement fill="Solid">
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement key="textField-22" mode="Opaque" x="27" y="598" width="437" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="Tahoma" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Equipaje Cliente Información de Incidentes]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="textField-26" mode="Opaque" x="11" y="702" width="150" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
+					<font fontName="Tahoma" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<text><![CDATA[Bagtag:]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-15" mode="Opaque" x="163" y="702" width="346" height="13" forecolor="#000000" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+					<font fontName="Tahoma" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{claim_check_num}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band/>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

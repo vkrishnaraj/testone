@@ -33,6 +33,12 @@
   </module>
  <module>
      <web>
+         <web-uri>volaris_production.war</web-uri>
+         <context-root>volaris</context-root>
+     </web>
+  </module>
+ <module>
+     <web>
          <web-uri>lfc_production.war</web-uri>
          <context-root>lostandfound</context-root>
      </web>

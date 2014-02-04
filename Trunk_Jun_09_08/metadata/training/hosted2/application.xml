@@ -52,6 +52,12 @@
   </module>
    <module>
      <web>
+         <web-uri>volaris_training.war</web-uri>
+         <context-root>volaris</context-root>
+     </web>
+  </module>
+   <module>
+     <web>
          <web-uri>demonstration_training.war</web-uri>
          <context-root>demonstration</context-root>
      </web>

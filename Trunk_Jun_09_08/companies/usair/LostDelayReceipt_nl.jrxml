@@ -2,9 +2,9 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LostDelayReceipt" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="75"/>
+	<property name="ireport.y" value="384"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -64,7 +64,7 @@
 				</graphicElement>
 			</line>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-10" mode="Opaque" x="123" y="475" width="101" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-10" mode="Opaque" x="123" y="444" width="101" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -77,7 +77,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{file_reference}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-11" mode="Opaque" x="123" y="491" width="240" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-11" mode="Opaque" x="123" y="460" width="341" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -90,7 +90,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{pass_name}]]></textFieldExpression>
 			</textField>
 			<textField pattern="(###)###-####" isBlankWhenNull="false">
-				<reportElement key="textField-12" mode="Opaque" x="123" y="507" width="165" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-12" mode="Opaque" x="123" y="476" width="165" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -103,7 +103,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{phone}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-13" mode="Opaque" x="123" y="524" width="345" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-13" mode="Opaque" x="123" y="493" width="345" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -116,7 +116,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{address1}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-14" mode="Opaque" x="123" y="540" width="344" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-14" mode="Opaque" x="123" y="509" width="344" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -129,7 +129,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{address2}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-15" mode="Opaque" x="132" y="557" width="341" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-15" mode="Opaque" x="132" y="526" width="341" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -142,7 +142,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{city_st_zip}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-16" mode="Opaque" x="479" y="493" width="62" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-16" mode="Opaque" x="131" y="544" width="343" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -167,56 +167,56 @@
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement key="textField-19" positionType="Float" mode="Opaque" x="9" y="456" width="321" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-19" positionType="Float" mode="Opaque" x="9" y="425" width="321" height="15" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Passagier bagage claim informatie:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-22" mode="Opaque" x="8" y="475" width="105" height="17" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-22" mode="Opaque" x="8" y="444" width="105" height="17" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Claimnummer:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-23" mode="Opaque" x="8" y="492" width="101" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-23" mode="Opaque" x="8" y="461" width="101" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Passagiers naam:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-24" mode="Opaque" x="8" y="508" width="94" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-24" mode="Opaque" x="8" y="477" width="94" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Telefoon:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-25" mode="Opaque" x="8" y="524" width="94" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-25" mode="Opaque" x="8" y="493" width="94" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Adres 1:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-26" mode="Opaque" x="8" y="557" width="115" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-26" mode="Opaque" x="8" y="526" width="115" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Woonplaats, Postcode:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-27" mode="Opaque" x="367" y="493" width="110" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-27" mode="Opaque" x="8" y="544" width="115" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Bagage label nummer:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-28" mode="Opaque" x="8" y="540" width="94" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-28" mode="Opaque" x="8" y="509" width="94" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
@@ -248,35 +248,35 @@
 				<imageExpression class="java.lang.String"><![CDATA[$P{logo}]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement key="textField-38" positionType="Float" mode="Opaque" x="9" y="115" width="506" height="13" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-38" positionType="Float" mode="Opaque" x="9" y="122" width="506" height="13" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Wij willen ons graag verontschuldigen voor de vertraging van uw bagage.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-39" positionType="Float" mode="Opaque" x="9" y="135" width="506" height="14" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-39" positionType="Float" mode="Opaque" x="9" y="142" width="506" height="14" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="true" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[1e 24 uur:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-40" positionType="Float" mode="Opaque" x="9" y="151" width="519" height="25" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-40" positionType="Float" mode="Opaque" x="9" y="158" width="506" height="40" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[De meeste bagage wordt binnen 24 uur gevonden,dus u kunt er zeker van zijn dat u de bagage weer snel in u bezit is.  Onze bagage service specialist zal er alles aan doen om de tijd van teruggave te verkorten.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-41" positionType="Float" mode="Opaque" x="9" y="234" width="506" height="14" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-41" positionType="Float" mode="Opaque" x="9" y="203" width="506" height="14" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="true" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Na 24 uur:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-42" positionType="Float" mode="Opaque" x="9" y="250" width="506" height="99" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-42" positionType="Float" mode="Opaque" x="9" y="219" width="506" height="99" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
@@ -287,35 +287,35 @@ Of, u kunt ook de status checken op:
 ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-46" positionType="Float" mode="Opaque" x="9" y="349" width="506" height="24" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-46" positionType="Float" mode="Opaque" x="9" y="318" width="506" height="24" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="14" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[  www.USAirways.com/baggage]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-47" positionType="Float" mode="Opaque" x="9" y="373" width="506" height="14" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-47" positionType="Float" mode="Opaque" x="9" y="342" width="506" height="14" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="true" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Na 5 dagen:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-48" positionType="Float" mode="Opaque" x="9" y="390" width="506" height="66" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-48" positionType="Float" mode="Opaque" x="9" y="359" width="506" height="66" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[In een uitzonderlijk geval dat uw bagage nog niet is gevonden binnen deze 5 dagen dan zult u een passagiers eigendom formulier in moeten vullen die u kunt vinden op de website die hierboven vermeld staat.  U kunt dit formulier ook krijgen op elke luchthaven waar US Airways een bagage service kantoor heeft. Het invullen van dit formulier moet zo gedetailleerd mogelijk zijn over de inhoud van uw bagage zodat wij de bagage zorgvuldig kunnen zoeken.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-49" positionType="Float" mode="Opaque" x="8" y="577" width="412" height="10" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-49" positionType="Float" mode="Opaque" x="8" y="568" width="412" height="10" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="7" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[BIJKOMENDE INFORMATIE:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-50" mode="Opaque" x="9" y="589" width="532" height="124" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-50" mode="Opaque" x="9" y="582" width="532" height="124" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
@@ -329,7 +329,7 @@ Sauf si la valeur suplementaire a été declaré, la responsabilité concernant 
 ]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-54" mode="Opaque" x="470" y="475" width="71" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-54" mode="Opaque" x="470" y="444" width="71" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -342,14 +342,14 @@ Sauf si la valeur suplementaire a été declaré, la responsabilité concernant 
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{stationname}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement key="textField-55" mode="Opaque" x="367" y="475" width="99" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-55" mode="Opaque" x="367" y="444" width="99" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[rapport gemaakt in:]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="false">
-				<reportElement key="textField-56" mode="Opaque" x="269" y="475" width="96" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-56" mode="Opaque" x="269" y="444" width="96" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -362,27 +362,11 @@ Sauf si la valeur suplementaire a été declaré, la responsabilité concernant 
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{createdate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement key="textField-57" mode="Opaque" x="228" y="475" width="38" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-57" mode="Opaque" x="228" y="444" width="38" height="15" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Datum:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="textField-40" positionType="Float" mode="Opaque" x="9" y="183" width="519" height="25" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
-				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
-					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-				</textElement>
-				<text><![CDATA[Voor passagiers die “Bagage VIP Afgifte Service” gekocht hebben en hierover nog vragen/klachten hebben, neem a.u.b. contact op met:]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="textField-40" positionType="Float" mode="Opaque" x="9" y="208" width="519" height="25" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
-				<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
-					<font fontName="Arial" size="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
-				</textElement>
-				<text><![CDATA[VIP Delivery Customer Service Vertegenwoordiger: 1-877-847-0045
-Of per email bagsvip@maketraveleasier.com
-]]></text>
 			</staticText>
 		</band>
 	</pageHeader>

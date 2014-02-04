@@ -287,13 +287,13 @@ function sortAgents(sortOrder) {
             </tr>
             <tr>
               <td colspan="9" align="center">
-                <INPUT Id="button" type="button" value="Back" onClick="history.back()">
+                <INPUT Id="button" type="button" value='<bean:message key="Back" />' onClick="history.back()">
                 &nbsp;
                 <logic:present name="cbroStationID" scope="session">
 <%
                   if (session.getAttribute("cbroStationID").equals("" + a.getStation().getStation_ID())) {
 %>
-                    <INPUT type="button" value="Batch Delete" onClick="batchTaskDelete()" Id="button">
+                    <INPUT type="button" value='<bean:message key="Batch.Delete" />' onClick="batchTaskDelete()" Id="button">
                     &nbsp;
                     <html:submit styleId="button" property="create">
                       <bean:message key="button.createTask" />

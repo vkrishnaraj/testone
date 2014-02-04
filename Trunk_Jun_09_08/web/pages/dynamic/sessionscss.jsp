@@ -67,6 +67,10 @@ a.starter:hover, a.starter:active, a.starter:focus {
 
 
 <%
+
+	java.util.Locale myLocale = (java.util.Locale) session.getAttribute("org.apache.struts.action.LOCALE"); // spa
+	boolean spanish = "spa".equalsIgnoreCase(myLocale.getISO3Language());
+	
 	String key = null;
 	int j = -1;
   if (menu_links != null && menu_links.size() > 0) {
@@ -74,20 +78,21 @@ a.starter:hover, a.starter:active, a.starter:focus {
   	for (Iterator i=menu_links.keySet().iterator();i.hasNext();) {
       key = (String)i.next();
       j++;
-      if (key.equals("On-hand Bag") || key.equals("Task Manager")) {
+      if (key.equals("On-hand Bag") || key.equals("Task Manager")
+    		  || (spanish && (key.equals("Mishandled Bag") || key.equals("Damaged Bag") || key.equals("Unchecked property")))) {
 %>
 
-			#menubuilder<%=j%> {
-				width: <%=TracerProperties.get(user.getCompanycode_ID(),"menu.width") %>px;
-				z-index:100;
-			}    
+				#menubuilder<%=j%> {
+					width: <%=TracerProperties.get(user.getCompanycode_ID(),"menu.width") %>px;
+					z-index:100;
+				}    
 <%
 			} else {
 %>
-			#menubuilder<%=j%> {
-				width: 180px;
-				z-index:100;
-			}
+				#menubuilder<%=j%> {
+					width: 180px;
+					z-index:100;
+				}
 <%
 			}
 		}

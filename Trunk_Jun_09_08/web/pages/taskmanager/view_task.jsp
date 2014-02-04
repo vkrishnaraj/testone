@@ -187,7 +187,7 @@
               </tr>
               <tr>
                 <td colspan="4" align="center">
-                  <INPUT Id="button" type="button" value="Back" onClick="history.back()">
+                  <INPUT Id="button" type="button" value='<bean:message key="Back" />' onClick="history.back()">
                   &nbsp;
                   <logic:present name="cbroStationID" scope="session">
 <%
