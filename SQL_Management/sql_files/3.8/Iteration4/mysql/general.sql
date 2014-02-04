@@ -104,3 +104,9 @@ update task set task_type = '2DAYTASK' where task_type = 'TWODAYTASK';
 update task set task_type = '3DAYTASK' where task_type = 'THREEDAYTASK';
 update task set task_type = '4DAYTASK' where task_type = 'FOURDAYTASK';
 update task set task_type = '5DAYTASK' where task_type = 'FIVEDAYTASK';
+
+
+alter table ohd modify column firstname varchar(30);
+alter table ohd modify column lastname varchar(30);
+alter table ohd_passenger modify column firstname varchar(30);
+alter table ohd_passenger modify column lastname varchar(30);
