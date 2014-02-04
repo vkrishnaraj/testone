@@ -780,7 +780,7 @@ public class IssuanceItemBMO {
 		if (iItem.isReturned()) {
 			if (isInventoried) {
 				IssuanceItemInventory item = iItem.getIssuanceItemInventory();
-				toReturn = item.getDescription() + " #" + item.getBarcode() + " WAS RETURNED BY A CUSTOMER ON THIS REPORT\n";
+				toReturn = getInventoriedDescription(item, "RETURNED BY");
 			} else {
 				int quantity = iItem.getQuantity();
 				String wasWere = " WAS";
@@ -793,11 +793,11 @@ public class IssuanceItemBMO {
 			if (isInventoried) {
 				IssuanceItemInventory item = iItem.getIssuanceItemInventory();
 				int status_id = item.getInventoryStatus().getStatus_ID();
-				String action = "LOANED";
+				String action = "LOANED TO";
 				if (status_id == TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_ISSUED) {
-					action = "ISSUED";
+					action = "ISSUED TO";
 				}
-				toReturn = item.getDescription() + " #" + item.getBarcode() + " WAS " + action + " TO A CUSTOMER ON THIS REPORT\n";
+				toReturn = getInventoriedDescription(item, action);
 			} else {
 				int quantity = iItem.getQuantity();
 				String wasWere = " WAS";
@@ -806,6 +806,27 @@ public class IssuanceItemBMO {
 				}
 				toReturn = quantity + " " + iItem.getIssuanceItemQuantity().getIssuanceItem().getDescription() + wasWere + " ISSUED TO A CUSTOMER ON THIS REPORT\n";
 			}
+		}
+		return toReturn;
+	}
+	
+	private static String getInventoriedDescription(IssuanceItemInventory item, String action) {
+		String toReturn = "";
+		if (item != null) {
+			String remarkDesc = "";
+			boolean hasDesc = (item.getDescription() != null && item.getDescription().trim().length() > 0);
+			boolean hasBarcode = (item.getBarcode() != null && item.getBarcode().trim().length() > 0);
+			if (!hasDesc && hasBarcode) {
+				remarkDesc = "ITEM #" + item.getBarcode() + " WITHOUT A DESCRIPTION";
+			} else if (hasDesc && !hasBarcode) {
+				remarkDesc = item.getDescription() + " WITHOUT A BARCODE";
+			} else if (!hasDesc && !hasBarcode) {
+				remarkDesc = "AN ITEM WITHOUT A BARCODE OR A DESCRIPTION";
+			} else {
+				remarkDesc = item.getDescription() + " #" + item.getBarcode();
+			}
+			
+			toReturn = remarkDesc + " WAS " + action + " A CUSTOMER ON THIS REPORT\n";
 		}
 		return toReturn;
 	}
