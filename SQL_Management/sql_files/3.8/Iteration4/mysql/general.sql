@@ -110,3 +110,7 @@ alter table ohd modify column firstname varchar(30);
 alter table ohd modify column lastname varchar(30);
 alter table ohd_passenger modify column firstname varchar(30);
 alter table ohd_passenger modify column lastname varchar(30);
+alter table audit_ohd modify column firstname varchar(30);
+alter table audit_ohd modify column lastname varchar(30);
+alter table audit_ohd_passenger modify column firstname varchar(30);
+alter table audit_ohd_passenger modify column lastname varchar(30);
