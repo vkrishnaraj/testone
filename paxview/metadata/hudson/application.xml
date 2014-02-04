@@ -48,5 +48,12 @@
          <context-root>flyafrica-paxview</context-root>
      </web>
   </module>
+    
+   <module>
+     <web>
+         <web-uri>volaris-pv-hudson.war</web-uri>
+         <context-root>volaris-paxview</context-root>
+     </web>
+  </module>
   
 </application> 

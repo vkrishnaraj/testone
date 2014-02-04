@@ -236,6 +236,34 @@
 		</antcall> 	
 	</target>
 	
+	<target name="build-volaris-training">
+		<property name="company.name" value="volaris" />
+		<property name="environment.name" value="training" />
+		<antcall target="war" >
+		</antcall> 	
+	</target>
+	
+	<target name="build-volaris-prod">
+		<property name="company.name" value="volaris" />
+		<property name="environment.name" value="prod" />
+		<antcall target="war" >
+		</antcall> 	
+	</target>
+	
+	<target name="build-volaris-test">
+		<property name="company.name" value="volaris" />
+		<property name="environment.name" value="test" />
+		<antcall target="war" >
+		</antcall> 	
+	</target>
+
+	<target name="build-volaris-hudson">
+		<property name="company.name" value="volaris" />
+		<property name="environment.name" value="hudson" />
+		<antcall target="war" >
+		</antcall> 	
+	</target>
+	
 	<target name="build-spirit-training">
 		<property name="company.name" value="spirit" />
 		<property name="environment.name" value="qa" />
@@ -271,6 +299,7 @@
 		<antcall target="build-westjet-test" /> 
 		<antcall target="build-webjet-test" /> 
 		<antcall target="build-flyafrica-test" /> 
+		<antcall target="build-volaris-test" /> 
 	</target>
 
 	<target name="build-hudson">
@@ -280,6 +309,7 @@
 		<antcall target="build-westjet-hudson" /> 
 		<antcall target="build-webjet-hudson" /> 	
 		<antcall target="build-flyafrica-hudson" /> 
+		<antcall target="build-volaris-hudson" /> 
 	</target>
 	
 	<target name="build-train">
@@ -289,6 +319,7 @@
 		<antcall target="build-westjet-qa" /> 
 		<antcall target="build-webjet-training" /> 	
 		<antcall target="build-flyafrica-training" /> 
+		<antcall target="build-volaris-training" /> 
 	</target>
 	
 	<target name="build-prod">
@@ -298,6 +329,7 @@
 		<antcall target="build-westjet-prod" /> 
 		<antcall target="build-webjet-prod" /> 	
 		<antcall target="build-flyafrica-prod" /> 
+		<antcall target="build-volaris-prod" /> 
 	</target>
 	
 	<target name="build-ear-test">
