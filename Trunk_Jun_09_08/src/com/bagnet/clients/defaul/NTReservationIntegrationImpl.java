@@ -388,6 +388,9 @@ public class NTReservationIntegrationImpl extends
 		form.setNumpassengers(booking.getPaxAffected());
 		form.setNumbagchecked(booking.getNumberChecked());
 		form.setAgent(user);
+		if (booking.getNonrev()) {
+			form.setNonrevenue(1);
+		}
 				
 		form.setAgent(user);
 		if (booking.getOsi() != null && PropertyBMO.isTrue(PropertyBMO.PROPERTY_NT_RES_OSI_ON)) {

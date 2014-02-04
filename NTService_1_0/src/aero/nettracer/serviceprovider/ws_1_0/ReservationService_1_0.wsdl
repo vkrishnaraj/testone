@@ -238,6 +238,7 @@
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="bagItinerary" nillable="true" type="ax21:Itinerary"/>
                     <xs:element minOccurs="0" name="checkedLocation" type="xs:int"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="claimChecks" nillable="true" type="ax21:ClaimCheck"/>
+                    <xs:element minOccurs="0" name="nonrev" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="numberChecked" type="xs:int"/>
                     <xs:element minOccurs="0" name="osi" nillable="true" type="xs:string"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="passengerItinerary" nillable="true" type="ax21:Itinerary"/>

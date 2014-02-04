@@ -172,6 +172,9 @@ public class Reservation implements ReservationInterface {
 							if (name.getRapidReward() != null) {
 								p.setFfNumber(name.getRapidReward());
 							}
+							if (name.getNonrev() != null && name.getNonrev().trim().length() > 0) {
+								res.setNonrev(true);
+							}
 							aero.nettracer.serviceprovider.ws_1_0.common.xsd.Address a = p.addNewAddresses();
 							
 							if (addresses != null && addresses.length > 0) {

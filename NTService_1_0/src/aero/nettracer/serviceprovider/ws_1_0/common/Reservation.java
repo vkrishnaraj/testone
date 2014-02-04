@@ -15,6 +15,7 @@ public class Reservation {
 	private int paxAffected = 0;
 	private int checkedLocation = 0;
 	private String osi = null;
+	private boolean nonrev = false;
 
 	public Passenger[] getPassengers() {
 		return passengers;
@@ -86,6 +87,14 @@ public class Reservation {
 
 	public void setOsi(String osi) {
 		this.osi = osi;
+	}
+
+	public boolean isNonrev() {
+		return nonrev;
+	}
+
+	public void setNonrev(boolean nonrev) {
+		this.nonrev = nonrev;
 	}
 
 }
