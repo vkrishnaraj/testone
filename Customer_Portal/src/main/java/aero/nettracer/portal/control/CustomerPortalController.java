@@ -42,6 +42,8 @@ import com.bagnet.nettracer.ws.onlineclaims.xsd.Claim;
 public class CustomerPortalController {
 
 	private static Logger logger = Logger.getLogger(CustomerPortalController.class);
+	
+	private static long MAX_SIZE = 5 * 1024 * 1024; // 5MB
 
 	CaptchaBean captchaBean = new CaptchaBean();
 	LoginBean loginBean = new LoginBean();
@@ -144,49 +146,47 @@ public class CustomerPortalController {
 							|| extension.equals("docx")
 							|| extension.equals("tiff")
 							|| extension.equalsIgnoreCase("png")) {
-						// InputStream stream = upFile.getInputStream();
-						// long size = upFile.getSize();
-						// byte[] buffer = new byte[(int) size];
-						/*
-						 * stream.read(buffer, 0, (int) size); stream.close();
-						 * rendSuccess = true; rendFailure = false;
-						 */
-						String fileName = upFile.getName().contains("\\") ? upFile
-								.getName().substring(
-										upFile.getName().lastIndexOf("\\") + 1,
-										upFile.getName().length()) : upFile
-								.getName(); // Fixing the bugs in IE
-						File file = new File();
-						byte[] data = upFile.getBytes();
-						file.setName(fileName);
-						file.setLength(upFile.getSize());
-						file.setData(data);
-						// file.setId(fileId++);
-						if (passengerBean.getNewFiles() != null) {
-							List<File> existingFiles = passengerBean.getNewFiles();
-							for (File existingFile : existingFiles) {
-								if (fileName.equals(existingFile.getName())) {
-									logger.warn("File is already existing");
-									FacesUtil
-											.addError("File is already existing");
-									return null; //"no";
+						if (MAX_SIZE >= upFile.getSize()) {
+							String fileName = upFile.getName().contains("\\") ? upFile
+									.getName().substring(
+											upFile.getName().lastIndexOf("\\") + 1,
+											upFile.getName().length()) : upFile
+									.getName(); // Fixing the bugs in IE
+							File file = new File();
+							byte[] data = upFile.getBytes();
+							file.setName(fileName);
+							file.setLength(upFile.getSize());
+							file.setData(data);
+							// file.setId(fileId++);
+							if (passengerBean.getNewFiles() != null) {
+								List<File> existingFiles = passengerBean.getNewFiles();
+								for (File existingFile : existingFiles) {
+									if (fileName.equals(existingFile.getName())) {
+										logger.warn("File is already existing");
+										FacesUtil
+												.addError("File is already existing");
+										return null; //"no";
+									}
 								}
+								FileHelper.saveImage(passengerBean.getIncidentID(),
+										fileName, data);
+								file.setPath(FileHelper.getPath());
+						        file.setPublish(true);
+						        file.setDateUploaded(Calendar.getInstance());
+								passengerBean.getNewFiles().add(file);
+								fileDataModelList = new ListDataModel<File>(
+										passengerBean.getNewFiles());
+								logger.info("File Uploaded Successfully.");
 							}
-							FileHelper.saveImage(passengerBean.getIncidentID(),
-									fileName, data);
-							file.setPath(FileHelper.getPath());
-					        file.setPublish(true);
-					        file.setDateUploaded(Calendar.getInstance());
-							passengerBean.getNewFiles().add(file);
-							fileDataModelList = new ListDataModel<File>(
-									passengerBean.getNewFiles());
-							logger.info("File Uploaded Successfully.");
+							file = null;
+							return null; //"ok";
+						} else {
+							logger.error("File is too large.");
+							FacesUtil.addError("File is too large. Please use files less than 5MB in size.");
 						}
-						file = null;
-						return null; //"ok";
 					} else {
-						logger.error("File type not supported");
-						FacesUtil.addError("File type not supported");
+						logger.error("File type not supported.");
+						FacesUtil.addError("File type not supported. Supported types are: jpg, jpeg, gif, tiff, png, pdf, doc, docx.");
 					}
 				}
 
