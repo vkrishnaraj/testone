@@ -13,7 +13,15 @@
 
 
 
-<%@page import="java.text.DateFormat"%><logic:present name="file_not_found" scope="request">
+<%@page import="java.text.DateFormat"%>
+<script>
+	function importAhl(){
+		var ahlId = '<%=request.getAttribute("wt_raw_incident")%>';
+		var url = 'lostDelay.do?importAhl_id='+ahlId;
+		window.location.href=url;
+	}
+</script>
+<logic:present name="file_not_found" scope="request">
     <tr>
       <td colspan="3" id="pageheadercell">
         <div id="pageheaderleft">
@@ -61,7 +69,7 @@
 </td>
 </logic:present>
 
-<<logic:present name="wt_raw" scope="request">
+<logic:present name="wt_raw" scope="request">
 <bean:define id="wtr" name="wt_raw" scope="request"/>
 <bean:define id="paxlist" name="wt_raw" property="pax"/>
 <bean:define id="paxitin" name="wt_raw" property="paxItinerary"/>
@@ -104,8 +112,15 @@
 <tr>
 <td id="middlecolumn">
 <div id="maincontent">
+	<font color=red>
+      <logic:messagesPresent message="true">
+        <html:messages id="msg" message="true">
+          <br />
+          <bean:write name="msg" />
+          <br />
+        </html:messages>
+      </logic:messagesPresent> </font>
 	<table>
-	<td>
 
 		<tr>
 			<td class="label"><bean:message key="wt.view.ahl.date" /></td>
@@ -303,24 +318,20 @@
        	<tr>
 			<td class="label"><span class="label"><bean:message key="wt.view.ahl.further.information" /></span></td>
 			<td><bean:write name="wtr" property="furtherInfo"/></td>
-			</tr>
-		<tr>
-       	
-       	</td>
-	</td>
-</tr>
+		</tr>
 
 </table>
 </div>
 </td>
 </tr>
-            <tr>
-              <td colspan="4" align="center">
-                <INPUT id="button" type="button" value="Back" onClick="history.back()">
-                </br>
-                &nbsp;
-              </td>
-            </tr>
+	<tr>
+		<td colspan="4" align="center">
+			<INPUT id="button" type="button" value="Back" onClick="history.back()"> &nbsp; 
+			<logic:present name="allowImport" scope="request">
+				<INPUT id="button" type="button" value="<bean:message key="import.ahl" />" onClick="importAhl();"> &nbsp; 
+			</logic:present><br />&nbsp;
+		</td>
+	</tr>
 </logic:present>
 
 

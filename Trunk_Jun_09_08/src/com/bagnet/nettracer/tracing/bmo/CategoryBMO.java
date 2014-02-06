@@ -5,7 +5,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Expression;
+import org.hibernate.criterion.Restrictions;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.Category;
@@ -21,8 +21,9 @@ public class CategoryBMO {
 			sess = HibernateWrapper.getSession().openSession();
 			
 			Criteria cri = sess.createCriteria(OHD_CategoryType.class).add(
-					Expression.eq("OHD_CategoryType_ID", new Integer(code)));
-			List retList = cri.list();
+					Restrictions.eq("OHD_CategoryType_ID", new Integer(code)));
+			@SuppressWarnings("unchecked")
+			List<OHD_CategoryType> retList = cri.list();
 			
 			if (retList.size() == 1) {
 				OHD_CategoryType tmp = (OHD_CategoryType) cri.list().get(0);
@@ -49,7 +50,30 @@ public class CategoryBMO {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(OHD_CategoryType.class).add(
-					Expression.eq("OHD_CategoryType_ID", new Integer(code)));
+					Restrictions.eq("OHD_CategoryType_ID", new Integer(code)));
+			OHD_CategoryType tmp = (OHD_CategoryType) cri.list().get(0);
+			tmp.setLocale(locale);
+			return tmp;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public static OHD_CategoryType getCategoryByWT(String code, String locale) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(OHD_CategoryType.class).add(
+					Restrictions.eq("wtCategory", code));
 			OHD_CategoryType tmp = (OHD_CategoryType) cri.list().get(0);
 			tmp.setLocale(locale);
 			return tmp;
@@ -74,7 +98,7 @@ public class CategoryBMO {
 			if(categoryID!=0){
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Category.class).add(
-					Expression.eq("id", Long.valueOf(categoryID)));
+					Restrictions.eq("id", Long.valueOf(categoryID)));
 			Category tmp = (Category) cri.list().get(0);
 			return tmp;
 			} else {
@@ -101,6 +125,7 @@ public class CategoryBMO {
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(sql);
 			q.setParameter("companycode", companycode);
+			@SuppressWarnings("unchecked")
 			List<Depreciation_Category> ilist= (List<Depreciation_Category>) q.list();
 			return ilist;
 		} catch (Exception e) {
@@ -124,7 +149,7 @@ public class CategoryBMO {
 			if(categoryID!=0){
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Depreciation_Category.class).add(
-					Expression.eq("id", categoryID));
+					Restrictions.eq("id", categoryID));
 			Depreciation_Category tmp = (Depreciation_Category) cri.list().get(0);
 			return tmp;
 			} else {
@@ -152,6 +177,7 @@ public class CategoryBMO {
 			Query q = sess.createQuery(sql);
 			
 			q.setParameter("catId", catId);
+			@SuppressWarnings("unchecked")
 			List<Depreciation_Item> ilist= (List<Depreciation_Item>) q.list();
 			return ilist;
 		} catch (Exception e) {

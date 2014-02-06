@@ -44,8 +44,6 @@ import com.bagnet.nettracer.wt.connector.WebServiceDto;
 import com.bagnet.nettracer.wt.connector.WorldTracerConnector;
 import com.bagnet.nettracer.wt.connector.WorldTracerWebService;
 
-import com.bagnet.nettracer.tracing.actions.SearchIncidentAction;
-
 /**
  * @author matt
  * 
@@ -68,11 +66,6 @@ public class WorldTracerAFAction extends Action {
 		ActionMessages errors = new ActionMessages();
 
 		Agent user = (Agent) session.getAttribute("user");
-		String wt_http = WorldTracerUtils.getWt_url(user.getCompanycode_ID());
-		String wt_url = "http://" + wt_http + "/";
-		// if (!user.getStation().getCompany().getVariable().isWTEnabled())
-		// return (mapping.findForward(TracingConstants.NO_PERMISSION));
-
 		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1)
 				+ ".do", user)
 				&& !UserPermissions
@@ -109,6 +102,13 @@ public class WorldTracerAFAction extends Action {
 			} finally {
 				wtc.logout();
 			}
+			if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_IMPORT_AHL, user)){
+				Incident inc=WorldTracerUtils.findIncidentByWTID(request.getParameter("ahl_id"));
+				if(inc==null){
+					request.setAttribute("allowImport",1);
+				}
+			}
+			
 			request.setAttribute("wt_raw", result);
 			request.setAttribute("wt_raw_incident", request
 					.getParameter("ahl_id"));
@@ -236,7 +236,7 @@ public class WorldTracerAFAction extends Action {
 		if (currpage + 1 == totalpages)
 			request.setAttribute("end", "1");
 		if (totalpages > 1) {
-			ArrayList al = new ArrayList();
+			ArrayList<String> al = new ArrayList<String>();
 			for (int i = 0; i < totalpages; i++) {
 				al.add(Integer.toString(i));
 			}

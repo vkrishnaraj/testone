@@ -717,10 +717,18 @@
                 <% } %>
 
 		<%-- <html:submit property="savetracing" styleId="button" onclick="return validatereqFields(this.form, 'lostdelay');"> --%>
-			<html:hidden property="savetracing" value="" disabled="true" />
-                <html:button property="savetracingButton" styleClass="button" styleId="saveButton" onclick="disableButtons(); anyLossCodeChanges(); if(validatereqFields(this.form, 'lostdelay') != false && validateRest(this.form) != false && confirmCarrierWt() != false) {this.form.savetracing.disabled = false; clearBeforeUnload(); enableStateProvince(); this.form.submit();} else {enableButtons(); this.form.savetracing.disabled = true; return false;}">
-                  <bean:message key="button.savetracing" />
-                </html:button>
+				<logic:present scope="request" name="importAhl">
+					<html:hidden property="amendWT" value="" disabled="true" />
+					<html:button styleId="wtbutton" property="amendWTButton" onclick="disableButtons(); if( validatereqFields(this.form, 'lostdelay') != false && validateRest(this.form) != false) {this.form.amendWT.disabled = false; clearBeforeUnload(); enableStateProvince(); this.form.submit();} else {enableButtons(); this.form.amendWT.disabled = true; return false;}">
+						<bean:message key="button.amendWT" />
+					</html:button>
+				</logic:present>
+				<logic:notPresent scope="request" name="importAhl">
+					<html:hidden property="savetracing" value="" disabled="true" />
+		                <html:button property="savetracingButton" styleClass="button" styleId="saveButton" onclick="disableButtons(); anyLossCodeChanges(); if(validatereqFields(this.form, 'lostdelay') != false && validateRest(this.form) != false && confirmCarrierWt() != false) {this.form.savetracing.disabled = false; clearBeforeUnload(); enableStateProvince(); this.form.submit();} else {enableButtons(); this.form.savetracing.disabled = true; return false;}">
+		                  <bean:message key="button.savetracing" />
+		                </html:button>
+                </logic:notPresent>
 
               </logic:equal></td>
             </tr>

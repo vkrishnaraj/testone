@@ -2,18 +2,16 @@ package com.bagnet.nettracer.wt;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.URIException;
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
-import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
@@ -23,23 +21,39 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Expression;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Order;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.CategoryBMO;
+import com.bagnet.nettracer.tracing.bmo.ManufacturerBMO;
+import com.bagnet.nettracer.tracing.bmo.StationBMO;
+import com.bagnet.nettracer.tracing.bmo.XDescElementsBMO;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
+import com.bagnet.nettracer.tracing.db.DeliveryInstructions;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
+import com.bagnet.nettracer.tracing.db.Item_Inventory;
+import com.bagnet.nettracer.tracing.db.Manufacturer;
 import com.bagnet.nettracer.tracing.db.OHD;
 import com.bagnet.nettracer.tracing.db.OHD_CategoryType;
+import com.bagnet.nettracer.tracing.db.Remark;
+import com.bagnet.nettracer.tracing.db.Station;
+import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.WT_FWD_Log;
 import com.bagnet.nettracer.tracing.db.WT_Info;
-import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
+import com.bagnet.nettracer.tracing.db.WorldTracerFile;
 import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
+import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles;
 import com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles.ActionFileType;
+import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
+import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 
 public class WorldTracerUtils {
 	// private static String wt_user = "Air@18maR";
@@ -60,13 +74,15 @@ public class WorldTracerUtils {
 	public static String status_extended = "D";
 	public static String status_handled = "H";
 	public static String status_qoh = "Q";
-	private static String error;
+	@SuppressWarnings("unused")
+	private static String error; //What is this even for?
 	private static Logger logger = Logger.getLogger(WorldTracerUtils.class);
 
 
 	/**
 	 * get the NT agent to use for wt inserts
 	 */
+	@SuppressWarnings("unchecked")
 	public static Agent getWTAgent(int station_id, String companycode_id) {
 		Session sess = null;
 		try {
@@ -80,7 +96,7 @@ public class WorldTracerUtils {
 			q.setParameter("station_id", new Integer(station_id));
 			q.setParameter("companycode_id", companycode_id);
 
-			List list = q.list();
+			List<Agent> list = q.list();
 			if (list != null && list.size() > 0)
 				return (Agent) list.get(0);
 
@@ -447,7 +463,8 @@ public class WorldTracerUtils {
 			Query q = sess
 					.createQuery("from com.bagnet.nettracer.tracing.db.Incident incident where incident.wtFile.wt_id = :wt_id");
 			q.setParameter("wt_id", wt_id);
-			List list = q.list();
+			@SuppressWarnings("unchecked")
+			List<Incident> list = q.list();
 
 			if (list.size() == 0) {
 				return null;
@@ -478,7 +495,8 @@ public class WorldTracerUtils {
 			Query q = sess
 					.createQuery("from com.bagnet.nettracer.tracing.db.OHD ohd where ohd.wtFile.wt_id = :wt_id");
 			q.setParameter("wt_id", wt_id);
-			List list = q.list();
+			@SuppressWarnings("unchecked")
+			List<OHD> list = q.list();
 
 			if (list.size() == 0) {
 				return null;
@@ -499,8 +517,9 @@ public class WorldTracerUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Worldtracer_Actionfiles.class);
-			cri.add(Expression.eq("action_file_text", actionfile_text));
-			List list = cri.list();
+			cri.add(Restrictions.eq("action_file_text", actionfile_text));
+			@SuppressWarnings("unchecked")
+			List<Worldtracer_Actionfiles> list = cri.list();
 			if (list != null && list.size() > 0) {
 				return (Worldtracer_Actionfiles) list.get(0);
 			}
@@ -525,8 +544,9 @@ public class WorldTracerUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Worldtracer_Actionfiles.class);
-			cri.add(Expression.eq("id", ID));
-			List list = cri.list();
+			cri.add(Restrictions.eq("id", ID));
+			@SuppressWarnings("unchecked")
+			List<Worldtracer_Actionfiles> list = cri.list();
 			if (list != null && list.size() > 0) {
 				return (Worldtracer_Actionfiles) list.get(0);
 			}
@@ -551,8 +571,9 @@ public class WorldTracerUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Worldtracer_Actionfiles.class);
-			cri.add(Expression.eq("wt_ohd_id", wt_id));
-			List list = cri.list();
+			cri.add(Restrictions.eq("wt_ohd_id", wt_id));
+			@SuppressWarnings("unchecked")
+			List<Worldtracer_Actionfiles> list = cri.list();
 			if (list != null && list.size() > 0) {
 				return (Worldtracer_Actionfiles) list.get(0);
 			}
@@ -577,8 +598,9 @@ public class WorldTracerUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Worldtracer_Actionfiles.class);
-			cri.add(Expression.eq("wt_incident_id", wt_incident_id));
-			List list = cri.list();
+			cri.add(Restrictions.eq("wt_incident_id", wt_incident_id));
+			@SuppressWarnings("unchecked")
+			List<Worldtracer_Actionfiles> list = cri.list();
 			if (list != null && list.size() > 0) {
 				return (Worldtracer_Actionfiles) list.get(0);
 			}
@@ -616,11 +638,11 @@ public class WorldTracerUtils {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Worldtracer_Actionfiles.class);
 			cri.addOrder(Order.desc("percent_match"));
-			cri.add(Expression.eq("action_file_type", type));
-			cri.add(Expression.eq("day", new Integer(day)));
-			cri.add(Expression.eq("airline", airline));
-			cri.add(Expression.eq("station", station));
-			cri.add(Expression.eq("deleted", false));
+			cri.add(Restrictions.eq("action_file_type", type));
+			cri.add(Restrictions.eq("day", new Integer(day)));
+			cri.add(Restrictions.eq("airline", airline));
+			cri.add(Restrictions.eq("station", station));
+			cri.add(Restrictions.eq("deleted", false));
 
 
 			if (rowsperpage > 0) {
@@ -628,7 +650,8 @@ public class WorldTracerUtils {
 				cri.setFirstResult(startnum);
 				cri.setMaxResults(rowsperpage);
 			}
-			ArrayList<Worldtracer_Actionfiles> list = (ArrayList) cri.list();
+			@SuppressWarnings("unchecked")
+			ArrayList<Worldtracer_Actionfiles> list = (ArrayList<Worldtracer_Actionfiles>) cri.list();
 			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -662,7 +685,8 @@ public class WorldTracerUtils {
 			Query q = sess
 					.createQuery("from com.bagnet.nettracer.tracing.db.Worldtracer_Actionfiles wa where wa.id = :af_id and deleted = false");
 			q.setInteger("af_id", af_id);
-			List list = q.list();
+			@SuppressWarnings("unchecked")
+			List<Worldtracer_Actionfiles> list = q.list();
 
 			if (list.size() == 0) {
 				return false;
@@ -706,8 +730,7 @@ public class WorldTracerUtils {
 			sess = HibernateWrapper.getSession().openSession();
 			Criteria cri = sess.createCriteria(Worldtracer_Actionfiles.class);
 			cri.addOrder(Order.desc("percent_match"));
-			cri.add(Expression.eq("action_file_type", ActionFileType.valueOf(wt_type.toUpperCase())));
-			// cri.add(Expression.eq("action_file_type","WM"));
+			cri.add(Restrictions.eq("action_file_type", ActionFileType.valueOf(wt_type.toUpperCase())));
 			if (rowsperpage > 0) {
 				int startnum = currpage * rowsperpage;
 				cri.setFirstResult(startnum);
@@ -715,10 +738,11 @@ public class WorldTracerUtils {
 			}
 
 			if (ahl_id != null && ahl_id.length() > 0)
-				cri.add(Expression.eq("wt_incident_id", ahl_id));
+				cri.add(Restrictions.eq("wt_incident_id", ahl_id));
 			if (ohd_id != null && ohd_id.length() > 0)
-				cri.add(Expression.eq("wt_ohd_id", ohd_id));
-			ArrayList<Worldtracer_Actionfiles> list = (ArrayList) cri.list();
+				cri.add(Restrictions.eq("wt_ohd_id", ohd_id));
+			@SuppressWarnings({ "unchecked" })
+			ArrayList<Worldtracer_Actionfiles> list = (ArrayList<Worldtracer_Actionfiles>) cri.list();
 			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -742,7 +766,8 @@ public class WorldTracerUtils {
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(query);
 			q.setInteger("wt_fwd_log_id", wt_fwd_log_id);
-			List list = q.list();
+			@SuppressWarnings("unchecked")
+			List<WT_FWD_Log> list = q.list();
 			if (list.size() == 0) {
 				logger.debug("unable to find wt_fwd_log: " + wt_fwd_log_id);
 				return null;
@@ -786,6 +811,7 @@ public class WorldTracerUtils {
 		return wt_url;
 	}
 
+	@SuppressWarnings("static-access")
 	public void setError(String error) {
 		this.error = error;
 	}
@@ -798,7 +824,8 @@ public class WorldTracerUtils {
 			Query q = sess
 					.createQuery("from com.bagnet.nettracer.tracing.db.BDO bdo where bdo.BDO_ID= :BDO_ID");
 			q.setParameter("BDO_ID", BDO_ID);
-			List list = q.list();
+			@SuppressWarnings("unchecked")
+			List<BDO> list = q.list();
 
 			if (list.size() == 0) {
 				logger.debug("unable to find bdo: " + BDO_ID);
@@ -936,7 +963,7 @@ public class WorldTracerUtils {
 		try {
 			sess = HibernateWrapper.getSession().openSession();
 			code = code.replace("/", "");
-			Criteria cri = sess.createCriteria(OHD_CategoryType.class).add(Expression.like("wtCategory", code)).add(Expression.eq("locale", "en"));
+			Criteria cri = sess.createCriteria(OHD_CategoryType.class).add(Restrictions.like("wtCategory", code)).add(Restrictions.eq("locale", "en"));
 			OHD_CategoryType oc = (OHD_CategoryType) cri.list().get(0);
 			return oc.getOHD_CategoryType_ID();
 		} catch (Exception e) {
@@ -953,22 +980,234 @@ public class WorldTracerUtils {
 		}
 	}
 	
-	/*
-	public static String getPostWtRequest(GetMethod method,String cgiexe)
-	{
-		StringBuffer sb=new StringBuffer();
-		sb.append("URL: ");
-		try {
-			sb.append(method.getURI().toString());
-		} catch (URIException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public static IncidentForm mapAhlToIncident(IncidentForm i, aero.nettracer.serviceprovider.wt_1_0.common.Ahl a, Agent user) {
+		WorldTracerFile wtf=new WorldTracerFile(a.getAhlId(), WorldTracerFile.WTStatus.ACTIVE);
+		i.setWtFile(wtf);
+		
+		i.setAgent(user);
+		
+		i.setStatus(new Status(TracingConstants.MBR_STATUS_OPEN));
+		
+		
+		if(a.getStationCode()!=null && a.getStationCode().length()==3 && a.getAirlineCode()!=null 
+				&& a.getAirlineCode().length()>0){
+			Station s=StationBMO.getStationByCode(a.getStationCode(), a.getAirlineCode());
+			if(s!=null){
+				i.setStationcreated(s);
+				i.setStationassigned(s);
+			} else {
+				i.setStationcreated(user.getStation());
+				i.setStationassigned(user.getStation());
+			}
 		}
-		return sb.toString();
+
+		i.setCreatedate(TracerDateTime.getGMTDate());
+		i.setCreatetime(TracerDateTime.getGMTDate());
+
+		i.setNumbagchecked(a.getNumberBagsChecked());
+		i.setNumpassengers(a.getNumberPaxAffected());
+		
+		if (a.getFaultReason() != 0) {
+			i.setLoss_code(a.getFaultReason());
+			Station s=StationBMO.getStationByCode(a.getFaultStation());
+			if(s!=null){
+				i.setFaultstation(s);
+			}
+		} else {
+			a.setFaultReason(79);
+			a.setFaultReasonDescription("Created in error");
+		}
+		
+		i.setRecordlocator(a.getPnrLocator());
+		
+		ArrayList<com.bagnet.nettracer.tracing.db.Passenger> paxList = new ArrayList<com.bagnet.nettracer.tracing.db.Passenger>();
+		for (aero.nettracer.serviceprovider.wt_1_0.common.Passenger p: a.getPax()){
+			if (p != null) {
+				com.bagnet.nettracer.tracing.db.Passenger pax = mapAhlPassenger(p);
+				paxList.add(pax);
+			}
+		}
+		i.setPassengerlist(paxList);
+		
+		ArrayList<com.bagnet.nettracer.tracing.db.Itinerary> itinList = new ArrayList<com.bagnet.nettracer.tracing.db.Itinerary>();
+		
+		for (aero.nettracer.serviceprovider.wt_1_0.common.Itinerary itin: a.getPaxItinerary()) {
+			if (itin != null && itin.getDepartureCity()!=null && !itin.getDepartureCity().isEmpty()
+					&& itin.getArrivalCity()!=null && !itin.getArrivalCity().isEmpty()) {
+				com.bagnet.nettracer.tracing.db.Itinerary it = mapItinerary(itin,user);
+				it.setItinerarytype(TracingConstants.PASSENGER_ROUTING);
+				itinList.add(it);
+			}
+		}
+		for (aero.nettracer.serviceprovider.wt_1_0.common.Itinerary itin: a.getBagItinerary()) {
+			if (itin != null && itin.getDepartureCity()!=null && !itin.getDepartureCity().isEmpty()
+					&& itin.getArrivalCity()!=null && !itin.getArrivalCity().isEmpty()) {
+				com.bagnet.nettracer.tracing.db.Itinerary it = mapItinerary(itin,user);
+				it.setItinerarytype(TracingConstants.BAGGAGE_ROUTING);
+				itinList.add(it);
+			}
+		}
+		
+		i.setItinerarylist(itinList);
+		
+		ArrayList<com.bagnet.nettracer.tracing.db.Item> items = new ArrayList<com.bagnet.nettracer.tracing.db.Item>();
+		
+		for (aero.nettracer.serviceprovider.wt_1_0.common.Item item: a.getItem()) {
+			if (item != null) {
+				mapAhlItem(items, item);
+			}
+		}
+		i.setItemlist(items);
+		
+		ArrayList<com.bagnet.nettracer.tracing.db.Incident_Claimcheck> claimChecks = new ArrayList<com.bagnet.nettracer.tracing.db.Incident_Claimcheck>();
+		for (aero.nettracer.serviceprovider.wt_1_0.common.ClaimCheck cc: a.getClaimCheck()) {
+			StringBuilder claimCheckNum=new StringBuilder();
+			
+			if(cc.getAirlineCode()!=null && cc.getAirlineCode().length()>0){
+				claimCheckNum.append(cc.getAirlineCode());
+			}
+			if(cc.getTagNumber()!=null && cc.getTagNumber().length()>0){
+				claimCheckNum.append(cc.getTagNumber());
+			}
+			if(claimCheckNum.length()>0){
+				Incident_Claimcheck cl=new Incident_Claimcheck();
+				cl.setClaimchecknum(claimCheckNum.toString());
+				claimChecks.add(cl);
+			}
+		}
+		i.setClaimchecklist(claimChecks);
+		
+		//Remark for FurtherInfo
+		List<Remark> remarks=new ArrayList<Remark>();
+		i.setRemarklist(remarks);
+		Remark rem =i.getRemark(i.getRemarklist().size());
+		rem.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
+		rem.setRemarktype(TracingConstants.REMARK_REGULAR);
+		if(a.getFurtherInfo()!=null && a.getFurtherInfo().length()>0){
+			rem.setRemarktext(a.getFurtherInfo());
+			remarks.add(rem);
+		}
+		
+		DeliveryInstructions DI=new DeliveryInstructions();
+		DI.setInstructions("");
+		i.setDeliveryInstructions(DI);
+		
+		return i;
 	}
 	
-	public static void insertAmendWtString(IncidentForm incform,Incident inc){
-		//incform.
+	private static com.bagnet.nettracer.tracing.db.Passenger mapAhlPassenger(aero.nettracer.serviceprovider.wt_1_0.common.Passenger p) {
+		aero.nettracer.serviceprovider.wt_1_0.common.Address ad = p.getAddress();
+		com.bagnet.nettracer.tracing.db.Passenger pax = new com.bagnet.nettracer.tracing.db.Passenger();
+		com.bagnet.nettracer.tracing.db.Address add = new com.bagnet.nettracer.tracing.db.Address();
+		
+		pax.addAddress(add);
+		
+		com.bagnet.nettracer.tracing.db.AirlineMembership membership=new com.bagnet.nettracer.tracing.db.AirlineMembership();
+		membership.setMembershipnum(p.getFfNumber());
+		membership.setCompanycode_ID(p.getFfAirline());
+		membership.setMembershipstatus(p.getFfStatus());
+		
+		pax.setMembership(membership);
+		pax.setFirstname(p.getFirstname());
+		pax.setLastname(p.getLastname());
+		pax.setMiddlename(p.getMiddlename());
+		pax.setSalutation(p.getSalutation());
+		pax.setLanguageFreeFlow(p.getLanguageFreeFlow());
+		if(ad!=null){
+			add.setPassenger(pax);
+			add.setAddress1(ad.getAddress1());
+			add.setAddress2(ad.getAddress2());
+			add.setAltphone(ad.getAltPhone());
+			add.setCity(ad.getCity());
+			
+			add.setCountrycode_ID(ad.getCountryCode());
+			
+			add.setEmail(ad.getEmailAddress());
+			add.setHomephone(ad.getHomePhone());
+			add.setMobile(ad.getMobilePhone());
+			add.setPager(ad.getPagerNumber());
+			add.setProvince(ad.getProvince());
+			
+			add.setState_ID(ad.getState());
+			add.setPermanent(!ad.isTemporaryAddress());
+			add.setWorkphone(ad.getWorkPhone());
+			add.setZip(ad.getZip());
+		}
+		return pax;
 	}
-	*/
+
+	private static com.bagnet.nettracer.tracing.db.Itinerary mapItinerary(aero.nettracer.serviceprovider.wt_1_0.common.Itinerary itin, Agent user) {
+		com.bagnet.nettracer.tracing.db.Itinerary it = new com.bagnet.nettracer.tracing.db.Itinerary();
+		it.set_DATEFORMAT(user.getDateformat().getFormat());
+		it.set_TIMEFORMAT(user.getTimeformat().getFormat());
+		it.setAirline(itin.getAirline());
+		it.setLegto(itin.getArrivalCity());
+		it.setLegto_type(itin.getLegto_type());
+
+		it.setLegfrom(itin.getDepartureCity());
+		it.setLegfrom_type(itin.getLegfrom_type());
+
+		it.setDepartdate(itin.getFlightDate().getTime());
+		it.setDisdepartdate(DateUtils.formatDate(itin.getFlightDate().getTime(), user.getDateformat().getFormat(), null, null));
+		
+		it.setFlightnum(itin.getFlightNumber());
+		
+		return it;
+	}
+	
+	private static void mapAhlItem(ArrayList<com.bagnet.nettracer.tracing.db.Item> items, aero.nettracer.serviceprovider.wt_1_0.common.Item item) {
+		com.bagnet.nettracer.tracing.db.Item it = new com.bagnet.nettracer.tracing.db.Item();
+		
+		it.setBagnumber(item.getBagNumber());
+		it.setColor(item.getColor());
+		
+		ArrayList<Item_Inventory> contents = new ArrayList<Item_Inventory>();
+		for (aero.nettracer.serviceprovider.wt_1_0.common.Content inv:item.getContent()) {
+			Item_Inventory content = new Item_Inventory();
+			
+			try {
+				content.setCategorytype_ID(CategoryBMO.getCategoryByWT(inv.getCategory(), TracingConstants.DEFAULT_LOCALE).getOHD_CategoryType_ID());
+			} catch (NullPointerException e) {
+				content.setCategorytype_ID(0);
+			}
+			content.setItem(it);
+			content.setDescription(inv.getDescription().trim().toUpperCase());
+			contents.add(content);
+		}
+		it.setInventorylist(contents);
+		int descId=XDescElementsBMO.getXdescelementid(item.getDesc1());
+		it.setXdescelement_ID_1(descId);
+		descId=XDescElementsBMO.getXdescelementid(item.getDesc2());
+		it.setXdescelement_ID_2(descId);
+		descId=XDescElementsBMO.getXdescelementid(item.getDesc3());
+		it.setXdescelement_ID_3(descId);
+
+		it.setFnameonbag(item.getFirstNameOnBag());
+		it.setLnameonbag(item.getLastNameOnBag());
+		item.getManufacturer();
+		if(item.getManufacturer()!=null){
+			String manuDesc=item.getManufacturer().substring(0,item.getManufacturer().indexOf("/"));
+			Manufacturer manu=ManufacturerBMO.getManufacturerByDesc(manuDesc);
+			if(manu!=null){			
+				it.setManufacturer_ID(manu.getManufacturer_ID());
+			} else {
+				it.setManufacturer_ID(TracingConstants.MANUFACTURER_OTHER_ID);
+				it.setManufacturer_other(manuDesc);
+			}
+		}
+		try{
+		DecimalFormat myFormatter=new DecimalFormat("00");
+		int type=Integer.valueOf(item.getType());
+		String bdoNum=myFormatter.format(type);
+		it.setBagtype(bdoNum);
+		} catch (NumberFormatException nfe){
+			nfe.printStackTrace();
+		}
+		
+		it.setExternaldesc(item.getExternaldesc());
+		
+		it.setStatus(new Status(TracingConstants.ITEM_STATUS_OPEN));
+		items.add(it);
+	}
+
 }

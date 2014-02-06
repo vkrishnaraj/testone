@@ -391,6 +391,7 @@ public class TracingConstants {
 	
 	public static final String SYSTEM_COMPONENT_NAME_UNASSIGNED_INBOUND_QUEUE = "Unassigned Inbound Queue";
 	public static final String SYSTEM_COMPONENT_NAME_PERSONAL_QUEUE = "Assigned Personal Tasks";
+	public static final String SYSTEM_COMPONENT_NAME_IMPORT_AHL = "Import WT AHL";
 	
 	//Table numbers for status
 	public final static int AJAX_STATUS_INC = 1;

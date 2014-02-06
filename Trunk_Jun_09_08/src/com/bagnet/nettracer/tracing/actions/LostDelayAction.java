@@ -37,6 +37,8 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 
+import aero.nettracer.serviceprovider.wt_1_0.common.Ahl;
+
 import com.bagnet.clients.us.SharesIntegrationWrapper;
 import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
@@ -96,6 +98,11 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
 import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
+import com.bagnet.nettracer.wt.WorldTracerRecordNotFoundException;
+import com.bagnet.nettracer.wt.WorldTracerUtils;
+import com.bagnet.nettracer.wt.connector.WebServiceDto;
+import com.bagnet.nettracer.wt.connector.WorldTracerConnector;
+import com.bagnet.nettracer.wt.connector.WorldTracerWebService;
 
 public class LostDelayAction extends CheckedAction {
 	private static Logger logger = Logger.getLogger(LostDelayAction.class);
@@ -206,7 +213,7 @@ public class LostDelayAction extends CheckedAction {
 		if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_REMARK_UPDATE_LD, user))
 			theform.setAllow_remark_update(1);
 
-		if(user.getStation().getStation_ID() != theform.getStationassigned_ID()) {
+		if(theform.getStationassigned()!=null && user.getStation().getStation_ID() != theform.getStationassigned_ID()) {
 			request.setAttribute("cantmatch", "1");
 		}
 		
@@ -620,10 +627,6 @@ public class LostDelayAction extends CheckedAction {
 				boolean isNew = theform.getIncident_ID() == null || theform.getIncident_ID().trim().length() == 0;
 				if (isNew && PropertyBMO.isTrue("ntfs.submit.lostdelay")) {
 					ConnectionUtil.createAndSubmitForTracing(iDTO, user, request, UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, user));
-//					File file = ConnectionUtil.createAndSubmitForTracing(iDTO, user, request, UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_VIEW_FRAUD_RESULTS, user));
-//					if (file != null) {
-//						session.setAttribute("file", file);
-//					}
 				}
 				
 				request.setAttribute("lostdelay", "1");
@@ -696,6 +699,7 @@ public class LostDelayAction extends CheckedAction {
 		 * modify incident on html rewrite link
 		 */
 		String incident = request.getParameter("incident_ID");
+		String importAhl=request.getParameter("importAhl_id");
 		if(incident != null && incident.length() > 0) {
 			Incident inc;
 			if((inc = bs.findIncidentByID(incident, theform, user, TracingConstants.LOST_DELAY)) == null) {
@@ -774,6 +778,45 @@ public class LostDelayAction extends CheckedAction {
 			
 			request.setAttribute("incident", incident);
 
+		} else if (importAhl != null && !importAhl.isEmpty()) {
+				WorldTracerConnector wtc;
+				Ahl result = null;
+				wtc = WorldTracerWebService.getInstance();
+				try {
+					WebServiceDto dto = new WebServiceDto();
+					dto.setCronUser(false);
+					dto.setUseAvailableConnectionsIfAvailable(true);
+					result = wtc.findAHL(importAhl, dto);
+				} catch (WorldTracerRecordNotFoundException ex) {
+					logger.error("ahl not found");
+					request.setAttribute("file_not_found", "1");
+					request.setAttribute("wt_raw_incident", importAhl);
+				} catch (RuntimeException ex) {
+					ex.printStackTrace();
+				} finally {
+					wtc.logout();
+				}
+				if(UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_IMPORT_AHL, user) && result!=null){
+					Incident inc=WorldTracerUtils.findIncidentByWTID(importAhl);
+					if(inc==null){
+						request.setAttribute("newform", "1");
+						request.setAttribute("importAhl", "1");
+						TracerUtils.populateIncident(theform, request, TracingConstants.LOST_DELAY);
+						theform=WorldTracerUtils.mapAhlToIncident(theform, result, user);
+						session.setAttribute("incidentForm", theform);
+						return (mapping.findForward(TracingConstants.LD_MAIN));
+					} else {
+						request.setAttribute("wt_raw", result);
+						request.setAttribute("wt_raw_incident", importAhl);
+						logger.error("ahl has incident already");
+						error = new ActionMessage("message.ahl.has.nt.file");
+						errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+						saveMessages(request, errors);
+						return (mapping.findForward(TracingConstants.VIEW_WORLDTRACER_AHL));
+					}
+				}
+				return (mapping.findForward(TracingConstants.VIEW_WORLDTRACER_AHL));
+				
 		} else {
 			error = null;
 			ArrayList alerrors = new ArrayList();
