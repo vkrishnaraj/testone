@@ -228,6 +228,9 @@ public class Utils {
 			bb.setCreated_timestamp(new Date());
 		} else {
 			BagBuzz old = Utils.getBagBuzz(bb.getBagbuzz_id());
+			if (old.getStatus().getStatus_ID() == TracingConstants.BAGBUZZ_PUBLISHED) {
+				unpublishBagBuzz(old);
+			}
 			bb.setCreated_timestamp(old.getCreated_timestamp());
 		}
 		Status s = new Status();
