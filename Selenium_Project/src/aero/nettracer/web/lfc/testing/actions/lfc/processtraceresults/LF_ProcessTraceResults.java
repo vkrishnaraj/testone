@@ -110,7 +110,7 @@ public class LF_ProcessTraceResults extends LFC_SeleniumTest {
 			verifyTrue(isTextPresent(LF_ProcessTraceResults.foundId));
 			verifyTrue(isElementPresent(By.xpath("//div[@id='maincontent']/table[2]/tbody/tr[2]/td/a")));
 			verifyTrue(isTextPresent("Cellphone, Apple, iPhone 4S, AP1234"));
-			click(By.name("getNextItem"));
+			click(By.xpath("//div[@id='maincontent']/table[2]/tbody/tr[2]/td/a"));
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LFPTR: Failed to verify trace result info on the Shelved Trace Results page.");
