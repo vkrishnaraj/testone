@@ -6,15 +6,13 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.HashMap;
 
 import org.apache.axiom.om.impl.builder.StAXOMBuilder;
 import org.apache.axis2.AxisFault;
@@ -43,8 +41,8 @@ import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 import aero.nettracer.serviceprovider.common.utils.BagTagConversion;
 import aero.nettracer.serviceprovider.common.utils.ServiceUtilities;
 import aero.nettracer.serviceprovider.wt_1_0.common.ActionFile;
+import aero.nettracer.serviceprovider.wt_1_0.common.ActionFileCount;
 import aero.nettracer.serviceprovider.wt_1_0.common.ActionFileRequestData;
-import aero.nettracer.serviceprovider.wt_1_0.common.Address;
 import aero.nettracer.serviceprovider.wt_1_0.common.Ahl;
 import aero.nettracer.serviceprovider.wt_1_0.common.Bdo;
 import aero.nettracer.serviceprovider.wt_1_0.common.ClaimCheck;
@@ -64,159 +62,73 @@ import aero.nettracer.serviceprovider.wt_1_0.common.Tag;
 import aero.nettracer.serviceprovider.wt_1_0.common.WorldTracerResponse;
 import aero.nettracer.serviceprovider.wt_1_0.dto.WorldTracerActionDTO;
 import aero.nettracer.serviceprovider.wt_1_0.services.DefaultWorldTracerService;
+import aero.nettracer.serviceprovider.wt_1_0.services.DefaultWorldTracerService.TxType;
+import aero.nettracer.serviceprovider.wt_1_0.services.DefaultWorldTracerService.WorldTracerField;
 import aero.nettracer.serviceprovider.wt_1_0.services.PreProcessor;
 import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerException;
 import aero.nettracer.serviceprovider.wt_1_0.services.WorldTracerRecordNotFoundException;
-import aero.nettracer.serviceprovider.wt_1_0.services.DefaultWorldTracerService.TxType;
-import aero.nettracer.serviceprovider.wt_1_0.services.DefaultWorldTracerService.WorldTracerField;
-import aero.nettracer.serviceprovider.wt_1_0.services.ishares.service.CommandNotProperlyFormedException;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.BasicRule;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.RuleMapper;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.UsWorldTracerRuleMap;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerConnectionException;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerRule;
-import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerService;
 import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerRule.Format;
-import aero.sita.www.bag.wtr._2009._01.AdditionalInfoAmendType.FurtherInfo;
-import aero.sita.www.bag.wtr._2009._01.AlphaLength2To16;
-import aero.sita.www.bag.wtr._2009._01.AmountType;
-import aero.sita.www.bag.wtr._2009._01.BagDescType;
-import aero.sita.www.bag.wtr._2009._01.BagElmsType;
-import aero.sita.www.bag.wtr._2009._01.BagMatrlType;
-import aero.sita.www.bag.wtr._2009._01.BagTagAmendType;
-import aero.sita.www.bag.wtr._2009._01.BagTagType;
-import aero.sita.www.bag.wtr._2009._01.ColorCodeType;
-import aero.sita.www.bag.wtr._2009._01.ColorTypeDescAmendType;
-import aero.sita.www.bag.wtr._2009._01.ColorTypeDescType;
-import aero.sita.www.bag.wtr._2009._01.ContactInfoAmendType;
-import aero.sita.www.bag.wtr._2009._01.ContactInfoAmendType.TempAddress;
-import aero.sita.www.bag.wtr._2009._01.ContactInfoType;
-import aero.sita.www.bag.wtr._2009._01.ContentType;
-import aero.sita.www.bag.wtr._2009._01.ContentsAmendType;
-import aero.sita.www.bag.wtr._2009._01.ContentsType;
-import aero.sita.www.bag.wtr._2009._01.CostType;
-import aero.sita.www.bag.wtr._2009._01.DelayedBagGroupAmendType;
-import aero.sita.www.bag.wtr._2009._01.DelayedBagGroupType;
-import aero.sita.www.bag.wtr._2009._01.DelayedBagType;
-import aero.sita.www.bag.wtr._2009._01.DelayedClaimAmendType;
-import aero.sita.www.bag.wtr._2009._01.DelayedClaimAmendType.TracingFinalized;
-import aero.sita.www.bag.wtr._2009._01.DelayedClaimType;
-import aero.sita.www.bag.wtr._2009._01.FlightDateOrARNKType;
-import aero.sita.www.bag.wtr._2009._01.FlightDateType;
-import aero.sita.www.bag.wtr._2009._01.FlightOptionalDateOrARNKType;
-import aero.sita.www.bag.wtr._2009._01.FlightOptionalDateType;
-import aero.sita.www.bag.wtr._2009._01.FlightSegmentOrARNKType;
-import aero.sita.www.bag.wtr._2009._01.FlightSegmentType;
-import aero.sita.www.bag.wtr._2009._01.OnHandBagAmendType;
-import aero.sita.www.bag.wtr._2009._01.OnHandBagType;
-import aero.sita.www.bag.wtr._2009._01.OriginDestinationType;
-import aero.sita.www.bag.wtr._2009._01.PassengerAmendType;
-import aero.sita.www.bag.wtr._2009._01.PassengerAmendType.Language;
-import aero.sita.www.bag.wtr._2009._01.PassengerItineraryAmendType;
-import aero.sita.www.bag.wtr._2009._01.PassengerItineraryType;
-import aero.sita.www.bag.wtr._2009._01.PassengerPaymentAmendType;
-import aero.sita.www.bag.wtr._2009._01.PassengerPaymentType;
-import aero.sita.www.bag.wtr._2009._01.PassengerType;
-import aero.sita.www.bag.wtr._2009._01.PhoneAmendType;
-import aero.sita.www.bag.wtr._2009._01.RecordIdentifierType;
-import aero.sita.www.bag.wtr._2009._01.RecordReferenceType;
-import aero.sita.www.bag.wtr._2009._01.RecordType;
-import aero.sita.www.bag.wtr._2009._01.RushBagGroupType;
-import aero.sita.www.bag.wtr._2009._01.RushBagType;
-import aero.sita.www.bag.wtr._2009._01.StationAirlineType;
-import aero.sita.www.bag.wtr._2009._01.InboxMessageSearchType;
-import aero.sita.www.bag.wtr._2009._01.StringLength0To58AmendType;
-import aero.sita.www.bag.wtr._2009._01.StringLength1To58;
-import aero.sita.www.bag.wtr._2009._01.WTRAddressAmendType;
-import aero.sita.www.bag.wtr._2009._01.WTRAddressAmendType.Country;
-import aero.sita.www.bag.wtr._2009._01.WTRAddressAmendType.PostalCode;
-import aero.sita.www.bag.wtr._2009._01.WTROnhandBagRecReadRSDocument.WTROnhandBagRecReadRS.Passengers;
-
-import org.iata.www.iata._2007._00.TTYAddress;
-import aero.sita.www.bag.wtr._2009._01.WTRBagsCreateRSDocument;
-import aero.sita.www.bag.wtr._2009._01.WTRCloseRecordsRQDocument;
-import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagRecReadRSDocument;
-import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagsCreateRQDocument;
-import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagsRecUpdateRQDocument;
-import aero.sita.www.bag.wtr._2009._01.WTRForwardOnhandBagsRQDocument;
-import aero.sita.www.bag.wtr._2009._01.WTROnhandBagCreateRQDocument;
-import aero.sita.www.bag.wtr._2009._01.WTROnhandBagRecReadRSDocument;
-import aero.sita.www.bag.wtr._2009._01.WTROnhandBagRecUpdateRQDocument;
-import aero.sita.www.bag.wtr._2009._01.WTRQuickOnhandBagsCreateRQDocument;
-import aero.sita.www.bag.wtr._2009._01.WTRReadRecordRQDocument;
-import aero.sita.www.bag.wtr._2009._01.WTRReinstateRecordsRQDocument;
-import aero.sita.www.bag.wtr._2009._01.WTRRushBagsCreateRQDocument;
-import aero.sita.www.bag.wtr._2009._01.WTRStatusRSDocument;
-import aero.sita.www.bag.wtr._2009._01.WTRSuspendRecordsRQDocument;
-import aero.sita.www.bag.wtr._2009._01.WTRTracingStateChangeRQType;
-import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageCountRQDocument;
-import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageCountRSDocument;
-import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageCountRQDocument.WTRInboxMessageCountRQ;
-import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageSendRQDocument;
-import aero.sita.www.bag.wtr._2009._01.WTROnhandBagsRequestRQDocument;
-import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageEraseRQDocument;
-import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageReadRQDocument;
-import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageReadRSDocument;
-import aero.sita.www.bag.wtr._2009._01.WTROnhandBagsRequestRQDocument;
+import aero.nettracer.serviceprovider.wt_1_0.services.wtrweb.service.WorldTracerService;
+import aero.sita.www.bag.wtr._2009._01.*;
 import aero.sita.www.bag.wtr._2009._01.BagElmsType.Enum;
-import aero.sita.www.bag.wtr._2009._01.InboxAreaType;
-import aero.sita.www.bag.wtr._2009._01.WTRAddressType;
 import aero.sita.www.bag.wtr._2009._01.DelayedBagGroupAmendType.DelayedBags.DelayedBag;
 import aero.sita.www.bag.wtr._2009._01.DelayedBagGroupType.BaggageItinerary;
 import aero.sita.www.bag.wtr._2009._01.DelayedBagGroupType.DelayedBags;
+import aero.sita.www.bag.wtr._2009._01.DelayedClaimAmendType.TracingFinalized;
 import aero.sita.www.bag.wtr._2009._01.OnHandBagType.Itinerary.Routes;
 import aero.sita.www.bag.wtr._2009._01.PassengerAmendType.Initials.Intial;
+import aero.sita.www.bag.wtr._2009._01.PassengerAmendType.Language;
 import aero.sita.www.bag.wtr._2009._01.PassengerAmendType.Names.Name;
 import aero.sita.www.bag.wtr._2009._01.PassengerItineraryType.Itinerary.FlightSegments;
 import aero.sita.www.bag.wtr._2009._01.PassengerType.Initials;
 import aero.sita.www.bag.wtr._2009._01.PassengerType.Names;
 import aero.sita.www.bag.wtr._2009._01.RushBagGroupType.RushDestinations;
 import aero.sita.www.bag.wtr._2009._01.RushBagGroupType.RushFlights;
+import aero.sita.www.bag.wtr._2009._01.WTRAddressAmendType.State;
 import aero.sita.www.bag.wtr._2009._01.WTRCloseRecordsRQDocument.WTRCloseRecordsRQ;
 import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagRecReadRSDocument.WTRDelayedBagRecReadRS;
 import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagsCreateRQDocument.WTRDelayedBagsCreateRQ;
-//import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagsRecUpdateRQDocument.WTRDelayedBagsRecUpdateRQ;
-import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagsRecUpdateRQType;
 import aero.sita.www.bag.wtr._2009._01.WTRDeliveryOrderCreateRQDocument.WTRDeliveryOrderCreateRQ;
 import aero.sita.www.bag.wtr._2009._01.WTRDeliveryOrderCreateRQDocument.WTRDeliveryOrderCreateRQ.DeliveryOrder;
 import aero.sita.www.bag.wtr._2009._01.WTRDeliveryOrderCreateRQDocument.WTRDeliveryOrderCreateRQ.DeliveryOrder.Bags;
-import aero.sita.www.bag.wtr._2009._01.WTRDeliveryOrderCreateRQDocument.WTRDeliveryOrderCreateRQ.DeliveryOrder.DeliveryCompany;
-import aero.sita.www.bag.wtr._2009._01.WTRDeliveryOrderCreateRQDocument.WTRDeliveryOrderCreateRQ.DeliveryOrder.DeliveryInfo;
 import aero.sita.www.bag.wtr._2009._01.WTRDeliveryOrderCreateRQDocument.WTRDeliveryOrderCreateRQ.DeliveryOrder.Bags.Bag;
 import aero.sita.www.bag.wtr._2009._01.WTRDeliveryOrderCreateRQDocument.WTRDeliveryOrderCreateRQ.DeliveryOrder.Bags.Bag.ColorType;
+import aero.sita.www.bag.wtr._2009._01.WTRDeliveryOrderCreateRQDocument.WTRDeliveryOrderCreateRQ.DeliveryOrder.DeliveryCompany;
+import aero.sita.www.bag.wtr._2009._01.WTRDeliveryOrderCreateRQDocument.WTRDeliveryOrderCreateRQ.DeliveryOrder.DeliveryInfo;
 import aero.sita.www.bag.wtr._2009._01.WTRForwardOnhandBagsRQDocument.WTRForwardOnhandBagsRQ;
-import aero.sita.www.bag.wtr._2009._01.WTRForwardOnhandBagsRQDocument.WTRForwardOnhandBagsRQ.OnHandBags;
 import aero.sita.www.bag.wtr._2009._01.WTRForwardOnhandBagsRQDocument.WTRForwardOnhandBagsRQ.RushBagTags;
 import aero.sita.www.bag.wtr._2009._01.WTRForwardOnhandBagsRQDocument.WTRForwardOnhandBagsRQ.TeletypeAddresses;
+import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageCountRQDocument.WTRInboxMessageCountRQ;
+import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageCountRSDocument.WTRInboxMessageCountRS.MessageCounts.MessageCount;
+import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageEraseRQDocument.WTRInboxMessageEraseRQ;
+import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageReadRQDocument.WTRInboxMessageReadRQ;
+import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageReadRQDocument.WTRInboxMessageReadRQ.InboxMessageSearch;
+import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageReadRSDocument.WTRInboxMessageReadRS.Messages.Message;
+import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageSendRQDocument.WTRInboxMessageSendRQ;
+import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageSendRQDocument.WTRInboxMessageSendRQ.Destination;
+import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageSendRQDocument.WTRInboxMessageSendRQ.Destination.InboxAddress;
 import aero.sita.www.bag.wtr._2009._01.WTROnhandBagCreateRQDocument.WTROnhandBagCreateRQ;
 import aero.sita.www.bag.wtr._2009._01.WTROnhandBagRecReadRSDocument.WTROnhandBagRecReadRS;
+import aero.sita.www.bag.wtr._2009._01.WTROnhandBagRecReadRSDocument.WTROnhandBagRecReadRS.Passengers;
 import aero.sita.www.bag.wtr._2009._01.WTROnhandBagRecUpdateRQDocument.WTROnhandBagRecUpdateRQ;
+import aero.sita.www.bag.wtr._2009._01.WTROnhandBagsRequestRQDocument.WTROnhandBagsRequestRQ;
+import aero.sita.www.bag.wtr._2009._01.WTROnhandBagsRequestRQDocument.WTROnhandBagsRequestRQ.OnhandBags;
+import aero.sita.www.bag.wtr._2009._01.WTROnhandBagsRequestRQDocument.WTROnhandBagsRequestRQ.QuickOnhandBags;
 import aero.sita.www.bag.wtr._2009._01.WTRQuickOnhandBagsCreateRQDocument.WTRQuickOnhandBagsCreateRQ;
 import aero.sita.www.bag.wtr._2009._01.WTRQuickOnhandBagsCreateRQDocument.WTRQuickOnhandBagsCreateRQ.BagTags;
-import aero.sita.www.bag.wtr._2009._01.WTROnhandBagsRequestRQDocument.WTROnhandBagsRequestRQ;
-import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageEraseRQDocument.WTRInboxMessageEraseRQ;
-import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageSendRQDocument.WTRInboxMessageSendRQ;
-import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageReadRQDocument.WTRInboxMessageReadRQ;
-import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageReadRQDocument.WTRInboxMessageReadRQ;
-import aero.sita.www.bag.wtr._2009._01.WTROnhandBagsRequestRQDocument.WTROnhandBagsRequestRQ;
-import aero.sita.www.bag.wtr._2009._01.WTRDeliveryOrderCreateRQDocument;
 import aero.sita.www.bag.wtr._2009._01.WTRReadRecordRQDocument.WTRReadRecordRQ;
 import aero.sita.www.bag.wtr._2009._01.WTRRushBagsCreateRQDocument.WTRRushBagsCreateRQ;
 import aero.sita.www.bag.wtr._2009._01.WTRRushBagsCreateRQDocument.WTRRushBagsCreateRQ.SupplimentalInfo;
 import aero.sita.www.bag.wtr.delayedbagservice.DelayedBagServiceStub;
+import aero.sita.www.bag.wtr.inboxservice.InboxServiceStub;
 import aero.sita.www.bag.wtr.onhandbagservice.OnhandBagServiceStub;
 import aero.sita.www.bag.wtr.rushbagservice.RushBagServiceStub;
-import aero.sita.www.bag.wtr.inboxservice.InboxServiceStub;
-import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageCountRSDocument.WTRInboxMessageCountRS.MessageCounts.MessageCount;
-import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageSendRQDocument.WTRInboxMessageSendRQ.Destination;
-import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageSendRQDocument.WTRInboxMessageSendRQ.Destination.InboxAddress;
-import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageReadRQDocument.WTRInboxMessageReadRQ.InboxMessageSearch;
-import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageReadRSDocument.WTRInboxMessageReadRS.Messages;
-import aero.sita.www.bag.wtr._2009._01.WTRInboxMessageReadRSDocument.WTRInboxMessageReadRS.Messages.Message;
-import aero.sita.www.bag.wtr._2009._01.WTROnhandBagsRequestRQDocument.WTROnhandBagsRequestRQ.OnhandBags;
-import aero.sita.www.bag.wtr._2009._01.WTROnhandBagsRequestRQDocument.WTROnhandBagsRequestRQ.QuickOnhandBags;
-import aero.sita.www.bag.wtr._2009._01.impl.DelayedClaimAmendTypeImpl.TracingFinalizedImpl;
-import aero.nettracer.serviceprovider.wt_1_0.common.ActionFileCount;
+//import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagsRecUpdateRQDocument.WTRDelayedBagsRecUpdateRQ;
 
 public class WorldTracerServiceImpl implements WorldTracerService {
 
@@ -252,7 +164,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 	private static final int MAX_CONTENT_DESC_LENGTH = 90;
 	private static final int MAX_CONTENT_CAT_LINES = 1;
-	private static final int MAX_CONTENT_SPLIT = 2;
 	private static final int LOSS_COMMENT_MAX = 58;
   
 	private boolean restrictedAreaType(WorldTracerActionDTO dto, String areaType) {
@@ -1974,7 +1885,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			List<String> fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.CT);
 			List<String> fieldList2 = fieldMap.get(DefaultWorldTracerService.WorldTracerField.BI);
-			List<String> contentsList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.CC);
 			List<String> tagList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.TN);
 
 			Item[] items = data.getItem();
@@ -2694,7 +2604,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			aero.sita.www.bag.wtr._2009._01.WTRForwardOnhandBagsRQDocument.WTRForwardOnhandBagsRQ.RushFlights rf = d1.addNewRushFlights();
 			aero.sita.www.bag.wtr._2009._01.WTRForwardOnhandBagsRQDocument.WTRForwardOnhandBagsRQ.RushDestinations rds = d1.addNewRushDestinations();
-			int itinCount = 0;
+			
 			if (data.getItinerary() != null) {
 				for (Itinerary itin : data.getItinerary()) {
 					if (itin.getAirline() == null || itin.getAirline().trim().length() <= 0 || itin.getFlightNumber() == null || itin.getFlightNumber().trim().length() <= 0
@@ -2702,7 +2612,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 							|| itin.getArrivalCity().trim().length() <= 0 || itin.getFlightDate() == null) {
 						continue;
 					} else {
-						itinCount++;
 						FlightDateType fdt = rf.addNewFlightDateOrARNK().addNewFlightDate();
 						fdt.setAirlineCode(itin.getAirline().trim().toUpperCase());
 						fdt.setDate(itin.getFlightDate());
@@ -2853,7 +2762,7 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			RushFlights rf = rb.addNewRushFlights();
 			RushDestinations rds = rb.addNewRushDestinations();
-			int itinCount = 0;
+			
 			if (msg.getItinerary() != null) {
 				for (Itinerary itin : msg.getItinerary()) {
 					if (itin.getAirline() == null || itin.getAirline().trim().length() <= 0 || itin.getFlightNumber() == null || itin.getFlightNumber().trim().length() <= 0
@@ -2861,7 +2770,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 							|| itin.getArrivalCity().trim().length() <= 0 || itin.getFlightDate() == null) {
 						continue;
 					} else {
-						itinCount++;
 						FlightDateType fdt = rf.addNewFlightDateOrARNK().addNewFlightDate();
 						fdt.setAirlineCode(itin.getAirline().toUpperCase());
 						fdt.setDate(itin.getFlightDate());
@@ -3880,6 +3788,28 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 			// Set version & POS
 			d1.setVersion(VERSION_0_PT_1);
 			d1.addNewPOS().addNewSource().setAirlineVendorID(data.getAirlineCode());
+			
+			String freeFormText = null;
+			if ((List<String>) fieldMap.get(WorldTracerField.FI) != null
+					&& ((List<String>) fieldMap.get(WorldTracerField.FI))
+							.size() > 0) {
+				freeFormText = ((List<String>) fieldMap
+						.get(WorldTracerField.FI)).get(0);
+			}
+
+			if (freeFormText != null) {
+				AdditionalInfoAmendType.FurtherInfo info=null;
+				if(d1.getAdditionalInfo()!=null){
+					info=d1.addNewAdditionalInfo().getFurtherInfo();
+					if(info.getStringValue()!=null && !info.getStringValue().contains("freeFormText")){
+						String newInfo=info.getStringValue()+NEWLINE+freeFormText;
+						info.setStringValue(newInfo);
+					}
+				} else {
+					info=d1.addNewAdditionalInfo().addNewFurtherInfo();
+					info.setStringValue(freeFormText);
+				}
+			}
 
 			RecordReferenceType r = d1.addNewRecordReference();
 			String ahlId = data.getAhlId();
@@ -3919,11 +3849,8 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			PassengerPaymentAmendType d3 = d2.addNewPassengerPayments().addNewPassengerPayment();
 			d3.setSeq(1);
-			// String cs_fmt = "%02d %s/%s%1.2f";
 			int claimCount = 0;
 			if (incident.getExpenses() != null) {
-				// String cost;
-
 				if (incident.getExpenses() != null) {
 					for (Expenses expense : incident.getExpenses()) {
 						if (expense.getApprovalDate() != null && expense.getCurrrency() != null) {
@@ -3957,7 +3884,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 			List<String> fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.CT);
 			List<String> fieldList2 = fieldMap.get(DefaultWorldTracerService.WorldTracerField.BI);
-			List<String> contentsList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.CC);
 			List<String> tagList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.TN);
 
 			Item[] items = data.getItem();
@@ -3973,7 +3899,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					DelayedBag t3 = t22.addNewDelayedBag();
 					t3.setSeq(i + 1);
 					ContentsAmendType cx = null;
-//					ContentsAmendType cx = t3.addNewBagContents();
 
 					if (tagList != null && i < tagList.size()) {
 						BagTagAmendType tag = t3.addNewBagTag();
@@ -3982,9 +3907,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						tag.setTagSequence(airtag.substring(2));
 					}
 
-//					if (fieldList2 != null && i < fieldList2.size()) {
-//						t3.addNewBrandInfo().setStringValue(RULES.get(DefaultWorldTracerService.WorldTracerField.BI).formatEntry(fieldList2.get(i)));
-//					}
 					ColorTypeDescAmendType t4 = t3.addNewColorTypeDesc();
 					t4.setColorCode(ColorCodeType.Enum.forString(colorType));
 					t4.setTypeCode(Integer.valueOf(bagType));
@@ -4192,62 +4114,10 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				}
 			}
 			
-//			
-//			//find first permanent address
-//			Address ntpa = PreProcessor.getAhlAddress(data, true);
-//
-//			if(ntpa != null){
-//				WTRAddressAmendType pa = ct.addNewPermanentAddress();
-//				if(ntpa.getAddress1()!=null && ntpa.getAddress1().length() > 0){
-//					StringLength0To58AmendType pa1 = pa.addNewAddressLine();
-//					pa1.setSeq(1);
-//					pa1.setStringValue(ntpa.getAddress1());
-//				}
-//				if(ntpa.getAddress2()!=null && ntpa.getAddress2().length() > 0){
-//					StringLength0To58AmendType pa2 = pa.addNewAddressLine();
-//					pa2.setSeq(2);
-//					pa2.setStringValue(ntpa.getAddress2());
-//				}
-//				if(ntpa.getCity()!=null && ntpa.getCity().length() > 0){
-//					pa.setCity(ntpa.getCity());
-//				}
-//				if(ntpa.getState() != null && ntpa.getState().length() > 0 
-//						&& ntpa.getCountryCode() != null 
-//						&& (ntpa.getCountryCode().equalsIgnoreCase("US") || ntpa.getCountryCode().equalsIgnoreCase("United States"))){
-//					WTRAddressAmendType.State state = pa.addNewState();
-//					state.setStringValue(ntpa.getState());
-//					pa.setState(state);
-//				} else if(ntpa.getProvince() != null && ntpa.getProvince().length() > 0){
-//					//there is no province field for WT
-//					WTRAddressAmendType.State state = pa.addNewState();
-//					state.setStringValue(ntpa.getProvince());
-//					pa.setState(state);
-//				}
-//				if(ntpa.getZip() != null && ntpa.getZip().length() > 0){
-//					PostalCode zip = pa.addNewPostalCode();
-//					zip.setStringValue(ntpa.getZip());
-//					pa.setPostalCode(zip);
-//				}
-//				if(ntpa.getCountryCode() != null && ntpa.getCountryCode().length() > 0){
-//					Country country = pa.addNewCountry();
-//					country.setStringValue(ntpa.getCountryCode());
-//					pa.setCountry(country);
-//				}
-//			}
-
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.ZIP);
 			if (fieldList != null && fieldList.size() > 0) {
 				ct.addNewZipCode().setStringValue(fieldList.get(0));
 			}
-
-			// MARKER 1
-			// MARKER 2
-
-			// fieldList =
-			// fieldMap.get(DefaultWorldTracerService.WorldTracerField.STATE);
-			// if (fieldList != null && fieldList.size() > 0) {
-			// ct.setState(fieldList.get(0));
-			// }
 
 			fieldList = fieldMap.get(DefaultWorldTracerService.WorldTracerField.TA);
 			if (fieldList != null && fieldList.size() > 0) {
@@ -4261,49 +4131,6 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				}
 			}
 			
-			//get first temp address
-//			Address ntta = PreProcessor.getAhlAddress(data, false);
-//			
-//			if(ntta != null){
-//				TempAddress ta = ct.addNewTempAddress();
-//				WTRAddressAmendType t = ta.addNewAddress();
-//				if(ntta.getAddress1()!=null && ntta.getAddress1().length() > 0){
-//					StringLength0To58AmendType ta1 = t.addNewAddressLine();
-//					ta1.setSeq(1);
-//					ta1.setStringValue(ntta.getAddress1());
-//				}
-//				if(ntta.getAddress2()!=null && ntta.getAddress2().length() > 0){
-//					StringLength0To58AmendType ta2 = t.addNewAddressLine();
-//					ta2.setSeq(2);
-//					ta2.setStringValue(ntta.getAddress2());
-//				}
-//				if(ntta.getCity()!=null && ntta.getCity().length() > 0){
-//					t.setCity(ntta.getCity());
-//				}
-//				if(ntta.getState() != null && ntta.getState().length() > 0 
-//						&& ntta.getCountryCode() != null 
-//						&& (ntta.getCountryCode().equalsIgnoreCase("US") || ntta.getCountryCode().equalsIgnoreCase("United States"))){
-//					WTRAddressAmendType.State state = t.addNewState();
-//					state.setStringValue(ntta.getState());
-//					t.setState(state);
-//				} else if(ntta.getProvince() != null && ntta.getProvince().length() > 0){
-//					//there is no province field for WT
-//					WTRAddressAmendType.State state = t.addNewState();
-//					state.setStringValue(ntta.getProvince());
-//					t.setState(state);
-//				}
-//				if(ntta.getZip() != null && ntta.getZip().length() > 0){
-//					PostalCode zip = t.addNewPostalCode();
-//					zip.setStringValue(ntta.getZip());
-//					t.setPostalCode(zip);
-//				}
-//				if(ntta.getCountryCode() != null && ntta.getCountryCode().length() > 0){
-//					Country country = t.addNewCountry();
-//					country.setStringValue(ntta.getCountryCode());
-//					t.setCountry(country);
-//				}
-//			}
-
 			// Set Flight Information
 			int itinCount = 0;
 			aero.sita.www.bag.wtr._2009._01.PassengerItineraryAmendType.Itinerary.FlightSegments p2 = p1.addNewItinerary().addNewFlightSegments();
