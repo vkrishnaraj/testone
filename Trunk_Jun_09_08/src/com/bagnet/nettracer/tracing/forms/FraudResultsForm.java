@@ -3,7 +3,12 @@ package com.bagnet.nettracer.tracing.forms;
 import java.util.ArrayList;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
+
+import com.bagnet.nettracer.tracing.db.lf.LFFound;
 
 import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.fs.model.detection.TraceResponse;
@@ -47,6 +52,23 @@ public final class FraudResultsForm extends ActionForm {
 
 	public void setTraceResponse(TraceResponse traceResponse) {
 		this.traceResponse = traceResponse;
+	}
+	 
+	@Override
+	public void reset(ActionMapping mapping, HttpServletRequest request) {
+		// reset boolean variables so that checkboxes will work right.
+		if (primaryResults != null) {
+			for (MatchHistory match : primaryResults) {
+				match.setDeleteSelected(false);
+				match.setRequestSelected(false);
+			}
+		}
+		if (secondaryResults != null) {
+			for (MatchHistory match : secondaryResults) {
+				match.setDeleteSelected(false);
+				match.setRequestSelected(false);
+			}
+		}
 	}
 
 }
