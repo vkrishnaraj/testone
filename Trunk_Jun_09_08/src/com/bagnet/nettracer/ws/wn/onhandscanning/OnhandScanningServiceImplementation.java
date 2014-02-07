@@ -1155,6 +1155,8 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 	/**
 	 * Updates OHD for addBagForLZ.  Update itinerary, status and adds 'Scanned' remark
 	 * 
+	 * As per jira ticket NT-2092, update type and color for addBagForLZ
+	 * 
 	 * @param wsohd
 	 * @param ohd
 	 * @param agent
@@ -1167,6 +1169,12 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 				if(wsohd.getItinerariesArray() != null && wsohd.getItinerariesArray().length > 0){
 					WSCoreOHDUtil util = new WSCoreOHDUtil();
 					util.WStoOHDItinMapping(wsohd, ohd);
+				}
+				if(wsohd.getType() != null && wsohd.getType().length() > 0){
+					ohd.setType(wsohd.getType());
+				}
+				if(wsohd.getColor() != null && wsohd.getColor().length() > 0){
+					ohd.setColor(wsohd.getColor());
 				}
 				handleTBI(ohd, tbi);
 				addOHDUpdateRemark(ohd, agent, REMARK_SCANNED);

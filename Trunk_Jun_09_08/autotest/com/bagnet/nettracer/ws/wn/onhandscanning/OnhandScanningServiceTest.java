@@ -743,6 +743,8 @@ public class OnhandScanningServiceTest {
 		populateWSOHDObject(ohd, bagtag);
 		ohd.getItinerariesArray(0).setLegfrom("XAX");
 		ohd.getItinerariesArray(0).setLegto("AXA");
+		ohd.setColor("BU");
+		ohd.setType("90");
 
 		addBagForLZ.setTbi(false);
 		addBagForLZ.setPositionId(posId);
@@ -760,6 +762,9 @@ public class OnhandScanningServiceTest {
 		assertTrue(responseLZ.getPositionId() == null);
 		assertTrue(responseLZ.getOnhand().getItinerariesArray(0).getLegfrom().equals("XAX"));
 		assertTrue(responseLZ.getOnhand().getItinerariesArray(0).getLegto().equals("AXA"));
+		//NT-2092 assert that we are updating color and type
+		assertTrue(responseLZ.getOnhand().getColor().equals("BU"));
+		assertTrue(responseLZ.getOnhand().getType().equals("90"));
 	}
 
 	@Test
