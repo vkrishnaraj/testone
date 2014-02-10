@@ -133,6 +133,7 @@ public final class EditIssuanceCategoryForm extends ActionForm {
 			category.setLostdelay(false);
 			category.setMissing(false);
 			category.setLimitByPassenger(false);
+			category.setCopyDescription(false);
 			if (category.getItems() != null) {
 				for (IssuanceItem item : category.getItems()) {
 					item.setActive(false);

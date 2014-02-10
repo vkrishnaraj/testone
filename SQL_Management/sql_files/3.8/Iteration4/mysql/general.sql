@@ -116,3 +116,5 @@ alter table audit_ohd_passenger modify column firstname varchar(30);
 alter table audit_ohd_passenger modify column lastname varchar(30);
 
 insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group) VALUES (1502,'Import WT AHL','Allows user to Import WorldTracer AHL to create new Incidents',93,'',0,0,0);
+
+alter table issuance_category add copyDescription bit not null default 0;

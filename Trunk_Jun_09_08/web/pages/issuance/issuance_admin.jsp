@@ -33,18 +33,45 @@
 		var catList=document.getElementById("item_category");
 		var typeList=document.getElementById("item_type");
 		var selectedCategory=catList.options[catList.selectedIndex].value;
+		var issDesc=document.getElementById("item_desc");
+		issDesc.value = "";
 		typeList.options.length=0;
  		<logic:iterate indexId="i" id="c_item" name="item_category_resultList" type="com.bagnet.nettracer.tracing.db.issuance.IssuanceCategory" >
 		if("<%=c_item.getId()%>"==selectedCategory)
 			{	
 				<% int index = 0;
 					for (IssuanceItem item : c_item.getItems()) { 
-						String desc = item.getDescription() != null ? item.getDescription().replaceAll("\"", "\\\\\"") : ""; 
-						desc = desc.replaceAll("/", "\\\\/");%>
-						typeList.options[<%=index%>]=new Option("<%=desc%>","<%=item.getId()%>",false,false);
-				<%   	index++;
+						if (item.isActive()) {
+							String desc = item.getDescription() != null ? item.getDescription().replaceAll("\"", "\\\\\"") : ""; 
+							desc = desc.replaceAll("/", "\\\\/");
+							if (index == 0 && c_item.isCopyDescription()) { %>
+								issDesc.value = "<%=desc %>";
+							<% } %>
+							typeList.options[<%=index%>]=new Option("<%=desc%>","<%=item.getId()%>",false,false);
+					<%   	index++;
+						}
 				    } %>
 			}
+		</logic:iterate>
+	}
+
+	function populateDesc() {
+		var typeList=document.getElementById("item_type");
+		var selectedType=typeList.options[typeList.selectedIndex].value;
+		var issDesc=document.getElementById("item_desc");
+		issDesc.value = "";
+ 		<logic:iterate indexId="i" id="c_item" name="item_category_resultList" type="com.bagnet.nettracer.tracing.db.issuance.IssuanceCategory" >
+			<% if (c_item.isCopyDescription()) { %>
+				<% for (IssuanceItem item : c_item.getItems()) { 
+					if (item.isActive()) { %>
+						if ("<%=item.getId()%>"==selectedType) {	
+							<% String desc = item.getDescription() != null ? item.getDescription().replaceAll("\"", "\\\\\"") : ""; 
+							desc = desc.replaceAll("/", "\\\\/"); %>
+							issDesc.value = "<%=desc %>";
+						}
+				<% 	}
+				} %>
+			<% } %>
 		</logic:iterate>
 	}
 
@@ -592,15 +619,17 @@
 	                     	</select>
 	                  	</td>
 	                  	<td>
-	                        <select id="item_type" name="item_type" class="dropdown" >
+	                        <select id="item_type" name="item_type" class="dropdown" onchange="populateDesc()">
 	                        	<% boolean firstAdded = false; %>
 	                     		<logic:iterate indexId="i" id="c_item" name="item_category_resultList" type="com.bagnet.nettracer.tracing.db.issuance.IssuanceCategory" >
 	                     			<% if (c_item.isInventory() && !firstAdded) { 
-	                     					for (IssuanceItem item : c_item.getItems()) {%>
-	                     				<option value="<%=item.getId() %>" >
-	                     					<%=item.getDescription() %>
-	                     				</option>
-	                     			<% 		}
+	                     					for (IssuanceItem item : c_item.getItems()) {
+	                     						if (item.isActive()) { %>
+				                     				<option value="<%=item.getId() %>" >
+				                     					<%=item.getDescription() %>
+				                     				</option>
+	                     						<% }
+	                     					}
 	                     					firstAdded = true;
 	                     			   } %>
 	                     		</logic:iterate>
@@ -610,7 +639,7 @@
 	                     	<input type="text" id="item_cost" name="item_cost" value="0" size="6" maxlength="20" class="textfield" />
 	                  	</td>	                  	
 	                  	<td>
-	                     	<input type="text" name="item_desc" value="" size="10" class="textfield" />
+	                     	<input type="text" id="item_desc" name="item_desc" value="" size="10" class="textfield" />
 	                  	</td>
 	                  	<td>
 	                     	<input type="text" name="item_barcode" value="" size="4" maxlength="20" class="textfield" />
@@ -878,6 +907,9 @@
                 </logic:iterate> 
               </table>
 <% } %>
+<SCRIPT LANGUAGE="JavaScript">
+	populateDesc();
+</SCRIPT>
 					
                   </html:form>
 					

@@ -46,6 +46,8 @@ public class IssuanceCategory {
 	
 	private boolean limitByPassenger;
 	
+	private boolean copyDescription;
+	
 	@ManyToOne
 	@JoinColumn(name="company_code_id", nullable=false)
 	private Company company;
@@ -141,6 +143,14 @@ public class IssuanceCategory {
 
 	public void setLimitByPassenger(boolean limitByPassenger) {
 		this.limitByPassenger = limitByPassenger;
+	}
+
+	public boolean isCopyDescription() {
+		return copyDescription;
+	}
+
+	public void setCopyDescription(boolean copyDescription) {
+		this.copyDescription = copyDescription;
 	}
 
 }

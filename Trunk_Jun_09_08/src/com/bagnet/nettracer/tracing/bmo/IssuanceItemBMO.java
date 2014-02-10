@@ -706,6 +706,8 @@ public class IssuanceItemBMO {
 			cat.setCompany(CompanyBMO.getCompany(user.getCompanycode_ID()));
 			if (cat.isInventory()) {
 				cat.setLimitByPassenger(false);
+			} else {
+				cat.setCopyDescription(false);
 			}
 		}
 		if (!cat.isInventory()) {
