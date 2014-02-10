@@ -1,9 +1,6 @@
 package com.bagnet.nettracer.tracing.forms.lf;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.List;
 
 import org.apache.struts.action.ActionForm;
 
@@ -240,7 +237,7 @@ public final class LostReportForm extends ActionForm {
 				break;
 			}
 		}
-		if(phone.getDecryptedPhoneNumber()!=null && !phone.getDecryptedPhoneNumber().isEmpty()){
+		if(phones.size() == 0 || (phone.getDecryptedPhoneNumber()!=null && !phone.getDecryptedPhoneNumber().isEmpty())){
 			phone.setPerson(lost.getClient());
 			lost.getClient().getPhones().add(phone);
 		}
