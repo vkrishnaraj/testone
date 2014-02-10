@@ -58,6 +58,7 @@
                     <br />
                     <html:hidden property="editcategory" value="" disabled="true"/>
                     <table class="form2" cellspacing="0" cellpadding="0" width="100%">
+                    <logic:notEmpty name="item_category_resultList" >
               <tr>
                       <td class="header">
 	                     <bean:message key="issuance.item.category" />
@@ -127,8 +128,9 @@
 	                  </td>
                 </tr>
                 </logic:iterate>
+                </logic:notEmpty>
 					  <tr>
-		                <td colspan="7" align="center" valign="top">
+		                <td colspan="10" align="center" valign="top">
 			                  <html:submit property="addcategory" styleId="button">
 			                    <bean:message key="issuance.item.add.category" />
 			                  </html:submit>
