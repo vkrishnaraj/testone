@@ -59,7 +59,7 @@ public class TemplateSearchAction extends CheckedAction {
 		int rowcount = 0;
 		int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_SEARCH_PAGES, session);
 
-		if (TracingConstants.COMMAND_SEARCH.equals(dtsf.getCommand())) {
+		if (!TracingConstants.COMMAND_CLEAR.equals(dtsf.getCommand())) {
 			
 			currpage = dtsf.getCurrpage() != null ? Integer.parseInt(dtsf.getCurrpage()) : 0;
 			if (dtsf.getNextpage() != null && dtsf.getNextpage().equals("1")) {
@@ -101,8 +101,6 @@ public class TemplateSearchAction extends CheckedAction {
 			}
 			
 			request.setAttribute("results", results);
-		} else {
-			DomainUtils.resetSearchForm(dtsf);
 		}
 		
 		if (session.getAttribute("templateStatusList") == null) {

@@ -229,6 +229,7 @@ public class DomainUtils {
 		form.setS_createtime(null);
 		form.setE_createtime(null);
 		form.setCommand(null);
+		form.setDescription(null);
 	}
 	
 	public static void resetTaskForm(TaskSearchForm form) {

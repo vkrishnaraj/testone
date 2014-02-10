@@ -60,7 +60,7 @@ public class ViewPendingTasksAction extends CheckedAction {
 		int rowcount = 0;
 		int rowsperpage = TracerUtils.manageRowsPerPage(request.getParameter("rowsperpage"), TracingConstants.ROWS_SEARCH_PAGES, session);
 
-		if (TracingConstants.COMMAND_SEARCH.equals(tsf.getCommand())) {
+		if (!TracingConstants.COMMAND_CLEAR.equals(tsf.getCommand())) {
 			
 			currpage = tsf.getCurrpage() != null ? Integer.parseInt(tsf.getCurrpage()) : 0;
 			if (tsf.getNextpage() != null && tsf.getNextpage().equals("1")) {
@@ -95,8 +95,6 @@ public class ViewPendingTasksAction extends CheckedAction {
 			
 			results = incidentActivityService.listIncidentActivitiesNotInWork(dto);
 			request.setAttribute("results", results);
-		} else {
-			DomainUtils.resetTaskForm(tsf);
 		}
 		
 		if (session.getAttribute("taskTypesList") == null) {

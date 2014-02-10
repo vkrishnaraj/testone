@@ -78,13 +78,15 @@ public class DocumentServiceImpl implements DocumentService {
 			throw new InsufficientInformationException(Document.class);
 		}
 		
+		DocumentTemplateResult result = new DocumentTemplateResult();
+		String content = document.getTemplate().getData();
 		if (adapter == null) {
-			throw new InsufficientInformationException(TemplateAdapter.class);
+			document.setContent(content);
+			result.setMessageKey("document.generated.failure");
 		}
 		
-		DocumentTemplateResult result = new DocumentTemplateResult();
+		
 		Set<TemplateVar> vars = document.getTemplate().getVariables();
-		String content = document.getTemplate().getData();
 		if (vars != null && !vars.isEmpty()) {
 			for (TemplateVar var: vars) {
 				String associatedClass = var.getAssociatedClass();

@@ -162,7 +162,9 @@
             		<td align="center" colspan="4">
             			<input id="searchButton" type="button" class="button" value='<bean:message key="button.search" />' onclick="setCommand('<%=TracingConstants.COMMAND_SEARCH %>')" />
       			        &nbsp;&nbsp;
-            			<input id="resetButton" type="button" class="button" value='<bean:message key="button.reset" />' onclick="setCommand('<%=TracingConstants.COMMAND_CLEAR %>')" />
+            			<html:reset styleId="resetButton" styleClass="button">
+            				<bean:message key="button.reset" />
+            			</html:reset>
               		</td>
             	</tr>
             </table>

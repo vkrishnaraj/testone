@@ -150,9 +150,9 @@
             		<td align="center" colspan="3">
             			<input id="searchButton" type="button" class="button" value='<bean:message key="button.search" />' onclick="setCommand('<%=TracingConstants.COMMAND_SEARCH %>')" />
             			&nbsp;&nbsp;
-            			<input id="resetButton" type="button" class="button" value='<bean:message key="button.reset" />' onclick="setCommand('<%=TracingConstants.COMMAND_CLEAR %>')" />
-            			&nbsp;&nbsp;
-            			<input id="createButton" type="button" class="button" value='<bean:message key="button.create" />' onclick="setCommand('<%=TracingConstants.COMMAND_CREATE %>')" />
+            			<html:reset styleId="resetButton" styleClass="button">
+            				<bean:message key="button.reset" />
+            			</html:reset>
               		</td>
             	</tr>
             </table>
@@ -180,6 +180,13 @@
  			 		document.location.href="#result";
               	</script>
            	</logic:present>
+           	<table class="form2" cellspacing="0" cellpadding="0">
+           		<tr>
+           			<td style="text-align:center;">
+            			<input id="createButton" type="button" class="button" value='<bean:message key="button.create" />' onclick="setCommand('<%=TracingConstants.COMMAND_CREATE %>')" />
+           			</td>
+           		</tr>
+           	</table>
        	</div>
     	</td>
  	</tr>

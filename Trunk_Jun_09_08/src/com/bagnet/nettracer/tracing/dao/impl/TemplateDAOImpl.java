@@ -327,11 +327,11 @@ public class TemplateDAOImpl implements TemplateDAO {
 		}
 		
 		if (dto.getName() != null && !dto.getName().isEmpty()) {
-			criteria.add(Restrictions.like("t.name", dto.getName()));
+			criteria.add(Restrictions.ilike("t.name", "%" + dto.getName() + "%"));
 		}
 		
 		if (dto.getDescription() != null && !dto.getDescription().isEmpty()) {
-			criteria.add(Restrictions.like("t.description", "%" + dto.getDescription() + "%"));
+			criteria.add(Restrictions.ilike("t.description", "%" + dto.getDescription() + "%"));
 		}
 		
 		if (dto.getActive() != TracingConstants.ACTIVE_SEARCH_BOTH && dto.getActive() != 0) {
