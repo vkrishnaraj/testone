@@ -21,6 +21,7 @@ import org.dozer.Mapper;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Expression;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.transaction.annotation.Transactional;
 
 import aero.nettracer.fs.model.AuditFsClaim;
@@ -863,6 +864,34 @@ public class ClaimUtils {
 				createdClaims.remove(key);
 			}
 		}
+	}
+	
+	public static FsClaim getFsClaimFromNtIncident(Incident incident) {
+		return getFsClaimFromNtIncident(incident.getIncident_ID());
+	}
+	
+	public static FsClaim getFsClaimFromNtIncident(String incidentId) {
+		if (incidentId == null || incidentId.isEmpty()) return null;
+		
+		Session session = null;
+		FsClaim fsClaim = null;
+		
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			Criteria criteria = session.createCriteria(FsIncident.class);
+			criteria.add(Restrictions.eq("airlineIncidentId", incidentId));
+			FsIncident fsIncident = (FsIncident) criteria.uniqueResult();
+			if (fsIncident != null) {
+				fsClaim = fsIncident.getFile().getFirstClaim();
+			}
+		} catch (Exception e) {
+			logger.error(e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return fsClaim;
 	}
 
 }

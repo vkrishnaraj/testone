@@ -207,6 +207,11 @@ public class File implements Serializable {
 		this.requestStatus = requestStatus;
 	}
 	
-	
+	public FsClaim getFirstClaim() {
+		if (claims != null && !claims.isEmpty()) {
+			return claims.toArray(new FsClaim[0])[0];
+		}
+		return null;
+	}
 	
 }

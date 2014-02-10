@@ -43,6 +43,7 @@ import com.bagnet.nettracer.tracing.forms.communications.CustomerCommunicationsF
 import com.bagnet.nettracer.tracing.service.DocumentService;
 import com.bagnet.nettracer.tracing.service.IncidentActivityService;
 import com.bagnet.nettracer.tracing.service.TemplateService;
+import com.bagnet.nettracer.tracing.utils.ClaimUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.DomainUtils;
 import com.bagnet.nettracer.tracing.utils.EmailUtils;
@@ -373,12 +374,16 @@ public class CustomerCommunicationsAction extends CheckedAction {
 					} else {
 						messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(result.getMessageKey()));
 					}
-				} else {
-					Document document = (Document) result.getPayload();
-					DomainUtils.toForm(document, ccf);
+					
+					for (String missingInfo: result.getMissingInfoList()) {
+						messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("document.print.missing.info", new Object[] { missingInfo }));
+					}
 				}
+				
+				Document document = (Document) result.getPayload();
+				DomainUtils.toForm(document, ccf);
 				ccf.setTemplateId(tId);
-				success = true;
+				success = result.isSuccess();
 			} catch (NumberFormatException nfe) {
 				logger.error("Unable to load template with id: " + templateId, nfe);
 				success = false;
@@ -576,18 +581,30 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		try {
 			TemplateAdapterDTO dto = DomainUtils.getTemplateAdapterDTO(user, template);
 			dto.setIncident(incident);
+			dto.setClaim(ClaimUtils.getFsClaimFromNtIncident(incident));
 			if(epId>0){
 				ExpensePayout ep=ExpenseUtils.getExpensePayout(String.valueOf(epId));
 				if(ep!=null){
 					dto.setExpensePayout(ep);
 				}
 			}
-
-			TemplateAdapter adapter = TemplateAdapterFactory.getTemplateAdapter(dto);
-			result = documentService.merge(document, adapter);
-			if (result.isSuccess()) {
-				result.setPayload(document);
+			
+			TemplateAdapter adapter = null;
+			String missingInfo = null;
+			try {
+				adapter = TemplateAdapterFactory.getTemplateAdapter(dto);
+			} catch (InsufficientInformationException iie) {
+				logger.error(iie);
+				missingInfo = iie.getMissingInfo();
 			}
+			
+			result = documentService.merge(document, adapter);			
+			result.setPayload(document);
+			
+			if (missingInfo != null) {
+				result.addMissingInfo(missingInfo);
+			}
+			
 		} catch (InvalidDocumentTypeException e) {
 			logger.error("Failed to create adapter for template type", e);
 			return new DocumentTemplateResult(false, "document.template.type.error");
