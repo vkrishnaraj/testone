@@ -175,8 +175,8 @@
 	}
 
 	  
-	  function openPreviewWindow3(fileName) {
-		  window.open("customerCommunications.do?preview_document="+fileName+"&receipt=1", '', 'width=600,height=800,resizable=yes');
+	  function openPreviewWindow1(fileName) {
+		  window.open("issuanceItemAdmin.do?preview_document="+fileName+"&receipt=1", '', 'width=600,height=800,resizable=yes');
 		}
 			
 
@@ -1105,6 +1105,6 @@
 	<logic:present name="receiptName" scope="request">
 	    <script language=javascript>
 	    	var fileName = '<%=(String) request.getAttribute("receiptName") %>';
-   			openPreviewWindow3(fileName);
+   			openPreviewWindow1(fileName);
 	    </script>
     </logic:present>

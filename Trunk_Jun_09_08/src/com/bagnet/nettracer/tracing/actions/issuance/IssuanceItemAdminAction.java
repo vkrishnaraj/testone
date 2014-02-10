@@ -22,7 +22,9 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.bagnet.nettracer.tracing.actions.templates.DocumentTemplateResult;
 import com.bagnet.nettracer.tracing.bmo.IssuanceItemBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -31,13 +33,19 @@ import com.bagnet.nettracer.tracing.db.issuance.IssuanceCategory;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemInventory;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemQuantity;
 import com.bagnet.nettracer.tracing.forms.issuance.IssuanceItemAdminForm;
+import com.bagnet.nettracer.tracing.service.DocumentService;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
 public class IssuanceItemAdminAction extends Action {
 	
 	private static final Logger logger = Logger.getLogger(IssuanceItemAdminAction.class);
+	
+	private final String REQUEST_PREVIEW_DOCUMENT = "preview_document";
+	
+	private DocumentService documentService = (DocumentService) SpringUtils.getBean(TracingConstants.DOCUMENT_SERVICE_BEAN);
 	
 	/**
 	 * Action for issuanceItemAdmin.do. JSP located at pages/issuance/issuance_admin.jsp
@@ -67,6 +75,16 @@ public class IssuanceItemAdminAction extends Action {
 		}
 		
 		fform.setStationsearch_ID(searchStation.getStation_ID());
+
+		// handles the case in which the user wants to preview the document
+		if (request.getParameter(REQUEST_PREVIEW_DOCUMENT) != null) {
+			String directoryKey = request.getParameter("receipt") != null ? PropertyBMO.DOCUMENT_LOCATION_RECEIPTS : PropertyBMO.DOCUMENT_LOCATION_TEMP;
+			DocumentTemplateResult result = documentService.previewFile(user, request.getParameter("preview_document"), PropertyBMO.getValue(directoryKey), response);
+			if (!result.isSuccess()) {
+				return mapping.findForward(TracingConstants.FILE_NOT_FOUND);
+			}
+			return null;
+		}
 		
 		// HANDLE HISTORY ACTIONS
 		
