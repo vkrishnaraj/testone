@@ -1018,7 +1018,7 @@ public class BagService {
 								
 								tmpHtmlFileName = TracerProperties.get(theform.getAgent().getStation().getCompany().getCompanyCode_ID(),TracerProperties.EMAIL_REPORT_LD);
 								embedImage = !TracerProperties.isTrue(theform.getAgent().getStation().getCompany().getCompanyCode_ID(),TracerProperties.EMAIL_REPORT_LD_DISABLE_IMAGE);
-								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "lostdelay.email.title"));
+								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "lostdelay.email.title", TracingConstants.LOST_DELAY));
 								
 								myEmailSubjectLine = StringUtils.trimToNull(TracerProperties.get(theform.getAgent().getStation().getCompany().getCompanyCode_ID(),"email.subjectline.lostdelay.key"));
 								myEmailSubjectLine = (myEmailSubjectLine == null) ? myEmailSubjectLine : StringUtils.trimToNull(messages.getMessage(new Locale(currentLocale), myEmailSubjectLine));
@@ -1039,7 +1039,7 @@ public class BagService {
 										new Locale(currentLocale), "email.damaged"));
 								tmpHtmlFileName = TracerProperties.get(theform.getAgent().getStation().getCompany().getCompanyCode_ID(),TracerProperties.EMAIL_REPORT_DAM);
 								embedImage = !TracerProperties.isTrue(theform.getAgent().getStation().getCompany().getCompanyCode_ID(),TracerProperties.EMAIL_REPORT_DAM_DISABLE_IMAGE);
-								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "damage.email.title"));
+								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "damage.email.title", TracingConstants.DAMAGED_BAG));
 								
 								myEmailSubjectLine = StringUtils.trimToNull(TracerProperties.get(theform.getAgent().getStation().getCompany().getCompanyCode_ID(),"email.subjectline.damaged.key"));
 								myEmailSubjectLine = (myEmailSubjectLine == null) ? myEmailSubjectLine : StringUtils.trimToNull(messages.getMessage(new Locale(currentLocale), myEmailSubjectLine));
@@ -1060,7 +1060,7 @@ public class BagService {
 										new Locale(currentLocale), "email.missing"));
 								tmpHtmlFileName = TracerProperties.get(theform.getAgent().getStation().getCompany().getCompanyCode_ID(),TracerProperties.EMAIL_REPORT_PIL);
 								embedImage = !TracerProperties.isTrue(theform.getAgent().getStation().getCompany().getCompanyCode_ID(),TracerProperties.EMAIL_REPORT_PIL_DISABLE_IMAGE);
-								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "missing.email.title"));
+								h.putAll(LostDelayReceipt.getParameters(theform, null, null, theform.getAgent(), "missing.email.title", TracingConstants.MISSING_ARTICLES));
 								
 								myEmailSubjectLine = StringUtils.trimToNull(TracerProperties.get(theform.getAgent().getStation().getCompany().getCompanyCode_ID(),"email.subjectline.pilfered.key"));
 								myEmailSubjectLine = (myEmailSubjectLine == null) ? myEmailSubjectLine : StringUtils.trimToNull(messages.getMessage(new Locale(currentLocale), myEmailSubjectLine));
