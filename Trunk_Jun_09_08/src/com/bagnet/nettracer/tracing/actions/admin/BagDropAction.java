@@ -202,17 +202,19 @@ public class BagDropAction extends Action{
 	 * @return
 	 */
 	private BagDropDTO initDTO(BagDropDTO dto, Agent user, Station cbroStation){
+			TimeZone timeZone = TimeZone
+				.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
+		
 			dto = new BagDropDTO();
 			dto.setAirlineCode(user.getCompanycode_ID());
 			dto.setArrivalStation(getCurrentStation(cbroStation, user));
 			
-			Date startOfDayGMTDate = getStartOfDayGMT(user, 0);
-			Date endOfDayGMTDate = getStartOfDayGMT(user, 1);
+			Date startOfDayGMTDate = getStartOfDayGMT(user, timeZone, 0);
+			Date endOfDayGMTDate = getStartOfDayGMT(user, timeZone, 1);
 			dto.setStartScheduleArrivalDate(startOfDayGMTDate);
 			dto.setEndScheduleArrivalDate(endOfDayGMTDate);
 			
-			TimeZone timeZone = TimeZone
-					.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
+
 			dto.set_DATEFORMAT(user.getDateformat().getFormat());
 			dto.set_TIMEFORMAT(user.getTimeformat().getFormat());
 			dto.set_TIMEZONE(timeZone);
@@ -365,13 +367,12 @@ public class BagDropAction extends Action{
 		}
 	}
 	
-	private Date getStartOfDayGMT(Agent agent, int dayOffset){
+	private Date getStartOfDayGMT(Agent agent, TimeZone timeZone, int dayOffset){
 		//initializing date range to start of day in GMT
-		Calendar startOfDayCal = GregorianCalendar.getInstance();
-		startOfDayCal.set(Calendar.HOUR, 0);
+		Calendar startOfDayCal = GregorianCalendar.getInstance(timeZone);
+		startOfDayCal.set(Calendar.HOUR_OF_DAY, 0);
 		startOfDayCal.set(Calendar.MINUTE, 0);
 		startOfDayCal.set(Calendar.SECOND, 0);
-		startOfDayCal.set(Calendar.AM_PM, Calendar.AM);
 		startOfDayCal.add(Calendar.DATE, dayOffset);
 		Date startOfDayGMTDate = DateUtils.convertToGMTDate(startOfDayCal.getTime());
 		return startOfDayGMTDate;
