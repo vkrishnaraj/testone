@@ -116,7 +116,7 @@
 		                &nbsp;-&nbsp;
 		                <html:text property="e_createtime" size="10" maxlength="10" styleId="e_createtime" styleClass="textfield" />&nbsp;<img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.taskSearchForm.e_createtime,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;">
             		</td>
-					<td>
+					<td colspan=2>
             			<bean:message key="tasks.not.in.work.task.type" />
             			<br>
 						<html:select name="taskSearchForm" property="taskType" styleId="taskType" styleClass="dropdown" >
@@ -148,9 +148,18 @@
 							<html:options collection="incidentActivityStatusList" property="value" labelProperty="label" />
 						</html:select>
             		</td>
+            		<td>
+            			<bean:message key="tasks.not.in.work.acaa" />
+            			<br>
+     					<html:select name="taskSearchForm" property="acaa" styleId="status" styleClass="dropdown" >
+	          	        	<html:option value="-1"><bean:message key="select.all" /></html:option>
+	          	        	<html:option value="<%=String.valueOf(TracingConstants.NO) %>"><bean:message key="select.no" /></html:option>
+	          	        	<html:option value="<%=String.valueOf(TracingConstants.YES) %>"><bean:message key="select.yes" /></html:option>
+						</html:select>
+            		</td>
             	</tr>
             	<tr>
-            		<td align="center" colspan="3">
+            		<td align="center" colspan="4">
             			<input id="searchButton" type="button" class="button" value='<bean:message key="button.search" />' onclick="setCommand('<%=TracingConstants.COMMAND_SEARCH %>')" />
       			        &nbsp;&nbsp;
             			<input id="resetButton" type="button" class="button" value='<bean:message key="button.reset" />' onclick="setCommand('<%=TracingConstants.COMMAND_CLEAR %>')" />
@@ -171,9 +180,10 @@
           			<display:column titleKey="tasks.not.in.work.incident.id" property="incidentId" href="searchIncident.do" paramId="incident" paramProperty="incidentId" sortable="true" sortName="incidentId" headerClass="header" />
           			<display:column titleKey="tasks.not.in.work.passenger.last.name" property="lastName" sortable="true" sortName="passengerLastName" headerClass="header" />
           			<display:column titleKey="tasks.not.in.work.passenger.first.name" property="firstName" sortable="true" sortName="passengerFirstName" headerClass="header" />
+          			<display:column titleKey="tasks.not.in.work.acaa" property="acaa" sortable="true" sortName="acaa" headerClass="header" />
  			    	<display:footer>
 		               	<tr>
-			                <td colspan="7">
+			                <td colspan="8">
 			                  <jsp:include page="/pages/includes/pagination_incl.jsp" />
 			                </td>
 		              	</tr>

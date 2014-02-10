@@ -18,6 +18,7 @@ public class IncidentActivityTaskSearchDTO {
 	private Agent agent;
 	private TaskType taskType;
 	private Status status;
+	private int acaa;
 	
 	private String sort;
 	private String dir;
@@ -200,6 +201,14 @@ public class IncidentActivityTaskSearchDTO {
 
 	public void setPassengerFirstName(String passengerFirstName) {
 		this.passengerFirstName = passengerFirstName;
+	}
+
+	public int getAcaa() {
+		return acaa;
+	}
+
+	public void setAcaa(int acaa) {
+		this.acaa = acaa;
 	}
 	
 }

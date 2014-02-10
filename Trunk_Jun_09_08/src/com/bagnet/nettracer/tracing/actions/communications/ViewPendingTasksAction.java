@@ -129,6 +129,8 @@ public class ViewPendingTasksAction extends CheckedAction {
 			dto.setStatus(new Status(tsf.getStatus()));
 		}
 		
+		dto.setAcaa(tsf.getAcaa());
+		
 		dto.setPassengerLastName(tsf.getPassengerLastName());
 		dto.setPassengerFirstName(tsf.getPassengerFirstName());
 	}

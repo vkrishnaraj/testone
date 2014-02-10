@@ -239,6 +239,7 @@ public class DomainUtils {
 		form.setE_createtime(null);
 		form.setStatus(0);
 		form.setTaskType(0);
+		form.setAcaa(-1);
 	}
 	
 	public static void resetSearchForm(CustomerCommunicationsTaskForm form) {

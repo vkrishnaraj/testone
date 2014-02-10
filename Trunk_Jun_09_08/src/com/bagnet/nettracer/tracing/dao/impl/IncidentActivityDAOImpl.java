@@ -74,6 +74,7 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 		map.put("vtniwincidentId", 			"i.incident_ID");
 		map.put("vtniwpassengerFirstName",	"vtniw.firstname");
 		map.put("vtniwpassengerLastName",	"vtniw.lastname");
+		map.put("vtniwacaa",				"vtniw.acaa");
 		
 		financestatusmap.put(TracingConstants.FINANCE_STATUS_AWAITING_DISBURSEMENT, "1");
 		financestatusmap.put(TracingConstants.FINANCE_STATUS_FINANCE_APPROVED, "1");
@@ -1094,6 +1095,10 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 			criteria.add(Restrictions.eq("vtniw.status", dto.getStatus()));
 		}
 		
+		if (dto.getAcaa() >= 0) {
+			criteria.add(Restrictions.eq("vtniw.acaa", dto.getAcaa() == TracingConstants.YES));
+		}
+		
 		if (dto.getRowsPerPage() > 0) {
 			criteria.setFirstResult(dto.getCurrentPage() * dto.getRowsPerPage());
 			criteria.setMaxResults(dto.getRowsPerPage());
@@ -1145,24 +1150,29 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 	
 	private boolean updateTasksNotInWorkView() {
 		String sql = "CREATE OR REPLACE VIEW view_tasks_not_in_work AS " +
-					 "(select t.task_id,t.task_type_id,t.opened_timestamp,i.agent_ID,t.status_ID,i.Incident_ID,p.lastname,p.firstname from task t " +
-					 "join incident_activity ia on t.incidentActivityId = ia.id " +
-					 "join incident i on ia.incident = i.Incident_ID " +
-					 "join passenger p on i.Incident_ID = p.incident_ID " +
-					 "where t.active = 1 " +
-					 "and t.agent_id = 1 or t.agent_id = i.agent_ID is null " +
-					 "and task_type in ('INCACTIVITYTASK','INBOUND','DAMAGED') " +
-					 "group by t.opened_timestamp, i.agent_ID, t.status_ID, i.Incident_ID, p.lastname, p.firstname) " +
-					 "union all " +
-					 "(select t.task_id,t.task_type_id,t.opened_timestamp,i.agent_ID,t.status_ID,i.Incident_ID,p.lastname,p.firstname from task t " +
-					 "join inboundqueue iq on t.inboundqueue_id = iq.id " +
-					 "join incident i on iq.incident_id = i.Incident_ID " +
-					 "join passenger p on i.Incident_ID = p.incident_ID " +
-					 "where t.active = 1 " +
-					 "and t.agent_id = 1 or t.agent_id = i.agent_ID is null " +
-					 "and task_type in ('INCACTIVITYTASK','INBOUND','DAMAGED') " +
-					 "group by t.opened_timestamp, i.agent_ID, t.status_ID, i.Incident_ID, p.lastname, p.firstname) " +
-					 "order by opened_timestamp";
+				"(select t.task_id,t.task_type_id,t.opened_timestamp,i.agent_ID,t.status_ID,i.Incident_ID,p.lastname,p.firstname,case when it.bagtype = 94 or it.bagtype = 95 then 1 else 0 end as acaa " +
+				"from task t  " +
+				"join incident_activity ia on t.incidentActivityId = ia.id " +
+				"join incident i on ia.incident = i.Incident_ID  " +
+				"join item it on i.Incident_ID = it.incident_ID " +
+				"join passenger p on i.Incident_ID = p.incident_ID  " +
+				"where t.active = 1  " +
+				"and t.agent_id = 1 or t.agent_id = i.agent_ID is null  " +
+				"and task_type in ('INCACTIVITYTASK','INBOUND','DAMAGED')  " +
+				"group by t.opened_timestamp, i.agent_ID, t.status_ID, i.Incident_ID, p.lastname, p.firstname)  " +
+				"union all  " +
+				"(select t.task_id,t.task_type_id,t.opened_timestamp,i.agent_ID,t.status_ID,i.Incident_ID,p.lastname,p.firstname,case when it.bagtype = 94 or it.bagtype = 95 then 1 else 0 end as acaa " +
+				"from task t  " +
+				"join inboundqueue iq on t.inboundqueue_id = iq.id  " +
+				"join incident i on iq.incident_id = i.Incident_ID " +
+				"join item it on i.Incident_ID = it.incident_ID " +
+				"join passenger p on i.Incident_ID = p.incident_ID " +
+				"where t.active = 1  " +
+				"and t.agent_id = 1 or t.agent_id = i.agent_ID is null  " +
+				"and task_type in ('INCACTIVITYTASK','INBOUND','DAMAGED')  " +
+				"group by t.opened_timestamp, i.agent_ID, t.status_ID, i.Incident_ID, p.lastname, p.firstname)  " +
+				"order by opened_timestamp ";
+		
 		Session session = null;
 		try {
 			session = HibernateWrapper.getSession().openSession();

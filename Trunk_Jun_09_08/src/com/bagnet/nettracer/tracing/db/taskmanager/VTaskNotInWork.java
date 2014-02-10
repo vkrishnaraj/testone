@@ -34,6 +34,7 @@ public class VTaskNotInWork implements Serializable {
 	private Incident incident;
 	private String lastname;
 	private String firstname;
+	private boolean acaa;
 
 	@Id
 	public long getTask_id() {
@@ -110,6 +111,14 @@ public class VTaskNotInWork implements Serializable {
 
 	public void setFirstname(String firstname) {
 		this.firstname = firstname;
+	}
+
+	public boolean getAcaa() {
+		return acaa;
+	}
+
+	public void setAcaa(boolean acaa) {
+		this.acaa = acaa;
 	}
 
 }

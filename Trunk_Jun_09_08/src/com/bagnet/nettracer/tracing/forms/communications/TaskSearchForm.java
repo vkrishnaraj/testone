@@ -11,6 +11,7 @@ public class TaskSearchForm extends IncidentActivityTaskForm {
 	private String passengerFirstName;
 	private int taskType;
 	private int status;
+	private int acaa = -1;
 
 	public String getAgentName() {
 		return agentName;
@@ -50,6 +51,14 @@ public class TaskSearchForm extends IncidentActivityTaskForm {
 
 	public void setStatus(int status) {
 		this.status = status;
+	}
+
+	public int getAcaa() {
+		return acaa;
+	}
+
+	public void setAcaa(int acaa) {
+		this.acaa = acaa;
 	}
 
 }

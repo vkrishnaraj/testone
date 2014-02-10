@@ -54,6 +54,8 @@ public class IncidentActivityTaskDTO {
 	private double expensecheckamt;
 	private double expensevoucheramt;
 	
+	private String acaa;
+	
 	public String get_DATEFORMAT() {
 		return _DATEFORMAT;
 	}
@@ -328,6 +330,14 @@ public class IncidentActivityTaskDTO {
 
 	public void setApprover(String approver) {
 		this.approver = approver;
+	}
+
+	public String getAcaa() {
+		return acaa;
+	}
+
+	public void setAcaa(String acaa) {
+		this.acaa = acaa;
 	}
 	
 }

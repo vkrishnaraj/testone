@@ -416,6 +416,7 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 			iatdto.setLastName(vtniw.getLastname());
 			iatdto.setFirstName(vtniw.getFirstname());
 			iatdto.setTaskDate(vtniw.getOpened_timestamp());
+			iatdto.setAcaa(vtniw.getAcaa() ? "Yes" : "No");
 			try {
 				iatdto.setStatus(bundle.getString(vtniw.getStatus().getKey()));
 			} catch (Exception e) {
