@@ -27,6 +27,7 @@ import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Articles;
 import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
@@ -53,7 +54,7 @@ public class LostDelayReceipt {
 		super();
 	}
 	
-	public static HashMap getParameters(IncidentForm theform, MessageResources messages, String language, Agent user, String titleProperty) {
+	public static HashMap getParameters(IncidentForm theform, MessageResources messages, String language, Agent user, String titleProperty, int type) {
 		HashMap parameters = new HashMap();
 		
 		if (messages == null) {
@@ -207,6 +208,18 @@ public class LostDelayReceipt {
 			parameters.put("bag_description", sbBagDesc.toString().substring(1));
 		}
 		
+		if (TracingConstants.MISSING_ARTICLES == type) {
+			sbArticles = new StringBuffer();
+			if (theform.getArticlelist() != null && theform.getArticlelist().size() > 0) {
+				for (Articles art : theform.getArticlelist()) {
+					if (art != null && art.getArticle() != null && art.getArticle().trim().length() > 0) {
+						sbArticles.append(",");
+						sbArticles.append(art.getArticle().trim());
+					}
+				}
+			}
+		}
+		
 		if (sbArticles.length() > 0) {
 			parameters.put("articles", sbArticles.toString().substring(1));
 		}
@@ -226,7 +239,7 @@ public class LostDelayReceipt {
 			Agent user = (Agent) session.getAttribute("user");
 			MessageResources messages = MessageResources.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
 
-			Map parameters = getParameters(theform, messages, language, user, "lostdelay.receipt.title");
+			Map parameters = getParameters(theform, messages, language, user, "lostdelay.receipt.title", TracingConstants.LOST_DELAY);
 
 			ResourceBundle myResources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(language));
 			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);

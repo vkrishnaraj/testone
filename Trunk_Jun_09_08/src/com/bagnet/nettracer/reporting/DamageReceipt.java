@@ -46,7 +46,7 @@ public class DamageReceipt {
 			
 			//Map parameters = new HashMap();
 			
-			Map parameters = LostDelayReceipt.getParameters(theform, messages, language, user, "damage.receipt.title");
+			Map parameters = LostDelayReceipt.getParameters(theform, messages, language, user, "damage.receipt.title", TracingConstants.DAMAGED_BAG);
 			
 			ResourceBundle myResources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(language));
 
