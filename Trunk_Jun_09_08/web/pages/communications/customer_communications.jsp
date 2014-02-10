@@ -77,7 +77,6 @@
 	}
 
 	function submitIncidentActivity() {
-		clearBeforeUnload();
 		var activitySelect = document.getElementById("activityIdSelect");
 		var activityId = activitySelect.options[activitySelect.selectedIndex].value;
 		if (activityId == "<%=TracingConstants.ACTIVITY_CUSTOMER_COMMUNICATION %>") {
