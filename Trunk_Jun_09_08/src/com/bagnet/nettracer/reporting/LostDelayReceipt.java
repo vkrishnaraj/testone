@@ -22,7 +22,6 @@ import org.apache.log4j.Logger;
 import org.apache.struts.util.MessageResources;
 
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
-import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -38,7 +37,6 @@ import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
-import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
 /**
  * @author Matt
@@ -54,8 +52,8 @@ public class LostDelayReceipt {
 		super();
 	}
 	
-	public static HashMap getParameters(IncidentForm theform, MessageResources messages, String language, Agent user, String titleProperty, int type) {
-		HashMap parameters = new HashMap();
+	public static HashMap<String, Object> getParameters(IncidentForm theform, MessageResources messages, String language, Agent user, String titleProperty, int type) {
+		HashMap<String, Object> parameters = new HashMap<String, Object>();
 		
 		if (messages == null) {
 			messages = MessageResources.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
@@ -65,7 +63,6 @@ public class LostDelayReceipt {
 			language = TracingConstants.DEFAULT_LOCALE;
 		}
 		
-		String airline = theform.getStationcreated().getCompany().getCompanydesc();
 		parameters.put("title", messages.getMessage(new Locale(language), titleProperty));
 
 		parameters.put("station_city", (theform.getStationassigned().getCity() != null ? theform.getStationassigned().getCity().toUpperCase() : ""));
@@ -239,7 +236,7 @@ public class LostDelayReceipt {
 			Agent user = (Agent) session.getAttribute("user");
 			MessageResources messages = MessageResources.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
 
-			Map parameters = getParameters(theform, messages, language, user, "lostdelay.receipt.title", TracingConstants.LOST_DELAY);
+			Map<String, Object> parameters = getParameters(theform, messages, language, user, "lostdelay.receipt.title", TracingConstants.LOST_DELAY);
 
 			ResourceBundle myResources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(language));
 			parameters.put("REPORT_RESOURCE_BUNDLE", myResources);

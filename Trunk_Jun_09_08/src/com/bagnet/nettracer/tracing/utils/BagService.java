@@ -560,7 +560,6 @@ public class BagService {
 		return insertIncident(iDTO, theform, itemtype, sc, request, false);
 	}
 
-	@SuppressWarnings("unchecked")
 	public ActionMessage insertIncident(Incident iDTO, IncidentForm theform, int itemtype, ServletContext sc,
 			HttpServletRequest request, boolean checkClosedStatus) {
 		try {
@@ -1008,7 +1007,7 @@ public class BagService {
 							String tmpHtmlFileName = null;
 							boolean embedImage = true;
 							
-							HashMap<String, String> h = new HashMap<String, String>();
+							HashMap<String, Object> h = new HashMap<String, Object>();
 							h.put("PASS_NAME", passname);
 
 							File file = null;

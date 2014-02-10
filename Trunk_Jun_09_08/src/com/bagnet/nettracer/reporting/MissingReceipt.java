@@ -45,7 +45,7 @@ public class MissingReceipt {
 			MessageResources messages = MessageResources.getMessageResources("com.bagnet.nettracer.tracing.resources.ApplicationResources");
 			Agent user = (Agent) session.getAttribute("user");
 			
-			Map parameters = LostDelayReceipt.getParameters(theform, messages, language, user, "missing.receipt.title", TracingConstants.MISSING_ARTICLES);
+			Map<String, Object> parameters = LostDelayReceipt.getParameters(theform, messages, language, user, "missing.receipt.title", TracingConstants.MISSING_ARTICLES);
 			
 			
 			ResourceBundle myResources = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(language));
