@@ -30,7 +30,7 @@
           
         <tr>
           <td><bean:message key="colname.recordlocator" />:</td>
-          <td><html:text property="recordlocator" size="15" styleClass="textfield" value="" maxlength="6"/></td>
+          <td><html:text property="recordlocator" size="15" styleClass="textfield" value="" maxlength="6" onkeydown="if (event.keyCode==13) {buttonSelected = 'prepopulate'; return event.keyCode; }"/></td>
         </tr>
         <tr>
           <td align="center" valign="top" colspan="12"><html:submit

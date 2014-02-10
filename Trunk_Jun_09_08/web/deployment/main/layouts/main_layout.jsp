@@ -101,8 +101,8 @@ response.addDateHeader("Expires", -1);
 </head>
 
 <%  
-if (request.getAttribute("lostdelay") != null || request.getAttribute("missing") != null || request.getAttribute("damaged") != null
-			|| request.getAttribute("lost") != null || request.getAttribute("found") != null || request.getAttribute("onhand") != null ) { 
+if (request.getAttribute("prepopulate") == null && (request.getAttribute("lostdelay") != null || request.getAttribute("missing") != null || request.getAttribute("damaged") != null
+			|| request.getAttribute("lost") != null || request.getAttribute("found") != null || request.getAttribute("onhand") != null )) { 
 %>
 <body onkeydown="if (event.keyCode==13) {event.keyCode=9; return event.keyCode }">
 <% } else { %>
