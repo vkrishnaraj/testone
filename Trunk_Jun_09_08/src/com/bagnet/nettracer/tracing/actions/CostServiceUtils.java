@@ -316,7 +316,7 @@ public class CostServiceUtils {
 			if(a.getErrorCodes()==null || (a.getErrorCodes()!=null && a.getErrorCodes().sizeOfErrorCodeEnumArray()==0)){
 				try{
 					BigDecimal cost=a.getDeliveryCharges().add(a.getFuelSurchargeCost()).add(a.getAddtlFeesCost());
-					form.setCost(cost.toString());
+					form.setCost(TracingConstants.DECIMALFORMAT.format(cost.doubleValue()));
 					form.setCurrency("USD");
 					form.setOrigDelivCost(cost.doubleValue());
 				} catch (Exception e){
