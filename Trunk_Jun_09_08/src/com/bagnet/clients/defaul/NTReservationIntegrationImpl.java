@@ -55,7 +55,7 @@ public class NTReservationIntegrationImpl extends
 		try {
 			NTIntegrationWrapper wrapper = new NTIntegrationWrapper();
 			
-			if (form.getRecordlocator() != null && form.getRecordlocator().trim().length() > 0) {
+			if (form.getRecordlocator() != null && (form.getRecordlocator().trim().length() == 6 || form.getRecordlocator().trim().length() == 8)) {
 				// If searching bag record locator				
 				booking = wrapper.getReservationData(form.getRecordlocator(), null);
 			} else if (form.getBagTagNumber() != null && form.getBagTagNumber().trim().length() > 0) {
