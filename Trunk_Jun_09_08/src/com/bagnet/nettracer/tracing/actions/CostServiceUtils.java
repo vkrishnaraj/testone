@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.actions;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Set;
@@ -313,9 +314,16 @@ public class CostServiceUtils {
 	    	CalculateDeliveryCostResponse reply = replyDoc.getCalculateDeliveryCostResponse();
 	    	SouthwestAirlinesCalculateDeliveryCostResponse a= reply.getCalculateDeliveryCostResult();
 			if(a.getErrorCodes()==null || (a.getErrorCodes()!=null && a.getErrorCodes().sizeOfErrorCodeEnumArray()==0)){
-				form.setCost(a.getTotalAirlineCost().toString());
-				form.setCurrency("USD");
-				form.setOrigDelivCost(a.getTotalAirlineCost().doubleValue());
+				try{
+					BigDecimal cost=a.getDeliveryCharges().add(a.getFuelSurchargeCost()).add(a.getAddtlFeesCost());
+					form.setCost(cost.toString());
+					form.setCurrency("USD");
+					form.setOrigDelivCost(cost.doubleValue());
+				} catch (Exception e){
+					ActionMessage error = new ActionMessage("error.delivery.request.calculation");
+					messages.add(ActionMessages.GLOBAL_MESSAGE, error);
+					e.printStackTrace();
+				}
 				
 			} else {
 				boolean specificError=false;
