@@ -390,9 +390,22 @@
 						
 						<logic:equal name="activity" property="statusId" value="0" >
 							<% if (canDelete) { %>
-								<a href="incidentActivity.do?command=<%=TracingConstants.COMMAND_DELETE %>&activity=<%=String.valueOf(activity.getId()) %>&incident=<bean:write name="incidentForm" property="incident_ID" />" onclick="return verifyDelete();" >
-									<bean:message key="delete" />
-								</a>
+								<logic:equal name="activity" property="isCorrespondence" value="true" >
+									<logic:equal name="activity" property="activityCode" value="<%=String.valueOf(TracingConstants.OUTBOUND_CORRESPONDANCE) %>">
+										<logic:notEqual name="activity" property="published" value="true">
+											<a href="customerCommunications.do?command=<%=TracingConstants.COMMAND_DELETE %>&communicationsId=<%=String.valueOf(activity.getId()) %>&incident=<bean:write name="incidentForm" property="incident_ID" />" onclick="return verifyDelete();" >
+												<bean:message key="customer.communication.action.delete" />
+											</a>
+										</logic:notEqual>
+									</logic:equal>
+								</logic:equal>
+									
+								<logic:notEqual name="activity" property="isCorrespondence" value="true" >
+									<a href="incidentActivity.do?command=<%=TracingConstants.COMMAND_DELETE %>&activity=<%=String.valueOf(activity.getId()) %>&incident=<bean:write name="incidentForm" property="incident_ID" />" onclick="return verifyDelete();" >
+										<bean:message key="delete" />
+									</a>
+								</logic:notEqual>
+									
 							<% } else { %>
 								&nbsp;
 							<% } %>
