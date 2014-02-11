@@ -397,7 +397,13 @@
 												<bean:message key="customer.communication.action.delete" />
 											</a>
 										</logic:notEqual>
+										<logic:equal name="activity" property="published" value="true">
+											&nbsp;
+										</logic:equal>
 									</logic:equal>
+									<logic:notEqual name="activity" property="activityCode" value="<%=String.valueOf(TracingConstants.OUTBOUND_CORRESPONDANCE) %>">
+										&nbsp;
+									</logic:notEqual>
 								</logic:equal>
 									
 								<logic:notEqual name="activity" property="isCorrespondence" value="true" >
