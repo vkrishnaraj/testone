@@ -235,6 +235,15 @@ public abstract class BaseExpenseAction extends CheckedAction {
 		ep.setMileageamt(epf.getMileageamt());
 		ep.setVoucheramt(epf.getVoucheramt());
 		ep.setVoucherExpirationDate(epf.getVoucherExpirationDate());
+		if(epf.getFirstname()!=null){
+			ep.setFirstname(epf.getFirstname());
+		}
+		if(epf.getLastname()!=null){
+			ep.setLastname(epf.getLastname());
+		}
+		if(epf.getMiddlename()!=null){
+			ep.setMiddlename(epf.getMiddlename());
+		}
 		
 		ExpenseType et = new ExpenseType();
 		et.setExpensetype_ID( epf.getExpensetype_id());

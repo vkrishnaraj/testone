@@ -45,6 +45,7 @@
 	boolean bsoPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, a) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN,a);
 	boolean payApproveCreatePerm = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAYMENT_APPROVAL_CREATE, a) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAYMENT_APPROVAL_ADMIN,a);
 	boolean isInBSO=(epf!=null && a!=null && a.getStation()!=null && epf.getExpenselocation_ID()==a.getStation().getStation_ID());
+	boolean isVoucher=(epf!=null && epf.getPaymentType().equals("VOUCH"));
 	boolean passDataInExp = PropertyBMO.isTrue(PropertyBMO.PASSENGER_DATA_IN_EXPENSE);
 	
 	Locale myLocale = (Locale) session.getAttribute("org.apache.struts.action.LOCALE");
@@ -445,17 +446,17 @@
             <td nowrap >
               <bean:message key="colname.last_name" />
               <br>
-              <html:text property="lastname" size="20" maxlength="20"  styleClass="textfield" disabled="true"/>
+              <html:text property="lastname" size="20" maxlength="20"  styleClass="textfield" disabled="<%=isVoucher %>"/>
             </td>
             <td nowrap >
               <bean:message key="colname.first_name" />
               <br>
-              <html:text property="firstname" size="20" maxlength="20"  styleClass="textfield" disabled="true"/>
+              <html:text property="firstname" size="20" maxlength="20"  styleClass="textfield" disabled="<%=isVoucher %>"/>
             </td>
             <td>
               <bean:message key="colname.mid_initial" />
               <br>
-              <html:text property="middlename" size="1" maxlength="1"  styleClass="textfield" disabled="true"/>
+              <html:text property="middlename" size="1" maxlength="1"  styleClass="textfield" disabled="<%=isVoucher %>"/>
             </td>
           </tr>
       	  <tr>
@@ -563,7 +564,6 @@
                   <html:text property="email" size="42" maxlength="100" styleClass="textfield" disabled="true"/>
                </td>  
             </tr>
-            
         	<html:hidden property="email"/>
 			<html:hidden property="countrycode_ID"/>
 			<html:hidden property="state_ID"/>
@@ -572,7 +572,7 @@
 			<html:hidden property="province"/>
 			<html:hidden property="city"/>
 			<html:hidden property="zip"/>
-        	<% if (!isInBSO) { %>
+        	<% if (!isInBSO || isVoucher) { %>
 				<html:hidden property="lastname"/>
 				<html:hidden property="firstname"/>
 				<html:hidden property="middlename"/>
