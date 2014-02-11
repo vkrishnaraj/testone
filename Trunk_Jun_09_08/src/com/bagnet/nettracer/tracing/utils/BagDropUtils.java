@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.util.MessageResources;
 
@@ -31,6 +32,8 @@ import com.bagnet.nettracer.exceptions.ObjectDoesNotExistException;
  *
  */
 public class BagDropUtils {
+	
+	public static int DEFAULT_REFRESH_LIMIT = 2;
 
 	@SuppressWarnings("unused")
 	private static Logger logger = Logger.getLogger(BagDropUtils.class);
@@ -262,6 +265,52 @@ public class BagDropUtils {
 	 */
 	public static int getModifyRange(Agent agent){
 		return isBagDropAdmin(agent)?30:1;//consider making this configurable in property table or company specific vars
+	}
+	
+	
+	
+	/**
+	 * Determines if an agent has the ability to fetch flight data based on station and date range
+	 * 
+	 * @param agent
+	 * @param station
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	public static boolean canRefreshFlightInfo(Agent agent, String station, Date start, Date end){
+		TimeZone timeZone = TimeZone
+				.getTimeZone(AdminUtils.getTimeZoneById(agent.getDefaulttimezone()).getTimezone());
+		Date startCurrentDay = getStartOfDayGMT(timeZone, 0);
+
+		int daysBack = NumberUtils.toInt(PropertyBMO.getValue(PropertyBMO.BAGDROP_REFRESH_LIMIT), DEFAULT_REFRESH_LIMIT);
+		long day = 24 * 60 * 60 * 1000;
+
+		boolean validDate = startCurrentDay.getTime() - start.getTime() <= daysBack * day;
+		
+		return canUpdateByStation(agent,station) && validDate;
+	}
+	
+	/**
+	 * Updates flight information from the third party reservation system over the given date range
+	 * 
+	 * @param agent
+	 * @param station
+	 * @param start
+	 * @param end
+	 * @throws InvalidStationException
+	 * @throws MissingRequiredFieldsException
+	 */
+	public static void refreshFlightInfo(Agent agent, String station, Date start, Date end) throws InvalidStationException,MissingRequiredFieldsException{
+		if(!canRefreshFlightInfo(agent,station,start,end)){
+			return;
+		}
+		Calendar current = Calendar.getInstance();
+		current.setTime(start);
+		while(current.getTime().getTime() < end.getTime()){
+			refreshFlightInfo(agent,station,current.getTime());
+			current.add(Calendar.DATE, 1);
+		}
 	}
 	
 	/**
@@ -525,4 +574,23 @@ public class BagDropUtils {
 		
 		return getBagDropBMO().getAverageTimeToCarousel(station, companycode, startGMTDate, endGMTDate);
 	}
+
+	/**
+	 * Returns start of day converted to GMT based on the provided timezone
+	 * 
+	 * @param timeZone
+	 * @param dayOffset
+	 * @return
+	 */
+	public static Date getStartOfDayGMT(TimeZone timeZone, int dayOffset){
+		//initializing date range to start of day in GMT
+		Calendar startOfDayCal = GregorianCalendar.getInstance(timeZone);
+		startOfDayCal.set(Calendar.HOUR_OF_DAY, 0);
+		startOfDayCal.set(Calendar.MINUTE, 0);
+		startOfDayCal.set(Calendar.SECOND, 0);
+		startOfDayCal.add(Calendar.DATE, dayOffset);
+		Date startOfDayGMTDate = DateUtils.convertToGMTDate(startOfDayCal.getTime());
+		return startOfDayGMTDate;
+	}
 }
+

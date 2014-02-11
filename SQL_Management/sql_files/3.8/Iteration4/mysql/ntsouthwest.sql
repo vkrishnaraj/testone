@@ -41,3 +41,5 @@ insert into properties (keyStr,valueStr) VALUES
 ('default.autoprovision.timeout' ,'30');
 
 insert into properties (keyStr, valueStr) values ('create.call.task.timezone','CST');
+
+insert into properties (keyStr, valueStr) values ('bagdrop.refresh.limit','2');

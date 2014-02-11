@@ -27,6 +27,8 @@ public class BagDropForm extends ValidatorForm{
 	private String _TIMEFORMAT;
 	private java.util.TimeZone _TIMEZONE;
 	
+	private boolean displayGetFlightInfoButton;
+	
 	private List <BagDrop> bagDropList;
 	
 	private BagDropDTO dto;
@@ -37,6 +39,12 @@ public class BagDropForm extends ValidatorForm{
 	 * in a single BagDrop since we auto load single results.
 	 */
 	private BagDropDTO lastNonSingleDTO;
+	
+	/**
+	 * Unlike the lastNonSingleDTO which only saves the state of the DTO when it yields a non-single result,
+	 * previousDTO will always save the previous state. (NT-2059)
+	 */
+	private BagDropDTO previousDTO;
 	
 	private BagDrop editBagDrop;
 	
@@ -214,6 +222,22 @@ public class BagDropForm extends ValidatorForm{
 
 	public void setLastNonSingleDTO(BagDropDTO lastNonSingleDTO) {
 		this.lastNonSingleDTO = lastNonSingleDTO;
+	}
+
+	public boolean isDisplayGetFlightInfoButton() {
+		return displayGetFlightInfoButton;
+	}
+
+	public void setDisplayGetFlightInfoButton(boolean displayGetFlightInfoButton) {
+		this.displayGetFlightInfoButton = displayGetFlightInfoButton;
+	}
+
+	public BagDropDTO getPreviousDTO() {
+		return previousDTO;
+	}
+
+	public void setPreviousDTO(BagDropDTO previousDTO) {
+		this.previousDTO = previousDTO;
 	}
 	
 }

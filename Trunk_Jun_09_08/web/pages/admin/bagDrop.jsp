@@ -164,12 +164,14 @@
 					</td>
 			    </tr>
 			    <tr>
-            		<td colspan="9" align="center">
+			    	<logic:equal name="bagDropForm" property="displayGetFlightInfoButton" value="true">
+            			<td colspan="9" align="center">
             			<html:hidden property="getFlightData" value="1" disabled="true" />
-              			<html:submit styleId="button" property="getFlightData" onclick="this.disabled=true; this.form.getFlightData.disabled = false; this.value='Please wait'; this.form.submit();">
-                			<bean:message key="button.bagdrop.refreshflightinfo" />
-              			</html:submit>
-            		</td>
+              				<html:submit styleId="button" property="getFlightDataButton" onclick="this.disabled=true; this.form.getFlightData.disabled = false; this.value='Please wait'; this.form.submit();">
+                				<bean:message key="button.bagdrop.refreshflightinfo" />
+              				</html:submit>
+            			</td>
+            		</logic:equal>
           		</tr>
 		 	</display:footer>
 		</display:table>

@@ -88,8 +88,20 @@ public class BagDropAction extends Action{
 		}
 		
 		if (request.getParameter("getFlightData") != null) {
+
+			if(bdform.getPreviousDTO() != null && bdform.getPreviousDTO().getStartScheduleArrivalDate() != null && bdform.getPreviousDTO().getEndScheduleArrivalDate() != null){
+				dto.setStartScheduleArrivalDate((Date)bdform.getPreviousDTO().getStartScheduleArrivalDate().clone());
+				dto.setEndScheduleArrivalDate((Date)bdform.getPreviousDTO().getEndScheduleArrivalDate().clone());
+			} else {
+				/* previous dto not found, default to current day */
+				TimeZone timeZone = TimeZone
+						.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
+				dto.setStartScheduleArrivalDate(BagDropUtils.getStartOfDayGMT(timeZone, 0));
+				dto.setEndScheduleArrivalDate(BagDropUtils.getStartOfDayGMT(timeZone, 1));
+			}
+
 			try {
-				BagDropUtils.refreshFlightInfo(user, getCurrentStation(cbroStation, user), new Date());
+				BagDropUtils.refreshFlightInfo(user, getCurrentStation(cbroStation, user), dto.getStartScheduleArrivalDate(), dto.getEndScheduleArrivalDate());
 			} catch (InvalidStationException ise){
 				ActionMessage error = new ActionMessage("bagdrop.error.invalidstation");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
@@ -209,8 +221,8 @@ public class BagDropAction extends Action{
 			dto.setAirlineCode(user.getCompanycode_ID());
 			dto.setArrivalStation(getCurrentStation(cbroStation, user));
 			
-			Date startOfDayGMTDate = getStartOfDayGMT(user, timeZone, 0);
-			Date endOfDayGMTDate = getStartOfDayGMT(user, timeZone, 1);
+			Date startOfDayGMTDate = BagDropUtils.getStartOfDayGMT(timeZone, 0);
+			Date endOfDayGMTDate = BagDropUtils.getStartOfDayGMT(timeZone, 1);
 			dto.setStartScheduleArrivalDate(startOfDayGMTDate);
 			dto.setEndScheduleArrivalDate(endOfDayGMTDate);
 			
@@ -306,9 +318,14 @@ public class BagDropAction extends Action{
 			/** Since we autoload single results, saving the DTO that resulted in a non-single result to support use of back button **/
 			theForm.setLastNonSingleDTO(dto.clone());
 		} 
+		
+		/** regardless of whether the dto produced results, always save the dto (NT-2059)**/
+		theForm.setPreviousDTO(dto.clone());
 
 		dto.setMaxResults(rowsperpage);
 		dto.setStartIndex(currpage*rowsperpage);
+		
+		theForm.setDisplayGetFlightInfoButton(BagDropUtils.canRefreshFlightInfo(agent, dto.getArrivalStation(), dto.getStartScheduleArrivalDate(), dto.getEndScheduleArrivalDate()));
 		return BagDropUtils.searchBagdrop(agent, dto);
 	}
 	
@@ -366,15 +383,5 @@ public class BagDropAction extends Action{
 			return agent.getStation().getStationcode();
 		}
 	}
-	
-	private Date getStartOfDayGMT(Agent agent, TimeZone timeZone, int dayOffset){
-		//initializing date range to start of day in GMT
-		Calendar startOfDayCal = GregorianCalendar.getInstance(timeZone);
-		startOfDayCal.set(Calendar.HOUR_OF_DAY, 0);
-		startOfDayCal.set(Calendar.MINUTE, 0);
-		startOfDayCal.set(Calendar.SECOND, 0);
-		startOfDayCal.add(Calendar.DATE, dayOffset);
-		Date startOfDayGMTDate = DateUtils.convertToGMTDate(startOfDayCal.getTime());
-		return startOfDayGMTDate;
-	}
+
 }
