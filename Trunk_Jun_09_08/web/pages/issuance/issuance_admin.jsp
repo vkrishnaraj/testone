@@ -346,16 +346,9 @@
                     </tr>
                     </table>
                     <html:hidden property="editquantity" value="" disabled="true"/>
-                    <html:hidden property="issuequantity" value="" disabled="true"/>
                     <html:hidden property="historyquantity" value="" disabled="true"/>
                     <table class="form2" cellspacing="0" cellpadding="0" width="100%">
               <tr>
-	                  <td class="header">
-	                     <bean:message key="issuance.item.incident" />
-	                  </td>
-	                  <td class="header">
-	                     <bean:message key="issuance.item.issue" />
-	                  </td>
                       <td class="header">
 	                     <bean:message key="issuance.item.category" />
                       </td>
@@ -378,24 +371,16 @@
                 <logic:iterate indexId="i" id="q_item" name="item_quantity_resultList" type="com.bagnet.nettracer.tracing.db.issuance.IssuanceItemQuantity" >
                 	<% boolean itemActive = (q_item.getIssuanceItem().getCategory().isActive() && q_item.getIssuanceItem().isActive()); %>
                   <tr <%if (q_item.getQuantity() < q_item.getMinimuActiveQuantity()) {%> style="background-color: red;" <%}%>>
-	                  <% if (itemActive) { %>
 	                  <td>
-	                     <input type="text" name="item_incid_<%=q_item.getId() %>" value="" size="5" class="textfield" />
-	                  </td>
-	                  <td>
-	                     <input type="submit" name="quantity_issue_<%=q_item.getId()%>" id="button" onclick="this.form.issuequantity.value = <%=q_item.getId()%>; this.form.issuequantity.disabled = false;" 
-							value="<bean:message key="issuance.item.button.issue" />" >
-						 </input>
-	                  </td>
-	                  <% } else { %>
-	                  <td colspan=2>
-	                  		<bean:message key="issuance.item.inactive" />
-	                  </td>
-	                  <% } %>
-                      <td>
+	                  	 <% if (!itemActive) { %>
+	                  	 	<b><bean:message key="inactive" /></b>&nbsp;
+	                  	 <% } %>
               			 <%=q_item.getIssuanceItem().getCategory().getDescription() %>
                       </td>
 	                  <td>
+	                  	 <% if (!itemActive) { %>
+	                  	 	<b><bean:message key="inactive" /></b>&nbsp;
+	                  	 <% } %>
 	                     <%=q_item.getIssuanceItem().getDescription()%>
 	                  </td>
 	                  <td>
@@ -421,7 +406,7 @@
                   </tr>
                 </logic:iterate> 
 					  <tr>
-		                <td colspan="8" align="center" valign="top">
+		                <td colspan="6" align="center" valign="top">
 			                  <html:submit property="quantity_history" styleId="button">
 			                    <bean:message key="issuance.item.quantity.button.history" />
 			                  </html:submit>
