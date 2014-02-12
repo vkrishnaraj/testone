@@ -7,6 +7,7 @@
 package com.bagnet.nettracer.tracing.utils;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -16,6 +17,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
+
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 
 /**
@@ -170,6 +172,18 @@ public class DateUtils {
 		}
 		return null;
 	}
+	
+	public static Date convertToDatetime(String str, String instyle) {
+		Date mydate = null;
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat(instyle);
+			mydate = sdf.parse(str);
+		} catch (ParseException e) {
+			logger.warn("user entered bad time format on UI - expected time format: " + instyle + "; entered: " + str);
+		}
+		return mydate;
+	}
+
 	
 	public static Date convertToGMTDate(Date now) {
 		try {
