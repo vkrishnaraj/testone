@@ -514,6 +514,26 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 	/**
 	 * Updates an existing OHD.
 	 * 
+	 * @param ohd
+	 * @param updateLateCheck - since lateCheckInd is a boolean, 
+	 * 							we have to pass in the hasLateCheckIndicator value from the web service
+	 * @return
+	 */
+	private boolean updateExistingOhd(OHD ohd, boolean updateLateCheck){
+		OhdBMO obmo = new OhdBMO();
+		OHD oldohd = obmo.findOHDByID(ohd.getOHD_ID());
+		if(oldohd != null && ohd!= null){
+			mapNonNullOhdFields(oldohd, ohd, updateLateCheck);
+			return obmo.insertOHD(oldohd, ohd.getAgent());
+		} else {
+			return false;
+		}
+	}
+	
+	
+	/**
+	 * Maps fields from the first OHD to the second OHD in accordance to SWA mapping rules.
+	 * 
 	 * When updating an existing OHD for SWA, only update the following fields if provided:
 	 *   color
 	 *   type
@@ -540,12 +560,8 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 	 * @param ohd
 	 * @param updateLateCheck - since lateCheckInd is a boolean, 
 	 * 							we have to pass in the hasLateCheckIndicator value from the web service
-	 * @return
 	 */
-	private boolean updateExistingOhd(OHD ohd, boolean updateLateCheck){
-		OhdBMO obmo = new OhdBMO();
-		OHD oldohd = obmo.findOHDByID(ohd.getOHD_ID());
-		
+	private void mapNonNullOhdFields(OHD oldohd, OHD ohd, boolean updateLateCheck){
 		if(oldohd != null && ohd!= null){
 			if(ohd.getColor() != null && ohd.getColor().length() > 0){
 				oldohd.setColor(ohd.getColor());
@@ -633,13 +649,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 					}
 				}
 			}
-			
-			return obmo.insertOHD(oldohd, ohd.getAgent());
-		} else {
-			return false;
 		}
-		
-
 	}
 
 
@@ -1089,22 +1099,23 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		WSCoreOHDUtil util = new WSCoreOHDUtil();
 		OHD ohd = null;
 		
+		populateMissingOHDFields(wsohd, agent);
+		
 		//add/update ohd
-		if(wsohd.getOHDID() != null && wsohd.getOHDID().length() > 0){
+		if((incomingOHD = OHDUtils.getBagTagNumberIncomingToStation(wsohd.getBagtagnum(),holdingstation)) != null){
+			util.properlyHandleForwardedOnHand(incomingOHD, agent, holdingstation);
+			ohd = OhdBMO.getOHDByID(incomingOHD.getOHD_ID(), null);
+			updateLzOHD(wsohd, ohd, agent, tbi, posId, lateCheckInc);
+			serviceResponse.setCreateUpdateIndicator(STATUS_UPDATE);
+		} else if(wsohd.getOHDID() != null && wsohd.getOHDID().length() > 0){
 			ohd = OhdBMO.getOHDByID(wsohd.getOHDID(), null);
-			updateLzOHD(wsohd, ohd, agent, tbi);
+			updateLzOHD(wsohd, ohd, agent, tbi, posId, lateCheckInc);
 			serviceResponse.setCreateUpdateIndicator(STATUS_UPDATE);
 		} else if ((ohdId = OnhandScanningServiceUtil.lookupBagtag(wsohd.getBagtagnum(), holdingstation.getStation_ID())) != null){
 			ohd = OhdBMO.getOHDByID(ohdId, null);
-			updateLzOHD(wsohd, ohd, agent, tbi);
-			serviceResponse.setCreateUpdateIndicator(STATUS_UPDATE);
-		} else if ((incomingOHD = OHDUtils.getBagTagNumberIncomingToStation(wsohd.getBagtagnum(),holdingstation)) != null){
-			util.properlyHandleForwardedOnHand(incomingOHD, agent, holdingstation);
-			ohd = OhdBMO.getOHDByID(incomingOHD.getOHD_ID(), null);
-			updateLzOHD(wsohd, ohd, agent, tbi);
+			updateLzOHD(wsohd, ohd, agent, tbi, posId, lateCheckInc);
 			serviceResponse.setCreateUpdateIndicator(STATUS_UPDATE);
 		} else {
-			populateMissingOHDFields(wsohd, agent);
 			if(!addOhdReqFields(wsohd, serviceResponse)){
 				serviceResponse.setSuccess(false);
 				serviceResponse.setReturnStatus(STATUS_RETURN_LZ_UPDATE_REQUIRED);
@@ -1155,27 +1166,20 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 	/**
 	 * Updates OHD for addBagForLZ.  Update itinerary, status and adds 'Scanned' remark
 	 * 
-	 * As per jira ticket NT-2092, update type and color for addBagForLZ
+	 * As per jira ticket NT-2163, update OHD in the same manner as createUpdateOnhand
 	 * 
 	 * @param wsohd
 	 * @param ohd
 	 * @param agent
 	 * @param tbi
 	 */
-	private void updateLzOHD(WSOHD wsohd, OHD ohd, Agent agent, boolean tbi){
+	private void updateLzOHD(WSOHD wsohd, OHD ohd, Agent agent, boolean tbi, String posId, boolean lateCheckInc){
 		if(ohd != null){
 			OhdBMO obmo = new OhdBMO();
 			try {
-				if(wsohd.getItinerariesArray() != null && wsohd.getItinerariesArray().length > 0){
-					WSCoreOHDUtil util = new WSCoreOHDUtil();
-					util.WStoOHDItinMapping(wsohd, ohd);
-				}
-				if(wsohd.getType() != null && wsohd.getType().length() > 0){
-					ohd.setType(wsohd.getType());
-				}
-				if(wsohd.getColor() != null && wsohd.getColor().length() > 0){
-					ohd.setColor(wsohd.getColor());
-				}
+				OHD newohd = wsohdToOHD(wsohd, posId, lateCheckInc);
+				mapNonNullOhdFields(ohd, newohd, lateCheckInc);
+				
 				handleTBI(ohd, tbi);
 				addOHDUpdateRemark(ohd, agent, REMARK_SCANNED);
 				obmo.insertOHD(ohd, agent);

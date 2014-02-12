@@ -558,7 +558,7 @@ public class OnhandScanningServiceTest {
 		assertTrue(lzret.getReturn().getSuccess());
 		assertTrue(OnhandScanningServiceImplementation.STATUS_RETURN_LZ_UPDATE_ITEM_TYPE_REQUIRED
 				.equals(lzret.getReturn().getReturnStatus()));
-
+		
 		//since we are not longer receiving the forward, we need to receive it here before closing
 		WSCoreOHDUtil util = new WSCoreOHDUtil();
 		toRecieve = OhdBMO.getOHDByID(retohd.getOHDID(), null);
@@ -757,12 +757,11 @@ public class OnhandScanningServiceTest {
 		assertTrue(responseLZ.getOnhand().getStatus().equals("Closed"));
 		assertTrue(responseLZ.getReturnStatus().equals("Successful Create/Update"));
 		
-		//for updates, we only update the itinerary and TBI status
-		assertTrue(responseLZ.getLateCheckIndicator() == false);
-		assertTrue(responseLZ.getPositionId() == null);
+		//as per NT-2163 we are to update OHDs in the same manner as createUpdateOHD
+		assertTrue(responseLZ.getLateCheckIndicator() == true);
+		assertTrue(responseLZ.getPositionId().equals(posId));
 		assertTrue(responseLZ.getOnhand().getItinerariesArray(0).getLegfrom().equals("XAX"));
 		assertTrue(responseLZ.getOnhand().getItinerariesArray(0).getLegto().equals("AXA"));
-		//NT-2092 assert that we are updating color and type
 		assertTrue(responseLZ.getOnhand().getColor().equals("BU"));
 		assertTrue(responseLZ.getOnhand().getType().equals("90"));
 	}
