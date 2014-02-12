@@ -147,10 +147,20 @@
                     <br />
                     <table class="form2" cellspacing="0" cellpadding="0" width="100%">
                       <tr>
-                      	<td>
-                      		<bean:message key="edit.issuance.category.description" /> <br/>
-                      		<html:text name="editIssuanceCategoryForm" property="category.description" size="10" maxlength="100" styleClass="textfield" />
-                      	</td>
+                      	<logic:equal name="editIssuanceCategoryForm" property="category.id" value="0">
+	                      	<td colspan="8">
+	                      		<bean:message key="edit.issuance.category.description" /> <br/>
+	                      		<html:text name="editIssuanceCategoryForm" property="category.description" maxlength="100" style="width:95%;" styleClass="textfield" />
+	                      	</td>
+                      	</logic:equal>
+                      	<logic:notEqual name="editIssuanceCategoryForm" property="category.id" value="0">
+	                      	<td colspan="7">
+	                      		<bean:message key="edit.issuance.category.description" /> <br/>
+	                      		<html:text name="editIssuanceCategoryForm" property="category.description" maxlength="100" style="width:95%;" styleClass="textfield" />
+	                      	</td>
+                      	</logic:notEqual>
+                      </tr>
+                      <tr>
                       	<td>
                       		<bean:message key="edit.issuance.category.lostdelay" /> <br/>
                 			<html:checkbox name="editIssuanceCategoryForm" property="category.lostdelay" />
@@ -236,9 +246,9 @@
                 <logic:iterate indexId="i" id="item" name="editIssuanceCategoryForm" property="items" type="com.bagnet.nettracer.tracing.db.issuance.IssuanceItem" >
                 		<tr>
                 			<td>
-                      		<html:text name="item" property="description" size="10" maxlength="100" styleClass="textfield" indexed="true" />
+                      		<html:text name="item" property="description" maxlength="100" style="width:95%;" styleClass="textfield" indexed="true" />
                 			</td>
-                			<td>
+                			<td style="width: 6%;">
                 			<html:checkbox name="item" property="active" indexed="true" />
                 			</td>
                 		</tr>
