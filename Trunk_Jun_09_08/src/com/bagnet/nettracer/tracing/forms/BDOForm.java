@@ -393,10 +393,13 @@ public final class BDOForm extends ValidatorForm {
 	}
 
 	public void setDisppickuptime(String s) {
-		if(s!=null && !s.isEmpty())
-			setPickuptime(DateUtils.convertToDate(s, get_TIMEFORMAT(), null,get_TIMEZONE()));
-		else
+		if(s!=null && !s.isEmpty()){
+			Date aDateWithTime = DateUtils.convertToDatetime(s, get_TIMEFORMAT());
+			setPickuptime(aDateWithTime);
+		}
+		else{
 			setPickuptime(null);
+		}
 	}
 
 	/**Get date and time then format to yyyy-MM-dd HH:mm:ss format for return
@@ -404,9 +407,8 @@ public final class BDOForm extends ValidatorForm {
 	 * @return the pickuptime for display only
 	 */
 	public String getDisppickuptime() {
-		Date tempdate = DateUtils.convertToDate( DateUtils.formatDate(getPickupdate(), TracingConstants.DB_DATEFORMAT, null, null) + " "
+		Date tempdate = DateUtils.convertToDate( DateUtils.formatDate(getPickupdate(), TracingConstants.DB_DATEFORMAT, null, get_TIMEZONE()) + " "
 				+ DateUtils.formatDate(getPickuptime(), TracingConstants.DB_TIMEFORMAT, null, null),TracingConstants.DB_DATETIMEFORMAT,null);
-		
 		return DateUtils.formatDate(tempdate, _TIMEFORMAT, null, null);		
 	}
 
