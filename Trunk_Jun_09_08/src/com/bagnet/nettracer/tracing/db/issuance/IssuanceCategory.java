@@ -29,7 +29,7 @@ public class IssuanceCategory {
 	@GeneratedValue
 	private long id;
 	
-	@Column(nullable=false, length=255)
+	@Column(length = 100)
 	private String description;
 	
 	private boolean lostdelay;

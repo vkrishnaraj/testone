@@ -523,7 +523,7 @@
 	                     <input type="text" id="item_cost_<%=i_item.getId() %>" name="item_cost_<%=i_item.getId() %>" value="<%=df.format(i_item.getCost()) %>" size="6" class="textfield" />
 	                  </td>	                  	 
 	                  <td>
-	                     <input type="text" name="item_desc_<%=i_item.getId() %>" value="<%=i_item.getDescription()%>" size="10" class="textfield" />
+	                     <input type="text" name="item_desc_<%=i_item.getId() %>" value="<%=i_item.getDescription()%>" size="10" maxlength="100" class="textfield" />
 	                  </td>
 	                  <td>
 	                     <input type="text" name="item_barcode_<%=i_item.getId() %>" value="<%=i_item.getBarcode()%>" size="4" maxlength="20" class="textfield" />
@@ -639,7 +639,7 @@
 	                     	<input type="text" id="item_cost" name="item_cost" value="0" size="6" maxlength="20" class="textfield" />
 	                  	</td>	                  	
 	                  	<td>
-	                     	<input type="text" id="item_desc" name="item_desc" value="" size="10" class="textfield" />
+	                     	<input type="text" id="item_desc" name="item_desc" value="" size="10" maxlength="100" class="textfield" />
 	                  	</td>
 	                  	<td>
 	                     	<input type="text" name="item_barcode" value="" size="4" maxlength="20" class="textfield" />

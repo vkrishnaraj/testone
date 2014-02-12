@@ -149,7 +149,7 @@
                       <tr>
                       	<td>
                       		<bean:message key="edit.issuance.category.description" /> <br/>
-                      		<html:text name="editIssuanceCategoryForm" property="category.description" size="10" styleClass="textfield" />
+                      		<html:text name="editIssuanceCategoryForm" property="category.description" size="10" maxlength="100" styleClass="textfield" />
                       	</td>
                       	<td>
                       		<bean:message key="edit.issuance.category.lostdelay" /> <br/>
@@ -236,7 +236,7 @@
                 <logic:iterate indexId="i" id="item" name="editIssuanceCategoryForm" property="items" type="com.bagnet.nettracer.tracing.db.issuance.IssuanceItem" >
                 		<tr>
                 			<td>
-                      		<html:text name="item" property="description" size="10" styleClass="textfield" indexed="true" />
+                      		<html:text name="item" property="description" size="10" maxlength="100" styleClass="textfield" indexed="true" />
                 			</td>
                 			<td>
                 			<html:checkbox name="item" property="active" indexed="true" />
