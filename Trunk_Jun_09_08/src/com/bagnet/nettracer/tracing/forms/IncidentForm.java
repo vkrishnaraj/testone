@@ -298,7 +298,6 @@ public final class IncidentForm extends ValidatorForm {
 		this.issuanceItemIncidents = issuanceItemIncidents;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void reset(org.apache.struts.action.ActionMapping mapping, javax.servlet.http.HttpServletRequest request) {
 		super.reset(mapping, request);
@@ -647,30 +646,32 @@ public final class IncidentForm extends ValidatorForm {
 			Itinerary i = new Itinerary();
 			i.set_DATEFORMAT(get_DATEFORMAT());
 			i.set_TIMEFORMAT(get_TIMEFORMAT());
-			//i.setAirline(TracingConstants.DEFAULT_AIRLINE);
 			
 			if (type >= 0) i.setItinerarytype(type);
 
-			/* following code set the legs types to the legfrom and legto */
-			// first two itinerary( passenger and bag)
-			if (index <= 1) {
-				i.setLegfrom_type(TracingConstants.LEG_B_STATION);
+			/*
+			 * Checks if there are any previous itineraries of the same type. If
+			 * there are, marks respective stations as transfer stations
+			 */
+			int tempindex=index-1;
+			Itinerary tempi=null;
+			Itinerary checki=null;
+			while(tempindex>=0){
+				checki=itinerarylist.get(tempindex);
+				if(checki.getItinerarytype()==type){
+					tempi=checki;
+					break;
+				}
+				tempindex--;
+			}
+			
+			if(tempi!=null){
+				tempi.setLegto_type(TracingConstants.LEG_T_STATION);
+				i.setLegfrom_type(TracingConstants.LEG_T_STATION);
 				i.setLegto_type(TracingConstants.LEG_E_STATION);
 			} else {
-				// make the previous terminating station into trasfer station
-				int tempindex=index-1;
-				Itinerary tempi=null;
-				while(tempindex>=0){
-					tempi=itinerarylist.get(tempindex);
-					if(tempi.getItinerarytype()==type)	break;
-					tempindex--;
-				}
-				
-				if(tempi!=null){
-					tempi.setLegto_type(TracingConstants.LEG_T_STATION);
-					i.setLegfrom_type(TracingConstants.LEG_T_STATION);
-					i.setLegto_type(TracingConstants.LEG_E_STATION);
-				}
+				i.setLegfrom_type(TracingConstants.LEG_B_STATION);
+				i.setLegto_type(TracingConstants.LEG_E_STATION);
 			}
 
 			this.itinerarylist.add(i);
