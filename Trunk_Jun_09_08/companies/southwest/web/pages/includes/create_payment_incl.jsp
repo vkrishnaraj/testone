@@ -65,14 +65,17 @@ function updatePaymentFields(newType) {
 }
 
 function validateRequiredFields() {
-	var minimumValue = 1;
-	var checkamt = document.getElementsByName("checkamt")[0];
-	if (0 < checkamt.value.length && !checkFloatGreaterThanMinimumValue(checkamt.value, minimumValue)) {
-        alert("<bean:message key="error.validation.minimum.amount"/>");
-		checkamt.focus();
-	    return false;
+	
+	if (document.getElementById("button").value == "<bean:message key="button.issue.voucher"/>") {
+		var minimumValue = 1;
+		var checkamt = document.getElementsByName("checkamt")[0];
+		if (0 < checkamt.value.length && !checkFloatGreaterThanMinimumValue(checkamt.value, minimumValue)) {
+	        alert("<bean:message key="error.validation.minimum.amount"/>");
+			checkamt.focus();
+		    return false;
+		}
 	}
-
+	
    	var lastnameId = document.getElementsByName("lastname")[0];
 	if (lastnameId.value.length < 1){
 		alert("<bean:message key='colname.last_name'/>" + " <bean:message key='error.validation.isRequired'/>");
