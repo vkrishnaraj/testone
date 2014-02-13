@@ -961,17 +961,37 @@
     	}
 
     	function validateIssuanceQuantity() {
+    		var typeList=document.getElementById("issuance_type");
+    		var selectedType=typeList.options[typeList.selectedIndex].value;
 			var quantField = document.getElementById("issuance_quantity");
 			var testQuantity = validQuantity;
-			if (limitByPass && numPass < validQuantity) {
-				testQuantity = numPass;
+			var passAdjusted = calculateValidPass(selectedType);
+			if (limitByPass && passAdjusted < validQuantity) {
+				testQuantity = passAdjusted;
+			}
+			if (testQuantity < 1) {
+				alert("<bean:message key='error.all.allowed.issued' />");
+				typeList.focus();
+				return false;	
 			}
 			if (quantField.value > testQuantity) {
-				alert("<bean:message key='issuance.item.quantity.issued' />" + " value must be less than or equal to " + testQuantity);
+				alert("<bean:message key='issuance.item.quantity.issued' />" + " " + "<bean:message key='error.less.than.equal' />" + " " + testQuantity);
 				quantField.focus();
 				return false;	
 			}
 			return true;
+        }
+
+        function calculateValidPass(itemID) {
+            var toReturn = numPass;
+          	<logic:iterate id="issuanceitem" indexId="iiIndex" name="incidentForm" property="issuanceItemIncidents" type="com.bagnet.nettracer.tracing.db.issuance.IssuanceItemIncident">
+          		<% if (issuanceitem != null && !issuanceitem.isReturned() && issuanceitem.getIssuanceItemQuantity() != null) { %>
+          			if (<%=issuanceitem.getIssuanceItemQuantity().getId() %>==itemID) {
+          				toReturn = toReturn - <%=issuanceitem.getQuantity() %>;
+              		}
+          		<% } %>
+			</logic:iterate>
+			return toReturn;
         }
     	
         </script>
