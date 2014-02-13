@@ -3,8 +3,8 @@
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
 	<property name="ireport.zoom" value="1.464100000000004"/>
-	<property name="ireport.x" value="142"/>
-	<property name="ireport.y" value="325"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="639"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -53,7 +53,7 @@
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement>
+				<textElement lineSpacing="Single">
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["BDO #: " + $P{bdo_id}]]></textFieldExpression>
@@ -70,7 +70,7 @@
 			</image>
 			<textField>
 				<reportElement mode="Transparent" x="335" y="77" width="173" height="20"/>
-				<textElement>
+				<textElement lineSpacing="Single">
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["BDO Date: "+$F{date1}]]></textFieldExpression>
@@ -84,12 +84,9 @@
 		<band height="540">
 			<elementGroup/>
 			<elementGroup/>
-			<frame>
-				<reportElement positionType="Float" mode="Transparent" x="15" y="0" width="523" height="51"/>
-			</frame>
 			<textField>
 				<reportElement mode="Transparent" x="15" y="74" width="523" height="127"/>
-				<textElement>
+				<textElement lineSpacing="Single">
 					<font fontName="Arial" size="12"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{customerinfo}]]></textFieldExpression>
@@ -98,22 +95,22 @@
 				<reportElement mode="Transparent" x="15" y="357" width="245" height="162"/>
 			</frame>
 			<textField>
-				<reportElement mode="Transparent" x="16" y="357" width="245" height="162"/>
-				<textElement>
+				<reportElement mode="Transparent" x="16" y="358" width="245" height="161"/>
+				<textElement lineSpacing="Single">
 					<font fontName="Arial" size="12"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{deliveryinfo}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement mode="Transparent" x="15" y="229" width="246" height="104"/>
-				<textElement>
+				<textElement lineSpacing="Single">
 					<font fontName="Arial" size="12"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{bagtag}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement mode="Transparent" x="7" y="519" width="531" height="21"/>
-				<textElement>
+				<textElement lineSpacing="Single">
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{receivedby}]]></textFieldExpression>
@@ -122,50 +119,50 @@
 				<reportElement mode="Transparent" x="275" y="357" width="263" height="162"/>
 			</frame>
 			<textField>
-				<reportElement mode="Transparent" x="275" y="357" width="263" height="162"/>
-				<textElement>
+				<reportElement mode="Transparent" x="275" y="358" width="263" height="161"/>
+				<textElement lineSpacing="Single">
 					<font fontName="Arial" size="12"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{instructions}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement mode="Transparent" x="15" y="201" width="523" height="28"/>
-				<textElement textAlignment="Left">
+				<textElement textAlignment="Left" lineSpacing="Single">
 					<font fontName="Arial" size="20" isBold="true" isItalic="false" isUnderline="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{bagInfo}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement mode="Transparent" x="15" y="334" width="246" height="23"/>
-				<textElement textAlignment="Left">
+				<textElement textAlignment="Left" lineSpacing="Single">
 					<font fontName="Arial" size="18" isBold="true" isItalic="false" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{delInfo}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement mode="Transparent" x="275" y="334" width="263" height="23"/>
-				<textElement textAlignment="Left">
+				<textElement textAlignment="Left" lineSpacing="Single">
 					<font fontName="Arial" size="18" isBold="true" isItalic="false" isUnderline="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{delIns}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement mode="Transparent" x="15" y="0" width="523" height="28"/>
-				<textElement textAlignment="Left">
+				<reportElement mode="Transparent" x="15" y="0" width="320" height="28"/>
+				<textElement textAlignment="Left" lineSpacing="Single">
 					<font fontName="Arial" size="20" isBold="true" isItalic="false" isUnderline="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{custInfo}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement mode="Transparent" x="16" y="51" width="523" height="23"/>
-				<textElement>
+				<reportElement mode="Transparent" x="16" y="51" width="319" height="23"/>
+				<textElement lineSpacing="Single">
 					<font fontName="Arial" size="18" isBold="true" isUnderline="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{address}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement mode="Transparent" x="16" y="28" width="523" height="23"/>
-				<textElement>
+				<textElement lineSpacing="Single">
 					<font fontName="Arial" size="12"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{refNum}]]></textFieldExpression>
@@ -178,7 +175,7 @@
 			</line>
 			<textField>
 				<reportElement mode="Transparent" x="275" y="229" width="263" height="105"/>
-				<textElement>
+				<textElement lineSpacing="Single">
 					<font fontName="Arial" size="12"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{bagtag2}]]></textFieldExpression>
@@ -200,7 +197,7 @@
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" lineSpacing="Single">
 					<font fontName="Arial Narrow" size="30" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[STATION COPY]]></text>
@@ -215,7 +212,7 @@
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" lineSpacing="Single">
 					<font fontName="Arial Narrow" size="30" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[CUSTOMER COPY]]></text>
@@ -230,7 +227,7 @@
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" lineSpacing="Single">
 					<font fontName="Arial Narrow" size="30" isBold="true" pdfFontName="Helvetica-Bold"/>
 				</textElement>
 				<text><![CDATA[VENDOR COPY]]></text>
@@ -243,7 +240,7 @@
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement/>
+				<textElement lineSpacing="Single"/>
 				<textFieldExpression class="java.lang.String"><![CDATA["COPY " + $V{PAGE_NUMBER} + "."]]></textFieldExpression>
 			</textField>
 			<break>
@@ -257,7 +254,7 @@
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement/>
+				<textElement lineSpacing="Single"/>
 				<text><![CDATA[COPY 1 - STATION]]></text>
 			</staticText>
 			<staticText>
@@ -268,7 +265,7 @@
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement/>
+				<textElement lineSpacing="Single"/>
 				<text><![CDATA[COPY 2 - CUSTOMER]]></text>
 			</staticText>
 			<staticText>
@@ -279,7 +276,7 @@
 					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 				</box>
-				<textElement/>
+				<textElement lineSpacing="Single"/>
 				<text><![CDATA[COPY 3 - VENDOR (INVOICE)]]></text>
 			</staticText>
 		</band>
