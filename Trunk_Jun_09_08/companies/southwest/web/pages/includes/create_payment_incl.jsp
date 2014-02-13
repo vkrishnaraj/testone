@@ -76,29 +76,41 @@ function validateRequiredFields() {
 		checkamt.focus();
 	    return false;
 	}
+
+   	var lastnameId = document.getElementsByName("lastname")[0];
+	if (lastnameId.value.length < 1){
+		alert("<bean:message key='colname.last_name'/>" + " <bean:message key='error.validation.isRequired'/>");
+		lastnameId.focus();
+		return false;
+	} 
 	
-	var distributeMethod = document.getElementById("distributemethod");
-	if (distributeMethod.options[distributeMethod.selectedIndex].value == "MAIL") {
-    	var address1 = document.getElementsByName("address1")[0];
-		if (address1.value.length < 1){
-			alert("<bean:message key='colname.street_addr'/>" + " <bean:message key='error.validation.isRequired'/>");
-			address1.focus();
-			return false;
-		}
-		
-    	var city = document.getElementsByName("city")[0];
-		if (city.value.length < 1){
-			alert("<bean:message key='colname.city'/>" + " <bean:message key='error.validation.isRequired'/>");
-			city.focus();
-			return false;
-		}
-		
-    	var countrycodeId = document.getElementsByName("countrycode_ID")[0];
-		if (countrycodeId.value.length < 1){
-			alert("<bean:message key='colname.country'/>" + " <bean:message key='error.validation.isRequired'/>");
-			countrycodeId.focus();
-			return false;
-		} 
+   	var firstnameId = document.getElementsByName("firstname")[0];
+	if (firstnameId.value.length < 1){
+		alert("<bean:message key='colname.first_name'/>" + " <bean:message key='error.validation.isRequired'/>");
+		firstnameId.focus();
+		return false;
+	} 
+	
+   	var address1 = document.getElementsByName("address1")[0];
+	if (address1.value.length < 1){
+		alert("<bean:message key='colname.street_addr'/>" + " <bean:message key='error.validation.isRequired'/>");
+		address1.focus();
+		return false;
+	}
+	
+   	var city = document.getElementsByName("city")[0];
+	if (city.value.length < 1){
+		alert("<bean:message key='colname.city'/>" + " <bean:message key='error.validation.isRequired'/>");
+		city.focus();
+		return false;
+	}
+	
+   	var countrycodeId = document.getElementsByName("countrycode_ID")[0];
+	if (countrycodeId.value.length < 1){
+		alert("<bean:message key='colname.country'/>" + " <bean:message key='error.validation.isRequired'/>");
+		countrycodeId.focus();
+		return false;
+	} else {
 
 		if (countrycodeId.value == "US") {
 			var stateId = document.getElementsByName("state_ID")[0];
@@ -114,9 +126,29 @@ function validateRequiredFields() {
 				zip.focus();
 				return false;
 			}
+		} else {
+			var provinceId = document.getElementsByName("province")[0];
+			if (provinceId.value.length < 1){
+				alert("<bean:message key='colname.province'/>" + " <bean:message key='error.validation.isRequired'/>");
+				provinceId.focus();
+				return false;
+			}	
 		}
 	}
 	
+   	var newCommentId = document.getElementsByName("newComment")[0];
+	if (newCommentId.value.length < 1){
+		alert("<bean:message key='colname.comments'/>" + " <bean:message key='error.validation.isRequired'/>");
+		newCommentId.focus();
+		return false;
+	} 
+	
+   	var paycodeId = document.getElementsByName("paycode")[0];
+	if (paycodeId.value.length < 1){
+		alert("<bean:message key='colname.paycode'/>" + " <bean:message key='error.validation.isRequired'/>");
+		paycodeId.focus();
+		return false;
+	} 
 	return true;
 }
 
