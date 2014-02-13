@@ -34,7 +34,9 @@
 		var typeList=document.getElementById("item_type");
 		var selectedCategory=catList.options[catList.selectedIndex].value;
 		var issDesc=document.getElementById("item_desc");
+		var issCost=document.getElementById("item_cost");
 		issDesc.value = "";
+		issCost.value = "0";
 		typeList.options.length=0;
  		<logic:iterate indexId="i" id="c_item" name="item_category_resultList" type="com.bagnet.nettracer.tracing.db.issuance.IssuanceCategory" >
 		if("<%=c_item.getId()%>"==selectedCategory)
@@ -44,8 +46,11 @@
 						if (item.isActive()) {
 							String desc = item.getDescription() != null ? item.getDescription().replaceAll("\"", "\\\\\"") : ""; 
 							desc = desc.replaceAll("/", "\\\\/");
-							if (index == 0 && c_item.isCopyDescription()) { %>
-								issDesc.value = "<%=desc %>";
+							if (index == 0) { 
+								if (c_item.isCopyDescription()) { %>
+									issDesc.value = "<%=desc %>";
+								<% } %>
+								issCost.value = "<%=item.getCost() %>";
 							<% } %>
 							typeList.options[<%=index%>]=new Option("<%=desc%>","<%=item.getId()%>",false,false);
 					<%   	index++;
@@ -59,19 +64,22 @@
 		var typeList=document.getElementById("item_type");
 		var selectedType=typeList.options[typeList.selectedIndex].value;
 		var issDesc=document.getElementById("item_desc");
+		var issCost=document.getElementById("item_cost");
 		issDesc.value = "";
+		issCost.value = "0";
  		<logic:iterate indexId="i" id="c_item" name="item_category_resultList" type="com.bagnet.nettracer.tracing.db.issuance.IssuanceCategory" >
-			<% if (c_item.isCopyDescription()) { %>
-				<% for (IssuanceItem item : c_item.getItems()) { 
-					if (item.isActive()) { %>
-						if ("<%=item.getId()%>"==selectedType) {	
+			<% for (IssuanceItem item : c_item.getItems()) { 
+				if (item.isActive()) { %>
+					if ("<%=item.getId()%>"==selectedType) {	
+						<% if (c_item.isCopyDescription()) { %>
 							<% String desc = item.getDescription() != null ? item.getDescription().replaceAll("\"", "\\\\\"") : ""; 
 							desc = desc.replaceAll("/", "\\\\/"); %>
 							issDesc.value = "<%=desc %>";
-						}
-				<% 	}
-				} %>
-			<% } %>
+						<% } %>
+						issCost.value = "<%=item.getCost() %>";
+					}
+				<% }
+			} %>
 		</logic:iterate>
 	}
 

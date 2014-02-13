@@ -30,6 +30,9 @@ public class IssuanceItem {
 	private String description;
 	
 	boolean active;
+
+	@Column(name = "cost")
+	private double cost = 0;
 	
 	@ManyToOne
 	@JoinColumn(name="issuance_category_id")
@@ -75,6 +78,14 @@ public class IssuanceItem {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	public double getCost() {
+		return cost;
+	}
+
+	public void setCost(double cost) {
+		this.cost = cost;
 	}
 
 	public Set<IssuanceItemQuantity> getQuantityItems() {

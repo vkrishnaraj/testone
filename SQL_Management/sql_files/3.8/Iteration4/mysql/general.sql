@@ -120,5 +120,6 @@ insert into systemcomponents (component_id,component_name,component_desc,parent_
 alter table issuance_category add copyDescription bit not null default 0;
 alter table issuance_category modify column description varchar(100);
 alter table issuance_item modify column description varchar(100);
+alter table issuance_item add column cost double default 0;
 
 alter table ohd_log modify column expeditenum varchar(12) default null;

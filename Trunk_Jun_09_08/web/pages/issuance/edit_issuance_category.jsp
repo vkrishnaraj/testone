@@ -239,6 +239,11 @@
 	                  <td class="header">
 	                     <bean:message key="issuance.item.description" />
 	                  </td>
+	                  <logic:equal name="editIssuanceCategoryForm" property="category.inventory" value="true">
+                      	 <td class="header">
+                      	 	<bean:message key="issuance.item.cost" />
+                      	 </td>
+                      </logic:equal>
 	                  <td class="header">
 	                     <bean:message key="issuance.item.active" />
 	                  </td>
@@ -248,6 +253,11 @@
                 			<td>
                       		<html:text name="item" property="description" maxlength="100" style="width:95%;" styleClass="textfield" indexed="true" />
                 			</td>
+			                <logic:equal name="editIssuanceCategoryForm" property="category.inventory" value="true">
+		                      <td>
+	                     		<html:text name="item" property="cost" size="4" maxlength="10" styleClass="textfield" indexed="true" />
+		                      </td>
+		                    </logic:equal>
                 			<td style="width: 6%;">
                 			<html:checkbox name="item" property="active" indexed="true" />
                 			</td>
