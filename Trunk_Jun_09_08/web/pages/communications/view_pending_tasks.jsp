@@ -151,7 +151,7 @@
             		<td>
             			<bean:message key="tasks.not.in.work.acaa" />
             			<br>
-     					<html:select name="taskSearchForm" property="acaa" styleId="status" styleClass="dropdown" >
+     					<html:select name="taskSearchForm" property="acaa" styleId="acaa" styleClass="dropdown" >
 	          	        	<html:option value="-1"><bean:message key="select.all" /></html:option>
 	          	        	<html:option value="<%=String.valueOf(TracingConstants.NO) %>"><bean:message key="select.no" /></html:option>
 	          	        	<html:option value="<%=String.valueOf(TracingConstants.YES) %>"><bean:message key="select.yes" /></html:option>
