@@ -75,7 +75,7 @@ public class BDOReceipt {
 
 			for (int j = 0; j < 3; j++) {
 				BDO_Receipt_DTO brd = new BDO_Receipt_DTO();
-				brd.setDate1(DateUtils.formatDate(theform.getCreatedate(), theform.getAgent().getDateformat().getFormat(), null, null));
+				brd.setDate1(DateUtils.formatDate(theform.getCreatedate(), theform.getAgent().getDateformat().getFormat(), null, null));				
 				String RefInfo=messages.getMessage(TracerProperties.BDO_LABEL_REFERENCE_NUMBER)+": ";
 				if(theform.getIncident_ID()!=null)
 					RefInfo+=theform.getIncident_ID();
@@ -129,9 +129,7 @@ public class BDOReceipt {
 				brd.setBagInfo(messages.getMessage(TracerProperties.BDO_LABEL_BAG_INFORMATION));
 				brd.setCustInfo(messages.getMessage(TracerProperties.BDO_LABEL_CUSTOMER_INFORMATION));
 				brd.setDelInfo(messages.getMessage(TracerProperties.BDO_LABEL_DELIVERY_INFORMATION));
-				brd.setDelIns(messages.getMessage(TracerProperties.BDO_LABEL_DELIVERY_INSTRUCTIONS));
-
-				
+				brd.setDelIns(messages.getMessage(TracerProperties.BDO_LABEL_DELIVERY_INSTRUCTIONS));				
 
 				brd.setPhone(phno);
 				if(theform.getBagcount()<=10){
@@ -260,10 +258,17 @@ public class BDOReceipt {
 				{	brd.setServiceLevel(sl.getDescription());	
 					deliInfo+=messages.getMessage(TracerProperties.BDO_LABEL_SERVICE_LEVEL)+": "+sl.getDescription();
 				}
-				brd.setDeliveryinfo(deliInfo); //Add this too
+				//add pickup date and time to deliver info if applicable
+				String pickupDateAndTime = theform.getDisppickupdate() + " " + theform.getDisppickuptime();
+				if (pickupDateAndTime != null && pickupDateAndTime.trim().length() > 0) 
+				{	
+					brd.setDate2(pickupDateAndTime);
+					deliInfo+="\r";
+					deliInfo+=messages.getMessage(TracerProperties.BDO_LABEL_PICKUPDATE_AND_TIME)+": "+ brd.getDate2();
+				}	
 				
-				al.add(brd);
-						
+				brd.setDeliveryinfo(deliInfo); //Add this too				
+				al.add(brd);						
 			}
 
 			ReportBMO rbmo = new ReportBMO(request);
