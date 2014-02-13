@@ -65,10 +65,6 @@ function updatePaymentFields(newType) {
 }
 
 function validateRequiredFields() {
-	if (document.getElementById("button").value != "<bean:message key="button.issue.voucher"/>") {
-		return true;
-	}
-	
 	var minimumValue = 1;
 	var checkamt = document.getElementsByName("checkamt")[0];
 	if (0 < checkamt.value.length && !checkFloatGreaterThanMinimumValue(checkamt.value, minimumValue)) {
