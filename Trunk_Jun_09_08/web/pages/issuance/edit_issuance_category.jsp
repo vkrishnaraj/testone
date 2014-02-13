@@ -21,7 +21,31 @@
   
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
   <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
+<SCRIPT LANGUAGE="JavaScript">
+  
+	function validateCost(costField) {
+		if (!(costField.value && costField.value.match(/^\d*\.?\d+$/))) {
+			alert("<bean:message key="issuance.item.cost" /> <bean:message key="error.validation.float" />");
+			costField.focus();
+			return false;
+		}
+		return true;
+	}
 
+	function validateEditCategory(form) {
+	    for (var j=0;j < form.length; j++) {
+	        currentElement = form.elements[j];
+	        currentElementName=currentElement.name;
+	        if (currentElementName.indexOf("].dispCost") != -1) {
+				if (!validateCost(currentElement)) {
+					return false;
+				}
+		    }
+	    }
+	    return true;
+	}
+
+</SCRIPT>
         <html:form action="editIssuanceCategory.do" method="post" enctype="multipart/form-data" >
             <tr>
               <td colspan="3" id="pageheadercell">
@@ -255,7 +279,7 @@
                 			</td>
 			                <logic:equal name="editIssuanceCategoryForm" property="category.inventory" value="true">
 		                      <td>
-	                     		<html:text name="item" property="cost" size="4" maxlength="10" styleClass="textfield" indexed="true" />
+	                     		<html:text name="item" property="dispCost" size="4" maxlength="10" styleClass="textfield" indexed="true" />
 		                      </td>
 		                    </logic:equal>
                 			<td style="width: 6%;">
@@ -270,7 +294,7 @@
 		                </td>
                     </table><br/>
 		                <div align="center" >
-			                  <html:submit property="save_category" styleId="button">
+			                  <html:submit property="save_category" styleId="button" onclick="return validateEditCategory(this.form);">
 			                    <bean:message key="edit.issuance.category.save" />
 			                  </html:submit>
 		                </div>

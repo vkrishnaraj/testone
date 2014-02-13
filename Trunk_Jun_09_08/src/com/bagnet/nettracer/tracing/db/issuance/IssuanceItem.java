@@ -1,5 +1,6 @@
 package com.bagnet.nettracer.tracing.db.issuance;
 
+import java.text.DecimalFormat;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -12,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -47,6 +49,9 @@ public class IssuanceItem {
 	@org.hibernate.annotations.OrderBy(clause="station_id")
 	@OneToMany(mappedBy="issuanceItem", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private Set<IssuanceItemInventory> inventoryItems;
+	
+	@Transient
+	private DecimalFormat df = new DecimalFormat("#0.00");
 
 	public long getId() {
 		return id;
@@ -102,6 +107,14 @@ public class IssuanceItem {
 
 	public void setInventoryItems(Set<IssuanceItemInventory> inventoryItems) {
 		this.inventoryItems = inventoryItems;
+	}
+	
+	public String getDispCost() {
+		return df.format(getCost());
+	}
+	
+	public void setDispCost(String dispCost) {
+		this.cost = Double.parseDouble(dispCost);
 	}
 	
 }
