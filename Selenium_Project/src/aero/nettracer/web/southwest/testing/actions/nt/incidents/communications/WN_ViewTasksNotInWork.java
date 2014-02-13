@@ -32,9 +32,10 @@ public class WN_ViewTasksNotInWork extends WN_SeleniumTest {
 			verifyTrue(isElementPresent(By.id("s_createtime")));
 			verifyTrue(isElementPresent(By.id("e_createtime")));
 			verifyTrue(isElementPresent(By.id("status")));
+			verifyTrue(isElementPresent(By.id("taskType")));
 			verifyTrue(isElementPresent(By.id("passengerLastName")));
 			verifyTrue(isElementPresent(By.id("passengerFirstName")));
-			verifyFalse(isElementPresent(By.xpath("//div[@id='maincontent']/h1[2]")));
+			verifyTrue(isElementPresent(By.id("acaa")));
 		} else {
 			System.out.println("!!!!!!!!!!!!!!!! Failed to navigate to the tasks not in work page.");
 			verifyTrue(false);
