@@ -9,6 +9,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Item" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code" %>
 <%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%@ page import="com.bagnet.nettracer.tracing.forms.IncidentForm" %>
 <%@ page import="java.util.List" %>
@@ -54,6 +55,16 @@
   
 	var lossCodeChange=false;
 	
+	var codeStationMap=new Object();
+	  <% List losscodes=(List)request.getAttribute("losscodes");
+	  Company_specific_irregularity_code code=null;
+	  for(Object obj:losscodes){
+		  code=(Company_specific_irregularity_code)obj;%>
+		  codeStationMap["<%=code.getLoss_code()%>depart"]=<%=code.isDepartStation()%>;
+		  codeStationMap["<%=code.getLoss_code()%>transfer"]=<%=code.isTransferStation()%>;
+		  codeStationMap["<%=code.getLoss_code()%>destination"]=<%=code.isDestinationStation()%>;
+		  codeStationMap["<%=code.getLoss_code()%>any"]=<%=code.isAnyStation()%>;
+	  <%}%>
 	function lossCodeChanged(index){
 		  <% if(PropertyBMO.isTrue(PropertyBMO.PROPERTY_BAG_LEVEL_LOSS_CODES)){ %>
 			  var disValue=document.getElementById("theitem["+index+"].lossCode");
@@ -100,6 +111,20 @@
 	  }
   }
   </SCRIPT>
+		<div id="<%=TracingConstants.JSP_PAX_ITIN %>">
+			<logic:iterate id="theitinerary" indexId="k" name="incidentForm"
+				property="itinerarylist">
+				<logic:equal name="theitinerary" property="itinerarytype" value="0">
+				<div>
+			
+					<html:hidden property="legfrom_type" name="theitinerary" />
+					<html:hidden property="legto_type" name="theitinerary" />
+					<html:hidden name="theitinerary" property="legfrom" />
+					<html:hidden name="theitinerary" property="legto" />
+				</div>
+				</logic:equal>
+			</logic:iterate>
+		</div>
 		<logic:iterate id="theitem" indexId="i" name="incidentForm" property="itemlist" type="com.bagnet.nettracer.tracing.db.Item">
             <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
             

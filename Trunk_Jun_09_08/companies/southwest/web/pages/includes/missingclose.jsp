@@ -1,6 +1,7 @@
 <%@page import="java.util.Locale"%>
 <%@page import="com.bagnet.nettracer.tracing.db.Agent"%>
 <%@page import="org.apache.struts.util.PropertyMessageResources"%>
+<%@page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
 <%@ page language="java"%>
 
 <%
@@ -14,6 +15,10 @@ function validateMissingClose(form, doCheck)
 	if (doCheck == 1 || doSaveCheck == 1) {
 	
     	var hasRemarkText  = false;
+	    var departStation=false;
+	    var transStation=false;
+	    var destStation=false;
+	    var anyStation=false;
     	for (var j=0; j < form.length; j++) {
 	      currentElement = form.elements[j];
 	      currentElementName=currentElement.name;
@@ -36,15 +41,77 @@ function validateMissingClose(form, doCheck)
      	
 				return false;
 			}
+        	
+        	departStation=codeStationMap[currentElement.value+"depart"];
+        	transStation=codeStationMap[currentElement.value+"transfer"];
+        	destStation=codeStationMap[currentElement.value+"destination"];
+        	anyStation=codeStationMap[currentElement.value+"any"];
 	      } else if (currentElementName.indexOf("].faultStation_id") != -1) {
-	        if (currentElement.value.length == 0) {
-	          alert("<%= (String)myMessages.getMessage(myLocale, "colname.fault.station") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
-	          currentElement.focus();
-	          return false;
-	        }
-	      }
-		
-			else if (currentElementName.indexOf("remarktext") != -1) {  
+	      	if(currentElement.value!=null && currentElement.value.length>0){
+	      		hasPaxItin=false;
+	      		faultStationCode=null;
+	      		if(typeof currentElement.options!="undefined"){
+	      			faultStationCode=currentElement.options[currentElement.selectedIndex].text;
+	      		
+		      		var paxItinList=document.getElementById("pax_itin");
+		      		for(var m=0; m < paxItinList.childNodes.length; m++){
+		      				var paxItin=paxItinList.children[m];
+		      				var checkFromStation=false;
+		      				var checkToStation=false;
+				      		for (var k=0; k < paxItin.childNodes.length; k++) {
+						      itinElement = paxItin.children[k];
+						      itinElementName=null;
+						      if(typeof itinElement != "undefined")
+						      	itinElementName=itinElement.name;
+						      	
+						      	if(typeof itinElementName != "undefined" && itinElementName != null 
+				      				&& (itinElementName.indexOf("legto_type") != -1)){
+				      				if((departStation && itinElement.value=="<%=TracingConstants.LEG_B_STATION%>") 
+				      					|| (transStation && itinElement.value=="<%=TracingConstants.LEG_T_STATION%>")
+				      					|| (destStation && itinElement.value=="<%=TracingConstants.LEG_E_STATION%>")){
+				      					checkToStation=true;
+				      				}
+				      			}
+				      			if(typeof itinElementName != "undefined" && itinElementName != null 
+				      				&& (itinElementName.indexOf("legfrom_type") != -1)){
+				      				if((departStation && itinElement.value=="<%=TracingConstants.LEG_B_STATION%>") 
+				      					|| (transStation && itinElement.value=="<%=TracingConstants.LEG_T_STATION%>")
+				      					|| (destStation && itinElement.value=="<%=TracingConstants.LEG_E_STATION%>")){
+				      					checkFromStation=true;
+				      				}
+				      			}
+				      				      			
+				      			if(typeof itinElementName != "undefined" && itinElementName != null 
+				      				&& itinElementName.indexOf("legfrom") != -1 && itinElementName.indexOf("legfrom_type") == -1){
+				      				if(itinElement.value.toUpperCase()==faultStationCode && checkFromStation){
+				      					hasPaxItin=true;
+				      				}
+				      			}
+				      			if(typeof itinElementName != "undefined" && itinElementName != null
+				      				 && itinElementName.indexOf("legto") != -1 && itinElementName.indexOf("legto_type") == -1){
+				      				if(itinElement.value.toUpperCase()==faultStationCode && checkToStation){
+				      					hasPaxItin=true;
+				      				}
+				      			}
+				      			
+				      			if(anyStation){
+				      				hasPaxItin=true;
+				      			}
+				      		}
+			      		}
+		      		}
+		      		
+		      		if(!hasPaxItin){
+		  				alert("<%=(String)myMessages.getMessage(myLocale,"error.fault.pax.itin")%>");
+		     			currentElement.focus();
+		  				return false;
+		  			}
+	  			} else if (currentElement!=null && currentElement.value.length<1){
+		          alert("<%= (String)myMessages.getMessage(myLocale,"colname.fault.station") %>" + " <%= (String)myMessages.getMessage(myLocale,"error.validation.isRequired") %>");
+		          currentElement.focus();
+		          return false;
+	        	}
+  			} else if (currentElementName.indexOf("remarktext") != -1) {  
 			      if (currentElement.value.length == 0) {
 			        alert("<%= (String)myMessages.getMessage(myLocale, "colname.remark") %>" + " <%= (String)myMessages.getMessage(myLocale, "error.validation.isRequired") %>");
 				    currentElement.focus();
