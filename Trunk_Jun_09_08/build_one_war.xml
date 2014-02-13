@@ -4114,6 +4114,12 @@
 			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
 		</ant>
 
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources_es.properties" />
+			<property name="overrideResource" value="${basedir}/companies/southwest/ApplicationResources_es.properties" />
+			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources_es.properties" />
+		</ant>
+
 		<antcall target="fast_all" />
 		<antcall target="delete" />
 	</target>
