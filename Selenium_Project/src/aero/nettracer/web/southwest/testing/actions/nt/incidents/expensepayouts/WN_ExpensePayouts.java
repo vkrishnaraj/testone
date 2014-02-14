@@ -55,6 +55,7 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 
 		if (checkNoErrorPage()) {
 		    type(By.name("checkamt"),"151");
+			type(By.name("newComment"),"test");
 		    click(By.id("button"));
 		} else {
 			System.out.println("!!!!!!!!!!! ERROR - Loading Create Expense Payout Page !!!!!!!!!");
@@ -63,6 +64,7 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 		if (checkNoErrorPage()) {
 			verifyTrue(isTextPresent("Unable to Create Expense Payout. Draft Amount is over the BSO Limit: 150"));
 		    type(By.name("checkamt"),"150");
+			type(By.name("newComment"),"test");
 		    click(By.id("button"));
 		} else {
 			System.out.println("!!!!!!!!!!! ERROR - Attempting to save Expense Payout  !!!!!!!!!");
@@ -75,9 +77,11 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 			verifyTrue(isEditable(By.name("checkamt")));
 			verifyTrue(isEditable(By.name("newComment")));
 		    type(By.name("checkamt"),"151");
+			type(By.name("newComment"),"test");
 		    click(By.id("button"));
 		    assertEquals("Unable to Create Expense Payout. Draft Amount is over the BSO Limit: 150",getAlert());
 		    type(By.name("checkamt"),"150");
+			type(By.name("newComment"),"test");
 		    click(By.id("button"));
 		} else {
 			System.out.println("!!!!!!!!!!! ERROR - Saving Expense Payout  !!!!!!!!!");
@@ -125,6 +129,7 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 
 		if (checkNoErrorPage()) {
 		    type(By.name("checkamt"),"151");
+    		type(By.name("newComment"),"test");
 		    click(By.id("button"));
 		} else {
 			System.out.println("!!!!!!!!!!! ERROR - Loading Create Expense Payout Page !!!!!!!!!");
@@ -179,6 +184,7 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 
 		if (checkNoErrorPage()) {
 		    type(By.name("checkamt"),"151");
+		    type(By.name("newComment"),"test");
 		    click(By.id("button"));
 		} else {
 			System.out.println("!!!!!!!!!!! ERROR - Loading Create Expense Payout Page !!!!!!!!!");
