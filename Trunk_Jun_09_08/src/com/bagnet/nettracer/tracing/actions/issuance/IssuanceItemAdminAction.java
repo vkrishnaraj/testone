@@ -64,6 +64,22 @@ public class IssuanceItemAdminAction extends Action {
 			return null;
 		}
 
+		// handles the case in which the user wants to preview the document
+		if (request.getParameter(REQUEST_PREVIEW_DOCUMENT) != null) {
+			if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_LOSTDELAY, user)
+					|| UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_DAMAGE, user)
+					|| UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_MISSING, user)) {
+				String directoryKey = request.getParameter("receipt") != null ? PropertyBMO.DOCUMENT_LOCATION_RECEIPTS : PropertyBMO.DOCUMENT_LOCATION_TEMP;
+				DocumentTemplateResult result = documentService.previewFile(user, request.getParameter("preview_document"), PropertyBMO.getValue(directoryKey), response);
+				if (!result.isSuccess()) {
+					return mapping.findForward(TracingConstants.FILE_NOT_FOUND);
+				}
+				return null;
+			} else {
+				return (mapping.findForward(TracingConstants.NO_PERMISSION));
+			}
+		}
+
 		if (!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_STATION_ADMIN, user))
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
 
@@ -75,16 +91,6 @@ public class IssuanceItemAdminAction extends Action {
 		}
 		
 		fform.setStationsearch_ID(searchStation.getStation_ID());
-
-		// handles the case in which the user wants to preview the document
-		if (request.getParameter(REQUEST_PREVIEW_DOCUMENT) != null) {
-			String directoryKey = request.getParameter("receipt") != null ? PropertyBMO.DOCUMENT_LOCATION_RECEIPTS : PropertyBMO.DOCUMENT_LOCATION_TEMP;
-			DocumentTemplateResult result = documentService.previewFile(user, request.getParameter("preview_document"), PropertyBMO.getValue(directoryKey), response);
-			if (!result.isSuccess()) {
-				return mapping.findForward(TracingConstants.FILE_NOT_FOUND);
-			}
-			return null;
-		}
 		
 		// HANDLE HISTORY ACTIONS
 		
