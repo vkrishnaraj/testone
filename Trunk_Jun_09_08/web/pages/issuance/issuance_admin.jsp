@@ -50,7 +50,7 @@
 								if (c_item.isCopyDescription()) { %>
 									issDesc.value = "<%=desc %>";
 								<% } %>
-								issCost.value = "<%=item.getCost() %>";
+								issCost.value = "<%=item.getDispCost() %>";
 							<% } %>
 							typeList.options[<%=index%>]=new Option("<%=desc%>","<%=item.getId()%>",false,false);
 					<%   	index++;
@@ -76,7 +76,7 @@
 							desc = desc.replaceAll("/", "\\\\/"); %>
 							issDesc.value = "<%=desc %>";
 						<% } %>
-						issCost.value = "<%=item.getCost() %>";
+						issCost.value = "<%=item.getDispCost() %>";
 					}
 				<% }
 			} %>
