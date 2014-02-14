@@ -808,16 +808,32 @@ public class BagService {
 				}
 			}
 			Itinerary iti = null;
+			Itinerary newItin = null;
+			IncidentForm newForm=new IncidentForm();
 			if(theform.getItinerarylist() != null) {
 				for(int i = 0; i < theform.getItinerarylist().size(); i++) {
 					iti = (Itinerary) theform.getItinerarylist().get(i);
-					iti.setIncident(iDTO);
+					newItin = newForm.getItinerary(i, iti.getItinerarytype());
+					newItin.set_DATEFORMAT(iti.get_DATEFORMAT());
+					newItin.set_TIMEFORMAT(iti.get_TIMEFORMAT());
+					newItin.setActarrivetime(iti.getActarrivetime());
+					newItin.setAirline(iti.getAirline());
+					newItin.setArrivedate(iti.getArrivedate());
+					newItin.setDepartdate(iti.getDepartdate());
+					newItin.setFlightnum(iti.getFlightnum());
+					newItin.setIncident(iDTO);
+					newItin.setItinerary_ID(iti.getItinerary_ID());
+					newItin.setItinerarytype(iti.getItinerarytype());
+					newItin.setLegfrom(iti.getLegfrom());
+					newItin.setLegto(iti.getLegto());
+					newItin.setScharrivetime(iti.getScharrivetime());
+					newItin.setSchdeparttime(iti.getSchdeparttime());
 				}
 			}
 
 			iDTO.setClaimchecks(new LinkedHashSet<Incident_Claimcheck>(theform.getClaimchecklist()));
 			iDTO.setRemarks(new LinkedHashSet<Remark>(theform.getRemarklist()));
-			iDTO.setItinerary(new LinkedHashSet<Itinerary>(theform.getItinerarylist()));
+			iDTO.setItinerary(new LinkedHashSet<Itinerary>(newForm.getItinerarylist()));
 
 			iDTO.setPassengers(new LinkedHashSet<Passenger>(theform.getPassengerlist()));
 			Passenger pa = null;
