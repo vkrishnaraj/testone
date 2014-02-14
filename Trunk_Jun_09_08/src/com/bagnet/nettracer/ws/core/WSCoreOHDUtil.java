@@ -300,7 +300,7 @@ public class WSCoreOHDUtil {
 			}
 
 		}
-		
+
 		if(oDTO.getPassengers() != null){
 			for(OHD_Passenger pax:(Set<OHD_Passenger>)oDTO.getPassengers()){
 				com.bagnet.nettracer.ws.core.pojo.xsd.WSPassenger wspax = so.addNewPassengers();
@@ -308,22 +308,24 @@ public class WSCoreOHDUtil {
 				wspax.setMiddlename(pax.getMiddlename());
 				wspax.setLastname(pax.getLastname());
 				wspax.setIsprimary(pax.getIsprimary());
-				
-				if(pax.getAddresses() != null){
+
+				if(pax.getAddresses() != null && pax.getAddresses().size() > 0){
 					OHD_Address addr = pax.getAddress(0);
-					wspax.setAddress1(addr.getAddress1());
-					wspax.setAddress2(addr.getAddress2());
-					wspax.setCity(addr.getCity());
-					wspax.setStateID(addr.getState_ID());
-					wspax.setProvince(addr.getProvince());
-					wspax.setZip(addr.getZip());
-					wspax.setCountrycodeID(addr.getCountrycode_ID());
-					wspax.setEmail(addr.getEmail());
-					wspax.setHomephone(addr.getHomephone());
-					wspax.setAltphone(addr.getAltphone());
-					wspax.setMobile(addr.getMobile());
-					wspax.setPager(addr.getPager());
-					wspax.setWorkphone(addr.getWorkphone());
+					if(addr != null){
+						wspax.setAddress1(addr.getAddress1());
+						wspax.setAddress2(addr.getAddress2());
+						wspax.setCity(addr.getCity());
+						wspax.setStateID(addr.getState_ID());
+						wspax.setProvince(addr.getProvince());
+						wspax.setZip(addr.getZip());
+						wspax.setCountrycodeID(addr.getCountrycode_ID());
+						wspax.setEmail(addr.getEmail());
+						wspax.setHomephone(addr.getHomephone());
+						wspax.setAltphone(addr.getAltphone());
+						wspax.setMobile(addr.getMobile());
+						wspax.setPager(addr.getPager());
+						wspax.setWorkphone(addr.getWorkphone());
+					}
 				}
 			}
 		}
