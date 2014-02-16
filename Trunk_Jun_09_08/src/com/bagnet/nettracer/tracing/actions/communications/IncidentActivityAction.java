@@ -205,7 +205,8 @@ public class IncidentActivityAction extends CheckedAction {
 		if(TracingConstants.ACTIVITY_CODE_INBOUND_CURE.equals(code) ||
 		   TracingConstants.ACTIVITY_CODE_INBOUND_FAX.equals(code) ||
 		   TracingConstants.ACTIVITY_CODE_INBOUND_MAIL.equals(code) ||
-		   TracingConstants.ACTIVITY_CODE_INBOUND_PORTAL.equals(code)){
+		   TracingConstants.ACTIVITY_CODE_INBOUND_PORTAL.equals(code) ||
+		   TracingConstants.ACTIVITY_CODE_SECONDARY_CORRESPONDENCE.equals(code)){
 			InboundTasksUtils.createInboundTask(ia.getIncident(), user, ia.getActivity(), ia.getId());
 		}
 	}

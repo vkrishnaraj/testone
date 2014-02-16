@@ -202,7 +202,8 @@ public class CustomerCommunicationsAction extends CheckedAction {
 			   TracingConstants.ACTIVITY_CODE_INBOUND_FAX.equals(ia.getActivity().getCode()) ||
 			   TracingConstants.ACTIVITY_CODE_INBOUND_MAIL.equals(ia.getActivity().getCode()) ||
 			   TracingConstants.ACTIVITY_CODE_INBOUND_PORTAL.equals(ia.getActivity().getCode()) ||
-			   TracingConstants.ACTIVITY_CODE_RECEIVED_DAMAGED_ITEM.equals(ia.getActivity().getCode())){
+			   TracingConstants.ACTIVITY_CODE_RECEIVED_DAMAGED_ITEM.equals(ia.getActivity().getCode()) ||
+			   TracingConstants.ACTIVITY_CODE_SECONDARY_CORRESPONDENCE.equals(ia.getActivity().getCode())){
 				success=OnlineClaimsDao.acknowledgeMessages(ia);
 
 				if(!success){
@@ -214,7 +215,8 @@ public class CustomerCommunicationsAction extends CheckedAction {
 			   TracingConstants.ACTIVITY_CODE_INBOUND_FAX.equals(ia.getActivity().getCode()) ||
 			   TracingConstants.ACTIVITY_CODE_INBOUND_MAIL.equals(ia.getActivity().getCode()) ||
 			   TracingConstants.ACTIVITY_CODE_INBOUND_PORTAL.equals(ia.getActivity().getCode()) ||
-			   TracingConstants.ACTIVITY_CODE_RECEIVED_DAMAGED_ITEM.equals(ia.getActivity().getCode())){
+			   TracingConstants.ACTIVITY_CODE_RECEIVED_DAMAGED_ITEM.equals(ia.getActivity().getCode()) ||
+			   TracingConstants.ACTIVITY_CODE_SECONDARY_CORRESPONDENCE.equals(ia.getActivity().getCode())){
 
 				InboundTasksUtils.closeTaskByIncidentActivityId(id, user);
 			}

@@ -576,8 +576,9 @@ public class InboundTasksUtils {
 			toReturn = new TaskType(TracingConstants.TASK_TYPE_CODE_INBOUND_ELECTRONIC);
 		} else if (TracingConstants.ACTIVITY_CODE_RECEIVED_DAMAGED_ITEM.equals(activityCode)) {
 			toReturn = new TaskType(TracingConstants.TASK_TYPE_CODE_INBOUND_DAMAGED);
+		} else if (TracingConstants.ACTIVITY_CODE_SECONDARY_CORRESPONDENCE.equals(activityCode)) {
+			toReturn = new TaskType(TracingConstants.TASK_TYPE_CODE_SECONDARY_CORRESPONDENCE);
 		}
-		
 		return toReturn;
 	}
 	

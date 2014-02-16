@@ -1513,6 +1513,7 @@ public class TracingConstants {
 	public static final String ACTIVITY_CODE_INBOUND_CURE = "99C";
 	public static final String ACTIVITY_CODE_INBOUND_PORTAL = "99E";
 	public static final String ACTIVITY_CODE_RECEIVED_DAMAGED_ITEM = "10";
+	public static final String ACTIVITY_CODE_SECONDARY_CORRESPONDENCE = "256";
 	
 	public static final String BAGTYPE_94 = "94";
 	public static final String BAGTYPE_95 = "95";
@@ -1564,6 +1565,7 @@ public class TracingConstants {
 	public static final int TASK_TYPE_CODE_FRAUD_REVIEW = 5;
 	public static final int TASK_TYPE_CODE_SUPERVISOR_REVIEW = 6;
 	public static final int TASK_TYPE_CODE_INBOUND_DAMAGED = 7;
+	public static final int TASK_TYPE_CODE_SECONDARY_CORRESPONDENCE = 8;
 	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {

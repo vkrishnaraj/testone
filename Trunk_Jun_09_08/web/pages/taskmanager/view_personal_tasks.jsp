@@ -78,8 +78,8 @@ function updatePagination() {
 	       	<display:column style="width:25%;" titleKey="colname.incident_num" sortable="true" sortName="incident_id" headerClass="header">
 	       		<a href="<c:url value="/searchIncident.do?incident=${task.inboundqueue.incident.incident_ID}"/>">${task.inboundqueue.incident.incident_ID}</a>
 	       	</display:column>
-	       	<display:column style="width:25%;" titleKey="colname.unassignedinbound.tasktype" value="${task.description}&nbsp;" sortable="true" sortName="type" headerClass="header" />
-	       	<display:column style="width:25%;" titleKey="colname.unassignedinbound.origin" value="${task.inboundqueue.activity.description}&nbsp;" sortable="true" sortName="origin" headerClass="header" />
+	       	<display:column style="width:20%;" titleKey="colname.unassignedinbound.tasktype" value="${task.description}&nbsp;" sortable="true" sortName="type" headerClass="header" />
+	       	<display:column style="width:30%;" titleKey="colname.unassignedinbound.origin" value="${task.inboundqueue.activity.description}&nbsp;" sortable="true" sortName="origin" headerClass="header" />
 	       	<display:column style="width:25%;" titleKey="colname.unassignedinbound.createtimestamp" value="${task.dispOpened_timestamp}&nbsp;" sortable="true" sortName="opened_timestamp" headerClass="header" />
 	       	
 	       <display:footer>

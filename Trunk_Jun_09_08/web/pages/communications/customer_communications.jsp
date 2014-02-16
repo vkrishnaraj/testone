@@ -379,7 +379,8 @@
 							<% if(TracingConstants.ACTIVITY_CODE_INBOUND_CURE.equals(activity.getActivityCode()) ||
 								  TracingConstants.ACTIVITY_CODE_INBOUND_FAX.equals(activity.getActivityCode()) ||
 								  TracingConstants.ACTIVITY_CODE_INBOUND_MAIL.equals(activity.getActivityCode()) ||
-								  TracingConstants.ACTIVITY_CODE_RECEIVED_DAMAGED_ITEM.equals(activity.getActivityCode())){
+								  TracingConstants.ACTIVITY_CODE_RECEIVED_DAMAGED_ITEM.equals(activity.getActivityCode()) ||
+								  TracingConstants.ACTIVITY_CODE_SECONDARY_CORRESPONDENCE.equals(activity.getActivityCode())){
 							%>
 								<logic:equal name="activity" property="toBeAcknowledged" value="true">
 									<a href="customerCommunications.do?command=<%=TracingConstants.COMMAND_ACKNOWLEDGE_INBOUND %>&communicationsId=<%=String.valueOf(activity.getId()) %>&incident=<bean:write name="incidentForm" property="incident_ID" />" >

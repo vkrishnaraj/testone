@@ -1702,7 +1702,8 @@ public class BagService {
 						TracingConstants.ACTIVITY_CODE_INBOUND_FAX.equals(code) ||
 						TracingConstants.ACTIVITY_CODE_INBOUND_MAIL.equals(code) ||
 						TracingConstants.ACTIVITY_CODE_INBOUND_PORTAL.equals(code) ||
-						TracingConstants.ACTIVITY_CODE_RECEIVED_DAMAGED_ITEM.equals(code)){
+						TracingConstants.ACTIVITY_CODE_RECEIVED_DAMAGED_ITEM.equals(code) ||
+						TracingConstants.ACTIVITY_CODE_SECONDARY_CORRESPONDENCE.equals(code)){
 					if(InboundTasksUtils.hasOpenInboundTaskByActivityId(activity.getId())){
 						toBeAcknowledged = true;
 					}
