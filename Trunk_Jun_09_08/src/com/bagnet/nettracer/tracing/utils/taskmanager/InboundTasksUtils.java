@@ -17,6 +17,7 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.InboundQueue;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Item;
+import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.communications.Activity;
 import com.bagnet.nettracer.tracing.db.taskmanager.AcaaTask;
@@ -274,17 +275,21 @@ public class InboundTasksUtils {
 	
 	
 	/**
-	 * saves the provided task
+	 * saves the provided task.  If an assigned station is provided, update the associated incident's assigned station
 	 * 
 	 * @param task
 	 * @param agent
+	 * @param assignedStation
 	 * @return
 	 */
-	public static long saveTask(InboundQueueTask task, Agent agent){
+	public static long saveTask(InboundQueueTask task, Agent agent, Station assignedStation){
 		if(task != null && task.getInboundqueue() != null && task.getInboundqueue().getIncident() != null){
 			Incident incident = IncidentBMO.getIncidentByID(task.getInboundqueue().getIncident().getIncident_ID(), null);
 			incident.setAgentassigned(task.getInboundqueue().getIncident().getAgentassigned());
 			task.getInboundqueue().setIncident(incident);
+			if(assignedStation != null){
+				incident.setStationassigned(assignedStation);
+			}
 		}
 
 		return getInboundTasksBMO().saveTask(task, agent);
@@ -351,7 +356,7 @@ public class InboundTasksUtils {
 		task.setStatus(status);
 		task.setOpened_timestamp(DateUtils.convertToGMTDate(new Date()));
 		task.setTaskType(getTaskTypeForInboundQueueTask(activity));
-		return saveTask(task, agent);
+		return saveTask(task, agent, null);
 	}
 	
 	/**

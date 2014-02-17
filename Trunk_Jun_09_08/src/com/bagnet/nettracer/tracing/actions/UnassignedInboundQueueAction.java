@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.taskmanager.InboundQueueTask;
 import com.bagnet.nettracer.tracing.dto.InboundTasksDTO;
@@ -106,7 +107,11 @@ public class UnassignedInboundQueueAction extends Action {
 				for(UnassignedIncidentElement incident:incidentList){
 					if(incident.getTasks() != null){
 						for(InboundQueueTask task:incident.getTasks()){
-							InboundTasksUtils.saveTask(task, user);
+							Station assignedStation = null;
+							if(task != null && task.getAssigned_agent() != null){
+								assignedStation = task.getAssigned_agent().getStation();
+							}
+							InboundTasksUtils.saveTask(task, user, assignedStation);
 						}
 					}
 				}

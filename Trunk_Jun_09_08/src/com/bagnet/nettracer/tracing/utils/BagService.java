@@ -2763,7 +2763,7 @@ public class BagService {
 							if(uia.getActivity().getCode().equals(ia.getActivity().getCode()) &&
 									uia.getCreateDate().equals(ia.getCreateDate())){
 								task.getInboundqueue().setIncidentActivityId(uia.getId());
-								InboundTasksUtils.saveTask(task, null);
+								InboundTasksUtils.saveTask(task, null, null);
 							}
 						}
 					}
