@@ -1776,18 +1776,23 @@ public class WorldTracerWebService implements WorldTracerConnector {
 
 	private Itinerary mapOhdItinerary(com.bagnet.nettracer.tracing.db.OHD_Itinerary itin) {
 		Itinerary it = new Itinerary();
-		
-		it.setAirline(itin.getAirline());
-		it.setArrivalCity(itin.getLegto());
-		it.setDepartureCity(itin.getLegfrom());
-		
-		GregorianCalendar cal2 = new GregorianCalendar();
-		cal2.setTime(itin.getDepartdate());
-		
-		it.setFlightDate(cal2);
-		it.setFlightNumber(itin.getFlightnum());
-		it.setLegfrom_type(itin.getLegfrom_type());
-		it.setLegto_type(itin.getLegto_type());
+
+		if(itin != null){
+			it.setAirline(itin.getAirline());
+			it.setArrivalCity(itin.getLegto());
+			it.setDepartureCity(itin.getLegfrom());
+
+			if(itin.getDepartdate() != null){
+				/* Calendar.setTime(null) will throw a null pointer exception, must null check first */
+				GregorianCalendar cal2 = new GregorianCalendar();
+				cal2.setTime(itin.getDepartdate());
+				it.setFlightDate(cal2);
+			}
+
+			it.setFlightNumber(itin.getFlightnum());
+			it.setLegfrom_type(itin.getLegfrom_type());
+			it.setLegto_type(itin.getLegto_type());
+		}
 		return it;
 	}
 
@@ -2098,6 +2103,6 @@ public class WorldTracerWebService implements WorldTracerConnector {
 		}
 		return null;
 	}
-
-
+	
+	
 }
