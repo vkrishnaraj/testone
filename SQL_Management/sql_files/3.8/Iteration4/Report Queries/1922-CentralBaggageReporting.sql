@@ -18,21 +18,36 @@ select s.stationcode,
 #Station Recovery Rate Report
 #startdatetime - Beginning of Date Range. Datetime value
 #enddatetime - End of Date Range. Datetime value
-select s.StationCode, 
-  count(*) as reports_taken,
-  sum(case when inc.status_id=13 and s.Station_ID!=l.station_id then 1 else 0 end) as station_returned, 
-  sum(case when inc.status_id=13 and s.Station_ID=l.station_id then 1 else 0 end) as cbs_returned,
-  sum(case when inc.status_id!=13 then 1 else 0 end) as open_reports,
-  sum(case when not isnull(ep.Expensepayout_ID) then 1 else 0 end) as reports_with_payments,
-  ROUND(100 * (count(*) - sum(case when inc.status_id!=13 then 1 else 0 end)) / count(*), 2) as Recovery_ratio,
-  ROUND(sum(ep.checkamt+ep.voucheramt+ep.creditcard_refund),2) as total_payments
+select s.StationCode,
+  count(inc.incident_id) as reports_taken,
+  sum(case when not isNull(closedCount.incident_id) and isNull(l.station_id) then 1 else 0 end) as station_returned, 
+  sum(case when not isNull(closedCount.incident_id) and not isNull(l.station_id) then 1 else 0 end) as cbs_returned,
+  count(openCount.incident_id) as open_reports,
+  count(ep.incident_id) as reports_with_payments,
+  ROUND(100 * (count(closedCount.incident_id) / count(*)), 2) as Recovery_ratio,
+  (case when not isNull(ep.payments) then  ROUND(sum(ep.payments),2) else 0 end) as total_payments
     from incident inc
-    left outer join expensepayout ep on ep.incident_ID = inc.Incident_ID and ep.status_ID in (53,55)
+    left outer join 
+      (select sum(checkamt+voucheramt+creditcard_refund) as payments, expensepayout.incident_id, count(*) as expCount from expensepayout inner join incident i on i.Incident_ID = expensepayout.incident_ID
+        where expensepayout.status_id in (53,55) and i.createdate between CAST(:startdatetime AS DATETIME) and CAST(:enddatetime AS DATETIME) group by expensepayout.incident_id) as ep on ep.incident_id=inc.Incident_ID
+    left outer join 
+      (select incident_id, stationcreated_id from incident where incident_id not in 
+          (select incident.incident_id from incident inner join item it on it.incident_ID = incident.Incident_ID 
+            where it.status_ID not in (50,59) and incident.createdate between CAST(:startdatetime AS DATETIME) and CAST(:enddatetime AS DATETIME) group by incident.Incident_ID having count(*)>0)
+        and incident_id in 
+          (select incident.incident_id from incident inner join item it on it.incident_ID = incident.Incident_ID
+            where it.status_ID in (50,59) and incident.createdate between CAST(:startdatetime AS DATETIME) and CAST(:enddatetime AS DATETIME) group by incident.Incident_ID having count(*)>0))
+      as closedCount on closedCount.incident_id=inc.incident_id
+    left outer join 
+      (select incident_id, stationcreated_id from incident where incident_id in 
+        (select incident.incident_id from incident inner join item it on it.incident_ID = incident.Incident_ID 
+          where it.status_ID not in (50,59) and incident.createdate between CAST(:startdatetime AS DATETIME) and CAST(:enddatetime AS DATETIME) group by incident.Incident_ID having count(*)>0))
+      as openCount on openCount.incident_id=inc.incident_id
     inner join station s on s.station_id=inc.stationcreated_ID and s.companycode_ID='WN'
     left outer join Lz l on l.station_id = s.Station_ID
-    where
-    inc.createdate between CAST(:startdatetime AS DATETIME) and CAST(:enddatetime AS DATETIME) group by inc.stationcreated_id order by s.stationcode;
- 
+    where inc.itemtype_ID=1 and inc.createdate between CAST(:startdatetime AS DATETIME) and CAST(:enddatetime AS DATETIME) 
+    	group by inc.stationcreated_id order by s.stationcode;  
+    
 #------------------------------------------------------------------------------------
  
 #Report Expenses by Payment Code
