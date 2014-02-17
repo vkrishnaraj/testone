@@ -55,6 +55,10 @@ public class DocumentTemplateResult {
 		missingInfoList.add(missingInfo);
 	}
 	
+	public void setMissingInfoList(List<String> missingInfoList) {
+		this.missingInfoList = missingInfoList;
+	}
+
 	public List<String> getMissingInfoList() {
 		return missingInfoList;
 	}

@@ -1,6 +1,7 @@
 package com.bagnet.nettracer.tracing.actions.communications;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -591,20 +592,17 @@ public class CustomerCommunicationsAction extends CheckedAction {
 				}
 			}
 			
-			TemplateAdapter adapter = null;
-			String missingInfo = null;
-			try {
-				adapter = TemplateAdapterFactory.getTemplateAdapter(dto);
-			} catch (InsufficientInformationException iie) {
-				logger.error(iie);
-				missingInfo = iie.getMissingInfo();
-			}
+			result = TemplateAdapterFactory.hasRequiredInfo(dto);
+			List<String> missingInfoList = result.getMissingInfoList();
+			
+			TemplateAdapter adapter = TemplateAdapterFactory.getTemplateAdapter(dto);
 			
 			result = documentService.merge(document, adapter);			
 			result.setPayload(document);
-			
-			if (missingInfo != null) {
-				result.addMissingInfo(missingInfo);
+			if (!missingInfoList.isEmpty()) {
+				result.setSuccess(false);
+				result.setMessageKey("document.generated.failure");
+				result.setMissingInfoList(missingInfoList);
 			}
 			
 		} catch (InvalidDocumentTypeException e) {

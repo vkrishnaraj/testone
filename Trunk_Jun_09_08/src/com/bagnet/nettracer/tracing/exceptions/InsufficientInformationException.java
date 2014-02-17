@@ -1,6 +1,5 @@
 package com.bagnet.nettracer.tracing.exceptions;
 
-import aero.nettracer.fs.model.FsClaim;
 
 public class InsufficientInformationException extends Exception {
 
@@ -11,9 +10,6 @@ public class InsufficientInformationException extends Exception {
 		super("Missing required information: " + clazz != null ? clazz.getSimpleName() : "null class");
 		if (clazz != null) {
 			missingInfo = clazz.getSimpleName();
-			if (missingInfo.equals(FsClaim.class.getSimpleName())) {
-				missingInfo = "Claim";
-			}
 		}
 	}
 	

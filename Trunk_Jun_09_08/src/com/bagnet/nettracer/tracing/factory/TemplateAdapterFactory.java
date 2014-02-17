@@ -5,12 +5,13 @@ import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
 
+import com.bagnet.nettracer.tracing.actions.templates.DocumentTemplateResult;
 import com.bagnet.nettracer.tracing.adapter.TemplateAdapter;
 import com.bagnet.nettracer.tracing.adapter.impl.TemplateAdapterImpl;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.ClaimDAO;
 import com.bagnet.nettracer.tracing.db.Address;
-import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.lf.LFAddress;
@@ -19,7 +20,6 @@ import com.bagnet.nettracer.tracing.db.lf.LFPerson;
 import com.bagnet.nettracer.tracing.db.lf.LFPhone;
 import com.bagnet.nettracer.tracing.dto.TemplateAdapterDTO;
 import com.bagnet.nettracer.tracing.enums.TemplateType;
-import com.bagnet.nettracer.tracing.exceptions.InsufficientInformationException;
 import com.bagnet.nettracer.tracing.exceptions.InvalidDocumentTypeException;
 
 /**
@@ -35,7 +35,32 @@ public class TemplateAdapterFactory {
 	
 	private TemplateAdapterFactory() { }
 	
-	public static TemplateAdapter getTemplateAdapter(TemplateAdapterDTO dto) throws InvalidDocumentTypeException,InsufficientInformationException {
+	public static DocumentTemplateResult hasRequiredInfo(TemplateAdapterDTO dto) {
+		DocumentTemplateResult result = new DocumentTemplateResult();
+		boolean success = true;
+		for (TemplateType type: dto.getTypes()) {
+			if (type == TemplateType.INCIDENT && dto.getIncident() == null) {
+				result.addMissingInfo(TracingConstants.getDisplayNameFromClass(Incident.class));
+				success = false;
+			} else if (type == TemplateType.CLAIM && dto.getClaim() == null) {
+				result.addMissingInfo(TracingConstants.getDisplayNameFromClass(FsClaim.class));
+				success = false;
+			} else if (type == TemplateType.FOUND_ITEM && dto.getFound() == null) {
+				result.addMissingInfo(TracingConstants.getDisplayNameFromClass(LFFound.class));
+				success = false;
+			} else if (type == TemplateType.CLAIM_SETTLEMENT && dto.getExpensePayout() == null) {
+				result.addMissingInfo(TracingConstants.getDisplayNameFromClass(ExpensePayout.class));
+				success = false;
+			} else {
+				continue;
+			}
+		}
+		
+		result.setSuccess(success);
+		return result;
+	}
+	
+	public static TemplateAdapter getTemplateAdapter(TemplateAdapterDTO dto) throws InvalidDocumentTypeException {
 		TemplateAdapter adapter = instance.createAdapter(dto);
 		for (TemplateType type: dto.getTypes()) {
 			switch(type) {
@@ -61,22 +86,23 @@ public class TemplateAdapterFactory {
 		return adapter;
 	}
 	
-	private TemplateAdapter createAdapter(TemplateAdapterDTO dto) throws InsufficientInformationException {
+	private TemplateAdapter createAdapter(TemplateAdapterDTO dto) {
 		TemplateAdapter adapter = new TemplateAdapterImpl();
 		getAgentInfo(dto, adapter);
 		return adapter;
 	}
 	
-	private void getAgentInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) throws InsufficientInformationException {
-		if (dto.getAgent() == null) throw new InsufficientInformationException(Agent.class);
-		adapter.setAgentFirstName(dto.getAgent().getFirstname());
-		adapter.setAgentLastName(dto.getAgent().getLastname());
-		adapter.setAgentInitials(dto.getAgent().getInitial());
-		adapter.setDateFormat(dto.getAgent().getDateformat().getFormat());
+	private void getAgentInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) {
+		if (dto.getAgent() != null) {
+			adapter.setAgentFirstName(dto.getAgent().getFirstname());
+			adapter.setAgentLastName(dto.getAgent().getLastname());
+			adapter.setAgentInitials(dto.getAgent().getInitial());
+			adapter.setDateFormat(dto.getAgent().getDateformat().getFormat());
+		}
 	}
 	
 
-	private void getExpenseInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) throws InsufficientInformationException {
+	private void getExpenseInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) {
 		if(dto.getExpensePayout()!=null){
 			double total=0;
 			if(dto.getExpensePayout().getCheckamt()>0){
@@ -89,13 +115,11 @@ public class TemplateAdapterFactory {
 				total+=dto.getExpensePayout().getCreditCardRefund();
 			}
 			adapter.setExpenseTotalAmount(TracingConstants.DECIMALFORMAT.format(total));
-		} else {
-			adapter.setExpenseTotalAmount(TracingConstants.DECIMALFORMAT.format(0));
 		}
 	}
 	
-	private void getIncidentInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) throws InsufficientInformationException {
-		if (dto.getIncident() == null) throw new InsufficientInformationException(Incident.class);
+	private void getIncidentInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) {
+		if (dto.getIncident() == null) return;
 		Incident incident = dto.getIncident();
 		if (incident.getIncident_ID() != null)
 			adapter.setIncidentId(incident.getIncident_ID());			
@@ -138,8 +162,9 @@ public class TemplateAdapterFactory {
 		}
 	}
 	
-	private void getClaimInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) throws InsufficientInformationException {
-		if (dto.getClaim() == null) throw new InsufficientInformationException(FsClaim.class);
+	private void getClaimInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) {
+		if (dto.getClaim() == null) return;
+		
 		FsClaim claim = dto.getClaim();
 		
 		adapter.setClaimId(String.valueOf(claim.getId()));
@@ -181,8 +206,8 @@ public class TemplateAdapterFactory {
 		
 	}
 	
-	private void getFoundItemInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) throws InsufficientInformationException {
-		if (dto.getFound() == null) throw new InsufficientInformationException(LFFound.class);
+	private void getFoundItemInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) {
+		if (dto.getFound() == null) return;
 		LFFound found = dto.getFound();
 		adapter.setFoundItemId(String.valueOf(found.getId()));
 		adapter.setFoundItemItem(found.getItem().getDescription());

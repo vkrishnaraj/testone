@@ -4,11 +4,17 @@ import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TimeZone;
 
+import aero.nettracer.fs.model.FsClaim;
+
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.ExpensePayout;
+import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
@@ -19,6 +25,23 @@ import com.bagnet.nettracer.tracing.utils.DateUtils;
  * @author Ankur Gupta
  */
 public class TracingConstants {
+	
+	private static HashMap<Class<?>, String> displayNames = new LinkedHashMap<Class<?>, String>();
+	
+	static {
+		displayNames.put(Incident.class, "Incident");
+		displayNames.put(FsClaim.class, "Claim");
+		displayNames.put(LFFound.class, "Found Item");
+		displayNames.put(ExpensePayout.class, "Expense Payout");
+	}
+	
+	public static String getDisplayNameFromClass(Class<?> clazz) {
+		String displayName = displayNames.get(clazz);
+		if (displayName == null) {
+			displayName = "unknown";
+		}
+		return displayName;
+	}
 
 	public static enum SortParam {
 		LASTNAME ("lastname"),

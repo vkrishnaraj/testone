@@ -15,64 +15,64 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	private String dateFormat;
 	
 	// Agent info
-	private String agentFirstName = "";
-	private String agentLastName = "";
-	private String agentInitials = "";
+	private String agentFirstName;
+	private String agentLastName;
+	private String agentInitials;
 	
 	// Claim info
-	private String claimId = "";
-	private String claimType = "";
-	private String claimFirstName = "";
-	private String claimLastName = "";
-	private String claimAddress1 = "";
-	private String claimAddress2 = "";
-	private String claimCity = "";
-	private String claimState = "";
-	private String claimProvince = "";
-	private String claimZip = "";
-	private String claimCountry = "";
-	private String claimHomePhone = "";
-	private String claimBusinessPhone = "";
-	private String claimMobilePhone = "";
+	private String claimId;
+	private String claimType;
+	private String claimFirstName;
+	private String claimLastName;
+	private String claimAddress1;
+	private String claimAddress2;
+	private String claimCity;
+	private String claimState;
+	private String claimProvince;
+	private String claimZip;
+	private String claimCountry;
+	private String claimHomePhone;
+	private String claimBusinessPhone;
+	private String claimMobilePhone;
 	
 	// Found Item info
-	private String foundItemId = "";
-	private String foundItemType = "";
-	private String foundItemColor = "";
-	private String foundItemItem = "";
-	private String foundItemDescription = "";
-	private String foundItemCaseColor = "";
-	private String foundItemFirstName = "";
-	private String foundItemLastName = "";
-	private String foundItemAddress1 = "";
-	private String foundItemAddress2 = "";
-	private String foundItemCity = "";
-	private String foundItemState = "";
-	private String foundItemProvince = "";
-	private String foundItemCountry = "";
-	private String foundItemZip = "";
-	private String foundItemHomePhone = "";
-	private String foundItemBusinessPhone = "";
-	private String foundItemMobilePhone = "";
+	private String foundItemId;
+	private String foundItemType;
+	private String foundItemColor;
+	private String foundItemItem;
+	private String foundItemDescription;
+	private String foundItemCaseColor;
+	private String foundItemFirstName;
+	private String foundItemLastName;
+	private String foundItemAddress1;
+	private String foundItemAddress2;
+	private String foundItemCity;
+	private String foundItemState;
+	private String foundItemProvince;
+	private String foundItemCountry;
+	private String foundItemZip;
+	private String foundItemHomePhone;
+	private String foundItemBusinessPhone;
+	private String foundItemMobilePhone;
 
 	// Incident info
-	private String incidentId = "";
-	private String incidentType = "";
-	private String incidentFirstName = "";
-	private String incidentLastName = "";
-	private String incidentAddress1 = "";
-	private String incidentAddress2 = "";
-	private String incidentCity = "";
-	private String incidentState = "";
-	private String incidentProvince = "";
-	private String incidentCountry = "";
-	private String incidentZip = "";
-	private String incidentHomePhone = "";
-	private String incidentBusinessPhone = "";
-	private String incidentMobilePhone = "";
+	private String incidentId;
+	private String incidentType;
+	private String incidentFirstName;
+	private String incidentLastName;
+	private String incidentAddress1;
+	private String incidentAddress2;
+	private String incidentCity;
+	private String incidentState;
+	private String incidentProvince;
+	private String incidentCountry;
+	private String incidentZip;
+	private String incidentHomePhone;
+	private String incidentBusinessPhone;
+	private String incidentMobilePhone;
 	
 	// Expense info
-	private String expenseTotalAmount = "";
+	private String expenseTotalAmount;
 	
 	public String getDateFormat() {
 		return dateFormat;
@@ -83,7 +83,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getAgentFirstName() {
-		return agentFirstName != null ? agentFirstName : "";
+		return agentFirstName;
 	}
 
 	public void setAgentFirstName(String agentFirstName) {
@@ -91,7 +91,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getAgentLastName() {
-		return agentLastName != null ? agentLastName : "";
+		return agentLastName;
 	}
 
 	public void setAgentLastName(String agentLastName) {
@@ -99,7 +99,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getAgentInitials() {
-		return agentInitials != null ? agentInitials : "";
+		return agentInitials;
 	}
 
 	public void setAgentInitials(String agentInitials) {
@@ -107,7 +107,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getClaimId() {
-		return claimId != null ? claimId : "";
+		return claimId;
 	}
 
 	public void setClaimId(String claimId) {
@@ -115,7 +115,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getClaimType() {
-		return claimType != null ? claimType : "";
+		return claimType;
 	}
 
 	public void setClaimType(String claimType) {
@@ -123,7 +123,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getClaimFirstName() {
-		return claimFirstName != null ? claimFirstName : "";
+		return claimFirstName;
 	}
 
 	public void setClaimFirstName(String claimFirstName) {
@@ -131,7 +131,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getClaimLastName() {
-		return claimLastName != null ? claimLastName : "";
+		return claimLastName;
 	}
 
 	public void setClaimLastName(String claimLastName) {
@@ -143,7 +143,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getClaimAddress1() {
-		return claimAddress1 != null ? claimAddress1 : "";
+		return claimAddress1;
 	}
 
 	public void setClaimAddress1(String claimAddress1) {
@@ -151,7 +151,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getClaimAddress2() {
-		return claimAddress2 != null ? claimAddress2 : "";
+		return claimAddress2;
 	}
 
 	public void setClaimAddress2(String claimAddress2) {
@@ -159,7 +159,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getClaimCity() {
-		return claimCity != null ? claimCity : "";
+		return claimCity;
 	}
 
 	public void setClaimCity(String claimCity) {
@@ -167,7 +167,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getClaimState() {
-		return claimState != null ? claimState : "";
+		return claimState;
 	}
 
 	public void setClaimState(String claimState) {
@@ -175,7 +175,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getClaimProvince() {
-		return claimProvince != null ? claimProvince : "";
+		return claimProvince;
 	}
 
 	public void setClaimProvince(String claimProvince) {
@@ -183,7 +183,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getClaimZip() {
-		return claimZip != null ? claimZip : "";
+		return claimZip;
 	}
 
 	public void setClaimZip(String claimZip) {
@@ -191,7 +191,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getClaimCountry() {
-		return claimCountry != null ? claimCountry : "";
+		return claimCountry;
 	}
 
 	public void setClaimCountry(String claimCountry) {
@@ -199,7 +199,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getClaimHomePhone() {
-		return claimHomePhone != null ? claimHomePhone : "";
+		return claimHomePhone;
 	}
 
 	public void setClaimHomePhone(String claimHomePhone) {
@@ -207,7 +207,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getClaimBusinessPhone() {
-		return claimBusinessPhone != null ? claimBusinessPhone : "";
+		return claimBusinessPhone;
 	}
 
 	public void setClaimBusinessPhone(String claimBusinessPhone) {
@@ -215,7 +215,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getClaimMobilePhone() {
-		return claimMobilePhone != null ? claimMobilePhone : "";
+		return claimMobilePhone;
 	}
 
 	public void setClaimMobilePhone(String claimMobilePhone) {
@@ -223,7 +223,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getFoundItemId() {
-		return foundItemId != null ? foundItemId : "";
+		return foundItemId;
 	}
 
 	public void setFoundItemId(String foundItemId) {
@@ -231,7 +231,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getFoundItemType() {
-		return foundItemType != null ? foundItemType : "";
+		return foundItemType;
 	}
 
 	public void setFoundItemType(String foundItemType) {
@@ -239,7 +239,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getFoundItemColor() {
-		return foundItemColor != null ? foundItemColor : "";
+		return foundItemColor;
 	}
 
 	public void setFoundItemColor(String foundItemColor) {
@@ -247,7 +247,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getFoundItemItem() {
-		return foundItemItem != null ? foundItemItem : "";
+		return foundItemItem;
 	}
 
 	public void setFoundItemItem(String foundItemItem) {
@@ -255,7 +255,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getFoundItemDescription() {
-		return foundItemDescription != null ? foundItemDescription : "";
+		return foundItemDescription;
 	}
 
 	public void setFoundItemDescription(String foundItemDescription) {
@@ -263,7 +263,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getFoundItemCaseColor() {
-		return foundItemCaseColor != null ? foundItemCaseColor : "";
+		return foundItemCaseColor;
 	}
 
 	public void setFoundItemCaseColor(String foundItemCaseColor) {
@@ -271,7 +271,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getFoundItemFirstName() {
-		return foundItemFirstName != null ? foundItemFirstName : "";
+		return foundItemFirstName;
 	}
 
 	public void setFoundItemFirstName(String foundItemFirstName) {
@@ -279,7 +279,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getFoundItemLastName() {
-		return foundItemLastName != null ? foundItemLastName : "";
+		return foundItemLastName;
 	}
 
 	public void setFoundItemLastName(String foundItemLastName) {
@@ -291,7 +291,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getFoundItemAddress1() {
-		return foundItemAddress1 != null ? foundItemAddress1 : "";
+		return foundItemAddress1;
 	}
 
 	public void setFoundItemAddress1(String foundItemAddress1) {
@@ -299,7 +299,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getFoundItemAddress2() {
-		return foundItemAddress2 != null ? foundItemAddress2 : "";
+		return foundItemAddress2;
 	}
 
 	public void setFoundItemAddress2(String foundItemAddress2) {
@@ -307,7 +307,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getFoundItemCity() {
-		return foundItemCity != null ? foundItemCity : "";
+		return foundItemCity;
 	}
 
 	public void setFoundItemCity(String foundItemCity) {
@@ -315,7 +315,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getFoundItemState() {
-		return foundItemState != null ? foundItemState : "";
+		return foundItemState;
 	}
 
 	public void setFoundItemState(String foundItemState) {
@@ -323,7 +323,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getFoundItemProvince() {
-		return foundItemProvince != null ? foundItemProvince : "";
+		return foundItemProvince;
 	}
 
 	public void setFoundItemProvince(String foundItemProvince) {
@@ -331,7 +331,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getFoundItemCountry() {
-		return foundItemCountry != null ? foundItemCountry : "";
+		return foundItemCountry;
 	}
 
 	public void setFoundItemCountry(String foundItemCountry) {
@@ -339,7 +339,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getFoundItemZip() {
-		return foundItemZip != null ? foundItemZip : "";
+		return foundItemZip;
 	}
 
 	public void setFoundItemZip(String foundItemZip) {
@@ -347,7 +347,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getFoundItemHomePhone() {
-		return foundItemHomePhone != null ? foundItemHomePhone : "";
+		return foundItemHomePhone;
 	}
 
 	public void setFoundItemHomePhone(String foundItemHomePhone) {
@@ -355,7 +355,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getFoundItemBusinessPhone() {
-		return foundItemBusinessPhone != null ? foundItemBusinessPhone : "";
+		return foundItemBusinessPhone;
 	}
 
 	public void setFoundItemBusinessPhone(String foundItemBusinessPhone) {
@@ -363,7 +363,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getFoundItemMobilePhone() {
-		return foundItemMobilePhone != null ? foundItemMobilePhone : "";
+		return foundItemMobilePhone;
 	}
 
 	public void setFoundItemMobilePhone(String foundItemMobilePhone) {
@@ -371,7 +371,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getIncidentId() {
-		return incidentId != null ? incidentId : "";
+		return incidentId;
 	}
 
 	public void setIncidentId(String incidentId) {
@@ -379,7 +379,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getIncidentType() {
-		return incidentType != null ? incidentType : "";
+		return incidentType;
 	}
 
 	public void setIncidentType(String incidentType) {
@@ -387,7 +387,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getIncidentFirstName() {
-		return incidentFirstName != null ? incidentFirstName : "";
+		return incidentFirstName;
 	}
 
 	public void setIncidentFirstName(String incidentFirstName) {
@@ -395,7 +395,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getIncidentLastName() {
-		return incidentLastName != null ? incidentLastName : "";
+		return incidentLastName;
 	}
 
 	public void setIncidentLastName(String incidentLastName) {
@@ -407,7 +407,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getIncidentAddress1() {
-		return incidentAddress1 != null ? incidentAddress1 : "";
+		return incidentAddress1;
 	}
 
 	public void setIncidentAddress1(String incidentAddress1) {
@@ -415,7 +415,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getIncidentAddress2() {
-		return incidentAddress2 != null ? incidentAddress2 : "";
+		return incidentAddress2;
 	}
 
 	public void setIncidentAddress2(String incidentAddress2) {
@@ -423,7 +423,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getIncidentCity() {
-		return incidentCity != null ? incidentCity : "";
+		return incidentCity;
 	}
 
 	public void setIncidentCity(String incidentCity) {
@@ -431,7 +431,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getIncidentState() {
-		return incidentState != null ? incidentState : "";
+		return incidentState;
 	}
 
 	public void setIncidentState(String incidentState) {
@@ -439,7 +439,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getIncidentProvince() {
-		return incidentProvince != null ? incidentProvince : "";
+		return incidentProvince;
 	}
 
 	public void setIncidentProvince(String incidentProvince) {
@@ -447,7 +447,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getIncidentCountry() {
-		return incidentCountry != null ? incidentCountry : "";
+		return incidentCountry;
 	}
 
 	public void setIncidentCountry(String incidentCountry) {
@@ -455,7 +455,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getIncidentZip() {
-		return incidentZip != null ? incidentZip : "";
+		return incidentZip;
 	}
 
 	public void setIncidentZip(String incidentZip) {
@@ -463,7 +463,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getIncidentHomePhone() {
-		return incidentHomePhone != null ? incidentHomePhone : "";
+		return incidentHomePhone;
 	}
 
 	public void setIncidentHomePhone(String incidentHomePhone) {
@@ -471,7 +471,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getIncidentBusinessPhone() {
-		return incidentBusinessPhone != null ? incidentBusinessPhone : "";
+		return incidentBusinessPhone;
 	}
 
 	public void setIncidentBusinessPhone(String incidentBusinessPhone) {
@@ -479,7 +479,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	}
 
 	public String getIncidentMobilePhone() {
-		return incidentMobilePhone != null ? incidentMobilePhone : "";
+		return incidentMobilePhone;
 	}
 
 	public void setIncidentMobilePhone(String incidentMobilePhone) {
@@ -526,7 +526,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 			fullAddress.append("<br/>"+value);
 		}
 		
-		return fullAddress.toString();
+		return !fullAddress.toString().isEmpty() ? fullAddress.toString() : null;
 	}
 	
 	private String invokeMethod(String methodName) {

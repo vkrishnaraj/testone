@@ -85,7 +85,6 @@ public class DocumentServiceImpl implements DocumentService {
 			result.setMessageKey("document.generated.failure");
 		}
 		
-		
 		Set<TemplateVar> vars = document.getTemplate().getVariables();
 		if (vars != null && !vars.isEmpty()) {
 			for (TemplateVar var: vars) {
@@ -95,7 +94,10 @@ public class DocumentServiceImpl implements DocumentService {
 				
 				try {
 					Method getter = adapter.getClass().getDeclaredMethod("get" + associatedClass + displayTag, new Class[] { });
-					content = content.replace(toReplace, (String) getter.invoke(adapter, new Object[] { }));
+					String getterValue = (String) getter.invoke(adapter, new Object[] { });
+					if (getterValue != null) {
+						content = content.replace(toReplace, getterValue);
+					}
 				} catch (NoSuchMethodException nsme) {
 					// MJS: not catastrophic; make note of the exception and move on
 					logger.info("NoSuchMethodException caught attempting to find method: TemplateAdapter.get" + associatedClass + displayTag + "()");
