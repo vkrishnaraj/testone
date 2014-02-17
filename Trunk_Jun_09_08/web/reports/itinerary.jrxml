@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE jasperReport PUBLIC "-//JasperReports//DTD JasperReport//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
-
-<jasperReport name="itinerary" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="itinerary" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
 	<property name="ireport.scriptlethandling" value="2"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<field name="legfrom" class="java.lang.String"/>
 	<field name="legto" class="java.lang.String"/>
 	<field name="flightnum" class="java.lang.String"/>
@@ -26,14 +27,14 @@
 	</columnHeader>
 	<detail>
 		<band height="75" isSplitAllowed="false">
-			<textField pattern="" isBlankWhenNull="true" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="true">
 				<reportElement key="textField-49" positionType="Float" mode="Opaque" x="149" y="3" width="40" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{legfrom}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="true" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="true">
 				<reportElement key="textField-50" positionType="Float" mode="Opaque" x="193" y="3" width="42" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
@@ -47,105 +48,105 @@
 				</textElement>
 				<text><![CDATA[/]]></text>
 			</staticText>
-			<textField pattern="" isBlankWhenNull="true" hyperlinkType="None">
-				<reportElement key="textField-51" positionType="Float" mode="Opaque" x="371" y="4" width="52" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-51" positionType="Float" mode="Opaque" x="371" y="4" width="85" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{flightnum}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="true" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="true">
 				<reportElement key="textField-52" positionType="Float" mode="Opaque" x="150" y="20" width="85" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{disdepartdate}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="true" hyperlinkType="None">
-				<reportElement key="textField-53" positionType="Float" mode="Opaque" x="371" y="20" width="52" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-53" positionType="Float" mode="Opaque" x="371" y="20" width="85" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{disarrivedate}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="true" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="true">
 				<reportElement key="textField-54" positionType="Float" mode="Opaque" x="150" y="37" width="85" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{disschdeparttime}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="true" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="true">
 				<reportElement key="textField-55" positionType="Float" mode="Opaque" x="150" y="54" width="85" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{disscharrivetime}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="true" hyperlinkType="None">
-				<reportElement key="textField-56" positionType="Float" mode="Opaque" x="371" y="37" width="52" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-56" positionType="Float" mode="Opaque" x="371" y="37" width="85" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{disactdeparttime}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="true" hyperlinkType="None">
-				<reportElement key="textField-57" positionType="Float" mode="Opaque" x="371" y="54" width="52" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-57" positionType="Float" mode="Opaque" x="371" y="54" width="85" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="12" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{disactarrivetime}]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-59" positionType="Float" mode="Opaque" x="7" y="3" width="137" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{colname.fromto} + ":"]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-60" positionType="Float" mode="Opaque" x="7" y="20" width="137" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{colname.departdate} + ":"]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-61" positionType="Float" mode="Opaque" x="7" y="37" width="137" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{colname.schdeptime} + ":"]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-62" positionType="Float" mode="Opaque" x="7" y="54" width="137" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{colname.scharrtime} + ":"]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-63" positionType="Float" mode="Opaque" x="240" y="3" width="127" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{colname.flightnum}+":"]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-64" positionType="Float" mode="Opaque" x="240" y="20" width="127" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{colname.arrdate}+":"]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-65" positionType="Float" mode="Opaque" x="240" y="37" width="128" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$R{colname.actdeptime}+":"]]></textFieldExpression>
 			</textField>
-			<textField pattern="" isBlankWhenNull="false" hyperlinkType="None">
+			<textField pattern="" isBlankWhenNull="false">
 				<reportElement key="textField-66" positionType="Float" mode="Opaque" x="240" y="54" width="128" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
