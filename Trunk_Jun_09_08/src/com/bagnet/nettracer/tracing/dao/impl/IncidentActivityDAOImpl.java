@@ -515,6 +515,7 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			Criteria criteria = session.createCriteria(Activity.class, "a");
+			criteria.add(Restrictions.eq("a.display", true));
 			criteria.addOrder(Order.asc("a.description"));
 			results = (List<Activity>) criteria.list();
 		} catch (Exception e) {

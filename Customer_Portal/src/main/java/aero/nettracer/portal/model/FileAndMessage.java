@@ -2,6 +2,7 @@ package aero.nettracer.portal.model;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 public class FileAndMessage implements Comparable<FileAndMessage> {
 	
@@ -74,8 +75,9 @@ public class FileAndMessage implements Comparable<FileAndMessage> {
 	}
 	
 	public String getDispDateCreated() {
-		SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy hh:mm a");
 		if (getDateCreated() != null) {
+			SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy hh:mm a z");
+			format.setTimeZone(TimeZone.getTimeZone("GMT"));
 			return format.format(getDateCreated().getTime());
 		}
 		return "";

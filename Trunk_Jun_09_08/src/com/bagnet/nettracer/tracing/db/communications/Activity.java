@@ -19,6 +19,8 @@ public class Activity {
 	
 	private String description;
 	
+	private boolean display;
+	
 	public Activity() { }
 	
 	public Activity(String code) {
@@ -47,6 +49,14 @@ public class Activity {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public boolean isDisplay() {
+		return display;
+	}
+
+	public void setDisplay(boolean display) {
+		this.display = display;
 	}
 	
 }

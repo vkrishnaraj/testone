@@ -143,10 +143,7 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 		List<OptionDTO> options = new ArrayList<OptionDTO>();
 		if (!fromDb.isEmpty()) {
 			for (Activity a: fromDb) {
-				/** Removes Create Claim Settlement from Activity Selection so Users must go through Expenses to create one **/
-				if(!a.getCode().equals(TracingConstants.CREATE_SETTLEMENT_ACTIVITY)){
-					options.add(new OptionDTO(a.getCode(), a.getDescription()));
-				}
+				options.add(new OptionDTO(a.getCode(), a.getDescription()));
 			}
 		}
 		return options;

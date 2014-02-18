@@ -125,3 +125,6 @@ alter table issuance_item add column cost double default 0;
 alter table ohd_log modify column expeditenum varchar(12) default null;
 
 insert into task_type (code, description ) values (8,'Secondary Correspondence');
+
+alter table activity add display bit not null default 1;
+update activity set display = 0 where code in ('55C', '99E');

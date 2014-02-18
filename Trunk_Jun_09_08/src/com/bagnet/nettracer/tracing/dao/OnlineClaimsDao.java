@@ -3,11 +3,9 @@ package com.bagnet.nettracer.tracing.dao;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.dozer.DozerBeanMapperSingletonWrapper;
@@ -409,39 +407,47 @@ public class OnlineClaimsDao {
 							sess.delete(i);
 						}
 
-						Map<Long,IncidentActivity> iafilemap=new HashMap<Long,IncidentActivity>();
+						boolean hasIA = false;
+						Set<OCFile> filelist=new LinkedHashSet<OCFile>();
 						for (OCFile i : existingDbClaim.getFile()) {
 							if(i.getIncAct()!=null){
-								iafilemap.put(i.getId(), i.getIncAct());
+								OCFile fCopy = new OCFile();
+								BeanUtils.copyProperties(i, fCopy);
+								fCopy.setId(0);
+								filelist.add(fCopy);
 								i.getIncAct().getFiles().remove(i);
+								hasIA = true;
 							}
 							sess.delete(i);
 						}
 
-						Map<Long,IncidentActivity> iamessagemap=new HashMap<Long,IncidentActivity>();
+						Set<OCMessage> messagelist=new LinkedHashSet<OCMessage>();
 						for (OCMessage i : existingDbClaim.getMessages()) {
 							if(i.getIncAct()!=null){
-								iamessagemap.put(i.getId(), i.getIncAct());
+								OCMessage mCopy = new OCMessage();
+								BeanUtils.copyProperties(i, mCopy);
+								mCopy.setId(0);
+								messagelist.add(mCopy);
 								i.getIncAct().getMessages().remove(i);
+								hasIA = true;
 							}
 							sess.delete(i);
 						}
 						
-						IncidentActivity ia=null;
-						for(OCMessage i:claim.getMessages()){
-							ia=iamessagemap.get(i.getId());
-							if(ia!=null){
-								i.setIncAct(ia);
+						if (hasIA) {
+							for(OCMessage i:claim.getMessages()){
+								if (i.getStatusId()==TracingConstants.OC_STATUS_NEW) {
+									messagelist.add(i);
+								}
 							}
-							i.setId(0);
-						}
-
-						for(OCFile i:claim.getFile()){
-							ia=iafilemap.get(i.getId());
-							if(ia!=null){
-								i.setIncAct(ia);
+							claim.setMessages(messagelist);
+	
+							for(OCFile i:claim.getFile()){
+								if (i.getStatusId()==TracingConstants.OC_STATUS_NEW) {
+									filelist.add(i);
+								}
 							}
-							i.setId(0);
+							claim.setFile(filelist);
 						}
 						
 						BeanUtils.copyProperties(claim, existingDbClaim);
