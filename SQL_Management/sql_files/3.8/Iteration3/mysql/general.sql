@@ -347,6 +347,7 @@ insert into systemcomponents (component_id,component_name,component_desc,parent_
    751,'Bag Drop Admin','Bag Drop Admin',39,null,0,99,0);
    
 alter table ohd modify column storage_location varchar(125);
+alter table audit_ohd modify column storage_location varchar(125);
 alter table ohd modify column firstname varchar(25);
 alter table ohd modify column lastname varchar(25);
 alter table ohd_passenger modify column firstname varchar(25);
