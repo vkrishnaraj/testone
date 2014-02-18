@@ -1,18 +1,18 @@
 set @qry = concat("
 #START QUERY
 
-select stuff 
+select formatted_output 
 
 #OUTFILE
 into outfile 'D:/EDW/assisted_device_code_", date_format(now(), '%Y%m%d'), ".csv' 
 from (
-select concat_ws('|','H',date_format(now(), '%Y%m%d'), date_format(now(), '%Y%m%d')) stuff, 1 as seq
+select concat_ws('|','H',date_format(now(), '%Y%m%d'), date_format(now(), '%Y%m%d')) formatted_output, 1 as seq
 union
 select concat_ws('|',
 
 #COLUMNS
 id,description
-) stuff, 2 as seq 
+) formatted_output, 2 as seq 
 
 #ROOT QUERY
 from category where type = 2
@@ -21,7 +21,7 @@ select concat_ws('|','T',
 
 #COUNT
 count(id)
-) stuff, 3 as seq 
+) formatted_output, 3 as seq 
 
 #ROOT QUERY
 from category where type = 2

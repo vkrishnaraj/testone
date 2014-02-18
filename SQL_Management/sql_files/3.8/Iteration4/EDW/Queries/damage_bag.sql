@@ -1,12 +1,12 @@
 set @qry = concat("
 #START QUERY
 
-select stuff 
+select formatted_output 
 
 #OUTFILE
 into outfile 'D:/EDW/damage_bag_", date_format(now(), '%Y%m%d'), ".csv' 
 from (
-select concat_ws('|','H',date_format(now(), '%Y%m%d'), date_format(date_add(now(), INTERVAL -1 DAY), '%Y%m%d')) stuff, 1 as seq
+select concat_ws('|','H',date_format(now(), '%Y%m%d'), date_format(date_add(now(), INTERVAL -1 DAY), '%Y%m%d')) formatted_output, 1 as seq
 union
 select concat_ws('|',
 
@@ -35,7 +35,7 @@ ifnull(e.total, '0'),
 (inc.checkedlocation + 10),
 '',
 ''
-) stuff, 2 as seq 
+) formatted_output, 2 as seq 
 
 #ROOT QUERY
 from 
@@ -61,7 +61,7 @@ select concat_ws('|','T',
 
 #COUNT
 count(i.Item_ID)
-) stuff, 3 as seq 
+) formatted_output, 3 as seq 
 
 #ROOT QUERY
 from

@@ -1,12 +1,12 @@
 set @qry = concat("
 #START QUERY
 
-select stuff 
+select formatted_output 
 
 #OUTFILE
 into outfile 'D:/EDW/baggage_return_info_", date_format(now(), '%Y%m%d'), ".csv' 
 from (
-select concat_ws('|','H',date_format(now(), '%Y%m%d'), date_format(date_add(now(), INTERVAL -1 DAY), '%Y%m%d')) stuff, 1 as seq
+select concat_ws('|','H',date_format(now(), '%Y%m%d'), date_format(date_add(now(), INTERVAL -1 DAY), '%Y%m%d')) formatted_output, 1 as seq
 union
 select concat_ws('|',
 
@@ -23,7 +23,7 @@ ifnull(case when b.canceled = 0 then ba.username else a.username end, ''),
 ifnull(i.posId, ''),
 'N',
 case when (isnull(b.canceled) or b.canceled = 1) and i.status_ID != 50 then 'N' else 'Y' end
-) stuff, 2 as seq 
+) formatted_output, 2 as seq 
 
 #ROOT QUERY
 from item i
@@ -47,7 +47,7 @@ select concat_ws('|','T',
 
 #COUNT
 count(i.Item_ID)
-) stuff, 3 as seq 
+) formatted_output, 3 as seq 
 
 #ROOT QUERY
 from item i

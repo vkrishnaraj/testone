@@ -1,146 +1,146 @@
 set @qry = concat("
 #START QUERY
 
-select stuff 
+select formatted_output 
 
 #OUTFILE
 into outfile 'D:/EDW/bag_type_code_", date_format(now(), '%Y%m%d'), ".csv'
 from (
-select concat_ws('|','H',date_format(now(), '%Y%m%d'), date_format(now(), '%Y%m%d')) stuff, 1 as seq
+select concat_ws('|','H',date_format(now(), '%Y%m%d'), date_format(now(), '%Y%m%d')) formatted_output, 1 as seq
 union
-select '01|SUITCASE - HARD EXT - NO ZIP' stuff, 2 as seq 
+select '01|SUITCASE - HARD EXT - NO ZIP' formatted_output, 2 as seq 
 union
-select '02|SUITCASE - HARD F/A STYLE' stuff, 2 as seq 
+select '02|SUITCASE - HARD F/A STYLE' formatted_output, 2 as seq 
 union
-select '03|SUITCASE - HARD CORNER NO ZIP' stuff, 2 as seq 
+select '03|SUITCASE - HARD CORNER NO ZIP' formatted_output, 2 as seq 
 union
-select '04|SUITCASE (NO ZIPPER)' stuff, 2 as seq 
+select '04|SUITCASE (NO ZIPPER)' formatted_output, 2 as seq 
 union
-select '05|SOFT BAG (NO ZIPPER)' stuff, 2 as seq 
+select '05|SOFT BAG (NO ZIPPER)' formatted_output, 2 as seq 
 union
-select '06|BRIEF CASE (NO ZIPPER)' stuff, 2 as seq 
+select '06|BRIEF CASE (NO ZIPPER)' formatted_output, 2 as seq 
 union
-select '07|SATCHEL' stuff, 2 as seq 
+select '07|SATCHEL' formatted_output, 2 as seq 
 union
-select '08|DUFFEL BAG (ARMY)' stuff, 2 as seq 
+select '08|DUFFEL BAG (ARMY)' formatted_output, 2 as seq 
 union
-select '09|LAUNDRY BAG / DRAWSTRING CLOSE' stuff, 2 as seq 
+select '09|LAUNDRY BAG / DRAWSTRING CLOSE' formatted_output, 2 as seq 
 union
-select '10|BOX (MULTIPLE ITEMS)' stuff, 2 as seq 
+select '10|BOX (MULTIPLE ITEMS)' formatted_output, 2 as seq 
 union
-select '11|TRUNK' stuff, 2 as seq 
+select '11|TRUNK' formatted_output, 2 as seq 
 union
-select '12|STORAGE CONTAINER' stuff, 2 as seq 
+select '12|STORAGE CONTAINER' formatted_output, 2 as seq 
 union
-select '20|GARMENT BAG' stuff, 2 as seq 
+select '20|GARMENT BAG' formatted_output, 2 as seq 
 union
-select '22|SUITCASE - SOFT F/A STYLE' stuff, 2 as seq 
+select '22|SUITCASE - SOFT F/A STYLE' formatted_output, 2 as seq 
 union
-select '23|SUITCASE - ZIPPER' stuff, 2 as seq 
+select '23|SUITCASE - ZIPPER' formatted_output, 2 as seq 
 union
-select '24|SMALL SUITCASE - ZIPPER' stuff, 2 as seq 
+select '24|SMALL SUITCASE - ZIPPER' formatted_output, 2 as seq 
 union
-select '25|SPORTS BAG' stuff, 2 as seq 
+select '25|SPORTS BAG' formatted_output, 2 as seq 
 union
-select '26|SHOULDER BAG' stuff, 2 as seq 
+select '26|SHOULDER BAG' formatted_output, 2 as seq 
 union
-select '27|EXPANDABLE BAG IN HEIGHT' stuff, 2 as seq 
+select '27|EXPANDABLE BAG IN HEIGHT' formatted_output, 2 as seq 
 union
-select '28|MATTED WOVEN RUG' stuff, 2 as seq 
+select '28|MATTED WOVEN RUG' formatted_output, 2 as seq 
 union
-select '29|BACKPACK' stuff, 2 as seq 
+select '29|BACKPACK' formatted_output, 2 as seq 
 union
-select '50|HAT BOX' stuff, 2 as seq 
+select '50|HAT BOX' formatted_output, 2 as seq 
 union
-select '51|COURIER BAG/BOX/PACKAGE' stuff, 2 as seq 
+select '51|COURIER BAG/BOX/PACKAGE' formatted_output, 2 as seq 
 union
-select '52|SAMPLE/DISPLAY CASE' stuff, 2 as seq 
+select '52|SAMPLE/DISPLAY CASE' formatted_output, 2 as seq 
 union
-select '53|ART/DISPLAY PORTFOLIO' stuff, 2 as seq 
+select '53|ART/DISPLAY PORTFOLIO' formatted_output, 2 as seq 
 union
-select '54|TUBE (W/O SPORTING EQUIPMENT)' stuff, 2 as seq 
+select '54|TUBE (W/O SPORTING EQUIPMENT)' formatted_output, 2 as seq 
 union
-select '55|DUTY FREE ARTICLES' stuff, 2 as seq 
+select '55|DUTY FREE ARTICLES' formatted_output, 2 as seq 
 union
-select '56|COSMETIC/BEAUTY CASE' stuff, 2 as seq 
+select '56|COSMETIC/BEAUTY CASE' formatted_output, 2 as seq 
 union
-select '57|KENNEL/PET CONTAINER' stuff, 2 as seq 
+select '57|KENNEL/PET CONTAINER' formatted_output, 2 as seq 
 union
-select '58|ICE CHEST/COOLER' stuff, 2 as seq 
+select '58|ICE CHEST/COOLER' formatted_output, 2 as seq 
 union
-select '59|TOOL/TACKLE BOX' stuff, 2 as seq 
+select '59|TOOL/TACKLE BOX' formatted_output, 2 as seq 
 union
-select '60|FISHING RODS' stuff, 2 as seq 
+select '60|FISHING RODS' formatted_output, 2 as seq 
 union
-select '61|FIREARMS' stuff, 2 as seq 
+select '61|FIREARMS' formatted_output, 2 as seq 
 union
-select '62|GOLF BAGS/CLUBS' stuff, 2 as seq 
+select '62|GOLF BAGS/CLUBS' formatted_output, 2 as seq 
 union
-select '63|BICYCLE' stuff, 2 as seq 
+select '63|BICYCLE' formatted_output, 2 as seq 
 union
-select '64|SLEEPING BAG/BEDROLL/TENT' stuff, 2 as seq 
+select '64|SLEEPING BAG/BEDROLL/TENT' formatted_output, 2 as seq 
 union
-select '65|WIND/SURF/BOOGIE BOARD' stuff, 2 as seq 
+select '65|WIND/SURF/BOOGIE BOARD' formatted_output, 2 as seq 
 union
-select '66|SKIS/SKI POLES' stuff, 2 as seq 
+select '66|SKIS/SKI POLES' formatted_output, 2 as seq 
 union
-select '67|SKI/SNOWBOARD' stuff, 2 as seq 
+select '67|SKI/SNOWBOARD' formatted_output, 2 as seq 
 union
-select '68|SKI BOOTS/BOOT BAG' stuff, 2 as seq 
+select '68|SKI BOOTS/BOOT BAG' formatted_output, 2 as seq 
 union
-select '69|SPORTING EQUIPMENT (OTHER)' stuff, 2 as seq 
+select '69|SPORTING EQUIPMENT (OTHER)' formatted_output, 2 as seq 
 union
-select '70|STROLLER/PRAM/BABY CARRIAGE' stuff, 2 as seq 
+select '70|STROLLER/PRAM/BABY CARRIAGE' formatted_output, 2 as seq 
 union
-select '71|CHILD/INFANT CAR SEAT' stuff, 2 as seq 
+select '71|CHILD/INFANT CAR SEAT' formatted_output, 2 as seq 
 union
-select '72|CHILD/INFANT EQUIPMENT (OTHER)' stuff, 2 as seq 
+select '72|CHILD/INFANT EQUIPMENT (OTHER)' formatted_output, 2 as seq 
 union
-select '73|FULL SIZE PRAM/BABY CARRIAGE/JOGGER' stuff, 2 as seq 
+select '73|FULL SIZE PRAM/BABY CARRIAGE/JOGGER' formatted_output, 2 as seq 
 union
-select '74|UMBRELLA STROLLER' stuff, 2 as seq 
+select '74|UMBRELLA STROLLER' formatted_output, 2 as seq 
 union
-select '75|WHEELED SPORTING ITEMS' stuff, 2 as seq 
+select '75|WHEELED SPORTING ITEMS' formatted_output, 2 as seq 
 union
-select '80|AUDIO EQUIPMENT' stuff, 2 as seq 
+select '80|AUDIO EQUIPMENT' formatted_output, 2 as seq 
 union
-select '81|VIDEO EQUIPMENT' stuff, 2 as seq 
+select '81|VIDEO EQUIPMENT' formatted_output, 2 as seq 
 union
-select '82|COMPUTER EQUIPMENT' stuff, 2 as seq 
+select '82|COMPUTER EQUIPMENT' formatted_output, 2 as seq 
 union
-select '83|ELECTRICAL APPLIANCES' stuff, 2 as seq 
+select '83|ELECTRICAL APPLIANCES' formatted_output, 2 as seq 
 union
-select '84|COMMUNICATION EQUIPMENT' stuff, 2 as seq 
+select '84|COMMUNICATION EQUIPMENT' formatted_output, 2 as seq 
 union
-select '85|MUSICAL INSTRUMENT' stuff, 2 as seq 
+select '85|MUSICAL INSTRUMENT' formatted_output, 2 as seq 
 union
-select '89|CAMPING/FOLDING/COLLAPSIBLE CHAIR' stuff, 2 as seq 
+select '89|CAMPING/FOLDING/COLLAPSIBLE CHAIR' formatted_output, 2 as seq 
 union
-select '90|BAGGAGE TROLLEY' stuff, 2 as seq 
+select '90|BAGGAGE TROLLEY' formatted_output, 2 as seq 
 union
-select '91|WCHR/ORTHOPAEDIC DEVICES' stuff, 2 as seq 
+select '91|WCHR/ORTHOPAEDIC DEVICES' formatted_output, 2 as seq 
 union
-select '92|SECURITY REMOVED ITEMS' stuff, 2 as seq 
+select '92|SECURITY REMOVED ITEMS' formatted_output, 2 as seq 
 union
-select '93|SHOPPING BAG' stuff, 2 as seq 
+select '93|SHOPPING BAG' formatted_output, 2 as seq 
 union
-select '94|WHEEL CHAIR' stuff, 2 as seq 
+select '94|WHEEL CHAIR' formatted_output, 2 as seq 
 union
-select '95|ORTHOPAEDIC DEVICES' stuff, 2 as seq 
+select '95|ORTHOPAEDIC DEVICES' formatted_output, 2 as seq 
 union
-select '96|BEDDING BAG' stuff, 2 as seq 
+select '96|BEDDING BAG' formatted_output, 2 as seq 
 union
-select '97|SPECIALIST DIVE BAG/EQUIPMENT' stuff, 2 as seq 
+select '97|SPECIALIST DIVE BAG/EQUIPMENT' formatted_output, 2 as seq 
 union
-select '98|BEACH PATIO UMBRELLA' stuff, 2 as seq 
+select '98|BEACH PATIO UMBRELLA' formatted_output, 2 as seq 
 union
-select '99|ARTICLE NOT SHOWN' stuff, 2 as seq 
+select '99|ARTICLE NOT SHOWN' formatted_output, 2 as seq 
 union
 
-select 'T|64' stuff, 3 as seq 
+select 'T|64' formatted_output, 3 as seq 
 
 ) temp
-order by seq, stuff");
+order by seq, formatted_output");
 prepare stmt from @qry;
 execute stmt;
 deallocate prepare stmt;

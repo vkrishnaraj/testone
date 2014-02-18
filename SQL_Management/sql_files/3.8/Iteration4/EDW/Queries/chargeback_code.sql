@@ -1,12 +1,12 @@
 set @qry = concat("
 #START QUERY
 
-select stuff 
+select formatted_output 
 
 #OUTFILE
 into outfile 'D:/EDW/chargeback_code_", date_format(now(), '%Y%m%d'), ".csv' 
 from (
-select concat_ws('|','H',date_format(now(), '%Y%m%d'), date_format(now(), '%Y%m%d')) stuff, 1 as seq
+select concat_ws('|','H',date_format(now(), '%Y%m%d'), date_format(now(), '%Y%m%d')) formatted_output, 1 as seq
 union
 select concat_ws('|',
 
@@ -18,7 +18,7 @@ CASE (transferStation) WHEN 0 THEN 'N' ELSE 'Y' END,
 CASE (destinationStation) WHEN 0 THEN 'N' ELSE 'Y' END,
 CASE (controllable) WHEN 0 THEN 'N' ELSE 'Y' END,
 CASE (active) WHEN 0 THEN 'N' ELSE 'Y' END
-) stuff, 2 as seq 
+) formatted_output, 2 as seq 
 
 #ROOT QUERY
 from company_irregularity_codes 
@@ -30,13 +30,13 @@ select concat_ws('|','T',
 
 #COUNT
 count(*)
-) stuff, 3 as seq 
+) formatted_output, 3 as seq 
 
 #ROOT QUERY
 from (select * from company_irregularity_codes where companycode_ID = 'WN' 
 group by loss_code) temp2
 ) temp
-order by seq, stuff");
+order by seq, formatted_output");
 prepare stmt from @qry;
 execute stmt;
 deallocate prepare stmt;
