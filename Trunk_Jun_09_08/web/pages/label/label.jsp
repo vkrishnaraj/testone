@@ -88,6 +88,7 @@
     <tr>
       <td id="pageheadercell">
         <div id="pageheaderleft">
+        
           <h1>
 				<c:choose>
 	        		<c:when test="${not empty label}">
@@ -149,6 +150,7 @@
 		    	  </div>
 		    	  
                   <c:if test="${not empty labellist}">
+                    <br>*&nbsp;<bean:message key="message.required" />
 		          	<display:table id="thisLabel" name="requestScope.labellist" requestURI="/label.do" sort="external" 
 		          		size="<%=NumberUtils.toInt((String)request.getAttribute("rowcount"))%>" pagesize="<%=NumberUtils.toInt((String)request.getAttribute("rowsperpage"))%>"
 		          		class="form2" cellspacing="0" cellpadding="0" partialList="true">
@@ -178,7 +180,7 @@
 							
 							<input type="text" name="starting_position" id="starting_position" value="" size="2" maxlength="2" class="textfield" onchange="verifyStartingPositionRange();">
 							&nbsp;
-							<bean:message key="label.starting.position" />
+							*&nbsp;<bean:message key="label.starting.position" />
 							&nbsp;&nbsp;
 							<input type="submit" name="print" value="<bean:message key="print" />" id="button" onclick="return validateCheckboxes('label_id') && verifyStartingPositionRange();">
 						</td>
