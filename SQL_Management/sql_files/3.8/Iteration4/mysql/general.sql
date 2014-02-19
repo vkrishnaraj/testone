@@ -136,6 +136,5 @@ ALTER TABLE wt_transaction ADD INDEX (createDate);
 ALTER TABLE wt_transaction ADD INDEX (result);
 ALTER TABLE wt_transaction ADD INDEX (txType);
 ALTER TABLE wt_transaction ADD INDEX (agent_id);
-ALTER TABLE wt_transaction ADD INDEX (agent_id);
 ALTER TABLE wt_transaction ADD INDEX (incident_id);
 ALTER TABLE wt_transaction ADD INDEX (ohd_id);
