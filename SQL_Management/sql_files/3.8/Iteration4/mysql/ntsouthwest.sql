@@ -111,4 +111,8 @@ select i.incident_id, timestamp(i.createdate, i.createtime) as takenDate, p.firs
 	  and a.username=agentUsername and i.itemtype_ID=itemType limit percentlimit;
 end //
 
+## Make sure this is ran against Production. Already ran against Testing, Testing2, and Training ##
+GRANT EXECUTE ON PROCEDURE wn_production.getAgentAuditReport TO 'ntwn_user'@'%';
+GRANT EXECUTE ON PROCEDURE wn_production.getBSOAgentAuditReport TO 'ntwn_user'@'%';
+flush privileges;
 ###################################################################
