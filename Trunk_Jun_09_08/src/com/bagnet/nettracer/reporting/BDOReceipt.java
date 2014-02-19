@@ -259,13 +259,21 @@ public class BDOReceipt {
 					deliInfo+=messages.getMessage(TracerProperties.BDO_LABEL_SERVICE_LEVEL)+": "+sl.getDescription();
 				}
 				//add pickup date and time to deliver info if applicable
-				String pickupDateAndTime = theform.getDisppickupdate() + " " + theform.getDisppickuptime();
-				if (pickupDateAndTime != null && pickupDateAndTime.trim().length() > 0) 
-				{	
-					brd.setDate2(pickupDateAndTime);
+				String pickupDate = DateUtils.formatDate(theform.getPickupdate(), theform.getAgent().getDateformat().getFormat(), null, null);
+				String pickupTime = theform.getDisppickuptime();
+				String pickupDateAndTimeLabel = "";
+				String pickupDateAndTimeValue = "";
+				if (pickupDate != null && pickupDate.trim().length() > 0){
+					pickupDateAndTimeValue = pickupDate;
+					pickupDateAndTimeLabel = TracerProperties.BDO_LABEL_PICKUPDATE;
+					if (pickupTime != null && pickupTime.trim().length() > 0){
+						pickupDateAndTimeValue += " " + pickupTime;
+						pickupDateAndTimeLabel = TracerProperties.BDO_LABEL_PICKUPDATE_AND_TIME;
+					}
+					brd.setDate2(pickupDateAndTimeValue);
 					deliInfo+="\r";
-					deliInfo+=messages.getMessage(TracerProperties.BDO_LABEL_PICKUPDATE_AND_TIME)+": "+ brd.getDate2();
-				}	
+					deliInfo+=messages.getMessage(pickupDateAndTimeLabel)+": "+ brd.getDate2();
+				}
 				
 				brd.setDeliveryinfo(deliInfo); //Add this too				
 				al.add(brd);						
