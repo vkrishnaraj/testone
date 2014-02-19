@@ -130,3 +130,12 @@ alter table activity add display bit not null default 1;
 update activity set display = 0 where code in ('55C', '99E');
 
 alter table audit_ohd modify column storage_location varchar(125);
+
+# ALREADY RAN FOR NTWN_TESTING
+ALTER TABLE wt_transaction ADD INDEX (createDate);
+ALTER TABLE wt_transaction ADD INDEX (result);
+ALTER TABLE wt_transaction ADD INDEX (txType);
+ALTER TABLE wt_transaction ADD INDEX (agent_id);
+ALTER TABLE wt_transaction ADD INDEX (agent_id);
+ALTER TABLE wt_transaction ADD INDEX (incident_id);
+ALTER TABLE wt_transaction ADD INDEX (ohd_id);
