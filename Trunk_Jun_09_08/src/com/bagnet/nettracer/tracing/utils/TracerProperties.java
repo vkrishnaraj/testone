@@ -67,7 +67,8 @@ public class TracerProperties {
 	public static final String BDO_LABEL_CHARGES="bdo.label.charges";
 	public static final String BDO_LABEL_DELIVERY_COMPANY="bdo.label.delivery.company";
 	public static final String BDO_LABEL_SERVICE_LEVEL="bdo.label.service.level";
-	public static final String BDO_LABEL_PICKUPDATE_AND_TIME="bdo.label.pickup.date.time";	
+	public static final String BDO_LABEL_PICKUPDATE_AND_TIME="bdo.label.pickup.date.time";		
+	public static final String BDO_LABEL_PICKUPDATE="bdo.label.pickup.date";	
 	public static final String BDO_LABEL_REFERENCE_NUMBER="bdo.label.reference.number";
 	public static final String BDO_LABEL_DELIVERY_ADDRESS="bdo.label.delivery.address";
 
