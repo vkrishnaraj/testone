@@ -131,7 +131,7 @@ update activity set display = 0 where code in ('55C', '99E');
 
 alter table audit_ohd modify column storage_location varchar(125);
 
-# ALREADY RAN FOR NTWN_TESTING
+# ALREADY RAN FOR NTWN_TESTING, NTWN_TESTING2, NTWN_TRAINING
 ALTER TABLE wt_transaction ADD INDEX (createDate);
 ALTER TABLE wt_transaction ADD INDEX (result);
 ALTER TABLE wt_transaction ADD INDEX (txType);
