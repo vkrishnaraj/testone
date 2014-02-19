@@ -169,7 +169,7 @@
 							      	itinElementName=itinElement.name;
 							      		
 					      			if(typeof itinElementName != "undefined" && itinElementName != null && itinElementName.indexOf("].legfrom") != -1){
-					      				if(itinElement.value.toUpperCase()==faultStationCode && ((currentPaxItin==1 && departStation) || (currentPaxItin!=paxItinNum && transStation) )){
+					      				if(itinElement.value.toUpperCase()==faultStationCode && ((currentPaxItin==1 && departStation) || (currentPaxItin!=1 && transStation) )){
 					      					hasPaxItin=true;
 					      				}
 					      			}
