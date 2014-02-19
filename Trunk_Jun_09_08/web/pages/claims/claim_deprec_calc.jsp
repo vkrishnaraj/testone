@@ -16,11 +16,16 @@
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.reporting.ReportingConstants" %>
+<%@ page import="java.util.ResourceBundle" %>
+<%@ page import="java.util.Locale" %>
 <%
   Agent a = (Agent)session.getAttribute("user");
   ClaimDeprecCalcForm myform=(ClaimDeprecCalcForm)session.getAttribute("claimDeprecCalcForm");
   boolean ntUser = PropertyBMO.isTrue("nt.user");
   boolean ntfsUser = PropertyBMO.isTrue("ntfs.user");
+
+	ResourceBundle bundle = ResourceBundle.getBundle(
+			"com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
 %>
   
   <html:form action="claim_deprec_calc.do" method="post" enctype="multipart/form-data">
@@ -244,15 +249,30 @@
 				var fieldf = document.getElementById("date_purch_"+i);
 				var fieldg = document.getElementById("dep_content_"+i+"_type");
 				var receipt = document.getElementById("dep_content_" + i + "_rec");
+				var dateCalculated=document.getElementById("claimDeprec.dispDateCalculate");
 				var coc = document.getElementById("dep_content_" + i + "_coc");
 				
 				
 				var n = parseFloat(fielda.value);
-				nowDate=new Date();
+				var nowDate;
+				if(dateCalculated!=null && dateCalculated.value!=""){
+					nowDate=new Date(dateCalculated.value);
+				} else {
+					nowDate=new Date();
+				}
 				purchaseDate=new Date(fieldf.value);
 				var milliPerYear=1000*60*60*24*365.26;
-				yearDiff=(nowDate-purchaseDate)/milliPerYear;
-				yearDiff=yearDiff.toFixed();
+				if(nowDate.getFullYear()==purchaseDate.getFullYear() && nowDate.getDate()==purchaseDate.getDate() && nowDate.getMonth()==purchaseDate.getMonth()  ){
+					yearDiff=1;
+				} else {
+					yearDiff=(nowDate-purchaseDate)/milliPerYear;
+					yearDiff=Math.ceil(yearDiff);
+				}
+
+				if(yearDiff<1){
+					alert("<%=(String) bundle.getString("error.deprec.calculation")%>");
+					yearDiff=1;
+				}
 				var deprecPerc=0;
 				var calcVal=fielda.value;
 				<% GeneralDepreciationRules rules=CompanyBMO.getDeprecRules(a.getCompanycode_ID());%>
@@ -412,6 +432,13 @@
 				}
 			}
 			
+			function calculateAll(){
+				var e=0;
+				<logic:iterate indexId="i" id="item" name="claimDeprecCalcForm" property="claimDeprec.itemlist">
+				 	calculateThis(e);
+				 	e++;
+				</logic:iterate>
+			}
 
 			function googleshop(index) {
 				search=document.getElementById('dep_content_'+index);
@@ -454,7 +481,7 @@
 
 					<tr>
 						<td class="header" width="10%"><strong><bean:message key="deprec.calc.date.calculation"/>: </strong></td>
-						<td><html:text styleId="calculationDate"  name="claimDeprecCalcForm" property="claimDeprec.dispDateCalculate"
+						<td><html:text styleId="calculationDate"  name="claimDeprecCalcForm" property="claimDeprec.dispDateCalculate" onchange="calculateAll();"
 								size="8" styleClass="textfield" /> 
 								
 								<img
@@ -513,7 +540,6 @@
 						<tr>
 							<td nowrap="nowrap">
 							<% String descriptionID="dep_content_"+t1;
-								/*String descripOnClick="document.getElementById('dep_content_"+t1+"_type').selectedIndex=87"; onblur="<%=descripOnClick "*/
 								String calcThis="calculateThis("+t1+");";
 								String changeCat="categoryChange("+t1+"); "+calcThis;
 								String amountClaimId="dep_amount_"+t1;
