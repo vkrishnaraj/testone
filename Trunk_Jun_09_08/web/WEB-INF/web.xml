@@ -180,8 +180,15 @@
         /deployment/main/js/fckeditor/editor/filemanager/connectors/*
       </url-pattern>
     </servlet-mapping>
+     <servlet>
+      <servlet-name>CKConnector</servlet-name>
+        <servlet-class>
+          com.bagnet.nettracer.fckeditor.ConnectorServlet
+      </servlet-class>
+      <load-on-startup>1</load-on-startup>
+    </servlet>
     <servlet-mapping>
-      <servlet-name>Connector</servlet-name>
+      <servlet-name>CKConnector</servlet-name>
       <url-pattern>
         /deployment/main/js/ckeditor/filemanager/connectors/*
       </url-pattern>
