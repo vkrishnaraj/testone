@@ -2763,6 +2763,14 @@ public class BagService {
 							if(uia.getActivity().getCode().equals(ia.getActivity().getCode()) &&
 									uia.getCreateDate().equals(ia.getCreateDate())){
 								task.getInboundqueue().setIncidentActivityId(uia.getId());
+								
+								/** 
+								 * NT-2236 we need to update the assigned agent for the task and the incident associated in order to capture 
+								 * updated agent assignments done directly through the incident
+								 **/
+								task.setAssigned_agent(inboundIncident.getAgentassigned());
+								task.getInboundqueue().setIncident(inboundIncident);
+								
 								InboundTasksUtils.saveTask(task, null, null);
 							}
 						}
