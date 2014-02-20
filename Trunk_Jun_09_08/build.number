@@ -1,8 +1,8 @@
 #Build Number for ANT. Do not edit!
-#Tue Feb 18 21:35:10 EST 2014
+#Wed Feb 19 21:36:54 EST 2014
 tag.name=TAG_
-build.number=187
+build.number=188
 tag.number=3_8_0
-tag.separator=_
 version.number=3.8.0
+tag.separator=_
 branch.number=.
