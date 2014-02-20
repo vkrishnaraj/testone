@@ -140,3 +140,6 @@ ALTER TABLE wt_transaction ADD INDEX (incident_id);
 ALTER TABLE wt_transaction ADD INDEX (ohd_id);
 
 update systemcomponents set component_action_link = 'unassignedInboundQueue.do?loadList=1' where component_id = 1150;
+
+alter table agent_logger add column expired boolean not null default false;
+update agent_logger set expired=true where log_off_time is null;

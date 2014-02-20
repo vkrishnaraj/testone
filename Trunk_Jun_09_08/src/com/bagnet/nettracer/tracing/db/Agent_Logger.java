@@ -31,6 +31,7 @@ public class Agent_Logger implements Serializable {
 
 	private String username;
 
+	private boolean expired = false;
 
 	/**
 	 * @return Returns the agent_ID.
@@ -159,5 +160,22 @@ public class Agent_Logger implements Serializable {
 	 */
 	public void setUsername(String username) {
 		this.username = username;
+	}
+	/**
+	 * @return if the session expired
+	 * 
+	 * @hibernate.property type="boolean"
+	 */
+	public boolean isExpired() {
+		return expired;
+	}
+	/**
+	 * sets the expired status
+	 * @param expired
+	 * 
+	 * @hibernate.property type="boolean"
+	 */
+	public void setExpired(boolean expired) {
+		this.expired = expired;
 	}
 }

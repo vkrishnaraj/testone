@@ -155,7 +155,7 @@ public class AdminUtils {
 
 			//only logged on users
 			if (form.getActivity_status() == null || form.getActivity_status().length() < 1 || !form.getActivity_status().equals("-1"))
-				sql.append(" and logger.log_off_time is null");
+				sql.append(" and logger.log_off_time is null and expired=0");
 
 			Query q = sess.createQuery(sql.toString());
 			q.setString("companycode", companycode);
@@ -244,7 +244,7 @@ public class AdminUtils {
 	
 			//only logged on users
 			if (form.getActivity_status() == null || form.getActivity_status().length() < 1 || !form.getActivity_status().equals("-1"))
-				sql.append(" and logger.log_off_time is null");
+				sql.append(" and logger.log_off_time is null and logger.expired=0");
 
 			sql.append(" order by logger.log_in_time desc");
 

@@ -3,6 +3,7 @@
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
 <%@ taglib uri="/tags/struts-logic" prefix="logic" %>
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
@@ -98,7 +99,7 @@ function updatePagination() {
                   <br>
                   <html:select property="activity_status" styleClass="dropdown">
                     <html:option value="-2">
-                      <bean:message key="Currently_Logged_On" />
+                      <bean:message key="message.active" />
                     </html:option>
                     <html:option value="-1">
                       <bean:message key="all" />
@@ -151,6 +152,11 @@ function updatePagination() {
                     <bean:message key="colname.time_logged_off" />
                   </strong>
                 </td>
+                <td>
+                  <strong>
+                    <bean:message key="header.status" />
+                  </strong>
+                </td>
               </tr>
               <logic:present name="agentList" scope="request">
                 <logic:iterate id="agent" name="agentList" type="com.bagnet.nettracer.tracing.db.Agent_Logger">
@@ -164,6 +170,19 @@ function updatePagination() {
                     <td>
                       &nbsp;
                       <bean:write name="agent" property="displayLoggedOff" />
+                    </td>
+                     <td>
+                      <c:choose>
+                        <c:when test="${agent.expired}">
+                           <bean:message key="message.expired" />
+                        </c:when>
+                        <c:when test="${!agent.expired && agent.log_off_time == null}">
+                           <bean:message key="message.active" />
+                        </c:when>
+                        <c:when test="${!agent.expired && agent.log_off_time != null}">
+                           <bean:message key="message.logged_off" />
+                        </c:when>                      
+                      </c:choose> 
                     </td>
                   </tr>
                 </logic:iterate>

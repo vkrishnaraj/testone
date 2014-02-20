@@ -251,6 +251,8 @@
  	<session-timeout>${timeout}</session-timeout>
  	
  </session-config>
- 
+ <listener>
+	<listener-class>com.bagnet.nettracer.tracing.web.SessionListener</listener-class>
+ </listener>
  
 </web-app>

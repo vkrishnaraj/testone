@@ -360,6 +360,10 @@ public class SecurityUtils {
 	}
 
 	public static void updateAgentLogin(Agent agent, Date log_off_time, int is_online, boolean fullSave) {
+		updateAgentLogin( agent, log_off_time, is_online, fullSave, false );
+	}
+	
+	public static void updateAgentLogin(Agent agent, Date log_off_time, int is_online, boolean fullSave, boolean check_expired) {
 		Session sess = null;
 		Transaction t = null;
 		if (agent == null) return;
@@ -397,10 +401,25 @@ public class SecurityUtils {
 
 			t = sess.beginTransaction();
 			if (al == null) al = new Agent_Logger();
+			// Logoff time will be set if the
+			// user clicked the logoff link
+			boolean expired = false;
+			if (check_expired  && al.getLog_off_time() == null ) {
+			 	expired = true;
+			 	if ( log.isDebugEnabled() )	log.debug("Session expired");
+			} else if (check_expired  && al.getLog_off_time() != null ) {
+				// Already been updated through logoff
+				try {
+					sess.close();
+				} catch (Exception e) {
+				}
+				return;
+			}
 			al.setAgent_ID(agent.getAgent_ID());
 			al.setCompanycode_ID(agent.getStation().getCompany().getCompanyCode_ID());
 			al.setLog_in_time(agent.getLast_logged_on());
 			al.setLog_off_time(log_off_time);
+			al.setExpired(expired);
 			sess.saveOrUpdate(al);
 			t.commit();
 
