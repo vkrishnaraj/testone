@@ -180,6 +180,12 @@
         /deployment/main/js/fckeditor/editor/filemanager/connectors/*
       </url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+      <servlet-name>Connector</servlet-name>
+      <url-pattern>
+        /deployment/main/js/ckeditor/filemanager/connectors/*
+      </url-pattern>
+    </servlet-mapping>
  
  
  <!-- currently the W3C havent settled on a media type for WSDL;
