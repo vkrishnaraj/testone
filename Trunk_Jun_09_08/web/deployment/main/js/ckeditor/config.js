@@ -35,13 +35,16 @@ CKEDITOR.editorConfig = function( config ) {
 	var _FileBrowserExtension = 'php' ;
 	var _QuickUploadExtension = 'php' ;
 	
-	config.filebrowserBrowseUrl = CKEDITOR.basePath + 'filemanager/browser/default/browser.html?Connector=' + encodeURIComponent( CKEDITOR.basePath + 'filemanager/connectors/' + _FileBrowserLanguage + '/connector.' + _FileBrowserExtension ) ;
-	config.filebrowserUploadUrl = CKEDITOR.basePath + 'filemanager/connectors/' + _QuickUploadLanguage + '/upload.' + _QuickUploadExtension ;
+	var _FCKBasePath = CKEDITOR.basePath + '';
+	_FCKBasePath = _FCKBasePath.replace('ckeditor/', 'fckeditor/editor/');
 	
-	config.filebrowserImageBrowseUrl = CKEDITOR.basePath + 'filemanager/browser/default/browser.html?Type=Image&Connector=' + encodeURIComponent( CKEDITOR.basePath + 'filemanager/connectors/' + _FileBrowserLanguage + '/connector.' + _FileBrowserExtension ) ;
-	config.filebrowserImageUploadUrl = CKEDITOR.basePath + 'filemanager/connectors/' + _QuickUploadLanguage + '/upload.' + _QuickUploadExtension + '?Type=Image' ;
+	config.filebrowserBrowseUrl = _FCKBasePath + 'filemanager/browser/default/browser.html?Connector=' + encodeURIComponent( CKEDITOR.basePath + 'filemanager/connectors/' + _FileBrowserLanguage + '/connector.' + _FileBrowserExtension ) ;
+	/*	config.filebrowserUploadUrl = CKEDITOR.basePath + 'filemanager/connectors/' + _QuickUploadLanguage + '/upload.' + _QuickUploadExtension ; */
 	
-	config.filebrowserFlashBrowseUrl = CKEDITOR.basePath + 'filemanager/browser/default/browser.html?Type=Flash&Connector=' + encodeURIComponent( CKEDITOR.basePath + 'filemanager/connectors/' + _FileBrowserLanguage + '/connector.' + _FileBrowserExtension ) ;
-	config.filebrowserFlashUploadUrl = CKEDITOR.basePath + 'filemanager/connectors/' + _QuickUploadLanguage + '/upload.' + _QuickUploadExtension + '?Type=Flash' ;
+	config.filebrowserImageBrowseUrl = _FCKBasePath + 'filemanager/browser/default/browser.html?Type=Image&Connector=' + encodeURIComponent( CKEDITOR.basePath + 'filemanager/connectors/' + _FileBrowserLanguage + '/connector.' + _FileBrowserExtension ) ;
+	/*	config.filebrowserImageUploadUrl = CKEDITOR.basePath + 'filemanager/connectors/' + _QuickUploadLanguage + '/upload.' + _QuickUploadExtension + '?Type=Image' ; */
+	
+	config.filebrowserFlashBrowseUrl = _FCKBasePath + 'filemanager/browser/default/browser.html?Type=Flash&Connector=' + encodeURIComponent( CKEDITOR.basePath + 'filemanager/connectors/' + _FileBrowserLanguage + '/connector.' + _FileBrowserExtension ) ;
+	/*	config.filebrowserFlashUploadUrl = CKEDITOR.basePath + 'filemanager/connectors/' + _QuickUploadLanguage + '/upload.' + _QuickUploadExtension + '?Type=Flash' ; */
 	
 };
