@@ -77,7 +77,7 @@ public class FileAndMessage implements Comparable<FileAndMessage> {
 	public String getDispDateCreated() {
 		if (getDateCreated() != null) {
 			SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy hh:mm a z");
-			format.setTimeZone(TimeZone.getTimeZone("GMT"));
+			format.setTimeZone(TimeZone.getTimeZone("CST"));
 			return format.format(getDateCreated().getTime());
 		}
 		return "";

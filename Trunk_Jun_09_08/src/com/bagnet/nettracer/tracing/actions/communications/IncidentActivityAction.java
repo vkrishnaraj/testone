@@ -91,7 +91,6 @@ public class IncidentActivityAction extends CheckedAction {
 			success = incidentActivityId > 0;
 			if(success){
 				IncidentActivity ia = incidentActivityService.load(incidentActivityId);
-				success = createOCMessage(user, ia, messages, activity);
 				if(success){
 					createInboundTask(user, ia);
 				}
