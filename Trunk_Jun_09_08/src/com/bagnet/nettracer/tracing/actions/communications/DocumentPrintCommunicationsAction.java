@@ -110,9 +110,34 @@ public class DocumentPrintCommunicationsAction extends Action {
 			}
 		}
 			
-		List<IncidentActivity> incidentActivitylist = incidentActivityService.getIncidentActivitiesByTaskStatus(status, sortBy);
+		List<IncidentActivity> incidentActivities = incidentActivityService.getIncidentActivitiesByTaskStatus(status, sortBy);
+		
+		//remove inActive incident activity tasks
+		List<IncidentActivity> incidentActivitylist = null;
+		if (incidentActivities != null && !incidentActivities.isEmpty()) {
+			incidentActivitylist = new ArrayList<IncidentActivity>();
+			for (IncidentActivity incidentActivity : incidentActivities) {
+				List<IncidentActivityTask> tasksList = incidentActivity.getTasks();
+				if (tasksList == null || tasksList.isEmpty()) {
+					continue;
+				}
+	
+				List<IncidentActivityTask> activeTasks = new ArrayList<IncidentActivityTask>(); 
+				for (IncidentActivityTask incidentActivityTask : tasksList) {
+					if (incidentActivityTask.isActive()) {
+						activeTasks.add(incidentActivityTask);
+					}
+					
+				}
+				
+				if (!activeTasks.isEmpty()) {
+					incidentActivity.setTasks(activeTasks);
+					incidentActivitylist.add(incidentActivity);
+				}
+			}
+		}
+		
 		if (incidentActivitylist == null || incidentActivitylist.isEmpty()) {
-
 			if (errors == null) {
 				errors = new ActionMessages();
 				ActionMessage error = new ActionMessage("error.document.print.queue");

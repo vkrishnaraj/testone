@@ -667,13 +667,13 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 			Criteria criteria = session.createCriteria(IncidentActivity.class, "ia");			
 			criteria.add(Restrictions.isNotNull("ia.approvalAgent"));		
 
-			criteria.createAlias("tasks", "task");
+			criteria.createAlias("ia.tasks", "task");
 			criteria.add(Restrictions.eq("task.status", status));
 			criteria.add(Restrictions.eq("task.active", true));
 			
 			if (StringUtils.startsWithIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_APPROVAL_AGENT_NAME.getParamString())
 					|| StringUtils.startsWithIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_APPROVAL_AGENT_USERNAME.getParamString())) {
-				criteria.createAlias("approvalAgent", "aa");
+				criteria.createAlias("ia.approvalAgent", "aa");
 				if (StringUtils.equalsIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_APPROVAL_AGENT_NAME.getParamString())) {
 					criteria.addOrder(Order.asc("aa.lastname"));
 				} else if (StringUtils.equalsIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_APPROVAL_AGENT_NAME_REV.getParamString())) {
@@ -685,7 +685,7 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 				}
 			} else if (StringUtils.startsWithIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_DOCUMENT_ID.getParamString())
 					|| StringUtils.startsWithIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_DOCUMENT_TITLE.getParamString())) {
-				criteria.createAlias("document", "d");
+				criteria.createAlias("ia.document", "d");
 				if (StringUtils.equalsIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_DOCUMENT_ID.getParamString())) {
 					criteria.addOrder(Order.asc("d.id"));
 				} else if (StringUtils.equalsIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_DOCUMENT_ID_REV.getParamString())) {
