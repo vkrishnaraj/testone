@@ -8,16 +8,21 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.ValidatorForm;
 
 import com.bagnet.nettracer.tracing.db.Agent;
-import com.bagnet.nettracer.tracing.db.taskmanager.InboundQueueTask;
 import com.bagnet.nettracer.tracing.utils.taskmanager.UnassignedInboundAgentElement;
 import com.bagnet.nettracer.tracing.utils.taskmanager.UnassignedIncidentElement;
 
 public class UnassignedInboundQueueForm extends ValidatorForm {
 	private static final long serialVersionUID = -2791233648024154545L;
 	
-	private String test;
-	
 	private List<UnassignedInboundAgentElement> agentMatrix;
+	
+	/**
+	 * When sorting with display tag, the check box values are not being submitted.
+	 * When page is submitted, store agentMatrix so that check box values can we set in the action when using sort.
+	 */
+	private List<UnassignedInboundAgentElement> previousAgentMatrix;
+	
+	
 	private List<Agent> agentList;
 	
 	private List<UnassignedIncidentElement> incidentList;
@@ -45,14 +50,6 @@ public class UnassignedInboundQueueForm extends ValidatorForm {
 			}
 		}
 	}
-	public String getTest() {
-		return test;
-	}
-	public void setTest(String test) {
-		System.out.println(test);
-		
-		this.test = test;
-	}
 	
 	public UnassignedInboundAgentElement getAgentMatrix(int i){
 		if(agentMatrix != null && agentMatrix.size() > i){
@@ -75,5 +72,11 @@ public class UnassignedInboundQueueForm extends ValidatorForm {
 		} else {
 			return null;
 		}
+	}
+	public List<UnassignedInboundAgentElement> getPreviousAgentMatrix() {
+		return previousAgentMatrix;
+	}
+	public void setPreviousAgentMatrix(List<UnassignedInboundAgentElement> previousAgentMatrix) {
+		this.previousAgentMatrix = previousAgentMatrix;
 	}
 }

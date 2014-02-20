@@ -2,10 +2,13 @@ package com.bagnet.nettracer.tracing.utils.taskmanager;
 
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeansException;
+
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.taskmanager.InboundQueueTask;
 
-public class UnassignedInboundAgentElement {
+public class UnassignedInboundAgentElement implements Cloneable {
 	private Agent agent;
 	private double load;
 	
@@ -72,6 +75,18 @@ public class UnassignedInboundAgentElement {
 			return maxAssign - taskList.size(); 
 		} else {
 			return maxAssign;
+		}
+	}
+	
+	@Override
+	public UnassignedInboundAgentElement clone(){
+		try {
+			UnassignedInboundAgentElement ret = new UnassignedInboundAgentElement();
+			BeanUtils.copyProperties(this, ret);
+			return ret;
+		} catch (BeansException e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 }

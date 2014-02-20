@@ -138,3 +138,5 @@ ALTER TABLE wt_transaction ADD INDEX (txType);
 ALTER TABLE wt_transaction ADD INDEX (agent_id);
 ALTER TABLE wt_transaction ADD INDEX (incident_id);
 ALTER TABLE wt_transaction ADD INDEX (ohd_id);
+
+update systemcomponents set component_action_link = 'unassignedInboundQueue.do?loadList=1' where component_id = 1150;

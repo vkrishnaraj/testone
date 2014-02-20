@@ -601,19 +601,29 @@ public class InboundTasksUtils {
 			int ret = 0;
 			
 			if("username".equals(sort)){
-				ret = o1.getIncident().getAgent().getUsername().compareTo(o2.getIncident().getAgent().getUsername());
+				ret = compareAgentassigned(o1,o2);
 			} else if ("type".equals(sort)){
 				ret =  o1.getDispTaskList().compareTo(o2.getDispTaskList());
 			} else if ("date".equals(sort)){
 				ret =  o1.getOldestTaskDate().compareTo(o2.getOldestTaskDate());
-			} else if ("incident".equals(sort)){
+			} else if ("incidentid".equals(sort)){
 				ret =  o1.getIncident().getIncident_ID().compareTo(o2.getIncident().getIncident_ID());
 			} else {
-				ret = o1.getIncident().getAgent().getUsername().compareTo(o2.getIncident().getAgent().getUsername());
+				ret = compareAgentassigned(o1,o2);
 			}
 
-			ret = "asc".equals(dir)?ret:-ret;
+			ret = TracingConstants.SORT_ASCENDING.equals(dir)?ret:-ret;
 			return ret;
+		}
+		
+		private int compareAgentassigned(UnassignedIncidentElement o1, UnassignedIncidentElement o2){
+			if(o1.getIncident().getAgentassigned() == null){
+				return 1;
+			} else if (o2.getIncident().getAgentassigned() == null){
+				return -1;
+			} else {
+				return o1.getIncident().getAgentassigned().getUsername().compareTo(o2.getIncident().getAgentassigned().getUsername());
+			}
 		}
 	}
 
