@@ -65,6 +65,7 @@ public class CRAPReport {
 			report_info.put("claim_id", String.valueOf(theform.getClaim().getId()));
 			
 			double stationPaid=0;
+			double cbsPayout=0;
 			double cbsslv=0;
 			double stationslv=0;
 			
@@ -89,7 +90,6 @@ public class CRAPReport {
 				 * will put a @SuppressWarnings("unchecked") around this call to insure it doesn't
 				 * potentially break the system
 				 */  
-				@SuppressWarnings("unchecked")
 				List<Lz> lzList=LzUtils.getIncidentLzStations(user.getCompanycode_ID());
 				HashMap<Integer,Lz> lzmap=new HashMap<Integer,Lz>();
 				if(lzList!=null){
@@ -103,8 +103,11 @@ public class CRAPReport {
 						boolean epDelivered=ep.getExpensetype().getExpensetype_ID()==TracingConstants.EXPENSEPAYOUT_DELIVERY;
 						boolean epPaid=ep.getStatus().getStatus_ID()==TracingConstants.EXPENSEPAYOUT_STATUS_PAID;
 						if(epApproved || epPaid){
-							if(lzmap!=null && lzmap.get(ep.getAgent().getStation().getStation_ID())!=null && ep.getVoucheramt()>0){
+							/*NT-2243 SLVs are Issued Vouchers. Modified to check for the VOUCH paytype, where drafts check for the DRAFT paytype*/
+							if(lzmap!=null && lzmap.get(ep.getAgent().getStation().getStation_ID())!=null && ep.getPaytype().equals(TracingConstants.ENUM_VOUCHER) && ep.getVoucheramt()>0){
 								cbsslv+=ep.getVoucheramt();
+							} else if(lzmap!=null && lzmap.get(ep.getAgent().getStation().getStation_ID())!=null && ep.getPaytype().equals(TracingConstants.ENUM_DRAFT) && ep.getCheckamt()>0){
+								cbsPayout+=ep.getCheckamt();
 							} else {
 								if(ep.getVoucheramt()>0){
 									stationslv+=ep.getVoucheramt();
@@ -179,6 +182,7 @@ public class CRAPReport {
 			}
 			report_info.put("stationpaid", "$"+TracingConstants.DECIMALFORMAT.format(stationPaid));
 			report_info.put("cbsslv", "$"+TracingConstants.DECIMALFORMAT.format(cbsslv));
+			report_info.put("cbsPayout", "$"+TracingConstants.DECIMALFORMAT.format(cbsPayout));
 			report_info.put("stationslv", "$"+TracingConstants.DECIMALFORMAT.format(stationslv));
 			report_info.put("exclusion", "$"+TracingConstants.DECIMALFORMAT.format(exclusion));
 			report_info.put("depreciation", "$"+TracingConstants.DECIMALFORMAT.format(depreciation));

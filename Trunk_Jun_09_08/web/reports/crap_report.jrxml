@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="crap_report" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20" isFloatColumnFooter="true">
 	<property name="ireport.scriptlethandling" value="2"/>
-	<property name="ireport.zoom" value="1.9487171000000618"/>
+	<property name="ireport.zoom" value="2.593742460100085"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="442"/>
+	<property name="ireport.y" value="96"/>
 	<parameter name="report_info" class="java.util.HashMap" isForPrompting="false"/>
 	<parameter name="depreciationReport" class="net.sf.jasperreports.engine.JasperReport" isForPrompting="false"/>
 	<parameter name="depreciations" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource" isForPrompting="false"/>
@@ -19,6 +19,25 @@
 		<groupExpression><![CDATA[$V{PAGE_NUMBER}]]></groupExpression>
 		<groupHeader>
 			<band height="218">
+				<rectangle>
+					<reportElement x="1" y="103" width="150" height="20" backcolor="#AFAFAF"/>
+					<graphicElement>
+						<pen lineWidth="0.0" lineStyle="Double"/>
+					</graphicElement>
+				</rectangle>
+				<rectangle>
+					<reportElement x="425" y="103" width="109" height="20" backcolor="#AFAFAF"/>
+					<graphicElement>
+						<pen lineWidth="0.0" lineStyle="Double"/>
+					</graphicElement>
+				</rectangle>
+				<textField isBlankWhenNull="true">
+					<reportElement mode="Opaque" x="260" y="103" width="165" height="20" backcolor="#AFAFAF"/>
+					<textElement lineSpacing="Single">
+						<font size="14"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[($P{report_info}).get("cbsPayout")]]></textFieldExpression>
+				</textField>
 				<textField>
 					<reportElement mode="Opaque" x="1" y="1" width="533" height="23" backcolor="#AFAFAF"/>
 					<textElement textAlignment="Center" lineSpacing="Single">
@@ -27,11 +46,11 @@
 					<textFieldExpression class="java.lang.String"><![CDATA[$R{header.remarks}]]></textFieldExpression>
 				</textField>
 				<textField>
-					<reportElement mode="Opaque" x="1" y="103" width="533" height="20" backcolor="#AFAFAF"/>
+					<reportElement mode="Opaque" x="151" y="103" width="109" height="20" backcolor="#AFAFAF"/>
 					<textElement textAlignment="Center" lineSpacing="Single">
 						<font size="14" isBold="true"/>
 					</textElement>
-					<textFieldExpression class="java.lang.String"><![CDATA[$R{header.cbs.payout}]]></textFieldExpression>
+					<textFieldExpression class="java.lang.String"><![CDATA[$R{header.cbs.payout}+":"]]></textFieldExpression>
 				</textField>
 				<textField pattern="" isBlankWhenNull="true">
 					<reportElement key="" isPrintRepeatedValues="false" mode="Transparent" x="4" y="25" width="525" height="77" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
