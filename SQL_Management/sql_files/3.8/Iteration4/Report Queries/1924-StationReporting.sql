@@ -73,11 +73,12 @@ inc.checkedlocation, (case inc.checkedlocation when not 0 then cat.description e
 
 #Station Current Loaner Report - Is based on and returns GMT Time
 #stationCode - 3 Character Station Code to check against.
-select inv.barcode, inv.description, (case inv.inventory_status_id when 701 then "Y" else "N" end) as loanIndicator, 
+select inv.barcode, inv.description, ii.description as bagItemType, (case inv.inventory_status_id when 701 then "Y" else "N" end) as loanIndicator, 
   (case inv.inventory_status_id when 701 then (case inv.incident_id when "$SNITEM$" then "Special Need" else inv.incident_id end) else "" end) as incNum,
   date((case inv.inventory_status_id when 701 then inv.editDate else "" end)) as loanDate 
   from audit_issuance_item_inventory inv inner join station s on inv.station_id=s.Station_ID 
   inner join Status st on st.Status_ID = inv.inventory_status_id
+  inner join issuance_item ii on ii.id=inv.issuance_item_id
     where inv.audit_id in (select max(audit_id) from audit_issuance_item_inventory group by id) and s.stationCode=:stationcode and (inv.trade_type = 0 or inv.trade_type=2)
     group by inv.id;
 #--------------------------------------------------------------------
