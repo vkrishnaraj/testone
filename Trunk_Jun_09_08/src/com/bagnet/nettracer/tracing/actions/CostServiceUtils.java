@@ -273,6 +273,9 @@ public class CostServiceUtils {
 				} else if(item.getSpecialCondition()==TracingConstants.SPECIAL_CONDITION_BOTH){
 					id.setOversize(true);
 					id.setOverweight(true);
+				} else {
+					id.setOversize(false);
+					id.setOverweight(false);
 				}
 				id.setStandard(item.isNoAddFees());
 			}
@@ -332,6 +335,23 @@ public class CostServiceUtils {
 						ActionMessage error = new ActionMessage("error.zip.out.delivery");
 						messages.add(ActionMessages.GLOBAL_MESSAGE, error);
 						specificError=true;
+						try{
+							BigDecimal cost=null;
+						
+							if(a.getMileageCost()!=null){
+								cost=a.getMileageCost().add(a.getDeliveryCharges()).add(a.getAddtlFeesCost()).add(a.getFuelSurchargeCost());
+							} else {
+								cost=a.getDeliveryCharges().add(a.getFuelSurchargeCost()).add(a.getAddtlFeesCost());
+							}
+							
+							form.setCost(TracingConstants.DECIMALFORMAT.format(cost.doubleValue()));
+							form.setCurrency("USD");
+							form.setOrigDelivCost(cost.doubleValue());
+						} catch (Exception e){
+							ActionMessage calcerror = new ActionMessage("error.delivery.request.calculation");
+							messages.add(ActionMessages.GLOBAL_MESSAGE, calcerror);
+							e.printStackTrace();
+						}
 					} 
 					if(err.equals(ErrorCodeEnum.UNKNOWN_ZIP_CODE)){
 						ActionMessage error = new ActionMessage("error.unknown.zip");
