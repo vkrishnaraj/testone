@@ -217,11 +217,13 @@ select inv.id, inv.editdate, (case inv.trade_type when 0 then "Both" when 1 then
   ifnull((case inv.incident_id when "$SNITEM$" then "Special Need" else inv.incident_id end), '') as incNum,
   timestamp((case inv.inventory_status_id when 701 then inv.editDate else "" end)) as loanDate,
   p.firstname as passFirstName,p.lastname as passLastName, s.stationcode, a.username, a.firstname as agentFirstName,a.lastname as agentLastName,
-  timestamp((case inv.inventory_status_id when 702 then inv.issueDate else "" end)) as issueDate, inv.cost
+  timestamp((case inv.inventory_status_id when 702 then inv.issueDate else "" end)) as issueDate, inv.cost,
+  ii.description as bagItemType
   from audit_issuance_item_inventory inv 
   inner join station s on inv.station_id=s.Station_ID 
   inner join Status st on st.Status_ID = inv.inventory_status_id
   inner join Agent a on inv.editagent_id = a.Agent_ID
+  inner join issuance_item ii on ii.id = inv.issuance_item_id
   left outer join passenger p on p.Passenger_ID = (select pp.Passenger_ID from passenger pp where inv.Incident_ID = pp.incident_ID limit 1) 
     where inv.audit_id in (select max(audit_id) from audit_issuance_item_inventory where audit_issuance_item_inventory.id=inv.id group by id) 
     and s.stationCode=:stationcode 
