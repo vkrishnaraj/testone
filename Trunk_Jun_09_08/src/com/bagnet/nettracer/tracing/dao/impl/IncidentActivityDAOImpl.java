@@ -16,6 +16,7 @@ import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 import org.hibernate.transform.Transformers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -665,11 +666,18 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			Criteria criteria = session.createCriteria(IncidentActivity.class, "ia");			
+			criteria.add(Restrictions.isNotNull("ia.tasks"));			
 			criteria.add(Restrictions.isNotNull("ia.approvalAgent"));		
 
-			criteria.createAlias("ia.tasks", "task");
-			criteria.add(Restrictions.eq("task.status", status));
-			criteria.add(Restrictions.eq("task.active", true));
+			criteria.createAlias("ia.tasks", "task", JoinType.LEFT_OUTER_JOIN);
+			
+			Conjunction and = Restrictions.conjunction();
+			and.add(Restrictions.isNotNull("ia.tasks"))
+			.add(Restrictions.eq("task.status", status))
+			.add(Restrictions.eq("task.active", true));
+			
+			criteria.add(and);
+
 			
 			if (StringUtils.startsWithIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_APPROVAL_AGENT_NAME.getParamString())
 					|| StringUtils.startsWithIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_APPROVAL_AGENT_USERNAME.getParamString())) {
