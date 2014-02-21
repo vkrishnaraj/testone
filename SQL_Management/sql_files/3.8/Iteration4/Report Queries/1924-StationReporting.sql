@@ -40,6 +40,17 @@ select i.lossCode, c.description, c.controllable, count(*) from item i inner joi
   and c.companycode_ID='WN' and c.report_type=i.itemtype_ID
   group by i.lossCode;
   
+ #MTD Calculation
+ #endDate - the end of the date range. DateTime variable
+ #stationCode - 3 Character Station Code to check against.
+ #lossCodes - Array of LossCodes to check for. 
+ select i.lossCode, c.description, count(i.Item_ID) as mtdCount 
+ from item i inner join incident inc on i.incident_ID = inc.Incident_ID 
+  inner join station s on s.Station_ID = inc.stationassigned_ID inner join Company_irregularity_codes c on i.lossCode= c.loss_code 
+  where (inc.createdate between DATE_FORMAT(now() ,'%Y-%m-01') and now()) and s.stationcode = :stationCode and find_in_set(i.lossCode, :lossCodes)
+  and c.companycode_ID='WN' and c.report_type=i.itemtype_ID
+  group by i.lossCode; 
+  
 #Station Chargeback Detail Report - Is based on and returns GMT Time. 
 #Combines Itinerary routes as a single column. Combines Itinerary Flightnums as a single column. Combines Itinerary departdates as a single column.
 #Detail vs Summary should control which query is ran
