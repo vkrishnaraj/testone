@@ -116,3 +116,6 @@ GRANT EXECUTE ON PROCEDURE wn_production.getAgentAuditReport TO 'ntwn_user'@'%';
 GRANT EXECUTE ON PROCEDURE wn_production.getBSOAgentAuditReport TO 'ntwn_user'@'%';
 flush privileges;
 ###################################################################
+
+
+insert into properties (keyStr, valueStr) VALUES ('portal.url', 'https://live.nettracer.aero/customer-portal/southwest/login.do');

@@ -154,6 +154,11 @@ public class EmailUtils {
 					String img1 = he.embed(new URL("file:/" + imagepath + myEmailHeaderImage), myEmailHeaderImage);
 					h.put("BANNER_IMAGE", img1);
 				}
+				
+				String portalUrl = PropertyBMO.getValue(PropertyBMO.PROPERTY_PORTAL_URL);
+				if (portalUrl != null && portalUrl.matches("(?i)http[s]{0,1}://.*")) {
+					h.put("PORTAL_URL", portalUrl);
+				}
 
 				String msg = EmailParser.parse(configpath + htmlFileName, h, currentLocale);
 
