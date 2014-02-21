@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Context {
 	// This is just a helper class which has no relevance for the logger
-	private static final Logger logger = LoggerFactory.getLogger(Dispatcher.class);
+	private static final Logger logger = LoggerFactory.getLogger(Context.class);
 	
 	private String typeStr;
 	private String commandStr;
