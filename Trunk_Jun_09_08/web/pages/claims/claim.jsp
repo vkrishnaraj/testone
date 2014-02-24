@@ -189,17 +189,18 @@
                       </td>
                     </tr>
                     <% if(crapFields && hasIncident){ %>
-                    
-                    	<logic:present name="claimForm" property="claim.ntIncident">
-	                    <tr>
-	                    	<td>
-	                          <a href="#" onclick="openReportWindow('reporting?print=<%=ReportingConstants.CRAP_SHEET %>&outputtype=0','CRAPSheet',800,600);return false;"><img src="deployment/main/images/nettracer/icon_printrpt.gif" width="12" height="12"></a>
-	                        </td>
-	                        <td>
-	                          <a href="#" onclick="openReportWindow('reporting?print=<%=ReportingConstants.CRAP_SHEET %>&outputtype=0','CRAPSheet',800,600);return false;"><bean:message key="link.crap_sheet" /></a>
-	                        </td>
-		                </tr>
-		                </logic:present>
+                    	<logic:notEqual name="claimForm" property="claim.id" value="0">
+	                    	<logic:present name="claimForm" property="claim.ntIncident">
+		                    <tr>
+		                    	<td>
+		                          <a href="#" onclick="openReportWindow('reporting?print=<%=ReportingConstants.CRAP_SHEET %>&outputtype=0','CRAPSheet',800,600);return false;"><img src="deployment/main/images/nettracer/icon_printrpt.gif" width="12" height="12"></a>
+		                        </td>
+		                        <td>
+		                          <a href="#" onclick="openReportWindow('reporting?print=<%=ReportingConstants.CRAP_SHEET %>&outputtype=0','CRAPSheet',800,600);return false;"><bean:message key="link.crap_sheet" /></a>
+		                        </td>
+			                </tr>
+			                </logic:present>
+		                </logic:notEqual>
                     <%} %>
                   </table>
                 </div>

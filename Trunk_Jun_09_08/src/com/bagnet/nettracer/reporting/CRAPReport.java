@@ -115,9 +115,9 @@ public class CRAPReport {
 						boolean epPaid=ep.getStatus().getStatus_ID()==TracingConstants.EXPENSEPAYOUT_STATUS_PAID;
 						if(epApproved || epPaid){
 							/*NT-2243 SLVs are Issued Vouchers. Modified to check for the VOUCH paytype, where drafts check for the DRAFT paytype*/
-							if(lzmap!=null && lzmap.get(ep.getAgent().getStation().getStation_ID())!=null && ep.getPaytype().equals(TracingConstants.ENUM_VOUCHER) && ep.getVoucheramt()>0){
+							if(lzmap!=null && lzmap.get(ep.getAgent().getStation().getStation_ID())!=null && ep!=null && ep.getPaytype()!=null && ep.getPaytype().equals(TracingConstants.ENUM_VOUCHER) && ep.getVoucheramt()>0){
 								cbsslv+=ep.getVoucheramt();
-							} else if(lzmap!=null && lzmap.get(ep.getAgent().getStation().getStation_ID())!=null && ep.getPaytype().equals(TracingConstants.ENUM_DRAFT) && ep.getCheckamt()>0){
+							} else if(lzmap!=null && lzmap.get(ep.getAgent().getStation().getStation_ID())!=null && ep!=null && ep.getPaytype()!=null && ep.getPaytype().equals(TracingConstants.ENUM_DRAFT) && ep.getCheckamt()>0){
 								cbsPayout+=ep.getCheckamt();
 							} else {
 								if(ep.getVoucheramt()>0){
