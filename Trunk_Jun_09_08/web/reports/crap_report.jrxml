@@ -3,7 +3,7 @@
 	<property name="ireport.scriptlethandling" value="2"/>
 	<property name="ireport.zoom" value="2.593742460100085"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="96"/>
+	<property name="ireport.y" value="50"/>
 	<parameter name="report_info" class="java.util.HashMap" isForPrompting="false"/>
 	<parameter name="depreciationReport" class="net.sf.jasperreports.engine.JasperReport" isForPrompting="false"/>
 	<parameter name="depreciations" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource" isForPrompting="false"/>
@@ -386,7 +386,7 @@
 				<textElement textAlignment="Center" lineSpacing="Single">
 					<font size="14" isBold="true"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$R{header.lost.delay.only}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[($P{report_info}).get("reportType")]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
 				<reportElement key="" mode="Opaque" x="4" y="25" width="118" height="14" isRemoveLineWhenBlank="true" forecolor="#000000" backcolor="#FFFFFF"/>

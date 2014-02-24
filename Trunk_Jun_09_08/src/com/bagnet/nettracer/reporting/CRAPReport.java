@@ -68,8 +68,19 @@ public class CRAPReport {
 			double cbsPayout=0;
 			double cbsslv=0;
 			double stationslv=0;
-			
+
+			String crapTitle="";
 			if(theform.getClaim()!=null && theform.getClaim().getNtIncident()!=null){
+				if( theform.getClaim().getNtIncident().getItemtype_ID()==TracingConstants.LOST_DELAY){
+					report_info.put("reportType", myResources.getString("header.lost.delay.only"));
+					crapTitle="Lost";
+				} else if (theform.getClaim().getNtIncident().getItemtype_ID()==TracingConstants.DAMAGED_BAG){
+					report_info.put("reportType", myResources.getString("header.damage.only"));
+					crapTitle="Damaged";
+				} else if (theform.getClaim().getNtIncident().getItemtype_ID()==TracingConstants.MISSING_ARTICLES){
+					report_info.put("reportType", myResources.getString("header.missing.only"));
+					crapTitle="Missing Articles";
+				}
 				report_info.put("numPax",String.valueOf(theform.getClaim().getNtIncident().getNumpassengers()));
 				report_info.put("numBagCK",String.valueOf(theform.getClaim().getNtIncident().getNumbagchecked()));
 				report_info.put("numBagRCV",String.valueOf(theform.getClaim().getNtIncident().getNumbagreceived()));
@@ -189,7 +200,6 @@ public class CRAPReport {
 			report_info.put("adjclaim", "$"+TracingConstants.DECIMALFORMAT.format(adjClaim));
 			
 			/* Logic for the Title */
-			String crapTitle="Lost";
 			if(theform.getClaim().isIx()){
 				crapTitle+=" IX";
 			}
