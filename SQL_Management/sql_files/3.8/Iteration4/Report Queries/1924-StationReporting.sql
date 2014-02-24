@@ -41,7 +41,6 @@ select i.lossCode, c.description, c.controllable, count(*) from item i inner joi
   group by i.lossCode;
   
  #MTD Calculation
- #endDate - the end of the date range. DateTime variable
  #stationCode - 3 Character Station Code to check against.
  #lossCodes - Array of LossCodes to check for. 
  select i.lossCode, c.description, count(i.Item_ID) as mtdCount 
