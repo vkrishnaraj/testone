@@ -596,8 +596,14 @@ public final class BDOForm extends ValidatorForm {
 	@Override
 	public void reset(org.apache.struts.action.ActionMapping mapping, javax.servlet.http.HttpServletRequest request) {
 		super.reset(mapping, request);
-		secure=false;
-		
+		if (this.itemlist != null && this.itemlist.size() > 0) {
+			for (int i = 0; i < this.itemlist.size(); i++){
+				Item item = (Item) this.itemlist.get(i);
+				item.setNoAddFees(false);
+			}
+			setItemlist(itemlist);
+		}
+		secure=false;		
 	}
 
 	public List<Item> getExistItemList() {
