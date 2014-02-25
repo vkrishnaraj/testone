@@ -7,8 +7,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.bagnet.clients.defaul.FckEditorPathBuilderImpl;
+import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.documents.templates.Template;
 import com.bagnet.nettracer.tracing.exceptions.InsufficientInformationException;
+import com.bagnet.nettracer.tracing.utils.TracerProperties;
 
 @Entity
 @Table(name = "document")
@@ -81,11 +84,14 @@ public class Document {
 		return template.getName();
 	}
 	
-	public String getXml() {
+	public String getXml(Agent user) {
 		StringBuilder xml = new StringBuilder("<?xml version=\"1.0\"?>");
 		xml.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
 		xml.append("<html><body>");
-		xml.append(getContent());
+		String toReplace = "/" + TracerProperties.get(user.getCompanycode_ID(),"application_context") + "/showImage\\?ID=" + FckEditorPathBuilderImpl.subdir + "/";
+		String replaceWith = TracerProperties.get(user.getCompanycode_ID(),"image_store").replaceAll("^[cdCD]:", "") + FckEditorPathBuilderImpl.subdir;
+		String imageFriendlyContent = getContent().replaceAll(toReplace, replaceWith);
+		xml.append(imageFriendlyContent);
 		xml.append("</body></html>");
 		return xml.toString();
 	}

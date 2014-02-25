@@ -34,11 +34,18 @@ CKEDITOR.stylesSet.add( 'default', [
 	{ name: 'Italic Title',		element: 'h2', styles: { 'font-style': 'italic' } },
 	{ name: 'Subtitle',			element: 'h3', styles: { 'color': '#aaa', 'font-style': 'italic' } },
 	{
-		name: 'Special Container',
+		name: 'Inches',
 		element: 'div',
 		styles: {
-			padding: '5px 10px',
-			background: '#eee',
+			padding: '1in 1in 1in 1in',
+			border: '1px solid #ccc'
+		}
+	},
+	{
+		name: 'Pixels',
+		element: 'div',
+		styles: {
+			padding: '75px 75px 75px 75px',
 			border: '1px solid #ccc'
 		}
 	},

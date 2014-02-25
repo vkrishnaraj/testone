@@ -166,18 +166,18 @@ public class DocumentServiceImpl implements DocumentService {
 			filePath.append(fileName);
 			out = new FileOutputStream(filePath.toString());
 			ITextRenderer renderer = new ITextRenderer();
-			renderer.setDocumentFromString(firstDocument.getXml());
+			renderer.setDocumentFromString(firstDocument.getXml(user));
 			renderer.layout();
 			renderer.createPDF(out, false); 
 			
 			for (int i = 1; i < documents.size(); i++) {
 				Document document = documents.get(i);
-				if (document == null  || StringUtils.isBlank(document.getXml())) {
+				if (document == null  || StringUtils.isBlank(document.getXml(user))) {
 					logger.debug("Document is empty: document Id = " + document.getId());
 					continue;
 				}
 				
-		        renderer.setDocumentFromString(document.getXml());
+		        renderer.setDocumentFromString(document.getXml(user));
 		        renderer.layout();
 		        renderer.writeNextDocument();
 		    }
@@ -227,7 +227,7 @@ public class DocumentServiceImpl implements DocumentService {
 			filePath.append(fileName);
 			OutputStream out = new FileOutputStream(filePath.toString());
 			ITextRenderer renderer = new ITextRenderer();
-			renderer.setDocumentFromString(document.getXml());
+			renderer.setDocumentFromString(document.getXml(user));
 			renderer.layout();
 			renderer.createPDF(out);
 			
