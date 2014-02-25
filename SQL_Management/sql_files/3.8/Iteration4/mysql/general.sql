@@ -143,3 +143,6 @@ update systemcomponents set component_action_link = 'unassignedInboundQueue.do?l
 
 alter table agent_logger add column expired boolean not null default false;
 update agent_logger set expired=true where log_off_time is null;
+
+alter table lffound drop column receiptFileName;
+alter table lffound add receiptFile_id bigint;
