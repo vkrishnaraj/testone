@@ -857,7 +857,11 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		long activityId = getIncidentActivityService().save(DomainUtils.createIncidentActivity(inc, activity, agent));
 		
 		if(activityId > 0){
-			InboundTasksUtils.createDamagedTask(inc, agent, activity, activityId);
+			/**
+			 * NT-2258 The InboundTasksUtils.createInboundTask has been updated to correctly handle Damage Vs ACAA
+			 * Use this createInboundTask as oppose to createDamagedTask.
+			 */
+			InboundTasksUtils.createInboundTask(inc, agent, activity, activityId);
 		}
 		
 		return copyIncidentToOHD(inc);

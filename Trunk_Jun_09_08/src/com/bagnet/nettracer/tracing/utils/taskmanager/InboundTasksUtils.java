@@ -300,6 +300,10 @@ public class InboundTasksUtils {
 	 * 
 	 * If incident is a ACAA (defined by the item type being either 94 or 95), an AcaaTask will be created instead
 	 * 
+	 * If the incident is of type damaged, a DamageTask will be created instead.
+	 * 
+	 * In the case that an incident is both a damage and ACAA, create an AcaaTask
+	 * 
 	 * @param incident
 	 * @param agent
 	 * @return
@@ -308,8 +312,13 @@ public class InboundTasksUtils {
 		if(isAcaa(incident)){
 			return createAcaaTask(incident, agent, activity, incidentActivityId);
 		}
-		InboundTask task = new InboundTask();
-		return createInboundQueueTask(task, incident, agent, activity, incidentActivityId);
+		else if(isDamaged(incident)){
+			return createDamagedTask(incident, agent, activity, incidentActivityId);
+		}
+		else {
+			InboundTask task = new InboundTask();
+			return createInboundQueueTask(task, incident, agent, activity, incidentActivityId);
+		}
 	}
 	
 	
@@ -320,7 +329,7 @@ public class InboundTasksUtils {
 	 * @param agent
 	 * @return
 	 */
-	public static long createAcaaTask(Incident incident, Agent agent, Activity activity, long incidentActivityId){
+	protected static long createAcaaTask(Incident incident, Agent agent, Activity activity, long incidentActivityId){
 		AcaaTask task = new AcaaTask();
 		return createInboundQueueTask(task, incident, agent, activity, incidentActivityId);
 	}
@@ -332,7 +341,7 @@ public class InboundTasksUtils {
 	 * @param agent
 	 * @return
 	 */
-	public static long createDamagedTask(Incident incident, Agent agent, Activity activity, long incidentActivityId){
+	protected static long createDamagedTask(Incident incident, Agent agent, Activity activity, long incidentActivityId){
 		DamagedTask task = new DamagedTask();
 		return createInboundQueueTask(task, incident, agent, activity, incidentActivityId);
 	}
@@ -375,6 +384,21 @@ public class InboundTasksUtils {
 			}
 		}
 		return isAcaa;
+	}
+	
+	/**
+	 * Identifies if an incident is an Damaged incident.
+	 * 
+	 * @param incident
+	 * @return
+	 */
+	private static boolean isDamaged(Incident incident){
+		boolean isDamaged = false;
+		if(incident != null && incident.getItemtype_ID() == TracingConstants.DAMAGED_BAG){
+			isDamaged = true;
+		}
+			
+		return isDamaged;
 	}
 	
 	/**

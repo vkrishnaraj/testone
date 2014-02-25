@@ -121,7 +121,11 @@ public class DamagedAction extends CheckedAction {
 					Activity activity = incidentActivityService.getActivity(TracingConstants.ACTIVITY_CODE_RECEIVED_DAMAGED_ITEM);
 					long activityId = incidentActivityService.save(DomainUtils.createIncidentActivity(incident, activity, user));
 					if(activityId > 0){
-						InboundTasksUtils.createDamagedTask(incident, user, activity ,activityId);
+						/**
+						 * NT-2258 The InboundTasksUtils.createInboundTask has been updated to correctly handle Damage Vs ACAA
+						 * Use this createInboundTask as oppose to createDamagedTask.
+						 */
+						InboundTasksUtils.createInboundTask(incident, user, activity, activityId);
 					}
 				} else {
 					request.setAttribute("error", "error.message.set.rx.timestamp.failed");
