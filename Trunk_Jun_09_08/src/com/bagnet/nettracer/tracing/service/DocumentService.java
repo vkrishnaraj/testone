@@ -115,4 +115,6 @@ public interface DocumentService {
 	 * @return the name of the first variable found, null otherwise.
 	 */
 	public String getMissingRequiredVariable(Document document);
+	
+	public byte[] getByteArrayForDocument(Document document, String companyCode, String sourceDirectory, int outputType);
 }

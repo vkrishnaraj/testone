@@ -1873,3 +1873,34 @@ function populateBagInfo(form) {
 	}
 	
 }
+
+function submitPrintRequest(url, options, toSubmit) {
+	if (!url || url == null) return;
+
+	var output;
+	var reportOptionsDialog = jQuery("#reportOptionsDiv").dialog({
+								height: 50,
+								width: 200,
+								title: '<%=(String)bundle.getString("print.options.dialog.title") %>',
+								modal: true,
+								buttons: {
+									Ok: function() {
+										jQuery(this).dialog("close");
+										var outputSelect = document.getElementById("outputSelect");
+										output = outputSelect.options[outputSelect.selectedIndex].value;
+										postPrintRequest(url, options, output, toSubmit);												
+									},
+									Cancel: function() {
+										jQuery(this).dialog("close");
+									}
+								}
+							});
+	reportOptionsDialog.dialog("open");
+}
+
+function postPrintRequest(url, options, output, toSubmit) {
+	window.open(url+'&output='+output, '', options);
+	if (toSubmit && toSubmit != null) {
+		toSubmit.submit();
+	}
+}

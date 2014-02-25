@@ -197,10 +197,6 @@
 	    }
 	}
 
-	function displayPPUReceipt(fileName, foundId) {
-		window.open("ntlf_create_found_item.do?displayReceipt="+fileName+"&foundId="+foundId, '', 'width=600,height=800,resizable=yes');
-	}
-	
 </SCRIPT>
 <jsp:include page="/pages/includes/validation_search.jsp" />
 <html:form focus="found.barcode" action="ntlf_create_found_item.do" method="post" onsubmit="return validateFoundItemForm(this);" >
@@ -659,10 +655,8 @@
 					<td>
 						<a href='ntlf_create_found_item.do?undo=1&itemId=<bean:write name="foundItemForm" property="foundItem.id" />'><bean:message key="lf.undo" /></a>
 						<logic:equal name="foundItemForm" property="foundItem.disposition.status_ID" value="<%=String.valueOf(TracingConstants.LF_DISPOSITION_PICKED_UP) %>" >
-							<logic:notEmpty name="foundItemForm" property="found.receiptFileName" >
 								,&nbsp;
-								<a href="#" onclick="displayPPUReceipt('<bean:write name="foundItemForm" property="found.receiptFileName" />', <bean:write name="foundItemForm" property="found.id" />)"><bean:message key="print.ppu" /></a>
-							</logic:notEmpty>
+								<a href="#" onclick="submitPrintRequest('ntlf_create_found_item.do?displayReceipt=1&foundId=<bean:write name="foundItemForm" property="foundItem.id" />', 'width=600,height=800,resizable=yes'); return false;"><bean:message key="print.ppu" /></a>
 						</logic:equal>
 					</td>
 					</tr>
@@ -742,11 +736,4 @@
    			</div>
    		</td>
    	</tr>
-   	<logic:present name="receiptName" scope="request">
-	    <script language=javascript>
-	    	var fileName = '<%=(String) request.getAttribute("receiptName") %>';
-   			var foundId = document.getElementById('found.id').value;
-   			displayPPUReceipt(fileName, foundId);
-	    </script>
-    </logic:present>
 </html:form>

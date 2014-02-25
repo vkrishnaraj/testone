@@ -26,6 +26,7 @@ import org.hibernate.annotations.Proxy;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.documents.Document;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 @Entity
@@ -89,7 +90,8 @@ public class LFFound implements LFObject, Serializable {
 	@Fetch(FetchMode.SELECT)
 	private LFSalvage salvage;
 		
-	private String receiptFileName;
+	@OneToOne(targetEntity=com.bagnet.nettracer.tracing.db.documents.Document.class, cascade=CascadeType.ALL)
+	private Document receiptFile;
 	
 	@Transient
 	private int entryStatus;
@@ -398,12 +400,12 @@ public class LFFound implements LFObject, Serializable {
 		return lastLoaded;
 	}
 
-	public String getReceiptFileName() {
-		return receiptFileName;
+	public Document getReceiptFile() {
+		return receiptFile;
 	}
 
-	public void setReceiptFileName(String receiptFileName) {
-		this.receiptFileName = receiptFileName;
+	public void setReceiptFile(Document receiptFile) {
+		this.receiptFile = receiptFile;
 	}
 
 	public boolean isSelected() {

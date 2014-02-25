@@ -171,11 +171,11 @@ legend {
 			   				</h1>
 						</td>
 						<td style="text-align:right;">
-							<logic:present name="previewLink" scope="request" >
-								<a href="#" onclick="openPreviewWindow('<%=(String) request.getAttribute("previewLink") %>');">
-									<bean:message key="link.preview" />
-								</a>
-							</logic:present>
+								<logic:notEqual name="customerCommunicationsForm" property="documentId" value="0" >
+									<a href="#" onclick="submitPrintRequest('customerCommunications.do?preview_document=<bean:write name="customerCommunicationsForm" property="documentId" />','width=600,height=800,resizable=yes');">
+										<bean:message key="link.preview" />
+									</a>
+								</logic:notEqual>
 							<logic:notPresent name="previewLink" scope="request" >
 								&nbsp;
 							</logic:notPresent>
@@ -236,8 +236,8 @@ legend {
 				<div style="text-align:center;" >
 					&nbsp;&nbsp;
 					<input type="button" id="submitCustComm" class="button" value='<bean:message key="button.save" />'  onclick="saveOrUpdate();"/>
-					&nbsp;&nbsp;
-					<input id="savePreviewButton" type="button" class="button" value='<bean:message key="button.save.preview" />' onclick="saveAndPreview();">
+<!-- 					&nbsp;&nbsp; -->
+<%-- 					<input id="savePreviewButton" type="button" class="button" value='<bean:message key="button.save.preview" />' onclick="saveAndPreview();"> --%>
 					<logic:equal name="customerCommunicationsForm" property="agentId" value="<%=String.valueOf(a.getAgent_ID()) %>">
 						<logic:equal name="customerCommunicationsForm" property="taskStatus" value="<%=String.valueOf(TracingConstants.FINANCE_STATUS_FRAUD_REJECTED)  %>">
 							&nbsp;&nbsp;

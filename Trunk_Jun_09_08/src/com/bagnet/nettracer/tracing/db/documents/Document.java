@@ -7,6 +7,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.bagnet.clients.defaul.FckEditorPathBuilderImpl;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.documents.templates.Template;
@@ -94,6 +96,14 @@ public class Document {
 		xml.append(imageFriendlyContent);
 		xml.append("</body></html>");
 		return xml.toString();
+	}
+	
+	public void appendContent(Document toAppend) {
+		if (toAppend == null || toAppend.getContent() == null || StringUtils.isBlank(toAppend.getContent())) return;
+		StringBuilder newContent = new StringBuilder(getContent() != null ? getContent() : "");
+		newContent.append("<div style=\"page-break-after: always\"><span style=\"display: none;\">&nbsp;</span></div>");
+		newContent.append(toAppend.getContent());
+		this.setContent(newContent.toString());
 	}
 
 }

@@ -56,10 +56,6 @@
 		}
 	}
 
-	function openPreviewWindow(fileName) {
-		window.open("editTemplate.do?preview_document="+fileName, '', 'width=600,height=800,resizable=yes');
-	}
-
 </script>
 <html:form focus="name" action="editTemplate.do" method="post" >
 <html:hidden property="command" styleId="command" />
@@ -97,11 +93,11 @@
 							<bean:message key="message.required" />
 						</td>
 						<td style="text-align:right;">
-							<logic:present name="previewLink" scope="request" >
-								<a href="#" onclick="openPreviewWindow('<%=(String) request.getAttribute("previewLink") %>');">
+							<logic:notEqual name="templateEditForm" property="id" value="0" >
+								<a href="#" onclick="submitPrintRequest('editTemplate.do?preview_document=<bean:write name="templateEditForm" property="id" />','width=600,height=800,resizable=yes');">
 									<bean:message key="document.preview" />
 								</a>
-							</logic:present>
+							</logic:notEqual>
 							<logic:notPresent name="previewLink" scope="request" >
 								&nbsp;
 							</logic:notPresent>
@@ -194,8 +190,6 @@
 			<div style="text-align:center;">
 				<br>
 				<input id="saveButton" type="button" class="button" value='<bean:message key="button.save" />' onclick="saveOrUpdateTemplate();">
-				&nbsp;&nbsp;
-				<input id="savePreviewButton" type="button" class="button" value='<bean:message key="button.save.preview" />' onclick="saveAndPreview();">
 				<logic:notEqual name="templateEditForm" property="id" value="0">
 					&nbsp;&nbsp;
 					<input id="deleteButton" type="button" class="button" value='<bean:message key="button.delete" />' onclick="confirmDelete();">

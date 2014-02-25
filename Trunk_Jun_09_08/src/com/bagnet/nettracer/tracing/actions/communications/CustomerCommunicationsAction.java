@@ -88,12 +88,12 @@ public class CustomerCommunicationsAction extends CheckedAction {
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
 		}
 		
+		CustomerCommunicationsForm ccf = (CustomerCommunicationsForm) form;
 		if (isAjaxRequest(request)) {
-			return handleAjaxRequest(user, request, response, mapping);
+			return handleAjaxRequest(ccf, user, request, response, mapping);
 		}
 
 		boolean success = true;
-		CustomerCommunicationsForm ccf = (CustomerCommunicationsForm) form;
 		
 		if (request.getParameter("taskId") != null) {
 			String taskIdParam = (String) request.getParameter("taskId");
@@ -240,15 +240,6 @@ public class CustomerCommunicationsAction extends CheckedAction {
 			return null;
 		}
 		
-		if (ccf.isPreview()) {
-			DocumentTemplateResult result = generatePreview(ccf, user);
-			if (result.isSuccess()) {
-				request.setAttribute("previewLink", result.getPayload());
-			}
-			success = result.isSuccess();
-			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(result.getMessageKey()));
-		}
-		
 		if (!messages.isEmpty()) {
 			saveMessages(request, messages);
 			request.setAttribute("success", success);
@@ -317,7 +308,7 @@ public class CustomerCommunicationsAction extends CheckedAction {
 				|| request.getParameter(REQUEST_VIEW_SAMPLE_PRINTOUT) != null;
 	}
 	
-	private ActionForward handleAjaxRequest(Agent user, HttpServletRequest request, HttpServletResponse response, ActionMapping mapping) {
+	private ActionForward handleAjaxRequest(CustomerCommunicationsForm ccf, Agent user, HttpServletRequest request, HttpServletResponse response, ActionMapping mapping) {
 		// handles ajax call for the list of available templates
 		if (request.getParameter(REQUEST_TEMPLATE_LIST) != null) {
 			try {
@@ -331,20 +322,36 @@ public class CustomerCommunicationsAction extends CheckedAction {
 
 		// handles the case in which the user wants to preview the document
 		if (request.getParameter(REQUEST_PREVIEW_DOCUMENT) != null) {
-			String directoryKey = request.getParameter("receipt") != null ? PropertyBMO.DOCUMENT_LOCATION_RECEIPTS : PropertyBMO.DOCUMENT_LOCATION_TEMP;
-			DocumentTemplateResult result = documentService.previewFile(user, request.getParameter("preview_document"), PropertyBMO.getValue(directoryKey), response);
-			if (!result.isSuccess()) {
-				return mapping.findForward(TracingConstants.FILE_NOT_FOUND);
+			try {
+				int outputType = Integer.parseInt((String) request.getParameter("output"));
+				long documentId = Long.parseLong((String) request.getParameter("preview_document"));
+				Document document = documentService.load(documentId);
+				if (document != null && document.getFileName() == null) {
+					if (outputType == TracingConstants.REPORT_OUTPUT_PDF) {
+						if (!documentService.generatePdf(user, document, PropertyBMO.getValue(PropertyBMO.DOCUMENT_LOCATION_TEMP)).isSuccess()) {
+							logger.error("Failed to generate preview for customer communication");
+						}
+					}
+					byte[] toOutput = documentService.getByteArrayForDocument(document, user.getCompanycode_ID(), PropertyBMO.getValue(PropertyBMO.DOCUMENT_LOCATION_TEMP), outputType);
+					outputToResponse(response, toOutput, outputType);
+				}
+			} catch (Exception e) {
+				logger.error("Failed to generate CustomerCommunications preview", e);
 			}
 			return null;
 		}
 		
 		// handles the case in which the user wants to preview the document
 		if (request.getParameter(REQUEST_VIEW_SAMPLE_PRINTOUT) != null) {
-			String incidentId = (String) request.getParameter("view_sample_printout");
-			DocumentTemplateResult result = viewSamplePrintout(incidentId, user, response, new ActionMessages());
-			if (!result.isSuccess()) {
-				return mapping.findForward(TracingConstants.FILE_NOT_FOUND);
+			try {
+				String incidentActivityId = (String) request.getParameter("view_sample_printout");
+				int outputType = Integer.parseInt((String) request.getParameter("output"));
+				DocumentTemplateResult result = viewSamplePrintout(incidentActivityId, user, response, new ActionMessages(), outputType);
+				if (!result.isSuccess()) {
+					return mapping.findForward(TracingConstants.FILE_NOT_FOUND);
+				}
+			} catch (Exception e) {
+				logger.error("Failed to display sample printout", e);
 			}
 			return null;
 		}
@@ -558,6 +565,7 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		DomainUtils.toForm(incidentActivityService.load(incidentActivity.getId()), ccf, user);
 		return success;
 	}
+	
 	/** SF: making a mask method in case it is used elsewhere despite being a local private method **/
 	@SuppressWarnings("unused")
 	private DocumentTemplateResult generateDocument(long templateId, Incident incident, Agent user) {
@@ -615,30 +623,7 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		return result;
 	}
 	
-	private DocumentTemplateResult generatePreview(CustomerCommunicationsForm ccf, Agent user) {
-		ccf.setPreview(false);
-		DocumentTemplateResult result = new DocumentTemplateResult();
-		Document document = documentService.load(ccf.getDocumentId());
-		if (document == null) {
-			result.setMessageKey("document.generated.failure");
-			return result;
-		}
-		
-		try {
-			result = documentService.generatePdf(user, document, PropertyBMO.getValue(PropertyBMO.DOCUMENT_LOCATION_TEMP));
-			if (result.isSuccess()) {
-				document.setFileName((String) result.getPayload());
-				result.setSuccess(documentService.update(document));
-			}
-		} catch (InsufficientInformationException e) {
-			logger.error("Insufficient information to create incident activity preview.", e);
-			return new DocumentTemplateResult(false, "document.template.missing.information.error");
-		}
-		
-		return result;
-	}
-	
-	private DocumentTemplateResult viewSamplePrintout(String incidentActivityId, Agent user, HttpServletResponse response, ActionMessages messages) {
+	private DocumentTemplateResult viewSamplePrintout(String incidentActivityId, Agent user, HttpServletResponse response, ActionMessages messages, int outputType) {
 		DocumentTemplateResult result = new DocumentTemplateResult();
 		try {
 			long id = Long.valueOf(incidentActivityId);
@@ -652,15 +637,17 @@ public class CustomerCommunicationsAction extends CheckedAction {
 
 			if (ia != null && ia.getDocument() != null) {
 				String tempDir = PropertyBMO.getValue(PropertyBMO.DOCUMENT_LOCATION_TEMP);
-				result = documentService.generatePdf(user, ia.getDocument(), tempDir);
-				if (!result.isSuccess()) {
-					messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(result.getMessageKey()));
+				if (outputType == TracingConstants.REPORT_OUTPUT_PDF) {
+					result = documentService.generatePdf(user, ia.getDocument(), tempDir);
+					if (!result.isSuccess()) {
+						messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(result.getMessageKey()));
+					}
 				}
 				
-				result = documentService.previewFile(user, (String) result.getPayload(), tempDir, response);
-				if (!result.isSuccess()) {
-					messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(result.getMessageKey()));
-				}
+				byte[] toOutput = documentService.getByteArrayForDocument(ia.getDocument(), user.getCompanycode_ID(), tempDir, outputType);
+				outputToResponse(response, toOutput, outputType);
+				
+				result.setSuccess(true);
 				return result;
 			}
 		} catch (NumberFormatException nfe) {

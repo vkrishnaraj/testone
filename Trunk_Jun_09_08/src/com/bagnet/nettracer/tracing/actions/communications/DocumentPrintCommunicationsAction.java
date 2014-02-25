@@ -12,7 +12,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -23,6 +22,7 @@ import org.displaytag.util.ParamEncoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.actions.templates.DocumentTemplateResult;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -43,11 +43,12 @@ import com.bagnet.nettracer.tracing.utils.UserPermissions;
  * a list of all approved documents that are pending print.
  */
 
-public class DocumentPrintCommunicationsAction extends Action {
+public class DocumentPrintCommunicationsAction extends CheckedAction {
 	private final Logger log = LoggerFactory.getLogger(getClass());
 
 	private Status status = new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING_PRINT);
 	private IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
+	private DocumentService documentService = (DocumentService) SpringUtils.getBean(TracingConstants.DOCUMENT_SERVICE_BEAN);
 	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws Exception {
@@ -131,6 +132,7 @@ public class DocumentPrintCommunicationsAction extends Action {
 			ResourceBundle resourceBundle = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(agent.getCurrentlocale()));
 			boolean isPreviewPrint = StringUtils.equalsIgnoreCase(request.getParameter(TracingConstants.COMMAND_PRINT), resourceBundle.getString("document.print.preview"));
 			String[] checkedTaskIds = request.getParameterValues("incident_activity_task_id");
+			List<Document> documents = null; 
 			if (checkedTaskIds == null || checkedTaskIds.length < 1) {
 				if (!isPreviewPrint) {
 					errors = (errors != null) ? errors : new ActionMessages();
@@ -145,7 +147,6 @@ public class DocumentPrintCommunicationsAction extends Action {
 				
 				Arrays.sort(taskIds);
 				
-				List<Document> documents = null; 
 				StringBuilder printedTaskIds = null; //comma delimited incidentActivity ids
 				for (IncidentActivity incidentActivity : incidentActivitylist) {
 					List<IncidentActivityTask> tasks = incidentActivity.getTasks();
@@ -173,14 +174,31 @@ public class DocumentPrintCommunicationsAction extends Action {
 					}
 				}
 
-				result =  generatePdf(agent, documents, request, response);
-				if (!isPreviewPrint && result != null && result.isSuccess()) {					
+//				result =  generatePdf(agent, documents, request, response);
+				if (!isPreviewPrint /*&& result != null && result.isSuccess()*/) {					
 					request.setAttribute("printedTaskIds", printedTaskIds);
 				}
 			}
 			
-			if (isPreviewPrint) {				
-				return previewFile(mapping, agent, (result == null) ? null :(String) result.getPayload(), response);
+			if (documents != null && !documents.isEmpty()) {	
+				try {
+					int output = Integer.parseInt((String) request.getParameter("output"));
+					Document toPrint = documents.get(0);
+					if (output == TracingConstants.REPORT_OUTPUT_PDF) {
+						if (!generatePdf(agent, documents, request).isSuccess()) {
+							log.error("Failed to generate preview for the document print queue");
+						}
+					} else if (output == TracingConstants.REPORT_OUTPUT_HTML) {
+						toPrint = combineDocuments(documents);
+					}
+					
+					byte[] toOutput = documentService.getByteArrayForDocument(toPrint, agent.getCompanycode_ID(), PropertyBMO.getValue(PropertyBMO.DOCUMENT_LOCATION_LETTERS), output);
+					outputToResponse(response, toOutput, output);
+					return null;
+//					return previewFile(mapping, agent, (result == null) ? null :(String) result.getPayload(), response);
+				} catch (NumberFormatException nfe) {
+					log.error("Failed to generate preview for documents.", nfe);
+				}
 			}
 			
 			return mapping.findForward(TracingConstants.DOCUMENT_PRINT_COMMUNICATIONS);
@@ -205,11 +223,11 @@ public class DocumentPrintCommunicationsAction extends Action {
 		return (result != null && result.isSuccess()) ? null : mapping.findForward(TracingConstants.FILE_NOT_FOUND);
 	}
 	
-	private DocumentTemplateResult generatePdf(Agent agent, List<Document> documents, HttpServletRequest request, HttpServletResponse response) {
+	private DocumentTemplateResult generatePdf(Agent agent, List<Document> documents, HttpServletRequest request) {
 		try {
 			ActionMessage error = null;
 			DocumentService documentService = (DocumentService) SpringUtils.getBean(TracingConstants.DOCUMENT_SERVICE_BEAN);
-			DocumentTemplateResult result = documentService.generatePdf(agent, documents, PropertyBMO.getValue(PropertyBMO.DOCUMENT_LOCATION_TEMP));
+			DocumentTemplateResult result = documentService.generatePdf(agent, documents, PropertyBMO.getValue(PropertyBMO.DOCUMENT_LOCATION_LETTERS));
 			if (documents == null || documents.isEmpty()) {
 				error = new ActionMessage("message.nodata");
 			} else {
@@ -234,5 +252,20 @@ public class DocumentPrintCommunicationsAction extends Action {
 			log.error("Failed to print document", e);
 			return null;
 		}
+	}
+	
+	private Document combineDocuments(List<Document> documents) {
+		Document result = new Document();
+		if (documents == null || documents.isEmpty()) return result;
+		
+		result = documents.get(0);
+		if (documents.size() > 1) {
+			int i = 1;
+			do {
+				result.appendContent(documents.get(i));
+				++i;
+			} while (i < documents.size());
+		}
+		return result;
 	}
 }

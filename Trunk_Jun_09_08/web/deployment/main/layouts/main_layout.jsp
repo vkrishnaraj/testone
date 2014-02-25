@@ -404,6 +404,7 @@ jQuery('html').addClass("oldBrowser");
 </script>
 <![endif]-->
 
+<jsp:include page="/pages/includes/print_options.jsp" />
 
 <%
 	String isVis = request.getParameter("slideUpContainerVisible");

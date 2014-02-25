@@ -111,10 +111,6 @@
 		return confirm('<%=bundle.getString("message.incident.activity.delete") %>');
 	}
 
-	function openPreviewWindow(activityId) {
-		window.open("customerCommunications.do?view_sample_printout="+activityId, '', 'width=600,height=800,top=2600,resizable=yes');
-	}
-
 	function showOutboundMessageDialog() {
 		var outboundMessageDialog = jQuery("#outboundMessageDiv").dialog({
 			height: 225,
@@ -297,7 +293,6 @@
 						</logic:equal>
 					</td>
 					<td>
-						<!-- Currently, customer communications are only identified from other activities by having a status id -->
 						<logic:equal name="activity" property="isCustomerCommunication" value="true" >
 							<logic:notEqual name="activity" property="statusId" value="<%=String.valueOf(TracingConstants.STATUS_CUSTOMER_COMM_PUBLISHED) %>">
 								<% if (canEdit) { %>
@@ -313,7 +308,7 @@
 									<br>
 								<% } %>
 								<% if (canEdit) { %>
-									<a href="#" onclick="openPreviewWindow('<%=activity.getId() %>')">
+									<a href="#" onclick="submitPrintRequest('customerCommunications.do?view_sample_printout=<%=activity.getId() %>','width=600,height=800,resizable=yes');return false;">
 										<bean:message key="customer.communication.action.preview" />
 									</a>
 								<% } %>
@@ -323,7 +318,7 @@
 							</logic:notEqual>
 							<logic:equal name="activity" property="statusId" value="<%=String.valueOf(TracingConstants.STATUS_CUSTOMER_COMM_PUBLISHED) %>">
 								<% if (canViewPublished) { %>
-									<a href="#" onclick="openPreviewWindow('<%=activity.getId() %>')">
+									<a href="#" onclick="submitPrintRequest('customerCommunications.do?view_sample_printout=<%=activity.getId() %>','width=600,height=800,resizable=yes');return false;">
 										<bean:message key="customer.communication.action.view" />
 									</a>
 									&nbsp;

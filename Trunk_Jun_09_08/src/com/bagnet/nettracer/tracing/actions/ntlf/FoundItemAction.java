@@ -97,20 +97,8 @@ public class FoundItemAction extends CheckedAction {
 		}
 		if(found!=null){
 			if (request.getParameter("displayReceipt") != null) {
-				String fileName = request.getParameter("displayReceipt");
-				String receiptsDir = PropertyBMO.getValue(PropertyBMO.DOCUMENT_LOCATION_RECEIPTS);
-				DocumentTemplateResult result = documentService.canPreviewFile(user, fileName, receiptsDir);
-				if (!result.isSuccess()) {
-					logger.error("Unable to generate receipt: " + fileName + " for found with id: " + found.getId());
-					request.setAttribute("fileName", fileName);
-					return mapping.findForward(TracingConstants.FILE_NOT_FOUND);
-				}
-				
-				result = documentService.previewFile(user, (String) request.getParameter("displayReceipt"), receiptsDir, response);
-				if (result.isSuccess()) {
-					return null;
-				}
-				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(result.getMessageKey()));
+				displayReceipt(request, response, user, found);
+				return null;
 			}
 			request.setAttribute("stationID", found.getLocation().getStation_ID());
 		}
@@ -238,11 +226,10 @@ public class FoundItemAction extends CheckedAction {
 				found.setStatusId(TracingConstants.LF_STATUS_CLOSED);
 				
 				DocumentTemplateResult result = generateFoundItemReceipt(user, found);
-				if (result.isSuccess()) {
-					found.setReceiptFileName((String) result.getPayload());
-					request.setAttribute("receiptName", result.getPayload());
-				} else {
+				if (!result.isSuccess()) {
 					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(result.getMessageKey()));
+				} else {
+					found.setReceiptFile((Document) result.getPayload());
 				}
 				
 				LFServiceWrapper.getInstance().saveOrUpdateFoundItem(found, user);
@@ -292,6 +279,26 @@ public class FoundItemAction extends CheckedAction {
 		
 		return mapping.findForward(TracingConstants.NTLF_CREATE_FOUND_ITEM);
 		
+	}
+
+	private void displayReceipt(HttpServletRequest request, HttpServletResponse response, Agent user, LFFound found) {
+		try {
+			int outputType = Integer.parseInt((String) request.getParameter("output"));
+			long foundId = Long.parseLong((String) request.getParameter("foundId"));
+			found = LFServiceWrapper.getInstance().getFoundItem(foundId);
+			if (found != null && found.getReceiptFile() != null) {
+				Document document = found.getReceiptFile();
+				if (outputType == TracingConstants.REPORT_OUTPUT_PDF && document.getFileName() == null) {
+					if (!documentService.generatePdf(user, document, PropertyBMO.getValue(PropertyBMO.DOCUMENT_LOCATION_RECEIPTS)).isSuccess()) {
+						logger.error("Failed to generate a pdf receipt for found item with id: " + found.getId());
+					}
+				}
+				byte[] toOutput = documentService.getByteArrayForDocument(document, user.getCompanycode_ID(), PropertyBMO.getValue(PropertyBMO.DOCUMENT_LOCATION_RECEIPTS), outputType);
+				outputToResponse(response, toOutput, outputType);
+			}
+		} catch (Exception e) {
+			logger.error("Failed to display passenger pickup receipt", e);
+		}
 	}
 	
 	private LFItem getItemById(Set<LFItem> items, long id) {
@@ -349,8 +356,12 @@ public class FoundItemAction extends CheckedAction {
 			result = documentService.merge(document, adapter);
 			if (!result.isSuccess()) return result;
 			
-			// 4. create the pdf
-			result = documentService.generatePdf(user, document, PropertyBMO.getValue(PropertyBMO.DOCUMENT_LOCATION_RECEIPTS));
+			if (documentService.save(document) == 0) {
+				result.setSuccess(false);
+				result.setMessageKey("ppu.receipt.failed");
+			} else {
+				result.setPayload(document);
+			}
 			
 		} catch (Exception e) {
 			logger.error("Failed to generate the found item receipt for LFFound with id: " + found.getId(), e);

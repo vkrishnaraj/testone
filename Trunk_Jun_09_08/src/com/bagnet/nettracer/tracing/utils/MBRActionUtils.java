@@ -1638,12 +1638,12 @@ public class MBRActionUtils {
 			// 3. merge the template and adapter
 			result = documentService.merge(document, adapter);
 			if (!result.isSuccess()) return result;
-			
-			// 4. create the pdf
-			result = documentService.generatePdf(user, document, PropertyBMO.getValue(PropertyBMO.DOCUMENT_LOCATION_RECEIPTS));
-			if (result.isSuccess()) {
-				document.setFileName((String)result.getPayload());
+
+			// 4. save the document
+			if (documentService.save(document) > 0) {
 				result.setPayload(document);
+			} else {
+				result.setSuccess(false);
 			}
 		} catch (Exception e) {
 			logger.error("Failed to generate the template receipt for Incident with id: " + qitem.getCategory().getTemplate().getId(), e);

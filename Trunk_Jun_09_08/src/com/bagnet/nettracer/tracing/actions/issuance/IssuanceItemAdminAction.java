@@ -15,20 +15,20 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
-import com.bagnet.nettracer.tracing.actions.templates.DocumentTemplateResult;
+import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.bmo.IssuanceItemBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Station;
+import com.bagnet.nettracer.tracing.db.documents.Document;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceCategory;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemInventory;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemQuantity;
@@ -39,7 +39,7 @@ import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
-public class IssuanceItemAdminAction extends Action {
+public class IssuanceItemAdminAction extends CheckedAction {
 	
 	private static final Logger logger = Logger.getLogger(IssuanceItemAdminAction.class);
 	
@@ -69,10 +69,22 @@ public class IssuanceItemAdminAction extends Action {
 			if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_LOSTDELAY, user)
 					|| UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_DAMAGE, user)
 					|| UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_MISSING, user)) {
-				String directoryKey = request.getParameter("receipt") != null ? PropertyBMO.DOCUMENT_LOCATION_RECEIPTS : PropertyBMO.DOCUMENT_LOCATION_TEMP;
-				DocumentTemplateResult result = documentService.previewFile(user, request.getParameter("preview_document"), PropertyBMO.getValue(directoryKey), response);
-				if (!result.isSuccess()) {
-					return mapping.findForward(TracingConstants.FILE_NOT_FOUND);
+				try {				
+					int outputType = Integer.parseInt((String) request.getParameter("output"));
+					String directoryKey = request.getParameter("receipt") != null ? PropertyBMO.DOCUMENT_LOCATION_RECEIPTS : PropertyBMO.DOCUMENT_LOCATION_TEMP;
+					long documentId = Long.parseLong((String) request.getParameter(REQUEST_PREVIEW_DOCUMENT));
+					Document document = documentService.load(documentId);
+					if (document != null) {
+						if (outputType == TracingConstants.REPORT_OUTPUT_PDF) {
+							if (!documentService.generatePdf(user, document, PropertyBMO.getValue(directoryKey)).isSuccess()) {
+								logger.error("Failed to generate preview for customer communication");
+							}
+						}
+						byte[] toOutput = documentService.getByteArrayForDocument(document, user.getCompanycode_ID(), PropertyBMO.getValue(directoryKey), outputType);
+						outputToResponse(response, toOutput, outputType);
+					}
+				} catch (Exception e) {
+					logger.error("Failed to display the receipt for the issued item", e);
 				}
 				return null;
 			} else {

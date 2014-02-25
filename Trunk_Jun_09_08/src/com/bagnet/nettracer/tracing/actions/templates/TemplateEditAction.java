@@ -61,15 +61,12 @@ public class TemplateEditAction extends CheckedAction {
 			session.setAttribute("templateVars", templateService.getTemplateVars());
 		}
 		
+		TemplateEditForm dtf = (TemplateEditForm) form;
 		if (request.getParameter("preview_document") != null) {
-			DocumentTemplateResult result = documentService.previewFile(user, request.getParameter("preview_document"), PropertyBMO.getValue(PropertyBMO.DOCUMENT_LOCATION_TEMP), response);
-			if (!result.isSuccess()) {
-				messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(result.getMessageKey(), result.getPayload() != null ? result.getPayload() : null));
-			}
+			handlePreviewDocument(response, messages, user, dtf, (String) request.getParameter("output"));
 			return null;
 		}
 		
-		TemplateEditForm dtf = (TemplateEditForm) form;
 		dtf.setTypesList(TemplateType.getDependencyTemplateTypes());
 		setUserDataOnForm(dtf, user);
 
@@ -96,15 +93,6 @@ public class TemplateEditAction extends CheckedAction {
 			redirect = success;
 		}
 		
-		if (dtf.isPreview()) {
-			DocumentTemplateResult result = generateTemplatePreview(dtf, user);
-			if (result.isSuccess()) {
-				request.setAttribute("previewLink", result.getPayload());
-			}
-			success = result.isSuccess();
-			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(result.getMessageKey()));
-		}
-		
 		if (!messages.isEmpty()) {
 			saveMessages(request, messages);
 			request.setAttribute("success", success);
@@ -114,6 +102,25 @@ public class TemplateEditAction extends CheckedAction {
 			return mapping.findForward(TracingConstants.SEARCH_TEMPLATE);
 		} else {
 			return mapping.findForward(TracingConstants.EDIT_TEMPLATE);
+		}
+	}
+
+	private void handlePreviewDocument(HttpServletResponse response, ActionMessages messages, Agent user, TemplateEditForm dtf, String outputTypeParam) {
+		int outputType = -1;
+		try {
+			outputType = Integer.parseInt(outputTypeParam);
+
+			DocumentTemplateResult result = generateTemplatePreview(dtf, user, outputType);
+			if (!result.isSuccess()) {
+				messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(result.getMessageKey(), result.getPayload() != null ? result.getPayload() : null));
+			} else {
+				byte[] toOutput = documentService.getByteArrayForDocument((Document) result.getPayload(), user.getCompanycode_ID(), PropertyBMO.getValue(PropertyBMO.DOCUMENT_LOCATION_TEMP), outputType);
+				outputToResponse(response, toOutput, outputType);
+			}
+			
+		} catch (NumberFormatException nfe) {
+			logger.error("Invalid value for output", nfe);
+			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("document.generated.failure"));
 		}
 	}
 	
@@ -157,7 +164,7 @@ public class TemplateEditAction extends CheckedAction {
 		return success;
 	}
 	
-	private DocumentTemplateResult generateTemplatePreview(TemplateEditForm dtf, Agent user) {
+	private DocumentTemplateResult generateTemplatePreview(TemplateEditForm dtf, Agent user, int outputType) {
 		dtf.setPreview(false);
 		Template template = templateService.load(dtf.getId());
 		// 1. validate the template to be used
@@ -175,8 +182,11 @@ public class TemplateEditAction extends CheckedAction {
 				return result;
 			}
 			
-			// 3. create the pdf file		
-			result = documentService.generatePdf(user, document, PropertyBMO.getValue(PropertyBMO.DOCUMENT_LOCATION_TEMP));
+			// 3. create the pdf file	
+			if (outputType == TracingConstants.REPORT_OUTPUT_PDF) {
+				result = documentService.generatePdf(user, document, PropertyBMO.getValue(PropertyBMO.DOCUMENT_LOCATION_TEMP));
+			}
+			result.setPayload(document);
 			
 		} catch (InvalidDocumentTypeException e) {
 			logger.error("Failed to create adapter for template type", e);

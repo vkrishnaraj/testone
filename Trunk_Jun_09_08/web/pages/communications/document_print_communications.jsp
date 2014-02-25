@@ -17,13 +17,13 @@
 %>
 <script type="text/javascript">
 
-function previewDocuments(checkboxName) {
+function previewDocuments(checkboxName, toSubmit) {
 	if (!validateCheckboxes(checkboxName)) {
 		return false;
 	}
 	
 	var url = "documentPrintCommunications.do?print=";
-	url += "<%=(String) myMessages.getMessage(myLocale, "document.print.preview").replace(" ", "+")%>";
+	url += "<%=(String) myMessages.getMessage(myLocale, "document.print.generate").replace(" ", "+")%>";
 
 	var checkboxes = document.getElementsByName(checkboxName);
     for (var j=0;j < checkboxes.length; j++) {
@@ -33,7 +33,7 @@ function previewDocuments(checkboxName) {
 		}
     }
     
-    openWindowWithBar(url,'report',800,600); 
+    submitPrintRequest(url,'width=600,height=800,resizable=yes,scrollbars=yes', toSubmit);
 	
 	return true;
 }
@@ -126,11 +126,9 @@ function validateCheckboxes(checkboxName) {
 				<hr/>
 	            
 	             <div>
-	             	<a href="#" onclick="openWindowWithBar('documentPrintCommunications.do?generateFile=<bean:write name="generateFile" scope="request"/>','report',800,600);return false;"><b><bean:message key="link.view_report" /></b></a>
+<%-- 	             	<a href="#" onclick="openWindowWithBar('documentPrintCommunications.do?generateFile=<bean:write name="generateFile" scope="request"/>','report',800,600);return false;"><b><bean:message key="link.view_report" /></b></a> --%>
 	              </div>
-	              <script>
-	              		openWindowWithBar('documentPrintCommunications.do?generateFile=<bean:write name="generateFile" scope="request" />','report',800,600);
-				</script>
+	              
 	        </c:if>
 		        
 			<c:if test="${not empty incidentActivitylist}">
@@ -171,7 +169,7 @@ function validateCheckboxes(checkboxName) {
 								<input type="button" name="print" value="<bean:message key="document.print.preview" />" id="button" onclick="return previewDocuments('incident_activity_task_id');">
 								
 								&nbsp;&nbsp;								
-								<input type="submit" name="print" value="<bean:message key="document.print.generate" />" id="button" onclick="return validateCheckboxes('incident_activity_task_id');">
+								<input type="button" name="print" value="<bean:message key="document.print.generate" />" id="button" onclick="if (validateCheckboxes('incident_activity_task_id')) { previewDocuments('incident_activity_task_id', document.forms[0]); return true; } else { return false; }">
 							</td>
 					    </tr>
 				    </table>		

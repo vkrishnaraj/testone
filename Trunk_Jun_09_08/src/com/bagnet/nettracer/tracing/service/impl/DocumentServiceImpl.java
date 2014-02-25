@@ -16,9 +16,10 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import com.bagnet.nettracer.tracing.actions.templates.DocumentTemplateResult;
@@ -114,7 +115,7 @@ public class DocumentServiceImpl implements DocumentService {
 			
 		}
 		document.setContent(content);
-		
+		result.setPayload(document);
 		result.setMessageKey("document.generated.success");
 		result.setSuccess(true);
 		return result;
@@ -182,7 +183,7 @@ public class DocumentServiceImpl implements DocumentService {
 		        renderer.writeNextDocument();
 		    }
 		    renderer.finishPDF();
-			
+			firstDocument.setFileName(fileName);
 			// update the result details
 			result.setSuccess(true);
 			result.setMessageKey("document.generated.success");
@@ -388,6 +389,56 @@ public class DocumentServiceImpl implements DocumentService {
 			}
 		}
 		return toReturn;
+	}
+	
+	@Override
+	public byte[] getByteArrayForDocument(Document document, String companyCode, String sourceDirectory, int outputType) {
+		byte[] bytes = new byte[0];
+		if (document == null) return bytes;
+		
+		switch(outputType) {
+			case TracingConstants.REPORT_OUTPUT_HTML:
+				if (document.getContent() != null) {
+					bytes = document.getContent().getBytes();
+				}
+				break;
+			case TracingConstants.REPORT_OUTPUT_PDF:
+				if (document.getFileName() != null) {
+					bytes = getByteArrayFromFile(companyCode, document.getFileName(), sourceDirectory);
+				}
+				break;
+			default:
+				break;
+		}
+		return bytes;
+	}
+	
+	private byte[] getByteArrayFromFile(String companyCode, String fileName, String sourceDirectory) {
+		Byte[] bytes = null;
+		
+		String documentStorePath = TracerProperties.get(companyCode, "document_store") + sourceDirectory + "\\";
+		File toPreview = new File(documentStorePath + fileName);
+		FileInputStream in = null;
+		if (toPreview.exists()) {
+			try {
+				in = new FileInputStream(toPreview);
+				List<Byte> data = new ArrayList<Byte>();
+				int current = -1;
+				while ((current = in.read()) > -1) {
+					data.add((byte) current);
+				}
+				bytes = data.toArray(new Byte[data.size()]);
+			} catch (Exception e) {
+				logger.error("Error occurred trying to get the byte[] from file: " + fileName, e);
+			} finally {
+				try {
+					if (in != null)	in.close();
+				} catch (IOException ioe) {
+					logger.error("Failed to close the FileInputStream", ioe);
+				}
+			}
+		}
+		return ArrayUtils.toPrimitive(bytes);
 	}
 	
 }
