@@ -7,7 +7,7 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 
 public class FckEditorPathBuilderImpl implements net.fckeditor.requestcycle.UserPathBuilder{
-	public static String subdir = "/bagbuzz";
+	public static String subdir = "/editor_files";
 	public static String context = "/" + TracerProperties.get(TracerProperties.get("wt.company.code"),"application_context");
 	
 	public String getUserFilesAbsolutePath(HttpServletRequest request){
