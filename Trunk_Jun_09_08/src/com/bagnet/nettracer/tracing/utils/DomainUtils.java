@@ -117,6 +117,10 @@ public class DomainUtils {
 		if(ia.getAgent()!=null){
 			ccf.setAgentId(ia.getAgent().getAgent_ID());
 		}
+		
+		if(ia.getLastStatus()!=null){
+			ccf.setTaskStatus(ia.getLastStatus().getStatus_ID());
+		}
 	}
 	
 	public static Template fromForm(TemplateEditForm form) {

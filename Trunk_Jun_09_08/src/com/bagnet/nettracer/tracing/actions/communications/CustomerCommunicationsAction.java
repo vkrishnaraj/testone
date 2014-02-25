@@ -184,7 +184,6 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		} else if (TracingConstants.COMMAND_UPDATE.equals(ccf.getCommand()) 
 				&& UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_EDIT, user)) {
 			success = updateCustomerCommunications(ccf, user, messages);
-			ccf.setTaskStatus(0);
 		} else if (TracingConstants.COMMAND_ACKNOWLEDGE.equals(ccf.getCommand()) 
 				&& UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_EDIT, user)) {
 			success = incidentActivityService.closeTask(ccf.getTaskId());
