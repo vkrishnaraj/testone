@@ -146,3 +146,6 @@ update agent_logger set expired=true where log_off_time is null;
 
 alter table lffound drop column receiptFileName;
 alter table lffound add receiptFile_id bigint;
+
+alter table bdo add column pickuptz_id int default 0;
+update bdo set pickuptz_id=0;
