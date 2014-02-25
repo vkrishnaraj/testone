@@ -398,6 +398,11 @@ function toggledc(o) {
               <html:text property="disppickupdate" size="11" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.BDOForm.disppickupdate,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;">
               &nbsp;
               <html:text property="disppickuptime" size="6" maxlength="10" styleClass="textfield" />
+              <br/>
+              <html:select property="pickuptz_id" styleClass="dropdown" style="width:200px" >
+              	<html:options collection="timeZoneList" property="id"
+										labelProperty="description" />
+              </html:select>
              </td>
           </tr>
           

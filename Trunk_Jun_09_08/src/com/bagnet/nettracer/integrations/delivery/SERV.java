@@ -131,7 +131,13 @@ public class SERV implements BDOIntegration {
 			
 			Calendar pickupCal = Calendar.getInstance();
 			if (bdo.getDisppickuptime() !=null) {
-				pickupCal.setTime(DateUtils.convertToDate(bdo.getDisppickuptime(),bdo.get_DATEFORMAT() + " " + bdo.get_TIMEFORMAT(), null,null));
+				com.bagnet.nettracer.tracing.db.TimeZone tz=null;
+				tz=AdminUtils.getTimeZoneById(String.valueOf(bdo.getPickuptz_id()));
+				TimeZone t=null;
+				if(tz!=null){
+					t=TimeZone.getTimeZone(tz.getTimezone());
+				}
+				pickupCal.setTime(DateUtils.convertToGMTDate(bdo.getDisppickuptime(),bdo.get_DATEFORMAT() + " " + bdo.get_TIMEFORMAT(), t));
 				ws.setPickUpDate(fixTimeZone(pickupCal,"GMT"));
 			}
 			

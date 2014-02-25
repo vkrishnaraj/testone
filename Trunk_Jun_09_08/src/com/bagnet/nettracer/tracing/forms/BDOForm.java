@@ -52,6 +52,7 @@ public final class BDOForm extends ValidatorForm {
 	private Date deliverydate;
 	private Date pickupdate;
 	private Date pickuptime;	
+	private int pickuptz_id;	
 
 	private List<BDO_Passenger> passengerlist = new ArrayList<BDO_Passenger>();
 	private List<Item> itemlist = new ArrayList<Item>();
@@ -396,8 +397,8 @@ public final class BDOForm extends ValidatorForm {
 		if(s!=null && !s.isEmpty()){
 			Date aDateWithTime = DateUtils.convertToDatetime(s, get_TIMEFORMAT());
 			setPickuptime(aDateWithTime);
-		}
-		else{
+			//setPickuptime(DateUtils.convertToGMTDate(s, get_TIMEFORMAT(), get_TIMEZONE()));
+		} else {
 			setPickuptime(null);
 		}
 	}
@@ -620,6 +621,14 @@ public final class BDOForm extends ValidatorForm {
 
 	public void setDistance(double distance) {
 		this.distance = distance;
+	}
+
+	public int getPickuptz_id() {
+		return pickuptz_id;
+	}
+
+	public void setPickuptz_id(int pickuptz_id) {
+		this.pickuptz_id = pickuptz_id;
 	}
 
 }

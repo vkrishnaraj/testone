@@ -53,7 +53,8 @@ public class BDO implements Serializable {
 
 	private Date deliverydate;
 	private Date pickupdate;
-	private Date pickuptime;	
+	private Date pickuptime;
+	private int pickuptz_id;	
 
 	private OHD ohd;
 	private Incident incident;
@@ -621,12 +622,28 @@ public class BDO implements Serializable {
 		this.origDelivCost = origDelivCost;
 	}
 
+	/**
+	 * @return the distance
+	 * @hibernate.property type="double"
+	 */
 	public double getDistance() {
 		return distance;
 	}
 
 	public void setDistance(double distance) {
 		this.distance = distance;
+	}
+
+	/**
+	 * @return the pickuptz
+	 * @hibernate.property type="int"
+	 */
+	public int getPickuptz_id() {
+		return pickuptz_id;
+	}
+
+	public void setPickuptz_id(int pickuptz_id) {
+		this.pickuptz_id = pickuptz_id;
 	}
 
 }

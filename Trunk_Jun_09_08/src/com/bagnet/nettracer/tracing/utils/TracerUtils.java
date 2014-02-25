@@ -585,6 +585,9 @@ public class TracerUtils {
 		session.setAttribute("claimStatusList",
 				session.getAttribute("claimStatusList") != null ? session
 						.getAttribute("claimStatusList") : getStatusList(TracingConstants.TABLE_CLAIM_STATUS, locale));
+		
+		session.setAttribute("timeZoneList", session.getAttribute("timeZoneList") != null ? session
+						.getAttribute("timeZoneList"): AdminUtils.getTimeZones());
 	}
 
 	/**

@@ -101,6 +101,12 @@ public class BDOUtils {
 		theform.set_DATEFORMAT(user.getDateformat().getFormat());
 		theform.set_TIMEFORMAT(user.getTimeformat().getFormat());
 		theform.setCurrency(user.getDefaultcurrency());
+		
+		com.bagnet.nettracer.tracing.db.TimeZone tz=AdminUtils.getTimeZoneById(user.getCurrenttimezone());
+		if(tz!=null){
+			theform.setPickuptz_id(tz.getId());
+		}
+		
 		if (user.getDefaulttimezone() != null)
 			theform.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
 
