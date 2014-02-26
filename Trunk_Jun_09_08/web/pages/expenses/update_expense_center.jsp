@@ -43,7 +43,7 @@
 	boolean sameday = today.equals(createdate);
 	boolean showcancel = (sameday && epf.getCancelcount() == 0 ) ? true : false;
 	boolean bsoPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, a) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN,a);
-	boolean payApproveCreatePerm = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAYMENT_APPROVAL_CREATE, a) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAYMENT_APPROVAL_ADMIN,a);
+	boolean payApproveCreatePerm = (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAYMENT_APPROVAL_CREATE, a) || UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAYMENT_APPROVAL, a)) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAYMENT_APPROVAL_ADMIN,a);
 	boolean isInBSO=(epf!=null && a!=null && a.getStation()!=null && epf.getExpenselocation_ID()==a.getStation().getStation_ID());
 	boolean isVoucher=(epf!=null && epf.getPaymentType().equals("VOUCH"));
 	boolean passDataInExp = PropertyBMO.isTrue(PropertyBMO.PASSENGER_DATA_IN_EXPENSE);
@@ -582,7 +582,7 @@
 							<td align="center" valign="top" colspan="3">
 								<%
 									if (epf.getStatus_id() == TracingConstants.EXPENSEPAYOUT_STATUS_PENDING) {
-												if (canApprove) {
+												if (canApprove && !payApproveCreatePerm ) {
 								%>
 
 								<html:submit property="updateExpense" styleId="button">
