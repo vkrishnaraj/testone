@@ -196,21 +196,14 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 				String incidentActivityId = selenium.getValue("id=id");
 				Settings.CUST_COMM_ID = incidentActivityId;
 				System.out.println("WN: Customer Communications Created: " + Settings.CUST_COMM_ID);
-				selenium.click("id=savePreviewButton");
+				verifyTrue(isElementPresent(By.linkText("Preview")));
+				selenium.click("css=span.bb");
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
-					verifyTrue(isElementPresent(By.linkText("Preview")));
-					selenium.click("css=span.bb");
-					waitForPageToLoadImproved();
-					if (checkNoErrorPage()) {
-						checkCopyrightAndQuestionMarks();
-						verifyEquals("Lost/Delayed Bag Incident", selenium.getText("//div[@id='pageheaderleft']/h1"));
-					} else {
-						System.out.println("!!!!!!!!!!!!!!!! Failed to reload the incident from the customer communications page.");
-						verifyTrue(false);
-					}
+					checkCopyrightAndQuestionMarks();
+					verifyEquals("Lost/Delayed Bag Incident", selenium.getText("//div[@id='pageheaderleft']/h1"));
 				} else {
-					System.out.println("!!!!!!!!!!!!!!!! Failed to save & preview the customer communications page.");
+					System.out.println("!!!!!!!!!!!!!!!! Failed to reload the incident from the customer communications page.");
 					verifyTrue(false);
 				}
 			} else {
