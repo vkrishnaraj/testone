@@ -91,7 +91,7 @@ public class Document {
 		xml.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">");
 		xml.append("<html><body>");
 		String toReplace = "/" + TracerProperties.get(user.getCompanycode_ID(),"application_context") + "/showImage\\?ID=" + FckEditorPathBuilderImpl.subdir + "/";
-		String replaceWith = TracerProperties.get(user.getCompanycode_ID(),"image_store").replaceAll("^[cdCD]:", "") + FckEditorPathBuilderImpl.subdir;
+		String replaceWith = TracerProperties.get(user.getCompanycode_ID(),"image_store").replaceAll("^[cdCD]:", "").replaceAll("\\\\", "\\\\\\\\") + FckEditorPathBuilderImpl.subdir;
 		String imageFriendlyContent = getContent().replaceAll(toReplace, replaceWith);
 		xml.append(imageFriendlyContent);
 		xml.append("</body></html>");
