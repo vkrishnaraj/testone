@@ -323,7 +323,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 		selenium.click("saveButton");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
-			verifyTrue(isTextPresent("Damaged Baggage Report has been modified."));
+			verifyTrue(isTextPresent("Damaged Baggage Incident has been modified."));
 		} else {
 			System.out.println("!!!!!!!!!!!!!!! - Failed to save the damaged incident in testCourtesyReasonDisabled. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 			verifyTrue(false);
@@ -367,7 +367,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 				waitForPageToLoadImproved();
 				if (checkNoErrorPage()) {
 					checkCopyrightAndQuestionMarks();
-					verifyTrue(isTextPresent("Damaged Baggage Report has been modified."));
+					verifyTrue(isTextPresent("Damaged Baggage Incident has been modified."));
 				} else {
 					System.out.println("!!!!!!!!!!!!!!! - Failed to save the damaged incident in testCourtesyReasonEnabled. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 					verifyTrue(false);
