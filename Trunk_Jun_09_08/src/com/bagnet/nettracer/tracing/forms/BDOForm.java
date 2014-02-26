@@ -397,7 +397,6 @@ public final class BDOForm extends ValidatorForm {
 		if(s!=null && !s.isEmpty()){
 			Date aDateWithTime = DateUtils.convertToDatetime(s, get_TIMEFORMAT());
 			setPickuptime(aDateWithTime);
-			//setPickuptime(DateUtils.convertToGMTDate(s, get_TIMEFORMAT(), get_TIMEZONE()));
 		} else {
 			setPickuptime(null);
 		}
