@@ -1874,7 +1874,7 @@ function populateBagInfo(form) {
 	
 }
 
-function submitPrintRequest(url, options, toSubmit) {
+function submitPrintRequest(url, options) {
 	if (!url || url == null) return;
 
 	var output;
@@ -1888,7 +1888,7 @@ function submitPrintRequest(url, options, toSubmit) {
 										jQuery(this).dialog("close");
 										var outputSelect = document.getElementById("outputSelect");
 										output = outputSelect.options[outputSelect.selectedIndex].value;
-										postPrintRequest(url, options, output, toSubmit);												
+										postPrintRequest(url, options, output);												
 									},
 									Cancel: function() {
 										jQuery(this).dialog("close");
@@ -1898,9 +1898,6 @@ function submitPrintRequest(url, options, toSubmit) {
 	reportOptionsDialog.dialog("open");
 }
 
-function postPrintRequest(url, options, output, toSubmit) {
+function postPrintRequest(url, options, output) {
 	window.open(url+'&output='+output, '', options);
-	if (toSubmit && toSubmit != null) {
-		toSubmit.submit();
-	}
 }
