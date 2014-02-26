@@ -1167,7 +1167,7 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 				"join passenger p on i.Incident_ID = p.incident_ID  " +
 				"where t.active = 1  " +
 				"and t.agent_id = 1 or t.agent_id = i.agent_ID is null  " +
-				"and task_type in ('INCACTIVITYTASK','INBOUND','DAMAGED')  " +
+				"and task_type in ('INCACTIVITYTASK','INBOUND','DAMAGED','ACAA')  " +
 				"group by t.opened_timestamp, i.agent_ID, t.status_ID, i.Incident_ID, p.lastname, p.firstname)  " +
 				"union all  " +
 				"(select t.task_id,t.task_type_id,t.opened_timestamp,i.agent_ID,t.status_ID,i.Incident_ID,p.lastname,p.firstname,case when it.bagtype = 94 or it.bagtype = 95 then 1 else 0 end as acaa " +
@@ -1178,7 +1178,7 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 				"join passenger p on i.Incident_ID = p.incident_ID " +
 				"where t.active = 1  " +
 				"and t.agent_id = 1 or t.agent_id = i.agent_ID is null  " +
-				"and task_type in ('INCACTIVITYTASK','INBOUND','DAMAGED')  " +
+				"and task_type in ('INCACTIVITYTASK','INBOUND','DAMAGED','ACAA')  " +
 				"group by t.opened_timestamp, i.agent_ID, t.status_ID, i.Incident_ID, p.lastname, p.firstname)  " +
 				"order by opened_timestamp ";
 		
