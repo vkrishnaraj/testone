@@ -146,7 +146,11 @@
           </tr>
           <tr>
             <td colspan="1">
-              <bean:message key="colname.salutation.req" />
+              <% if(i==0) {%>
+              	<bean:message key="colname.salutation.req" />
+              <% } else {%>
+              	<bean:message key="colname.salutation" />
+              <% } %>
               <br>
               <html:select name="passenger" styleId='<%= "passenger[" + i + "].salutation" %>' indexed="true" property="salutation" styleClass="dropdown">
                 <html:option value="0">
@@ -352,7 +356,11 @@
             <logic:iterate indexId="k" name="passenger" id="addresses" property="addresses" type="com.bagnet.nettracer.tracing.db.Address">
               <tr>
                 <td colspan=2>
-                  <bean:message key="colname.street_addr1.req" />
+              	  <% if(i==0) {%>
+                  	<bean:message key="colname.street_addr1.req" />
+                  <% } else { %>
+                  	<bean:message key="colname.street_addr1" />
+                  <% } %>
                   <br>
                   <html:text property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].address1" %>' size="45" maxlength="50" styleClass="textfield" />
                 </td>
@@ -364,12 +372,20 @@
               </tr>
               <tr>
                 <td>
-                  <bean:message key="colname.city.req" />
+              	  <% if(i==0) {%>
+                  	<bean:message key="colname.city.req" />
+                  <% } else { %>
+                  	<bean:message key="colname.city" />
+                  <% } %>
                   <br>
                   <html:text property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].city" %>' size="15" maxlength="50" styleClass="textfield" />
                 </td>
                 <td>
-                  <bean:message key="colname.state.req" />
+              	  <% if(i==0) {%>
+                  	<bean:message key="colname.state.req" />
+                  <% } else { %>
+                  	<bean:message key="colname.state" />
+                  <% } %>
                   <br />
                   <logic:equal name="addresses" property="countrycode_ID" value="US">
                     <html:select property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].state_ID" %>' styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'countrycode_ID', 'province');" >
@@ -414,7 +430,11 @@
                       </logic:notEqual>
                 </td>
                 <td>
-                  <bean:message key="colname.zip.req" />
+              	  <% if(i==0) {%>
+                 	 <bean:message key="colname.zip.req" />
+                  <% } else { %>
+                  	<bean:message key="colname.zip" />
+                  <% } %>
                   <br>
                   <html:text property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].zip" %>' size="15" maxlength="11" styleClass="textfield" />
                 </td>
@@ -465,7 +485,12 @@
                   <html:text property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].workphone" %>' size="15" maxlength="25" styleClass="textfield" />
                 </td>
                 <td>
-                  <bean:message key="colname.mobile_ph.req" />
+                
+              	  <% if(i==0) {%>
+                  	<bean:message key="colname.mobile_ph.req" />
+                  <% } else { %>
+                  	<bean:message key="colname.mobile_ph" />
+                  <% } %>
                   <br>
                   <html:text property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].mobile" %>' size="15" maxlength="25" styleClass="textfield" />
                 </td>

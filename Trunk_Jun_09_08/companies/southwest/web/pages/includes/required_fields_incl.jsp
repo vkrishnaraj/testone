@@ -280,19 +280,40 @@
 		} 
 		
 		//passenger validation
-		else if (currentElementName.indexOf("passenger[") != -1 && currentElementName.indexOf("passenger[") < currentElementName.indexOf("].salutation")) {  
+		else if (currentElementName.indexOf("].lastname") != -1) {
+			if (currentElement.value.length == 0)
+	        {
+	          alert("<%=(String) bundle.getString(
+	              "colname.last_name")%>" + " <%=(String) bundle.getString(
+	              "error.validation.isRequired")%>");
+	          currentElement.focus();
+	          return false;
+	        }  
+		}
+		else if (currentElementName.indexOf("].firstname") != -1) {
+			if (currentElement.value.length == 0)
+	        {
+	          alert("<%=(String) bundle.getString(
+	              "colname.first_name")%>" + " <%=(String) bundle.getString(
+	              "error.validation.isRequired")%>");
+	          currentElement.focus();
+	          return false;
+	        }    
+		}
+		else if (currentElementName.indexOf("passenger["+firstPaxIndex+"].salutation")!=-1){
+		//currentElementName.indexOf("passenger[") != -1 && currentElementName.indexOf("passenger[") < currentElementName.indexOf("].salutation")) {  
 		      if (currentElement.value.length == 0 || currentElement.value == '0') {
 		        alert("<%= (String)bundle.getString( "colname.salutation") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
 			    currentElement.focus();
 			    return false;
 		      }
-		} else if (currentElementName.indexOf("zip") != -1) {  
+		} else if (currentElementName.indexOf("address["+firstAddressIndex+"].zip") != -1) {  
 		      if (currentElement.value.length == 0) {
 		        alert("<%= (String)bundle.getString( "colname.zip") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
 			    currentElement.focus();
 			    return false;
 		      }
-		} else if (currentElementName.indexOf("].mobile") != -1) {
+		} else if (currentElementName.indexOf("address["+firstAddressIndex+"].mobile") != -1) {
 			  var homephone = document.getElementsByName(currentElementName.replace('].mobile', '].homephone'))[0].value;
 			  var workphone = document.getElementsByName(currentElementName.replace('].mobile', '].workphone'))[0].value;
 			  var mobile = document.getElementsByName(currentElementName)[0].value;		  
