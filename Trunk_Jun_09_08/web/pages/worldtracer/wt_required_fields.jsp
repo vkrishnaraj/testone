@@ -198,7 +198,7 @@ ResourceBundle bundle = ResourceBundle.getBundle(
           currentElement.focus();
           return false;
         }
-      } else if (currentElementName.indexOf("].color") != -1) { 
+      } else if (currentElementName.indexOf("].color") != -1 && formType != 'pilfered') { 
         var left = currentElementName.indexOf("[");
         var right = currentElementName.indexOf("]");
         bagIndices = bagIndices.concat(currentElementName.substring(left+1, right)); 
@@ -210,7 +210,7 @@ ResourceBundle bundle = ResourceBundle.getBundle(
           currentElement.focus();
           return false;
         }
-      } else if (currentElementName.indexOf("].bagtype") != -1) {  
+      } else if (currentElementName.indexOf("].bagtype") != -1 && formType != 'pilfered') {  
         if (currentElement.value.length == 0)
         {
           alert("<%=(String) bundle.getString(
