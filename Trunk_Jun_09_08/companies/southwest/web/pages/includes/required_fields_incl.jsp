@@ -304,13 +304,13 @@
 		}
 		
 		//baggage validation
-		else if (currentElementName.indexOf("claimchecknum") != -1) {  
+		else if (currentElementName.indexOf("claimchecknum") != -1  && formType != 'pilfered') {  
 		      if (currentElement.value.length == 0) {
 		        alert("<%= (String)bundle.getString( "colname.claimnum") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
 			    currentElement.focus();
 			    return false;
 		      }
-		} else if (currentElementName.indexOf("manufacturer_ID") != -1) {  
+		} else if (currentElementName.indexOf("manufacturer_ID") != -1  && formType != 'pilfered') {  
 		      if (currentElement.value.length == 0) {
 		        alert("<%= (String)bundle.getString( "colname.manufacturer") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
 			    currentElement.focus();
