@@ -603,22 +603,7 @@
 									<bean:message key="button.updatePayment" />
 								</html:submit>
 								<%
-									}
-											} else if (epf.getStatus_id() == TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED) {
-												if (canEdit || canPay || canApprove) {
-								%>
-								<html:submit property="updateExpense" styleId="button">
-									<bean:message key="button.updatePayment" />
-								</html:submit>&nbsp;
-								
-								<%
-									}
-									if (canPay && !bsoPermission && !payApproveCreatePerm) {
-								%>
-								<html:submit property="payExpense" styleId="button" onclick="buttonSelected='payExpense';">
-									<bean:message key="button.payExpense" />
-								</html:submit>
-								<%}
+									} 
 								if(payApproveCreatePerm && !bsoPermission && !epf.isHasIncidentActivity()){ %>
 									<input type="button" id="createClaimSettlement" class="button" value="<bean:message key="button.action.submit.review" />" onclick="if (validateExpense(this.form)) { submitIncidentActivity(); }" />
 
@@ -635,6 +620,18 @@
 										</table>
 									</div>	
 								<% }
+								} else if (epf.getStatus_id() == TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED) {
+									if (canEdit || canPay || canApprove) { %>
+										<html:submit property="updateExpense" styleId="button">
+											<bean:message key="button.updatePayment" />
+										</html:submit>&nbsp;
+								
+								<% }
+									if (canPay && !bsoPermission) { %>
+										<html:submit property="payExpense" styleId="button" onclick="buttonSelected='payExpense';">
+											<bean:message key="button.payExpense" />
+										</html:submit>
+									<%}
 								} else if (!submitOk && (canEdit || canPay || canApprove)) {
 								%>
 								<html:submit property="updateRemarkOnly" styleId="button">
