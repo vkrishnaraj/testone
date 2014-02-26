@@ -263,7 +263,7 @@
             if (report_type != 1) {
 %>
               <td <% if (report_type == 2 || !collectExpTagNum) { %>colspan="2"<% } %>>
-                <%  if ( report_type == 2) { %>
+                <%  if ( report_type == 2 && a.getCompanycode_ID().equals("WN") ) { %>
                     <bean:message key="colname.claimnum" />
                 <% } else { %>
                     <bean:message key="colname.claimnum.req2" />
@@ -436,7 +436,7 @@
           </tr>
           <tr>
             <td valign="top">
-              <% if (report_type == 2) { %>
+              <% if (report_type == 2 && a.getCompanycode_ID().equals("WN")) { %>
                   <bean:message key="colname.color" />
               <% } else {  %>
                   <bean:message key="colname.color.req" />
@@ -449,7 +449,7 @@
               </html:select>
             
               <br>
-              <% if (report_type == 2) { %>
+              <% if (report_type == 2 && a.getCompanycode_ID().equals("WN")) { %>
                 <bean:message key="colname.bagtype" />
               <% } else { %>
                 <bean:message key="colname.bagtype.req" />
@@ -524,11 +524,11 @@
               <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=4&xdescelement=theitem[<%= i %>].xdescelement_ID_3&type=xdescelement_ID_3',800,30,230);return false;"><bean:message key="chart4" /></a>
             </td>
             <td valign="top">
-            <% if (report_type == 2) { %>
-                  <bean:message key="colname.manufacturer" />
+            <% if (report_type == 2 && a.getCompanycode_ID().equals("WN")) { %>
+                  <bean:message key="colname.manufacturer" /> 
             <% } else { %>
                   <bean:message key="colname.manufacturer.req" />
-            <% } %>
+            <% } %> 
               <br>
               <html:select name="theitem" property="manufacturer_ID" styleClass="dropdown" indexed="true" onchange='showmanu(this);return true;'>
                 <html:option value="">

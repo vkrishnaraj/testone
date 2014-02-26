@@ -29,7 +29,7 @@ ResourceBundle bundle = ResourceBundle.getBundle(
     
     var langKey = "";
     var langKeyLabel = "";
-    
+
     for (var j=0;j < form.length; j++) {
       currentElement = form.elements[j];
       currentElementName=currentElement.name;
@@ -197,8 +197,8 @@ ResourceBundle bundle = ResourceBundle.getBundle(
               "error.validation.isRequired")%>");
           currentElement.focus();
           return false;
-        }
-      } else if (currentElementName.indexOf("].color") != -1 && formType != 'pilfered') { 
+        } 
+      } else if (currentElementName.indexOf("].color") != -1 && !( formType == 'pilfered' && <%= a.getCompanycode_ID().equals("WN") %> )) { 
         var left = currentElementName.indexOf("[");
         var right = currentElementName.indexOf("]");
         bagIndices = bagIndices.concat(currentElementName.substring(left+1, right)); 
@@ -209,8 +209,9 @@ ResourceBundle bundle = ResourceBundle.getBundle(
               "error.validation.isRequired")%>");
           currentElement.focus();
           return false;
+          
         }
-      } else if (currentElementName.indexOf("].bagtype") != -1 && formType != 'pilfered') {  
+      } else if (currentElementName.indexOf("].bagtype") != -1 && !( formType == 'pilfered' && <%= a.getCompanycode_ID().equals("WN") %> ) ) {  
         if (currentElement.value.length == 0)
         {
           alert("<%=(String) bundle.getString(
