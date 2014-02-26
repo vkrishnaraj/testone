@@ -173,13 +173,7 @@
 			document.getElementById("manu_other" + pos).style.visibility = "hidden";
 		}
 	}
-	
-	  
-	  function openPreviewWindow1(fileName) {
-		  window.open("issuanceItemAdmin.do?preview_document="+fileName+"&receipt=1", '', 'width=600,height=800,resizable=yes');
-		}
-		
-  </SCRIPT>
+</SCRIPT>
 
 <%
 	int report_type = 0;
@@ -999,8 +993,9 @@
 				<% } %>
 						<td style="text-align:left;">
 							<logic:notEmpty name="issuanceitem" property="document">
-							<a href="#" onclick="openPreviewWindow1('<bean:write name="issuanceitem" property="document.fileName" />')"> 
-																<bean:message key="link.preview" /></a>
+								<a href="#" onclick="submitPrintRequest('issuanceItemAdmin.do?preview_document=<bean:write name="issuanceitem" property="document.id" />&receipt=1', 'width=600,height=800,resizable=yes'); return false;"> 
+									<bean:message key="link.preview" />
+								</a>
 							</logic:notEmpty>
 							<logic:empty name="issuanceitem" property="document">
 							&nbsp;
@@ -1074,14 +1069,9 @@
 	<br>
 	<br>
 </logic:notEqual>
-<script> <logic:iterate id="theitem" indexId="i" name="incidentForm" property="itemlist" type="com.bagnet.nettracer.tracing.db.Item">
-      		checkBagType(<%=i%>);
-     	</logic:iterate>
-     		anyLossCodeChanges();
-</script>
-	<logic:present name="receiptName" scope="request">
-	    <script language=javascript>
-	    	var fileName = '<%=(String) request.getAttribute("receiptName") %>';
-   			openPreviewWindow1(fileName);
-	    </script>
-    </logic:present>
+<script>
+<logic:iterate id="theitem" indexId="i" name="incidentForm" property="itemlist" type="com.bagnet.nettracer.tracing.db.Item">
+	<script type="text/javascript">
+   		checkBagType(<%=i%>);
+  		</script>
+</logic:iterate>

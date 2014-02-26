@@ -116,5 +116,14 @@ public interface DocumentService {
 	 */
 	public String getMissingRequiredVariable(Document document);
 	
+	/**
+	 * This method gets the content of a document in the form of a byte array for output to an HttpServletResponse.
+	 * @param document - the Document to display the content of.
+	 * @param companyCode - the company code of the user making the request
+	 * @param sourceDirectory - the source directory containing the pdf file, which is used only if outputType is set
+	 * to pdf.
+	 * @param outputType - the output type of the document, currently only html or pdf.
+	 * @return - a byte array representation of the document content.
+	 */
 	public byte[] getByteArrayForDocument(Document document, String companyCode, String sourceDirectory, int outputType);
 }

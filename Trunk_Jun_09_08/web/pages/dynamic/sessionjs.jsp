@@ -1888,7 +1888,7 @@ function submitPrintRequest(url, options) {
 										jQuery(this).dialog("close");
 										var outputSelect = document.getElementById("outputSelect");
 										output = outputSelect.options[outputSelect.selectedIndex].value;
-										postPrintRequest(url, options, output);												
+										window.open(url+'&outputtype='+output, '', options);										
 									},
 									Cancel: function() {
 										jQuery(this).dialog("close");
@@ -1896,8 +1896,4 @@ function submitPrintRequest(url, options) {
 								}
 							});
 	reportOptionsDialog.dialog("open");
-}
-
-function postPrintRequest(url, options, output) {
-	window.open(url+'&output='+output, '', options);
 }

@@ -200,8 +200,8 @@
 		                        }
 
 		                    });
-			
-			openReportWindow('reporting?print=<%=ReportingConstants.EXPENSE_LUV_VOUCHER%>&outputtype=0',800,600);
+	
+			submitPrintRequest('reporting?print=<%=ReportingConstants.EXPENSE_LUV_VOUCHER %>','width=600,height=800,resizable=yes,scrollbars=yes');
 		 };
 		    
     </script>
@@ -654,6 +654,7 @@
         	<html:hidden property="paycode" />
         	<html:hidden property="expenselocation_ID" />
     <% } %>
+<jsp:include page="/pages/includes/print_options.jsp" />
 </html:form>
 <c:if test="${expensePayoutForm.wssubmitc == 'no'}">
 	<script type="text/javascript">reSubmitWS();</script>
@@ -662,7 +663,9 @@
 	<script type="text/javascript">submitOK('<c:out value="${expensePayoutForm.ordernum}" />');</script>
 </c:if>
 <c:if test="${expensePayoutForm.toremark == 'yes'}">
-	<%epf.setToremark(null);%>
-	<script type="text/javascript">doPrint('<%=myMessages.getMessage(myLocale, "message.confirm.print.voucher")%>');</script>
+	<% epf.setToremark(null); %>
+	<script type="text/javascript">
+		doPrint('<%=myMessages.getMessage(myLocale, "message.confirm.print.voucher")%>');
+	</script>
 </c:if>
 

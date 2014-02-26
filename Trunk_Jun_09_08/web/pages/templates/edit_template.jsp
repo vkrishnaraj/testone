@@ -94,7 +94,7 @@
 						</td>
 						<td style="text-align:right;">
 							<logic:notEqual name="templateEditForm" property="id" value="0" >
-								<a href="#" onclick="submitPrintRequest('editTemplate.do?preview_document=<bean:write name="templateEditForm" property="id" />','width=600,height=800,resizable=yes');">
+								<a href="#" onclick="submitPrintRequest('editTemplate.do?preview_document=<bean:write name="templateEditForm" property="id" />','width=600,height=800,resizable=yes,scrollbars=yes');">
 									<bean:message key="document.preview" />
 								</a>
 							</logic:notEqual>

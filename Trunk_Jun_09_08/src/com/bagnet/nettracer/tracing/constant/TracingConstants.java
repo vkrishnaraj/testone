@@ -1590,6 +1590,8 @@ public class TracingConstants {
 	public static final int TASK_TYPE_CODE_INBOUND_DAMAGED = 7;
 	public static final int TASK_TYPE_CODE_SECONDARY_CORRESPONDENCE = 8;
 	
+	public static final String OUTPUT_TYPE = "outputtype";
+	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {
 			return DB_DATEFORMAT_MSSQL;

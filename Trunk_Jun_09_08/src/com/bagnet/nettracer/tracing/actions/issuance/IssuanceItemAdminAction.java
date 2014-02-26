@@ -70,7 +70,7 @@ public class IssuanceItemAdminAction extends CheckedAction {
 					|| UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_DAMAGE, user)
 					|| UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_ISSUANCE_ITEMS_MISSING, user)) {
 				try {				
-					int outputType = Integer.parseInt((String) request.getParameter("output"));
+					int outputType = Integer.parseInt((String) request.getParameter(TracingConstants.OUTPUT_TYPE));
 					String directoryKey = request.getParameter("receipt") != null ? PropertyBMO.DOCUMENT_LOCATION_RECEIPTS : PropertyBMO.DOCUMENT_LOCATION_TEMP;
 					long documentId = Long.parseLong((String) request.getParameter(REQUEST_PREVIEW_DOCUMENT));
 					Document document = documentService.load(documentId);

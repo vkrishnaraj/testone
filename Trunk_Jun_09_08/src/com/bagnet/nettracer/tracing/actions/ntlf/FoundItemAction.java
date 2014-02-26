@@ -283,7 +283,7 @@ public class FoundItemAction extends CheckedAction {
 
 	private void displayReceipt(HttpServletRequest request, HttpServletResponse response, Agent user, LFFound found) {
 		try {
-			int outputType = Integer.parseInt((String) request.getParameter("output"));
+			int outputType = Integer.parseInt((String) request.getParameter(TracingConstants.OUTPUT_TYPE));
 			long foundId = Long.parseLong((String) request.getParameter("foundId"));
 			found = LFServiceWrapper.getInstance().getFoundItem(foundId);
 			if (found != null && found.getReceiptFile() != null) {

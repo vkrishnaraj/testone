@@ -323,18 +323,18 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		// handles the case in which the user wants to preview the document
 		if (request.getParameter(REQUEST_PREVIEW_DOCUMENT) != null) {
 			try {
-				int outputType = Integer.parseInt((String) request.getParameter("output"));
+				int outputType = Integer.parseInt((String) request.getParameter(TracingConstants.OUTPUT_TYPE));
 				long documentId = Long.parseLong((String) request.getParameter("preview_document"));
 				Document document = documentService.load(documentId);
-				if (document != null && document.getFileName() == null) {
+				if (document != null && document.getFileName() == null || StringUtils.isBlank(document.getFileName())) {
 					if (outputType == TracingConstants.REPORT_OUTPUT_PDF) {
 						if (!documentService.generatePdf(user, document, PropertyBMO.getValue(PropertyBMO.DOCUMENT_LOCATION_TEMP)).isSuccess()) {
 							logger.error("Failed to generate preview for customer communication");
 						}
 					}
-					byte[] toOutput = documentService.getByteArrayForDocument(document, user.getCompanycode_ID(), PropertyBMO.getValue(PropertyBMO.DOCUMENT_LOCATION_TEMP), outputType);
-					outputToResponse(response, toOutput, outputType);
 				}
+				byte[] toOutput = documentService.getByteArrayForDocument(document, user.getCompanycode_ID(), PropertyBMO.getValue(PropertyBMO.DOCUMENT_LOCATION_TEMP), outputType);
+				outputToResponse(response, toOutput, outputType);
 			} catch (Exception e) {
 				logger.error("Failed to generate CustomerCommunications preview", e);
 			}
@@ -345,7 +345,7 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		if (request.getParameter(REQUEST_VIEW_SAMPLE_PRINTOUT) != null) {
 			try {
 				String incidentActivityId = (String) request.getParameter("view_sample_printout");
-				int outputType = Integer.parseInt((String) request.getParameter("output"));
+				int outputType = Integer.parseInt((String) request.getParameter(TracingConstants.OUTPUT_TYPE));
 				DocumentTemplateResult result = viewSamplePrintout(incidentActivityId, user, response, new ActionMessages(), outputType);
 				if (!result.isSuccess()) {
 					return mapping.findForward(TracingConstants.FILE_NOT_FOUND);

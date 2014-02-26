@@ -63,7 +63,7 @@ public class TemplateEditAction extends CheckedAction {
 		
 		TemplateEditForm dtf = (TemplateEditForm) form;
 		if (request.getParameter("preview_document") != null) {
-			handlePreviewDocument(response, messages, user, dtf, (String) request.getParameter("output"));
+			handlePreviewDocument(response, messages, user, dtf, (String) request.getParameter(TracingConstants.OUTPUT_TYPE));
 			return null;
 		}
 		
