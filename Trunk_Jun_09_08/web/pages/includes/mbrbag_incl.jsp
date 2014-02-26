@@ -263,7 +263,11 @@
             if (report_type != 1) {
 %>
               <td <% if (report_type == 2 || !collectExpTagNum) { %>colspan="2"<% } %>>
-                <bean:message key="colname.claimnum.req2" />
+                <%  if ( report_type == 2) { %>
+                    <bean:message key="colname.claimnum" />
+                <% } else { %>
+                    <bean:message key="colname.claimnum.req2" />
+                <% } %>
                 <br>
                 <html:text name="theitem" property="claimchecknum" size="13" maxlength="12" styleClass="textfield" indexed="true" />
               </td>
@@ -432,7 +436,11 @@
           </tr>
           <tr>
             <td valign="top">
-              <bean:message key="colname.color.req" />
+              <% if (report_type == 2) { %>
+                  <bean:message key="colname.color" />
+              <% } else {  %>
+                  <bean:message key="colname.color.req" />
+              <% } %>
             
               <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=3&key=theitem[<%= i %>].color&type=color',800,10,230);return false;"><bean:message key="chart3" /></a>
               <br>
@@ -441,7 +449,11 @@
               </html:select>
             
               <br>
-              <bean:message key="colname.bagtype.req" />
+              <% if (report_type == 2) { %>
+                <bean:message key="colname.bagtype" />
+              <% } else { %>
+                <bean:message key="colname.bagtype.req" />
+              <% } %>
               <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=1&key=theitem[<%= i %>].bagtype&type=bagtype',800,280,230);return false;"><bean:message key="chart1" /></a>
               <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=2&key=theitem[<%= i %>].bagtype&type=bagtype',800,370,230);return false;"><bean:message key="chart2" /></a>
               <br>
@@ -512,7 +524,11 @@
               <a href="#" onclick="openChart2('pages/popups/bagtypechart.jsp?charttype=4&xdescelement=theitem[<%= i %>].xdescelement_ID_3&type=xdescelement_ID_3',800,30,230);return false;"><bean:message key="chart4" /></a>
             </td>
             <td valign="top">
-              <bean:message key="colname.manufacturer.req" />
+            <% if (report_type == 2) { %>
+                  <bean:message key="colname.manufacturer" />
+            <% } else { %>
+                  <bean:message key="colname.manufacturer.req" />
+            <% } %>
               <br>
               <html:select name="theitem" property="manufacturer_ID" styleClass="dropdown" indexed="true" onchange='showmanu(this);return true;'>
                 <html:option value="">
