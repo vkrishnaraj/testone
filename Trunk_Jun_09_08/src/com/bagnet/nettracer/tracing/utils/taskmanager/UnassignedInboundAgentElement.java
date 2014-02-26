@@ -16,6 +16,8 @@ public class UnassignedInboundAgentElement implements Cloneable {
 	private boolean acaa;
 	private boolean damaged;
 	
+	private boolean enableAssignments;
+	
 	private int maxAssign;
 	private int currentAssign;
 	
@@ -88,5 +90,11 @@ public class UnassignedInboundAgentElement implements Cloneable {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	public boolean isEnableAssignments() {
+		return enableAssignments;
+	}
+	public void setEnableAssignments(boolean enableAssignments) {
+		this.enableAssignments = enableAssignments;
 	}
 }

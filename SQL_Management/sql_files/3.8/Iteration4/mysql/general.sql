@@ -149,3 +149,7 @@ alter table lffound add receiptFile_id bigint;
 
 alter table bdo add column pickuptz_id int default 0;
 update bdo set pickuptz_id=0;
+
+
+ALTER TABLE inboundqueue ADD INDEX incident_id (incident_id);
+ALTER TABLE task ADD INDEX inboundqueue_id (inboundqueue_id);
