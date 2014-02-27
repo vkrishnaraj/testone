@@ -83,7 +83,6 @@ function validateCheckboxes(checkboxName) {
 
 	return false;
 }
-//-->
 </script>
 
   <jsp:include page="/pages/includes/taskmanager_header.jsp" />
@@ -156,10 +155,6 @@ function validateCheckboxes(checkboxName) {
 		
 						<display:column titleKey="colname.incident.activity.document.title" sortable="true" value="${incidentActivity.document.title}&nbsp;" headerClass="header"
 										sortName="<%=sortBy.equals(TracingConstants.SortParam.INCIDENT_ACTIVITY_DOCUMENT_TITLE.getParamString())?TracingConstants.SortParam.INCIDENT_ACTIVITY_DOCUMENT_TITLE_REV.getParamString():TracingConstants.SortParam.INCIDENT_ACTIVITY_DOCUMENT_TITLE.getParamString()%>"/>
-		
-						<display:column titleKey="header.action" headerClass="header">
-		          			<a onclick="confirmDeleteDocument(${incidentActivity.id});"><bean:message key="delete"/></a>
-			          	</display:column>
 		            </display:table>
 		            
 					<table class="form2" cellspacing="0" cellpadding="0">
