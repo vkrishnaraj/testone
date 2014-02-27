@@ -306,13 +306,13 @@
 			    currentElement.focus();
 			    return false;
 		      }
-		} else if (currentElementName.indexOf("address["+firstAddressIndex+"].zip") != -1) {  
+		} else if (currentElementName.indexOf("addresses["+firstAddressIndex+"].zip") != -1) {  
 		      if (currentElement.value.length == 0) {
 		        alert("<%= (String)bundle.getString( "colname.zip") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
 			    currentElement.focus();
 			    return false;
 		      }
-		} else if (currentElementName.indexOf("address["+firstAddressIndex+"].mobile") != -1) {
+		} else if (currentElementName.indexOf("addresses["+firstAddressIndex+"].mobile") != -1) {
 			  var homephone = document.getElementsByName(currentElementName.replace('].mobile', '].homephone'))[0].value;
 			  var workphone = document.getElementsByName(currentElementName.replace('].mobile', '].workphone'))[0].value;
 			  var mobile = document.getElementsByName(currentElementName)[0].value;		  
