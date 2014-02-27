@@ -240,8 +240,6 @@ legend {
 				<div style="text-align:center;" >
 					&nbsp;&nbsp;
 					<input type="button" id="submitCustComm" class="button" value='<bean:message key="button.save" />'  onclick="saveOrUpdate();"/>
-<!-- 					&nbsp;&nbsp; -->
-<%-- 					<input id="savePreviewButton" type="button" class="button" value='<bean:message key="button.save.preview" />' onclick="saveAndPreview();"> --%>
 					<logic:equal name="customerCommunicationsForm" property="agentId" value="<%=String.valueOf(a.getAgent_ID()) %>">
 						<logic:equal name="customerCommunicationsForm" property="taskStatus" value="<%=String.valueOf(TracingConstants.FINANCE_STATUS_FRAUD_REJECTED)  %>">
 							&nbsp;&nbsp;
