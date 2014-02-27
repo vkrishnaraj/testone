@@ -62,7 +62,9 @@ public class LogoffAction extends Action {
 			}
 		}
 		String redirectUrl =  (String) session.getAttribute(TracingConstants.SESSION_REDIRECT_URL);
-		
+		String logOffClicked = request.getParameter("action");
+		if ( logOffClicked != null )
+			session.setAttribute("logOffClicked", "true");
 		session.invalidate();
 		session = request.getSession(true);
 		

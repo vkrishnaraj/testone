@@ -369,7 +369,7 @@ public class SecurityUtils {
 		if (agent == null) return;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-
+	
 			// update agent table
 			t = sess.beginTransaction();
 			if(fullSave) {
@@ -382,47 +382,33 @@ public class SecurityUtils {
 			q.executeUpdate();
 			}
 			t.commit();
-
+	
 			// update agent_logger table
-
+	
 			// find previous log in record first if this is a logoff
 			Agent_Logger al = null;
-
+	
 			if (log_off_time != null) {
-
+	
 				Criteria criteria = sess.createCriteria(Agent_Logger.class);
 				criteria.add(Restrictions.eq("agent_ID", new Integer(agent.getAgent_ID())));
 				criteria.add(Restrictions.eq("log_in_time", agent.getLast_logged_on()));
 				@SuppressWarnings("unchecked")
 				List<Agent_Logger> results = criteria.list();
-
+	
 				if (results != null && results.size() > 0) al = (Agent_Logger) results.get(0);
 			}
-
+	
 			t = sess.beginTransaction();
 			if (al == null) al = new Agent_Logger();
-			// Logoff time will be set if the
-			// user clicked the logoff link
-			boolean expired = false;
-			if (check_expired  && al.getLog_off_time() == null ) {
-			 	expired = true;
-			 	if ( log.isDebugEnabled() )	log.debug("Session expired");
-			} else if (check_expired  && al.getLog_off_time() != null ) {
-				// Already been updated through logoff
-				try {
-					sess.close();
-				} catch (Exception e) {
-				}
-				return;
-			}
 			al.setAgent_ID(agent.getAgent_ID());
 			al.setCompanycode_ID(agent.getStation().getCompany().getCompanyCode_ID());
 			al.setLog_in_time(agent.getLast_logged_on());
 			al.setLog_off_time(log_off_time);
-			al.setExpired(expired);
+			al.setExpired(check_expired);
 			sess.saveOrUpdate(al);
 			t.commit();
-
+	
 		} catch (Exception e) {
 			return;
 		} finally {
@@ -434,6 +420,7 @@ public class SecurityUtils {
 			}
 		}
 	}
+
 	
 	public static boolean isWebServiceEnabled(String companycode_id) {
 		Session sess = null;

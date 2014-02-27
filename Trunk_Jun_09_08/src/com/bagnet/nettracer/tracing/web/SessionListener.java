@@ -22,8 +22,9 @@ public class SessionListener implements HttpSessionListener {
 	  @Override
 	  public void sessionDestroyed(HttpSessionEvent event) {
 		Agent user = (Agent) event.getSession().getAttribute("user");
+		String logOffClicked = (String) event.getSession().getAttribute("logOffClicked");
 		// Process this user logoff
-		if (user != null) {
+		if (logOffClicked == null && user != null) {
 			if (log.isDebugEnabled()) {
 				log.debug("SessionListener: User '" + user.getUsername() + "' logged off in session "
 						+ event.getSession().getId());
