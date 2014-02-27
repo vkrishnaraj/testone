@@ -21,8 +21,6 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.TimeZone;
 
-import org.apache.commons.lang.StringUtils;
-
 import javax.activation.FileDataSource;
 import javax.mail.internet.InternetAddress;
 import javax.servlet.ServletContext;
@@ -30,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.util.LabelValueBean;
@@ -96,10 +95,12 @@ import com.bagnet.nettracer.tracing.db.audit.Audit_Claim;
 import com.bagnet.nettracer.tracing.db.audit.Audit_ClaimProrate;
 import com.bagnet.nettracer.tracing.db.audit.Audit_Prorate_Itinerary;
 import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
+import com.bagnet.nettracer.tracing.db.communications.IncidentActivityRemark;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemIncident;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OCFile;
 import com.bagnet.nettracer.tracing.db.onlineclaims.OCMessage;
 import com.bagnet.nettracer.tracing.db.taskmanager.InboundQueueTask;
+import com.bagnet.nettracer.tracing.db.taskmanager.IncidentActivityTask;
 import com.bagnet.nettracer.tracing.db.wtq.WtqCloseOhd;
 import com.bagnet.nettracer.tracing.db.wtq.WtqOhdAction;
 import com.bagnet.nettracer.tracing.dto.FileDTO;
@@ -849,22 +850,50 @@ public class BagService {
 				}
 			}
 			
-			for(ExpensePayout ep : iDTO.getExpenses()) {
-				ep.setIncident(iDTO);
-				ep.setExpensepayout_ID(0);
-			}
-			
 			HashMap<IncidentActivity, InboundQueueTask> inboundMap = new HashMap<IncidentActivity, InboundQueueTask>();
 			
-			if(iDTO.getActivities()!=null){
-				for(IncidentActivity ia: iDTO.getActivities()){
+			if(oldInc != null && oldInc.getActivities()!=null){
+				Set<IncidentActivity> iaSet = new LinkedHashSet<IncidentActivity>();
+				for(IncidentActivity iaOld: oldInc.getActivities()){
+					IncidentActivity ia = new IncidentActivity();
+					BeanUtils.copyProperties(ia, iaOld);
+					if (ia.getExpensePayout() != null) {
+						ExpensePayout iaEp = ia.getExpensePayout();
+						boolean replaced = false;
+						for(ExpensePayout ep : iDTO.getExpenses()) {
+							if (ep.getExpensepayout_ID() == iaEp.getExpensepayout_ID()) {
+								ia.setExpensePayout(ep);
+								replaced = true;
+								break;
+							}
+							// Expenses should be protected by StaleStateException (unlike IncidentActivity) but running the check below just in case.
+							if (ep.getCreatedate().getTime() == iaEp.getCreatedate().getTime() && ep.getAgent().getUsername().equals(iaEp.getAgent().getUsername())) {
+								ia.setExpensePayout(ep);
+								replaced = true;
+								break;
+							}
+						}
+						// Below should never happen except when it does happen the incident should fail to save due to StaleStateException.
+						if (!replaced) {
+							iDTO.getExpenses().add(ia.getExpensePayout());
+						}
+					}
+					setIncidentActivityOnLists(ia);
 					InboundQueueTask task = InboundTasksUtils.getInboundTaskByActivityId(ia.getId());
 					if(task != null){
 						inboundMap.put(ia, task);
 					}
 					ia.setId(0); 
 					ia.setIncident(iDTO);
+					iaSet.add(ia);
 				}
+				iDTO.setActivities(iaSet);
+			}
+			
+			// The following ExpensePayout code must happen after the IncidentActivity code above. CG 2/27/14
+			for(ExpensePayout ep : iDTO.getExpenses()) {
+				ep.setIncident(iDTO);
+				ep.setExpensepayout_ID(0);
 			}
 
 			// everytime when user update mbr, reset the ohd lasttraced date so
@@ -2783,6 +2812,32 @@ public class BagService {
 			}
 		} catch (Exception e){
 			e.printStackTrace();
+		}
+	}
+	
+	private void setIncidentActivityOnLists(IncidentActivity ia) {
+		 //OCFile, OCMessage, Remarks, Tasks all refer to IncidentActivity and need to point to the activity that contains them.
+		if (ia != null) {
+			if (ia.getFiles() != null && !ia.getFiles().isEmpty()) {
+				for (OCFile file : ia.getFiles()) {
+					file.setIncAct(ia);
+				}
+			}
+			if (ia.getMessages() != null && !ia.getMessages().isEmpty()) {
+				for (OCMessage message : ia.getMessages()) {
+					message.setIncAct(ia);
+				}
+			}
+			if (ia.getRemarks() != null && !ia.getRemarks().isEmpty()) {
+				for (IncidentActivityRemark remark : ia.getRemarks()) {
+					remark.setIncidentActivity(ia);
+				}
+			}
+			if (ia.getTasks() != null && !ia.getTasks().isEmpty()) {
+				for (IncidentActivityTask task : ia.getTasks()) {
+					task.setIncidentActivity(ia);
+				}
+			}
 		}
 	}
 	
