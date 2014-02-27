@@ -153,3 +153,13 @@ update bdo set pickuptz_id=0;
 
 ALTER TABLE inboundqueue ADD INDEX incident_id (incident_id);
 ALTER TABLE task ADD INDEX inboundqueue_id (inboundqueue_id);
+
+alter table template add marginTop varchar(5) default "1.0";
+alter table template add marginBottom varchar(5) default "1.0";
+alter table template add marginLeft varchar(5) default "0.75";
+alter table template add marginRight varchar(5) default "0.75";
+
+alter table document add marginTop varchar(5) default "1.0";
+alter table document add marginBottom varchar(5) default "1.0";
+alter table document add marginLeft varchar(5) default "0.75";
+alter table document add marginRight varchar(5) default "0.75";
