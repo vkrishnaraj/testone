@@ -670,13 +670,8 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 			criteria.add(Restrictions.isNotNull("ia.approvalAgent"));		
 
 			criteria.createAlias("ia.tasks", "task", JoinType.LEFT_OUTER_JOIN);
-			
-			Conjunction and = Restrictions.conjunction();
-			and.add(Restrictions.isNotNull("ia.tasks"))
-			.add(Restrictions.eq("task.status", status))
-			.add(Restrictions.eq("task.active", true));
-			
-			criteria.add(and);
+			criteria.add(Restrictions.eq("task.status", status));
+			criteria.add(Restrictions.eq("task.active", true));
 
 			
 			if (StringUtils.startsWithIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_APPROVAL_AGENT_NAME.getParamString())
