@@ -310,23 +310,25 @@ public class Utils {
 			
 			//I just need the id, is there a way not to cascade
 			bb = Utils.getBagBuzz(bb.getBagbuzz_id());
-			t = sess.beginTransaction();
-			for (Integer i:list){
-				BagBuzzTask bbt = new BagBuzzTask();
-				Agent agent = new Agent();
-				agent.setAgent_ID(i);
-				bbt.setAssigned_agent(agent);
-				bbt.setBagBuzz(bb);
-				bbt.setStatus(s);
-				bbt.setOpened_timestamp(currentDate);
-				sess.saveOrUpdate(bbt);
+			if (TracingConstants.BAGBUZZ_PUBLISHED != bb.getStatus().getStatus_ID()) { // Covers case where agent hits refresh on bagbuzz admin page after clicking Publish link. CG 2/27/14
+				t = sess.beginTransaction();
+				for (Integer i:list){
+					BagBuzzTask bbt = new BagBuzzTask();
+					Agent agent = new Agent();
+					agent.setAgent_ID(i);
+					bbt.setAssigned_agent(agent);
+					bbt.setBagBuzz(bb);
+					bbt.setStatus(s);
+					bbt.setOpened_timestamp(currentDate);
+					sess.saveOrUpdate(bbt);
+				}
+				Status bbs = new Status();
+				bbs.setStatus_ID(TracingConstants.BAGBUZZ_PUBLISHED);
+				bb.setStatus(bbs);
+				sess.saveOrUpdate(bb);
+				
+				t.commit();
 			}
-			Status bbs = new Status();
-			bbs.setStatus_ID(TracingConstants.BAGBUZZ_PUBLISHED);
-			bb.setStatus(bbs);
-			sess.saveOrUpdate(bb);
-			
-			t.commit();
 		}
 		catch(Exception e){
 			logger.error("Error Saving: ", e);
