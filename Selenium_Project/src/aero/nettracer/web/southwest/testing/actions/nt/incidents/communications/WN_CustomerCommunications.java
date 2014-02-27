@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import aero.nettracer.web.southwest.testing.WN_SeleniumTest;
+import aero.nettracer.web.utility.IncidentUtil;
 import aero.nettracer.web.utility.Settings;
 
 public class WN_CustomerCommunications extends WN_SeleniumTest {
@@ -291,6 +292,7 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 		click(By.xpath("(//a[contains(@href, 'customerCommunicationsApp.do')])[2]"));
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
+			IncidentUtil.navigatePagination(driver);
 			selenium.click("//a[contains(@href, 'customerCommunicationsTasks.do?communicationsId="+Settings.CUST_COMM_ID+"&gettask=1')]");
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
