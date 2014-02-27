@@ -223,6 +223,10 @@ legend {
 					</logic:notEmpty>
 					<tr>
 						<td colspan="2" >
+							<html:hidden property="marginTop" styleId="hiddenCKMarginT"/>
+							<html:hidden property="marginBottom" styleId="hiddenCKMarginB"/>
+							<html:hidden property="marginLeft" styleId="hiddenCKMarginL"/>
+							<html:hidden property="marginRight" styleId="hiddenCKMarginR"/>
 							<textarea id="data" name="data"><bean:write name="customerCommunicationsForm" property="data" /></textarea>
 							<script type="text/javascript" >
 								CKEDITOR.replace('data',

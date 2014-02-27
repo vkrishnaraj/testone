@@ -153,6 +153,10 @@
 					<tr>
 						<td colspan="2">
 							<bean:message key="colname.template.data" />
+							<html:hidden property="marginTop" styleId="hiddenCKMarginT"/>
+							<html:hidden property="marginBottom" styleId="hiddenCKMarginB"/>
+							<html:hidden property="marginLeft" styleId="hiddenCKMarginL"/>
+							<html:hidden property="marginRight" styleId="hiddenCKMarginR"/>
 							<br>
 							<textarea id="data" name="data"><bean:write name="templateEditForm" property="data" /></textarea>
 						</td>

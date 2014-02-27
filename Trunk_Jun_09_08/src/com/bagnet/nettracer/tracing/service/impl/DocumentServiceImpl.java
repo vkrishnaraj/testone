@@ -115,6 +115,10 @@ public class DocumentServiceImpl implements DocumentService {
 			
 		}
 		document.setContent(content);
+		document.setMarginTop(document.getTemplate().getMarginTop());
+		document.setMarginBottom(document.getTemplate().getMarginBottom());
+		document.setMarginLeft(document.getTemplate().getMarginLeft());
+		document.setMarginRight(document.getTemplate().getMarginRight());
 		result.setPayload(document);
 		result.setMessageKey("document.generated.success");
 		result.setSuccess(true);
@@ -398,8 +402,8 @@ public class DocumentServiceImpl implements DocumentService {
 		
 		switch(outputType) {
 			case TracingConstants.REPORT_OUTPUT_HTML:
-				if (document.getContent() != null) {
-					bytes = document.getContent().getBytes();
+				if (document.getHTMLPrintContent() != null) {
+					bytes = document.getHTMLPrintContent().getBytes();
 				}
 				break;
 			case TracingConstants.REPORT_OUTPUT_PDF:

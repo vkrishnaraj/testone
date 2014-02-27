@@ -18,16 +18,18 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'insert', items : [ 'Table','HorizontalRule','SpecialChar','PageBreak','Image'] },
 		'/',
 		{ name: 'basicstyles', items : [ 'TextColor','Bold','Italic','Underline','-','RemoveFormat' ] },
-		{ name: 'paragraph', items : [ 'NumberedList','BulletedList','-','JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock','-','Outdent','Indent', '-', 'Blockquote', 'CreateDiv' ] },
+		{ name: 'paragraph', items : [ 'NumberedList','BulletedList','-','JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock','-','Outdent','Indent' ] },
 		'/',
-		{ name: 'styles', items : [ 'Format','Font','FontSize' ] }
+		{ name: 'styles', items : [ 'Format','Font','FontSize','MarginTop','MarginBottom','MarginLeft','MarginRight' ] }
 	];
 	
 	config.allowedContent = true;
 	
 	config.disableNativeSpellChecker = false;
 	
-	config.removePlugins = 'contextmenu';
+	config.removePlugins = 'contextmenu, liststyle, tabletools';
+	
+	config.extraPlugins = 'margins';
 	
 	var _FileBrowserLanguage	= 'php' ;
 	var _QuickUploadLanguage	= 'php' ;

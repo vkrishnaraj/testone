@@ -57,6 +57,18 @@ public class Template {
 	private Set<TemplateVar> variables;
 	
 	private int typeAvailableFor;
+	
+	@Column(length = 5)
+	private String marginTop;
+
+	@Column(length = 5)
+	private String marginBottom;
+
+	@Column(length = 5)
+	private String marginLeft;
+
+	@Column(length = 5)
+	private String marginRight;
 
 	public long getId() {
 		return id;
@@ -136,6 +148,38 @@ public class Template {
 
 	public void setTypeAvailableFor(int typeAvailableFor) {
 		this.typeAvailableFor = typeAvailableFor;
+	}
+
+	public String getMarginTop() {
+		return marginTop;
+	}
+
+	public void setMarginTop(String marginTop) {
+		this.marginTop = marginTop;
+	}
+
+	public String getMarginBottom() {
+		return marginBottom;
+	}
+
+	public void setMarginBottom(String marginBottom) {
+		this.marginBottom = marginBottom;
+	}
+
+	public String getMarginLeft() {
+		return marginLeft;
+	}
+
+	public void setMarginLeft(String marginLeft) {
+		this.marginLeft = marginLeft;
+	}
+
+	public String getMarginRight() {
+		return marginRight;
+	}
+
+	public void setMarginRight(String marginRight) {
+		this.marginRight = marginRight;
 	}
 
 	public boolean isValid() {

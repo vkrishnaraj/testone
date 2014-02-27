@@ -23,7 +23,11 @@ public class CustomerCommunicationsForm extends CommandForm {
 	private long taskId;
 	private int taskStatus;
 	private boolean pendingReview;
-	private int agentId;
+	private int agentId;	
+	private String marginTop;
+	private String marginBottom;
+	private String marginLeft;
+	private String marginRight;
 	
 	private List<IncidentActivityRemarkDTO> remarks;
 
@@ -153,6 +157,38 @@ public class CustomerCommunicationsForm extends CommandForm {
 
 	public void setAgentId(int agentId) {
 		this.agentId = agentId;
+	}
+
+	public String getMarginTop() {
+		return marginTop;
+	}
+
+	public void setMarginTop(String marginTop) {
+		this.marginTop = marginTop;
+	}
+
+	public String getMarginBottom() {
+		return marginBottom;
+	}
+
+	public void setMarginBottom(String marginBottom) {
+		this.marginBottom = marginBottom;
+	}
+
+	public String getMarginLeft() {
+		return marginLeft;
+	}
+
+	public void setMarginLeft(String marginLeft) {
+		this.marginLeft = marginLeft;
+	}
+
+	public String getMarginRight() {
+		return marginRight;
+	}
+
+	public void setMarginRight(String marginRight) {
+		this.marginRight = marginRight;
 	}
 
 }

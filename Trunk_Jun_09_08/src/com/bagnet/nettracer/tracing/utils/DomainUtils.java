@@ -80,6 +80,10 @@ public class DomainUtils {
 			form.setData("");
 			form.setTypeAvailableFor(TemplateType.INCIDENT.ordinal());
 			form.setCommand(TracingConstants.COMMAND_CREATE);
+			form.setMarginTop("1.0");
+			form.setMarginBottom("1.0");
+			form.setMarginLeft("0.75");
+			form.setMarginRight("0.75");
 		}
 	}
 	
@@ -87,6 +91,10 @@ public class DomainUtils {
 		ccf.setDocumentId(document.getId());
 		ccf.setDocumentTitle(document.getTemplate().getName());
 		ccf.setData(document.getContent());
+		ccf.setMarginTop(document.getMarginTop());
+		ccf.setMarginBottom(document.getMarginBottom());
+		ccf.setMarginLeft(document.getMarginLeft());
+		ccf.setMarginRight(document.getMarginRight());
 	}
 	
 	public static void toForm(IncidentActivity ia, CustomerCommunicationsForm ccf, Agent user) {
@@ -100,10 +108,15 @@ public class DomainUtils {
 		}
 
 		if (ia.getDocument() != null) {
-			ccf.setDocumentId(ia.getDocument().getId());
-			ccf.setDocumentTitle(ia.getDocument().getTitle());
-			ccf.setData(ia.getDocument().getContent());
-			ccf.setTemplateId(ia.getDocument().getTemplate().getId());
+			Document document = ia.getDocument();
+			ccf.setDocumentId(document.getId());
+			ccf.setDocumentTitle(document.getTitle());
+			ccf.setData(document.getContent());
+			ccf.setTemplateId(document.getTemplate().getId());
+			ccf.setMarginTop(document.getMarginTop());
+			ccf.setMarginBottom(document.getMarginBottom());
+			ccf.setMarginLeft(document.getMarginLeft());
+			ccf.setMarginRight(document.getMarginRight());
 		}
 		
 		if (ia.getRemarks() != null && !ia.getRemarks().isEmpty()) {
@@ -131,6 +144,10 @@ public class DomainUtils {
 		template.setDescription(form.getDescription());
 		template.setData(form.getData());
 		template.setTypeAvailableFor(form.getTypeAvailableFor());
+		template.setMarginTop(form.getMarginTop());
+		template.setMarginBottom(form.getMarginBottom());
+		template.setMarginLeft(form.getMarginLeft());
+		template.setMarginRight(form.getMarginRight());
 		return template;
 	}
 	
@@ -208,6 +225,10 @@ public class DomainUtils {
 		document.setContent(ccf.getData());
 		document.setFileName(ccf.getFileName());
 		document.setTemplate(template);
+		document.setMarginTop(ccf.getMarginTop());
+		document.setMarginBottom(ccf.getMarginBottom());
+		document.setMarginLeft(ccf.getMarginLeft());
+		document.setMarginRight(ccf.getMarginRight());
 		
 		ia.setId(ccf.getId());
 		ia.setCustCommId(ccf.getCustCommId());

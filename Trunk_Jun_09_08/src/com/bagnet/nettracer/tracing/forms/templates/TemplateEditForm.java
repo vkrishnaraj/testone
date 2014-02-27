@@ -40,6 +40,14 @@ public class TemplateEditForm extends CommandForm {
 	private int typeAvailableFor;
 	
 	private List<TemplateType> typesList;
+	
+	private String marginTop;
+	
+	private String marginBottom;
+	
+	private String marginLeft;
+	
+	private String marginRight;
 
 	public boolean isPreview() {
 		return preview;
@@ -143,6 +151,38 @@ public class TemplateEditForm extends CommandForm {
 
 	public void setTypesList(List<TemplateType> typesList) {
 		this.typesList = typesList;
+	}
+
+	public String getMarginTop() {
+		return marginTop;
+	}
+
+	public void setMarginTop(String marginTop) {
+		this.marginTop = marginTop;
+	}
+
+	public String getMarginBottom() {
+		return marginBottom;
+	}
+
+	public void setMarginBottom(String marginBottom) {
+		this.marginBottom = marginBottom;
+	}
+
+	public String getMarginLeft() {
+		return marginLeft;
+	}
+
+	public void setMarginLeft(String marginLeft) {
+		this.marginLeft = marginLeft;
+	}
+
+	public String getMarginRight() {
+		return marginRight;
+	}
+
+	public void setMarginRight(String marginRight) {
+		this.marginRight = marginRight;
 	}
 
 	public String getDisCreateDate() {

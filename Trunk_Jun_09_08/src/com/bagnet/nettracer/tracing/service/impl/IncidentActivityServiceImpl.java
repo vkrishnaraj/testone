@@ -101,6 +101,10 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 		Document newDocument = incidentActivity.getDocument();
 		document.setTitle(newDocument.getTitle());
 		document.setContent(newDocument.getContent());
+		document.setMarginTop(newDocument.getMarginTop());
+		document.setMarginBottom(newDocument.getMarginBottom());
+		document.setMarginLeft(newDocument.getMarginLeft());
+		document.setMarginRight(newDocument.getMarginRight());
 		if (!documentDao.update(document)) return false;
 		
 		return incidentActivityDao.update(incidentActivity);
