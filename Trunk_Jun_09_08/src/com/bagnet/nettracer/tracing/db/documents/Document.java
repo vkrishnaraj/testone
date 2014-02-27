@@ -138,6 +138,9 @@ public class Document {
 		String toReplace = "/" + TracerProperties.get(user.getCompanycode_ID(),"application_context") + "/showImage\\?ID=" + FckEditorPathBuilderImpl.subdir + "/";
 		String replaceWith = TracerProperties.get(user.getCompanycode_ID(),"image_store").replaceAll("^[cdCD]:", "").replaceAll("\\\\", "\\\\\\\\") + FckEditorPathBuilderImpl.subdir;
 		String imageFriendlyContent = getContent().replaceAll(toReplace, replaceWith);
+		if (imageFriendlyContent == null || imageFriendlyContent.length() == 0) {
+			imageFriendlyContent = "&nbsp;";
+		}
 		xml.append(imageFriendlyContent);
 		xml.append("</body></html>");
 		return xml.toString();
