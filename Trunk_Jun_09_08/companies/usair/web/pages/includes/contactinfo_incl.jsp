@@ -5,19 +5,22 @@
 <%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
 
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
 <%@ page import="com.bagnet.nettracer.tracing.forms.IncidentForm" %>
 <%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
 
-
-<%@page import="org.apache.struts.util.LabelValueBean"%><SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
-<SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
-<SCRIPT LANGUAGE="JavaScript">
+<%@page import="org.apache.struts.util.LabelValueBean"%>
+<script src="deployment/main/js/date.js"></script>
+<script src="deployment/main/js/date.js"></script>
+<script src="deployment/main/js/AnchorPosition.js"></script>
+<script src="deployment/main/js/PopupWindow.js"></script>
+<script src="deployment/main/js/popcalendar.js"></script>
+<script>
   
 	var cal1xx = new CalendarPopup();	
 
@@ -40,9 +43,31 @@
 		}
 	}
 
-	
+  function deletePassenger(emailCustomerId, object, objectType) {
+	  var emailCustomer = document.getElementById(emailCustomerId);
+	  if (!emailCustomer || emailCustomer.value.length < 0) {
+		  hideThisDiv(object, objectType);
+		  return true;
+	  } 
 
-</SCRIPT>
+	  if (emailCustomer.checked) {
+		  document.incidentForm.appendChild(emailCustomer);
+	  }
+	
+	  hideThisDiv(object, objectType);
+	  
+	  var newFormInput = document.createElement('input');
+	  newFormInput.setAttribute('type', 'hidden');
+	  newFormInput.setAttribute('name', 'actionDelete');
+	  newFormInput.setAttribute('value', 'y');
+	  document.incidentForm.appendChild(newFormInput);
+	  
+	  document.incidentForm.submit();
+	  
+	  return true;
+  }
+
+</script>
 
 
 <%
@@ -338,6 +363,7 @@
           </tr>
 
           <logic:present name="passenger" property="addresses">
+          	<c:set var="emailAfterCreation" value="" scope="page"/> 
             <logic:iterate indexId="k" name="passenger" id="addresses" property="addresses" type="com.bagnet.nettracer.tracing.db.Address">
               <tr>
                 <td colspan=2>
@@ -490,7 +516,10 @@
                     if (i.intValue() == 0 && request.getAttribute("companyDoesntEmail") == null) {
 %>
                       <br />
-                      <input type="checkbox" name="email_customer" value="1"
+                      <c:if test="${k == 0}">
+                      		<c:set var="emailAfterCreation" value="<%="email_customer_"+(i.intValue() * 20 + k.intValue())%>" scope="page"/>
+                	  </c:if>
+                      <input type="checkbox" name="email_customer" value="1" id="email_customer_<%=(i.intValue() * 20 + k.intValue())%>"
                       <logic:equal name="incidentForm" property="email_customer" value="1">
                         checked="checked"
                       </logic:equal>
@@ -548,23 +577,24 @@
           <% } %>
           <tr>
             <td colspan=5>
-              <input type="button" value="<bean:message key="button.delete_passenger" />" onclick="hideThisDiv('<%=TracingConstants.JSP_DELETE_PAX %>_<%=i%>', '<bean:message key="colname.passenger" />')" id="button">
+              <input type="button" value="<bean:message key="button.delete_passenger" />" onclick="deletePassenger('${emailAfterCreation}', '<%=TracingConstants.JSP_DELETE_PAX %>_<%=i%>', '<bean:message key="colname.passenger" />')" id="button">
             </td>
           </tr>
         </table>
         </div>
       </logic:iterate>
       <center>
-      <select name="addPassengerNum">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-      </select>
-      <html:submit styleId="button" property="addPassenger">
-        <bean:message key="button.add_additional_passenger" />
-      </html:submit></center>
+	      <select name="addPassengerNum" id="addPassengerNum">
+	        <option value="1">1</option>
+	        <option value="2">2</option>
+	        <option value="3">3</option>
+	        <option value="4">4</option>
+	        <option value="5">5</option>
+	      </select>
+	      <html:submit styleId="button" property="addPassenger">
+	        <bean:message key="button.add_additional_passenger" />
+	      </html:submit>
+      </center>
       <br>
       <br>
       &nbsp;&nbsp;&uarr;
