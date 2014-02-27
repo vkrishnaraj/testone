@@ -51,8 +51,30 @@
 				myField.value += myValue;
 			}
 		}
-
 	
+	  function deletePassenger(emailCustomerId, object, objectType) {
+		  var emailCustomer = document.getElementById(emailCustomerId);
+		  if (!emailCustomer || emailCustomer.value.length < 0) {
+			  hideThisDiv(object, objectType);
+			  return true;
+		  } 
+
+		  if (emailCustomer.checked) {
+			  document.incidentForm.appendChild(emailCustomer);
+		  }
+		
+		  hideThisDiv(object, objectType);
+		  
+		  var newFormInput = document.createElement('input');
+		  newFormInput.setAttribute('type', 'hidden');
+		  newFormInput.setAttribute('name', 'actionDelete');
+		  newFormInput.setAttribute('value', 'y');
+		  document.incidentForm.appendChild(newFormInput);
+		  
+		  document.incidentForm.submit();
+		  
+		  return true;
+	  }
 
 </script>
 
@@ -353,6 +375,7 @@
           </tr>
 
           <logic:present name="passenger" property="addresses">
+          	<c:set var="emailAfterCreation" value="" scope="page"/> 
             <logic:iterate indexId="k" name="passenger" id="addresses" property="addresses" type="com.bagnet.nettracer.tracing.db.Address">
               <tr>
                 <td colspan=2>
@@ -533,7 +556,10 @@
                     if (i.intValue() == 0 && request.getAttribute("companyDoesntEmail") == null) {
 %>
                       <br />
-                      <input type="checkbox" name="email_customer" value="1"
+                      <c:if test="${k == 0}">
+                      		<c:set var="emailAfterCreation" value="<%="email_customer_"+(i.intValue() * 20 + k.intValue())%>" scope="page"/>
+                	  </c:if>
+                      <input type="checkbox" name="email_customer" value="1" id="email_customer_<%=(i.intValue() * 20 + k.intValue())%>"
                       <logic:equal name="incidentForm" property="email_customer" value="1">
                         checked="checked"
                       </logic:equal>
@@ -592,23 +618,24 @@
           <% } %>
           <tr>
             <td colspan=5>
-              <input type="button" value="<bean:message key="button.delete_passenger" />" onclick="hideThisDiv('<%=TracingConstants.JSP_DELETE_PAX %>_<%=i%>', '<bean:message key="colname.passenger" />')" id="button">
+              <input type="button" value="<bean:message key="button.delete_passenger" />" onclick="deletePassenger('${emailAfterCreation}', '<%=TracingConstants.JSP_DELETE_PAX %>_<%=i%>', '<bean:message key="colname.passenger" />')" id="button">
             </td>
           </tr>
         </table>
         </div>
       </logic:iterate>
       <center>
-      <select name="addPassengerNum" id="addPassengerNum">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-      </select>
-      <html:submit styleId="button" property="addPassenger">
-        <bean:message key="button.add_additional_passenger" />
-      </html:submit></center>
+	      <select name="addPassengerNum" id="addPassengerNum">
+	        <option value="1">1</option>
+	        <option value="2">2</option>
+	        <option value="3">3</option>
+	        <option value="4">4</option>
+	        <option value="5">5</option>
+	      </select>
+	      <html:submit styleId="button" property="addPassenger">
+	        <bean:message key="button.add_additional_passenger" />
+	      </html:submit>
+      </center>
       <br>
       <br>
       &nbsp;&nbsp;&uarr;

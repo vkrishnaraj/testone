@@ -696,7 +696,8 @@ public class MBRActionUtils {
 			request.setAttribute("markDirty", 1);
 			return true;
 		}
-		return false;
+		
+		return org.apache.commons.lang.StringUtils.equalsIgnoreCase("y", request.getParameter("actionDelete"));
 	}
 	
 	public static void addToIntegerMap(HashMap<Integer, ArrayList<Integer>> typeBreakdown, Integer key, Integer value) {
