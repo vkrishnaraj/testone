@@ -102,4 +102,10 @@ public class IncidentUtil {
 		driver.findElement(By.xpath("(//input[@id='button'])[3]")).click();
 	}
 	
+	public static void navigatePagination(WebDriver driver) {
+		while (WebDriverUtil.isElementPresent(driver, By.xpath("//a[contains(text(),'Next >')]"))) {
+			driver.findElement(By.xpath("//a[contains(text(),'Next >')]")).click();
+		}
+	}
+	
 }
