@@ -301,7 +301,6 @@
 	        }    
 		}
 		else if (currentElementName.indexOf("passenger["+firstPaxIndex+"].salutation")!=-1){
-		//currentElementName.indexOf("passenger[") != -1 && currentElementName.indexOf("passenger[") < currentElementName.indexOf("].salutation")) {  
 		      if (currentElement.value.length == 0 || currentElement.value == '0') {
 		        alert("<%= (String)bundle.getString( "colname.salutation") %>" + " <%= (String)bundle.getString( "error.validation.isRequired") %>");
 			    currentElement.focus();

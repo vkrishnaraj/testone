@@ -25,14 +25,6 @@
 	var cal1xx = new CalendarPopup();	
 
 	
-	/*function textCounter2(field, countfield, maxlimit) {
-	    if (field.value.length > maxlimit) {
-	      field.value = field.value.substring(0, maxlimit);
-	    } else {
-	      countfield.value = maxlimit - field.value.length;
-	    }
-	  }*/
-	  
 		function insertNewLine2(elementId) {
 			if (window.event && window.event.keyCode == 13) {
 				insertAtCursor(elementId, '\n');
@@ -168,11 +160,7 @@
           </tr>
           <tr>
             <td colspan="1">
-              <% if(i==0) {%>
-              	<bean:message key="colname.salutation.req" />
-              <% } else {%>
-              	<bean:message key="colname.salutation" />
-              <% } %>
+              <bean:message key="colname.salutation.req" />
               <br>
               <html:select name="passenger" styleId='<%= "passenger[" + i + "].salutation" %>' indexed="true" property="salutation" styleClass="dropdown">
                 <html:option value="0">
@@ -379,11 +367,7 @@
             <logic:iterate indexId="k" name="passenger" id="addresses" property="addresses" type="com.bagnet.nettracer.tracing.db.Address">
               <tr>
                 <td colspan=2>
-              	  <% if(i==0) {%>
-                  	<bean:message key="colname.street_addr1.req" />
-                  <% } else { %>
-                  	<bean:message key="colname.street_addr1" />
-                  <% } %>
+                  <bean:message key="colname.street_addr1.req" />
                   <br>
                   <html:text property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].address1" %>' size="45" maxlength="50" styleClass="textfield" />
                 </td>
@@ -395,20 +379,12 @@
               </tr>
               <tr>
                 <td>
-              	  <% if(i==0) {%>
-                  	<bean:message key="colname.city.req" />
-                  <% } else { %>
-                  	<bean:message key="colname.city" />
-                  <% } %>
+                  <bean:message key="colname.city.req" />
                   <br>
                   <html:text property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].city" %>' size="15" maxlength="50" styleClass="textfield" />
                 </td>
                 <td>
-              	  <% if(i==0) {%>
-                  	<bean:message key="colname.state.req" />
-                  <% } else { %>
-                  	<bean:message key="colname.state" />
-                  <% } %>
+                  <bean:message key="colname.state.req" />
                   <br />
                   <logic:equal name="addresses" property="countrycode_ID" value="US">
                     <html:select property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].state_ID" %>' styleClass="dropdown" onchange="updateCountryUS(this, this.form, 'countrycode_ID', 'province');" >
@@ -453,11 +429,7 @@
                       </logic:notEqual>
                 </td>
                 <td>
-              	  <% if(i==0) {%>
-                 	 <bean:message key="colname.zip.req" />
-                  <% } else { %>
-                  	<bean:message key="colname.zip" />
-                  <% } %>
+                  <bean:message key="colname.zip.req" />
                   <br>
                   <html:text property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].zip" %>' size="15" maxlength="11" styleClass="textfield" />
                 </td>
@@ -508,12 +480,7 @@
                   <html:text property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].workphone" %>' size="15" maxlength="25" styleClass="textfield" />
                 </td>
                 <td>
-                
-              	  <% if(i==0) {%>
-                  	<bean:message key="colname.mobile_ph.req" />
-                  <% } else { %>
-                  	<bean:message key="colname.mobile_ph" />
-                  <% } %>
+                  <bean:message key="colname.mobile_ph.req" />
                   <br>
                   <html:text property='<%= "addresses[" + (i.intValue() * 20 + k.intValue()) + "].mobile" %>' size="15" maxlength="25" styleClass="textfield" />
                 </td>
