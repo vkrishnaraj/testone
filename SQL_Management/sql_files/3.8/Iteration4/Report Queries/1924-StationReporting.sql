@@ -116,6 +116,7 @@ p.lastname,p.firstname,
 #startDate - The beginning of the date range. DateTime variable
 #endDate - the end of the date range. DateTime variable
 select ss.stationCode, 
+  (case when not isnull(region.name) then region.name else '' end) as region,
   (case when not isnull(summaryList.fedexdeliveries) then summaryList.fedexdeliveries else 0 end) as fedexdeliveries, 
   (case when not isnull(summaryList.fedexcost) then summaryList.fedexcost else 0 end) as  fedexcost,
   (case when not isnull(summaryList.nonfedexdeliveries) then summaryList.nonfedexdeliveries else 0 end) as nonfedexdeliveries,
@@ -123,6 +124,7 @@ select ss.stationCode,
   (case when not isnull(summaryList.potentialCost) then summaryList.potentialCost else 0 end) as potentialCost,
   (case when not isnull(summaryList.potentialSavings) then summaryList.potentialSavings else 0 end) as potentialSavings
   from station ss left outer join
+  region on ss.region_id = region.id left outer join
   (select s.Station_ID, s.stationCode, sum(case when d.name like '%FedEx%' then 1 else 0 end) as fedexdeliveries, 
   sum(case when d.name like '%FedEx%' then e.checkamt else 0 end) as fedexcost,
   sum(case when d.name not like '%FedEx%' then 1 else 0 end) as nonfedexdeliveries, sum(case when d.name not like '%FedEx%' then e.checkamt else 0 end) as nonfedexcost,
