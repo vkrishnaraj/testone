@@ -23,17 +23,17 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 				checkCopyrightAndQuestionMarks();
 				
 				selenium.click("id=button");
-				selenium.click("name=saveButton");
+				selenium.click("id=saveButton");
 				verifyEquals("Permanent Address is required.", selenium.getAlert());
 				selenium.click("name=addPassenger");
 				waitForPageToLoadImproved();
 
 				if (checkNoErrorPage()) {
 					selenium.click("name=saveButton");
-					verifyEquals("Permanent Address check is required.", selenium.getAlert());
+					verifyEquals("Permanent Address is required.", selenium.getAlert());
 					selenium.click("id=addresses[0].permanent");
 					selenium.click("xpath=(//input[@id='button'])[3]");
-					selenium.click("name=saveButton");
+					selenium.click("id=saveButton");
 					verifyEquals("Passenger Itinerary is required.", selenium.getAlert());
 					selenium.click("name=addpassit");
 					waitForPageToLoadImproved();
@@ -92,12 +92,6 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 					verifyEquals("Depart Date is required.", selenium.getAlert());
 					selenium.type("name=theitinerary[1].disdepartdate", "10/15/2013");				
 					selenium.click("id=saveButton");
-					verifyEquals("Color is required.", selenium.getAlert());
-					selenium.select("name=theitem[0].color", "label=GY - Grey");
-					selenium.click("id=saveButton");
-					verifyEquals("Type is required.", selenium.getAlert());
-					selenium.select("id=bagtype0", "label=25");
-					selenium.click("id=saveButton");
 					verifyEquals("Record Locator is required.", selenium.getAlert());
 					selenium.type("name=recordlocator", "12345");
 					selenium.click("id=saveButton");
@@ -110,12 +104,6 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 					verifyEquals("Phone is required.", selenium.getAlert());
 					selenium.type("name=addresses[0].mobile", "4040213465");
 					selenium.click("id=saveButton");
-					verifyEquals("Claim Check Number is required.", selenium.getAlert());
-					selenium.type("name=theitem[0].claimchecknum", "1234567890");
-					selenium.click("id=saveButton");
-					verifyEquals("Manufacturer is required.", selenium.getAlert());
-					selenium.select("name=theitem[0].manufacturer_ID", "label=Bag Boy");
-					selenium.click("id=saveButton");
 					verifyEquals("Status is required.", selenium.getAlert());
 					selenium.select("name=article[0].statusId", "label=Missing");
 					selenium.click("id=saveButton");
@@ -127,6 +115,19 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 					selenium.click("id=saveButton");
 					verifyEquals("Remark is required.", selenium.getAlert());
 					selenium.type("id=remark[0]", "Remarks noted");	
+					selenium.click("id=saveButton");
+//					verifyEquals("Color is required.", selenium.getAlert());
+//					selenium.select("name=theitem[0].color", "label=GY - Grey");
+//					selenium.click("id=saveButton");
+//					verifyEquals("Type is required.", selenium.getAlert());
+//					selenium.select("id=bagtype0", "label=25");
+//					selenium.click("id=saveButton");
+//					verifyEquals("Claim Check Number is required.", selenium.getAlert());
+//					selenium.type("name=theitem[0].claimchecknum", "1234567890");
+//					selenium.click("id=saveButton");
+//					verifyEquals("Manufacturer is required.", selenium.getAlert());
+//					selenium.select("name=theitem[0].manufacturer_ID", "label=Bag Boy");
+//					selenium.click("id=saveButton");
 	
 					//optional fields last	
 					selenium.select("name=passenger[0].dlstate", "label=Georgia");
@@ -261,14 +262,6 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 			selenium.click("id=calendar");
 			selenium.click("link=Today");
 			selenium.type("name=cost","150");
-			selenium.click("id=button");
-			assertEquals("Pickup Date Time is required.", selenium.getAlert());
-			selenium.click("id=calendar2");
-			selenium.click("link=Today");
-			selenium.click("id=button");
-			assertEquals("Pickup Date Time is required.", selenium.getAlert());
-			selenium.type("name=disppickuptime","12:00");
-			selenium.check("name=theitem[0].noAddFees");
 			selenium.click("id=button");
 			assertEquals("Fault Code is required.", selenium.getAlert());
 			selenium.select("name=theitem[0].lossCode", "value=11");
