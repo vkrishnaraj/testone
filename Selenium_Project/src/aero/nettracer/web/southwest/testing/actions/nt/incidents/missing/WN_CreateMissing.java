@@ -30,7 +30,7 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 
 				if (checkNoErrorPage()) {
 					selenium.click("name=saveButton");
-					verifyEquals("Permanent Address is required.", selenium.getAlert());
+					verifyEquals("Permanent Address check is required.", selenium.getAlert());
 					selenium.click("id=addresses[0].permanent");
 					selenium.click("xpath=(//input[@id='button'])[3]");
 					selenium.click("id=saveButton");
@@ -115,7 +115,7 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 					selenium.click("id=saveButton");
 					verifyEquals("Remark is required.", selenium.getAlert());
 					selenium.type("id=remark[0]", "Remarks noted");	
-					selenium.click("id=saveButton");
+//					selenium.click("id=saveButton");
 //					verifyEquals("Color is required.", selenium.getAlert());
 //					selenium.select("name=theitem[0].color", "label=GY - Grey");
 //					selenium.click("id=saveButton");
@@ -262,6 +262,14 @@ public class WN_CreateMissing extends WN_SeleniumTest {
 			selenium.click("id=calendar");
 			selenium.click("link=Today");
 			selenium.type("name=cost","150");
+			selenium.click("id=button");
+			assertEquals("Pickup Date Time is required.", selenium.getAlert());
+			selenium.click("id=calendar2");
+			selenium.click("link=Today");
+			selenium.click("id=button");
+			assertEquals("Pickup Date Time is required.", selenium.getAlert());
+			selenium.type("name=disppickuptime","12:00");
+			selenium.check("name=theitem[0].noAddFees");
 			selenium.click("id=button");
 			assertEquals("Fault Code is required.", selenium.getAlert());
 			selenium.select("name=theitem[0].lossCode", "value=11");
