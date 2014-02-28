@@ -79,18 +79,6 @@ public class WN_EditTemplates extends WN_SeleniumTest {
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
 			verifyEquals("Successfully updated template: Test Template", selenium.getText("//div[@id='maincontent']/span/font"));
-			selenium.select("id=variableSelect", "label=Address1");
-			selenium.doubleClick("id=variableSelect");
-			selenium.click("id=savePreviewButton");
-			waitForPageToLoadImproved();
-			if (checkNoErrorPage()) {
-				checkCopyrightAndQuestionMarks();
-				verifyEquals("Successfully updated template: Test Template\nDocument successfully generated", selenium.getText("//div[@id='maincontent']/span/font"));
-				verifyTrue(isElementPresent(By.linkText("Preview Document")));
-			} else {
-				System.out.println("!!!!!!!!!!!!!!! - Failed to save & preview on the edit template page. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
-				verifyTrue(false);
-			}
 		} else {
 			System.out.println("!!!!!!!!!!!!!!! - Failed to save & preview on the edit template page. Error Page Loaded Instead. - !!!!!!!!!!!!!!!!!!");
 			verifyTrue(false);
