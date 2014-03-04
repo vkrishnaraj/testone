@@ -13,10 +13,11 @@ select et.description, e.Incident_ID, e.lastname, e.firstname, e.draft, e.create
 #--------------------------------------------------------------------
 
 #Station Summary Report - Is based on and returns GMT Time - Broken into three queries because it is three separate types of information
+#Report should be based on station creating not assigned.
 #startDate - The beginning of the date range. DateTime variable
 #endDate - the end of the date range. DateTime variable
 #stationCode - 3 Character Station Code to check against.
-select (case i.itemtype_ID when 1 then "Lost/Delay" when 2 then "Missing Article" when 3 then "Damaged" else "" end) as incType, count(*) from incident i inner join Station s on i.stationassigned_ID=s.Station_ID where i.createdate >= :startDate and i.createdate <=:endDate and s.stationcode = :stationCode  group by i.itemtype_ID order by i.itemtype_ID;
+select (case i.itemtype_ID when 1 then "Lost/Delay" when 2 then "Missing Article" when 3 then "Damaged" else "" end) as incType, count(*) from incident i inner join Station s on i.stationcreated_ID=s.Station_ID where i.createdate >= :startDate and i.createdate <=:endDate and s.stationcode = :stationCode  group by i.itemtype_ID order by i.itemtype_ID;
 
 select et.description, sum(e.voucheramt) as luvvoucher,  sum(case paytype when 'DRAFT' then e.checkamt else 0 end ) as draft, sum(case paytype when 'INVOICE' then e.checkamt else 0 end ) as invoice
 from expensepayout e inner join incident i on e.incident_ID = i.Incident_ID inner join agent a on e.agent_ID = a.Agent_ID
@@ -30,12 +31,13 @@ select count(b.BDO_ID) as Deliveries, sum(e.checkamt) as DeliveryCosts from bdo 
 #--------------------------------------------------------------------
 
 #Station Chargeback Summary Report - Is based on and returns GMT Time. Detail vs Summary should control which query is ran
+# UPDATED TO BE BASED ON ITEM FAULT STATION PER SWA FEEDBACK
 #startDate - The beginning of the date range. DateTime variable
 #endDate - the end of the date range. DateTime variable
 #stationCode - 3 Character Station Code to check against.
 #lossCodes - Array of LossCodes to check for. 
 select i.lossCode, c.description, c.controllable, count(*) from item i inner join incident inc on i.incident_ID = inc.Incident_ID 
-  inner join station s on s.Station_ID = inc.stationassigned_ID inner join Company_irregularity_codes c on i.lossCode= c.loss_code 
+  inner join station s on s.Station_ID = i.faultstation_id inner join Company_irregularity_codes c on i.lossCode= c.loss_code 
   where inc.createdate >= :startDate and inc.createdate <=:endDate and s.stationcode = :stationCode and find_in_set(i.lossCode, :lossCodes)
   and c.companycode_ID='WN' and c.report_type=i.itemtype_ID
   group by i.lossCode;
@@ -45,7 +47,7 @@ select i.lossCode, c.description, c.controllable, count(*) from item i inner joi
  #lossCodes - Array of LossCodes to check for. 
  select i.lossCode, c.description, count(i.Item_ID) as mtdCount 
  from item i inner join incident inc on i.incident_ID = inc.Incident_ID 
-  inner join station s on s.Station_ID = inc.stationassigned_ID inner join Company_irregularity_codes c on i.lossCode= c.loss_code 
+  inner join station s on s.Station_ID = i.faultstation_id inner join Company_irregularity_codes c on i.lossCode= c.loss_code 
   where (inc.createdate between DATE_FORMAT(now() ,'%Y-%m-01') and now()) and s.stationcode = :stationCode and find_in_set(i.lossCode, :lossCodes)
   and c.companycode_ID='WN' and c.report_type=i.itemtype_ID
   group by i.lossCode; 
@@ -73,7 +75,7 @@ inc.checkedlocation, (case inc.checkedlocation when not 0 then cat.description e
                   ORDER BY it.incident_id, it.itinerary_id ASC) itin1 
                   GROUP BY incident_id) as itinRoutes
   on itinRoutes.incident_ID = i.incident_ID
-  inner join station s on s.Station_ID = inc.stationassigned_ID inner join Company_irregularity_codes c on i.lossCode= c.loss_code 
+  inner join station s on s.Station_ID = i.faultstation_id inner join Company_irregularity_codes c on i.lossCode= c.loss_code 
   left outer join category cat on cat.categoryVal=inc.checkedlocation and cat.type=4
   where 
   s.stationcode = :stationCode and find_in_set(i.lossCode, :lossCodes) and not isnull(itinRoutes.initialDepartDate)

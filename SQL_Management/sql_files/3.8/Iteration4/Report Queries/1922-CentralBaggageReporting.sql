@@ -1,6 +1,7 @@
 ####Worked on by Peter Kibaki
 
 # Mishandling DOT-Summary
+#Report should be based on station creating not assigned.
 #startdatetime - Beginning of Date Range. Datetime value
 #enddatetime - End of Date Range. Datetime value
 select s.stationcode, 
@@ -9,9 +10,9 @@ select s.stationcode,
   sum(case when inc.itemtype_id=2 then 1 else 0 end) as Missing,
   count(*) as Total
     from incident inc
-    inner join station s on s.Station_ID=inc.stationassigned_ID and s.companyCode_id='WN'
+    inner join station s on s.Station_ID=inc.stationcreated_ID and s.companyCode_id='WN'
       where inc.createdate between CAST(:startdatetime AS DATETIME)
-      and CAST(:enddatetime AS DATETIME) group by inc.stationassigned_ID order by s.stationcode;
+      and CAST(:enddatetime AS DATETIME) group by inc.stationcreated_ID order by s.stationcode;
       
 #------------------------------------------------------------------------------------
 
@@ -147,6 +148,7 @@ left outer join
  
 #------------------------------------------------------------------------------------
       
+### UPDATED TO BE BASED ON ITEM FAULT STATION PER SWA FEEDBACK
 #Chargeback by Station. Takes in and returns GMT Date
 #startDate - The beginning of the date range. DateTime variable
 #endDate - the end of the date range. DateTime variable
@@ -154,7 +156,7 @@ left outer join
 #controllable - To return controllable lossCodes (1), uncontrollable lossCodes (0), or Both (2)
 select s.stationcode, i.lossCode, c.description, count(*) 
 from item i inner join incident inc on i.incident_ID = inc.Incident_ID 
-  inner join station s on s.Station_ID = inc.stationassigned_ID inner join Company_irregularity_codes c on i.lossCode= c.loss_code 
+  inner join station s on s.Station_ID = i.faultStation_id inner join Company_irregularity_codes c on i.lossCode= c.loss_code 
   where inc.createdate >= :startDate and inc.createdate <=:endDate and find_in_set(c.loss_Code, :lossCodes)
   and c.companycode_ID='WN' and c.report_type=i.itemtype_ID and
   (case :controllable when 0 then c.controllable=0 when 1 then c.controllable=1 else 1=1 end)
@@ -163,18 +165,20 @@ from item i inner join incident inc on i.incident_ID = inc.Incident_ID
 #------------------------------------------------------------------------------------
 
 #Incident Return Type Report Detail
+#Report should be based on station creating not assigned.
 #startDate - The beginning of the date range. DateTime variable
 #endDate - the end of the date range. DateTime variable
 #stationcodes - Array of 3 character station codes to check against. 3 character varchar
 select inc.createDate as IncidentDate, inc.incident_id, (case it.status_ID when 50 then "Delivery" when 59 then "PPU" else "Other" end) as ClosureType
   from incident inc 
-  inner join station s on inc.stationassigned_ID=s.Station_ID 
+  inner join station s on inc.stationcreated_ID=s.Station_ID 
   inner join item it on it.item_id = (select min(ii.item_id) from item ii where ii.incident_id=inc.Incident_ID limit 1)
     where inc.status_id=13
     and inc.close_date>=:startDate and inc.close_date<=:endDate
     and find_in_set(s.stationcode, :stationcodes) order by IncidentDate;
     
 #Incident Return Type Report Summary
+#Report should be based on station creating not assigned.
 #startDate - The beginning of the date range. DateTime variable
 #endDate - the end of the date range. DateTime variable
 #stationcodes - Array of 3 character station codes to check against. 3 character varchar
@@ -182,7 +186,7 @@ select s.stationcode, count(*) closedIncidents,
   sum(case it.status_id when 50 then 1 else 0 end) as closedByDelivery, 
   sum(case it.status_id when 59 then 1 else 0 end) as closedByPPU
   from incident inc 
-  inner join station s on inc.stationassigned_ID=s.Station_ID 
+  inner join station s on inc.stationcreated_ID=s.Station_ID 
   inner join item it on it.item_id = (select min(ii.item_id) from item ii where ii.incident_id=inc.Incident_ID limit 1)
     where inc.status_id=13
     and inc.close_date>=:startDate and inc.close_date<=:endDate and find_in_set(s.stationcode, :stationcodes)

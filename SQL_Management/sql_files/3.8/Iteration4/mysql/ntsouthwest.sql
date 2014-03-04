@@ -97,16 +97,16 @@ DELIMITER //
 create procedure getBSOAgentAuditReport (in startDate datetime, in endDate datetime, in stationcode varchar(3),in agentUsername varchar(100), in itemtype varchar(1), in percent varchar(3))
 begin
 declare percentlimit int default 0;
-set percentlimit =(SELECT ceiling((COUNT(i.incident_id)*percent/100)) FROM incident i inner join station s on i.stationassigned_ID=s.Station_ID 
+set percentlimit =(SELECT ceiling((COUNT(i.incident_id)*percent/100)) FROM incident i inner join station s on i.stationcreated_ID=s.Station_ID 
    inner join Passenger p on p.incident_ID = i.Incident_ID and p.isprimary = true
-   inner join agent a on a.agent_id=i.agentassigned_ID
+   inner join agent a on a.agent_id=i.agent_id
     where i.createdate>= startDate and i.createdate <= endDate and s.stationcode=stationcode
 	  and a.username=agentUsername and i.itemtype_ID=itemType);
 select i.incident_id, timestamp(i.createdate, i.createtime) as takenDate, p.firstname as passFirstName,p.lastname as passLastName,
 	a.userName as agentUserName, a.firstname as agentFirstName, a.lastname as agentLastName
-   from incident i inner join station s on i.stationassigned_ID=s.Station_ID 
+   from incident i inner join station s on i.stationcreated_ID=s.Station_ID 
    inner join Passenger p on p.incident_ID = i.Incident_ID and p.isprimary = true
-   inner join agent a on a.agent_id=i.agentassigned_ID
+   inner join agent a on a.agent_id=i.agent_id
 	  where i.createdate>= startdate and i.createdate <= enddate and s.stationcode=stationcode
 	  and a.username=agentUsername and i.itemtype_ID=itemType limit percentlimit;
 end //
