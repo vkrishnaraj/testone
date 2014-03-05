@@ -50,7 +50,7 @@ public class WN_CreateDamaged extends WN_SeleniumTest {
 
 				if (checkNoErrorPage()) {
 					selenium.click("name=saveButton");
-					verifyEquals("Permanent Address is required.", selenium.getAlert());
+					verifyEquals("Permanent Address check is required.", selenium.getAlert());
 					selenium.click("id=addresses[0].permanent");
 					selenium.click("xpath=(//input[@id='button'])[3]");
 					selenium.click("name=saveButton");
