@@ -90,7 +90,7 @@ a.starter:hover, a.starter:active, a.starter:focus {
 			} else {
 %>
 				#menubuilder<%=j%> {
-					width: 180px;
+					width: 225px;
 					z-index:100;
 				}
 <%

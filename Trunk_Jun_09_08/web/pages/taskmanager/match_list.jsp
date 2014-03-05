@@ -254,7 +254,7 @@ function updatePagination() {
 %>
                       <input type="submit" name="multiunreject" value="Un-reject" id="button">
                       &nbsp;
-                      <input type="submit" name="multireject" value="Reject" Id="button">
+                      <input type="submit" name="multireject" value="<bean:message key="button.reject" />" Id="button">
 <%
                     }
 %>
