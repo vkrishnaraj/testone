@@ -14,7 +14,6 @@ import com.nettracer.claims.utils.ClaimsProperties;
  */
 public class FileHelper {
 	private static final String BASE_PATH = ClaimsProperties.get(ClaimsProperties.FILE_SERVER);
-	//private static final String BASE_PATH = "//172.30.6.104/online_claims_files/";
 	private static String path;
 	
 	private static String getFilePath(String incidentId) {
