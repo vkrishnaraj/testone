@@ -279,16 +279,28 @@ var slideUpContainerLoaded = 0;
 var slideUpContainerShown = 0;
 
 function loadSlideupContainer(url) {
-	
-    if (slideUpContainerLoaded == 0) {
-    	jQuery("#sliderContentFrame").load(url);
-    	var slideUpElement = document.getElementById("slideUpContainer");
-    	var slideUpContainer = jQuery(slideUpElement);
-    	slideUpContainerLoaded = 1;
-    	slideUpContainer.animate({"bottom":"+=342px"},"slow");
-    	document.getElementById("slideUpContainerVisible").value = 'yes';
-    	slideUpContainerShown = 1;
-    }
+	jQuery("#sliderContentFrame").load(url);
+	var slideUpElement = document.getElementById("slideUpContainer");
+	slideUpElement.style.display = "inline";
+	slideUpElement.style.bottom="-340px";
+	if (slideUpContainerShown == 0){
+		document.getElementById("slideUpContainerVisible").value = 'yes';
+		document.getElementById("openLink").style.display = "none";
+		document.getElementById("minimazeLink").style.display = "inline";
+		document.getElementById("switchLink").style.display = "inline";
+		document.getElementById("closeLink").style.display = "inline";
+		document.getElementById("sliderContentFrame").style.display = "inline";			
+		var slideInnerElement = document.getElementById("sliderInner");
+		slideUpElement.style.width="";
+		slideInnerElement.style.padding="";
+	}
+	slideUpElement.style.top="";
+	var slideUpContainer = jQuery(slideUpElement);
+	slideUpContainerLoaded = 1;
+	slideUpContainer.animate({"bottom":"+=342px"},"slow");
+	document.getElementById("slideUpContainerVisible").value = 'yes';
+	slideUpContainerShown = 1;
+    	
 }
 
 function handleEvent() {
@@ -305,9 +317,11 @@ function handleEvent() {
 		slideUpElement.style.width="100px";
 		slideInnerElement.style.padding="10px 0px 20px";
 		document.getElementById("slideUpContainerVisible").value = 'no';
-		document.getElementById("closeLink").style.display = "none";
+		document.getElementById("minimazeLink").style.display = "none";
 		document.getElementById("openLink").style.display = "inline";
 		document.getElementById("switchLink").style.display = "none";
+		document.getElementById("closeLink").style.display = "none";
+
 		document.getElementById("sliderContentFrame").style.display = "none";
 		slideUpContainerShown = 0;
 	} else {
@@ -320,8 +334,9 @@ function handleEvent() {
 		slideInnerElement.style.padding="";
 		document.getElementById("slideUpContainerVisible").value = 'yes';
 		document.getElementById("openLink").style.display = "none";
-		document.getElementById("closeLink").style.display = "inline";
+		document.getElementById("minimazeLink").style.display = "inline";
 		document.getElementById("switchLink").style.display = "inline";
+		document.getElementById("closeLink").style.display = "inline";
 		document.getElementById("sliderContentFrame").style.display = "inline";
 		slideUpContainerShown = 1;
 	}
@@ -340,6 +355,14 @@ function switchLocation() {
 		slideUpContainerState = 0;
 	}
 }
+
+function closeSubPage()
+{
+	slideUpContainerShown = 0;
+	slideUpContainerLoaded = 0;
+	document.getElementById("slideUpContainer").style.display = "none";
+}
+
 
 function checkAllCheckboxes(checkboxName) {	    
 	var checkboxes = document.getElementsByName(checkboxName);

@@ -418,7 +418,8 @@ jQuery('html').addClass("oldBrowser");
 	<div id="sliderInner">
 	<div style="float: right; margin-right: 10px;">
 	 	<a id="switchLink" href="###" onclick="switchLocation();return false;">Switch Location</a>&nbsp;&nbsp;
-		<a id="closeLink" href="###" onclick="handleEvent();return false;">Minimize</a>
+		<a id="minimazeLink" href="###" onclick="handleEvent();return false;">Minimize</a>&nbsp;&nbsp;
+	 	<a id="closeLink" href="###" onclick="closeSubPage();return false;">Close</a>&nbsp;&nbsp;
 		<a id="openLink" href="###" onclick="handleEvent();return false;" style="display: none;">Maximize</a>
 	</div><br/>
 	<div id="sliderContentFrame" style="float: none"></div>
