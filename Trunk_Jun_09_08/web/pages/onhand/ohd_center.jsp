@@ -641,7 +641,7 @@ function gotoHistoricalReport() {
          </td>
 		 <td colspan="${form2_ohd_colspan}">
         	<bean:message key="colname.ohd_inventory_date" /> <br> 
-        	<html:text property="dispModifiedDate" size="14" readonly="true" styleClass="textfield" />
+        	<html:text property="dispInventoryDate" size="14" readonly="true" styleClass="textfield" />
       	</td>
       </tr>
     </table>

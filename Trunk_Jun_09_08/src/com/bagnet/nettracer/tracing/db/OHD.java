@@ -160,8 +160,7 @@ public class OHD implements Serializable {
 	}
 
 	public String getDispInventoryDate() {
-		String dispInventoryDate = DateUtils.formatDate(this.getInventoryDate(), _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
-		return dispInventoryDate != null && 0 < dispInventoryDate.lastIndexOf(' ') ? dispInventoryDate.substring(0, dispInventoryDate.lastIndexOf(' ')) : "";
+		return DateUtils.formatDate(this.getInventoryDate(), _DATEFORMAT + " " + _TIMEFORMAT, null, _TIMEZONE);
 	}
 	
 	/**
