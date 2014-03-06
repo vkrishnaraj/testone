@@ -288,7 +288,7 @@ ResourceBundle bundle = ResourceBundle.getBundle(
     return false;
   }
 
-  if(ccCount > bagIndices.length) {
+  if(ccCount > bagIndices.length && !(formType == 'damaged' || formType == 'pilfered')) {
         alert('<%= (String) bundle.getString( "error.validation.too.many.claimchecks")%>');
         document.getElementById("claimcheck["+firstClaimcheckIndex+"].claimchecknum").focus();
         return false;
