@@ -6,12 +6,15 @@ import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import com.nettracer.claims.utils.ClaimsProperties;
+
 /**
  * @author utpal
  *
  */
 public class FileHelper {
-	private static final String BASE_PATH = "//172.30.6.104/online_claims_files/";
+	private static final String BASE_PATH = ClaimsProperties.get(ClaimsProperties.FILE_SERVER);
+	//private static final String BASE_PATH = "//172.30.6.104/online_claims_files/";
 	private static String path;
 	
 	private static String getFilePath(String incidentId) {
@@ -23,7 +26,7 @@ public class FileHelper {
 		
 		String datePath = year + "/" + month + "/" + day + "/";
 		
-		String filePath = BASE_PATH + datePath + incidentId;
+		String filePath = datePath + incidentId;
 		return filePath;
 		
 	}
@@ -32,14 +35,15 @@ public class FileHelper {
 		
 		String filePath = getFilePath(incidentId);
 		
-		if (!makeFolder(filePath)) {
+		if (!makeFolder(BASE_PATH + filePath)) {
 			//Error in creating a directory.
 			return false;
 		}
 		
 		path=filePath;
+		
 		//write the file to the file specified
-		OutputStream outs = new FileOutputStream(filePath + "/" + fileName);
+		OutputStream outs = new FileOutputStream(BASE_PATH + filePath + "/" + fileName);
 		outs.write(file);
 		outs.flush();
 		outs.close();
@@ -63,7 +67,7 @@ public class FileHelper {
 	public static boolean deleteImage(String incidentId, String fileName, String filePath) throws IOException {
 		
 		// A File object to represent the filename
-	    java.io.File f = new java.io.File(filePath + "/" + fileName);
+	    java.io.File f = new java.io.File(BASE_PATH + filePath + "/" + fileName);
 
 	    // Make sure the file or directory exists and isn't write protected
 	    if (!f.exists())

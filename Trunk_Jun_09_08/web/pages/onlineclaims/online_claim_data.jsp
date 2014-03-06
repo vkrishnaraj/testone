@@ -529,7 +529,7 @@ phIndex++; %>
 </td></tr>
 <logic:iterate id="files" name="claim" property="file" type="com.bagnet.nettracer.tracing.db.onlineclaims.OCFile">
 <tr><td>
-<a href="/tracer/showImage?ID=<bean:write name='files' property='path'/>/<bean:write name='files' property='filename'/>&useOCPath=1" target="_blank">
+<a href="showImage?ID=<bean:write name='files' property='path'/>/<bean:write name='files' property='filename'/>&useOCPath=1" target="_blank">
 <bean:write name="files" property="filename"/></a>
 </td><td><logic:match value="true" name="files" property="interim">
 <bean:message key="oc.label.yes"/>
