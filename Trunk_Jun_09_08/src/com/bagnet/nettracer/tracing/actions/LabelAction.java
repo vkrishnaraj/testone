@@ -1,7 +1,6 @@
 package com.bagnet.nettracer.tracing.actions;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -154,7 +153,7 @@ public class LabelAction extends Action {
 			}
 			
 			if (checkedLabelIds.length != totalDeleted) {
-				log.error("Label(s) not deleted: agentId = {}, labelIds = {} and total deleted = " + totalDeleted, agent.getAgent_ID(), request.getParameter("printedLabelIds"));							
+				log.error("Labels not deleted: agentId = {}, labelIds = {} and total deleted = " + totalDeleted, agent.getAgent_ID(), request.getParameter("printedLabelIds"));							
 			}
 			
 			if (totalDeleted < 1) {
