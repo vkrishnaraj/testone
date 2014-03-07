@@ -134,7 +134,6 @@
           
             <jsp:include page="/pages/includes/closebagloss_incl.jsp" />
           <table class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
-          <input type="hidden" name="close" value="1">
            <html:hidden name="close" property="close" value="1"/>
            	<% if(!bagLossCodes){
            		if (DisputeResolutionUtils.isIncidentLocked(request.getAttribute("incident").toString())) { %>

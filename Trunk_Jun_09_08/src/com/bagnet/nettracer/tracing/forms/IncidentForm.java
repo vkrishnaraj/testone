@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts.validator.ValidatorForm;
 
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
@@ -47,7 +48,7 @@ import com.bagnet.nettracer.tracing.utils.TracerProperties;
  */
 public final class IncidentForm extends ValidatorForm {
 
-	private static final long serialVersionUID = -4458535454797410537L;
+	private static final long serialVersionUID = -2069525751787847784L;
 
 	private String Incident_ID;
 
@@ -98,7 +99,8 @@ public final class IncidentForm extends ValidatorForm {
 	private String resolutionRemarks;
 	
 	private String btnUpdateDispute = "No button";  // to support multiple submit buttons in dispute resolution 
-	
+
+	private boolean  reset = false; //forces a form fields 
 	private boolean locked = false;	//for dispute resolution process
 	private boolean codelocked = false;	//for dispute resolution process
 	private boolean stationlocked = false;	//for dispute resolution process
@@ -307,20 +309,26 @@ public final class IncidentForm extends ValidatorForm {
 				language = agent.getStation().getEmailLanguage();
 			}
 		}
-		if (passengerlist != null) {
-			for (Passenger p : passengerlist) {
-				if (p.getAddresses() != null) {
-					for (Address a : (Iterable<Address>) p.getAddresses()) {
-						a.setPermanent(false);
+		 
+		if (isReset()) {
+			setReset(null);//disable
+			
+			if (passengerlist != null) {
+				for (Passenger p : passengerlist) {
+					if (p.getAddresses() != null) {
+						for (Address a : (Iterable<Address>) p.getAddresses()) {
+							a.setPermanent(false);
+						}
 					}
 				}
 			}
-		}
-		if (remarklist != null) {
-			for (Remark r : remarklist) {
-				r.setSecure(false);
+			if (remarklist != null) {
+				for (Remark r : remarklist) {
+					r.setSecure(false);
+				}
 			}
 		}
+		
 		String defChecked = TracerProperties.get(agent.getCompanycode_ID(),TracerProperties.DEFAULT_CHECKED_LOCATION);
 		if(defChecked != null) {
 			checkedlocation = defChecked;
@@ -1533,5 +1541,11 @@ public final class IncidentForm extends ValidatorForm {
 		this.outMessage = outMessage;
 	}
 	
+	public boolean isReset() {
+		return reset;
+	}
 	
+	public void setReset(String reset) {
+		this.reset = StringUtils.equalsIgnoreCase("y", reset);
+	}
 }
