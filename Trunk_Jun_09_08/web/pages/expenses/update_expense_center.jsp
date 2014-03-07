@@ -12,6 +12,7 @@
 <%@ page import="java.util.Calendar"%>
 <%@ page import="java.util.Locale, org.apache.struts.util.PropertyMessageResources"%>
 <%@ page import="com.bagnet.nettracer.tracing.enums.TemplateType"%>
+<%@ page import="java.util.TimeZone, com.bagnet.nettracer.tracing.utils.AdminUtils"%>
 
 <%@ taglib uri="/tags/struts-bean" prefix="bean"%>
 <%@ taglib uri="/tags/struts-html" prefix="html"%>
@@ -50,6 +51,8 @@
 	
 	Locale myLocale = (Locale) session.getAttribute("org.apache.struts.action.LOCALE");
 	PropertyMessageResources myMessages = (PropertyMessageResources) request.getAttribute("org.apache.struts.action.MESSAGE");
+	
+	TimeZone timeZone = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(a.getDefaulttimezone()).getTimezone());
 %>
 
     <script>
@@ -215,7 +218,7 @@
 	<html:hidden name="expensePayoutForm" property="printcount"  value="0"/>
 	<html:hidden name="expensePayoutForm" property="cancelcount"  value="0"/>
 	<html:hidden name="expensePayoutForm" property="cancelreason" styleId="cancelreason" value="" />	
-	<fmt:timeZone value="${expensePayoutForm.tz}">
+	<fmt:timeZone value="<%=timeZone%>">
 		<tr>
 			<td colspan="3" id="pageheadercell">
 				<div id="pageheaderleft">
@@ -419,7 +422,7 @@
 							<td colspan="3">
 								<bean:message key="agent.comments" />
 								<br />
-								<textarea rows="6" cols="80" readonly="readonly"><c:forEach items="${expensePayoutForm.oldComments}" var="comment" varStatus="status"><c:out value="${comment.agent.username}" />&nbsp;<fmt:formatDate value="${comment.createDate}" />&#x0D;<c:out value="${comment.content}" /><c:if test="${!status.last }">&#x0D;&#x0D;</c:if></c:forEach></textarea>
+								<textarea rows="6" cols="80" readonly="readonly"><c:forEach items="${expensePayoutForm.oldComments}" var="comment" varStatus="status"><c:out value="${comment.agent.username}" />&nbsp;<fmt:formatDate value="${comment.createDate}" pattern="${comment.agent.dateformat.format} ${comment.agent.timeformat.format}"/>&#x0D;<c:out value="${comment.content}" /><c:if test="${!status.last }">&#x0D;&#x0D;</c:if></c:forEach></textarea>
 							</td>
 						</tr>
 					<% 
