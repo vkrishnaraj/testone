@@ -449,7 +449,7 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 		buttons = driver.findElements(By.className("ui-state-default"));
 		buttons.get(0).click();
 		if (checkNoErrorPage()) {
-			isTextPresent(By.xpath("//div[@id='maincontent']/table[9]/tbody/tr[3]/td[3]"), "OUTBOUND WEB PORTAL MESSAGE");
+			isTextPresent(By.xpath("//table[9]/tbody/tr[3]/td[3]"), "OUTBOUND WEB PORTAL MESSAGE");
 		} else {
 			System.out.println("!!!!!!!!!!!!!!!! Failed to create Outbound Incident Activity");
 			verifyTrue(false);
