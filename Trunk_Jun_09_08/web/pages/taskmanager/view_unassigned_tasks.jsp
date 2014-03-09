@@ -10,7 +10,7 @@
 <%@ taglib uri="/tags/struts-nested" prefix="nested" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
-<%@ page import="com.bagnet.nettracer.tracing.utils.taskmanager.UnassignedInboundAgentElement" %>
+<%@ page import="com.bagnet.nettracer.tracing.utils.taskmanager.inbound.UnassignedInboundAgentElement" %>
 
 <%@page import="com.bagnet.nettracer.tracing.forms.UnassignedInboundQueueForm" %>
 

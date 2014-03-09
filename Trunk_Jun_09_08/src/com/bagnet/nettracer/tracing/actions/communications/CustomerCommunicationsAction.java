@@ -52,7 +52,7 @@ import com.bagnet.nettracer.tracing.utils.ExpenseUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
-import com.bagnet.nettracer.tracing.utils.taskmanager.InboundTasksUtils;
+import com.bagnet.nettracer.tracing.utils.taskmanager.inbound.InboundTasksUtils;
 
 public class CustomerCommunicationsAction extends CheckedAction {
 

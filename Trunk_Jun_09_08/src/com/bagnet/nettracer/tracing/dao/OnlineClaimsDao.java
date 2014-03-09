@@ -48,7 +48,7 @@ import com.bagnet.nettracer.tracing.utils.DomainUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
-import com.bagnet.nettracer.tracing.utils.taskmanager.InboundTasksUtils;
+import com.bagnet.nettracer.tracing.utils.taskmanager.inbound.InboundTasksUtils;
 import com.bagnet.nettracer.ws.onlineclaims.xsd.Bag;
 import common.Logger;
 

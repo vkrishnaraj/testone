@@ -29,9 +29,9 @@ import com.bagnet.nettracer.tracing.dto.InboundTasksDTO;
 import com.bagnet.nettracer.tracing.forms.UnassignedInboundQueueForm;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
-import com.bagnet.nettracer.tracing.utils.taskmanager.InboundTasksUtils;
-import com.bagnet.nettracer.tracing.utils.taskmanager.UnassignedInboundAgentElement;
-import com.bagnet.nettracer.tracing.utils.taskmanager.UnassignedIncidentElement;
+import com.bagnet.nettracer.tracing.utils.taskmanager.inbound.InboundTasksUtils;
+import com.bagnet.nettracer.tracing.utils.taskmanager.inbound.UnassignedInboundAgentElement;
+import com.bagnet.nettracer.tracing.utils.taskmanager.inbound.UnassignedIncidentElement;
 
 public class UnassignedInboundQueueAction extends Action {
 	private final Logger log = LoggerFactory.getLogger(getClass());
@@ -72,14 +72,7 @@ public class UnassignedInboundQueueAction extends Action {
 		if (request.getParameter("autoassign") != null){
 			List<UnassignedIncidentElement> incidentList = theForm.getIncidentList();
 			List<InboundQueueTask> taskList = new ArrayList<InboundQueueTask>();
-			if(incidentList != null){
-				for(UnassignedIncidentElement incident:incidentList){
-					if(incident.getTasks() != null){
-						taskList.addAll(incident.getTasks());
-					}
-				}
-			}
-			InboundTasksUtils.autoAssignedTasks(theForm.getAgentMatrix(), taskList);
+			InboundTasksUtils.getAutoAssignImpl().autoAssignedTasks(theForm.getAgentMatrix(), incidentList);
 			theForm.setIncidentList(InboundTasksUtils.sortTaskList(incidentList, sort, dir));
 			/** save agent matrix for use by display tag sorting **/
 			theForm.setPreviousAgentMatrix(cloneAgentMatrix(theForm.getAgentMatrix()));

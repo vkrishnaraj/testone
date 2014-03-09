@@ -8,8 +8,8 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.ValidatorForm;
 
 import com.bagnet.nettracer.tracing.db.Agent;
-import com.bagnet.nettracer.tracing.utils.taskmanager.UnassignedInboundAgentElement;
-import com.bagnet.nettracer.tracing.utils.taskmanager.UnassignedIncidentElement;
+import com.bagnet.nettracer.tracing.utils.taskmanager.inbound.UnassignedInboundAgentElement;
+import com.bagnet.nettracer.tracing.utils.taskmanager.inbound.UnassignedIncidentElement;
 
 public class UnassignedInboundQueueForm extends ValidatorForm {
 	private static final long serialVersionUID = -2791233648024154545L;

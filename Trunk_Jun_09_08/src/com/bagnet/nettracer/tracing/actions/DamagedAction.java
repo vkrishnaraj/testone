@@ -79,7 +79,7 @@ import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
-import com.bagnet.nettracer.tracing.utils.taskmanager.InboundTasksUtils;
+import com.bagnet.nettracer.tracing.utils.taskmanager.inbound.InboundTasksUtils;
 
 /**
  * @author Matt

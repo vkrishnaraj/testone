@@ -1,4 +1,4 @@
-package com.bagnet.nettracer.tracing.utils.taskmanager;
+package com.bagnet.nettracer.tracing.utils.taskmanager.inbound;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -79,5 +79,36 @@ public class UnassignedIncidentElement {
 			} 
 		} 
 		return null;
+	}
+	
+	/**
+	 * If multiple tasks exists for a given incident, return the highest priority task given the following priority order: ACAA, DAMAGED, INBOUND
+	 * 
+	 * @return
+	 */
+	public InboundQueueTask getPriorityTask(){
+		InboundQueueTask acaa = null;
+		InboundQueueTask damaged = null;
+		InboundQueueTask inbound = null;
+		if(tasks != null){
+			for(InboundQueueTask task:tasks){
+				if(task.isAcaa()){
+					acaa = task;
+				}
+				if(task.isDamaged()){
+					damaged = task;
+				}
+				if(task.isInbound()){
+					inbound = task;
+				}
+			}
+		}
+		if(acaa != null){
+			return acaa;
+		} else if (damaged != null){
+			return damaged;
+		} else {
+			return inbound;
+		}
 	}
 }

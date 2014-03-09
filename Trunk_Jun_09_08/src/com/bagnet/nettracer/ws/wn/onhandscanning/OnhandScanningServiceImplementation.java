@@ -29,7 +29,7 @@ import com.bagnet.nettracer.tracing.utils.DomainUtils;
 import com.bagnet.nettracer.tracing.utils.OHDUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
-import com.bagnet.nettracer.tracing.utils.taskmanager.InboundTasksUtils;
+import com.bagnet.nettracer.tracing.utils.taskmanager.inbound.InboundTasksUtils;
 import com.bagnet.nettracer.ws.core.WSCoreOHDUtil;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSItinerary;
 import com.bagnet.nettracer.ws.core.pojo.xsd.WSOHD;

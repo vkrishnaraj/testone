@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -38,6 +39,21 @@ public class InboundQueueTask extends GeneralTask {
 
 	public void setTaskType(TaskType taskType) {
 		this.taskType = taskType;
+	}
+	
+	@Transient
+	public boolean isInbound(){
+		return this instanceof InboundTask;
+	}
+	
+	@Transient
+	public boolean isAcaa(){
+		return this instanceof AcaaTask;
+	}
+	
+	@Transient
+	public boolean isDamaged(){
+		return this instanceof DamagedTask;
 	}
 	
 }

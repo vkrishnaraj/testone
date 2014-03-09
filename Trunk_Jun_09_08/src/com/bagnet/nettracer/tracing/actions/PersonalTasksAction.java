@@ -24,7 +24,7 @@ import com.bagnet.nettracer.tracing.dto.InboundTasksDTO;
 import com.bagnet.nettracer.tracing.forms.PersonalTasksForm;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
-import com.bagnet.nettracer.tracing.utils.taskmanager.InboundTasksUtils;
+import com.bagnet.nettracer.tracing.utils.taskmanager.inbound.InboundTasksUtils;
 
 public class PersonalTasksAction extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)

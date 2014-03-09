@@ -1,4 +1,4 @@
-package com.bagnet.nettracer.tracing.utils.taskmanager;
+package com.bagnet.nettracer.tracing.utils.taskmanager.inbound;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -428,178 +428,17 @@ public class InboundTasksUtils {
 		return getInboundTasksBMO().getInboundAgentList();
 	}
 	
+	
 	/**
-	 * Auto assigns agent InboundQueueTasks from the provided list based on the assigned parameters provided in the list of UnassignedInboundAgentElements
+	 * Returns the AutoAssign Implementation
 	 * 
-	 * TODO - describe algorithm
+	 * Consider using Spring injection if future AutoAssign algorithms are to be supported
 	 * 
-	 * @param matrix
-	 * @param taskList
 	 * @return
 	 */
-	public static List<InboundQueueTask> autoAssignedTasks(List<UnassignedInboundAgentElement> matrix, List<InboundQueueTask> taskList){
-		int totalTasks = taskList.size();
-		double totalLoad = 0;
-		for(UnassignedInboundAgentElement agent:matrix){
-			totalLoad += agent.getLoad();
-		}
-		for(UnassignedInboundAgentElement agent:matrix){
-			int maxTasks = (int) ((agent.getLoad()/totalLoad) * totalTasks) + 1;
-			agent.setMaxAssign(maxTasks);
-			agent.setTaskList(new ArrayList<InboundQueueTask>());
-			
-			if(totalLoad > 0 && agent.getLoad() == 0){
-				/**
-				 * NT-2284 The original development of this algorithm assumed that if any of the task type were selected for an agent that the agent
-				 * could be potentially assigned tasks regards of the load for the agent (ex. if the agent has a load of zero,however, the agent is the only
-				 * agent that can work ACAA and there are ACAA tasks, that agent will be assigned ACAA tasks).  The product owner agrees with the premise that
-				 * if no load is set for any agents that the load will be even distributed across agents that have tasks enabled.  However, the PO states that 
-				 * if a load is set for one or more agents and an agent has tasks enabled but the load is zero, that agent should not be assigned any tasks 
-				 * regardless of any task types that are enabled.
-				 * 
-				 * For this condition, we check if the total load is greater than zero (thus we do not have a even default distribution) and the the current agent
-				 * load is zero.  If true, disable assignments.  Otherwise enable.
-				 **/
-				agent.setEnableAssignments(false);
-			} else {
-				agent.setEnableAssignments(true);
-			}
-		}
-		
-		ArrayList<InboundQueueTask> returnList = new ArrayList<InboundQueueTask>();
-		if(matrix != null && taskList != null){
-			while(taskList.size() > 0){
-				InboundQueueTask task = getNextTask(matrix, taskList);
-				taskList.remove(task);
-				UnassignedInboundAgentElement agent = getAssignAgent(matrix, task);
-				if(agent != null){
-					if(agent.getTaskList() == null){
-						agent.setTaskList(new ArrayList<InboundQueueTask>());
-					}
-					agent.getTaskList().add(task);
-					task.setAssigned_agent(agent.getAgent());
-					task.getInboundqueue().getIncident().setAgentassigned(agent.getAgent());
-				} else {
-					task.setAssigned_agent(null);
-					task.getInboundqueue().getIncident().setAgentassigned(null);
-					returnList.add(task);//unassignable
-				}
-			}
-		}
-		
-
-		for(UnassignedInboundAgentElement agent:matrix){
-			if(agent.getTaskList() != null){
-				returnList.addAll(agent.getTaskList());
-			}
-		}
-		return returnList;
+	public static AutoAssign getAutoAssignImpl(){
+		return new AutoAssignImpl();
 	}
-	
-	private static InboundQueueTask getNextTask(List<UnassignedInboundAgentElement> matrix, List<InboundQueueTask> taskList){
-		//first determine of many of each task type exists
-		int inbound = 0;
-		int acaa = 0;
-		int damaged = 0;
-		InboundTask inboundTask = null;
-		AcaaTask acaaTask = null;
-		DamagedTask damagedTask = null;
-		
-		for(InboundQueueTask task: taskList){
-			if(task instanceof InboundTask){
-				inbound++;
-				inboundTask = (InboundTask) task;
-			}
-			if(task instanceof AcaaTask){
-				acaa++;
-				acaaTask = (AcaaTask) task;
-			}
-			if(task instanceof DamagedTask){
-				damaged++;
-				damagedTask = (DamagedTask) task;
-			}
-		}
-		
-		//now determine how many available slots for each task type exists
-		int inboundSlots = 0;
-		int acaaSlots = 0;
-		int damagedSlots = 0;
-		
-		for(UnassignedInboundAgentElement agent:matrix){
-			if(agent.isInbound()){
-				inboundSlots += agent.getRemainingSlots();
-			}
-			if(agent.isAcaa()){
-				acaaSlots += agent.getRemainingSlots();
-			}
-			if(agent.isDamaged()){
-				damagedSlots += agent.getRemainingSlots();
-			}
-		}
-		
-		//determine the priority of each type by taking the difference between the number of available slots and the number of that respective task remains.
-		int inboundPriority = inboundSlots - inbound;
-		int acaaPriority = acaaSlots - acaa;
-		int damagedPriority = damagedSlots - damaged;
-		
-		InboundQueueTask retTask = null;
-		int currentPriority = Integer.MAX_VALUE;
-		
-		//determine the task with the lowest priority (meaning that least amount of remaining slots for fulfillment)
-		if(inbound > 0 && inboundPriority <= currentPriority){
-			retTask = inboundTask;
-			currentPriority = inboundPriority;
-		}
-		if(acaa > 0 && acaaPriority <= currentPriority){
-			retTask = acaaTask;
-			currentPriority = acaaPriority;
-		}
-		if(damaged > 0 && damagedPriority <= currentPriority){
-			retTask = damagedTask;
-			currentPriority = damagedPriority;
-		}
-
-		return retTask;
-	}
-	
-	private static UnassignedInboundAgentElement getAssignAgent(List<UnassignedInboundAgentElement> matrix, InboundQueueTask task){
-		int currentSlots = Integer.MIN_VALUE;
-		UnassignedInboundAgentElement currentAgent = null;
-		
-		if(task instanceof InboundTask){
-			for(UnassignedInboundAgentElement agent:matrix){
-				if(agent.isEnableAssignments() && agent.isInbound()){
-					if(agent.getRemainingSlots() > currentSlots){
-						currentAgent = agent;
-						currentSlots = agent.getRemainingSlots();
-					}
-				}
-			}
-		}
-		if(task instanceof AcaaTask){
-			for(UnassignedInboundAgentElement agent:matrix){
-				if(agent.isEnableAssignments() && agent.isAcaa()){
-					if(agent.getRemainingSlots() > currentSlots){
-						currentAgent = agent;
-						currentSlots = agent.getRemainingSlots();
-					}
-				}
-			}
-		}
-		if(task instanceof DamagedTask){
-			for(UnassignedInboundAgentElement agent:matrix){
-				if(agent.isEnableAssignments() && agent.isDamaged()){
-					if(agent.getRemainingSlots() > currentSlots){
-						currentAgent = agent;
-						currentSlots = agent.getRemainingSlots();
-					}
-				}
-			}
-		}
-		return currentAgent;
-	}
-	
-
 
 	public static List<UnassignedIncidentElement> sortTaskList(List<UnassignedIncidentElement> tasks, String sort, String dir){
 		if(tasks != null){

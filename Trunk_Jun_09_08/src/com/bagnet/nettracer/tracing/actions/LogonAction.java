@@ -90,7 +90,7 @@ import com.bagnet.nettracer.tracing.utils.UserPermissions;
 import com.bagnet.nettracer.tracing.utils.ntfs.ConnectionUtil;
 import com.bagnet.nettracer.tracing.utils.taskmanager.CSSCallsUtil;
 import com.bagnet.nettracer.tracing.utils.taskmanager.MorningDutiesUtil;
-import com.bagnet.nettracer.tracing.utils.taskmanager.InboundTasksUtils;
+import com.bagnet.nettracer.tracing.utils.taskmanager.inbound.InboundTasksUtils;
 
 
 public class LogonAction extends Action {

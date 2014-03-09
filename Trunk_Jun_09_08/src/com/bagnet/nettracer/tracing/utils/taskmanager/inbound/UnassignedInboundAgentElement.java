@@ -1,4 +1,4 @@
-package com.bagnet.nettracer.tracing.utils.taskmanager;
+package com.bagnet.nettracer.tracing.utils.taskmanager.inbound;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class UnassignedInboundAgentElement implements Cloneable {
 	private boolean enableAssignments;
 	
 	private int maxAssign;
-	private int currentAssign;
+	private double currentAssign;
 	
 	private List<InboundQueueTask> taskList;
 	
@@ -59,10 +59,10 @@ public class UnassignedInboundAgentElement implements Cloneable {
 	public void setMaxAssign(int maxAssign) {
 		this.maxAssign = maxAssign;
 	}
-	public int getCurrentAssign() {
+	public double getCurrentAssign() {
 		return currentAssign;
 	}
-	public void setCurrentAssign(int currentAssign) {
+	public void setCurrentAssign(double currentAssign) {
 		this.currentAssign = currentAssign;
 	}
 	public List<InboundQueueTask> getTaskList() {
