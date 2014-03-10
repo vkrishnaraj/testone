@@ -80,6 +80,7 @@
 				<h:panelGroup>
 					<t:inputText  value="#{bagItem.bagPrice}" style="width:50px;" 
 									required="false" id="bagPrice" onchange="calculateTotal(#{rowIndex}, true)"
+									onkeypress="return isNumberKey(event);"
 									readonly="#{passengerController.readOnlyOnSubmitted}"
 									validatorMessage="#{passengerController.bagDetailsLabel.nameonBag.label} :
 									#{passengerController.passengerInfoLabel.valueNoGreater.label} 20"
@@ -303,7 +304,7 @@
 		
 		<t:outputText value="Describe Trim:" styleClass="requiredField"/>
 		<rich:spacer width="5"/>
-		<t:inputText  value="#{bagItem.trimDescription}" readonly="#{passengerController.readOnlyOnSubmitted}"/>
+		<t:inputText  value="#{bagItem.trimDescription}" maxlength="50" readonly="#{passengerController.readOnlyOnSubmitted}"/>
 		<rich:spacer width="5"/>
 		
 		<h:selectBooleanCheckbox value="#{bagItem.softSided}" 
@@ -475,9 +476,11 @@
 				<rich:column>
 					<h:inputText value="#{contentItem.priceString}"  size="7" id="thePrice"
 						onchange="calculateTotal(#{rowIndex}, true)"
+						onkeypress="return isNumberKey(event);"
 						readonly="#{passengerController.readOnlyOnSubmitted}"/><br/>
 					<h:selectOneMenu value="#{contentItem.currency}" style="width:130px;"
 						onchange="calculateTotal(#{rowIndex}, true)"
+						onkeypress="return isNumberKey(event);" 
 						disabled="#{passengerController.readOnlyOnSubmitted}">
 						<f:selectItem itemValue="USD" itemLabel="US Dollar" />
 						<f:selectItems value="#{passengerController.currencyList}" />
@@ -606,6 +609,12 @@
 				if(invalidChars.test(ob.value)) {
 				    ob.value = ob.value.replace(invalidChars,"");
 				}
+			}
+			
+			function isNumberKey(evt){
+			    var charCode = (evt.which) ? evt.which : event.keyCode
+			    if ( charCode == 46 ) return true; // decimal
+			    return !(charCode > 31 && (charCode < 48 || charCode > 57));
 			}
 	//-->
 	</script>
