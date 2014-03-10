@@ -606,6 +606,7 @@
 		<t:inputText value="#{passengerBean.reroutedCityAirline}" styleClass="passInout"
 			tabindex="17" id="reroutedCityAirline" label="Airline rerouted by"
 			 required="#{passengerController.flightLabel.reroutedCityAirline.required}"
+			 maxlength="20"
 			 readonly="#{passengerController.flightLabel.reroutedCityAirline.hidden
 			 		|| passengerController.readOnlyOnSubmitted}"
 			requiredMessage="#{passengerController.passengerInfoLabel.requiredValueField.label}:  
