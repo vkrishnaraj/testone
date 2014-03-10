@@ -82,7 +82,7 @@
   IncidentForm myform = (IncidentForm) session.getAttribute("incidentForm");
   boolean isNew = myform.getIncident_ID() == null || myform.getIncident_ID().isEmpty();
 
-  myform.setReset("y");
+  myform.setReset(true);
 	
   boolean dlFieldsEnabled = hasViewEditDlPermission || isNew;
   boolean passportFieldsEnabled = hasViewEditPassportPermission || isNew;

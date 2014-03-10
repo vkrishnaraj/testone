@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.struts.validator.ValidatorForm;
 
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
@@ -311,7 +310,7 @@ public final class IncidentForm extends ValidatorForm {
 		}
 		 
 		if (isReset()) {
-			setReset(null);//disable
+			setReset(false);//disable
 			
 			if (passengerlist != null) {
 				for (Passenger p : passengerlist) {
@@ -1545,7 +1544,7 @@ public final class IncidentForm extends ValidatorForm {
 		return reset;
 	}
 	
-	public void setReset(String reset) {
-		this.reset = StringUtils.equalsIgnoreCase("y", reset);
+	public void setReset(boolean reset) {
+		this.reset = reset;
 	}
 }
