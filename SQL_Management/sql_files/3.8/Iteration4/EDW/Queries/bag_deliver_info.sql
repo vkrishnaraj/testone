@@ -24,7 +24,7 @@ ifnull(b.delivery_comments, ''),
 ifnull(b.origDelivCost, ''),
 s.stationcode,
 a.username,
-ifnull(b.lastDeliveryUpdate, ''),
+timestamp(b.createdate,b.createtime),
 CASE i.itemtype_ID WHEN 2 THEN (it.bagnumber + 1) ELSE '0' END
 ) formatted_output, 2 as seq 
 
