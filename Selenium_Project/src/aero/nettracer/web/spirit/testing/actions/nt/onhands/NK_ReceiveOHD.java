@@ -19,7 +19,7 @@ public class NK_ReceiveOHD extends NK_SeleniumTest {
 			waitForPageToLoadImproved();
 			if (checkNoErrorPage()) {
 				checkCopyrightAndQuestionMarks();
-				verifyTrue(isTextPresent("On-hand incident has been transfered to your station."));
+				verifyTrue(isTextPresent("On-hand bag has been transferred to your station."));
 				goToTaskManager();
 				LoginUtil.setCbroStation(driver, LZ_STATION);
 			} else {
