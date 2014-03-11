@@ -651,6 +651,14 @@ public class ExpensePayout implements Serializable {
 		this.state_ID = state_ID;
 	}
 	
+	@Transient
+	public String getState() {
+		if (state_ID != null && state_ID.length() > 0) {
+			return TracerUtils.getState(state_ID).getState();
+		}
+		return "";
+	}
+	
 	@Column(length = 3)
 	public String getCountrycode_ID() {
 		return countrycode_ID;

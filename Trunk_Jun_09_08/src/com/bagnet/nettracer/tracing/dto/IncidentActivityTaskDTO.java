@@ -53,6 +53,13 @@ public class IncidentActivityTaskDTO {
 	private String expensemaildate;
 	private double expensecheckamt;
 	private double expensevoucheramt;
+	private String explastName="";
+	private String expfirstName="";
+	private String expaddress;
+	private String expaptnum;
+	private String expcity;
+	private String expstate;
+	private String expzip;
 	
 	private String acaa;
 	
@@ -338,6 +345,80 @@ public class IncidentActivityTaskDTO {
 
 	public void setAcaa(String acaa) {
 		this.acaa = acaa;
+	}
+
+	public String getExplastName() {
+		return explastName;
+	}
+
+	public void setExplastName(String explastName) {
+		this.explastName = explastName;
+	}
+
+	public String getExpfirstName() {
+		return expfirstName;
+	}
+
+	public void setExpfirstName(String expfirstName) {
+		this.expfirstName = expfirstName;
+	}
+
+	public String getExpname() {
+		StringBuilder name=new StringBuilder();
+	
+		if(getExpfirstName()!=null && !getExpfirstName().isEmpty()){
+			name.append(getExpfirstName());
+		}
+		if(getExpfirstName()!=null && !getExpfirstName().isEmpty()
+				&& getExplastName()!=null && !getExplastName().isEmpty()){
+			name.append(" ");
+			
+		}
+		if (getExplastName()!=null && !getExplastName().isEmpty()){
+			name.append(getExplastName());
+		}
+		return name.toString();
+		
+	}
+
+	public String getExpaddress() {
+		return expaddress;
+	}
+
+	public void setExpaddress(String expaddress) {
+		this.expaddress = expaddress;
+	}
+
+	public String getExpaptnum() {
+		return expaptnum;
+	}
+
+	public void setExpaptnum(String expaptnum) {
+		this.expaptnum = expaptnum;
+	}
+
+	public String getExpcity() {
+		return expcity;
+	}
+
+	public void setExpcity(String expcity) {
+		this.expcity = expcity;
+	}
+
+	public String getExpstate() {
+		return expstate;
+	}
+
+	public void setExpstate(String expstate) {
+		this.expstate = expstate;
+	}
+
+	public String getExpzip() {
+		return expzip;
+	}
+
+	public void setExpzip(String expzip) {
+		this.expzip = expzip;
 	}
 	
 }

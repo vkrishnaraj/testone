@@ -227,12 +227,12 @@ public class PaymentApprovalReportBMO {
 		}	
 		
 		
-		drb = drb.addColumn(reportHeadingName, "name", String.class.getName(), 100);
-		drb = drb.addColumn(reportHeadingAddress, "address", String.class.getName(), 100);
-		drb = drb.addColumn(reportHeadingApt, "aptnum", String.class.getName(), 60);
-		drb = drb.addColumn(reportHeadingCity, "city", String.class.getName(), 100);
-		drb = drb.addColumn(reportHeadingState, "state", String.class.getName(), 60);
-		drb = drb.addColumn(reportHeadingZip, "zip", String.class.getName(), 80);
+		drb = drb.addColumn(reportHeadingName, "expname", String.class.getName(), 100);
+		drb = drb.addColumn(reportHeadingAddress, "expaddress", String.class.getName(), 100);
+		drb = drb.addColumn(reportHeadingApt, "expaptnum", String.class.getName(), 60);
+		drb = drb.addColumn(reportHeadingCity, "expcity", String.class.getName(), 100);
+		drb = drb.addColumn(reportHeadingState, "expstate", String.class.getName(), 60);
+		drb = drb.addColumn(reportHeadingZip, "expzip", String.class.getName(), 80);
 		drb = drb.addColumn(reportHeadingExpenseCheckAmt,"expensecheckamt",Double.class.getName(),100);
 		drb = drb.addColumn(reportHeadingAirline,"airline",String.class.getName(),80);
 		drb = drb.addColumn(reportHeadingPNR,"pnr",String.class.getName(),50);

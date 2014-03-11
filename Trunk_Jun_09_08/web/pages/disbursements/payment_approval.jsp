@@ -216,15 +216,15 @@ function sortTable(sortOrder) {
 		    					<html:hidden name="iat" property="expenseId" indexed="true"/>
 		    				</td>
 		    				<td >
-		    					<bean:write name="iat" property="name"/>
+		    					<bean:write name="iat" property="expname"/>
 		    				</td>
 		    				<td >
-		    					<bean:write name="iat" property="address"/><br/>
-		    					<logic:notEmpty name="iat" property="aptnum">
-		    						<bean:write name="iat" property="aptnum"/><br/>
+		    					<bean:write name="iat" property="expaddress"/><br/>
+		    					<logic:notEmpty name="iat" property="expaptnum">
+		    						<bean:write name="iat" property="expaptnum"/><br/>
 		    					</logic:notEmpty>
-		    					<bean:write name="iat" property="city"/>,<bean:write name="iat" property="state"/><br/>
-		    					<bean:write name="iat" property="zip"/>
+		    					<bean:write name="iat" property="expcity"/>,<bean:write name="iat" property="expstate"/><br/>
+		    					<bean:write name="iat" property="expzip"/>
 		    				</td>
 		    				<td >
 		    					<bean:write name="iat" property="dispExpensecheckamt"/>

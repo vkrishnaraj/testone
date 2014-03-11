@@ -340,6 +340,13 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 				iatdto.setExpensemaildate(iat.getIncidentActivity().getExpensePayout().getDismaildate());
 				iatdto.setExpensecheckamt(iat.getIncidentActivity().getExpensePayout().getCheckamt());
 				iatdto.setExpensevoucheramt(iat.getIncidentActivity().getExpensePayout().getVoucheramt());
+				iatdto.setExpfirstName(iat.getIncidentActivity().getExpensePayout().getFirstname());
+				iatdto.setExplastName(iat.getIncidentActivity().getExpensePayout().getLastname());
+				iatdto.setExpaddress(iat.getIncidentActivity().getExpensePayout().getAddress1());
+				iatdto.setExpaptnum(iat.getIncidentActivity().getExpensePayout().getAddress2());
+				iatdto.setExpcity(iat.getIncidentActivity().getExpensePayout().getCity());
+				iatdto.setExpstate(iat.getIncidentActivity().getExpensePayout().getState());
+				iatdto.setExpzip(iat.getIncidentActivity().getExpensePayout().getZip());
 			}
 			if(iat.getIncidentActivity().getLastPrinted()!=null){
 				iatdto.setLastPrinted(DateUtils.formatDate(iat.getIncidentActivity().getLastPrinted(), dto.get_DATEFORMAT(), null,null));
@@ -611,6 +618,16 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 	private boolean handleRejectTask(IncidentActivityTask iat) {
 		IncidentActivity ia=iat.getIncidentActivity();
 		ia.setApprovalAgent(iat.getAssigned_agent());
+		/*
+		 * Commented For NT-2262 - When an Claim Settlement is rejected, the expense payout's
+		 * approval date is set as the rejected dated
+		 */
+//		if(ia.getExpensePayout()!=null){
+//			ExpensePayout ep=ia.getExpensePayout();
+//			ep.setApproval_date(new Date());
+//			ExpensePayoutBMO.updateExpense(ep,iat.getAssigned_agent());
+//		}
+		
 		int statusId=iat.getStatus().getStatus_ID();
 		if(statusId==TracingConstants.FINANCE_STATUS_FRAUD_REVIEW){
 			return createTask(ia, FINANCE_STATUS_FRAUD_REJECTED, ia.getAgent());
