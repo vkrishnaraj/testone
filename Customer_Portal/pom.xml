@@ -26,7 +26,7 @@
       	<profile>
       		<id>hudson</id>
       		<properties>
-        		<ws.location>http\://hudson.nettracer.aero/ntsouthwest/services/OnlineClaimsService</ws.location>
+        		<ws.location>https\://hudson.nettracer.aero/ntsouthwest/services/OnlineClaimsService</ws.location>
         		<file.server>\\\\drad.nettracer.aero\\nettracer_claims_files\\hudson\\</file.server>
       		</properties>
     	</profile>
