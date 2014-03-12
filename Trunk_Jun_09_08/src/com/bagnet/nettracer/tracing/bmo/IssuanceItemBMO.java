@@ -636,11 +636,11 @@ public class IssuanceItemBMO {
 						sess.update(iItem);
 						sess.save(auditIItem);
 						t.commit();
-						if (fromAdmin && iItem.isVerifiedIncident() && status_id != TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_DISCARDED) {
+						if (fromAdmin && status_id != TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_DISCARDED) {
 							boolean success = true;
 							if (status_id == TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_AVAILABLE) {
 								success = updateIssuanceItemIncident(iItem, user, incID);
-							} else {
+							} else if (iItem.isVerifiedIncident()) {
 								success = saveIssuanceItemIncident(null, iItem, user, inc);
 							}
 							if (!success) {
