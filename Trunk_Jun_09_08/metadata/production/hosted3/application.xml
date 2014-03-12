@@ -9,7 +9,7 @@
  <module>
      <web>
          <web-uri>ntsouthwest_production.war</web-uri>
-         <context-root>ntsouthwest</context-root>
+         <context-root>southwest</context-root>
      </web>
   </module>
   
