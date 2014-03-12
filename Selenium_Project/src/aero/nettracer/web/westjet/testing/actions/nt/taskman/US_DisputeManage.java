@@ -179,7 +179,7 @@ public class US_DisputeManage extends WS_SeleniumTest {
 		
 		//Manage Disputes?
 		if (checkNoErrorPage()) {
-			clickMenu("menucol_0.25");
+			clickMenu("menucol_0.26");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("DisputeManageError: Failed Attempting to save Fault");
