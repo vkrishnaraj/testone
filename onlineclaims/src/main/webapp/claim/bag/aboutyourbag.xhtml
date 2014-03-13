@@ -82,10 +82,10 @@
 									required="false" id="bagPrice" onchange="calculateTotal(#{rowIndex}, true)"
 									onkeypress="return isNumberKey(event);"
 									readonly="#{passengerController.readOnlyOnSubmitted}"
-									validatorMessage="#{passengerController.bagDetailsLabel.nameonBag.label} :
-									#{passengerController.passengerInfoLabel.valueNoGreater.label} 20"
+									validatorMessage="Cost of Bag :
+									must be a number consisting of one or more digits."
 									label="Bag Price">
-						<f:validateLength maximum="20"/>
+						<f:validateDoubleRange/>
 					</t:inputText>&#160;&#160;
 					<h:selectOneMenu value="#{bagItem.bagCurrency}"
 						onchange="calculateTotal(#{rowIndex}, true)" id="bagCurrency"
@@ -477,7 +477,13 @@
 					<h:inputText value="#{contentItem.priceString}"  size="7" id="thePrice"
 						onchange="calculateTotal(#{rowIndex}, true)"
 						onkeypress="return isNumberKey(event);"
-						readonly="#{passengerController.readOnlyOnSubmitted}"/><br/>
+						readonly="#{passengerController.readOnlyOnSubmitted}"
+						validatorMessage="#{passengerController.bagDetailsLabel.price.label} :
+									must be a number consisting of one or more digits."
+						>
+						<f:validateDoubleRange/>
+					</h:inputText>
+						<br/>
 					<h:selectOneMenu value="#{contentItem.currency}" style="width:130px;"
 						onchange="calculateTotal(#{rowIndex}, true)"
 						onkeypress="return isNumberKey(event);" 
