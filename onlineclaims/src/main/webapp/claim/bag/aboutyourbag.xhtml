@@ -486,7 +486,6 @@
 						<br/>
 					<h:selectOneMenu value="#{contentItem.currency}" style="width:130px;"
 						onchange="calculateTotal(#{rowIndex}, true)"
-						onkeypress="return isNumberKey(event);" 
 						disabled="#{passengerController.readOnlyOnSubmitted}">
 						<f:selectItem itemValue="USD" itemLabel="US Dollar" />
 						<f:selectItems value="#{passengerController.currencyList}" />
