@@ -1,14 +1,12 @@
 package com.bagnet.clients.b6;
 
-import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
+import java.util.Locale; 
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
@@ -18,13 +16,11 @@ import javax.servlet.http.HttpServletRequest;
 import net.sf.jasperreports.engine.JRParameter;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.util.MessageResources;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
 import com.bagnet.clients.b6.reports.PAWOBReportDTO;
-import com.bagnet.clients.us.reports.PerformanceReportDTO;
 import com.bagnet.nettracer.exceptions.AmountOfDataOutOfRangeException;
 import com.bagnet.nettracer.exceptions.MissingRequiredFieldsException;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
@@ -32,13 +28,13 @@ import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.claims.ClaimSettlement;
 import com.bagnet.nettracer.tracing.dto.PPLC_DTO;
 import com.bagnet.nettracer.tracing.dto.StatReportDTO;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
-import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 import edu.emory.mathcs.backport.java.util.Arrays;
 
@@ -139,6 +135,7 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 				q.setParameterList("stationList", stationList);
 			}
 
+			@SuppressWarnings("unchecked")
 			List<ClaimSettlement> result = q.list();
 
 			if (result.size() == 0) {
@@ -147,21 +144,27 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 
 			for (ClaimSettlement cs : result) {
 				PPLC_DTO pdto = new PPLC_DTO();
-
+				
 				pdto.setDueDate(cs.getPplcDue());
 				pdto.setFirstName(cs.getFirstName());
 				pdto.setLastName(cs.getLastName());
-				pdto.setIncidentId(cs.getIncident().getIncident_ID());
+				pdto.setReceivedDate(cs.getPplcReceived());
 				pdto.setOfferDueDate(cs.getOfferDue());
-				pdto.setRecordLocator(cs.getIncident().getRecordlocator());
+				pdto.setOfferSentDate(cs.getOfferSent());
 				pdto.setSentDate(cs.getPplcSent());
-				pdto.setStationAssigned(cs.getIncident().getStationcode());
+
+				Incident incident = cs.getIncident();
+				if (incident != null) {
+					pdto.setRecordLocator(incident.getRecordlocator());
+					pdto.setStationAssigned(incident.getStationcode());
+					pdto.setIncidentId(incident.getIncident_ID());
+					pdto.setAgentAssigned((incident.getAgentassigned() == null) ? null : incident.getAgentassigned().getUsername());
+				}
 
 				dataList.add(pdto);
  			}
-
-			return ReportBMO.getReportFile(dataList, parameters, "b6_pplc_age", rootpath, srDTO.getOutputtype(),
-					request);
+			
+			return ReportBMO.getReportFile(dataList, parameters, "b6_pplc_age", rootpath, srDTO.getOutputtype(), request);
 
 		} catch (Exception e) {
 			logger.error("unable to create report " + e);
@@ -252,6 +255,7 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			boolean isAllCreateStation = false;
 			String[] myCreateStationId = srDTO.getCreatestation_ID();
 			if (myCreateStationId != null && myCreateStationId.length>0 ) {
+				@SuppressWarnings("unchecked")
 				List<String> myCreateStationIdList = Arrays.asList(myCreateStationId);
 				String myCreateStationSql = "(";
 				for (String item : myCreateStationIdList) {
@@ -275,6 +279,7 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			boolean isAllChargeStation = false;
 			String[] myChargeStationId = srDTO.getFaultstation_ID();
 			if (myChargeStationId != null && myChargeStationId.length>0) {
+				@SuppressWarnings("unchecked")
 				List<String> myChargeStationIdList = Arrays.asList(myChargeStationId);
 				String myChargeStationSql = "(";
 				for (String item : myChargeStationIdList) {
@@ -298,6 +303,7 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			boolean isAllAssignedStation = false;
 			String[] myAssignedStationId = srDTO.getStation_ID();
 			if (myAssignedStationId != null && myAssignedStationId.length>0) {
+				@SuppressWarnings("unchecked")
 				List<String> myAssignedStationIdList = Arrays.asList(myAssignedStationId);
 				String myAssignedStationSql = "(";
 				for (String item : myAssignedStationIdList) {
@@ -338,6 +344,7 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 				query.setDate("paxFlightEndDate", paxEndFlightDate);
 			}
 			
+			@SuppressWarnings("unchecked")
 			List<Object[]> results = query.list();
 			
 
