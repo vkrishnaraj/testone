@@ -244,15 +244,7 @@
        				<td width="115px" class="label"></td>
        			<%} %>
        			<td align="char" char=":"  class="field">
-				<%	
-				  	Itinerary itin = res.getPaxItinerary()[i.intValue()];
-					String itinString = itin.getAirline() + " " +
-										itin.getFlightNumber() + " " +
-										itin.getDepartureCity() + " " +
-										itin.getArrivalCity() + " " +
-										itin.getFlightDate().getTime().toLocaleString();
-					out.println(itinString);
-				%>
+       				<bean:write name="bitin" property="itinInfo" />
 				<br/>
 				</td>
 				</tr>
@@ -260,6 +252,16 @@
        	
        	<td/>
        	
+       	<logic:notEmpty name="wt_raw" property="routes">
+       	<td>
+       		<tr>
+				<td width="115px" valign="top" class="label"><span class="label"><bean:message key="wt.view.ohd.routes" /></span></td>
+				<td class="field">
+					<bean:write name="wt_raw" property="routesDetail" />
+				</td>
+			</tr>
+       	</td>
+       	</logic:notEmpty>
 		</tr>
 		
 		<tr>
@@ -299,6 +301,34 @@
 		</td>
 		
 		</tr>
+		
+		<logic:iterate id="matchInfo" name="wt_raw" property="readOnlyMatchInfo" scope="request" indexId="i">
+			<tr>
+				<%if (i.intValue() == 0){ %>
+				<td width="115px" valign="top" class="label"><span class="label"><bean:message key="wt.view.ohd.match.info" /></span></td>
+				<%}else{ %>
+				<td width="115px" class="label"></td>
+				<%} %>
+
+				<td class="field">
+				<bean:write name="matchInfo" filter="false" /> <br />
+				</td>
+			</tr>
+		</logic:iterate>
+		
+		<logic:iterate id="messageInfo" name="wt_raw" property="readOnlyMessageInfo" scope="request" indexId="i">
+			<tr>
+				<%if (i.intValue() == 0){ %>
+				<td width="115px" valign="top" class="label"><span class="label"><bean:message key="wt.view.ohd.message.info" /></span></td>
+				<%}else{ %>
+				<td width="115px" class="label"></td>
+				<%} %>
+
+				<td class="field">
+				<bean:write name="messageInfo" filter="false"  /> <br />
+				</td>
+			</tr>
+		</logic:iterate>
        	<tr>
 			<td class="label"><span class="label"><bean:message key="wt.view.ohd.further.information" /></span></td>
 			<td><bean:write name="wtr" property="furtherInfo"/></td>

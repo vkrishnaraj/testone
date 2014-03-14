@@ -6,10 +6,7 @@
 package com.bagnet.nettracer.tracing.utils;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,8 +17,6 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 
 import org.apache.log4j.Logger;
-
-import aero.nettracer.fs.model.Person;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 
@@ -39,21 +34,21 @@ public class StringUtils {
 	
 	public static String removePronouns(String s) {
 		if (s == null) return "";
-		ArrayList ar = new ArrayList();
+		ArrayList<String> ar = new ArrayList<String>();
 		ar.add(" a ");
 		ar.add(" an ");
 		ar.add(" the ");
 		ar.add(" that ");
 		ar.add(" and ");
 		ar.add(" none ");
-		ArrayList headar = new ArrayList();
+		ArrayList<String> headar = new ArrayList<String>();
 		headar.add("a ");
 		headar.add("an ");
 		headar.add("the ");
 		headar.add("that ");
 		headar.add("and ");
 		headar.add("none ");
-		ArrayList endar = new ArrayList();
+		ArrayList<String> endar = new ArrayList<String>();
 		endar.add(" a");
 		endar.add(" an");
 		endar.add(" the");
@@ -477,6 +472,20 @@ public class StringUtils {
 	public static String sanitizeForDoubleQuoteJavascript(String toSanitize) {
 		if (toSanitize != null) {
 			return toSanitize.replace("\"", "\\\\\"").replace("/", "\\\\/");
+		}
+		return "";
+	}
+	
+	public static String replaceNewLines(String s){
+		if(s!=null){
+			return s.replaceAll("\n", "<br/>");
+		}
+		return "";
+	}
+	
+	public static String replaceNewLinesReturns(String s){
+		if(s!=null){
+			return s.replaceAll("\r\n", "<br/>");
 		}
 		return "";
 	}

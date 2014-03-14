@@ -1,5 +1,6 @@
 package aero.nettracer.serviceprovider.wt_1_0.common;
 
+import java.text.DateFormat;
 import java.util.Calendar;
 
 public class Itinerary {
@@ -10,6 +11,7 @@ public class Itinerary {
 	private Calendar flightDate;
 	private int legfrom_type;
 	private int legto_type;
+	private String arnk;
 
 	public String getDepartureCity() {
 		return departureCity;
@@ -65,5 +67,35 @@ public class Itinerary {
 
 	public void setLegto_type(int legto_type) {
 		this.legto_type = legto_type;
+	}
+	
+	public String getItinInfo(){
+		StringBuilder itinString = new StringBuilder();
+		if(getAirline()!=null && !getAirline().isEmpty()){
+			itinString.append(getAirline() + " ");
+		}
+		if(getFlightNumber()!=null && !getFlightNumber().isEmpty()){
+			itinString.append(getFlightNumber()+" ");
+		}
+		if(getDepartureCity()!=null && !getDepartureCity().isEmpty()){
+			itinString.append(getDepartureCity()+" ");
+		}
+		if(getArrivalCity()!=null && !getArrivalCity().isEmpty()){
+			itinString.append(getArrivalCity()+" ");
+		}
+		if(getFlightDate() != null && getFlightDate().getTime() != null){
+			DateFormat ITIN_DATE_FORMAT = new java.text.SimpleDateFormat("MMM dd, yyyy");
+			itinString.append(ITIN_DATE_FORMAT.format(getFlightDate().getTime())+" ");
+		}
+		
+		return itinString.toString();
+	}
+
+	public String getArnk() {
+		return arnk;
+	}
+
+	public void setArnk(String arnk) {
+		this.arnk = arnk;
 	}
 }

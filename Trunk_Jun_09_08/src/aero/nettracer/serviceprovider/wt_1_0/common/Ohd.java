@@ -2,6 +2,8 @@ package aero.nettracer.serviceprovider.wt_1_0.common;
 
 import java.util.Calendar;
 
+import com.bagnet.nettracer.tracing.utils.StringUtils;
+
 public class Ohd {
 	private String ohdId;
 	private String stationCode;
@@ -18,6 +20,9 @@ public class Ohd {
 	private Agent agent;
 	private String pnrLocator;
 	private String furtherInfo;
+	private String[] routes;
+	private String[] messageInfo;
+	private String[] matchInfo;
 	
 	public String getStorageLocation() {
   	return storageLocation;
@@ -138,5 +143,75 @@ public class Ohd {
 
 	public void setFurtherInfo(String furtherInfo) {
 		this.furtherInfo = furtherInfo;
+	}
+
+	public String[] getRoutes() {
+		return routes;
+	}
+
+	public void setRoutes(String[] routes) {
+		this.routes = routes;
+	}
+
+	public String[] getMessageInfo() {
+		return messageInfo;
+	}
+
+	public void setMessageInfo(String[] messageInfo) {
+		this.messageInfo = messageInfo;
+	}
+
+	public String[] getReadOnlyMessageInfo() {
+		if(messageInfo!=null){
+			String[] mi=new String[messageInfo.length];
+			int i=0;
+			for(String s:messageInfo){
+				String m=StringUtils.replaceNewLines(s);
+				mi[i]=m;
+				i++;
+			}
+			return mi;
+		} else {
+			return new String[0];
+		}
+	}
+	
+
+	public String[] getMatchInfo() {
+		return matchInfo;
+	}
+
+	public void setMatchInfo(String[] matchInfo) {
+		this.matchInfo = matchInfo;
+	}
+
+	public String[] getReadOnlyMatchInfo() {
+		if(matchInfo!=null){
+			String[] mi=new String[matchInfo.length];
+			int i=0;
+			for(String s:matchInfo){
+				String m=StringUtils.replaceNewLines(s);
+				mi[i]=m;
+				i++;
+			}
+			return mi;
+		} else {
+			return new String[0];
+		}
+	}
+	
+	
+	public String getRoutesDetail(){
+		StringBuilder routesDetail=new StringBuilder();
+		int i=1;
+		for(String r:routes){
+			routesDetail.append(r);
+			if(i!=routes.length){
+				routesDetail.append("-");
+			}
+			i++;
+		}
+		
+		return routesDetail.toString();
 	}
 }

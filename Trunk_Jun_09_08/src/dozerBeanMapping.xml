@@ -106,6 +106,18 @@
 			<a>expenses</a>
 			<b>expensesArray</b>
 		</field>
+		<field>
+			<a>matchInfo</a>
+			<b>matchInfoArray</b>
+		</field>
+		<field>
+			<a>messageInfo</a>
+			<b>messageInfoArray</b>
+		</field>
+		<field>
+			<a>additionalRoutes</a>
+			<b>additionalRoutesArray</b>
+		</field>
 	</mapping>
 	
 	
@@ -137,6 +149,18 @@
 		<field>
 			<a>bagItinerary</a>
 			<b>bagItineraryArray</b>
+		</field>
+		<field>
+			<a>matchInfo</a>
+			<b>matchInfoArray</b>
+		</field>
+		<field>
+			<a>messageInfo</a>
+			<b>messageInfoArray</b>
+		</field>
+		<field>
+			<a>routes</a>
+			<b>routesArray</b>
 		</field>
 	</mapping>
 

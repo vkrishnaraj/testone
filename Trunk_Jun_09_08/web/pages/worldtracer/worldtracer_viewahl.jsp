@@ -10,9 +10,6 @@
 <%@ page import="aero.nettracer.serviceprovider.wt_1_0.common.Itinerary" %>
 <%@ page import="aero.nettracer.serviceprovider.wt_1_0.common.Address" %>
 
-
-
-
 <%@page import="java.text.DateFormat"%>
 <script>
 	function importAhl(){
@@ -73,6 +70,7 @@
 <bean:define id="wtr" name="wt_raw" scope="request"/>
 <bean:define id="paxlist" name="wt_raw" property="pax"/>
 <bean:define id="paxitin" name="wt_raw" property="paxItinerary"/>
+<bean:define id="bagitin" name="wt_raw" property="bagItinerary"/>
 <bean:define id="item" name="wt_raw" property="item"/>
 
 
@@ -242,22 +240,35 @@
        				<td width="115px" class="label"></td>
        			<%} %>
        			<td align="char" char=":"  class="field">
-<!--       			<bean:write name="pitin" property="airline" />-->
-<!--       			<bean:write name="pitin" property="flightNumber" />-->
-<!--				<bean:write name="pitin" property="departureCity" />-->
-<!--				<bean:write name="pitin" property="arrivalCity" />-->
-				<%	
-				  	Itinerary itin = res.getPaxItinerary()[i.intValue()];
-					String itinString = itin.getAirline() + " " +
-										itin.getFlightNumber() + " " +
-										itin.getDepartureCity() + " " +
-										itin.getArrivalCity() + " ";
-					if(itin.getFlightDate() != null && itin.getFlightDate().getTime() != null){
-					DateFormat ITIN_DATE_FORMAT = new java.text.SimpleDateFormat("MMM dd, yyyy");
-					itinString += ITIN_DATE_FORMAT.format(itin.getFlightDate().getTime());
-					}
-					out.println(itinString);
-				%>
+       				<bean:write name="pitin" property="itinInfo" />
+				<br/>
+				</td>
+				</tr>
+       	</logic:iterate>
+       	<td/>
+       	
+       	<logic:notEmpty name="wt_raw" property="additionalRoutes">
+       	<td>
+       		<tr>
+				<td width="115px" valign="top" class="label"><span class="label"><bean:message key="wt.view.ahl.additional.routes" /></span></td>
+				<td class="field">
+					<bean:write name="wt_raw" property="routesDetail" />
+				</td>
+			</tr>
+       	</td>
+       	</logic:notEmpty>
+       	
+       	<td>
+       	<logic:iterate id="bitin" name="bagitin" indexId="i" type="aero.nettracer.serviceprovider.wt_1_0.common.Itinerary" >
+       			<tr>
+       			<%if (i.intValue() == 0){ %>
+       			    <td width="115px" class="label"><span class="label"><bean:message key="wt.view.ahl.bag.itinerary" /></span></td>
+       			<%}else{ %>
+       				<td width="115px" class="label"></td>
+       			<%} %>
+       			<td align="char" char=":"  class="field">
+       			
+       				<bean:write name="bitin" property="itinInfo" />
 				<br/>
 				</td>
 				</tr>
@@ -314,11 +325,44 @@
 				</td>
 			</tr>
 		</logic:iterate>
+		
+		<logic:iterate id="matchInfo" name="wt_raw" property="readOnlyMatchInfo" scope="request" indexId="i">
+			<tr>
+				<%if (i.intValue() == 0){ %>
+				<td width="115px" valign="top" class="label"><span class="label"><bean:message key="wt.view.ahl.match.info" /></span></td>
+				<%}else{ %>
+				<td width="115px" class="label"></td>
+				<%} %>
+
+				<td class="field">
+				<bean:write name="matchInfo" filter="false"/> <br />
+				</td>
+			</tr>
+		</logic:iterate>
+		
+		<logic:iterate id="messageInfo" name="wt_raw" property="readOnlyMessageInfo" scope="request" indexId="i">
+			<tr>
+				<%if (i.intValue() == 0){ %>
+				<td width="115px" valign="top" class="label"><span class="label"><bean:message key="wt.view.ahl.message.info" /></span></td>
+				<%}else{ %>
+				<td width="115px" class="label"></td>
+				<%} %>
+
+				<td class="field">
+				<bean:write name="messageInfo" filter="false" /> <br />
+				</td>
+			</tr>
+		</logic:iterate>
        	
        	<tr>
 			<td class="label"><span class="label"><bean:message key="wt.view.ahl.further.information" /></span></td>
 			<td><bean:write name="wtr" property="furtherInfo"/></td>
-		</tr>
+			</tr>
+		<tr>
+       	
+       	</td>
+	</td>
+</tr>
 
 </table>
 </div>
