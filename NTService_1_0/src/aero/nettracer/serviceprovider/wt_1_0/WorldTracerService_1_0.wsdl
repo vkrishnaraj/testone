@@ -14,10 +14,13 @@
                     <xs:element minOccurs="0" name="faultStation" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="furtherInfo" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="item" nillable="true" type="ax23:Item"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="matchInfo" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="messageInfo" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="ohdId" nillable="true" type="xs:string"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="pax" nillable="true" type="ax23:Passenger"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="paxItinerary" nillable="true" type="ax23:Itinerary"/>
                     <xs:element minOccurs="0" name="pnrLocator" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="routes" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="stationCode" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="storageLocation" nillable="true" type="xs:string"/>
                 </xs:sequence>
@@ -31,6 +34,7 @@
             <xs:complexType name="Itinerary">
                 <xs:sequence>
                     <xs:element minOccurs="0" name="airline" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="arnk" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="arrivalCity" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="departureCity" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="flightDate" nillable="true" type="xs:dateTime"/>
@@ -129,6 +133,7 @@
             </xs:complexType>
             <xs:complexType name="Ahl">
                 <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="additionalRoutes" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="agent" nillable="true" type="ax23:Agent"/>
                     <xs:element minOccurs="0" name="ahlId" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="airlineCode" nillable="true" type="xs:string"/>
@@ -141,6 +146,8 @@
                     <xs:element minOccurs="0" name="faultStation" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="furtherInfo" nillable="true" type="xs:string"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="item" nillable="true" type="ax23:Item"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="matchInfo" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="messageInfo" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="numberBagsChecked" type="xs:int"/>
                     <xs:element minOccurs="0" name="numberPaxAffected" type="xs:int"/>
                     <xs:element maxOccurs="unbounded" minOccurs="0" name="pax" nillable="true" type="ax23:Passenger"/>

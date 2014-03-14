@@ -18,6 +18,9 @@ public class Ohd {
 	private Agent agent;
 	private String pnrLocator;
 	private String furtherInfo;
+	private String[] routes;
+	private String[] messageInfo;
+	private String[] matchInfo;
 	
 	public String getStorageLocation() {
   	return storageLocation;
@@ -138,5 +141,29 @@ public class Ohd {
 
 	public void setFurtherInfo(String furtherInfo) {
 		this.furtherInfo = furtherInfo;
+	}
+
+	public String[] getRoutes() {
+		return routes;
+	}
+
+	public void setRoutes(String[] routes) {
+		this.routes = routes;
+	}
+
+	public String[] getMessageInfo() {
+		return messageInfo;
+	}
+
+	public void setMessageInfo(String[] messageInfo) {
+		this.messageInfo = messageInfo;
+	}
+
+	public String[] getMatchInfo() {
+		return matchInfo;
+	}
+
+	public void setMatchInfo(String[] matchInfo) {
+		this.matchInfo = matchInfo;
 	}
 }

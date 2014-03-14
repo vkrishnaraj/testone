@@ -32,7 +32,6 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.iata.www.iata._2007._00.ErrorType;
-import org.iata.www.iata._2007._00.StateProvType;
 import org.iata.www.iata._2007._00.WarningType;
 
 import aero.nettracer.serviceprovider.common.db.ParameterType;
@@ -89,7 +88,6 @@ import aero.sita.www.bag.wtr._2009._01.PassengerType.Initials;
 import aero.sita.www.bag.wtr._2009._01.PassengerType.Names;
 import aero.sita.www.bag.wtr._2009._01.RushBagGroupType.RushDestinations;
 import aero.sita.www.bag.wtr._2009._01.RushBagGroupType.RushFlights;
-import aero.sita.www.bag.wtr._2009._01.WTRAddressAmendType.State;
 import aero.sita.www.bag.wtr._2009._01.WTRCloseRecordsRQDocument.WTRCloseRecordsRQ;
 import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagRecReadRSDocument.WTRDelayedBagRecReadRS;
 import aero.sita.www.bag.wtr._2009._01.WTRDelayedBagsCreateRQDocument.WTRDelayedBagsCreateRQ;
@@ -3070,12 +3068,17 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					i.setDepartureCity(fst.getOriginDestination().getOrigin());
 					i.setFlightDate(fst.getFlightAndDate().getDate());
 					i.setFlightNumber(fst.getFlightAndDate().getFlightNumber());
-
+					if(seg.getARNK()!=null){
+						i.setArnk(seg.getARNK().toString());
+					}
 					s.add(i);
 				}
 
 				rahl.setPaxItinerary(s.toArray(new Itinerary[s.size()]));
-
+				if(wsp.getItinerary().getAdditionalRoutes()!=null && wsp.getItinerary().getAdditionalRoutes().getRouteArray().length>0){
+					rahl.setAdditionalRoutes(wsp.getItinerary().getAdditionalRoutes().getRouteArray());
+				}
+				
 			}
 
 			DelayedBagGroupType db1 = wr1.getDelayedBagGroup();
@@ -3165,6 +3168,9 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 							seg.setAirline(type.getFlightDate().getAirlineCode());
 							seg.setFlightDate(type.getFlightDate().getDate());
 							seg.setFlightNumber(type.getFlightDate().getFlightNumber());
+							if(type.getARNK()!=null){
+								seg.setArnk(type.getARNK().toString());
+							}
 							itin.add(seg);
 						}
 
@@ -3173,6 +3179,14 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 				} catch (Exception e) {
 					logger.error("Parsing issue: " + e, e);
 				}
+			}
+			
+			if(wr1.getMessageInfo()!=null && wr1.getMessageInfo().getTextArray().length>0){
+				rahl.setMessageInfo(wr1.getMessageInfo().getTextArray());
+			}
+			
+			if(wr1.getMatchInfo()!=null && wr1.getMatchInfo().getTextArray().length>0){
+				rahl.setMatchInfo(wr1.getMatchInfo().getTextArray());
 			}
 
 		} catch (Exception e) {
@@ -3312,6 +3326,33 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						cc.setAirlineCode(ores.getOnHandBag().getBagTag().getAirlineCode());
 						cc.setTagNumber(ores.getOnHandBag().getBagTag().getTagSequence());
 					}
+					
+					if(ores.getOnHandBag().getItinerary()!=null){
+						if(ores.getOnHandBag().getItinerary().getFlightSegments()!=null){
+							aero.sita.www.bag.wtr._2009._01.OnHandBagType.Itinerary.FlightSegments segs = ores.getOnHandBag().getItinerary().getFlightSegments();
+							ArrayList<Itinerary> s = new ArrayList<Itinerary>();
+
+							for (FlightOptionalDateOrARNKType seg : segs.getFlightSegmentArray()) {
+								FlightOptionalDateType fst = seg.getFlightDate();
+								Itinerary i = new Itinerary();
+
+								i.setAirline(fst.getAirlineCode());
+								i.setFlightDate(fst.getDate());
+								i.setFlightNumber(fst.getFlightNumber());
+								if(seg.getARNK()!=null){
+									i.setArnk(seg.getARNK().toString());
+								}
+								s.add(i);
+							}
+
+							rohd.setBagItinerary(s.toArray(new Itinerary[s.size()]));
+							
+						}
+						if(ores.getOnHandBag().getItinerary().getRoutes()!=null){
+							rohd.setRoutes(ores.getOnHandBag().getItinerary().getRoutes().getRouteArray());
+						}
+						
+					}
 
 				}
 				if(ores.getAdditionalInfo()!=null && ores.getAdditionalInfo().getFurtherInfo()!=null){
@@ -3325,13 +3366,15 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 					ArrayList<Passenger> paxList = new ArrayList<Passenger>();
 					Passenger fPax = null;
 
-					String[] temp = wsp.getNames().getNameArray();
-					for (String tem : temp) {
-						Passenger p = new Passenger();
-						paxList.add(p);
-						p.setLastname(tem);
-						if (fPax == null) {
-							fPax = p;
+					if(wsp.getNames()!=null){
+						String[] temp = wsp.getNames().getNameArray();
+						for (String tem : temp) {
+							Passenger p = new Passenger();
+							paxList.add(p);
+							p.setLastname(tem);
+							if (fPax == null) {
+								fPax = p;
+							}
 						}
 					}
 					rohd.setPax(paxList.toArray(new Passenger[paxList.size()]));
@@ -3395,6 +3438,13 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 
 					}
 
+				}
+				
+				if(ores.getMatchInfo()!=null){
+					rohd.setMatchInfo(ores.getMatchInfo().getTextArray());
+				}
+				if(ores.getMessageInfo()!=null){
+					rohd.setMessageInfo(ores.getMessageInfo().getTextArray());
 				}
 			} else {
 				StringBuffer errorMsg = new StringBuffer();

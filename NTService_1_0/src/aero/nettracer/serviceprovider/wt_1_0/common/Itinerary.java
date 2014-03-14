@@ -10,6 +10,7 @@ public class Itinerary {
 	private Calendar flightDate;
 	private int legfrom_type;
 	private int legto_type;
+	private String arnk;
 
 	public String getDepartureCity() {
 		return departureCity;
@@ -65,5 +66,13 @@ public class Itinerary {
 
 	public void setLegto_type(int legto_type) {
 		this.legto_type = legto_type;
+	}
+
+	public String getArnk() {
+		return arnk;
+	}
+
+	public void setArnk(String arnk) {
+		this.arnk = arnk;
 	}
 }

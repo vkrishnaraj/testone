@@ -22,6 +22,9 @@ public class Ahl {
 	private int faultReason;
 	private Calendar tracingFinalized;
 	private String furtherInfo;
+	private String[] additionalRoutes;
+	private String[] messageInfo;
+	private String[] matchInfo;
 
 	public String getFaultReasonDescription() {
 		return faultReasonDescription;
@@ -173,6 +176,30 @@ public class Ahl {
 
 	public void setFurtherInfo(String furtherInfo) {
 		this.furtherInfo = furtherInfo;
+	}
+
+	public String[] getAdditionalRoutes() {
+		return additionalRoutes;
+	}
+
+	public void setAdditionalRoutes(String[] additionalRoutes) {
+		this.additionalRoutes = additionalRoutes;
+	}
+
+	public String[] getMessageInfo() {
+		return messageInfo;
+	}
+
+	public void setMessageInfo(String[] messageInfo) {
+		this.messageInfo = messageInfo;
+	}
+
+	public String[] getMatchInfo() {
+		return matchInfo;
+	}
+
+	public void setMatchInfo(String[] matchInfo) {
+		this.matchInfo = matchInfo;
 	}
 
 }
