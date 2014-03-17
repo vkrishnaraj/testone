@@ -87,7 +87,7 @@
 </html>
 </richcontent>
 </node>
-<node TEXT="Structure" FOLDED="true" ID="ID_1407572510" CREATED="1365620217633" MODIFIED="1365729988192">
+<node TEXT="Structure" ID="ID_1407572510" CREATED="1365620217633" MODIFIED="1365729988192">
 <node TEXT="abstract factory.png" ID="ID_1931171471" CREATED="1365620230652" MODIFIED="1365729988193">
 <hook URI="resources/abstract%20factory.png" SIZE="0.8042895" NAME="ExternalObject"/>
 </node>
@@ -140,7 +140,7 @@
 </node>
 </node>
 </node>
-<node TEXT="Examples in the Java API" FOLDED="true" POSITION="left" ID="ID_1256249416" CREATED="1365696730268" MODIFIED="1365729988229"><richcontent TYPE="DETAILS" HIDDEN="true">
+<node TEXT="Examples in the Java API" POSITION="left" ID="ID_1256249416" CREATED="1365696730268" MODIFIED="1365729988229"><richcontent TYPE="DETAILS" HIDDEN="true">
 
 <html>
   <head>
@@ -478,7 +478,7 @@
   </body>
 </html>
 </richcontent>
-<node FOLDED="true" ID="ID_1212794814" CREATED="1365696035382" MODIFIED="1365696035382" LINK="http://en.wikipedia.org/wiki/Creational_pattern"><richcontent TYPE="NODE">
+<node ID="ID_1212794814" CREATED="1365696035382" MODIFIED="1365696035382" LINK="http://en.wikipedia.org/wiki/Creational_pattern"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -491,7 +491,7 @@
   </body>
 </html>
 </richcontent>
-<node ID="ID_1459008439" CREATED="1365696035385" MODIFIED="1365697213925" LINK="http://en.wikipedia.org/wiki/Abstract_factory_pattern"><richcontent TYPE="NODE">
+<node FOLDED="true" ID="ID_1459008439" CREATED="1365696035385" MODIFIED="1365697213925" LINK="http://en.wikipedia.org/wiki/Abstract_factory_pattern"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -553,7 +553,7 @@
 </richcontent>
 </node>
 </node>
-<node ID="ID_1598755093" CREATED="1365696035396" MODIFIED="1365697203364" LINK="http://en.wikipedia.org/wiki/Builder_pattern"><richcontent TYPE="NODE">
+<node FOLDED="true" ID="ID_1598755093" CREATED="1365696035396" MODIFIED="1365697203364" LINK="http://en.wikipedia.org/wiki/Builder_pattern"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -648,7 +648,7 @@
 </richcontent>
 </node>
 </node>
-<node ID="ID_198582184" CREATED="1365696035419" MODIFIED="1365697208198" LINK="http://en.wikipedia.org/wiki/Factory_method_pattern"><richcontent TYPE="NODE">
+<node FOLDED="true" ID="ID_198582184" CREATED="1365696035419" MODIFIED="1365697208198" LINK="http://en.wikipedia.org/wiki/Factory_method_pattern"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -742,7 +742,7 @@
 </richcontent>
 </node>
 </node>
-<node ID="ID_1857475352" CREATED="1365696035437" MODIFIED="1365696035437" LINK="http://en.wikipedia.org/wiki/Prototype_pattern"><richcontent TYPE="NODE">
+<node FOLDED="true" ID="ID_1857475352" CREATED="1365696035437" MODIFIED="1365696035437" LINK="http://en.wikipedia.org/wiki/Prototype_pattern"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -772,7 +772,7 @@
 </richcontent>
 </node>
 </node>
-<node ID="ID_1707653023" CREATED="1365696035444" MODIFIED="1365696035444" LINK="http://en.wikipedia.org/wiki/Singleton_pattern"><richcontent TYPE="NODE">
+<node FOLDED="true" ID="ID_1707653023" CREATED="1365696035444" MODIFIED="1365696035444" LINK="http://en.wikipedia.org/wiki/Singleton_pattern"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -819,7 +819,7 @@
 </node>
 </node>
 </node>
-<node FOLDED="true" ID="ID_1748995728" CREATED="1365696035451" MODIFIED="1365696035451" LINK="http://en.wikipedia.org/wiki/Structural_pattern"><richcontent TYPE="NODE">
+<node ID="ID_1748995728" CREATED="1365696035451" MODIFIED="1365696035451" LINK="http://en.wikipedia.org/wiki/Structural_pattern"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -832,7 +832,7 @@
   </body>
 </html>
 </richcontent>
-<node ID="ID_1728749983" CREATED="1365696035459" MODIFIED="1365696035459" LINK="http://en.wikipedia.org/wiki/Adapter_pattern"><richcontent TYPE="NODE">
+<node FOLDED="true" ID="ID_1728749983" CREATED="1365696035459" MODIFIED="1365696035459" LINK="http://en.wikipedia.org/wiki/Adapter_pattern"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -910,7 +910,7 @@
 </richcontent>
 </node>
 </node>
-<node ID="ID_766356036" CREATED="1365696035477" MODIFIED="1365696035477" LINK="http://en.wikipedia.org/wiki/Bridge_pattern"><richcontent TYPE="NODE">
+<node FOLDED="true" ID="ID_766356036" CREATED="1365696035477" MODIFIED="1365696035477" LINK="http://en.wikipedia.org/wiki/Bridge_pattern"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -940,7 +940,7 @@
 </richcontent>
 </node>
 </node>
-<node ID="ID_875283496" CREATED="1365696035486" MODIFIED="1365696035486" LINK="http://en.wikipedia.org/wiki/Composite_pattern"><richcontent TYPE="NODE">
+<node FOLDED="true" ID="ID_875283496" CREATED="1365696035486" MODIFIED="1365696035486" LINK="http://en.wikipedia.org/wiki/Composite_pattern"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -986,7 +986,7 @@
 </richcontent>
 </node>
 </node>
-<node ID="ID_394905073" CREATED="1365696035495" MODIFIED="1365696035495" LINK="http://en.wikipedia.org/wiki/Decorator_pattern"><richcontent TYPE="NODE">
+<node FOLDED="true" ID="ID_394905073" CREATED="1365696035495" MODIFIED="1365696035495" LINK="http://en.wikipedia.org/wiki/Decorator_pattern"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -1048,7 +1048,7 @@
 </richcontent>
 </node>
 </node>
-<node ID="ID_569556518" CREATED="1365696035542" MODIFIED="1365696035542" LINK="http://en.wikipedia.org/wiki/Facade_pattern"><richcontent TYPE="NODE">
+<node FOLDED="true" ID="ID_569556518" CREATED="1365696035542" MODIFIED="1365696035542" LINK="http://en.wikipedia.org/wiki/Facade_pattern"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -1094,7 +1094,7 @@
 </richcontent>
 </node>
 </node>
-<node ID="ID_1677392898" CREATED="1365696035562" MODIFIED="1365696035562" LINK="http://en.wikipedia.org/wiki/Flyweight_pattern"><richcontent TYPE="NODE">
+<node FOLDED="true" ID="ID_1677392898" CREATED="1365696035562" MODIFIED="1365696035562" LINK="http://en.wikipedia.org/wiki/Flyweight_pattern"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -1124,7 +1124,7 @@
 </richcontent>
 </node>
 </node>
-<node ID="ID_1453553082" CREATED="1365696035574" MODIFIED="1365696035574" LINK="http://en.wikipedia.org/wiki/Proxy_pattern"><richcontent TYPE="NODE">
+<node FOLDED="true" ID="ID_1453553082" CREATED="1365696035574" MODIFIED="1365696035574" LINK="http://en.wikipedia.org/wiki/Proxy_pattern"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -1185,7 +1185,7 @@
 </node>
 </node>
 </node>
-<node FOLDED="true" ID="ID_511233326" CREATED="1365696035584" MODIFIED="1365696035584" LINK="http://en.wikipedia.org/wiki/Behavioral_pattern"><richcontent TYPE="NODE">
+<node ID="ID_511233326" CREATED="1365696035584" MODIFIED="1365696035584" LINK="http://en.wikipedia.org/wiki/Behavioral_pattern"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -1198,7 +1198,7 @@
   </body>
 </html>
 </richcontent>
-<node ID="ID_1186989172" CREATED="1365696035590" MODIFIED="1365696035590" LINK="http://en.wikipedia.org/wiki/Chain_of_responsibility_pattern"><richcontent TYPE="NODE">
+<node FOLDED="true" ID="ID_1186989172" CREATED="1365696035590" MODIFIED="1365696035590" LINK="http://en.wikipedia.org/wiki/Chain_of_responsibility_pattern"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -1244,7 +1244,7 @@
 </richcontent>
 </node>
 </node>
-<node ID="ID_1016180765" CREATED="1365696035600" MODIFIED="1365696035600" LINK="http://en.wikipedia.org/wiki/Command_pattern"><richcontent TYPE="NODE">
+<node FOLDED="true" ID="ID_1016180765" CREATED="1365696035600" MODIFIED="1365696035600" LINK="http://en.wikipedia.org/wiki/Command_pattern"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -1290,7 +1290,7 @@
 </richcontent>
 </node>
 </node>
-<node ID="ID_923110826" CREATED="1365696035610" MODIFIED="1365696035610" LINK="http://en.wikipedia.org/wiki/Interpreter_pattern"><richcontent TYPE="NODE">
+<node FOLDED="true" ID="ID_923110826" CREATED="1365696035610" MODIFIED="1365696035610" LINK="http://en.wikipedia.org/wiki/Interpreter_pattern"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -1368,7 +1368,7 @@
 </richcontent>
 </node>
 </node>
-<node ID="ID_367792551" CREATED="1365696035633" MODIFIED="1365696035633" LINK="http://en.wikipedia.org/wiki/Iterator_pattern"><richcontent TYPE="NODE">
+<node FOLDED="true" ID="ID_367792551" CREATED="1365696035633" MODIFIED="1365696035633" LINK="http://en.wikipedia.org/wiki/Iterator_pattern"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -1414,7 +1414,7 @@
 </richcontent>
 </node>
 </node>
-<node ID="ID_739386164" CREATED="1365696035650" MODIFIED="1365696035650" LINK="http://en.wikipedia.org/wiki/Mediator_pattern"><richcontent TYPE="NODE">
+<node FOLDED="true" ID="ID_739386164" CREATED="1365696035650" MODIFIED="1365696035650" LINK="http://en.wikipedia.org/wiki/Mediator_pattern"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -1508,7 +1508,7 @@
 </richcontent>
 </node>
 </node>
-<node ID="ID_1859911830" CREATED="1365696035690" MODIFIED="1365696035690" LINK="http://en.wikipedia.org/wiki/Memento_pattern"><richcontent TYPE="NODE">
+<node FOLDED="true" ID="ID_1859911830" CREATED="1365696035690" MODIFIED="1365696035690" LINK="http://en.wikipedia.org/wiki/Memento_pattern"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -1570,7 +1570,7 @@
 </richcontent>
 </node>
 </node>
-<node ID="ID_1340904353" CREATED="1365696035704" MODIFIED="1365696035704" LINK="http://en.wikipedia.org/wiki/Observer_pattern"><richcontent TYPE="NODE">
+<node FOLDED="true" ID="ID_1340904353" CREATED="1365696035704" MODIFIED="1365696035704" LINK="http://en.wikipedia.org/wiki/Observer_pattern"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -1664,7 +1664,7 @@
 </richcontent>
 </node>
 </node>
-<node ID="ID_934451242" CREATED="1365696035722" MODIFIED="1365696035722" LINK="http://en.wikipedia.org/wiki/State_pattern"><richcontent TYPE="NODE">
+<node FOLDED="true" ID="ID_934451242" CREATED="1365696035722" MODIFIED="1365696035722" LINK="http://en.wikipedia.org/wiki/State_pattern"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -1694,7 +1694,7 @@
 </richcontent>
 </node>
 </node>
-<node ID="ID_1098660508" CREATED="1365696035730" MODIFIED="1365696035730" LINK="http://en.wikipedia.org/wiki/Strategy_pattern"><richcontent TYPE="NODE">
+<node FOLDED="true" ID="ID_1098660508" CREATED="1365696035730" MODIFIED="1365696035730" LINK="http://en.wikipedia.org/wiki/Strategy_pattern"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -1756,7 +1756,7 @@
 </richcontent>
 </node>
 </node>
-<node ID="ID_787093831" CREATED="1365696035744" MODIFIED="1365696035744" LINK="http://en.wikipedia.org/wiki/Template_method_pattern"><richcontent TYPE="NODE">
+<node FOLDED="true" ID="ID_787093831" CREATED="1365696035744" MODIFIED="1365696035744" LINK="http://en.wikipedia.org/wiki/Template_method_pattern"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -1818,7 +1818,7 @@
 </richcontent>
 </node>
 </node>
-<node ID="ID_815700969" CREATED="1365696035762" MODIFIED="1365696035762" LINK="http://en.wikipedia.org/wiki/Visitor_pattern"><richcontent TYPE="NODE">
+<node FOLDED="true" ID="ID_815700969" CREATED="1365696035762" MODIFIED="1365696035762" LINK="http://en.wikipedia.org/wiki/Visitor_pattern"><richcontent TYPE="NODE">
 
 <html>
   <head>
@@ -1884,7 +1884,7 @@
 </node>
 <node TEXT="Behavioral" POSITION="right" ID="ID_615533328" CREATED="1365711350910" MODIFIED="1365729988230">
 <edge STYLE="bezier" COLOR="#00007c" WIDTH="thin"/>
-<node TEXT="Chain of Responsibility" FOLDED="true" ID="ID_1781532922" CREATED="1365698209203" MODIFIED="1365729988232">
+<node TEXT="Chain of Responsibility" ID="ID_1781532922" CREATED="1365698209203" MODIFIED="1365729988232">
 <node ID="ID_700003714" CREATED="1365698125358" MODIFIED="1365698125358"><richcontent TYPE="NODE">
 
 <html>
@@ -1900,7 +1900,7 @@
 </richcontent>
 </node>
 </node>
-<node TEXT="Command" FOLDED="true" ID="ID_353385138" CREATED="1365625268130" MODIFIED="1365729988235">
+<node TEXT="Command" ID="ID_353385138" CREATED="1365625268130" MODIFIED="1365729988235">
 <node TEXT="Encapsulate a request as an object, thereby letting you parameterize clients with different requests, queue or log requests, and support undoable operations." ID="ID_499009237" CREATED="1365625342794" MODIFIED="1365625344567"/>
 <node ID="ID_154547545" CREATED="1365698087630" MODIFIED="1365698087630"><richcontent TYPE="NODE">
 
@@ -1916,13 +1916,13 @@
 </html>
 </richcontent>
 </node>
-<node TEXT="Structure" ID="ID_1946007320" CREATED="1365625271935" MODIFIED="1365708291775">
+<node TEXT="Structure" FOLDED="true" ID="ID_1946007320" CREATED="1365625271935" MODIFIED="1365708291775">
 <node TEXT="command.png" ID="ID_296214068" CREATED="1365625282192" MODIFIED="1365625282192">
 <hook URI="resources/command.png" SIZE="0.8097166" NAME="ExternalObject"/>
 </node>
 </node>
 </node>
-<node TEXT="Interpreter" FOLDED="true" ID="ID_1959228093" CREATED="1365698218286" MODIFIED="1365729988237">
+<node TEXT="Interpreter" ID="ID_1959228093" CREATED="1365698218286" MODIFIED="1365729988237">
 <node ID="ID_725323318" CREATED="1365698132541" MODIFIED="1365698132541"><richcontent TYPE="NODE">
 
 <html>
@@ -1938,7 +1938,7 @@
 </richcontent>
 </node>
 </node>
-<node TEXT="Iterator" FOLDED="true" ID="ID_1419618274" CREATED="1365698223580" MODIFIED="1365729988240">
+<node TEXT="Iterator" ID="ID_1419618274" CREATED="1365698223580" MODIFIED="1365729988240">
 <node ID="ID_257227302" CREATED="1365698137053" MODIFIED="1365698137053"><richcontent TYPE="NODE">
 
 <html>
@@ -1954,7 +1954,7 @@
 </richcontent>
 </node>
 </node>
-<node TEXT="Mediator" FOLDED="true" ID="ID_1384485833" CREATED="1365698226413" MODIFIED="1365729988242">
+<node TEXT="Mediator" ID="ID_1384485833" CREATED="1365698226413" MODIFIED="1365729988242">
 <node ID="ID_1643867300" CREATED="1365698141098" MODIFIED="1365698141098"><richcontent TYPE="NODE">
 
 <html>
@@ -1970,7 +1970,7 @@
 </richcontent>
 </node>
 </node>
-<node TEXT="Memento" FOLDED="true" ID="ID_369081240" CREATED="1365698228929" MODIFIED="1365729988244">
+<node TEXT="Memento" ID="ID_369081240" CREATED="1365698228929" MODIFIED="1365729988244">
 <node ID="ID_575492342" CREATED="1365698145749" MODIFIED="1365698145749"><richcontent TYPE="NODE">
 
 <html>
@@ -1986,7 +1986,7 @@
 </richcontent>
 </node>
 </node>
-<node TEXT="Observer" FOLDED="true" ID="ID_943975705" CREATED="1365266315243" MODIFIED="1365729988246">
+<node TEXT="Observer" ID="ID_943975705" CREATED="1365266315243" MODIFIED="1365729988246">
 <node TEXT="Define a one-to-many dependency between objects where a state change in one object results in all its dependents being notified and updated automatically." ID="ID_1983616423" CREATED="1365266318721" MODIFIED="1365266322150"/>
 <node ID="ID_281097626" CREATED="1365698075979" MODIFIED="1365698075979"><richcontent TYPE="NODE">
 
@@ -2004,13 +2004,13 @@
 </node>
 <node TEXT="Publish/subscribe model" ID="ID_1914300766" CREATED="1365266652935" MODIFIED="1365266695188"/>
 <node TEXT="One subject, many observers" ID="ID_1403089260" CREATED="1365266658803" MODIFIED="1365266677065"/>
-<node TEXT="Structure" ID="ID_1096468564" CREATED="1365619677276" MODIFIED="1365708296616">
+<node TEXT="Structure" FOLDED="true" ID="ID_1096468564" CREATED="1365619677276" MODIFIED="1365708296616">
 <node TEXT="observer.png" ID="ID_1887604179" CREATED="1365619693975" MODIFIED="1365619693975">
 <hook URI="resources/observer.png" SIZE="0.85106385" NAME="ExternalObject"/>
 </node>
 </node>
 </node>
-<node TEXT="State" FOLDED="true" ID="ID_1756575863" CREATED="1365698231339" MODIFIED="1365729988247">
+<node TEXT="State" ID="ID_1756575863" CREATED="1365698231339" MODIFIED="1365729988247">
 <node ID="ID_826966224" CREATED="1365698151612" MODIFIED="1365698151612"><richcontent TYPE="NODE">
 
 <html>
@@ -2026,7 +2026,7 @@
 </richcontent>
 </node>
 </node>
-<node TEXT="Strategy" FOLDED="true" ID="ID_1095372608" CREATED="1365261618698" MODIFIED="1365729988249">
+<node TEXT="Strategy" ID="ID_1095372608" CREATED="1365261618698" MODIFIED="1365729988249">
 <node TEXT="Define a family of algorithms, encapsulate each one, and make them interchangeable. Strategy lets the algorithm vary independently from clients that use it. " ID="ID_483066742" CREATED="1365261631650" MODIFIED="1365261655969"/>
 <node ID="ID_887848779" CREATED="1365698063378" MODIFIED="1365698063378"><richcontent TYPE="NODE">
 
@@ -2043,7 +2043,7 @@
 </richcontent>
 </node>
 </node>
-<node TEXT="Template" FOLDED="true" ID="ID_1968048702" CREATED="1365698233352" MODIFIED="1365729988250">
+<node TEXT="Template" ID="ID_1968048702" CREATED="1365698233352" MODIFIED="1365729988250">
 <node ID="ID_88980091" CREATED="1365698157945" MODIFIED="1365698157945"><richcontent TYPE="NODE">
 
 <html>
@@ -2059,7 +2059,7 @@
 </richcontent>
 </node>
 </node>
-<node TEXT="Visitor" FOLDED="true" ID="ID_907323944" CREATED="1365698238691" MODIFIED="1365729988251">
+<node TEXT="Visitor" ID="ID_907323944" CREATED="1365698238691" MODIFIED="1365729988251">
 <node ID="ID_37181674" CREATED="1365698162921" MODIFIED="1365698162921"><richcontent TYPE="NODE">
 
 <html>
@@ -2078,7 +2078,7 @@
 </node>
 <node TEXT="Structural" POSITION="right" ID="ID_1457218160" CREATED="1365536366023" MODIFIED="1365729988253">
 <edge COLOR="#007c00"/>
-<node TEXT="Adapter" FOLDED="true" ID="ID_1296484042" CREATED="1365698297206" MODIFIED="1365729988254">
+<node TEXT="Adapter" ID="ID_1296484042" CREATED="1365698297206" MODIFIED="1365729988254">
 <node ID="ID_369219613" CREATED="1365697993331" MODIFIED="1365697993331"><richcontent TYPE="NODE">
 
 <html>
@@ -2094,7 +2094,7 @@
 </richcontent>
 </node>
 </node>
-<node TEXT="Bridge" FOLDED="true" ID="ID_1096467021" CREATED="1365698299920" MODIFIED="1365729988256">
+<node TEXT="Bridge" ID="ID_1096467021" CREATED="1365698299920" MODIFIED="1365729988256">
 <node ID="ID_1250657294" CREATED="1365698008534" MODIFIED="1365698008534"><richcontent TYPE="NODE">
 
 <html>
@@ -2110,7 +2110,7 @@
 </richcontent>
 </node>
 </node>
-<node TEXT="Composite" FOLDED="true" ID="ID_1954870254" CREATED="1365698302529" MODIFIED="1365729988258">
+<node TEXT="Composite" ID="ID_1954870254" CREATED="1365698302529" MODIFIED="1365729988258">
 <node ID="ID_934275338" CREATED="1365698013450" MODIFIED="1365698013450"><richcontent TYPE="NODE">
 
 <html>
@@ -2126,7 +2126,7 @@
 </richcontent>
 </node>
 </node>
-<node TEXT="Decorator" FOLDED="true" ID="ID_1436525047" CREATED="1365536382762" MODIFIED="1365729988260">
+<node TEXT="Decorator" ID="ID_1436525047" CREATED="1365536382762" MODIFIED="1365729988260">
 <node TEXT="Attach additional responsibilities to an object dynamically keeping the same interface. Decorators provide a flexible alternative to subclassing for extending functionality. " ID="ID_262425151" CREATED="1365536369930" MODIFIED="1365536377098"/>
 <node ID="ID_1380053728" CREATED="1365697939386" MODIFIED="1365697939386"><richcontent TYPE="NODE">
 
@@ -2142,13 +2142,13 @@
 </html>
 </richcontent>
 </node>
-<node TEXT="Structure" ID="ID_1610129815" CREATED="1365619616450" MODIFIED="1365708253017">
+<node TEXT="Structure" FOLDED="true" ID="ID_1610129815" CREATED="1365619616450" MODIFIED="1365708253017">
 <node TEXT="decorator.png" ID="ID_5009502" CREATED="1365619630486" MODIFIED="1365619630486">
 <hook URI="resources/decorator.png" SIZE="0.6465517" NAME="ExternalObject"/>
 </node>
 </node>
 </node>
-<node TEXT="Facade" FOLDED="true" ID="ID_1015979054" CREATED="1365698305334" MODIFIED="1365729988262">
+<node TEXT="Facade" ID="ID_1015979054" CREATED="1365698305334" MODIFIED="1365729988262">
 <node ID="ID_1625671269" CREATED="1365698018753" MODIFIED="1365698018753"><richcontent TYPE="NODE">
 
 <html>
@@ -2164,7 +2164,7 @@
 </richcontent>
 </node>
 </node>
-<node TEXT="Flyweight" FOLDED="true" ID="ID_665557144" CREATED="1365698307402" MODIFIED="1365729988263">
+<node TEXT="Flyweight" ID="ID_665557144" CREATED="1365698307402" MODIFIED="1365729988263">
 <node ID="ID_1259616409" CREATED="1365698024525" MODIFIED="1365698024525"><richcontent TYPE="NODE">
 
 <html>
@@ -2180,7 +2180,7 @@
 </richcontent>
 </node>
 </node>
-<node TEXT="Proxy" FOLDED="true" ID="ID_1536247570" CREATED="1365698310057" MODIFIED="1365729988264">
+<node TEXT="Proxy" ID="ID_1536247570" CREATED="1365698310057" MODIFIED="1365729988264">
 <node ID="ID_1858364999" CREATED="1365698029809" MODIFIED="1365698029809"><richcontent TYPE="NODE">
 
 <html>
