@@ -56,10 +56,6 @@ import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 
 public class WorldTracerUtils {
-	// private static String wt_user = "Air@18maR";
-	// private static String wt_pass = "Tran$615J";
-
-	// public static String wt_suffix_airline;
 
 	private static String wt_http;
 	public static String wt_url;
@@ -200,10 +196,7 @@ public class WorldTracerUtils {
 				+ companycode.toUpperCase() + "&OPT=" + status + "&SEARCH="
 				+ dt);
 		method.setDoAuthentication(true);
-		// method.setQueryString("OPT=A");
-		// method.setQueryString("ARL=" + companycode.toUpperCase());
-		// method.setQueryString("STN=" + stationcode.toUpperCase());
-
+		
 		// Provide custom retry handler is necessary
 		method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
 				new DefaultHttpMethodRetryHandler(3, false));
@@ -392,14 +385,7 @@ public class WorldTracerUtils {
 		try {
 			
 			String requestInfo = WorldTracerUtils.getWtRequest(wt_url, cgiexe);
-			// Execute the method.
-			/*
-			int statusCode = client.executeMethod(method);
-
-			if (statusCode != HttpStatus.SC_OK) {
-				System.err.println("Method failed: " + method.getStatusLine());
-			}
-*/
+			
 			// Read the response body.
 			responseBody = method.getResponseBodyAsString();
 			WorldTracerUtils.insertWTInfo(requestInfo,responseBody);
@@ -1040,8 +1026,8 @@ public class WorldTracerUtils {
 			}
 		}
 		for (aero.nettracer.serviceprovider.wt_1_0.common.Itinerary itin: a.getBagItinerary()) {
-			if (itin != null && itin.getDepartureCity()!=null && !itin.getDepartureCity().isEmpty()
-					&& itin.getArrivalCity()!=null && !itin.getArrivalCity().isEmpty()) {
+			/** NT-1312: Bag Itinerary in WT tend to not have Departure Cities  or Arrival Cities **/
+			if (itin != null) {
 				com.bagnet.nettracer.tracing.db.Itinerary it = mapItinerary(itin,user);
 				it.setItinerarytype(TracingConstants.BAGGAGE_ROUTING);
 				itinList.add(it);
