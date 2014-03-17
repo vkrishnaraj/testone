@@ -1,4 +1,4 @@
-<map version="freeplane 1.2.0">
+<map version="freeplane 1.3.0">
 <!--To view this file, download free mind mapping software Freeplane from http://freeplane.sourceforge.net -->
 <node TEXT="Design Patterns" FOLDED="false" ID="ID_1887218530" CREATED="1365709513162" MODIFIED="1365729988177" LINK="Tech.mm">
 <edge STYLE="bezier" COLOR="#00007c" WIDTH="thin"/>
@@ -63,15 +63,15 @@
 <hook NAME="AutomaticEdgeColor" COUNTER="12"/>
 <node TEXT="Creational" POSITION="left" ID="ID_1488974826" CREATED="1365710839893" MODIFIED="1365729988181">
 <edge COLOR="#00007c" WIDTH="thin"/>
-<node TEXT="Simple Factory" FOLDED="true" ID="ID_430949304" CREATED="1365619765741" MODIFIED="1365729988183">
+<node TEXT="Simple Factory" ID="ID_430949304" CREATED="1365619765741" MODIFIED="1365729988183">
 <node TEXT="More of a code idiom than a pattern" ID="ID_1281868544" CREATED="1365760064851" MODIFIED="1365760079777"/>
-<node TEXT="Structure" ID="ID_537769670" CREATED="1365619770539" MODIFIED="1365729988184">
+<node TEXT="Structure" FOLDED="true" ID="ID_537769670" CREATED="1365619770539" MODIFIED="1365729988184">
 <node TEXT="simple factory.png" ID="ID_1016732746" CREATED="1365619783251" MODIFIED="1365729988185">
 <hook URI="resources/simple%20factory.png" SIZE="0.8253095" NAME="ExternalObject"/>
 </node>
 </node>
 </node>
-<node TEXT="Abstract Factory" FOLDED="true" ID="ID_1825941237" CREATED="1365536266545" MODIFIED="1365729988187">
+<node TEXT="Abstract Factory" ID="ID_1825941237" CREATED="1365536266545" MODIFIED="1365729988187">
 <node TEXT="Provide an interface for creating families of related or dependent objects without specifying their concrete classes. " ID="ID_1215060890" CREATED="1365536285640" MODIFIED="1365729988189"/>
 <node ID="ID_816057838" CREATED="1365697680445" MODIFIED="1365729988194"><richcontent TYPE="NODE">
 
@@ -87,35 +87,35 @@
 </html>
 </richcontent>
 </node>
-<node TEXT="Structure" ID="ID_1407572510" CREATED="1365620217633" MODIFIED="1365729988192">
+<node TEXT="Structure" FOLDED="true" ID="ID_1407572510" CREATED="1365620217633" MODIFIED="1365729988192">
 <node TEXT="abstract factory.png" ID="ID_1931171471" CREATED="1365620230652" MODIFIED="1365729988193">
 <hook URI="resources/abstract%20factory.png" SIZE="0.8042895" NAME="ExternalObject"/>
 </node>
 </node>
 </node>
-<node TEXT="Builder" FOLDED="true" ID="ID_671608366" CREATED="1365698280598" MODIFIED="1365729988195">
+<node TEXT="Builder" ID="ID_671608366" CREATED="1365698280598" MODIFIED="1365729988195">
 <node TEXT="Builder (recognizeable by creational methods returning the instance itself)" ID="ID_1811157871" CREATED="1365696035396" MODIFIED="1365729988197">
 <font BOLD="false"/>
 </node>
 </node>
-<node TEXT="Factory Method" FOLDED="true" ID="ID_642000924" CREATED="1365536258780" MODIFIED="1365729988200">
+<node TEXT="Factory Method" ID="ID_642000924" CREATED="1365536258780" MODIFIED="1365729988200">
 <node TEXT="Define an interface for creating an object, but let subclasses decide which class to instantiate. Factory Method lets a class defer instantiation to subclasses (dependency injection)." ID="ID_303122603" CREATED="1365536264343" MODIFIED="1365729988203"/>
 <node TEXT="Factory method (recognizeable by creational methods returning an implementation of an abstract/interface type)" ID="ID_1341019857" CREATED="1365697694165" MODIFIED="1365729988215"/>
-<node TEXT="Structure" ID="ID_226482103" CREATED="1365619862762" MODIFIED="1365729988207">
+<node TEXT="Structure" FOLDED="true" ID="ID_226482103" CREATED="1365619862762" MODIFIED="1365729988207">
 <node TEXT="factory method.png" ID="ID_950778133" CREATED="1365620155743" MODIFIED="1365729988209">
 <hook URI="resources/factory%20method.png" SIZE="0.8174387" NAME="ExternalObject"/>
 </node>
 </node>
-<node TEXT="Example" ID="ID_1973378748" CREATED="1365708426133" MODIFIED="1365729988211">
+<node TEXT="Example" FOLDED="true" ID="ID_1973378748" CREATED="1365708426133" MODIFIED="1365729988211">
 <node TEXT="factory method example.png" ID="ID_776826760" CREATED="1365620155740" MODIFIED="1365729988213">
 <hook URI="resources/factory%20method%20example.png" SIZE="0.82304525" NAME="ExternalObject"/>
 </node>
 </node>
 </node>
-<node TEXT="Prototype" FOLDED="true" ID="ID_1317237033" CREATED="1365698282727" MODIFIED="1365729988217">
+<node TEXT="Prototype" ID="ID_1317237033" CREATED="1365698282727" MODIFIED="1365729988217">
 <node TEXT="Prototype (recognizeable by creational methods returning a different instance of itself with the same properties)" ID="ID_238997319" CREATED="1365696035437" MODIFIED="1365729988219"/>
 </node>
-<node TEXT="Singleton" FOLDED="true" ID="ID_243696533" CREATED="1365618963397" MODIFIED="1365729988221">
+<node TEXT="Singleton" ID="ID_243696533" CREATED="1365618963397" MODIFIED="1365729988221">
 <node TEXT="Ensure a class has only one instance, and provide a global point of access to it. " ID="ID_1679501319" CREATED="1365619037429" MODIFIED="1365729988223">
 <font BOLD="false"/>
 </node>
@@ -133,7 +133,7 @@
 </html>
 </richcontent>
 </node>
-<node TEXT="Structure" ID="ID_478105934" CREATED="1365619091288" MODIFIED="1365729988225">
+<node TEXT="Structure" FOLDED="true" ID="ID_478105934" CREATED="1365619091288" MODIFIED="1365729988225">
 <node TEXT="singleton.png" ID="ID_692493917" CREATED="1365619283123" MODIFIED="1365729988226">
 <hook URI="resources/singleton.png" SIZE="0.7781846" NAME="ExternalObject"/>
 </node>
