@@ -2,6 +2,7 @@ package com.bagnet.nettracer.tracing.db;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.TimeZone;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -9,11 +10,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
+import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 @Embeddable
 public class Comment implements Serializable {
+	private static final long serialVersionUID = 8776081030707498029L;
+
 	public Comment() {
 	}
 	
@@ -52,6 +57,11 @@ public class Comment implements Serializable {
 	
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
+	}
+	
+	@Transient
+	public String getDisplayCreateDate() {
+		return DateUtils.formatDate(createDate, agent.getDateformat().getFormat() + " " + agent.getTimeformat().getFormat(), null, TimeZone.getTimeZone(AdminUtils.getTimeZoneById(agent.getDefaulttimezone()).getTimezone()));
 	}
 
 	@Override
