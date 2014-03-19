@@ -125,13 +125,14 @@ public class LostAndFoundController {
 		}
 		update = (session.getAttribute("edit") != null && session.getAttribute(
 				"edit").equals(true));
-		if (getCompany() == null) {
-			FacesContext fc = FacesContext.getCurrentInstance();
-			try {
-				fc.getExternalContext().redirect("landing.do");
-			} catch (IOException e) {
-			}
-		}
+		//Commented while building out the lost Report form for Delta
+//		if (getCompany() == null) {
+//			FacesContext fc = FacesContext.getCurrentInstance();
+//			try {
+//				fc.getExternalContext().redirect("landing.do");
+//			} catch (IOException e) {
+//			}
+//		}
 	}
 
 	public boolean isEditting() {
