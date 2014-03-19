@@ -127,6 +127,7 @@ public class ReportingConstants {
 	
 	
 	public static final String DATETIME_FORMAT = "MMddyyyyhhmmss";
+	public static final String WRITTEN_DATE_FORMAT = "MMMMM dd, yyyy";
 	
 	public static final String EXCEL_FILE_TYPE = ".xls";
 	
