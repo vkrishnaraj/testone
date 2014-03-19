@@ -107,6 +107,7 @@ public class LF_ProcessTraceResults extends LFC_SeleniumTest {
 		}
 		
 		if (checkNoErrorPage()) {
+			waitForPageToLoadImproved(5000);
 			verifyTrue(isTextPresent(LF_ProcessTraceResults.foundId));
 			verifyTrue(isElementPresent(By.xpath("//div[@id='maincontent']/table[2]/tbody/tr[2]/td/a")));
 			verifyTrue(isTextPresent("Cellphone, Apple, iPhone 4S, AP1234"));
