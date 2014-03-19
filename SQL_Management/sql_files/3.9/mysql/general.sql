@@ -1,0 +1,1 @@
+insert into template_var (displayTag,associatedClass) values ('Salutation','Incident');
