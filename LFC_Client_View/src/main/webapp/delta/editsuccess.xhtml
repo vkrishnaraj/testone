@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	template="../layout/delta_template.xhtml">
+	<ui:define name="title">Delta Airlines: Lost &amp; Found</ui:define>
+	<ui:define name="body">
+		<h:form>
+		
+			<div class="interactivebreadcrumb breadcrumb">
+				<div id="InteractiveBreadcrumbNavigation">
+					<ul class="deltaDropDownMenu">
+						<li class="alpha"><a href="//www.delta.com"><div>Home</div>
+						</a></li>
+						<div class="breadcrumbDividerStyle">&gt;</div>
+						<li><a href="/client/delta/login.do"><div>Lost &amp; Found Update</div></a></li>
+						<div class="breadcrumbDividerStyle">&gt;</div>
+						<li><a href="#"><div>Update Success!</div></a></li>
+					</ul>
+				</div>
+			</div>
+			<h:panelGroup>
+				<div class="title parbase">
+					<div class="pageTitle">
+						<h1>
+							<t:outputText value="#{msg.edit_success_text_title}" escape="false"/>
+						</h1>
+					</div>
+				</div>
+				
+				<div id="ContentWell" class="grid_12 alpha">
+				<div class="grid_9 alpha">
+					<div class="parsys mainPar">
+						<div class="text section">
+							<div class="contentWrapper rteDelta">
+
+								<p class="twlvPxBlk">
+									<t:outputText value="#{msg.success_text_thank_you}" />
+								</p>
+								<p class="twlvPxBlk">
+									<t:outputText value="#{msg.success_text_tracking}" />
+									&#160;<b><t:outputText
+											value="#{lostAndFound.lostReport.reportId}" /></b>
+								</p>
+								<p class="twlvPxBlk">
+									<t:outputText value="#{msg.success_text_email}" />
+								</p>
+								<p class="twlvPxBlk">
+									<t:outputText value="#{msg.success_text_print}" />
+								</p>
+								<div align="right">
+									<a4j:commandButton
+										styleClass="small button ui-button ui-button-secondary right ui-widget ui-state-default ui-corner-all ui-button-text-only"
+										value="#{msg.general_button_back}"
+										action="#{lostAndFound.backToLogin}" />
+									&#160;&#160;&#160;
+									<a4j:commandButton
+										styleClass="small button ui-button ui-button-secondary right ui-widget ui-state-default ui-corner-all ui-button-text-only"
+										value="#{msg.general_button_review}"
+										action="#{lostAndFound.goToStatus}" />
+								</div>
+								
+								<br />
+
+							</div>
+						</div>
+					</div>
+				</div>
+				<br />
+				</div>
+			</h:panelGroup>
+		</h:form>
+	</ui:define>
+</ui:composition>

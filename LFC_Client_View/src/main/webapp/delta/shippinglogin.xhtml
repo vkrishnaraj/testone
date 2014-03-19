@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	template="../layout/delta_template.xhtml">
+	<ui:define name="title">Delta Airlines: Lost &amp; Found</ui:define>
+	<ui:define name="body">
+		<h:form id="pageForm">
+			<script type="text/javascript">
+				function whyPay(){
+					document.getElementById("bot").style.display="block";
+		        }
+			</script>
+			<h:panelGroup style="width: 315px">
+				<p class="contentHeader"><t:outputText value="#{msg.shipping_text_login_title}" /></p>
+				<p><t:outputText value="#{msg.shipping_text_desc}" escape="false" /></p>
+				<div >
+					<b><rich:messages id="reportMsg" errorClass="errormsg" infoClass="infomsg" layout="list" /></b>
+				</div>
+				<table><tr>
+				<td><t:outputText value="#{msg.shipping_label_last_name}" /></td>
+				<td><t:inputText value="#{lostAndFoundLogin.login.lastName}" /></td>
+				</tr><tr>
+				<td><t:outputText value="#{msg.shipping_label_tracking}" /></td>
+				<td><t:inputText value="#{lostAndFoundLogin.login.trackingNumber}" /></td>
+				</tr></table>
+				<a4j:commandButton styleClass="small button" value="#{msg.shipping_button_login}" action="#{lostAndFoundLogin.loginShippingDelta}" /><br/><br/>
+			</h:panelGroup>
+		</h:form>
+	</ui:define>
+</ui:composition>

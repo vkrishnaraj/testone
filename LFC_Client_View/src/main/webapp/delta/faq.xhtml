@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	template="../layout/delta_template.xhtml">
+	<ui:define name="title">Delta Airlines: Lost &amp; Found</ui:define>
+	<ui:define name="body">
+		<h:form id="pageForm">
+			<div class="interactivebreadcrumb breadcrumb">
+				<div id="InteractiveBreadcrumbNavigation">
+					<ul class="deltaDropDownMenu">
+						<li class="alpha"><a href="//www.delta.com"><div>Home</div>
+						</a></li>
+						<div class="breadcrumbDividerStyle">&gt;</div>
+						<li><a href="/client/delta/landing.do"><div>Lost &amp; Found</div></a></li>
+						<div class="breadcrumbDividerStyle">&gt;</div>
+						<li><a href="#"><div>Frequently Asked Questions</div></a></li>
+					</ul>
+				</div>
+			</div>
+
+			<script type="text/javascript" src="//content.delta.com/etc/clientlibs/foundation/jquery.js"></script>
+		
+			<script type="text/javascript" src="//content.delta.com/dlhome/jawr_loader.js"></script>
+		
+	    	<script type="text/javascript" src="//content.delta.com/dlhome/gzip_520035897/shared/jawr/js/core.js"> </script>
+			<script type="text/javascript" src="https://by.essl.optimost.com/es/220/c/41/u/Delta_Live.js "></script>
+			<script type="text/javascript" src="//content.delta.com/dlhome/gzip_72544912/shared/jawr/js/core_apps.js"> </script>
+			<script type="text/javascript" src="//content.delta.com/dlhome/gzip_698632109/shared/jawr/js/dwr.js"> </script>
+			<script type="text/javascript" src="//content.delta.com/dlhome/gzip_2115706472/shared/jawr/js/omniHome.js"> </script>
+			<script type="text/javascript" src="//content.delta.com/dlhome/gzip_20316209/shared/jawr/js/kanaChat.js"> </script>
+			<script type="text/javascript" src="//www.delta.com/utils/shared/jawr/js/mp_lang/MP_ENALL.js"></script>
+			<script type="text/javascript" src="//content.delta.com/etc/designs/delta/lib.20140228.js"></script>
+			
+		    <script type="text/javascript" src="//content.delta.com/dlhome/gzip_221017845/shared/jawr/js/clplang.js"> </script>
+			<h:panelGroup style="width: 315px">
+				<div class="title parbase">
+					<div class="pageTitle">
+						<h1>
+								<t:outputText value="#{msg.bagunchecked_text_title}" escape="false" />
+						</h1>
+					</div>
+				</div>
+				<div id="ContentWell" class="grid_12 alpha">
+
+				<div class="grid_9 alpha">
+					<div class="parsys mainPar">
+						<div class="text section">
+							<div class="contentWrapper rteDelta">
+								<div class="accordiontype section">
+
+
+									<p class="twlvPxBlk">
+										<t:outputText value="#{msg.bagunchecked_text_faq}"
+											escape="false" />
+									</p>
+
+									<script>
+									$(document).ready(function(){
+									    try {
+									        DeltaUtils.addAccordionFunctionality()
+									    } catch(error) { /* silently ignore */ }
+									    try {
+									        DeltaUtils.expandAccordianToAnchor();
+									    } catch(error) { /* silently ignore */ }
+									});
+									</script>
+									<a4j:commandButton
+										styleClass="small button ui-button ui-button-secondary right ui-widget ui-state-default ui-corner-all ui-button-text-only"
+										value="#{msg.general_button_back}"
+										action="#{lostAndFound.backToLanding}" />
+								<br/>
+								<br/>
+								
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<br />
+				<br />
+				</div>
+			</h:panelGroup>
+			<script type="text/javascript">
+			<!--
+				function toggleQuestion(quesDT) {
+					if (quesDT.className == 'first_item collapsed') {
+						quesDT.className = "first_item collapsed expanded";
+						document.getElementById(quesDT.id + 'a').className = "active";
+					} else if (quesDT.className == 'collapsed') {
+						quesDT.className = "collapsed expanded";
+						document.getElementById(quesDT.id + 'a').className = "active";
+					} else if (quesDT.className == 'collapsed expanded') {
+						quesDT.className = "collapsed";
+						document.getElementById(quesDT.id + 'a').className = "";
+					} else {
+						quesDT.className = "first_item collapsed";
+						document.getElementById(quesDT.id + 'a').className = "";
+					}
+				}
+			//-->
+			</script>
+		</h:form>
+	</ui:define>
+</ui:composition>

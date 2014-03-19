@@ -1,0 +1,143 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	template="../layout/delta_template.xhtml">
+	<ui:define name="title">Delta Airlines: Lost &amp; Found</ui:define>
+	<ui:define name="body">
+		<h:form id="lostForm">
+			<script type="text/javascript">
+				function validateEmail() {
+					var theEmail = document.getElementById("lostForm:email").value;
+					if (!theEmail) {
+						return window.confirm("Please be advised that if an email address is not provided, we" + 
+								" will contact you via telephone and only in the event that we find an item closely" + 
+								" matching the description of your reported lost item.");
+					} else {
+						return true;
+					}
+					
+				}
+				
+				function adjustAddressReq(countryList) {
+					province = document.getElementById("lostForm:province");
+					state = document.getElementById("lostForm:state");
+					if (countryList.options[countryList.selectedIndex].value == "US") {
+						province.value = '';
+						province.readOnly = true;
+					} else {
+						state.selectedIndex = 0;
+						province.readOnly = false;
+					}
+				}
+				
+				function adjustAddressReqState(stateList) {
+					province = document.getElementById("lostForm:province");
+					country = document.getElementById("lostForm:country");
+					if (stateList.options[stateList.selectedIndex].value == "") {
+						province.readOnly = false;
+					} else {
+						province.value = '';
+						province.readOnly = true;
+						country.selectedIndex = 0;
+					}
+				}
+
+		        var curDt = new Date();
+		        
+		        function disablementFunction(day){
+		            if (curDt==undefined){
+		                curDt = day.date.getDate;
+		            }
+		            if (curDt.getTime() - day.date.getTime() &gt;= 0) return true; else return false;  
+		        }
+		        
+		        function disabledClassesProv(day){
+		            if (curDt.getTime() - day.date.getTime() &lt; 0) return 'rich-calendar-boundary-dates';
+		        }
+		        
+		        function sameAsShippingCheck(){
+		            same = document.getElementById("lostForm:sameAsShipping");
+		            if(same.value=="on"){
+		            	document.getElementById("lostForm:billAddress1").value=document.getElementById("lostForm:shipAddress1").value;
+		            	document.getElementById("lostForm:billAddress2").value=document.getElementById("lostForm:shipAddress2").value;
+		            	document.getElementById("lostForm:billCity").value=document.getElementById("lostForm:shipCity").value;
+		            	document.getElementById("lostForm:billState").value=document.getElementById("lostForm:shipState").value;
+		            	document.getElementById("lostForm:billPostal").value=document.getElementById("lostForm:shipPostal").value;
+		            	document.getElementById("lostForm:billCountry").value=document.getElementById("lostForm:shipCountry").value;
+		            	document.getElementById("lostForm:billProvince").value=document.getElementById("lostForm:shipProvince").value;
+		            }
+		        }
+
+			</script>
+			<a4j:outputPanel id="outerPanel">
+			<a4j:outputPanel id="options">
+				<h:panelGroup  >
+				
+				<p class="contentHeader">
+					<t:outputText value="#{msg.shipping_option_text_title}" />
+				</p>
+				<p>
+					<t:outputText value="#{msg.shipping_option_text_desc}" escape="false" />
+				</p>
+				<!-- Iterate through the options -->
+				<a4j:region renderRegionOnly="true">
+					<a4j:outputPanel id="optionPanel">
+						<f:facet name="header">
+							<rich:columnGroup>
+								<rich:column>
+									<t:outputText value="#{msg.lostform_header_shipping_options}" />
+								</rich:column>
+							</rich:columnGroup>
+						</f:facet>
+						<rich:column><td colspan="3"><t:selectOneMenu
+									value="#{lostAndFound.selectedoption}" style="width: 95%;">
+									<f:selectItem itemLabel="#{msg.shipping_option_select}" itemValue="0" />
+									<f:selectItems value="#{shippingOptions}"/>
+								</t:selectOneMenu></td>
+						</rich:column>
+					</a4j:outputPanel>
+				</a4j:region>
+				<br />
+				<table style="width: 95%;">
+						<tr>
+							<td colspan="8" >&#160;</td>
+						</tr>
+						<tr>
+							<td class="twlvPxBlk" colspan="6"><b><t:outputText
+									value="#{msg.shipping_label_address_addr1}" /></b></td>
+						</tr>
+						<tr>
+							<td colspan="6">
+							 	<t:outputText value="#{lostAndFound.lostReport.contact.prefshipaddress.address1}"/><br/>
+							 	<t:outputText value="#{lostAndFound.lostReport.contact.prefshipaddress.address2}&lt;br /&gt;" escape="false" rendered="#{not empty lostAndFound.lostReport.contact.prefshipaddress.address2}"/>
+							 	<t:outputText value="#{lostAndFound.lostReport.contact.prefshipaddress.city}, #{lostAndFound.lostReport.contact.prefshipaddress.state} #{lostAndFound.lostReport.contact.prefshipaddress.postal} #{lostAndFound.lostReport.contact.prefshipaddress.country}"/>
+						 	</td>
+					 	</tr>
+					</table>
+				<br />
+				<br/>
+
+			</h:panelGroup>
+			</a4j:outputPanel>
+			<br/>
+			<h:panelGroup  >
+				<div>
+					<b><rich:messages id="reportMsg" errorClass="errormsg" style="color:red"
+						infoClass="infomsg" layout="list" /></b>
+				</div>
+				<div align="right">
+					<a4j:commandButton styleClass="small button" value="#{msg.general_button_back}" action="#{lostAndFound.backToShippingConfirm}"  rendered="#{not empty lostAndFound.lostReport.reportId}"/>&#160;&#160;&#160;
+				
+					<a4j:commandButton styleClass="small button"	value="#{msg.shipping_button_submit}"	action="#{lostAndFound.shipSelectOption}" oncomplete="this.disabled=false"  id="addressbutton" render="outerPanel" />
+				</div>
+				<br />
+			</h:panelGroup>
+			</a4j:outputPanel>
+		</h:form>
+	</ui:define>
+</ui:composition>

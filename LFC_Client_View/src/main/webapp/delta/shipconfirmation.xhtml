@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	template="../layout/delta_template.xhtml">
+	<ui:define name="title">Delta Airlines: Lost &amp; Found</ui:define>
+	<ui:define name="body">
+		<h:form>
+			<h:panelGroup>
+				<p class="contentHeader"><t:outputText value="#{msg.confirm_shipping_text_confirm_title}" escape="false"/></p>
+				<!-- Receipt Information -->
+				<p class="contentSubHeader"><t:outputText value="#{msg.confirm_shipping_text_order_summary}" /></p><br/>
+				<p><t:outputText value="#{msg.confirm_purchase_info_email}: " /> <t:outputText value="#{lostReport.contact.emailAddress}"/><br/>
+				<t:outputText value="#{msg.confirm_shipping_text_cc_info}:" /><br/>
+					<t:outputText value="#{msg.confirm_shipping_text_cc_vendor}: #{lostReport.cc.ccvendor}" /><br/>
+					<t:outputText value="#{msg.confirm_shipping_text_cc_name}: #{lostReport.cc.ccname}" /><br/>
+					<t:outputText value="#{msg.confirm_shipping_text_cc_number}: #{lostReport.cc.cc4number}" /><br/>
+					<t:outputText value="#{msg.confirm_shipping_text_cc_exp}: #{lostReport.cc.ccexpirationmonth}/#{lostReport.cc.ccexpirationyear}" /><br/>
+					<br/>
+				<t:outputText value="#{msg.success_shipping_text_purchase_billing}:" /><br/>
+				 	<t:outputText value="#{lostReport.cc.ccname}"/><br/>
+				 	<t:outputText value="#{lostReport.contact.billingaddress.address1}"/><br/>
+				 	<t:outputText value="#{lostReport.contact.billingaddress.address2}&lt;br /&gt;" escape="false" rendered="#{not empty lostReport.contact.billingaddress.address2}"/> 
+				 	<t:outputText value="#{lostReport.contact.billingaddress.city}, #{lostReport.contact.billingaddress.state} #{lostReport.contact.billingaddress.postal} #{lostReport.contact.billingaddress.country}"/><br/><div align="left">
+						<a4j:commandButton styleClass="small button" value="#{msg.general_button_edit}" action="#{lostAndFound.backToCCInfo}"  rendered="#{not empty lostAndFound.lostReport.reportId}"/>&#160;&#160;&#160;
+					</div><br/>
+				<t:outputText value="#{msg.success_shipping_text_purchase_shipping}:" /><br/>
+				 	<t:outputText value="#{lostReport.contact.shippingName}"/><br/>
+				 	<t:outputText value="#{lostReport.contact.prefshipaddress.address1}"/><br/>
+				 	<t:outputText value="#{lostReport.contact.prefshipaddress.address2}&lt;br /&gt;" escape="false" rendered="#{not empty lostReport.contact.prefshipaddress.address2}"/> 
+				 	<t:outputText value="#{lostReport.contact.prefshipaddress.city}, #{lostReport.contact.prefshipaddress.state} #{lostReport.contact.prefshipaddress.postal} #{lostReport.contact.prefshipaddress.country}"/><br/><div align="left">
+						<a4j:commandButton styleClass="small button" value="#{msg.general_button_edit}" action="#{lostAndFound.backToShippingConfirm}"  rendered="#{not empty lostAndFound.lostReport.reportId}"/>&#160;&#160;&#160;
+					</div><br/></p>
+				<t:outputText value="#{msg.success_shipping_text_order_shipping_type}: " /> <t:outputText value="#{lostReport.shippingOption}"/><br/>
+				<b><t:outputText value="#{msg.success_shipping_text_order_total}: " /> <t:outputText value="#{lostReport.shippingPayment}"/></b><br/><div align="left">
+						<a4j:commandButton styleClass="small button" value="#{msg.general_button_edit}" action="#{lostAndFound.backToShippingRates}"  rendered="#{not empty lostAndFound.lostReport.reportId}"/>&#160;&#160;&#160;
+					</div><br/><br/>
+				
+			</h:panelGroup><br/>
+			
+			<h:panelGroup  >
+				<div>
+					<b><rich:messages id="reportMsg" errorClass="errormsg" style="color:red"
+						infoClass="infomsg" layout="list" /></b>
+				</div>
+				<div align="right">
+					<a4j:commandButton styleClass="small button" value="#{msg.general_button_back}" action="#{lostAndFound.backToCCInfo}"  rendered="#{not empty lostAndFound.lostReport.reportId}"/>&#160;&#160;&#160;
+					
+					<a4j:commandButton styleClass="small button"	value="#{msg.shipping_button_submit}" action="#{lostAndFound.confirmPayment}"	oncomplete="this.disabled=false" id="paymentbutton" render="outerPanel" />
+				
+				</div>
+				<br />
+			</h:panelGroup>
+		</h:form>
+	</ui:define>
+</ui:composition>
