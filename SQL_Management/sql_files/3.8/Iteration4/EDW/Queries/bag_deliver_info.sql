@@ -36,6 +36,7 @@ left outer join item it on it.incident_ID = b.incident_ID
 left outer join station s on s.Station_ID = b.station_ID
 left outer join agent a on a.Agent_ID = b.agent_ID
 where b.createdate >= date(date_add(now(), INTERVAL -1 DAY))
+and b.incident_ID is not null
 
 union
 select concat_ws('|','T',
@@ -52,6 +53,7 @@ left outer join item it on it.incident_ID = b.incident_ID
 left outer join station s on s.Station_ID = b.station_ID
 left outer join agent a on a.Agent_ID = b.agent_ID
 where b.createdate >= date(date_add(now(), INTERVAL -1 DAY))
+and b.incident_ID is not null
 ) temp
 order by seq");
 prepare stmt from @qry;
