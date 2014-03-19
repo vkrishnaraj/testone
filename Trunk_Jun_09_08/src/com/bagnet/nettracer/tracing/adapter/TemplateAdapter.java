@@ -116,6 +116,8 @@ public interface TemplateAdapter {
 	public void setIncidentBusinessPhone(String incidentBusinessPhone);
 	public String getIncidentMobilePhone();
 	public void setIncidentMobilePhone(String incidentHomePhone);
+	public String getIncidentSalutation();
+	public void setIncidentSalutation(String salutation);
 	
 	// Expense Data
 	public String getExpenseTotalAmount();

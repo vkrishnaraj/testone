@@ -70,6 +70,7 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	private String incidentHomePhone;
 	private String incidentBusinessPhone;
 	private String incidentMobilePhone;
+	private String incidentSalutation;
 	
 	// Expense info
 	private String expenseTotalAmount;
@@ -484,6 +485,14 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 
 	public void setIncidentMobilePhone(String incidentMobilePhone) {
 		this.incidentMobilePhone = incidentMobilePhone;
+	}
+
+	public String getIncidentSalutation() {
+		return incidentSalutation;
+	}
+
+	public void setIncidentSalutation(String incidentSalutation) {
+		this.incidentSalutation = incidentSalutation;
 	}
 
 	public String getDateToday() {

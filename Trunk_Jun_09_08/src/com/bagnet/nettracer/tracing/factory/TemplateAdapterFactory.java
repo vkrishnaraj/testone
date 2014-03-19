@@ -5,6 +5,7 @@ import aero.nettracer.fs.model.FsClaim;
 import aero.nettracer.fs.model.Person;
 import aero.nettracer.fs.model.Phone;
 
+import com.bagnet.nettracer.reporting.ReportingConstants;
 import com.bagnet.nettracer.tracing.actions.templates.DocumentTemplateResult;
 import com.bagnet.nettracer.tracing.adapter.TemplateAdapter;
 import com.bagnet.nettracer.tracing.adapter.impl.TemplateAdapterImpl;
@@ -97,7 +98,7 @@ public class TemplateAdapterFactory {
 			adapter.setAgentFirstName(dto.getAgent().getFirstname());
 			adapter.setAgentLastName(dto.getAgent().getLastname());
 			adapter.setAgentInitials(dto.getAgent().getInitial());
-			adapter.setDateFormat(dto.getAgent().getDateformat().getFormat());
+			adapter.setDateFormat(ReportingConstants.WRITTEN_DATE_FORMAT);
 		}
 	}
 	
@@ -121,43 +122,30 @@ public class TemplateAdapterFactory {
 	private void getIncidentInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) {
 		if (dto.getIncident() == null) return;
 		Incident incident = dto.getIncident();
-		if (incident.getIncident_ID() != null)
 			adapter.setIncidentId(incident.getIncident_ID());			
 		if (incident.getItemtype() != null )
 			adapter.setIncidentType(incident.getItemtype().getDescription());			
 		if (incident.getPassenger_list().size() != 0 ){
 			Passenger p = incident.getPassenger_list().get(0);
-			if (p.getFirstname() != null)
 				adapter.setIncidentFirstName(p.getFirstname());				
-			if (p.getLastname() != null)
-				adapter.setIncidentLastName(p.getLastname());				
+				adapter.setIncidentLastName(p.getLastname());		
+				adapter.setIncidentSalutation(p.getSalutationdesc());
 			if (p.getAddress(0) != null){
 				Address a = p.getAddress(0);
-				if (a.getAddress1() != null)
-					adapter.setIncidentAddress1(a.getAddress1());				
-				if (a.getAddress2() != null)
-					adapter.setIncidentAddress2(a.getAddress2());				
-				if (a.getCity() != null)
-					adapter.setIncidentCity(a.getCity());				
-				if (a.getCountry() != null){
-					adapter.setIncidentCountry(a.getCountry());
-					if (!a.getCountrycode_ID().equals("US")){
-						adapter.setIncidentState(a.getProvince());
-					} else if (a.getState() != null){ 
-						adapter.setIncidentState(a.getState());
-					}
+				adapter.setIncidentAddress1(a.getAddress1());				
+				adapter.setIncidentAddress2(a.getAddress2());				
+				adapter.setIncidentCity(a.getCity());				
+				adapter.setIncidentCountry(a.getCountry());
+				if (!a.getCountrycode_ID().equals("US")){
+					adapter.setIncidentState(a.getProvince());
+				} else if (a.getState() != null){ 
+					adapter.setIncidentState(a.getState());
 				}
-				if (a.getProvince() != null){
-					adapter.setIncidentProvince(a.getProvince());
-				}
-				if (a.getZip() != null)
-					adapter.setIncidentZip(a.getZip());				
-				if (a.getHomephone() != null)
-					adapter.setIncidentHomePhone(a.getHomephone());				
-				if (a.getWorkphone() != null)
-					adapter.setIncidentBusinessPhone(a.getWorkphone());				
-				if (a.getMobile() != null)
-					adapter.setIncidentMobilePhone(a.getMobile());				
+				adapter.setIncidentProvince(a.getProvince());
+				adapter.setIncidentZip(a.getZip());				
+				adapter.setIncidentHomePhone(a.getHomephone());				
+				adapter.setIncidentBusinessPhone(a.getWorkphone());				
+				adapter.setIncidentMobilePhone(a.getMobile());				
 			}			
 		}
 	}
