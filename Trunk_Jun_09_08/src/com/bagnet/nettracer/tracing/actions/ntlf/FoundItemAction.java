@@ -353,7 +353,7 @@ public class FoundItemAction extends CheckedAction {
 			Document document = new Document(template);
 			
 			// 3. merge the template and adapter
-			result = documentService.merge(document, adapter);
+			result = documentService.mergeDocumentToPrint(document, adapter);
 			if (!result.isSuccess()) return result;
 			
 			if (documentService.save(document) == 0) {

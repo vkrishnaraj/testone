@@ -25,15 +25,25 @@ public interface DocumentService {
 	public boolean delete(long documentId);
 	
 	/**
-	 * The merge method combines the data contained in the supplied TemplateAdapter with the variables defined 
-	 * in the Template data contained in the supplied Document to generate the document's contents.
-	 * @param document which contains the Template data with which the adapter data should be merged
-	 * @param adapter which contains the variable data which will be merged with the document's Template data
-	 * @return a DocumentTemplateResult containing meta data regarding the results of the merge operation
-	 * @throws InsufficientInformationException if the method is called without both an adapter and document 
-	 * being supplied
+	 * The mergeDocumentToPrint method will merge the document with the adapter, but will replace all 
+	 * variables for which there is no data in the adapter with empty strings to remove variable names 
+	 * from printed documents.
+	 * @param document the Document to merge
+	 * @param adapter the TemplateAdapter which contains the data to merge with the document
+	 * @return DocumentTemplateResult, which holds the results of the merge process
+	 * @throws InsufficientInformationException if the document or adapter is null
 	 */
-	public DocumentTemplateResult merge(Document document, TemplateAdapter adapter) throws InsufficientInformationException;
+	public DocumentTemplateResult mergeDocumentToPrint(Document document, TemplateAdapter adapter) throws InsufficientInformationException;
+	
+	/**
+	 * The mergeDocumentToEdit method will merge the document with the adapter, leaving variable names 
+	 * in place for any variables for which there is no data in the adapter.
+	 * @param document the Document to merge
+	 * @param adapter the TemplateAdapter which contains the data to merge with the document
+	 * @return DocumentTemplateResult, which holds the results of the merge process
+	 * @throws InsufficientInformationException if the document or adapter is null
+	 */
+	public DocumentTemplateResult mergeDocumentToEdit(Document document, TemplateAdapter adapter) throws InsufficientInformationException;
 	
 	/**
 	 * The generatePdf method creates a pdf file on the file share from the contents of the given document.

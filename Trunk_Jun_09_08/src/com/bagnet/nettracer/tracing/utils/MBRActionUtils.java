@@ -1637,7 +1637,7 @@ public class MBRActionUtils {
 			Document document = new Document(template);
 			
 			// 3. merge the template and adapter
-			result = documentService.merge(document, adapter);
+			result = documentService.mergeDocumentToPrint(document, adapter);
 			if (!result.isSuccess()) return result;
 
 			// 4. save the document

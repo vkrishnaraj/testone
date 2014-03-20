@@ -70,11 +70,17 @@ public class DocumentServiceImpl implements DocumentService {
 		return dao.delete(documentId);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.bagnet.nettracer.tracing.service.DocumentService#merge(com.bagnet.nettracer.tracing.db.documents.Document, com.bagnet.nettracer.tracing.adapter.TemplateAdapter)
-	 */
 	@Override
-	public DocumentTemplateResult merge(Document document, TemplateAdapter adapter) throws InsufficientInformationException {
+	public DocumentTemplateResult mergeDocumentToPrint(Document document, TemplateAdapter adapter) throws InsufficientInformationException {
+		return merge(document, adapter, true);
+	}
+	
+	@Override
+	public DocumentTemplateResult mergeDocumentToEdit(Document document, TemplateAdapter adapter) throws InsufficientInformationException {
+		return merge(document, adapter, false);
+	}
+	
+	private DocumentTemplateResult merge(Document document, TemplateAdapter adapter, boolean print) throws InsufficientInformationException {
 		if (document == null) {
 			throw new InsufficientInformationException(Document.class);
 		}
@@ -96,6 +102,8 @@ public class DocumentServiceImpl implements DocumentService {
 				try {
 					Method getter = adapter.getClass().getDeclaredMethod("get" + associatedClass + displayTag, new Class[] { });
 					String getterValue = (String) getter.invoke(adapter, new Object[] { });
+					if (print && getterValue == null) getterValue = "";
+					
 					if (getterValue != null) {
 						content = content.replace(toReplace, getterValue);
 					}

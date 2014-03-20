@@ -177,7 +177,7 @@ public class TemplateEditAction extends CheckedAction {
 		try {
 			// 2. create the document using a dummy template adapter
 			TemplateAdapter adapter = TemplateAdapterFactory.getTemplateAdapter(DomainUtils.getDummyAdapterDTO(user));
-			result = documentService.merge(document, adapter);
+			result = documentService.mergeDocumentToPrint(document, adapter);
 			if (!result.isSuccess()) {
 				return result;
 			}

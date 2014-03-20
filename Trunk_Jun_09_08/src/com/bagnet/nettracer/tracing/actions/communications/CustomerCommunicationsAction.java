@@ -376,7 +376,7 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		} else {
 			try {
 				long tId = Long.valueOf(templateId);
-				DocumentTemplateResult result = generateDocument(tId, incident, user,eId);
+				DocumentTemplateResult result = generateDocument(tId, incident, user, eId);
 				if (!result.isSuccess()) {
 					if (result.getPayload() != null) {
 						messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(result.getMessageKey(), new Object[] { result.getPayload() }));
@@ -566,12 +566,6 @@ public class CustomerCommunicationsAction extends CheckedAction {
 		return success;
 	}
 	
-	/** SF: making a mask method in case it is used elsewhere despite being a local private method **/
-	@SuppressWarnings("unused")
-	private DocumentTemplateResult generateDocument(long templateId, Incident incident, Agent user) {
-		return generateDocument( templateId,  incident,  user, 0);
-	}
-	
 	private DocumentTemplateResult generateDocument(long templateId, Incident incident, Agent user, int epId) {
 		DocumentTemplateResult result = new DocumentTemplateResult();
 		Template template;
@@ -604,7 +598,7 @@ public class CustomerCommunicationsAction extends CheckedAction {
 			
 			TemplateAdapter adapter = TemplateAdapterFactory.getTemplateAdapter(dto);
 			
-			result = documentService.merge(document, adapter);			
+			result = documentService.mergeDocumentToEdit(document, adapter);			
 			result.setPayload(document);
 			if (!missingInfoList.isEmpty()) {
 				result.setSuccess(false);
