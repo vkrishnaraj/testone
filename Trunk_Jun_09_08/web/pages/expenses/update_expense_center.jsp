@@ -654,7 +654,6 @@
         	<html:hidden property="paycode" />
         	<html:hidden property="expenselocation_ID" />
     <% } %>
-<jsp:include page="/pages/includes/print_options.jsp" />
 </html:form>
 <c:if test="${expensePayoutForm.wssubmitc == 'no'}">
 	<script type="text/javascript">reSubmitWS();</script>
