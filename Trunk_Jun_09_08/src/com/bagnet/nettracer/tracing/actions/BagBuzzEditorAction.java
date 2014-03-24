@@ -11,7 +11,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import com.bagnet.nettracer.tracing.bmo.CategoryBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -39,14 +38,15 @@ public class BagBuzzEditorAction extends Action{
 			return navigateToAdmin(request, mapping);
 		}
 		if (admin && request.getParameter("editcategory") != null) {
-			int editIndex = Integer.parseInt(request.getParameter("editcategory"));
+			int editID = Integer.parseInt(request.getParameter("editcategory"));
+			int editIndex = Integer.parseInt(request.getParameter("editcategoryindex"));
 			String editDescription = request.getParameter("bb_cat[" + editIndex + "].description");
-			Utils.editCategory(editIndex, editDescription);
+			Utils.editCategory(editID, editDescription);
 			return navigateToAdmin(request, mapping);
 		}
 		if (admin && request.getParameter("deletecategory") != null) {
-			int deleteIndex = Integer.parseInt(request.getParameter("deletecategory"));
-			Utils.deleteCategory(deleteIndex);
+			int deleteID = Integer.parseInt(request.getParameter("deletecategory"));
+			Utils.deleteCategory(deleteID);
 			return navigateToAdmin(request, mapping);
 		}
 		
@@ -57,7 +57,7 @@ public class BagBuzzEditorAction extends Action{
 			}
 		} else {
 			BagBuzz bagbuzz = new BagBuzz();
-			bagbuzz.setCategory(CategoryBMO.getCategory(TracingConstants.BAG_BUZZ_DEFAULT_CATEGORY));
+			bagbuzz.setCategory(Utils.getDefaultBagBuzzCategory());
 			request.setAttribute("bagbuzz", bagbuzz);
 		}
 		

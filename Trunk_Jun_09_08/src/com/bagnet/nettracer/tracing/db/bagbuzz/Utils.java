@@ -17,6 +17,7 @@ import org.hibernate.criterion.Restrictions;
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 
+import com.bagnet.nettracer.tracing.bmo.CategoryBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.taskmanager.BagBuzzTask;
 import com.bagnet.nettracer.tracing.db.bagbuzz.BagBuzz;
@@ -454,12 +455,10 @@ public class Utils {
 	}
 	
 	public static void addCategory(String description) {
-		List<Category> categoryList = getBagBuzzCategories();
 		Category newCat = new Category();
 		newCat.setCategoryVal(0);
 		newCat.setType(TracingConstants.BAG_BUZZ_CATEGORIES);
 		newCat.setDescription(description);
-		newCat.setId(1000 + categoryList.size());
 
 		Session sess = null;
 		Transaction t = null;
@@ -489,15 +488,14 @@ public class Utils {
 		}
 	}
 	
-	public static void editCategory(int index, String description) {
-		List<Category> categoryList = getBagBuzzCategories();
-		if (index < categoryList.size()) {
-			Category toEdit = categoryList.get(index);
+	public static void editCategory(int id, String description) {
+		Category toEdit = CategoryBMO.getCategory(id);
+		if (toEdit != null) {
 			toEdit.setDescription(description);
-
+			
 			Session sess = null;
 			Transaction t = null;
-			
+				
 			try{
 				sess = HibernateWrapper.getSession().openSession();
 				t = sess.beginTransaction();
@@ -524,11 +522,11 @@ public class Utils {
 		}
 	}
 	
-	public static void deleteCategory(int index) {
-		List<Category> categoryList = getBagBuzzCategories();
+	public static void deleteCategory(int id) {
+		Category toDelete = CategoryBMO.getCategory(id);
 		String updateBagBuzz = "update com.bagnet.nettracer.tracing.db.bagbuzz.BagBuzz bb set category.id = :newCat where category.id = :oldCat";
-		
-		if (index < categoryList.size()) {
+
+		if (toDelete != null && toDelete.getCategoryVal() != 1) { // Don't delete default value.
 
 			Session sess = null;
 			Transaction t = null;
@@ -536,22 +534,11 @@ public class Utils {
 			try{
 				sess = HibernateWrapper.getSession().openSession();
 				Query bbq = sess.createQuery(updateBagBuzz);
-				bbq.setLong("oldCat", (TracingConstants.BAG_BUZZ_DEFAULT_CATEGORY + index));
-				bbq.setLong("newCat", TracingConstants.BAG_BUZZ_DEFAULT_CATEGORY);
+				bbq.setLong("oldCat", toDelete.getId());
+				bbq.setLong("newCat", getDefaultBagBuzzCategory().getId());
 			
 				t = sess.beginTransaction();
 				bbq.executeUpdate();
-				int lastIndex = categoryList.size() - 1;
-				for (int i = index; i < (lastIndex); i++) {
-					Category toEdit = categoryList.get(i);
-					toEdit.setDescription(categoryList.get(i + 1).getDescription());
-					sess.update(toEdit);
-					Query bbq2 = sess.createQuery(updateBagBuzz);
-					bbq2.setLong("oldCat", (TracingConstants.BAG_BUZZ_DEFAULT_CATEGORY + i + 1));
-					bbq2.setLong("newCat", (TracingConstants.BAG_BUZZ_DEFAULT_CATEGORY + i));
-					bbq2.executeUpdate();
-				}
-				Category toDelete = categoryList.get(lastIndex);
 				sess.delete(toDelete);
 				t.commit();
 			} catch (Exception e) {
@@ -573,6 +560,30 @@ public class Utils {
 				}
 			}
 		}
+	}
+	
+	public static Category getDefaultBagBuzzCategory() {
+		Category result = null;
+
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Category.class);
+			cri.add(Restrictions.eq("type", TracingConstants.BAG_BUZZ_CATEGORIES));
+			cri.add(Restrictions.eq("categoryVal", 1));
+			result = (Category) cri.uniqueResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return result;
 	}
 	
 	public static List<ActivityDTO> getTaskManagerEntries(GroupComponentPolicy policy, Agent agent) {

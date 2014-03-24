@@ -1546,7 +1546,6 @@ public class TracingConstants {
 	public static final int CLAIM_CHECK = 3;
 	public static final int BAG_CHECKED_LOCATION = 4;
 	public static final int BAG_BUZZ_CATEGORIES = 100;
-	public static final int BAG_BUZZ_DEFAULT_CATEGORY = 1000;
 
 	public static final String BAG_CHECK_MIXED = "8";
 

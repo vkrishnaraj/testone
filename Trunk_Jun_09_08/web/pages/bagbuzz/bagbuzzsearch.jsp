@@ -82,16 +82,18 @@ function writeConsole(content) {
       	  </h1>
           <html:hidden property="admin_view" value="1"/>
           <html:hidden property="editcategory" value="" disabled="true"/>
+          <html:hidden property="editcategoryindex" value="" disabled="true"/>
           <html:hidden property="deletecategory" value="" disabled="true"/>
       	  <table class="form2" cellspacing="0" cellpadding="0">
         	<logic:iterate id="bb_cat" indexId="i" name="bb_cat_list" scope="request" type="com.bagnet.nettracer.tracing.db.Category">
       	  	  <tr>
       	  	  	<td><html:text name="bb_cat" property="description" size="13" maxlength="100" styleClass="textfield" indexed="true" /></td>
-      	  	  	<td><input type="submit" name="edit_cat_<%=i%>" value="<bean:message key="edit"/>" onclick="document.bagbuzzeditorForm.editcategory.value = <%=i%>; document.bagbuzzeditorForm.editcategory.disabled = false;" id="button"/></td>
+      	  	  	<td><input type="submit" name="edit_cat_<%=i%>" value="<bean:message key="edit"/>" id="button"
+      	  	  			onclick="document.bagbuzzeditorForm.editcategory.value = <%=bb_cat.getId()%>; document.bagbuzzeditorForm.editcategory.disabled = false;document.bagbuzzeditorForm.editcategoryindex.value = <%=i%>; document.bagbuzzeditorForm.editcategoryindex.disabled = false;" /></td>
       	  	  	<% if (bb_cat.getCategoryVal() == 1) { %>
       	  	  		<td><bean:message key="label.bagbuzz.default.category" /></td>
       	  	  	<% } else { %>
-      	  	  		<td><input type="submit" name="delete_cat_<%=i%>" value="<bean:message key="delete"/>" onclick="document.bagbuzzeditorForm.deletecategory.value = <%=i%>; document.bagbuzzeditorForm.deletecategory.disabled = false;" id="button"/></td>
+      	  	  		<td><input type="submit" name="delete_cat_<%=i%>" value="<bean:message key="delete"/>" onclick="document.bagbuzzeditorForm.deletecategory.value = <%=bb_cat.getId()%>; document.bagbuzzeditorForm.deletecategory.disabled = false;" id="button"/></td>
       	  	  	<% } %>
       	  	  </tr>
       	  	</logic:iterate>
