@@ -11,6 +11,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Column;
 import java.util.Date;
 
+import com.bagnet.nettracer.tracing.db.Category;
 import com.bagnet.nettracer.tracing.db.Status;
 
 @Entity
@@ -53,10 +54,20 @@ public class BagBuzz {
 	public void setCreated_timestamp(Date createdTimestamp) {
 		created_timestamp = createdTimestamp;
 	}
-	
+
+	@ManyToOne
+	@JoinColumn(name = "category_ID", nullable = false)
+	public Category getCategory() {
+		return category;
+	}
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
 	long bagbuzz_id;
 	String description;
 	String data;
 	Status status;
 	Date created_timestamp;
+	Category category;
 }

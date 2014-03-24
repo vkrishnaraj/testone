@@ -402,7 +402,11 @@
               <logic:equal name="activityDTO" property="group" value="4">
                 <tr id="<%=activityDTO.getComponent_id() %>">
                   <td>
+                  <% if (TracingConstants.SYSTEM_COMPONENT_NAME_BAGBUZZ.equals(activityDTO.getActivityinfomenu())) { %>
+                    <a id="<%=activityDTO.getComponent_id() + activityDTO.getActivityinfo() + "link" %>" href='<bean:write name="activityDTO" property="activityloc"/>'><%= activityDTO.getActivityinfo() %></a>
+                  <% } else { %>
                     <a id="<%=activityDTO.getComponent_id() + "link" %>" href='<bean:write name="activityDTO" property="activityloc"/>'><bean:message key='<%= activityDTO.getActivityinfo().replaceAll(" ", "_") %>' /></a>
+                  <% } %>
                   </td>
                   <td>
                     <span id="<%=activityDTO.getComponent_id() + "entry" %>" style="float:left" ><bean:write name="activityDTO" property="entries" /></span>

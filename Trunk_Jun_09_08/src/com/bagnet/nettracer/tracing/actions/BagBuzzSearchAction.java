@@ -1,39 +1,39 @@
 package com.bagnet.nettracer.tracing.actions;
 
 import java.io.PrintWriter;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-import java.util.List;
-
+import com.bagnet.nettracer.tracing.bmo.CategoryBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
-
 import com.bagnet.nettracer.tracing.db.Agent;
-import com.bagnet.nettracer.tracing.db.bagbuzz.Utils;
+import com.bagnet.nettracer.tracing.db.Category;
 import com.bagnet.nettracer.tracing.db.bagbuzz.BagBuzz;
+import com.bagnet.nettracer.tracing.db.bagbuzz.Utils;
 import com.bagnet.nettracer.tracing.db.taskmanager.BagBuzzTask;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
-//import com.mysql.jdbc.Util;
 
 public class BagBuzzSearchAction extends Action{
-	
-	private static Logger logger = Logger.getLogger(WorldTracerAFAction.class);
 
 	private static BagBuzz getBagBuzz(HttpServletRequest request){
 		BagBuzz bb = new BagBuzz();
 		bb.setBagbuzz_id(Long.parseLong(request.getParameter("bb_id")));
 		System.out.println(request.getParameter("data"));
 		bb.setData(request.getParameter("data"));
-		if(request.getParameter("description") != null){
+		if (request.getParameter("description") != null) {
 			bb.setDescription(request.getParameter("description").trim());
+		}
+		if (request.getParameter("category.id") != null && request.getParameter("category.id").matches("^\\d*$")) {
+			bb.setCategory(CategoryBMO.getCategory(Integer.parseInt(request.getParameter("category.id"))));
 		}
 		return bb;
 	}
@@ -44,25 +44,19 @@ public class BagBuzzSearchAction extends Action{
 		HttpSession session = request.getSession();
 		
 		Agent user = (Agent) session.getAttribute("user");
-		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1)
-				+ ".do", user)
-				&& !UserPermissions
-						.hasPermission(
-								TracingConstants.SYSTEM_COMPONENT_NAME_BAGBUZZ,
-								user))
+		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)
+				&& !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BAGBUZZ, user)) {
 			return (mapping.findForward(TracingConstants.NO_PERMISSION));
+		}
 		
-		boolean admin = UserPermissions.hasPermission(
-								TracingConstants.SYSTEM_COMPONENT_NAME_BAGBUZZ_ADMIN,
-								user);
-		
+		boolean admin = (request.getParameter("admin_view") != null && UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BAGBUZZ_ADMIN, user));
+				
 		if(request.getParameter("view") != null){
 			request.setAttribute("bb", Utils.getBagBuzz(Long.parseLong(request.getParameter("bb_id"))));
 			if (request.getParameter("bbt_id") != null){
 				Utils.updateBagBuzzTaskReadStatus(Long.parseLong(request.getParameter("bbt_id")));
 			}
-			return (mapping
-					.findForward(TracingConstants.VIEW_BAGBUZZ_VIEW));
+			return (mapping.findForward(TracingConstants.VIEW_BAGBUZZ_VIEW));
 		}
 		if(request.getParameter("save") != null){
 			Utils.saveBagBuzz(BagBuzzSearchAction.getBagBuzz(request));
@@ -83,12 +77,20 @@ public class BagBuzzSearchAction extends Action{
 		}
 		
 		if(admin){
+			List<Category> catlist = Utils.getBagBuzzCategories();
+			request.setAttribute("bb_cat_list", catlist);
+			if (catlist.size() < PropertyBMO.getValueAsInt(PropertyBMO.BAGBUZZ_MAX_CATEGORIES)) {
+				request.setAttribute("can_add_category", "1");
+			}
 			List <BagBuzz> bblist = Utils.getBagBuzzList(null);
 			request.setAttribute("bb_list", bblist);
 			request.setAttribute("admin", "1");
 		} else {
-			List <BagBuzzTask> bbt_list = Utils.getBagBuzzTaskList(user);
-			request.setAttribute("bbt_list", bbt_list);
+			if (request.getParameter("category") != null) {
+				long category = Long.parseLong(request.getParameter("category"));
+				List <BagBuzzTask> bbt_list = Utils.getBagBuzzTaskList(user, category);
+				request.setAttribute("bbt_list", bbt_list);
+			}
 		}
 		return mapping.findForward(TracingConstants.VIEW_BAGBUZZ_SEARCH);
 	}

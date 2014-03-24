@@ -266,16 +266,20 @@ if (request.getAttribute("prepopulate") == null && (request.getAttribute("lostde
 <%
 				for (Iterator j=nextMenu.keySet().iterator();j.hasNext();) {
 					key2 = (String)j.next();
-          String val2 = (String)nextMenu.get(key2);
+          		String val2 = (String)nextMenu.get(key2);
           
-        	key2 = key2.replaceAll(" ", "_");
-        	index2++;
+        		index2++;
+        		if (val2 != null && val2.startsWith("bagbuzzsearch.do") && !TracingConstants.SYSTEM_COMPONENT_NAME_BAGBUZZ_ADMIN.equals(key2)) {
+%>
+					<li><a id="menucol_<%=index%>.<%=index2%>" href="<%=val2%>"><%=key2%></a></li>
+<%         		} else { 
+        			key2 = key2.replaceAll(" ", "_");
 
 %>
 					<li><a id="menucol_<%=index%>.<%=index2%>" href="<%=val2%>"><bean:message key="<%=key2%>"/></a></li>
 <%
-
 				}
+			}
 %>
 				</ul> 
 					

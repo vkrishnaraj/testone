@@ -23,10 +23,12 @@ import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.bmo.UsergroupBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Category;
 import com.bagnet.nettracer.tracing.db.GroupComponentPolicy;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.SystemComponent;
+import com.bagnet.nettracer.tracing.db.bagbuzz.Utils;
 
 /**
  * @author Ankur Gupta
@@ -89,7 +91,13 @@ public class UserPermissions {
 						*/
 						SystemComponent sc = (SystemComponent) ((Object[]) j.next())[0];
 						if (sc.getDisplay() != 0) {
-							childMap.put(sc.getComponent_Name(), sc.getComponent_action_link());
+							if (TracingConstants.SYSTEM_COMPONENT_NAME_BAGBUZZ.equals(sc.getComponent_Name())) {
+								for (Category cat : Utils.getBagBuzzCategories()) {
+									childMap.put(cat.getDescription(), sc.getComponent_action_link() + "?category=" + cat.getId());
+								}
+							} else {
+								childMap.put(sc.getComponent_Name(), sc.getComponent_action_link());
+							}
 						}
 					}
 				  }			
@@ -110,7 +118,13 @@ public class UserPermissions {
 						*/
 						SystemComponent sc = (SystemComponent) ((Object[]) j.next())[0];
 						if (sc.getDisplay() != 0) {
-							childMap.put(sc.getComponent_Name(), sc.getComponent_action_link());
+							if (TracingConstants.SYSTEM_COMPONENT_NAME_BAGBUZZ.equals(sc.getComponent_Name())) {
+								for (Category cat : Utils.getBagBuzzCategories()) {
+									childMap.put(cat.getDescription(), sc.getComponent_action_link() + "?category=" + cat.getId());
+								}
+							} else {
+								childMap.put(sc.getComponent_Name(), sc.getComponent_action_link());
+							}
 						}
 					}
 				}

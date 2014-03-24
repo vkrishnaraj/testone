@@ -51,6 +51,7 @@ import com.bagnet.nettracer.tracing.db.Label;
 import com.bagnet.nettracer.tracing.db.ProactiveNotification;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.bagbuzz.Utils;
 import com.bagnet.nettracer.tracing.db.communications.IncidentActivity;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.taskmanager.GeneralTask;
@@ -599,11 +600,13 @@ public class LogonAction extends Action {
 																					if (x != -1) {
 																						entries = x;
 																					} 																					
-																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_BAGBUZZ)){																			
-																					int x = com.bagnet.nettracer.tracing.db.bagbuzz.Utils.getBagBuzzCount(agent);																		
-																					if (x != -1) {
-																						entries = x;
-																					} 																
+																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_BAGBUZZ)){
+																					List<ActivityDTO> bbDtoList = Utils.getTaskManagerEntries(policy, agent);
+																					for (int x = 0; x < (bbDtoList.size() - 1); x++) {
+																						list.add(bbDtoList.get(x));
+																					}
+																					dto = bbDtoList.get(bbDtoList.size() - 1);
+																					entries = Integer.parseInt(dto.getEntries());
 																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_FRAUD_REVIEW)){																					
 																					IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
 																					entries = incidentActivityService.getIncidentActivityFraudReviewCount();

@@ -75,11 +75,43 @@ function writeConsole(content) {
     <tr>
       <td id="middlecolumn">
         <div id="maincontent">
-      	<logic:present name="admin" scope="request">  
+      	<logic:present name="admin" scope="request">
+      	
+  		  <h1 class="green">
+      		<bean:message key="header.bagbuzz.admin.category" />
+      	  </h1>
+          <html:hidden property="admin_view" value="1"/>
+          <html:hidden property="editcategory" value="" disabled="true"/>
+          <html:hidden property="deletecategory" value="" disabled="true"/>
+      	  <table class="form2" cellspacing="0" cellpadding="0">
+        	<logic:iterate id="bb_cat" indexId="i" name="bb_cat_list" scope="request" type="com.bagnet.nettracer.tracing.db.Category">
+      	  	  <tr>
+      	  	  	<td><html:text name="bb_cat" property="description" size="13" maxlength="100" styleClass="textfield" indexed="true" /></td>
+      	  	  	<td><input type="submit" name="edit_cat_<%=i%>" value="<bean:message key="edit"/>" onclick="document.bagbuzzeditorForm.editcategory.value = <%=i%>; document.bagbuzzeditorForm.editcategory.disabled = false;" id="button"/></td>
+      	  	  	<% if (bb_cat.getCategoryVal() == 1) { %>
+      	  	  		<td><bean:message key="label.bagbuzz.default.category" /></td>
+      	  	  	<% } else { %>
+      	  	  		<td><input type="submit" name="delete_cat_<%=i%>" value="<bean:message key="delete"/>" onclick="document.bagbuzzeditorForm.deletecategory.value = <%=i%>; document.bagbuzzeditorForm.deletecategory.disabled = false;" id="button"/></td>
+      	  	  	<% } %>
+      	  	  </tr>
+      	  	</logic:iterate>
+      		<logic:present name="can_add_category" scope="request">
+	      	  	<tr>
+	      	  		<td><input type="text" id="newCategory" name="newCategory" class="textfield"></td>
+	      	  		<td colspan="2"><input type="submit" name="addcategory" value="<bean:message key="add"/>" id="button"/></td>
+	      	  	</tr>
+	      	</logic:present>
+      	  </table>
+  		  <h1 class="green">
+      		<bean:message key="header.bagbuzz.admin.messages" />
+      	  </h1>
           <table class="form2" cellspacing="0" cellpadding="0">
             <tr>
               <td>
                 <b><bean:message key="bagbuzz.colname.description" /></b>
+              </td>
+              <td>
+              	<b><bean:message key="bagbuzz.colname.category" /></b>
               </td>
               <td>
                 <b><bean:message key="bagbuzz.colname.date" /></b>
@@ -110,6 +142,10 @@ function writeConsole(content) {
                 <a href="bagbuzzsearch.do?view=1&bb_id=<bean:write name="bb" property="bagbuzz_id"/>" onclick="window.open(this.href, 'child', 'height=440,width=800,scrollbars,resizable=yes'); return false"><bean:write name="bb" property="description" /></a><br />
                   &nbsp;
                 </td>
+                <td>
+                	<bean:write name="bb" property="category.description" />
+                  	&nbsp;
+                </td>
 				<td nowrap>
                   <bean:write name="bb" property="created_timestamp" />
                   &nbsp;
@@ -138,19 +174,19 @@ function writeConsole(content) {
                 <td nowrap>
                 &nbsp;
                 <%if (bb.getStatus().getStatus_ID() == 86 || bb.getStatus().getStatus_ID() == 95){ %>
-                  <a href="bagbuzzsearch.do?publish=1&bb_id=<bean:write name="bb" property="bagbuzz_id"/>"><bean:message key="bagbuzz.colname.publish" /></a><br />
+                  <a href="bagbuzzsearch.do?admin_view=1&publish=1&bb_id=<bean:write name="bb" property="bagbuzz_id"/>"><bean:message key="bagbuzz.colname.publish" /></a><br />
                 <%} %>
                 </td>
                 <td nowrap>
                 &nbsp;
                 <%if (bb.getStatus().getStatus_ID() == 87){ %>
-                  <a href="bagbuzzsearch.do?unpublish=1&bb_id=<bean:write name="bb" property="bagbuzz_id"/>"><bean:message key="bagbuzz.colname.unpublish" /></a><br />
+                  <a href="bagbuzzsearch.do?admin_view=1&unpublish=1&bb_id=<bean:write name="bb" property="bagbuzz_id"/>"><bean:message key="bagbuzz.colname.unpublish" /></a><br />
                 <%} %>
                 </td>
                 <td nowrap>
                 &nbsp;
                 <%if (bb.getStatus().getStatus_ID() == 86 || bb.getStatus().getStatus_ID() == 95){ %>
-                  <a href="bagbuzzsearch.do?delete=1&bb_id=<bean:write name="bb" property="bagbuzz_id"/>"><bean:message key="bagbuzz.colname.delete" /></a><br />
+                  <a href="bagbuzzsearch.do?admin_view=1&delete=1&bb_id=<bean:write name="bb" property="bagbuzz_id"/>"><bean:message key="bagbuzz.colname.delete" /></a><br />
                 <%} %>
                 </td>
                 <td nowrap>
@@ -158,7 +194,7 @@ function writeConsole(content) {
                 <%if (bb.getStatus().getStatus_ID() == 86 
                 		|| bb.getStatus().getStatus_ID() == 95
                 		|| bb.getStatus().getStatus_ID() == 87){ %>
-                  <a href="bagbuzzsearch.do?copy=1&bb_id=<bean:write name="bb" property="bagbuzz_id"/>"><bean:message key="bagbuzz.colname.copy" /></a><br />
+                  <a href="bagbuzzsearch.do?admin_view=1&copy=1&bb_id=<bean:write name="bb" property="bagbuzz_id"/>"><bean:message key="bagbuzz.colname.copy" /></a><br />
                 <%} %>
                 </td>
             </tr>

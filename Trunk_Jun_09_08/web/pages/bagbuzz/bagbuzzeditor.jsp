@@ -66,6 +66,12 @@ oFCKeditor.ReplaceTextarea() ;
 <h1><bean:message key="header.bagbuzzeditor" /></h1>
 </td>
 </tr>
+<tr><td>
+	<bean:message key="bagbuzz.colname.category" />&nbsp;
+              <html:select name="bagbuzz" property="category.id" styleClass="dropdown">
+                <html:options collection="bb_category_list" property="value" labelProperty="label" />
+              </html:select>
+</td></tr>
 <tr>
 <td>
 <bean:message key="bagbuzz.colname.description"/>  

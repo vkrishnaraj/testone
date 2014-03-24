@@ -1,14 +1,19 @@
 package com.bagnet.nettracer.tracing.db.bagbuzz;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
+import org.apache.struts.util.LabelValueBean;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Query;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
+
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 
@@ -16,19 +21,23 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.taskmanager.BagBuzzTask;
 import com.bagnet.nettracer.tracing.db.bagbuzz.BagBuzz;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Category;
+import com.bagnet.nettracer.tracing.db.GroupComponentPolicy;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.dto.ActivityDTO;
 
 
 public class Utils {
 	
 	private static Logger logger = Logger.getLogger(HibernateUtils.class);
 	
-	public static int getBagBuzzCount(Agent user){
+	public static int getBagBuzzCount(Agent user, long categoryID){
 		String sql = "from com.bagnet.nettracer.tracing.db.taskmanager.BagBuzzTask bt " 
 			+ "where 1=1 "
 			+ "and agent_ID = :agentID "
 			+ "and bt.status = :btstatus "
-			+ "and bt.bagBuzz.status = :bbstatus";
+			+ "and bt.bagBuzz.status = :bbstatus "
+			+ "and bt.bagBuzz.category.id = :categoryID";
 		Query q = null;
 		Session sess = null;
 		try {
@@ -37,6 +46,7 @@ public class Utils {
 			q.setInteger("agentID", user.getAgent_ID());
 			q.setLong("btstatus", TracingConstants.TASK_MANAGER_OPEN);
 			q.setLong("bbstatus", TracingConstants.BAGBUZZ_PUBLISHED);
+			q.setLong("categoryID", categoryID);
 			List result = q.list();
 			return result.size();
 		} catch (Exception e){
@@ -85,14 +95,15 @@ public class Utils {
 		return null;
 	}
 	
-	public static List <BagBuzzTask> getBagBuzzTaskList(Agent user){
+	public static List <BagBuzzTask> getBagBuzzTaskList(Agent user, long categoryID){
 		String bbtsql = "from com.bagnet.nettracer.tracing.db.taskmanager.BagBuzzTask bbt"
 			+ " where agent_ID = :agentID"
 			+ " and bbt.status != :bbtstatus"
+			+ " and bbt.bagBuzz.category.id = :categoryID"
 			+ " order by opened_timestamp desc";
 		
 		String bbsql = "from com.bagnet.nettracer.tracing.db.bagbuzz.BagBuzz bb";
-		bbsql += " where status = :publish order by created_timestamp desc";
+		bbsql += " where status = :publish and category.id = :categoryID order by created_timestamp desc";
 		
 		Query bbtq = null;
 		Session sess = null;
@@ -102,6 +113,7 @@ public class Utils {
 			bbtq = sess.createQuery(bbtsql.toString());
 			bbtq.setInteger("agentID", user.getAgent_ID());
 			bbtq.setLong("bbtstatus", TracingConstants.TASK_MANAGER_CLOSED);
+			bbtq.setLong("categoryID", categoryID);
 			
 			LinkedHashSet bbtqlhs = new LinkedHashSet(bbtq.list());
 			ArrayList <BagBuzzTask> bbtal = new ArrayList(bbtqlhs);
@@ -109,6 +121,7 @@ public class Utils {
 			Query bbq = null;
 			bbq = sess.createQuery(bbsql.toString());
 			bbq.setLong("publish", TracingConstants.BAGBUZZ_PUBLISHED);
+			bbq.setLong("categoryID", categoryID);
 			LinkedHashSet <BagBuzz> bbqlhs = new LinkedHashSet<BagBuzz>(bbq.list());
 			ArrayList <BagBuzz>bbal = new ArrayList<BagBuzz>(bbqlhs);
 			
@@ -393,6 +406,194 @@ public class Utils {
 				}
 			}
 		}
+	}
+
+	/**
+	 * @return list of labelBeanValues for filling the BagBuzz Category
+	 *  select dropdown
+	 */
+	public static Object getBagBuzzCategoryValues() {
+		ArrayList<LabelValueBean> ccl = new ArrayList<LabelValueBean>();
+		List<Category> result = getBagBuzzCategories();
+
+		if (result != null) {
+			for (Iterator<Category> i = result.iterator(); i.hasNext();) {
+				Category bagCheckValue= (Category) i.next();
+				ccl.add(new LabelValueBean(bagCheckValue.getDescription(),String.valueOf(bagCheckValue.getId())));
+			}
+		}
+		return ccl;
+	}
+
+	/**
+	 * @return list of Categories for filling the BagBuzz Category
+	 *  select dropdown
+	 */
+	@SuppressWarnings("unchecked")
+	public static List<Category> getBagBuzzCategories() {
+		List<Category> result = null;
+
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			Criteria cri = sess.createCriteria(Category.class);
+			cri.add(Restrictions.eq("type", TracingConstants.BAG_BUZZ_CATEGORIES));
+			result = cri.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return result;
+	}
+	
+	public static void addCategory(String description) {
+		List<Category> categoryList = getBagBuzzCategories();
+		Category newCat = new Category();
+		newCat.setCategoryVal(0);
+		newCat.setType(TracingConstants.BAG_BUZZ_CATEGORIES);
+		newCat.setDescription(description);
+		newCat.setId(1000 + categoryList.size());
+
+		Session sess = null;
+		Transaction t = null;
+		
+		try{
+			sess = HibernateWrapper.getSession().openSession();
+			t = sess.beginTransaction();
+			sess.save(newCat);
+			t.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (t != null) {
+				try {
+					t.rollback();
+				} catch (Exception ex) {
+					logger.error("Error Saving: ", ex);
+				}
+			}
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	public static void editCategory(int index, String description) {
+		List<Category> categoryList = getBagBuzzCategories();
+		if (index < categoryList.size()) {
+			Category toEdit = categoryList.get(index);
+			toEdit.setDescription(description);
+
+			Session sess = null;
+			Transaction t = null;
+			
+			try{
+				sess = HibernateWrapper.getSession().openSession();
+				t = sess.beginTransaction();
+				sess.update(toEdit);
+				t.commit();
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (t != null) {
+					try {
+						t.rollback();
+					} catch (Exception ex) {
+						logger.error("Error Saving: ", ex);
+					}
+				}
+			} finally {
+				if (sess != null) {
+					try {
+						sess.close();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
+	
+	public static void deleteCategory(int index) {
+		List<Category> categoryList = getBagBuzzCategories();
+		String updateBagBuzz = "update com.bagnet.nettracer.tracing.db.bagbuzz.BagBuzz bb set category.id = :newCat where category.id = :oldCat";
+		
+		if (index < categoryList.size()) {
+
+			Session sess = null;
+			Transaction t = null;
+			
+			try{
+				sess = HibernateWrapper.getSession().openSession();
+				Query bbq = sess.createQuery(updateBagBuzz);
+				bbq.setLong("oldCat", (TracingConstants.BAG_BUZZ_DEFAULT_CATEGORY + index));
+				bbq.setLong("newCat", TracingConstants.BAG_BUZZ_DEFAULT_CATEGORY);
+			
+				t = sess.beginTransaction();
+				bbq.executeUpdate();
+				int lastIndex = categoryList.size() - 1;
+				for (int i = index; i < (lastIndex); i++) {
+					Category toEdit = categoryList.get(i);
+					toEdit.setDescription(categoryList.get(i + 1).getDescription());
+					sess.update(toEdit);
+					Query bbq2 = sess.createQuery(updateBagBuzz);
+					bbq2.setLong("oldCat", (TracingConstants.BAG_BUZZ_DEFAULT_CATEGORY + i + 1));
+					bbq2.setLong("newCat", (TracingConstants.BAG_BUZZ_DEFAULT_CATEGORY + i));
+					bbq2.executeUpdate();
+				}
+				Category toDelete = categoryList.get(lastIndex);
+				sess.delete(toDelete);
+				t.commit();
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (t != null) {
+					try {
+						t.rollback();
+					} catch (Exception ex) {
+						logger.error("Error Saving: ", ex);
+					}
+				}
+			} finally {
+				if (sess != null) {
+					try {
+						sess.close();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
+	
+	public static List<ActivityDTO> getTaskManagerEntries(GroupComponentPolicy policy, Agent agent) {
+		List<ActivityDTO> returnList = new ArrayList<ActivityDTO>();
+		List<Category> categoryList = getBagBuzzCategories();
+		for (Category category : categoryList) {
+			ActivityDTO dto = new ActivityDTO();
+			String key = category.getDescription();
+			dto.setActivityinfo(key);
+			dto.setActivityloc(policy.getComponent().getComponent_action_link() + "?category=" + category.getId());
+			dto.setActivityinfomenu(policy.getComponent().getComponent_Name());
+			dto.setGroup(policy.getComponent().getSort_group());
+			dto.setHighPriority(false);
+			dto.setComponent_id(policy.getComponent().getComponent_ID());																		
+			int x = com.bagnet.nettracer.tracing.db.bagbuzz.Utils.getBagBuzzCount(agent, category.getId());																		
+			if (x != -1) {
+				dto.setEntries("" + x);
+			}
+			returnList.add(dto);
+		}
+		return returnList;
 	}
 	
 }

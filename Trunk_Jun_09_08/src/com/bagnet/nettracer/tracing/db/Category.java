@@ -51,7 +51,6 @@ public class Category implements Serializable{
 	}
 
 	@Id
-	@GeneratedValue
 	private long id;
 	
 	/**

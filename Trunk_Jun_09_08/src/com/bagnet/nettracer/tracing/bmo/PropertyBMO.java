@@ -289,6 +289,8 @@ public class PropertyBMO {
 	
 	public static final String CREATE_CALL_TASK_TIMEZONE = "create.call.task.timezone";
 	
+	public static final String BAGBUZZ_MAX_CATEGORIES = "bagbuzz.max.categories";
+	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;
 		if(key != null && value != null){
