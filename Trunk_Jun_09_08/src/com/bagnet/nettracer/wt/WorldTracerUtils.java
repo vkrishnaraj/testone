@@ -1007,58 +1007,67 @@ public class WorldTracerUtils {
 		i.setRecordlocator(a.getPnrLocator());
 		
 		ArrayList<com.bagnet.nettracer.tracing.db.Passenger> paxList = new ArrayList<com.bagnet.nettracer.tracing.db.Passenger>();
-		for (aero.nettracer.serviceprovider.wt_1_0.common.Passenger p: a.getPax()){
-			if (p != null) {
-				com.bagnet.nettracer.tracing.db.Passenger pax = mapAhlPassenger(p);
-				paxList.add(pax);
+		if(a.getPax() != null){
+			for (aero.nettracer.serviceprovider.wt_1_0.common.Passenger p: a.getPax()){
+				if (p != null) {
+					com.bagnet.nettracer.tracing.db.Passenger pax = mapAhlPassenger(p);
+					paxList.add(pax);
+				}
 			}
 		}
 		i.setPassengerlist(paxList);
 		
 		ArrayList<com.bagnet.nettracer.tracing.db.Itinerary> itinList = new ArrayList<com.bagnet.nettracer.tracing.db.Itinerary>();
-		
-		for (aero.nettracer.serviceprovider.wt_1_0.common.Itinerary itin: a.getPaxItinerary()) {
-			if (itin != null && itin.getDepartureCity()!=null && !itin.getDepartureCity().isEmpty()
-					&& itin.getArrivalCity()!=null && !itin.getArrivalCity().isEmpty()) {
-				com.bagnet.nettracer.tracing.db.Itinerary it = mapItinerary(itin,user);
-				it.setItinerarytype(TracingConstants.PASSENGER_ROUTING);
-				itinList.add(it);
+		if(a.getPaxItinerary() != null){
+			for (aero.nettracer.serviceprovider.wt_1_0.common.Itinerary itin: a.getPaxItinerary()) {
+				if (itin != null && itin.getDepartureCity()!=null && !itin.getDepartureCity().isEmpty()
+						&& itin.getArrivalCity()!=null && !itin.getArrivalCity().isEmpty()) {
+					com.bagnet.nettracer.tracing.db.Itinerary it = mapItinerary(itin,user);
+					it.setItinerarytype(TracingConstants.PASSENGER_ROUTING);
+					itinList.add(it);
+				}
 			}
 		}
-		for (aero.nettracer.serviceprovider.wt_1_0.common.Itinerary itin: a.getBagItinerary()) {
-			/** NT-1312: Bag Itinerary in WT tend to not have Departure Cities  or Arrival Cities **/
-			if (itin != null) {
-				com.bagnet.nettracer.tracing.db.Itinerary it = mapItinerary(itin,user);
-				it.setItinerarytype(TracingConstants.BAGGAGE_ROUTING);
-				itinList.add(it);
+		if(a.getBagItinerary() != null){
+			for (aero.nettracer.serviceprovider.wt_1_0.common.Itinerary itin: a.getBagItinerary()) {
+				/** NT-1312: Bag Itinerary in WT tend to not have Departure Cities  or Arrival Cities **/
+				if (itin != null) {
+					com.bagnet.nettracer.tracing.db.Itinerary it = mapItinerary(itin,user);
+					it.setItinerarytype(TracingConstants.BAGGAGE_ROUTING);
+					itinList.add(it);
+				}
 			}
 		}
-		
+
 		i.setItinerarylist(itinList);
 		
 		ArrayList<com.bagnet.nettracer.tracing.db.Item> items = new ArrayList<com.bagnet.nettracer.tracing.db.Item>();
-		
-		for (aero.nettracer.serviceprovider.wt_1_0.common.Item item: a.getItem()) {
-			if (item != null) {
-				mapAhlItem(items, item);
+
+		if(a.getItem() != null){
+			for (aero.nettracer.serviceprovider.wt_1_0.common.Item item: a.getItem()) {
+				if (item != null) {
+					mapAhlItem(items, item);
+				}
 			}
 		}
 		i.setItemlist(items);
 		
 		ArrayList<com.bagnet.nettracer.tracing.db.Incident_Claimcheck> claimChecks = new ArrayList<com.bagnet.nettracer.tracing.db.Incident_Claimcheck>();
-		for (aero.nettracer.serviceprovider.wt_1_0.common.ClaimCheck cc: a.getClaimCheck()) {
-			StringBuilder claimCheckNum=new StringBuilder();
-			
-			if(cc.getAirlineCode()!=null && cc.getAirlineCode().length()>0){
-				claimCheckNum.append(cc.getAirlineCode());
-			}
-			if(cc.getTagNumber()!=null && cc.getTagNumber().length()>0){
-				claimCheckNum.append(cc.getTagNumber());
-			}
-			if(claimCheckNum.length()>0){
-				Incident_Claimcheck cl=new Incident_Claimcheck();
-				cl.setClaimchecknum(claimCheckNum.toString());
-				claimChecks.add(cl);
+		if(a.getClaimCheck() != null){
+			for (aero.nettracer.serviceprovider.wt_1_0.common.ClaimCheck cc: a.getClaimCheck()) {
+				StringBuilder claimCheckNum=new StringBuilder();
+
+				if(cc.getAirlineCode()!=null && cc.getAirlineCode().length()>0){
+					claimCheckNum.append(cc.getAirlineCode());
+				}
+				if(cc.getTagNumber()!=null && cc.getTagNumber().length()>0){
+					claimCheckNum.append(cc.getTagNumber());
+				}
+				if(claimCheckNum.length()>0){
+					Incident_Claimcheck cl=new Incident_Claimcheck();
+					cl.setClaimchecknum(claimCheckNum.toString());
+					claimChecks.add(cl);
+				}
 			}
 		}
 		i.setClaimchecklist(claimChecks);
@@ -1148,17 +1157,19 @@ public class WorldTracerUtils {
 		it.setColor(item.getColor());
 		
 		ArrayList<Item_Inventory> contents = new ArrayList<Item_Inventory>();
-		for (aero.nettracer.serviceprovider.wt_1_0.common.Content inv:item.getContent()) {
-			Item_Inventory content = new Item_Inventory();
-			
-			try {
-				content.setCategorytype_ID(CategoryBMO.getCategoryByWT(inv.getCategory(), TracingConstants.DEFAULT_LOCALE).getOHD_CategoryType_ID());
-			} catch (NullPointerException e) {
-				content.setCategorytype_ID(0);
+		if(item.getContent() != null){
+			for (aero.nettracer.serviceprovider.wt_1_0.common.Content inv:item.getContent()) {
+				Item_Inventory content = new Item_Inventory();
+
+				try {
+					content.setCategorytype_ID(CategoryBMO.getCategoryByWT(inv.getCategory(), TracingConstants.DEFAULT_LOCALE).getOHD_CategoryType_ID());
+				} catch (NullPointerException e) {
+					content.setCategorytype_ID(0);
+				}
+				content.setItem(it);
+				content.setDescription(inv.getDescription().trim().toUpperCase());
+				contents.add(content);
 			}
-			content.setItem(it);
-			content.setDescription(inv.getDescription().trim().toUpperCase());
-			contents.add(content);
 		}
 		it.setInventorylist(contents);
 		int descId=XDescElementsBMO.getXdescelementid(item.getDesc1());
