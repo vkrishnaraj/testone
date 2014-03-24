@@ -12,6 +12,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 import com.bagnet.nettracer.tracing.bmo.CategoryBMO;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Category;
@@ -69,7 +70,7 @@ public class BagBuzzEditorAction extends Action{
 	private ActionForward navigateToAdmin(HttpServletRequest request, ActionMapping mapping) {
 		List<Category> catlist = Utils.getBagBuzzCategories();
 		request.setAttribute("bb_cat_list", catlist);
-		if (catlist.size() < 5) { //Change to property
+		if (catlist.size() < PropertyBMO.getValueAsInt(PropertyBMO.BAGBUZZ_MAX_CATEGORIES)) {
 			request.setAttribute("can_add_category", "1");
 		}
 		List <BagBuzz> bblist = Utils.getBagBuzzList(null);
