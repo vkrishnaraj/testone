@@ -169,7 +169,7 @@ public class TracerUtils {
 		theform.setCustomer_countrycode_ID(PropertyBMO.getValue(PropertyBMO.PROPERTY_DEFAULT_COUNTRY));
 	}
 
-	public static void populateIncident(IncidentForm theform,
+	public static IncidentForm populateIncident(IncidentForm theform,
 			HttpServletRequest request, int itemtype) {
 
 		HttpSession session = request.getSession();
@@ -290,6 +290,7 @@ public class TracerUtils {
 				.getCompanycode_ID());
 		theform.setEmail_customer(csv.isEmail_customer() ? 1 : 0);
 
+		return theform;
 	}
 
 	@SuppressWarnings("unchecked")

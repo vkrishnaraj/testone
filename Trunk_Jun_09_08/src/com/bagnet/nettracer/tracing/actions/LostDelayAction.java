@@ -801,8 +801,8 @@ public class LostDelayAction extends CheckedAction {
 					if(inc==null){
 						request.setAttribute("newform", "1");
 						request.setAttribute("importAhl", "1");
-						TracerUtils.populateIncident(theform, request, TracingConstants.LOST_DELAY);
-						theform=WorldTracerUtils.mapAhlToIncident(theform, result, user);
+						theform = TracerUtils.populateIncident(theform, request, TracingConstants.LOST_DELAY);
+						theform = WorldTracerUtils.mapAhlToIncident(theform, result, user);
 						session.setAttribute("incidentForm", theform);
 						return (mapping.findForward(TracingConstants.LD_MAIN));
 					} else {
