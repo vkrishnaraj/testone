@@ -1083,10 +1083,6 @@ public class WorldTracerUtils {
 			remarks.add(rem);
 		}
 		
-		DeliveryInstructions DI=new DeliveryInstructions();
-		DI.setInstructions("");
-		i.setDeliveryInstructions(DI);
-		
 		return i;
 	}
 	
