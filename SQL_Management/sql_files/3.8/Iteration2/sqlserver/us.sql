@@ -1,0 +1,1 @@
+insert into generaldepreciationrules (lessTwentyDeprec,twentyOnefiftyDeprec,onefiftyDeprec,noDates,companyCode) VALUES (0,0,0,0,'US');
