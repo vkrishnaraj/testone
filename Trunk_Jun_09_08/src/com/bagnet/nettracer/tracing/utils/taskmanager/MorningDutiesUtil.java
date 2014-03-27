@@ -457,7 +457,7 @@ public class MorningDutiesUtil extends TaskManagerUtil {
 		+ "and i.status.status_ID = :status " 
 		+ "and (i.stationassigned.station_ID = :station or i.stationassigned.lz_ID = :lz) "
 		+ "and i.incident_ID not in (select m.incident.incident_ID from "
-		+ getDayTask(day) + " m where m.status.status_ID != :taskStatus or deferment_timestamp > :curTime) "
+		+ getDayTask(day) + " m where m.status.status_ID != :taskStatus or generic_timestamp > :curTime) "
 		+ "and " + getDateRange(day)
 		+ " and i.incident_ID not in (select lockKey from com.bagnet.nettracer.tracing.db.Lock where lockType = '" + LockType.TM_INCIDENT + "') "
 		+ "";
