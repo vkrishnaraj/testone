@@ -509,7 +509,7 @@
 		      }
 
 			  /*bag arrival date validation*/
-		      var now = '<%= DateUtils.formatDate(new Date(), a.getDateformat().getFormat(), a.getDefaultlocale(), null) %>'
+		      var now = '<%= DateUtils.formatDate(new Date(), a.getDateformat().getFormat(), a.getDefaultlocale(), null) %>';
    			  var format = '<%= a.getDateformat().getFormat() %>';
    			  var datesDifference = compareDates(currentElement.value, format, now, format);		      
 		      if (datesDifference == 1) {		
