@@ -32,7 +32,7 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 		
 
 		if (checkNoErrorPage()) {
-			click(By.xpath("(//a[contains(text(),'Admin')])[3]"));
+			click(By.xpath("(//a[contains(text(),'Admin')])[4]"));
 
 		} else {
 			System.out.println("!!!!!!!!!!! ERROR saving BSO Limit to Admin Group !!!!!!!!!!!");
