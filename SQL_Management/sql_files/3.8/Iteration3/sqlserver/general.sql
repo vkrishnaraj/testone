@@ -45,7 +45,7 @@ GO
 
 update incident set custCommId = 1301;
 
-alter table issuance_category modify document_id bigint;
+alter table issuance_category alter column document_id bigint;
 
 GO
 
@@ -75,10 +75,11 @@ create table incident_activity (
   primary key (id),
   constraint fk_activity_agent foreign key (agent) references agent (Agent_ID),
   constraint fk_activity_approval_agent foreign key (approvalAgent) references agent (Agent_ID),
-  constraint fk_activity_document foreign key (document) references document (id),
+  constraint fk_activity_document foreign key (document) references document (id),//TODO
   constraint fk_activity_status foreign key (status) references status (Status_ID),
   constraint fk_activity_activity foreign key (activity) references activity (id)
 );
+
 
 SET IDENTITY_INSERT status ON;
 insert into status (Status_ID,description,table_id) values (1400,'Pending',26);
@@ -147,15 +148,17 @@ VALUES (412, 'To Be Inventoried', 'To Be Inventoried', 15, 'toBeInventoried.do',
 
 GO
 
-ALTER TABLE ohd ADD INDEX (inventoryDate);
-ALTER TABLE ohd_itinerary ADD INDEX (legfrom);
-ALTER TABLE ohd_itinerary ADD INDEX (legto);
-ALTER TABLE ohd_itinerary ADD INDEX (departdate);
-ALTER TABLE ohd_itinerary ADD INDEX (arrivedate);
+
+create index ohd_idx on ohd (inventoryDate);
+create index ohd_itinerary_legfrom_idx on ohd_itinerary (legfrom);
+create index ohd_itinerary_legto_idx on ohd_itinerary (legto);
+create index ohd_itinerary_departdate_idx on ohd_itinerary (departdate);
+create index ohd_itinerary_arrivedate_idx on ohd_itinerary (arrivedate);
+
 
 GO
 
-alter table activity modify code varchar(8) not null;
+alter table activity alter column code varchar(8);
 
 GO
 
@@ -327,7 +330,7 @@ update systemcomponents set component_name='LUV Cancel a Voucher' where componen
 
 alter table expensepayout add printcount integer default 0;
 
-alter table expensetype modify description varchar(30); 
+alter table expensetype alter column description varchar(30); 
 
 GO
 
@@ -358,15 +361,15 @@ SET IDENTITY_INSERT status ON;
 insert into status (Status_ID,description,table_ID) VALUES (94,'Cancelled',11);
 SET IDENTITY_INSERT status OFF;
 
-insert into properties ( keyStr, valueStr) VALUES ('label.queue',1);
+insert into properties ( keyStr, valueStr) VALUES ('label.queue', '1');
 insert into systemcomponents (component_id, component_name, component_desc, parent_component_id, component_action_link,display ,sort_order,sort_group) 
 VALUES (1500, 'Label Queue', 'Label Queue', 15, 'label.do', 1, 100, 4);
 
 create table label (
-  id bigint(20) not null identity,
+  id bigint not null identity,
   agent_id integer not null,
   text varchar(100) not null,
-  lastUpdate datetime not null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  lastUpdate datetime not null default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,//TODO
   primary key (id),
   constraint fk_label_agent foreign key (agent_id) references agent (Agent_ID)
 );
@@ -382,7 +385,7 @@ create table incident_activity_remark (
 
 GO
 
-alter table incident_activity drop foreign key fk_activity_status;
+alter table incident_activity drop fk_activity_status;
 alter table incident_activity drop column status;
 
 alter table usergroup add luvLimit float default 0;
@@ -403,7 +406,7 @@ create table audit_bagdrop (
   primary key (id)
 );
 
-ALTER TABLE audit_bagdrop ADD INDEX bagdrop_id (bagdrop_id);
+create index bagdrop_id on audit_bagdrop (bagdrop_id);
 
 GO
 
@@ -443,7 +446,7 @@ GO
 
 update company_specific_variable set fraudReview=0;
 
-alter table incident_activity add expensepayout_id int;
+alter table incident_activity add expensepayout_id integer;
 alter table incident_activity add lastPrinted date;
 SET IDENTITY_INSERT status ON;
 insert into status (Status_ID,description,table_ID) VALUES (1411,'Fraud Review',26);
@@ -457,17 +460,17 @@ insert into status (Status_ID,description,table_ID) VALUES (1418,'Fraud Approved
 insert into status (Status_ID,description,table_ID) VALUES (1419,'Supervisor Approved',26);
 SET IDENTITY_INSERT status OFF;
 
-insert into activity (code, description) VALUES ("55C","CREATE CLAIM SETTLEMENT LETTER");
+insert into activity (code, description) VALUES ('55C','CREATE CLAIM SETTLEMENT LETTER');
 insert into template_type (ordinal,defaultName) VALUES (5,'Expense');
 
-insert into properties ( keyStr, valueStr) VALUES ('mishandling.attachment.at.creation',1);
+insert into properties ( keyStr, valueStr) VALUES ('mishandling.attachment.at.creation','1');
 
 insert into activity (code,description) VALUES ('99E','INBOUND WEB PORTAL MESSAGE');
 insert into activity (code,description) VALUES ('99O','OUTBOUND WEB PORTAL MESSAGE');
 
 GO
 
-insert into properties ( keyStr, valueStr) VALUES ('document.print.queue',1);
+insert into properties ( keyStr, valueStr) VALUES ('document.print.queue','1');
 insert into systemcomponents (component_id, component_name, component_desc, parent_component_id, component_action_link,display ,sort_order,sort_group) 
 VALUES (1501, 'Document Print Queue', 'Approved incident activity documents pending print', 15, 'documentPrintCommunications.do', 1, 101, 4);
 
@@ -500,8 +503,8 @@ alter table audit_issuance_item_inventory add cost float default 0;
 GO
 
 update audit_usergroup set luvLimit = 0, bsoLimit = 0;
-update issuance_item_inventory cost = 0;
-update audit_issuance_item_inventory cost = 0;
+update issuance_item_inventory set cost = 0;
+update audit_issuance_item_inventory set cost = 0;
 
 alter table issuance_item_inventory add firstName varchar(25);
 alter table issuance_item_inventory add lastName varchar(25);
@@ -543,8 +546,8 @@ VALUES (1150,'Unassigned Inbound Queue','View tasks that have not been assigned'
 insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group) 
 VALUES (1151,'Assigned Personal Tasks','View assigned tasks',15,'personalTasks.do?reset=1',1,51,4);
 
-alter table agent add inboundQueue tinyint(1) default 0;
-alter table audit_agent add inboundQueue tinyint(1) default 0;
+alter table agent add inboundQueue tinyint default 0;
+alter table audit_agent add inboundQueue tinyint default 0;
 
 GO
 
