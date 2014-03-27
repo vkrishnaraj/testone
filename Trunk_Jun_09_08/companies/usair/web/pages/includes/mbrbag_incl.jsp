@@ -1111,7 +1111,6 @@
 	<br>
 	<br>
 </logic:notEqual>
-<script>
 <logic:iterate id="theitem" indexId="i" name="incidentForm" property="itemlist" type="com.bagnet.nettracer.tracing.db.Item">
 	<script type="text/javascript">
 		checkBagType(<%=i%>);
