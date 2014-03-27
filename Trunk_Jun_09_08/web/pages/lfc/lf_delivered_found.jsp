@@ -20,7 +20,7 @@
   	
   	int divId = 0;
   	String salvageFoundSize=String.valueOf(request.getAttribute("salvagefoundsize"));
-//  	String salvageFoundSize=String.valueOf(Integer.valueOf(request.getAttribute("salvagefoundsize"))-1);
+/*  	String salvageFoundSize=String.valueOf(Integer.valueOf(request.getAttribute("salvagefoundsize"))-1);*/
 %>
   
   

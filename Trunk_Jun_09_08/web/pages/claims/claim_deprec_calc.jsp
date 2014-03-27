@@ -335,7 +335,7 @@
 				}
 				</logic:iterate>
 				/* General Rules Logic*/
-				// If no receipt, check calcVal for appropriate further depreciation
+				/* If no receipt, check calcVal for appropriate further depreciation */
 				if(receipt.value=="0" || (fieldf.value=="" && <%=rules.getNoDates()==TracingConstants.NODATE_SAME_NO_RECEIPT %>)){
 					var noReceiptDeprec=0;
 					if(calcVal<20){

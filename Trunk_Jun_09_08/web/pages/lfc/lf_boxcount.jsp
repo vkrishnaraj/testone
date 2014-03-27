@@ -26,7 +26,7 @@
 	var cal1xx = new CalendarPopup();	
 	
 	
-	//people.sort(sortByFirstName);
+	/*people.sort(sortByFirstName);*/
 	 
 	 
 

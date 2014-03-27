@@ -15,7 +15,6 @@
 	
 %>
 <script type="text/javascript">
-<!--
 	function verifyStartingPositionRange() {
 		var startingPosition = document.getElementById("starting_position");
 		if (startingPosition.value.length < 1) {
@@ -79,7 +78,6 @@
 
 		return false;
 	}
-//-->
 </script>
 
   <jsp:include page="/pages/includes/taskmanager_header.jsp" />

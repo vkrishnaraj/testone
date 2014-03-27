@@ -56,7 +56,7 @@
 		} else {
 			stationList.value=<%=String.valueOf(TracingConstants.LF_STATUS_ALL) %>;
 		}
-		//document.getElementById("subCategory"+selectedCategory).style.display="inline";
+		/*document.getElementById("subCategory"+selectedCategory).style.display="inline";*/
 	}
     
 	function goprev() {

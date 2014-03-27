@@ -68,7 +68,7 @@ a.starter:hover, a.starter:active, a.starter:focus {
 
 <%
 
-	java.util.Locale myLocale = (java.util.Locale) session.getAttribute("org.apache.struts.action.LOCALE"); // spa
+	java.util.Locale myLocale = (java.util.Locale) session.getAttribute("org.apache.struts.action.LOCALE"); /*spa*/
 	boolean spanish = "spa".equalsIgnoreCase(myLocale.getISO3Language());
 	
 	String key = null;

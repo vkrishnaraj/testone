@@ -59,7 +59,7 @@
 			}
 		</logic:iterate>
 		
-		//document.getElementById("subCategory"+selectedCategory).style.display="inline";
+		/*document.getElementById("subCategory"+selectedCategory).style.display="inline";*/
 	}
 	
 	function getStations() {
@@ -79,7 +79,7 @@
 			}
 		</logic:iterate>
 		
-		//document.getElementById("subCategory"+selectedCategory).style.display="inline";
+		/*document.getElementById("subCategory"+selectedCategory).style.display="inline";*/
 	}
 	
 	function displayContactDiv() {

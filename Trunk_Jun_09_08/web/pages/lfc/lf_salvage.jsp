@@ -20,7 +20,7 @@
   	
   	int divId = 0;
   	String salvageFoundSize=String.valueOf(request.getAttribute("salvagefoundsize"));
-//  	String salvageFoundSize=String.valueOf(Integer.valueOf(request.getAttribute("salvagefoundsize"))-1);
+/*  	String salvageFoundSize=String.valueOf(Integer.valueOf(request.getAttribute("salvagefoundsize"))-1);*/
 %>
   
   
@@ -68,7 +68,7 @@
 	}
 	
 	function boxIdUpdate(key,boxID, foundId){
-		 //var key=event.keyCode || event.which;
+		 /*var key=event.keyCode || event.which;*/
 		 if (key==9){
  			o = document.lfSalvageForm;
  			o.previousBoxId.value = boxID.value;

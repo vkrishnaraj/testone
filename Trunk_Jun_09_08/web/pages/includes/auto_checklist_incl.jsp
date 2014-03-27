@@ -38,8 +38,8 @@
       boolean pilCrmIntegration = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PUSH_PIL, a);
       boolean ocIntegration = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CENTRAL_BAGGAGE_CLAIMS_FEATURES, a);
       
-      // MJS: the collect receive timestamp functionality should be available iff: the current report is a damaged incident, 
-      //	  the user's current station is LZ, and the user has the permission to set the received in LZ timestamp.
+      /* MJS: the collect receive timestamp functionality should be available iff: the current report is a damaged incident, 
+      	  the user's current station is LZ, and the user has the permission to set the received in LZ timestamp.*/
       boolean collectRxTimestamp = false;
       int ohdLzId = -1;
       if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_RECEIVE_TIMESTAMP_COLLECT, a)) {

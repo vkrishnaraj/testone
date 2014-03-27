@@ -10,7 +10,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.bmo.PropertyBMO" %>
 <%@ page import="java.util.ArrayList" %>
 <%	
-	//int divId = Integer.valueOf((String) request.getAttribute("divId"));
+	/*int divId = Integer.valueOf((String) request.getAttribute("divId"));*/
 	String cssFormClass = "form2";
 %>
 <logic:notEmpty name="count" scope="request" >

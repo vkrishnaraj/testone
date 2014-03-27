@@ -56,9 +56,9 @@
 </form>
 
 <script>
-<!--
+
     document.entry.submit();
-// -->
+
 </script>
 
 </body>

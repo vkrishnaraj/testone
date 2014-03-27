@@ -175,7 +175,7 @@
 		templateSelectDialog.dialog("open");
 	}
 
-	//label
+	/*label*/
 	function generateLabel(field) {
 		if (field.value.length < 1) {
 			return false;
@@ -198,7 +198,7 @@
 		
 		return true;
 	}
-//-->
+
 </script>
 <html:hidden name="incidentForm" property="outMessage" value=""/>
 
