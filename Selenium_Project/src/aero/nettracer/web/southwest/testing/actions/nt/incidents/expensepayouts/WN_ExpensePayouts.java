@@ -18,7 +18,7 @@ public class WN_ExpensePayouts extends WN_SeleniumTest {
 		clickMenu("menucol_10.3");
 
 		if (checkNoErrorPage()) {
-			click(By.xpath("(//a[contains(text(),'Admin')])[3]"));
+			click(By.xpath("(//a[contains(text(),'Admin')])[4]"));
 		} else {
 			System.out.println("!!!!!!!!!!! ERROR Loading Maintain Groups page !!!!!!!!!!!");
 		}

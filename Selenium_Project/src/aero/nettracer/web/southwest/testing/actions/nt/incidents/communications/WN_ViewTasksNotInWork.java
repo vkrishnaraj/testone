@@ -14,18 +14,18 @@ public class WN_ViewTasksNotInWork extends WN_SeleniumTest {
 	@Test
 	public void testViewTasksNotInWorkDisabled() {
 		verifyTrue(setPermissions(new String[] { VIEW_TASKS_NOT_IN_WORK }, new boolean[] { false }));
-		verifyFalse(selenium.isElementPresent("id=menucol_10.20"));
+		verifyFalse(selenium.isElementPresent("id=menucol_10.21"));
 	}
 	
 	@Test
 	public void testViewTasksNotInWorkEnabled() {
 		verifyTrue(setPermissions(new String[] { VIEW_TASKS_NOT_IN_WORK }, new boolean[] { true }));
-		verifyTrue(selenium.isElementPresent("id=menucol_10.20"));
+		verifyTrue(selenium.isElementPresent("id=menucol_10.21"));
 	}
 	
 	@Test
 	public void testNavigateToTasksNotInWork() {
-		clickMenu("menucol_10.20");
+		clickMenu("menucol_10.21");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			verifyTrue(isElementPresent(By.id("agentName")));
@@ -52,7 +52,7 @@ public class WN_ViewTasksNotInWork extends WN_SeleniumTest {
 		verifyTrue(setPermissions(permissions, values));
 		createIncident(true);
 		createCustomerCommunication();
-		clickMenu("menucol_10.20");
+		clickMenu("menucol_10.21");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			selenium.type("id=agentName", Settings.USERNAME_ADMIN);
