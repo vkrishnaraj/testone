@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.NavigationHandler;
 import javax.faces.component.UIViewRoot;
 import javax.faces.component.html.HtmlForm;
 import javax.faces.component.html.HtmlInputSecret;
@@ -135,33 +136,32 @@ public class PassengerController {
 
 	@PostConstruct
 	public void post() {
-		HttpSession session = (HttpSession) FacesUtil.getFacesContext()
-		.getExternalContext().getSession(false);
-		baggageState = (Long) session.getAttribute("baggageState");
-		String selectedLanguage = (String) session
-				.getAttribute("selectedLanguage");
+		HttpSession session = (HttpSession) FacesUtil.getFacesContext().getExternalContext().getSession(false);
+		if (session.isNew()) {
+            FacesContext fc = FacesContext.getCurrentInstance();
+            NavigationHandler nav = fc.getApplication().getNavigationHandler();
+			nav.handleNavigation(fc, null, "login?faces-redirect=true");
+            fc.renderResponse();
+			return;
+		}
+		
 		try {
-			passengerInfoLabel = passengerService.getPassengerInfoPage(
-					selectedLanguage, baggageState);
-			flightLabel = passengerService.getFlightInfoPage(
-					selectedLanguage, baggageState);
-			bagDetailsLabel = passengerService.getBagDetailsPage(
-					selectedLanguage, baggageState);
-			fileUploadLabel = passengerService.getFileUploadPage(
-					selectedLanguage, baggageState);
-			fraudQuestionLabel = passengerService.getFraudQuestionPage(
-					selectedLanguage, baggageState);
-			submitClaimLabel = passengerService.getSubmitClaimPage(
-					selectedLanguage, baggageState);
-			savedScreenLabel = passengerService.getSavedScreenPage(
-					selectedLanguage, baggageState);
-			generalLabel = passengerService.getGeneralPage(
-					selectedLanguage, baggageState);
+			baggageState = (Long) session.getAttribute("baggageState");
+			String selectedLanguage = (String) session.getAttribute("selectedLanguage");
+			passengerInfoLabel = passengerService.getPassengerInfoPage(selectedLanguage, baggageState);
+			flightLabel = passengerService.getFlightInfoPage(selectedLanguage, baggageState);
+			bagDetailsLabel = passengerService.getBagDetailsPage(selectedLanguage, baggageState);
+			fileUploadLabel = passengerService.getFileUploadPage(selectedLanguage, baggageState);
+			fraudQuestionLabel = passengerService.getFraudQuestionPage(selectedLanguage, baggageState);
+			submitClaimLabel = passengerService.getSubmitClaimPage(selectedLanguage, baggageState);
+			savedScreenLabel = passengerService.getSavedScreenPage(selectedLanguage, baggageState);
+			generalLabel = passengerService.getGeneralPage(selectedLanguage, baggageState);
+			
 			List<CountryCode> countries = passengerService.getCountries();
 			for (CountryCode countryCode : countries) {
-				selectItems.add(new SelectItem(countryCode.getId(),
-						countryCode.getCountry()));
+				selectItems.add(new SelectItem(countryCode.getId(), countryCode.getCountry()));
 			}
+			
 			if (airlines == null) {
 				airlines = new ArrayList<SelectItem>();
 				for (Airline air : passengerService.getAirlines()) {
@@ -169,9 +169,10 @@ public class PassengerController {
 							.getAirlineDesc()));
 				}
 			}
+			
 			currencyList = Currency.getCurrencies();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Post Exception ...", e);
 		}
 		
 	}
