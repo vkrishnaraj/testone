@@ -250,7 +250,7 @@ create table template_var (
   displayTag varchar(256) not null,
   associatedClass varchar(256) not null,
   primary key (id),
-  constraint unique_tag_class unique (displayTag,associatedClass)
+  constraint unique_tag_class unique (displayTag(255),associatedClass(255))
 );
 
 create table template_var_dependency (
@@ -258,7 +258,7 @@ create table template_var_dependency (
   associatedClass varchar(256) not null,
   dependentClass varchar(256) not null,
   primary key (id),
-  constraint unique_dependency unique (associatedClass,dependentClass)
+  constraint unique_dependency unique (associatedClass(255),dependentClass(255))
 );
 
 create table template_var_mapping (
