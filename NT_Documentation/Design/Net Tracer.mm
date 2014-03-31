@@ -50,7 +50,7 @@
 </stylenode>
 </map_styles>
 </hook>
-<node CREATED="1395953177913" FOLDED="true" ID="ID_518362160" MODIFIED="1396037374302" POSITION="right" TEXT="Performance">
+<node CREATED="1395953177913" ID="ID_518362160" MODIFIED="1396270491495" POSITION="right" TEXT="Performance">
 <node CREATED="1395953305345" ID="ID_1022828901" MODIFIED="1395953310197" TEXT="Concurrency"/>
 <node CREATED="1395953312136" ID="ID_1387673948" MODIFIED="1395953322780" TEXT="Response Time per request"/>
 <node CREATED="1395953325321" ID="ID_989379258" MODIFIED="1395954732389" TEXT="Data size per request"/>
@@ -99,10 +99,9 @@
       Agents associated with group and group contains permissions
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
-<node CREATED="1395953292145" ID="ID_212076688" MODIFIED="1396041009381" TEXT="Accountablility">
+<node CREATED="1395953292145" ID="ID_212076688" MODIFIED="1396273251674" TEXT="Accountablility">
 <richcontent TYPE="NOTE"><html>
   <head>
     
@@ -117,13 +116,19 @@
     <p>
       Agent auditing with many audit table
     </p>
+    <p>
+      
+    </p>
+    <p>
+      Audit tables are large causing migrations to take a long time
+    </p>
   </body>
 </html>
 </richcontent>
 <icon BUILTIN="flag"/>
 </node>
 </node>
-<node CREATED="1395953209497" FOLDED="true" ID="ID_1270863797" MODIFIED="1396037828152" POSITION="right" TEXT="Development">
+<node CREATED="1395953209497" ID="ID_1270863797" MODIFIED="1396270492916" POSITION="right" TEXT="Development">
 <node CREATED="1395954347643" ID="ID_175907763" MODIFIED="1395954988896" TEXT="CVS">
 <richcontent TYPE="NOTE"><html>
   <head>
@@ -557,8 +562,7 @@
       3) Managing caching
     </p>
   </body>
-</html>
-</richcontent>
+</html></richcontent>
 </node>
 </node>
 <node CREATED="1396014762819" ID="ID_220194551" MODIFIED="1396014777761" POSITION="left" TEXT="Architectural Requirements">
