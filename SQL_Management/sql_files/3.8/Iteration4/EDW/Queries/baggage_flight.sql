@@ -45,6 +45,7 @@ left outer join
    i2.Itinerary_ID
    from itinerary i2, 
    (SELECT @row:=1, @incCheck:='0') as row_count
+   where i2.itinerarytype = 1
    order by i2.incident_ID desc
 ) seq on seq.Itinerary_ID = i.Itinerary_ID
 where inc.lastupdated >= date(date_add(now(), INTERVAL -1 DAY))
