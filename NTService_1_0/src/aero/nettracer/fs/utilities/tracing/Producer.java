@@ -264,13 +264,20 @@ public class Producer {
 		Set<FsClaim> claims = file.getClaims();
 		Set<FsReceipt> receipts= new HashSet<FsReceipt>();
 		Set<String> ccNumbers = new HashSet<String>();
+		Set<FsIPAddress> ipaddresses = new HashSet<FsIPAddress>();
+		Set<String> ipaddressnums = new HashSet<String>();
 		//we might have duplicate Phone objects with the same phone number, we want unique phone numbers
 		for(FsClaim claim:claims){
 			receipts.addAll(claim.getReceipts());
+			ipaddresses.addAll(claim.getIpAddresses());
 		}
 		for(FsReceipt receipt:receipts)
 		{
 			ccNumbers.add(receipt.getCcLastFour());
+		}
+		
+		for(FsIPAddress ipaddress:ipaddresses){
+			ipaddressnums.add(ipaddress.getIpAddress());
 		}
 		
 		if((ccNumbers!=null && ccNumbers.size()>0)){
@@ -295,10 +302,32 @@ public class Producer {
 							sql+="rec.ccLastFour = \'"+format(ccnumber)+"\' OR ";
 						}
 					}
+					sql=sql.substring(0, sql.length()-3);			
+		}
+		
+		if(ipaddresses!=null && ipaddresses.size()>0){
+			sql += " union select null as f1_id, " +
+					"f2.id as f2_id, " +
+					"f3.id as f3_id, " +
+					"null as f4_id, " +
+					"null as f5_id, " +
+					"null as f6_id, " +
+					"null as f7_id, " +
+					"'cc' as type " +
+					"from fsipaddress ip " +
+					"left outer join fsclaim c2 on ip.claim_id = c2.id " +
+					"left outer join fsincident i2 on i2.claim_id = c2.id " +
+					"left outer join FsFile f2 on f2.id = c2.file_id " +
+					"left outer join FsFile f3 on f3.id = i2.file_id " +
+					"where ";
+					if(ipaddressnums.size()>0)
+					{
+						for(String ipaddress:ipaddressnums)
+						{
+							sql+="ip.ipaddress = \'"+format(ipaddress)+"\' OR ";
+						}
+					}
 					sql=sql.substring(0, sql.length()-3);
-					//ccNumLastFour = \'" + format(file.getIncident().getReservation().getCcNumLastFour()) +"\'";
-					
-			
 		}
 		
 		logger.debug("Producer query: " + sql);
