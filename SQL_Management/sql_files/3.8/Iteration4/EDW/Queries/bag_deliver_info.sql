@@ -7,7 +7,7 @@ select formatted_output
 into outfile 'D:/EDW/bag_deliver_info_", date_format(now(), '%Y%m%d'), ".csv' 
 from (
 select concat_ws('|','H',date_format(now(), '%Y%m%d'), date_format(date_add(now(), INTERVAL -1 DAY), '%Y%m%d')) formatted_output, 1 as seq
-union
+union all
 select concat_ws('|',
 
 #COLUMNS
@@ -38,7 +38,7 @@ left outer join agent a on a.Agent_ID = b.agent_ID
 where b.createdate >= date(date_add(now(), INTERVAL -1 DAY))
 and b.incident_ID is not null
 
-union
+union all
 select concat_ws('|','T',
 
 #COUNT
