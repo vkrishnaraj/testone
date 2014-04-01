@@ -70,8 +70,6 @@ public class WorldTracerUtils {
 	public static String status_extended = "D";
 	public static String status_handled = "H";
 	public static String status_qoh = "Q";
-	@SuppressWarnings("unused")
-	private static String error; //What is this even for?
 	private static Logger logger = Logger.getLogger(WorldTracerUtils.class);
 
 
@@ -795,11 +793,6 @@ public class WorldTracerUtils {
 			wt_url = "www.worldtracer.aero";
 
 		return wt_url;
-	}
-
-	@SuppressWarnings("static-access")
-	public void setError(String error) {
-		this.error = error;
 	}
 
 	public static BDO findBDOByID(int BDO_ID) {
