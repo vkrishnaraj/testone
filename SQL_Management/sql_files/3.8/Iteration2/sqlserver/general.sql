@@ -617,9 +617,6 @@ alter table task drop column deferment_timestamp;
 insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group)
 values (658,'Manage_CSS_Daily_Calls','Task Manager CS&S Daily Calls Display',15,'css_calls.do',1,99,1);
 
-insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group)
-values (659,'Manage Tasks','Task Manager CS & S Daily Calls Display',39,null,0,99,0);
-
 alter table bdo add pickupdate date default null;
 alter table bdo add pickuptime time default null;
 
