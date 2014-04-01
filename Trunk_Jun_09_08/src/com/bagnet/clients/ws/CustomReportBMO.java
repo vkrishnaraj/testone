@@ -316,7 +316,6 @@ public class CustomReportBMO implements com.bagnet.nettracer.integrations.report
 			rdto.setFlightDate(i.getDisdepartdate());
 			rdto.setFlightNum(i.getFlightnum());
 		}
-		if(inc.getFaultstationcode() != null);
 		rdto.setFaultStation(inc.getFaultstationcode());
 		if(inc.getLoss_code() > 0) {
 			try{
