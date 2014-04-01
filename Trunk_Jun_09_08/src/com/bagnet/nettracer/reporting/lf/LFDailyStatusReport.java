@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Hibernate;
 import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.SQLQuery;
 
@@ -40,13 +39,15 @@ public class LFDailyStatusReport extends AbstractNtJasperReport {
 					 "ifnull(lvir.count, 0) as 'lvir_count',ifnull(hvirwr.count, 0) as 'hvirwr_count', " +
 					 "ifnull(lvirwr.count, 0) as 'lvirwr_count',ifnull(hvirwor.count, 0) as 'hvirwor_count', " +
 					 "ifnull(lvirwor.count, 0) as 'lvirwor_count', ifnull(boxc.boxcount, 0) as 'box_count' from " +
-					 "(select xx.dateCount as 'received_date', x.station_ID as 'station' from lfboxcount x "+
-					 "left outer join lfboxcontainer xx on x.container_ID = xx.id where xx.dateCount between :startDate and :endDate group by xx.dateCount UNION "+
-					 "select tt.receivedDate 'received_date', tt.station_ID 'station' from lffound tt where tt.receivedDate between :startDate and :endDate ) zz " +
+					 /*NT-2393: When one query gets an extra column in a union, the unioned query must have the same number of columns. For this case, returning null for LFFound portion of the union*/
+					 "(select xx.dateCount as 'received_date', x.station_ID as 'station', x.id as 'countId' from lfboxcount x "+
+					 "left outer join lfboxcontainer xx on x.container_ID = xx.id where xx.dateCount between :startDate and :endDate UNION "+
+					 "select tt.receivedDate 'received_date', tt.station_ID 'station', null from lffound tt where tt.receivedDate between :startDate and :endDate ) zz " +
 					 "left outer join station s on zz.station = s.Station_ID " +
 					 "left outer join lffound lf on zz.received_date = lf.receivedDate "+
-					 "left outer join (select bcc.dateCount as 'received_date', bc.boxCount as 'boxcount', bc.station_ID as 'station' from lfboxcount bc "+
-					 				  "left outer join lfboxcontainer bcc on bc.container_ID = bcc.id where bcc.dateCount between :startDate and :endDate group by bcc.dateCount order by bcc.dateCount, bc.Station_ID) boxc on zz.received_date= boxc.received_date " +
+					 /*NT-2393: Removed the group by date as it was skewing the accurate boxcounts and changed what the query groups on*/
+					 "left outer join (select bcc.dateCount as 'received_date', bc.boxCount as 'boxcount', bc.station_ID as 'station', bc.id as 'countId' from lfboxcount bc "+
+					 				  "left outer join lfboxcontainer bcc on bc.container_ID = bcc.id where bcc.dateCount between :startDate and :endDate order by bcc.dateCount, bc.Station_ID) boxc on zz.countId= boxc.countId " +
 					 "left outer join (select lf.receivedDate as 'received_date',s.station_id,count(i.id) as 'count' from station s " +
                         			  "left outer join lffound lf on s.station_id = lf.station_id " +
                         			  "left outer join lfitem i on lf.id = i.found_id and i.type = " + TracingConstants.LF_TYPE_FOUND + " " + 
