@@ -236,6 +236,35 @@
 		</antcall> 	
 	</target>
 	
+	
+	<target name="build-porter-training">
+		<property name="company.name" value="porter" />
+		<property name="environment.name" value="training" />
+		<antcall target="war" >
+		</antcall> 	
+	</target>
+	
+	<target name="build-porter-prod">
+		<property name="company.name" value="porter" />
+		<property name="environment.name" value="prod" />
+		<antcall target="war" >
+		</antcall> 	
+	</target>
+	
+	<target name="build-porter-test">
+		<property name="company.name" value="porter" />
+		<property name="environment.name" value="test" />
+		<antcall target="war" >
+		</antcall> 	
+	</target>
+
+	<target name="build-porter-hudson">
+		<property name="company.name" value="porter" />
+		<property name="environment.name" value="hudson" />
+		<antcall target="war" >
+		</antcall> 	
+	</target>
+
 	<target name="build-volaris-training">
 		<property name="company.name" value="volaris" />
 		<property name="environment.name" value="training" />
@@ -298,7 +327,8 @@
 		<antcall target="build-spirit-test" /> 
 		<antcall target="build-westjet-test" /> 
 		<antcall target="build-webjet-test" /> 
-		<antcall target="build-flyafrica-test" /> 
+		<antcall target="build-flyafrica-test" />
+		<antcall target="build-porter-test" />
 		<antcall target="build-volaris-test" /> 
 	</target>
 
@@ -308,7 +338,8 @@
 		<antcall target="build-spirit-hudson" /> 
 		<antcall target="build-westjet-hudson" /> 
 		<antcall target="build-webjet-hudson" /> 	
-		<antcall target="build-flyafrica-hudson" /> 
+		<antcall target="build-flyafrica-hudson" />
+		<antcall target="build-porter-hudson" />
 		<antcall target="build-volaris-hudson" /> 
 	</target>
 	
@@ -318,7 +349,8 @@
 		<antcall target="build-spirit-training" /> 
 		<antcall target="build-westjet-qa" /> 
 		<antcall target="build-webjet-training" /> 	
-		<antcall target="build-flyafrica-training" /> 
+		<antcall target="build-flyafrica-training" />
+		<antcall target="build-porter-training" /> 
 		<antcall target="build-volaris-training" /> 
 	</target>
 	
@@ -329,6 +361,7 @@
 		<antcall target="build-westjet-prod" /> 
 		<antcall target="build-webjet-prod" /> 	
 		<antcall target="build-flyafrica-prod" /> 
+		<antcall target="build-porter-prod" />
 		<antcall target="build-volaris-prod" /> 
 	</target>
 	

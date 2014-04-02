@@ -48,6 +48,13 @@
          <context-root>flyafrica-paxview</context-root>
      </web>
   </module>
+  
+  <module>
+     <web>
+         <web-uri>porter-pv-hudson.war</web-uri>
+         <context-root>porter-paxview</context-root>
+     </web>
+  </module>
     
    <module>
      <web>

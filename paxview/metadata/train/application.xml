@@ -48,7 +48,14 @@
          <context-root>flyafrica-paxview</context-root>
      </web>
   </module>
-    
+   
+   <module>
+     <web>
+         <web-uri>porter-pv-training.war</web-uri>
+         <context-root>porter-paxview</context-root>
+     </web>
+  </module>
+  
    <module>
      <web>
          <web-uri>volaris-pv-training.war</web-uri>

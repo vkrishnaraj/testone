@@ -1,0 +1,125 @@
+body,td {
+	font: 9pt Arial, Helvetica, sans-serif;
+	color: #000000;
+}
+
+a {
+	color: #006699;
+	text-decoration: none;
+	font-weight: bold;
+	font: bold 10px/ 10px Arial, Helvetica, sans-serif;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+.statClaimContent {
+	font-size: 11px;
+	height: 0;
+	overflow: hidden;
+	margin-top: 4px;
+	margin-bottom: -4px;
+	width: 180px;
+}
+
+td.label {
+	font-weight: bold;
+	text-align: right;
+	padding-top: 5px;
+}
+
+#formbox {
+	border: 1px solid #006699;
+	padding: 10px 10px 10px 10px;
+	background-color: #F4F4F4;
+	position: relative;
+}
+
+#wrapper {
+	position: relative;
+	margin: 0 auto;
+	text-align: left;
+	z-index: 0;
+}
+
+#wrapper table.formtable td {
+	padding: 3px 8px 3px 0;
+}
+
+span.button {
+	height: 30px;
+	display: block;
+	margin-right: 5px;
+	float: left;
+	width: 80px;
+}
+
+#right {
+	padding: 22px 0 20px 20px;
+}
+
+#right .tools {
+	margin: 0 0 33px 10px;
+	width: 120px;
+}
+
+#right .tools h4 {
+	color: #000000;
+	font-weight: bold;
+	border-bottom: 1px solid #000000;
+	margin-bottom: 6px;
+	padding: 4px 0 7px 0;
+}
+
+#right #tools h4 {
+	
+}
+
+#right #info h4 {
+	
+}
+
+#right .tools ul {
+	margin: 0;
+	padding: 0;
+}
+
+#right .tools li {
+	display: block;
+	border-bottom: 1px solid #000000;
+	list-style: none;
+	margin: 0 0 8px;
+	padding: 0 0 9px 6px;
+}
+
+#right .tools a {
+	color: #006699;
+	text-decoration: none;
+	font-weight: bold;
+	font: bold 10px/ 10px Arial, Helvetica, sans-serif;
+}
+
+#right .tools a:hover {
+	text-decoration: underline;
+}
+
+#right .tools li a {
+	font-size: 11px;
+	font-weight: normal;
+}
+
+#right img {
+	display: block;
+}
+
+.borderOff {
+	border-bottom: 0px solid;
+	border-left: 0px solid;
+	border-right: 0px solid;
+	border-top: 0px solid;
+	margin-top: 1px;
+	background: none;
+	background-color: transparent;
+	background-image: none;
+}
