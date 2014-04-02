@@ -1,0 +1,153 @@
+/**************************************************/
+/* This stylesheet formats the forms in the main content area only.
+	formatting for Search fields, etc. is found in the main stylesheet.
+/**************************************************/
+
+/* text fields 
+width:65px;
+*/
+div#maincontent input.textfield,
+div#maincontent input.disabledtextfield {
+	height:15px;
+	border:1px solid #569ECD;
+	margin:2px 0px 1px 0px;
+	padding: 0px;
+	display:inline;
+}
+
+div#maincontent input.disabledtextfield {
+	background-color: #ECE9D8;
+	color: #ACA899;
+}
+
+div#maincontent textarea {
+	border:1px solid #569ECD;
+	margin:2px 0px 1px;
+	display:inline;
+}
+
+/* dropdowns */
+div#maincontent select.dropdown {
+	font-size:9px;
+	border:1px solid #569ECD;
+	margin:2px 0px 1px 0px;
+	display:inline;
+}
+
+div#maincontent select.date {
+	height:16px;
+	font-size:9px;
+	border:1px solid #569ECD;
+	margin:2px 0px 1px 0px;
+}
+/* buttons */
+div#maincontent input.browsebutton {
+	background-image:url(../images/nettracer/browsebutton.gif);
+	background-repeat:no-repeat;
+	height:23px;
+	border:0px none;
+	background-color:#FFFFFF;
+	color:#5C7524;
+	font-size:12px;
+	padding-left:20px;
+	cursor: hand;
+	cursor: pointer;
+}
+div#maincontent input.addbutton_green {
+	background-image:url(../images/nettracer/addButton_green.gif);
+	background-repeat:no-repeat;
+	height:30px;
+	border:0px none;
+	background-color:#FFFFFF;
+	color:#5C7524;
+	font-size:12px;
+	font-weight:bold;
+	padding-left:20px;
+	cursor: hand;
+	cursor: pointer;
+}
+div#maincontent input.addbutton_olive {
+	background-image:url(../images/nettracer/addButton_olive.gif);
+	background-repeat:no-repeat;
+	height:30px;
+	border:0px none;
+	background-color:#FFFFFF;
+	color:#999933;
+	font-size:12px;
+	font-weight:bold;
+	padding-left:20px;
+	cursor: pointer;
+	cursor: hand;
+}
+div#maincontent input.addbutton_smgreen {
+	background-image:url(../images/nettracer/addButton_smgreen.gif);
+	background-repeat:no-repeat;
+	height:23px;
+	border:0px none;
+	background-color:#FFFFFF;
+	color:#5C7524;
+	font-size:12px;
+	padding-left:20px;
+	cursor: hand;
+	cursor: pointer;
+}
+div#maincontent input.addbutton_blue {
+	background-image:url(../images/nettracer/addButton_blue.gif);
+	background-repeat:no-repeat;
+	height:30px;
+	border:0px none;
+	background-color:#FFFFFF;
+	color:#2E6D98;
+	font-size:12px;
+	font-weight:bold;
+	padding-left:20px;
+	cursor: hand;
+	cursor: pointer;
+}
+
+div#maincontent input.removebutton_blue {
+	background-image:url(../images/nettracer/subtractButton_blue.gif);
+	background-repeat:no-repeat;
+	height:30px;
+	border:0px none;
+	background-color:#FFFFFF;
+	color:#2E6D98;
+	font-size:12px;
+	font-weight:bold;
+	padding-left:20px;
+	cursor: hand;
+	cursor: pointer;
+}
+
+div#buttons input {
+	margin:0px 10px;
+}
+
+#button {
+	background-color: #1F43AE;
+	border: 0px none;
+	height: 20px;
+	margin: 0px;
+	display: inline;
+
+	font-size:11px;
+	font-weight:bold;
+	color: #FFFFFF;
+	cursor: hand;
+	cursor: pointer;
+}
+
+
+#wtbutton {
+	background-color: #1F43AE;
+	border: 0px none;
+	height: 20px;
+	margin: 0px;
+	display: inline;
+
+	font-size:11px;
+	font-weight:bold;
+	color: #FFFFFF;
+	cursor: hand;
+	cursor: pointer;
+}

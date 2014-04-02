@@ -838,6 +838,15 @@
 		<antcall target="donotrun-build-ear" />
 	</target>
 
+	<target name="build-ear-local-porter" depends="delete-wars">
+		<property name="staging.project" value="porter" />
+		<property name="staging.env" value="local" />
+		<property name="avis.service.includes" value="*.war" />
+		<antcall target="build-war-local-porter"/>
+		<property name="app.xml.location" value="metadata/porter/local" />		
+		<antcall target="donotrun-build-ear" />
+	</target>
+	
 	<target name="build-ear-local-volaris" depends="delete-wars">
 		<property name="staging.project" value="volaris" />
 		<property name="staging.env" value="local" />
@@ -907,6 +916,7 @@
 		<antcall target="build-war-testing-southwest"/>
 		<antcall target="build-war-testing-aircanada"/>
 		<antcall target="build-war-testing-flyafrica"/>
+		<antcall target="build-war-testing-porter"/>
 		<antcall target="build-war-testing-volaris"/>
 		<property name="app.xml.location" value="metadata/testing/hosted2" />
 		<antcall target="donotrun-build-ear" />
@@ -961,6 +971,7 @@
 		<antcall target="build-war-hudson-lfc"/>
 		<antcall target="build-war-hudson-jetblue"/>
 		<antcall target="build-war-hudson-flyafrica"/>
+		<antcall target="build-war-hudson-porter"/>
 		<antcall target="build-war-hudson-aircanada"/>
 		<antcall target="build-war-hudson-volaris"/>
 		<property name="app.xml.location" value="metadata/hudson/hosted2" />
@@ -1204,7 +1215,16 @@
 		<property name="app.xml.location" value="metadata/flyafrica/test" />
 		<antcall target="donotrun-build-ear" />
 	</target>
-	
+
+	<target name="build-ear-testing-porter" depends="delete-wars">
+		<property name="staging.project" value="porter" />
+		<property name="staging.env" value="testing" />
+		<property name="avis.service.includes" value="*.war" />
+		<antcall target="build-war-testing-porter"/>
+		<property name="app.xml.location" value="metadata/porter/test" />
+		<antcall target="donotrun-build-ear" />
+	</target>
+			
 	<target name="build-ear-testing-lfc" depends="delete-wars">
 		<property name="staging.project" value="lfc" />
 		<property name="staging.env" value="testing" />
@@ -1253,6 +1273,7 @@
 		<antcall target="build-war-training-frontier"/>
 		<antcall target="build-war-training-southwest"/>
 		<antcall target="build-war-training-flyafrica"/>
+		<antcall target="build-war-training-porter"/>
 		<antcall target="build-war-training-volaris"/>
 		<antcall target="build-war-training-aircanada"/>
 		<antcall target="build-war-training-demonstration"/>
@@ -1370,6 +1391,15 @@
 		<antcall target="donotrun-build-ear" />
 	</target>
 
+	<target name="build-ear-training-porter" depends="delete-wars">
+		<property name="staging.project" value="porter" />
+		<property name="staging.env" value="training" />
+		<property name="avis.service.includes" value="*.war" />
+		<antcall target="build-war-training-porter"/>
+		<property name="app.xml.location" value="metadata/porter/train" />
+		<antcall target="donotrun-build-ear" />
+	</target>
+		
 	<target name="build-ear-training-webjet" depends="delete-wars">
 		<property name="staging.project" value="webjet" />
 		<property name="staging.env" value="training" />
@@ -1441,6 +1471,7 @@
 		<antcall target="build-war-production-frontier"/>		
 		<antcall target="build-war-production-southwest"/>
 		<antcall target="build-war-production-flyafrica"/>
+		<antcall target="build-war-production-porter"/>
 		<antcall target="build-war-production-volaris"/>
 		<antcall target="build-war-production-aircanada"/>
 		<property name="app.xml.location" value="metadata/production/hosted2" />
@@ -1576,6 +1607,15 @@
 		<antcall target="donotrun-build-ear" />
 	</target>
 	
+	<target name="build-ear-production-porter" depends="delete-wars">
+		<property name="staging.project" value="porter" />
+		<property name="staging.env" value="production" />
+		<property name="avis.service.includes" value="*.war"/>
+		<antcall target="build-war-production-porter"/>
+		<property name="app.xml.location" value="metadata/porter/prod" />
+		<antcall target="donotrun-build-ear" />
+	</target>
+		
 	<target name="build-ear-production-avis-service" depends="delete-wars">
 		<property name="staging.project" value="abservice" />
 		<property name="staging.env" value="production" />
@@ -1784,6 +1824,14 @@
 		<antcall target="donotrun-build-flyafrica" />
 	</target>
 
+	<target name="build-war-testing-porter" depends="delete">
+		<property name="ant_project_name" value="porter" />
+		<property name="ant_war_name" value="porter_testing" />
+		<property name="environment.name" value="test"/>
+		<property name="porter.init.complete" value="true" />
+		<antcall target="donotrun-build-porter" />
+	</target>
+		
 	<target name="build-war-testing-volaris" depends="delete">
 		<property name="ant_project_name" value="volaris" />
 		<property name="ant_war_name" value="volaris_testing" />
@@ -1955,6 +2003,14 @@
 		<antcall target="donotrun-build-flyafrica" />
 	</target>
 
+	<target name="build-war-hudson-porter" depends="delete">
+		<property name="ant_project_name" value="porter" />
+		<property name="ant_war_name" value="porter_hudson" />
+		<property name="environment.name" value="hudson"/>
+		<property name="porter.init.complete" value="true" />
+		<antcall target="donotrun-build-porter" />
+	</target>
+		
 	<target name="build-war-hudson-volaris" depends="delete">
 		<property name="ant_project_name" value="volaris" />
 		<property name="ant_war_name" value="volaris_hudson" />
@@ -2125,6 +2181,14 @@
 		<antcall target="donotrun-build-flyafrica" />
 	</target>
 
+	<target name="build-war-production-porter" depends="delete">
+		<property name="ant_project_name" value="porter" />
+		<property name="ant_war_name" value="porter_production" />
+		<property name="environment.name" value="prod"/>
+		<property name="porter.init.complete" value="true" />
+		<antcall target="donotrun-build-porter" />
+	</target>
+	
 	<target name="build-war-production-volaris" depends="delete">
 		<property name="ant_project_name" value="volaris" />
 		<property name="ant_war_name" value="volaris_production" />
@@ -2258,6 +2322,14 @@
 		<antcall target="donotrun-build-flyafrica" />
 	</target>
 
+	<target name="build-war-training-porter" depends="delete">
+		<property name="ant_project_name" value="porter" />
+		<property name="ant_war_name" value="porter_training" />
+		<property name="environment.name" value="train"/>
+		<property name="porter.init.complete" value="true" />
+		<antcall target="donotrun-build-porter" />
+	</target>
+		
 	<target name="build-war-training-volaris" depends="delete">
 		<property name="ant_project_name" value="volaris" />
 		<property name="ant_war_name" value="volaris_training" />
@@ -2422,6 +2494,14 @@
 		<antcall target="donotrun-build-flyafrica" />
 	</target>
 
+	<target name="build-war-local-porter" depends="delete">
+		<property name="ant_project_name" value="porter" />
+		<property name="ant_war_name" value="pd" />
+		<property name="porter.init.complete" value="true" />
+		<property name="environment.name" value="local" />
+		<antcall target="donotrun-build-porter" />
+	</target>
+	
 	<target name="build-war-local-volaris" depends="delete">
 		<property name="ant_project_name" value="volaris" />
 		<property name="ant_war_name" value="y4" />
@@ -2563,6 +2643,7 @@
 		<antcall target="build-cron-testing-lfc"/>
 		<antcall target="build-cron-testing-webjet"/>
 		<antcall target="build-cron-testing-flyafrica"/>
+		<antcall target="build-cron-testing-porter"/>
 		<antcall target="build-cron-testing-volaris"/>
 		<antcall target="build-cron-testing-airtran"/>
 				
@@ -2585,6 +2666,7 @@
 		<antcall target="build-cron-training-webjet"/>
 		<antcall target="build-cron-training-demonstration"/>
 		<antcall target="build-cron-training-flyafrica"/>
+		<antcall target="build-cron-training-porter"/>
 		<antcall target="build-cron-training-volaris"/>
 	</target>
 	<target name="build-cron-production-all">
@@ -2604,6 +2686,7 @@
 		<antcall target="build-cron-production-lfc"/>
 		<antcall target="build-cron-production-webjet"/>
 		<antcall target="build-cron-production-flyafrica"/>
+		<antcall target="build-cron-production-porter"/>
 		<antcall target="build-cron-production-volaris"/>
 		<antcall target="build-cron-production-airtran"/>
 	</target>
@@ -2624,6 +2707,7 @@
 		<antcall target="build-cron-hudson-lfc"/>
 		<antcall target="build-cron-hudson-webjet"/>
 		<antcall target="build-cron-hudson-flyafrica"/>
+		<antcall target="build-cron-hudson-porter"/>
 		<antcall target="build-cron-hudson-volaris"/>
 	</target>
 	<target name="build-cron-demo-all">
@@ -3376,6 +3460,56 @@
 	</target>
 		
 	<!-- END FLY AFRICA CRON TARGETS -->
+	
+	<!-- PORTER CRON TARGETS -->
+		
+	<target name="build-cron-testing-porter">
+		<property name="staging.project" value="cron" />
+		<property name="staging.env" value="testing" />
+		<property name="ant_project_name" value="porter" />
+		<property name="sub_path" value="test/" />
+		<property name="environment.name" value="test"/>
+		<property name="cron.job.config.file" value="companies/porter/environment/test/jobs/cronJobs.xml" />
+		<property name="jarprefix" value="pdtest-" />
+		<antcall target="cron-service" />
+	</target>
+		
+	
+	<target name="build-cron-training-porter">
+		<property name="staging.project" value="cron" />
+		<property name="staging.env" value="training" />
+		<property name="ant_project_name" value="porter" />
+		<property name="sub_path" value="train/" />
+		<property name="environment.name" value="train"/>
+		<property name="cron.job.config.file" value="companies/porter/environment/train/jobs/cronJobs.xml" />
+		<property name="jarprefix" value="pdtrain-" />
+		<antcall target="cron-service" />
+	</target>
+
+	<target name="build-cron-production-porter">
+		<property name="staging.project" value="cron" />
+		<property name="staging.env" value="production" />
+		<property name="ant_project_name" value="porter" />
+		<property name="sub_path" value="prod/" />
+		<property name="environment.name" value="prod"/>
+		<property name="jarprefix" value="pdprod-" />
+		<property name="cron.job.config.file" value="companies/porter/environment/prod/jobs/cronJobs.xml" />
+		<antcall target="cron-service" />
+	</target>
+
+	<target name="build-cron-hudson-porter">
+		<property name="staging.project" value="cron" />
+		<property name="staging.env" value="hudson" />
+		<property name="ant_project_name" value="porter" />
+		<property name="sub_path" value="hudson/" />
+		<property name="environment.name" value="hudson"/>
+		<property name="jarprefix" value="pdhudson-" />
+		<property name="cron.job.config.file" value="companies/porter/environment/hudson/jobs/cronJobs.xml" />
+		<antcall target="cron-service" />
+	</target>
+		
+	<!-- END PORTER CRON TARGETS -->
+
 	
 	<!-- VOLARIS CRON TARGETS -->
 		
@@ -4616,6 +4750,43 @@
 		<antcall target="delete" />
 	</target>
 	
+	<target name="donotrun-build-porter">		
+
+		<property name="hibernate_props_loc" value="companies/porter/environment/${environment.name}" />
+		<property name="hibernate_dialect" value="mysql" />
+		<antcall target="generate-hibernate-xmls" />
+		
+		<copy todir="${basedir}/web/pages/login" file="companies/porter/environment/${environment.name}/login/center.jsp" />
+		
+		<ant antfile="build-gen.xml" target="combineResourceFiles">
+			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
+			<property name="overrideResource" value="${basedir}/companies/porter/environment/${environment.name}/tracer.properties" />
+			<property name="destinationResource" value="${basedir}/src/tracer.properties" />
+		</ant>
+
+		<copy todir="${basedir}/web/reports" file="companies/porter/DamageReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/porter/LostDelayReceipt.jrxml" />
+		<copy todir="${basedir}/web/reports" file="companies/porter/MissingReceipt.jrxml" />
+		
+		<copy todir="${basedir}/src" file="companies/porter/report_email_ld.html" overwrite="true" />
+		<copy todir="${basedir}/src" file="companies/porter/report_email_dam.html" overwrite="true" />
+		<copy todir="${basedir}/src" file="companies/porter/report_email_pil.html" overwrite="true" />
+		<antcall target="jasper_compile" />
+
+		<copy todir="${basedir}/src" file="companies/porter/custom_ui.properties" />
+
+		<!-- Hibernate main dependent on environment -->
+
+		<ant target="combineResourceFiles" antfile="build-gen.xml">
+			<property name="defaultResource" value="${basedir}/companies/tracer/ApplicationResources.properties" />
+			<property name="overrideResource" value="${basedir}/companies/porter/ApplicationResources.properties" />
+			<property name="destinationResource" value="${basedir}/src/com/bagnet/nettracer/tracing/resources/ApplicationResources.properties" />
+		</ant>
+
+		<antcall target="fast_all" />
+		<antcall target="delete" />
+	</target>
+
 	<target name="donotrun-build-volaris">		
 
 		<property name="hibernate_props_loc" value="companies/volaris/environment/${environment.name}" />

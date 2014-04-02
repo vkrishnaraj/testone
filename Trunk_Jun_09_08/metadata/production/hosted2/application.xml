@@ -39,6 +39,12 @@
   </module>
  <module>
      <web>
+         <web-uri>porter_production.war</web-uri>
+         <context-root>porter</context-root>
+     </web>
+  </module>
+ <module>
+     <web>
          <web-uri>lfc_production.war</web-uri>
          <context-root>lostandfound</context-root>
      </web>

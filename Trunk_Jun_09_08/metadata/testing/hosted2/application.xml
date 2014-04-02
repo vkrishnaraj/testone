@@ -56,5 +56,11 @@
          <context-root>volaris</context-root>
      </web>
   </module>
+   <module>
+     <web>
+         <web-uri>porter_testing.war</web-uri>
+         <context-root>porter</context-root>
+     </web>
+  </module>
 
 </application> 

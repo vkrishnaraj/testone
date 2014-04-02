@@ -58,6 +58,12 @@
   </module>
    <module>
      <web>
+         <web-uri>porter_training.war</web-uri>
+         <context-root>porter</context-root>
+     </web>
+  </module>
+   <module>
+     <web>
          <web-uri>demonstration_training.war</web-uri>
          <context-root>demonstration</context-root>
      </web>
