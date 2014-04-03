@@ -250,8 +250,13 @@ public class IssuanceItemAdminAction extends CheckedAction {
 		
 		if (request.getParameter("convertinventory") != null) {
 			String qID = request.getParameter("convertinventory");
+			String incID = null;
 			if (qID.matches(TracingConstants.REGEX_INTEGER)) {
-				IssuanceItemBMO.moveInventoriedItem(Long.parseLong(qID), TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_ISSUED, user, null, "Converted Item to Tradeout");
+				IssuanceItemInventory iItem = IssuanceItemBMO.getInventoriedItem(qID);
+				if(iItem!=null){
+					incID=iItem.getIncidentID();
+				}
+				IssuanceItemBMO.moveInventoriedItem(Long.parseLong(qID), TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_ISSUED, user, incID, "Converted Item to Tradeout");
 			}
 		}
 

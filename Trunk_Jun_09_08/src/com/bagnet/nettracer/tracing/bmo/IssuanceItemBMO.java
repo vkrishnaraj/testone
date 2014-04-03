@@ -599,6 +599,7 @@ public class IssuanceItemBMO {
 					if (incID == null || incID.equals(SPECIAL_LOAN_ID) || inc != null) {
 						boolean beingConverted = iItem.getInventoryStatus().getStatus_ID() == TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_ONLOAN &&
 								status_id == TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_ISSUED;
+						Status prevStatus=iItem.getInventoryStatus();
 						iItem.setInventoryStatus(StatusBMO.getStatus(status_id));
 						if (incID != null && incID.length() > 0) {
 							iItem.setIncidentID(incID);
@@ -640,7 +641,9 @@ public class IssuanceItemBMO {
 							boolean success = true;
 							if (status_id == TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_AVAILABLE) {
 								success = updateIssuanceItemIncident(iItem, user, incID);
-							} else if (iItem.isVerifiedIncident()) {
+							} else if (!(status_id == TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_ISSUED 
+									&& prevStatus.getStatus_ID()==TracingConstants.ISSUANCE_ITEM_INVENTORY_STATUS_ONLOAN)
+									&& iItem.isVerifiedIncident()) {
 								success = saveIssuanceItemIncident(null, iItem, user, inc);
 							}
 							if (!success) {
@@ -700,7 +703,6 @@ public class IssuanceItemBMO {
 	 * @param cat
 	 * @param user
 	 */
-	@SuppressWarnings("unchecked")
 	public static void saveCategory(IssuanceCategory cat, Agent user) {
 		if (cat.getId() == 0) {
 			cat.setCompany(CompanyBMO.getCompany(user.getCompanycode_ID()));
