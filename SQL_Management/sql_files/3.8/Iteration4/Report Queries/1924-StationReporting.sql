@@ -3,12 +3,13 @@
 #endDate - the end of the date range. DateTime variable
 #stationCode - 3 Character Station Code to check against.
 select et.description, e.Incident_ID, e.lastname, e.firstname, e.draft, e.createdate, a.username, 
-  (case paytype when 'DRAFT' or 'INVOICE' or 'PSO' then checkamt when 'VOUCH' then voucheramt when 'MILE' then mileageamt else 0 end) as amount, e.paytype
+  (case when paytype in ('DRAFT','INVOICE','PSO') then checkamt when paytype='VOUCH' then voucheramt when paytype='MILE' then mileageamt else 0 end) as amount, e.paytype
     from expensepayout e left outer join agent a on e.agent_ID = a.Agent_ID 
     inner join expensetype et on et.Expensetype_ID = e.expensetype_ID inner join station s on s.Station_ID = e.station_ID
       where e.createdate  >= :startDate and e.createdate  <=:endDate and s.stationcode = :stationCode 
-      and (case paytype when 'DRAFT' or 'INVOICE' or 'PSO' then checkamt when 'VOUCH' then voucheramt when 'MILE' then mileageamt else 0 end) > 0
-      and e.status_ID=55
+      and (case when paytype in ('DRAFT','INVOICE','PSO') then checkamt when paytype='VOUCH' then voucheramt when paytype='MILE' then mileageamt else 0 end) > 0
+      and e.status_id in (53,55,52)
+      and e.paycode!='DEL'
         order by e.paytype;
 #--------------------------------------------------------------------
 
@@ -19,12 +20,14 @@ select et.description, e.Incident_ID, e.lastname, e.firstname, e.draft, e.create
 #stationCode - 3 Character Station Code to check against.
 select (case i.itemtype_ID when 1 then "Lost/Delay" when 2 then "Missing Article" when 3 then "Damaged" else "" end) as incType, count(*) from incident i inner join Station s on i.stationcreated_ID=s.Station_ID where i.createdate >= :startDate and i.createdate <=:endDate and s.stationcode = :stationCode  group by i.itemtype_ID order by i.itemtype_ID;
 
-select et.description, sum(e.voucheramt) as luvvoucher,  sum(case paytype when 'DRAFT' then e.checkamt else 0 end ) as draft, sum(case paytype when 'INVOICE' then e.checkamt else 0 end ) as invoice
+select et.description, sum(e.voucheramt) as luvvoucher,  sum(case paytype when 'DRAFT' then e.checkamt else 0 end ) as draft, 
+sum(case paytype when 'INVOICE' then e.checkamt else 0 end ) as invoice, sum(case paytype when 'PSO' then e.checkamt else 0 end ) as pso
 from expensepayout e inner join incident i on e.incident_ID = i.Incident_ID inner join agent a on e.agent_ID = a.Agent_ID
     inner join station s on s.Station_ID = e.station_ID
     inner join expensetype et on et.Expensetype_ID = e.expensetype_ID
       where e.createdate >= :startDate and e.createdate <=:endDate and s.stationcode = :stationCode 
-      and (e.status_id = 53 or e.status_id=55)
+      and e.status_id in (53,55,52)
+      and e.paycode!='DEL'
         group by e.expensetype_ID;
         
 select count(b.BDO_ID) as Deliveries, sum(e.checkamt) as DeliveryCosts from bdo b inner join expensepayout e on e.bdo_id = b.BDO_ID inner join Station s on b.station_ID = s.Station_ID where b.deliverydate >= :startDate and b.deliverydate <=:endDate and s.stationcode = :stationCode ;
