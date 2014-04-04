@@ -4,7 +4,7 @@ import org.apache.struts.action.ActionForm;
 
 public final class SearchClaimForm extends ActionForm {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 5793198839859822390L;
 
 	private String currpage;
 	private String nextpage;

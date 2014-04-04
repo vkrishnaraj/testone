@@ -7,24 +7,21 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Criteria;
-import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.type.StandardBasicTypes;
+
+import aero.nettracer.fs.model.FsClaim;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Claim;
-import com.bagnet.nettracer.tracing.db.ItemType;
 import com.bagnet.nettracer.tracing.forms.SearchClaimForm;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.StringUtils;
-//import org.hibernate.classic.Session;
 
 public class ClaimDAO {
 	
@@ -107,7 +104,7 @@ public class ClaimDAO {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Set getClaimsFromSearchForm(SearchClaimForm form, Agent user, int rowsperpage, int currpage) {
+	public Set<FsClaim> getClaimsFromSearchForm(SearchClaimForm form, Agent user, int rowsperpage, int currpage) {
 		Set results = null;
 		Session session = null;
 		
@@ -282,7 +279,7 @@ public class ClaimDAO {
 		String toReturn = "";
 		String ntIncidentId = form.getIncidentId();
 		if (ntIncidentId != null && !ntIncidentId.isEmpty()) {
-			toReturn = "and c.ntIncidentId = :ntIncidentId ";
+			toReturn = "and (c.ntIncidentId = :ntIncidentId or c.incident.airlineIncidentId = :ntIncidentId) ";			
 		}
 		return toReturn;
 	}

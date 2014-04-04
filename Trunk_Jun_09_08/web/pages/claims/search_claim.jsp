@@ -15,11 +15,11 @@
   boolean ntUser = PropertyBMO.isTrue("nt.user");
 %>
   
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
-  <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
-  <SCRIPT LANGUAGE="JavaScript">
+  <script src="deployment/main/js/date.js"></script>
+  <script src="deployment/main/js/AnchorPosition.js"></script>
+  <script src="deployment/main/js/PopupWindow.js"></script>
+  <script src="deployment/main/js/popcalendar.js"></script>
+  <script>
     
 	var cal1xx = new CalendarPopup();	
     
@@ -77,13 +77,11 @@
             				<html:text name="searchClaimForm" property="claimId" size="5" styleClass="textfield" styleId="sId" onblur="fillzero(this.claimId,13);" />
             			</logic:greaterThan>
             		</td>
-            		<% if (ntUser) { %>
             		<td>
             			<bean:message key="colname.incident.id" />
             			<br />
             			<html:text name="searchClaimForm" property="incidentId" size="13" styleClass="textfield" styleId="iId" onblur="fillzero(this.incidentId,13);" />
             		</td>
-            		<% } %>
             		<td nowrap>
 		                <bean:message key="colname.claim.date.range" />
 		                (<%= a.getDateformat().getFormat() %>)
@@ -288,9 +286,10 @@
                 	</td>
               	</tr>
               </table>
-              <script language=javascript>
-                
-  document.location.href="#result";
-
-              </script>
+              <script>
+					document.location.href="#result";
+			  </script>
+          </div>
+          </td>
+          </tr>
           </html:form>

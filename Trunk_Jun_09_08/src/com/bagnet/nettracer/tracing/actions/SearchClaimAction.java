@@ -25,7 +25,6 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dao.ClaimDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.forms.SearchClaimForm;
-import com.bagnet.nettracer.tracing.utils.ClaimUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
@@ -60,7 +59,7 @@ public class SearchClaimAction extends CheckedAction {
 		Set<FsClaim> resultSet = new LinkedHashSet<FsClaim>();
 		if (request.getParameter("clear") == null) {
 			ClaimDAO cdao = new ClaimDAO();
-			long rowcount = cdao.getClaimCountFromSearchForm((SearchClaimForm) form, user);
+			long rowcount = cdao.getClaimCountFromSearchForm(theForm, user);
 	
 			currpage = theForm.getCurrpage() != null ? Integer.parseInt(theForm.getCurrpage()) : 0;
 			if (theForm.getNextpage() != null && theForm.getNextpage().equals("1"))
@@ -89,10 +88,11 @@ public class SearchClaimAction extends CheckedAction {
 			
 			/***************** end pagination *****************/
 
-			resultSet = cdao.getClaimsFromSearchForm((SearchClaimForm) form, user, rowsperpage, currpage);
-			
+			resultSet = cdao.getClaimsFromSearchForm(theForm, user, rowsperpage, currpage);
 			if (!end && resultSet.size() == 1) {
 				long claimId = resultSet.iterator().next().getId();
+				
+				logger.info("Redirecting -> claim_resolution.do?claimId=" + claimId);
 				response.sendRedirect("claim_resolution.do?claimId=" + claimId);
 				return null;
 			}
