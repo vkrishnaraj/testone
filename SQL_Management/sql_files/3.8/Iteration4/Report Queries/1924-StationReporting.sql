@@ -71,7 +71,7 @@ inc.checkedlocation, (case inc.checkedlocation when not 0 then cat.description e
             FROM (SELECT it.incident_id,it.itinerary_id,it.departdate, it.flightnum, 
             concat(it.legfrom, '-', it.legto) legs 
               FROM itinerary it inner join incident i on i.incident_id=it.incident_ID 
-                WHERE it.itinerarytype=0 and it.departdate >= :startDate and it.departdate <= :endDate
+                WHERE it.itinerarytype=0 and i.createDate >= :startDate and i.createDate <= :endDate
                   ORDER BY it.incident_id, it.itinerary_id ASC) itin1 
                   GROUP BY incident_id) as itinRoutes
   on itinRoutes.incident_ID = i.incident_ID
