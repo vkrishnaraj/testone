@@ -7,7 +7,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
-import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.log4j.Logger;
@@ -37,7 +36,6 @@ import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.fs.model.detection.MetaWarning;
 import aero.nettracer.fs.model.detection.TraceResponse;
 import aero.nettracer.fs.utilities.AuditUtil;
-import aero.nettracer.fs.utilities.GeoCode;
 import aero.nettracer.fs.utilities.Util;
 import aero.nettracer.selfservice.fraud.PrivacyPermissionsBean;
 import aero.nettracer.serviceprovider.common.db.PrivacyPermissions;
@@ -106,6 +104,7 @@ public class Producer {
 			pq = sess.createSQLQuery(ms.toString());
 			pq.addScalar("file2_id", StandardBasicTypes.LONG);
 			pq.addScalar("overallScore", StandardBasicTypes.DOUBLE);
+			@SuppressWarnings("unchecked")
 			List<Object[]> listMatchingFiles = pq.list();
 			
 			HashMap<Long, List<Double>> matchingMap = new HashMap<Long, List<Double>>();
@@ -313,7 +312,7 @@ public class Producer {
 					"null as f5_id, " +
 					"null as f6_id, " +
 					"null as f7_id, " +
-					"'cc' as type " +
+					"'ipaddr' as type " +
 					"from fsipaddress ip " +
 					"left outer join fsclaim c2 on ip.claim_id = c2.id " +
 					"left outer join fsincident i2 on i2.claim_id = c2.id " +
@@ -344,6 +343,7 @@ public class Producer {
 		pq.addScalar("f6_id", StandardBasicTypes.LONG);
 		pq.addScalar("f7_id", StandardBasicTypes.LONG);
 		pq.addScalar("type", StandardBasicTypes.STRING);
+		@SuppressWarnings("unchecked")
 		List<Object[]> result = pq.list();
 
 		sess.close();
@@ -358,6 +358,7 @@ public class Producer {
 			Long f5 = (Long) strs[4];
 			Long f6 = (Long) strs[5];
 			Long f7 = (Long) strs[6];
+			@SuppressWarnings("unused")
 			String type = (String) strs[7];
 			
 			if(f1 != null){
@@ -489,6 +490,7 @@ public class Producer {
 		int returnValue = 0; 
 		int knownFraudCount = 0 ;
 		int suspectedFraudCount = 0;
+		@SuppressWarnings("unused")
 		int count = 0;
 		Set<MatchHistory> mhs = tr.getMatchHistory();
 		for (MatchHistory mh: mhs) {
@@ -577,6 +579,7 @@ public class Producer {
 		Session sess = HibernateWrapper.getSession().openSession();
 		pq = sess.createSQLQuery(sql.toString());
 		pq.addScalar("companycode_id", StandardBasicTypes.STRING);
+		@SuppressWarnings("unchecked")
 		List<String> result = pq.list();
 		sess.close();
 		return result;
@@ -594,6 +597,7 @@ public class Producer {
 		Session sess = HibernateWrapper.getSession().openSession();
 		q = sess.createQuery(personSql.toString());
 		q.setParameter("id", fileId);
+		@SuppressWarnings("unchecked")
 		List <MatchHistory>result = q.list();
 		logger.debug(personSql);
 		logger.debug("MatchResult for fileId: " + fileId);
@@ -1008,6 +1012,7 @@ public class Producer {
 		
 	
 	public static void censorFile(File f, AccessLevelType level, String userCompany, List<PrivacyPermissions> plist){
+		@SuppressWarnings("unused")
 		String s = ACCESS_NOT_GRANTED;
 		PrivacyPermissions p1 = new PrivacyPermissions();
 		String company1 = f.getValidatingCompanycode();
@@ -1030,6 +1035,7 @@ public class Producer {
 	}
 	
 	public static boolean censorAttachments(List<FsAttachment> list, String valComp, AccessLevelType level, String userCompany, List<PrivacyPermissions> plist){
+		@SuppressWarnings("unused")
 		String s = ACCESS_NOT_GRANTED;
 		PrivacyPermissions p1 = new PrivacyPermissions();
 		String company1 = valComp;
