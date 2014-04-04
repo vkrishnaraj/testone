@@ -26,7 +26,7 @@ select s.StationCode,
   count(openCount.incident_id) as open_incidents,
   count(ep.incident_id) as incidents_with_payments,
   ROUND(100 * (count(closedCount.incident_id) / count(*)), 2) as Recovery_ratio,
-  (case when not isNull(ep.payments) then  ROUND(sum(ep.payments),2) else 0 end) as total_payments
+  (case when isNull(ROUND(sum(ep.payments),2)) then 0 else  ROUND(sum(ep.payments),2) end) as total_payments
     from incident inc
     left outer join 
       (select sum(checkamt+voucheramt+creditcard_refund) as payments, expensepayout.incident_id, count(*) as expCount from expensepayout inner join incident i on i.Incident_ID = expensepayout.incident_ID
