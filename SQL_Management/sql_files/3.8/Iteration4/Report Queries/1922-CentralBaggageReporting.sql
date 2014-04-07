@@ -30,7 +30,8 @@ select s.StationCode,
     from incident inc
     left outer join 
       (select sum(checkamt+voucheramt+creditcard_refund) as payments, expensepayout.incident_id, count(*) as expCount from expensepayout inner join incident i on i.Incident_ID = expensepayout.incident_ID
-        where expensepayout.status_id in (53,55) and i.createdate between CAST(:startdatetime AS DATETIME) and CAST(:enddatetime AS DATETIME) and i.status_ID !=13
+        where expensepayout.status_id in (52,53,55) and expensepayout.paycode!='DEL' and expensepayout.paytype='DRAFT'
+        and i.createdate between CAST(:startdatetime AS DATETIME) and CAST(:enddatetime AS DATETIME) and i.status_ID !=13
         and expensepayout.incident_ID in 
           (select incident.incident_id from incident inner join item it on it.incident_ID = incident.Incident_ID 
             where it.status_ID not in (50,59) and incident.createdate between CAST(:startdatetime AS DATETIME) and CAST(:enddatetime AS DATETIME) group by incident.Incident_ID having count(*)>0)
