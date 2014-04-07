@@ -33,6 +33,7 @@ import aero.nettracer.fs.model.detection.MatchDetail;
 import aero.nettracer.fs.model.detection.MatchDetail.MatchType;
 import aero.nettracer.fs.model.detection.MatchHistory;
 import aero.nettracer.fs.utilities.GeoCode;
+import aero.nettracer.fs.utilities.WhiteListUtil;
 import aero.nettracer.serviceprovider.common.hibernate.HibernateWrapper;
 
 public class Consumer implements Runnable{
@@ -92,9 +93,10 @@ public class Consumer implements Runnable{
 	private ArrayBlockingQueue<MatchHistory> matchQueue;
 	private ThreadContainer tc;
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Consumer(ArrayBlockingQueue queue, int type, ThreadContainer tc) throws Exception{
 		if (type == MATCH){
-			matchQueue = queue;
+			setMatchQueue(queue);
 		} else {
 			throw new Exception("unable to create consumer");
 		}
@@ -114,7 +116,6 @@ public class Consumer implements Runnable{
 					if(match != null){
 						tc.setStartTime(new Date());
 						tc.setWaiting(false);
-//						System.out.println(matchQueue.size());
 						logger.debug("consumer " + threadnumber);
 						processMatch(match);
 					} else {
@@ -199,9 +200,6 @@ public class Consumer implements Runnable{
 		}catch (Exception e){
 			e.printStackTrace();
 		}finally{
-//			match.getTraceCount().add(null);
-//			if(debug)System.out.println("consumer consumed count: " + match.getTraceCount().size());
-//			System.out.println("consumer consumed count: " + match.getTraceCount().size());
 
 		}
 	}
@@ -238,8 +236,7 @@ public class Consumer implements Runnable{
 		if (match.getFile1().getMatchingFiles() != null) {
 			
 			HashMap<Long, List<Double>>matchingMap = match.getFile1().getMatchingFiles();
-//			System.out.println("Data exists in matches...");
-			List<Double> existingScores = new ArrayList();
+			List<Double> existingScores = new ArrayList<Double>();
 			if (matchingMap.get(new Long(match.getFile2().getId()))!=null){
 				existingScores=matchingMap.get(new Long(match.getFile2().getId()));
 			}
@@ -665,9 +662,21 @@ public class Consumer implements Runnable{
 		boolean hasProxMatch = false;
 		boolean hasCloseProxMatch = false;
 		for(FsAddress a1:plist1){
-			String tas1 = getStringVersionOfAddress(a1);
+			String tas1 ="";
+			if(a1.getNormAddress()!=null && !a1.getNormAddress().isEmpty()){
+				tas1=a1.getNormAddress();
+			} else {
+				tas1=WhiteListUtil.normalizeAddress(a1);
+			}
+			
 			for(FsAddress a2:plist2){
-				String tas2 = getStringVersionOfAddress(a2);
+				String tas2 ="";
+				if(a2.getNormAddress()!=null && !a2.getNormAddress().isEmpty()){
+					tas2=a2.getNormAddress();
+				} else {
+					tas2=WhiteListUtil.normalizeAddress(a2);
+				}
+				
 				String hKey1 = tas1 + "/" + tas2;
 				String hKey2 = tas2 + "/" + tas1;
 				if (addressHashSet.contains(hKey1) || addressHashSet.contains(hKey2) || a1.getAddress1() == null) {
@@ -759,7 +768,7 @@ public class Consumer implements Runnable{
 							} else {
 								percent = ADDRESS_SIMILAR;
 							}
-							generateStringCompareDetail(match, details, str1, str2, description, percent, 70, .15, MatchType.address, isWhitelisted);
+							generateStringCompareDetail(match, details, str1, str2, description, percent, 75, .15, MatchType.address, isWhitelisted);
 						}
 					}
 				} else {
@@ -787,7 +796,7 @@ public class Consumer implements Runnable{
 							} else {
 								percent = ADDRESS_SIMILAR;
 							}
-							generateStringCompareDetail(match, details, str1, str2, description, percent, 70, .15, MatchType.address, isWhitelisted);
+							generateStringCompareDetail(match, details, str1, str2, description, percent, 75, .15, MatchType.address, isWhitelisted);
 							
 						} else {
 							// Country not available
@@ -810,7 +819,7 @@ public class Consumer implements Runnable{
 							} else {
 								percent = ADDRESS_SIMILAR;
 							}
-							generateStringCompareDetail(match, details, str1, str2, description, percent, 70, .15, MatchType.address, isWhitelisted);
+							generateStringCompareDetail(match, details, str1, str2, description, percent, 75, .15, MatchType.address, isWhitelisted);
 						}
 					}
 				}
@@ -818,26 +827,6 @@ public class Consumer implements Runnable{
 		}
 		
 	}
-
-
-	private static String getStringVersionOfAddress(FsAddress a) {
-		String address = "";
-		address += (a.getAddress1() == null || a.getAddress1().isEmpty() ? "" : a.getAddress1() + " ");
-		address += (a.getAddress2() == null || a.getAddress2().isEmpty() ? "" : a.getAddress2() + " ");
-		address += (a.getCity() == null || a.getCity().isEmpty() ? "" : a.getCity() + " ");
-		
-		if (a.getState() != null && !a.getState().isEmpty()) {
-			address += (a.getState() == null || a.getState().isEmpty() ? "" : a.getState() + " ");
-		} else {
-			address += (a.getProvince() == null || a.getProvince().isEmpty() ? "" : a.getProvince() + " ");
-		}
-		
-		address += (a.getZip() == null || a.getZip().isEmpty() ? "" : a.getZip() + " ");
-		address = address.trim().toUpperCase();
-		
-		return address;
-	}
-
 
 	private static void generateStringCompareDetail(MatchHistory match, Set<MatchDetail> details, String str1, String str2, String description, double percent, double minimumScore, double multiplier, MatchType type, boolean isWhitelisted) {
 	 
@@ -892,19 +881,8 @@ public class Consumer implements Runnable{
 			boolean num4Empty = (r1.getCcNumLastFour() != null && r1.getCcNumLastFour().trim().length() > 0 && r2.getCcNumLastFour() != null && r2.getCcNumLastFour().trim().length() > 0) ? false:true;
 			boolean num6Empty = (r1.getCcNumber() != null && r1.getCcNumber().trim().length() > 0 && r2.getCcNumber() != null && r2.getCcNumber().trim().length() > 0) ? false:true;
 			boolean typeEmpty = (r1.getCcType() != null && r1.getCcType().trim().length() > 0 && r2.getCcType() != null && r2.getCcType().trim().length() > 0) ? false:true;
+			@SuppressWarnings("unused")
 			boolean expEmpty = (r1.getCcExpMonth() != 0 && r2.getCcExpMonth() !=0 && r1.getCcExpYear() != 0 && r2.getCcExpYear() != 0) ? false:true;
-			
-			
-//			System.out.print("1CC4:" + (r1.getCcNumLastFour() == null ? "null":r1.getCcNumLastFour()) + " ");
-//			System.out.print("2CC4:" + (r2.getCcNumLastFour() == null ? "null":r2.getCcNumLastFour()) + " ");
-//			System.out.print("1type:" + (r1.getCcType() == null ? "null":r1.getCcType()) + " ");
-//			System.out.print("2type:" + (r2.getCcType() == null ? "null":r2.getCcType()) + " ");
-//			System.out.print("1CC16:" + (r1.getCcNumber() == null ? "null":r1.getCcNumber()) + " ");
-//			System.out.print("2CC16:" + (r2.getCcNumber() == null ? "null":r2.getCcNumber()) + " ");
-//			System.out.print("1CCMon:" + (r1.getCcExpMonth() == 0 ? "null":r1.getCcExpMonth()) + " ");
-//			System.out.print("2CCMon:" + (r2.getCcExpMonth() == 0 ? "null":r2.getCcExpMonth()) + " ");
-//			System.out.print("1CCY:" + (r1.getCcExpYear() == 0 ? "null":r1.getCcExpYear()) + " ");
-//			System.out.print("2CCY:" + (r2.getCcExpYear() == 0 ? "null":r2.getCcExpYear()) + " ");
 			
 			if(num6){						
 				if(num4 && type && exp){
@@ -1098,10 +1076,6 @@ public class Consumer implements Runnable{
 				}
 			}
 
-
-
-//			System.out.println(p1.getFirstNameSoundex() + " vs " + p2.getFirstNameSoundex());
-//			System.out.println(p1.getLastNameSoundex() + " vs " + p2.getLastNameSoundex());
 			if (p1.getFirstNameSoundex() != null && p2.getFirstNameSoundex() != null
 					&& p1.getFirstNameSoundex().length() > 0 
 					&& p1.getFirstNameSoundex().equals(p2.getFirstNameSoundex())
@@ -1203,24 +1177,7 @@ public class Consumer implements Runnable{
 					detail.setPercent(P_DRIVERS);
 					detail.setMatchtype(MatchType.drivers);
 					details.add(detail);
-				}
-				
-//				if(p1.getDriversLicenseNumber() != null && p1.getDriversLicenseNumber().trim().length() > 0
-//						&& p1.getDriversLicenseIssuer() != null && p1.getDriversLicenseIssuer().trim().length() > 0){
-//					if(p1.getDriversLicenseNumber().equalsIgnoreCase(p2.getDriversLicenseNumber())
-//							&& p1.getDriversLicenseIssuer().equalsIgnoreCase(p2.getDriversLicenseIssuer())){
-//						MatchDetail detail = new MatchDetail();
-//						detail.setContent1("********");
-//						detail.setContent2("********");
-//						detail.setDescription("Driver's License Match");
-//						detail.setMatch(match);
-//						detail.setPercent(P_DRIVERS);
-//				detail.setMatchtype(MatchType.drivers);
-//						details.add(detail);
-//					}
-//				}//end drivers
-				
-
+				}//end drivers
 				
 				if (p1.getEmailAddress() != null && p1.getEmailAddress().trim().length() > 0) {
 					if (p2.getEmailAddress() != null && p2.getEmailAddress().trim().length() > 0) {
@@ -1357,4 +1314,14 @@ public class Consumer implements Runnable{
 			}
 		}
 	} // END processIP method
+
+
+	public ArrayBlockingQueue<MatchHistory> getMatchQueue() {
+		return matchQueue;
+	}
+
+
+	public void setMatchQueue(ArrayBlockingQueue<MatchHistory> matchQueue) {
+		this.matchQueue = matchQueue;
+	}
 }
