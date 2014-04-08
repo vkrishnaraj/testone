@@ -631,3 +631,5 @@ alter table ohd alter column posId varchar(8);
 alter table audit_ohd alter column posId varchar(8);
 alter table item alter column posId varchar(8);
 alter table audit_item alter column posId varchar(8); 
+alter table depreciation_item alter column datePurchase datetime;
+alter table claim_depreciation alter column dateCalculate datetime;
