@@ -64,7 +64,7 @@ select i.lossCode, c.description, c.controllable, count(*) from item i inner joi
 #lossCodes - Array of LossCodes to check for. 
 select i.lossCode,  cat.id , c.description, c.controllable, itinRoutes.initialDepartDate, 
 itinRoutes.departDates, itinRoutes.route, itinRoutes.flightnums,
-inc.checkedlocation, (case inc.checkedlocation when not 0 then cat.description else "" end ) as checkLocation, i.incident_ID
+inc.checkedlocation, (CASE WHEN inc.checkedlocation != 0 THEN cat.description ELSE "" END ) as checkLocation, i.incident_ID
   from item i inner join incident inc on i.incident_ID = inc.Incident_ID
     left outer join 
         (SELECT incident_id, departdate as initialDepartDate,
