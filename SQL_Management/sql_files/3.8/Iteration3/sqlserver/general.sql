@@ -148,12 +148,12 @@ VALUES (412, 'To Be Inventoried', 'To Be Inventoried', 15, 'toBeInventoried.do',
 
 GO
 
-
-create index ohd_idx on ohd (inventoryDate);
-create index ohd_itinerary_legfrom_idx on ohd_itinerary (legfrom);
-create index ohd_itinerary_legto_idx on ohd_itinerary (legto);
-create index ohd_itinerary_departdate_idx on ohd_itinerary (departdate);
-create index ohd_itinerary_arrivedate_idx on ohd_itinerary (arrivedate);
+create index wt_transaction_createDate_idx on wt_transaction (createDate);
+create index wt_transaction_result_idx on wt_transaction (result);
+create index wt_transaction_txType_idx on wt_transaction (txType);
+create index wt_transaction_agent_id_idx on wt_transaction (agent_id);
+create index wt_transaction_incident_id_idx on wt_transaction (incident_id);
+create index wt_transaction_ohd_id_idx on wt_transaction (ohd_id);
 
 
 GO
