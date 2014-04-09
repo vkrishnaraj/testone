@@ -33,7 +33,6 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
 import com.bagnet.nettracer.tracing.db.Company_Specific_Variable;
-import com.bagnet.nettracer.tracing.db.DeliveryInstructions;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Incident_Claimcheck;
 import com.bagnet.nettracer.tracing.db.Item_Inventory;
@@ -1122,19 +1121,28 @@ public class WorldTracerUtils {
 
 	private static com.bagnet.nettracer.tracing.db.Itinerary mapItinerary(aero.nettracer.serviceprovider.wt_1_0.common.Itinerary itin, Agent user) {
 		com.bagnet.nettracer.tracing.db.Itinerary it = new com.bagnet.nettracer.tracing.db.Itinerary();
-		it.set_DATEFORMAT(user.getDateformat().getFormat());
-		it.set_TIMEFORMAT(user.getTimeformat().getFormat());
-		it.setAirline(itin.getAirline());
-		it.setLegto(itin.getArrivalCity());
-		it.setLegto_type(itin.getLegto_type());
-
-		it.setLegfrom(itin.getDepartureCity());
-		it.setLegfrom_type(itin.getLegfrom_type());
-
-		it.setDepartdate(itin.getFlightDate().getTime());
-		it.setDisdepartdate(DateUtils.formatDate(itin.getFlightDate().getTime(), user.getDateformat().getFormat(), null, null));
-		
-		it.setFlightnum(itin.getFlightNumber());
+		if(itin!=null){
+			it.set_DATEFORMAT(user.getDateformat().getFormat());
+			it.set_TIMEFORMAT(user.getTimeformat().getFormat());
+			it.setAirline(itin.getAirline());
+			it.setLegto(itin.getArrivalCity());
+			it.setLegto_type(itin.getLegto_type());
+	
+			it.setLegfrom(itin.getDepartureCity());
+			it.setLegfrom_type(itin.getLegfrom_type());
+			if(itin.getFlightDate()!=null){
+				it.setDepartdate(itin.getFlightDate().getTime());
+				it.setDisdepartdate(DateUtils.formatDate(itin.getFlightDate().getTime(), user.getDateformat().getFormat(), null, null));
+			}
+			
+			if(itin.getFlightNumber()!=null){
+				String flightNum=itin.getFlightNumber();
+				if(flightNum.length()>4){
+					flightNum=flightNum.substring(0,4);
+				}
+				it.setFlightnum(flightNum);
+			}
+		}
 		
 		return it;
 	}
@@ -1149,14 +1157,19 @@ public class WorldTracerUtils {
 		if(item.getContent() != null){
 			for (aero.nettracer.serviceprovider.wt_1_0.common.Content inv:item.getContent()) {
 				Item_Inventory content = new Item_Inventory();
-
-				try {
-					content.setCategorytype_ID(CategoryBMO.getCategoryByWT(inv.getCategory(), TracingConstants.DEFAULT_LOCALE).getOHD_CategoryType_ID());
-				} catch (NullPointerException e) {
-					content.setCategorytype_ID(0);
+				if(inv.getCategory()!=null){
+					OHD_CategoryType ohdct=CategoryBMO.getCategoryByWT(inv.getCategory(), TracingConstants.DEFAULT_LOCALE);
+					if(ohdct!=null){
+						content.setCategorytype_ID(ohdct.getOHD_CategoryType_ID());
+					}	else{
+						content.setCategorytype_ID(0);
+					}
 				}
+				
 				content.setItem(it);
-				content.setDescription(inv.getDescription().trim().toUpperCase());
+				if(inv.getDescription()!=null){
+					content.setDescription(inv.getDescription().trim().toUpperCase());
+				}
 				contents.add(content);
 			}
 		}
@@ -1170,9 +1183,14 @@ public class WorldTracerUtils {
 
 		it.setFnameonbag(item.getFirstNameOnBag());
 		it.setLnameonbag(item.getLastNameOnBag());
-		item.getManufacturer();
-		if(item.getManufacturer()!=null){
-			String manuDesc=item.getManufacturer().substring(0,item.getManufacturer().indexOf("/"));
+		
+		if(item.getManufacturer()!=null && !item.getManufacturer().isEmpty()){
+			String manuDesc="";
+			if(item.getManufacturer().contains("/")){
+				manuDesc=item.getManufacturer().substring(0,item.getManufacturer().indexOf("/"));
+			} else {
+				manuDesc=item.getManufacturer();
+			}
 			Manufacturer manu=ManufacturerBMO.getManufacturerByDesc(manuDesc);
 			if(manu!=null){			
 				it.setManufacturer_ID(manu.getManufacturer_ID());
@@ -1181,13 +1199,15 @@ public class WorldTracerUtils {
 				it.setManufacturer_other(manuDesc);
 			}
 		}
-		try{
-		DecimalFormat myFormatter=new DecimalFormat("00");
-		int type=Integer.valueOf(item.getType());
-		String bdoNum=myFormatter.format(type);
-		it.setBagtype(bdoNum);
-		} catch (NumberFormatException nfe){
-			nfe.printStackTrace();
+		if(item.getType()!=null){
+			try{
+				DecimalFormat myFormatter=new DecimalFormat("00");
+				int type=Integer.valueOf(item.getType());
+				String bdoNum=myFormatter.format(type);
+				it.setBagtype(bdoNum);
+			} catch (NumberFormatException nfe){
+				nfe.printStackTrace();
+			}
 		}
 		
 		it.setExternaldesc(item.getExternaldesc());

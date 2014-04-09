@@ -186,19 +186,12 @@
 					<bean:write name="passenger" property="address.address1" />
 					
 					<br/> 
+					<logic:present name="passenger" property="address.address2">
+						<logic:notEmpty name="passenger" property="address.address2">
+							<bean:write name="passenger" property="address.address2" /><br/>
+						</logic:notEmpty>
+					</logic:present>
 					<bean:write name="passenger" property="address.countryCode" />
-				<%
-				Address addr = res.getPax()[i.intValue()].getAddress();
-				String a = "";
-				if (addr.getAddress1() != null && addr.getAddress1().length() > 0){
-					a += addr.getAddress1() + "<br/>";
-				}
-				if (addr.getAddress2() != null && addr.getAddress2().length() > 0){
-					a += addr.getAddress2() + "<br/>";
-				}
-				
-				
-				%>
 				<br/>
 				
 					<bean:write name="passenger" property="address.emailAddress" />
