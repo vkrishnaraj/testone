@@ -196,7 +196,7 @@ function writeConsole(content) {
                 <%if (bb.getStatus().getStatus_ID() == 86 
                 		|| bb.getStatus().getStatus_ID() == 95
                 		|| bb.getStatus().getStatus_ID() == 87){ %>
-                  <a href="bagbuzzsearch.do?admin_view=1&copy=1&bb_id=<bean:write name="bb" property="bagbuzz_id"/>"><bean:message key="bagbuzz.colname.copy" /></a><br />
+                  <a href="bagbuzzsearch.do?copy=1&admin_view=1&bb_id=<bean:write name="bb" property="bagbuzz_id"/>"><bean:message key="bagbuzz.colname.copy" /></a><br />
                 <%} %>
                 </td>
             </tr>
