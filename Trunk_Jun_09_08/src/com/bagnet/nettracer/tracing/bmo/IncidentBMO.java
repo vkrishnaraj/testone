@@ -177,7 +177,6 @@ public class IncidentBMO {
 							sess.save(myIncidentControl);
 						} else {
 							myIncidentControl.setAssignedDate(TracerDateTime.getGMTDate());
-							//sess.saveOrUpdate(myIncidentControl);
 							sess.update(myIncidentControl);	
 						}
 					}
@@ -444,7 +443,6 @@ public class IncidentBMO {
 							sess.save(myIncidentControl);
 						} else {
 							myIncidentControl.setAssignedDate(TracerDateTime.getGMTDate());
-							//sess.saveOrUpdate(myIncidentControl);
 							sess.update(myIncidentControl);	
 						}
 					}
@@ -534,8 +532,7 @@ public class IncidentBMO {
 		} catch (StaleStateException sse){
 			logger.error("unable to insert into database because incident is stale: " + sse);
 
-			if (t != null)
-				t.rollback();
+			//Removed Dead Code
 			throw sse;
 		} catch (Exception e) {
 			logger.error("unable to insert into database: " + e);
@@ -1139,7 +1136,7 @@ public class IncidentBMO {
 			if (iscount)
 				s.append("select count(incident.incident_ID) from com.bagnet.nettracer.tracing.db.Incident incident ");
 			else
-				s.append("select distinct incident from com.bagnet.nettracer.tracing.db.Incident incident ");
+				s.append("select incident from com.bagnet.nettracer.tracing.db.Incident incident ");
 
 			boolean tagPresent = false;
 			if (!siDTO.getClaimchecknum().isEmpty() || siDTO.getExpediteTagNum() != null && !siDTO.getExpediteTagNum().isEmpty() 
@@ -2211,8 +2208,7 @@ public class IncidentBMO {
 				}
 
 				if (o.getAddresses() != null && o.getAddresses().size() > 0) {
-					for (@SuppressWarnings("unchecked")
-					Iterator<Address> j = o.getAddresses().iterator(); j.hasNext();) {
+					for (Iterator<Address> j = o.getAddresses().iterator(); j.hasNext();) {
 						Address o2 = j.next();
 						o2.setAddress_ID(0);
 					}
@@ -2391,28 +2387,6 @@ public class IncidentBMO {
 			inc.setLastupdated(TracerDateTime.getGMTDate());
 			ep.setIncident(inc);
 			inc.getExpenses().add(ep);
-//			if (inc.getClaims()==null || inc.getClaims().size()<=0) {
-//				Claim c = new Claim();
-//				
-//				c.setNtIncident(inc);
-//				
-//				c.setAmountClaimedCurrency(inc.getAgent().getDefaultcurrency());
-//				// mjs: begin NTFS modification
-////				c.setCountryofissue(AdminUtils.getCompany(inc.getAgent().getCompanycode_ID()).getCountrycode_ID());
-//				String countryOfIssue = AdminUtils.getCompany(inc.getAgent().getCompanycode_ID()).getCountrycode_ID();
-////				for (Person claimant: c.getClaimants()) {
-////					claimant.setPassportIssuer(countryOfIssue);
-////				}
-//				// mjs: end NTFS modification
-//				Status st = new Status();
-//				st.setStatus_ID(TracingConstants.CLAIM_STATUS_INPROCESS);
-//				c.setStatus(st);
-//				
-//				LinkedHashSet<Claim> claims = new LinkedHashSet<Claim>();
-//				claims.add(c);
-//				inc.setClaims(claims);
-//				sess.save(c);
-//			}
 			sess.save(ep);
 			sess.update(inc);
 			tx.commit();
@@ -2498,10 +2472,8 @@ public class IncidentBMO {
 			sess.save(aep);
 		}
 		sess.save(ac);
-//		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	private Incident normalizePhoneNumbers(Incident iDTO) {
 		if (iDTO.getPassengers() != null) {
 			for (Passenger pass : iDTO.getPassengers()) {

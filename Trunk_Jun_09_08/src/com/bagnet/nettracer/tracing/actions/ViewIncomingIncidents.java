@@ -41,8 +41,10 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
  * Preferences - Java - Code Style - Code Templates
  */
 public class ViewIncomingIncidents extends Action {
+	@SuppressWarnings("unused")
 	private static Logger logger = Logger.getLogger(ViewIncomingIncidents.class);
 
+	@SuppressWarnings("unchecked")
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		HttpSession session = request.getSession();
 
@@ -97,6 +99,7 @@ public class ViewIncomingIncidents extends Action {
 		}
 
 		// search
+		@SuppressWarnings("rawtypes")
 		ArrayList resultlist = null;
 		int rowcount = -1;
 
@@ -171,6 +174,7 @@ public class ViewIncomingIncidents extends Action {
 			if (currpage + 1 == totalpages)
 				request.setAttribute("end", "1");
 			if (totalpages > 1) {
+				@SuppressWarnings("rawtypes")
 				ArrayList al = new ArrayList();
 				for (int i = 0; i < totalpages; i++) {
 					al.add(Integer.toString(i));
