@@ -217,27 +217,27 @@
 				var field=document.getElementById(which);
 				var type=document.getElementById('claimType');
 				if (!field)
-					return
+					return;
 				if (type.value==<%=TracingConstants.MONTREAL_CONVENTION%> || type.value==<%=TracingConstants.WARSAW_CONVENTION%>)
-					field.style.display="block"
+					field.style.display="block";
 				else
-					field.style.display="none"
+					field.style.display="none";
 			}
 			
 			function hide(which){
-				which.style.display="none"
+				which.style.display="none";
 			}
 				
 			function show(which){
-				which.style.display="block"
+				which.style.display="block";
 			}
 			function checkValue(i, obj) {
 				var fieldb = document.getElementById("dep_calc_" + i);
 				var fieldc = document.getElementById("dep_value_" + i);
 				if (fieldb.value == fieldc.value) {
-					obj.style.backgroundColor = 'white'
+					obj.style.backgroundColor = 'white';
 				} else {
-					obj.style.backgroundColor = 'yellow'
+					obj.style.backgroundColor = 'yellow';
 				}
 			}
 			function calculateThis(i) {
@@ -296,17 +296,17 @@
 						<%} else if(cat.getCalcMethod()==TracingConstants.DEFINED_RATE){ %>
 							deprecPerc=0;
 							if(yearDiff>=1 && yearDiff<2){
-								deprecPerc=<%=cat.getFirstYear()%>
+								deprecPerc=<%=cat.getFirstYear()%>;
 							}
 							else if(yearDiff>=2 && yearDiff<3){
-								deprecPerc=<%=cat.getSecondYear()%>
+								deprecPerc=<%=cat.getSecondYear()%>;
 							} 
 							else if(yearDiff>=3){
-								deprecPerc=<%=cat.getThirdYear()%>
+								deprecPerc=<%=cat.getThirdYear()%>;
 							} 
 							if(yearDiff>=4){
 								for(var j=0; j<(yearDiff-3); j++){
-									deprecPerc+=<%=cat.getEachYear()%>
+									deprecPerc+=<%=cat.getEachYear()%>;
 								}
 							} 
 							<% if(cat.getMaxDeprec()!=0) { %>
@@ -339,11 +339,11 @@
 				if(receipt.value=="0" || (fieldf.value=="" && <%=rules.getNoDates()==TracingConstants.NODATE_SAME_NO_RECEIPT %>)){
 					var noReceiptDeprec=0;
 					if(calcVal<20){
-						noReceiptDeprec=<%=rules.getLessTwentyDeprec()%>
+						noReceiptDeprec=<%=rules.getLessTwentyDeprec()%>;
 					} else if (calcVal>=20 && calcVal<150){
-						noReceiptDeprec=<%=rules.getTwentyOnefiftyDeprec()%>
+						noReceiptDeprec=<%=rules.getTwentyOnefiftyDeprec()%>;
 					} else if (calcVal>=150){
-						noReceiptDeprec=<%=rules.getOnefiftyDeprec()%>
+						noReceiptDeprec=<%=rules.getOnefiftyDeprec()%>;
 					}
 					calcVal=calcVal - (fielda.value * (noReceiptDeprec/100));
 					if(calcVal<0){
