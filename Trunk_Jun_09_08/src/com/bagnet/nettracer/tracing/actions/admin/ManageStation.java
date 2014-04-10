@@ -413,8 +413,9 @@ public final class ManageStation extends Action {
 			} else {
 				s = new Station();	
 			}
-			
-			s.setStationcode((String) dForm.get("stationCode"));
+			String stationCode=(String) dForm.get("stationCode");
+			stationCode=stationCode.replace(" ","");
+			s.setStationcode(stationCode);
 			s.setStationdesc((String) dForm.get("stationDesc"));
 			s.setAddress1((String) dForm.get("addr1"));
 			s.setAddress2((String) dForm.get("addr2"));
