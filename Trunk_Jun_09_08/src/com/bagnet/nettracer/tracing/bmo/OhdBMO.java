@@ -709,7 +709,7 @@ public class OhdBMO {
 
 			if (iscount) sql
 					.append("select count(ohd.OHD_ID) from com.bagnet.nettracer.tracing.db.OHD ohd ");
-			else sql.append("select distinct ohd from com.bagnet.nettracer.tracing.db.OHD ohd ");
+			else sql.append("select ohd from com.bagnet.nettracer.tracing.db.OHD ohd ");
 
 			if (oDTO.getFirstname().trim().length() > 0 || oDTO.getLastname().trim().length() > 0
 					|| oDTO.getMiddlename().trim().length() > 0 || (sort != null && (sort.equalsIgnoreCase(SortParam.OHD_NAME.getParamString()) || sort.equalsIgnoreCase(SortParam.OHD_NAMEREV.getParamString())))) {
@@ -893,9 +893,9 @@ public class OhdBMO {
 					if (sort.equalsIgnoreCase(SortParam.OHD_INCIDENTREV.getParamString()))
 						sortq += " ohd.matched_incident desc, ";
 					if (sort.equalsIgnoreCase(SortParam.OHD_DATE.getParamString()))
-						sortq += " ohd.founddate asc";
+						sortq += " ohd.founddate asc, ohd.foundtime asc ";
 					if (sort.equalsIgnoreCase(SortParam.OHD_DATEREV.getParamString()))
-						sortq += " ohd.founddate desc";
+						sortq += " ohd.founddate desc, ohd.foundtime desc ";
 					if (sort.equalsIgnoreCase(SortParam.OHD_MODDATE.getParamString()))
 						sortq += " ohd.modifiedDate asc, ";
 					if (sort.equalsIgnoreCase(SortParam.OHD_MODDATEREV.getParamString()))
