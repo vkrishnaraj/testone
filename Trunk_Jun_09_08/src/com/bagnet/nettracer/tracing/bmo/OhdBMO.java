@@ -689,7 +689,7 @@ public class OhdBMO {
 	 *          size of current page
 	 * @return list of on hands, null if none found.
 	 */
-	@SuppressWarnings("rawtypes")//suppressing List rawtype since based on the iscount param, the list can be of type OHD or of type long
+	@SuppressWarnings({ "rawtypes", "unchecked" })//suppressing List rawtype since based on the iscount param, the list can be of type OHD or of type long
 	public List findOnHandBagsBySearchCriteria(Ohd_DTO oDTO, Agent user, int rowsperpage,
 			int currpage, boolean iscount, boolean notClosed, boolean dirtyRead, String sort) {
 
@@ -707,9 +707,20 @@ public class OhdBMO {
 			TimeZone tz = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
 
 
-			if (iscount) sql
-					.append("select count(ohd.OHD_ID) from com.bagnet.nettracer.tracing.db.OHD ohd ");
-			else sql.append("select ohd from com.bagnet.nettracer.tracing.db.OHD ohd ");
+			if (iscount){
+				sql.append("select count(ohd.OHD_ID) from com.bagnet.nettracer.tracing.db.OHD ohd ");
+			} else {
+				sql.append("select distinct ohd, ohd.OHD_ID ");
+				if ((sort != null && (sort.equalsIgnoreCase(SortParam.OHD_NAME.getParamString()) || sort.equalsIgnoreCase(SortParam.OHD_NAMEREV.getParamString())))) {
+					sql.append(", passengers.lastname ");
+				}
+
+				if (sort != null && (sort.equalsIgnoreCase(SortParam.OHD_DESTINATION.getParamString()) || sort.equalsIgnoreCase(SortParam.OHD_DESTINATIONREV.getParamString()))) {
+					sql.append(", itinerary.legto ");
+				}
+				
+				sql.append("from com.bagnet.nettracer.tracing.db.OHD ohd ");
+			}
 
 			if (oDTO.getFirstname().trim().length() > 0 || oDTO.getLastname().trim().length() > 0
 					|| oDTO.getMiddlename().trim().length() > 0 || (sort != null && (sort.equalsIgnoreCase(SortParam.OHD_NAME.getParamString()) || sort.equalsIgnoreCase(SortParam.OHD_NAMEREV.getParamString())))) {
@@ -725,7 +736,13 @@ public class OhdBMO {
 					|| (oDTO.getRoutingstation()!=null && oDTO.getRoutingstation().trim().length()>0)
 					|| (oDTO.getRoutingdate()!=null && oDTO.getRoutingdate().length()>0) 
 					|| (sort != null && (sort.equalsIgnoreCase(SortParam.OHD_DESTINATION.getParamString()) || sort.equalsIgnoreCase(SortParam.OHD_DESTINATIONREV.getParamString())))) {
+				if (sort != null && (sort.equalsIgnoreCase(SortParam.OHD_DESTINATION.getParamString()) || sort.equalsIgnoreCase(SortParam.OHD_DESTINATIONREV.getParamString()))) {
+					sql.append(" left outer ");
+				}
 				sql.append(" join ohd.itinerary itinerary ");
+				if (sort != null && (sort.equalsIgnoreCase(SortParam.OHD_DESTINATION.getParamString()) || sort.equalsIgnoreCase(SortParam.OHD_DESTINATIONREV.getParamString()))) {
+					sql.append(" with itinerary.legto_type="+TracingConstants.LEG_E_STATION);
+				}
 			}
 
 			sql.append(" where 1=1 ");
@@ -903,7 +920,7 @@ public class OhdBMO {
 					if (sort.equalsIgnoreCase(SortParam.OHD_BAGTAG.getParamString()))
 						sortq += " ohd.claimnum asc, ";
 					if (sort.equalsIgnoreCase(SortParam.OHD_BAGTAGREV.getParamString()))
-						sortq += "ohd.claimnum desc, ";
+						sortq += " ohd.claimnum desc, ";
 					if (sort.equalsIgnoreCase(SortParam.OHD_STATUS.getParamString()))
 						sortq += " ohd.status.status_ID asc, ";
 					if (sort.equalsIgnoreCase(SortParam.OHD_STATUSREV.getParamString()))
@@ -1081,7 +1098,18 @@ public class OhdBMO {
 				q.setString("agent", oDTO.getAgent().trim());
 			}
 
-			return q.list();
+			if (iscount){
+				return q.list();
+			} else {
+				List returnList=new ArrayList();
+				List resultList=q.list();
+				Object[] row;
+				for(int i=0;i<resultList.size();++i){
+					row=(Object[])resultList.get(i);
+					returnList.add((OHD)row[0]);
+				}
+				return returnList;
+			}
 		} catch (Exception e) {
 			logger.error("unable to retrieve ohd: " + e);
 			e.printStackTrace();
