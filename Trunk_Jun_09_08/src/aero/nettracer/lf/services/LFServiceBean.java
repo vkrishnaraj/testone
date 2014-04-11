@@ -74,9 +74,6 @@ import com.bagnet.nettracer.tracing.utils.general.Logger;
 @Stateless
 public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	
-	private static int EMAIL_FIRST_NOTICE_DAY = 3;
-	
-	private static int EMAIL_SECOND_NOTICE_DAY = 7;
 	private static final String CALCULATE_RETURNED_ITEMS_QUERY = 
 			"SELECT dt, sum(val) FROM (SELECT date(f.deliveredDate) AS dt, CASE count(*) WHEN NULL THEN 0 ELSE count(*) END AS val " +
 			"FROM lfitem i JOIN lffound f ON f.id = i.found_id LEFT OUTER JOIN lfmatchhistory h ON h.found_id = f.id AND h.status_Status_ID = 608 " +
@@ -134,6 +131,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return f;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public LFShipping getShipment(long id) {
 		Session sess = HibernateWrapper.getSession().openSession();
@@ -862,6 +860,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return f;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public LFFound getFoundItemByBarcode(String barcode) throws NonUniqueBarcodeException{
 		if(barcode == null || barcode.trim().length() == 0){
@@ -1328,7 +1327,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		try{
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(query);
-			List result = q.list();
+			List<?> result = q.list();
 			return ((Long) result.get(0)).intValue();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -1349,7 +1348,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		try{
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(query);
-			List result = q.list();
+			List<?> result = q.list();
 			return ((Long) result.get(0)).intValue();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -1361,6 +1360,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return 0;
 	}
 	
+	@SuppressWarnings("unchecked")
 	private List<LFFound> getFoundPaginatedList(String sql, int start, int offset){
 		if(sql == null){
 			return null;
@@ -1391,12 +1391,12 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return null;
 	}
 	
+	@SuppressWarnings("unchecked")
 	private List<LFItem> getItemPaginatedList(String sql, int start, int offset){
 		if(sql == null){
 			return null;
 		}
 		
-//		String query = sql + " order by i.foundDate asc";
 		Session sess = null;
 		try{
 			sess = HibernateWrapper.getSession().openSession();
@@ -1447,13 +1447,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		try{
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(query);
-			
-//			if (start > -1 && offset > -1 ) {
-//				q.setFirstResult(start);
-//				q.setMaxResults(offset);
-//			} else {
-//				throw new Exception("Invalided pagination bounds");
-//			}
 			
 			@SuppressWarnings("unchecked")
 			List<LFMatchHistory> results = q.list();
@@ -1629,7 +1622,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		try{
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(query);
-			List result = q.list();
+			List<?> result = q.list();
 			return ((Long) result.get(0)).intValue();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -1645,6 +1638,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return getTraceResultsPaginated(station, start, offset, null);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	//TODO review if this needs to be deprecated
 	public List<LFMatchHistory> getTraceResultsPaginated(Station station, int start, int offset, Subcompany subcomp) {
@@ -1698,7 +1692,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		try{
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(query);
-			List result = q.list();
+			List<?> result = q.list();
 			return ((Long) result.get(0)).intValue();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -1715,6 +1709,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 	
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<LFItem> getDeliveryPendingPaginatedList(Station station, int start, int offset, Subcompany subcomp) {
 		if(station == null){
@@ -1771,6 +1766,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return null;
 	}
 
+	@SuppressWarnings({ "unchecked" })
 	@Override
 	public List<LFMatchHistory> getTraceResultsForLost(long id) {
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m " +
@@ -1780,7 +1776,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		try{
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(sql);
-			List result = q.list();
+			List<?> result = q.list();
 			return  (List<LFMatchHistory>)result;
 		}catch(Exception e){
 			e.printStackTrace();
@@ -1792,6 +1788,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return null;
 	}
 
+	@SuppressWarnings({ "unchecked" })
 	@Override
 	public List<LFMatchHistory> getTraceResultsForFound(long id) {
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m " +
@@ -1801,7 +1798,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		try{
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(sql);
-			List result = q.list();
+			List<?> result = q.list();
 			return  (List<LFMatchHistory>)result;
 		}catch(Exception e){
 			e.printStackTrace();
@@ -2217,7 +2214,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		try{
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(sql);
-			List result = q.list();
+			List<?> result = q.list();
 			return ((Long) result.get(0)).intValue();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -2229,6 +2226,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return 0;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<LFMatchHistory> getAssociatedTraceResults(LFMatchHistory match){
 		if(match == null){
 			return null;
@@ -2256,6 +2254,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<LFMatchHistory> getFilteredTraceResultsPaginatedList(Station station, TraceResultsFilter filter, int start, int offset, Subcompany subcomp) {
 		String sql = "from com.bagnet.nettracer.tracing.db.lf.detection.LFMatchHistory m ";
 		
@@ -2339,6 +2338,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 	
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void getStillSearchingList() {
 		String sql = "select l.id lostid from lflost l, station s, lflossinfo r " +
@@ -2375,6 +2375,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 	
 	
+	@SuppressWarnings("unchecked")
 	public void autoClose(){
 		int daysTillClose = PropertyBMO.getValueAsInt(PropertyBMO.LF_AUTO_CLOSE_DAYS);
 		GregorianCalendar today = new GregorianCalendar();
@@ -2410,6 +2411,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	protected List<Long> getXDayList(int notice) throws Exception{
 		String sql = "select l.id lostid from lflost l left outer join subcompany sc on sc.subcompanycode=l.companyId " +
 		" where l.status_ID != " + TracingConstants.LF_STATUS_CLOSED +
@@ -2569,8 +2571,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		
 		HashMap<String,String> h = new HashMap<String,String>();
 		GregorianCalendar cal=new GregorianCalendar();
-		long lastFour = System.currentTimeMillis() + (4 * 86400 * 7 * 1000);
-		long lastWeek = System.currentTimeMillis() + (86400 * 7 * 1000);
 		Date endDate=new Date();
 		//DateUtils.addDays(endDate, -7);
 		Date week=DateUtils.addDays(endDate, -7);
@@ -2581,15 +2581,12 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		Date beginYear=cal.getTime();
 		System.out.println(DateUtils.formatDate(fourWeek,TracingConstants.DB_DATEFORMAT, null, null));
 		
-		int weeklyTotal=0;
-		int MTD=0;
-		int YTD=0;
 		//DateUtils.
 		cal.setTime(week);
 		int i=1;
 		do{
 			h.put("date"+i, DateUtils.formatDate(cal.getTime(),TracingConstants.DISPLAY_DATEFORMAT, null, null));
-			cal.add(cal.DATE, 1);
+			cal.add(GregorianCalendar.DATE, 1);
 			i++;
 		}
 		while(endDate.after(cal.getTime()));
@@ -2597,7 +2594,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		i=1;
 		do{
 			h.put("week"+i,DateUtils.formatDate(cal.getTime(), TracingConstants.DISPLAY_DATEFORMAT, null, null));
-			cal.add(cal.DATE, 7);
+			cal.add(GregorianCalendar.DATE, 7);
 			i++;
 		}
 		while((DateUtils.addDays(endDate,1)).after(cal.getTime()));
@@ -2619,6 +2616,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return h;
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void getBoxesEntered(HashMap h,Date endDate, Date week)
 	{
 		int weeklyTotal=0;
@@ -2676,6 +2674,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void getLostReportsEntered(HashMap h,Date endDate, Date week)
 	{
 	int weeklyTotal=0;
@@ -2734,6 +2733,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 	
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void getHighValueEntered(HashMap h,Date endDate, Date week)
 	{
 		int weeklyTotal=0;
@@ -2790,6 +2790,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void getLowValueEntered(HashMap h,Date endDate, Date week)
 	{
 		int weeklyTotal=0;
@@ -2848,6 +2849,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void getReturnedForValueType(int type, String fieldNameLabel, HashMap h, Date endDate, Date startDate)
 	{
 		int weeklyTotal=0;
@@ -2904,6 +2906,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void getMTDTotals(HashMap h, Date endDate, Date week)
 	{
 		//Low Value Items returned MTD
@@ -3135,6 +3138,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void getYTDTotals(HashMap h, Date endDate, Date week)
 	{
 		//Low Value Items returned
@@ -3365,6 +3369,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void getWeekItemCounts(HashMap h, Date endDate, Date fourweek)
 	{
 		int lowenterTotal=0;
@@ -3435,8 +3440,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				"AND ( ((i.trackingNumber IS NULL OR i.trackingNumber = '') AND i.lost_id IS NOT NULL) OR (l.foundemail = 1 AND i2.found_id = i.found_id AND " +
 				"(i2.trackingNumber IS NULL OR i2.trackingNumber = '') AND (i.trackingNumber IS NULL OR i.trackingNumber = '')) ) " +
 				"GROUP BY i.value, wk3 ) q3 on q3.val = q1.val and q3.wk3 = q1.wk1 group by val, q1.wk1 order by q1.wk1 asc, q1.val desc";
-//		sql = "select case  value when 0 then 'Low Value' else 'High Value' END as val, makedate(year(f.receivedDate), 7*week(f.receivedDate,1)-6) as wk3, "+
-//			"case count(*) when null then 0 else count(*) end as ct2  from lfitem i join lffound f on i.found_id = f.id where type = 2 and f.receivedDate < :enddate and f.receivedDate >= :fourweek and (trackingNumber is null or trackingNumber = '') and lost_id is not null group by value, week(f.receivedDate, 3)";
 	    q = null;
 		try {
 			q = sess.createSQLQuery(sql.toString());
@@ -3790,6 +3793,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return false;
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public boolean sendEmail(LFLost lost, HashMap params, String htmlFileName, String subjectline){
 		if(lost != null && lost.getClient() != null && lost.getClient().getDecryptedEmail() != null && !lost.getClient().getDecryptedEmail().isEmpty()){
 			try {
@@ -3813,8 +3817,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 					imagepath = root + "/DM/";
 				}
 				boolean embedImage = true;
-				
-//				System.out.println("path: " + root);
 				
 				HtmlEmail he = new HtmlEmail();
 				String currentLocale = lost.getAgent().getCurrentlocale();
@@ -3847,7 +3849,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 							imgbanner);
 					params.put("BANNER_IMAGE", img1);
 					}catch(Exception e){
-//						e.printStackTrace();
 						System.out.println("Unable to find email banner: " + imagepath + imgbanner);
 					}
 				}
@@ -3868,18 +3869,12 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return false;
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public boolean sendEmail(Agent a, HashMap params, String htmlFileName, String subjectline){
-		//if(lost != null && lost.getClient() != null && lost.getClient().getDecryptedEmail() != null && !lost.getClient().getDecryptedEmail().isEmpty()){
 			try {
 				String root = TracerProperties.get(a.getCompanycode_ID(),"email.resources");
-				String imgbanner = TracerProperties.get(a.getCompanycode_ID(),"lf.email.banner");
 				String configpath = root + "/";
-				String imagepath = root + "/";
 				configpath = root + "/WN/";
-				imagepath = root + "/WN/";
-				boolean embedImage = true;
-				
-//				System.out.println("path: " + root);
 				
 				HtmlEmail he = new HtmlEmail();
 				String currentLocale = a.getCurrentlocale();
@@ -3918,36 +3913,34 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				return false;
 			}
 			return true;
-		//}
-		//return false;
 	}
 	
-	public void testEmail(){
-		try{
-			HtmlEmail he = new HtmlEmail();
-			
-			String from = "noreply@lostandfound.aero";
-			String host = "10.8.185.132";
-			int port = 8625;
-			
-			he.setHostName(host);
-			he.setSmtpPort(port);
-
-			he.setFrom(from);
-			ArrayList al = new ArrayList();
-			al.add(new InternetAddress("mloupas@nettracer.aero"));
-			al.add(new InternetAddress("noreply@lostandfound.aero"));
-			he.setTo(al);
-			
-			he.setSubject("Avis Budget Group - Test Email");
-			
-			he.setHtmlMsg("Test");
-			he.send();
-			
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-	}
+//	public void testEmail(){
+//		try{
+//			HtmlEmail he = new HtmlEmail();
+//			
+//			String from = "noreply@lostandfound.aero";
+//			String host = "10.8.185.132";
+//			int port = 8625;
+//			
+//			he.setHostName(host);
+//			he.setSmtpPort(port);
+//
+//			he.setFrom(from);
+//			ArrayList al = new ArrayList();
+//			al.add(new InternetAddress("mloupas@nettracer.aero"));
+//			al.add(new InternetAddress("noreply@lostandfound.aero"));
+//			he.setTo(al);
+//			
+//			he.setSubject("Avis Budget Group - Test Email");
+//			
+//			he.setHtmlMsg("Test");
+//			he.send();
+//			
+//		}catch(Exception e){
+//			e.printStackTrace();
+//		}
+//	}
 	
 	public void traceAllFoundItems(){
 		LFTracingUtil.traceAllFoundItems(true);
@@ -3976,7 +3969,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		try{
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createSQLQuery(query);
-			List result = q.list();
+			List<?> result = q.list();
 			return ((BigInteger) result.get(0)).intValue();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -4016,7 +4009,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				throw new Exception("Invalid pagination bounds");
 			}
 			
-			List result = q.list();
+			List<?> result = q.list();
 			
 			ArrayList<LFFound> toReturn = new ArrayList<LFFound>();
 			for (int i = 0; i < result.size(); ++i) {
@@ -4033,6 +4026,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return null;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public LFBoxContainer loadBoxContainer(Date date){
 		if(date == null){
 			return null;
@@ -4056,6 +4050,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return s;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public LFBoxCount loadBoxCount(Station sta, Date date){
 		if(date == null || sta == null){
 			return null;
@@ -4067,7 +4062,6 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		try{
 			Criteria crit = sess.createCriteria(LFBoxCount.class).add(Restrictions.eq("source", sta))
 					.createCriteria("container").add(Restrictions.eq("dateCount", date));
-			//crit = sess.createCriteria(LFBoxCount.class).add(Restrictions.eq("source", sta));
 			list = crit.list();
 		}catch (HibernateException e){
 			e.printStackTrace();
@@ -4081,6 +4075,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return s;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public LFSalvage loadSalvage(long id) {
 		String sql = "select s.id, s.createdDate, s.closedDate, s.status_ID, s.agent_ID, s.station_id from LFSalvage s" +
 				" where id=:sid ";
@@ -4127,6 +4122,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List<LFSalvageFound> loadSalvageFound(long id) {
 		String sql = "select f.id, f.barcode, f.receivedDate, i.brand, i.model, i.serialNumber, i.color, i.description, i.longDescription, a.username, a.currentTimeZone, i.category, i.subcategory, f.salvageBoxId from LFFound f" +
 				" left join Agent a on f.agent_ID=a.agent_ID left join LFItem i on f.item_id=i.id where f.salvage_id=:sid ";
@@ -4136,7 +4132,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		try {
 			q = sess.createSQLQuery(sql.toString());
 			q.setParameter("sid", id);
-			List lis = q.list();
+			List<?> lis = q.list();
 			List<LFSalvageFound> results=new ArrayList();
 			Object[] o;
 			LFSalvageFound dto;
@@ -4158,7 +4154,9 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				dto.setCurrentTimeZone(o[10].toString());
 				dto.setCategory(Long.valueOf(o[11].toString()));
 				dto.setSubcategory(Long.valueOf(o[12].toString()));
-				dto.setSalvageBoxId(o[13].toString());
+				if (o[13] != null) {
+					dto.setSalvageBoxId(o[13].toString());
+				}
 				results.add(dto);
 			}
 			
@@ -4282,7 +4280,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		try{
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(sql);
-			List result = q.list();
+			List<?> result = q.list();
 			return ((Long) result.get(0)).intValue();
 		}catch(Exception e){
 			e.printStackTrace();
@@ -4295,7 +4293,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 	
 	@Override
-	@SuppressWarnings({ "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public List<LFSalvage> getSalvagesPaginated(Station station, SalvageSearchForm ssForm, int start, int offset) {
 		if(station == null){
 			return null;
@@ -4314,7 +4312,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				throw new Exception("Invalid pagination bounds");
 			}
 			
-			List result = q.list();
+			List<LFSalvage> result = q.list();
 			return result;
 		}catch(Exception e){
 			e.printStackTrace();
@@ -4422,8 +4420,8 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				q.setFirstResult(startnum);
 				q.setMaxResults(rowsperpage);
 			}
-			List lis = q.list();
-			List<SalvageDTO> results=new ArrayList();
+			List<?> lis = q.list();
+			List<SalvageDTO> results=new ArrayList<SalvageDTO>();
 			Object[] o;
 			SalvageDTO dto;
 			for (int i = 0; i < lis.size(); ++i) {
@@ -4454,8 +4452,8 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 	}
 	
-	public static void main(String [] args){
-		LFServiceBean bean = new LFServiceBean();
-		bean.testEmail();
-	}
+//	public static void main(String [] args){
+//		LFServiceBean bean = new LFServiceBean();
+//		bean.testEmail();
+//	}
 }
