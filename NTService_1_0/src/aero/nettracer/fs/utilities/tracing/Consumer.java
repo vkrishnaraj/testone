@@ -86,7 +86,8 @@ public class Consumer implements Runnable{
 	
 	private static final long MAX_THREAD_WAIT_TIME = 300000;//5min
 	
-	
+	public static final double ADDRESS_MIN_SCORE = 75;
+	public static final double ADDRESS_MULTIPLIER = .15;
 	
 	private int threadnumber;
 	private int threadtype;
@@ -768,7 +769,7 @@ public class Consumer implements Runnable{
 							} else {
 								percent = ADDRESS_SIMILAR;
 							}
-							generateStringCompareDetail(match, details, str1, str2, description, percent, 75, .15, MatchType.address, isWhitelisted);
+							generateStringCompareDetail(match, details, str1, str2, description, percent, ADDRESS_MIN_SCORE, ADDRESS_MULTIPLIER, MatchType.address, isWhitelisted);
 						}
 					}
 				} else {
@@ -796,7 +797,7 @@ public class Consumer implements Runnable{
 							} else {
 								percent = ADDRESS_SIMILAR;
 							}
-							generateStringCompareDetail(match, details, str1, str2, description, percent, 75, .15, MatchType.address, isWhitelisted);
+							generateStringCompareDetail(match, details, str1, str2, description, percent, ADDRESS_MIN_SCORE, ADDRESS_MULTIPLIER, MatchType.address, isWhitelisted);
 							
 						} else {
 							// Country not available
@@ -819,7 +820,7 @@ public class Consumer implements Runnable{
 							} else {
 								percent = ADDRESS_SIMILAR;
 							}
-							generateStringCompareDetail(match, details, str1, str2, description, percent, 75, .15, MatchType.address, isWhitelisted);
+							generateStringCompareDetail(match, details, str1, str2, description, percent, ADDRESS_MIN_SCORE, ADDRESS_MULTIPLIER, MatchType.address, isWhitelisted);
 						}
 					}
 				}
@@ -881,8 +882,6 @@ public class Consumer implements Runnable{
 			boolean num4Empty = (r1.getCcNumLastFour() != null && r1.getCcNumLastFour().trim().length() > 0 && r2.getCcNumLastFour() != null && r2.getCcNumLastFour().trim().length() > 0) ? false:true;
 			boolean num6Empty = (r1.getCcNumber() != null && r1.getCcNumber().trim().length() > 0 && r2.getCcNumber() != null && r2.getCcNumber().trim().length() > 0) ? false:true;
 			boolean typeEmpty = (r1.getCcType() != null && r1.getCcType().trim().length() > 0 && r2.getCcType() != null && r2.getCcType().trim().length() > 0) ? false:true;
-			@SuppressWarnings("unused")
-			boolean expEmpty = (r1.getCcExpMonth() != 0 && r2.getCcExpMonth() !=0 && r1.getCcExpYear() != 0 && r2.getCcExpYear() != 0) ? false:true;
 			
 			if(num6){						
 				if(num4 && type && exp){
