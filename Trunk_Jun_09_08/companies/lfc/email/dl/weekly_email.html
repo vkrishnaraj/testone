@@ -1,0 +1,254 @@
+<html>
+	<style>
+	</style>
+	<body>
+
+
+		<h1>LFC Weekly Summary Report</h1>
+		Date Range: {STARTDATE} - {ENDDATE}
+		<ul>
+			<li><a href="#summary">Summary Data</a></li>
+			<li><a href="#counts">Item and Status Counts (last 4 weeks)</a></li>
+			<li><a href="#returns">Total Return Rates</a></li>
+		</ul>
+		<p></p>
+		<hr/>
+		<h2>Summary Data</h2><a name="summary"/>
+		<table border="1" cellpadding="4" cellspacing="0">
+			<tr >
+				<th  bgcolor="" style="border-bottom: 1px solid black;">&nbsp;</th>
+				<th  bgcolor="lightblue" style="border-bottom: 1px solid black;">{date1}</th>
+				<th  bgcolor="lightblue" style="border-bottom: 1px solid black;">{date2}</th>
+				<th  bgcolor="lightblue" style="border-bottom: 1px solid black;">{date3}</th>
+				<th  bgcolor="lightblue" style="border-bottom: 1px solid black;">{date4}</th>
+				<th  bgcolor="lightblue" style="border-bottom: 1px solid black;">{date5}</th>
+				<th  bgcolor="lightblue" style="border-bottom: 1px solid black;">{date6}</th>
+				<th  bgcolor="lightblue" style="border-bottom: 1px solid black; border-right: 1px solid black;">{date7}</th>
+				<th  bgcolor="lightblue" style="border-bottom: 1px solid black;">Week</th>
+				<th  bgcolor="lightblue" style="border-bottom: 1px solid black;">MTD</th>
+				<th  bgcolor="lightblue" style="border-bottom: 1px solid black;">YTD</th>
+			</tr>
+			<tr>
+				<td  bgcolor="lightgrey" style="border-right: 1px solid black;">Lost Reports Entered</td>
+				<td>{LostEntered1}</td>
+				<td>{LostEntered2}</td>
+				<td>{LostEntered3}</td>
+				<td>{LostEntered4}</td>
+				<td>{LostEntered5}</td>
+				<td>{LostEntered6}</td>
+				<td style="border-right: 1px solid black;">{LostEntered7}</td>
+				<td>{LostWeekEntered}</td>
+				<td>{LostMTDEntered}</td>
+				<td>{LostYTDEntered}</td>
+			</tr>
+			<tr>
+				<td bgcolor="lightgrey" style="border-right: 1px solid black;">Boxes Received</td>
+				<td>{BoxesReceived1}</td>
+				<td>{BoxesReceived2}</td>
+				<td>{BoxesReceived3}</td>
+				<td>{BoxesReceived4}</td>
+				<td>{BoxesReceived5}</td>
+				<td>{BoxesReceived6}</td>
+				<td style="border-right: 1px solid black;">{BoxesReceived7}</td>
+				<td>{BoxesReceivedWeek}</td>
+				<td>{BoxesReceivedMTD}</td>
+				<td>{BoxesReceivedYTD}</td>
+			</tr>
+			<tr>
+				<td bgcolor="lightgrey" style="border-right: 1px solid black;">High Value Items Entered</td>
+				<td>{HighEntered1}</td>
+				<td>{HighEntered2}</td>
+				<td>{HighEntered3}</td>
+				<td>{HighEntered4}</td>
+				<td>{HighEntered5}</td>
+				<td>{HighEntered6}</td>
+				<td style="border-right: 1px solid black;">{HighEntered7}</td>
+				<td>{HighEnteredWeek}</td>
+				<td>{HighEnteredMTD}</td>
+				<td>{HighEnteredYTD}</td>
+			</tr>
+			<tr>
+				<td bgcolor="lightgrey" style="border-right: 1px solid black;">Low Value Items Entered</td>
+				<td>{LowEntered1}</td>
+				<td>{LowEntered2}</td>
+				<td>{LowEntered3}</td>
+				<td>{LowEntered4}</td>
+				<td>{LowEntered5}</td>
+				<td>{LowEntered6}</td>
+				<td style="border-right: 1px solid black;">{LowEntered7}</td>
+				<td>{LowEnteredWeek}</td>
+				<td>{LowEnteredMTD}</td>
+				<td>{LowEnteredYTD}</td>
+			</tr>
+			<tr>
+				<td  bgcolor="lightgrey" style="border-right: 1px solid black;">High Value Items Returned</td>
+				<td>{HighReturned1}</td>
+				<td>{HighReturned2}</td>
+				<td>{HighReturned3}</td>
+				<td>{HighReturned4}</td>
+				<td>{HighReturned5}</td>
+				<td>{HighReturned6}</td>
+				<td style="border-right: 1px solid black;">{HighReturned7}</td>
+				<td>{HighReturnedWeek}</td>
+				<td>{HighReturnedMTD}</td>
+				<td>{HighReturnedYTD}</td>
+			</tr>
+			<tr>
+				<td bgcolor="lightgrey" style="border-right: 1px solid black;">Low Value Items Returned</td>
+				<td>{LowReturned1}</td>
+				<td>{LowReturned2}</td>
+				<td>{LowReturned3}</td>
+				<td>{LowReturned4}</td>
+				<td>{LowReturned5}</td>
+				<td>{LowReturned6}</td>
+				<td style="border-right: 1px solid black;">{LowReturned7}</td>
+				<td>{LowReturnedWeek}</td>
+				<td>{LowReturnedMTD}</td>
+				<td>{LowReturnedYTD}</td>
+			</tr>
+		</table>
+		<p>&nbsp;</p>
+
+		<hr/>
+
+		<h2>Item and Status Counts (last 4 weeks)</h2><a name="counts" />
+		<font size="2">This table contains the total number of items entered, shipped, and waiting on customer feedback for the last 4 weeks broken down by low and high value.</font>
+			<p></p>
+		<table border="1" cellpadding="4" cellspacing="0">
+			<tr>
+				<td colspan="1" align="center" bgcolor="lightgrey" style="border-right: 1px solid black; font-weight: bold">&nbsp;</td>
+				<td colspan="3" align="center" bgcolor="lightblue" style="font-weight: bold">Low Value</td>
+				<td colspan="3" align="center" bgcolor="pink" style="font-weight: bold">High Value</td>
+			</tr>
+			<tr>
+				<td bgcolor="lightgrey" style="border-right: 1px solid black;border-bottom: 1px solid black; font-weight: bold">Week</td>
+				<td bgcolor="lightblue" style="border-bottom: 1px solid black; font-weight: bold">Entered</td>
+				<td bgcolor="lightblue" style="border-bottom: 1px solid black; font-weight: bold">Shipped</td>
+				<td bgcolor="lightblue" style="border-bottom: 1px solid black; font-weight: bold">WOC</td>
+				<td bgcolor="pink" style="border-bottom: 1px solid black; font-weight: bold">Entered</td>
+				<td bgcolor="pink" style="border-bottom: 1px solid black; font-weight: bold">Shipped</td>
+				<td bgcolor="pink" style="border-bottom: 1px solid black; font-weight: bold">WOC</td>
+			</tr>
+			
+			<tr>
+				<td bgcolor="lightgrey"  style="border-right: 1px solid black;font-weight: bold">{week1}</td>
+				<td >{lowEntered1}</td>
+				<td >{lowShipped1}</td>
+				<td style="border-right: 1px solid black;">{lowWOC1}</td>
+				<td >{highEntered1}</td>
+				<td >{highShipped1}</td>
+				<td >{highWOC1}</td>
+			</tr>
+			<tr>
+				<td bgcolor="lightgrey"  style="border-right: 1px solid black;font-weight: bold">{week2}</td>
+				<td >{lowEntered2}</td>
+				<td >{lowShipped2}</td>
+				<td style="border-right: 1px solid black;">{lowWOC2}</td>
+				<td >{highEntered2}</td>
+				<td >{highShipped2}</td>
+				<td >{highWOC2}</td>
+			</tr>
+			<tr>
+				<td bgcolor="lightgrey"  style="border-right: 1px solid black;font-weight: bold">{week3}</td>
+				<td >{lowEntered3}</td>
+				<td >{lowShipped3}</td>
+				<td style="border-right: 1px solid black;">{lowWOC3}</td>
+				<td >{highEntered3}</td>
+				<td >{highShipped3}</td>
+				<td >{highWOC3}</td>
+			</tr>
+			<tr>
+				<td bgcolor="lightgrey"  style="border-right: 1px solid black;font-weight: bold">{week4}</td>
+				<td >{lowEntered4}</td>
+				<td >{lowShipped4}</td>
+				<td style="border-right: 1px solid black;">{lowWOC4}</td>
+				<td >{highEntered4}</td>
+				<td >{highShipped4}</td>
+				<td >{highWOC4}</td>
+			</tr>
+			<tr>
+				<td bgcolor="lightgrey"  style="border-right: 1px solid black;font-weight: bold">{week5}</td>
+				<td >{lowEntered5}</td>
+				<td >{lowShipped5}</td>
+				<td style="border-right: 1px solid black;">{lowWOC5}</td>
+				<td >{highEntered5}</td>
+				<td >{highShipped5}</td>
+				<td >{highWOC5}</td>
+			</tr>
+			
+			<tr>
+				<td bgcolor="lightgrey" style="border-right: 1px solid black; border-top: 1px solid black; font-weight: bold">Total</td>
+				<td  style="border-top: 1px solid black; font-weight: bold">{LowEnterTotal}</td>
+				<td  style="border-top: 1px solid black; font-weight: bold">{LowShipTotal}</td>
+				<td  style="border-top: 1px solid black; font-weight: bold; border-right: 1px solid black;">{LowWocTotal}</td>
+				<td  style="border-top: 1px solid black; font-weight: bold">{highEnterTotal}</td>
+				<td  style="border-top: 1px solid black; font-weight: bold">{highShipTotal}</td>
+				<td  style="border-top: 1px solid black; font-weight: bold">{highWocTotal}</td>
+			</tr>
+
+		</table>
+
+		<p>&nbsp;</p>
+
+		<hr/>
+
+
+		<h2>Total Return Rates (last 4 weeks)</h2><a name="returns"/>
+			<font size="2">This table contains the calculated LFC return rates by low and high value and compares the actual return rate with established goals.  The low value number of items received is an estimated value based on the established item-to-box ratio.</font>
+			<p></p>
+		<table border="1" cellpadding="4" cellspacing="0">
+			<tr>
+				<td></td>
+				<td colspan="2" align="center" style="border-right: 1px solid black;" bgcolor="lightblue">Item Breakdown</td>
+				<td colspan="3" align="center" bgcolor="lightblue"  style="border-right: 1px solid black;" >Returns</td>
+				<td colspan="3" align="center" bgcolor="lightblue">Return Rate</td>
+			</tr>
+			<tr>
+				<td style="border-bottom: 1px solid black;">&nbsp;</td>
+				<td bgcolor="lightblue" style="border-bottom: 1px solid black;">Received</td>
+				<td bgcolor="lightblue" style="border-bottom: 1px solid black; border-right: 1px solid black;" >% of Total</td>
+				<td bgcolor="lightblue" style="border-bottom: 1px solid black;">Shipped</td>
+				<td bgcolor="lightblue" style="border-bottom: 1px solid black;">WOC</td>
+				<td bgcolor="lightblue" style="border-bottom: 1px solid black; border-right: 1px solid black;" >Total</td>
+				<td bgcolor="lightblue" style="border-bottom: 1px solid black;">% Returned</td>
+				<td bgcolor="lightblue" style="border-bottom: 1px solid black;">Goal</td>
+				<td bgcolor="lightblue" style="border-bottom: 1px solid black;">% of Goal</td>
+			</tr>
+			<tr>
+				<td bgcolor="lightgrey" style="border-right: 1px solid black;">High Value Items</td>
+				<td>{highEnterTotal}</td>
+				<td style="border-right: 1px solid black;" >{HighReceivedPercent}</td>
+				<td>{highShipTotal}</td>
+				<td>{highWocTotal}</td>
+				<td style="border-right: 1px solid black;" >{HighTotal}</td>
+				<td>{HighReturnedPercent}</td>
+				<td>9.97%</td>
+				<td>{HighVariance}</td>
+			</tr>
+			<tr>
+				<td bgcolor="lightgrey" style="border-right: 1px solid black;">Low Value Items</td>
+				<td>{LowReceived}</td>
+				<td style="border-right: 1px solid black;" >{LowReceivedPercent}</td>
+				<td>{LowShipTotal}</td>
+				<td>{LowWocTotal}</td>
+				<td style="border-right: 1px solid black;" >{LowTotal}</td>
+				<td>{LowReturnedPercent}</td>
+				<td>1.19%</td>
+				<td>{LowVariance}</td>
+			</tr>
+<tr>
+				<td bgcolor="lightgrey" style="border-right: 1px solid black;">Total</td>
+				<td>{TotalReceived}</td>
+				<td style="border-right: 1px solid black;" >{TotalReceivedPercent}</td>
+				<td>{TotalShipped}</td>
+				<td>{TotalWoc}</td>
+				<td style="border-right: 1px solid black;" >{TotalTotal}</td>
+				<td>{TotalReturnedPercent}</td>
+				<td>1.90%</td>
+				<td>{TotalVariance}</td>
+			</tr>
+		</table>
+
+		
+	</body>
+</html>
