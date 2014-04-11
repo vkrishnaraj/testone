@@ -8,6 +8,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -25,15 +26,27 @@ import aero.nettracer.lfc.model.PhoneBean;
 import aero.nettracer.lfc.model.RateBean;
 import aero.nettracer.lfc.model.SegmentBean;
 import aero.nettracer.lfc.model.ShippingBean;
+import aero.nettracer.lfc.remote.RemoteService;
 import aero.nettracer.lfc.service.ClientViewService;
+
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 
 @Component("lostAndFound")
 @Qualifier("lostAndFound")
 @Scope("view")
 public class LostAndFoundController {
 
-	private static Logger logger = Logger
-			.getLogger(LostAndFoundController.class);
+	private static Logger logger = Logger.getLogger(LostAndFoundController.class);
+	
+	private static String URL_SWA = "southwest";
+	private static String URL_AA = "american";
+	private static String URL_FL = "airtran";
+	private static String URL_DEMO = "demo";
+	private static String URL_AVS = "avis";
+	private static String URL_BGT = "budget";
+	private static String URL_DL = "delta";
+	private static String US_PHONE_COUNTRYCODE = "+1";
+	
 	private LostReportBean lostReport = new LostReportBean();
 	private boolean update;
 
@@ -66,73 +79,74 @@ public class LostAndFoundController {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
 				.getExternalContext().getSession(false);
 		lostReport = (LostReportBean) session.getAttribute("lostReport");
-		shippingAddress = (AddressBean) session.getAttribute("shippingAddress");
-		selectedoption = (String) session.getAttribute("selectedOption");
-		rates = (List<RateBean>) session.getAttribute("rates");
-
-		session.setAttribute("shippingOptions",
-				(List<SelectItem>) session.getAttribute("shippingOptions")); 
-
-		if (getSubCompany() != null
-				&& !(getSubCompany().equals("AVS")
-						|| getSubCompany().equals("BGT") || getSubCompany()
-						.equals("ABG"))) {
-			setSegmentLocationDesc(lostReport.getSegments());
-		}
-
-		if (lostReport != null && lostReport.getContact() != null) {
-			shippingPhone = lostReport.getContact().getShippingPhone();
-			if (shippingAddress == null
-					|| (shippingAddress != null && shippingAddress
-							.getAddress1() == null)) {
-				shippingAddress = new AddressBean();
-				if (lostReport.getContact().getPrefshipaddress() != null
-						&& lostReport.getContact().getPrefshipaddress()
-								.getAddress1() != null) {
-					populateShippingAddress(lostReport.getContact()
-							.getPrefshipaddress());
-				} else {
-					populateShippingAddress(lostReport.getContact()
-							.getAddress());
+		String subcompany = getSubcompanyFromURL();
+		if (subcompany != null) {
+			if (lostReport == null || !subcompany.equals(lostReport.getSubCompany()) || onLandingPage()) {
+				lostReport = createReportFromContext(session, subcompany);
+			}
+			if (TracingConstants.LF_LF_COMPANY_ID.equals(getCompany())) {
+				populatePhoneCountry(lostReport);
+			}
+			shippingAddress = (AddressBean) session.getAttribute("shippingAddress");
+			selectedoption = (String) session.getAttribute("selectedOption");
+			rates = (List<RateBean>) session.getAttribute("rates");
+	
+			session.setAttribute("shippingOptions",
+					(List<SelectItem>) session.getAttribute("shippingOptions")); 
+	
+			if (getSubCompany() != null
+					&& !(getSubCompany().equals("AVS")
+							|| getSubCompany().equals("BGT") || getSubCompany()
+							.equals("ABG"))) {
+				setSegmentLocationDesc(lostReport.getSegments());
+			}
+	
+			if (lostReport != null && lostReport.getContact() != null) {
+				shippingPhone = lostReport.getContact().getShippingPhone();
+				if (shippingAddress == null
+						|| (shippingAddress != null && shippingAddress
+								.getAddress1() == null)) {
+					shippingAddress = new AddressBean();
+					if (lostReport.getContact().getPrefshipaddress() != null
+							&& lostReport.getContact().getPrefshipaddress()
+									.getAddress1() != null) {
+						populateShippingAddress(lostReport.getContact()
+								.getPrefshipaddress());
+					} else {
+						populateShippingAddress(lostReport.getContact()
+								.getAddress());
+					}
 				}
+				if (selectedoption == null
+						&& lostReport.getShippingOption() != null) {
+					selectedoption = lostReport.getShippingOption().replace(" ",
+							"_");
+				}
+				if (shippingPhone == null) {
+					shippingPhone = new PhoneBean();
+					shippingPhone.setNumber(lostReport.getContact()
+							.getPrimaryPhone().getNumber());
+					shippingPhone.setCountry(lostReport.getContact()
+							.getPrimaryPhone().getCountry());
+					shippingPhone.setArea(lostReport.getContact().getPrimaryPhone()
+							.getArea());
+					shippingPhone.setExchange(lostReport.getContact()
+							.getPrimaryPhone().getExchange());
+					shippingPhone.setLine(lostReport.getContact().getPrimaryPhone()
+							.getLine());
+					shippingPhone.setExtension(lostReport.getContact()
+							.getPrimaryPhone().getExtension());
+				}
+	
+				session.setAttribute("shippingAddress", shippingAddress);
+				session.setAttribute("shippingPhone", shippingPhone);
+				session.setAttribute("selectedOption", selectedoption);
+				session.setAttribute("rates", rates);
+				session.setAttribute("optionselected", false);
 			}
-			if (selectedoption == null
-					&& lostReport.getShippingOption() != null) {
-				selectedoption = lostReport.getShippingOption().replace(" ",
-						"_");
-			}
-			if (shippingPhone == null) {
-				shippingPhone = new PhoneBean();
-				shippingPhone.setNumber(lostReport.getContact()
-						.getPrimaryPhone().getNumber());
-				shippingPhone.setCountry(lostReport.getContact()
-						.getPrimaryPhone().getCountry());
-				shippingPhone.setArea(lostReport.getContact().getPrimaryPhone()
-						.getArea());
-				shippingPhone.setExchange(lostReport.getContact()
-						.getPrimaryPhone().getExchange());
-				shippingPhone.setLine(lostReport.getContact().getPrimaryPhone()
-						.getLine());
-				shippingPhone.setExtension(lostReport.getContact()
-						.getPrimaryPhone().getExtension());
-			}
-
-			session.setAttribute("shippingAddress", shippingAddress);
-			session.setAttribute("shippingPhone", shippingPhone);
-			session.setAttribute("selectedOption", selectedoption);
-			session.setAttribute("rates", rates);
-			session.setAttribute("optionselected", false);
+			update = (session.getAttribute("edit") != null && session.getAttribute(
+					"edit").equals(true));
 		}
-		update = (session.getAttribute("edit") != null && session.getAttribute(
-				"edit").equals(true));
-		//Commented while building out the lost Report form for Delta
-//		if (getCompany() == null) {
-//			FacesContext fc = FacesContext.getCurrentInstance();
-//			try {
-//				fc.getExternalContext().redirect("landing.do");
-//			} catch (IOException e) {
-//			}
-//		}
 	}
 
 	public boolean isEditting() {
@@ -159,6 +173,7 @@ public class LostAndFoundController {
 
 	public String createReport() {
 		if (validate()) {
+			stripPhoneCountry(lostReport);
 			long id = clientViewService.create(lostReport);
 			if (id != -1) {
 				lostReport.setReportId(id + "");
@@ -366,12 +381,12 @@ public class LostAndFoundController {
 		boolean isValid = true;
 		isValid = validateName();
 		isValid = validateAddress() && isValid;
-		if (getSubCompany() != null
-				&& (getSubCompany().equals("SWA") || getSubCompany().equals(
-						"AA"))) {
-			isValid = validateLF_SWA() && isValid;
-		} else if (getSubCompany().equals("DEM")) {
-			isValid = validateLF_DEM() && isValid;
+		if (getSubCompany() != null && getCompany() != null && TracingConstants.LF_LF_COMPANY_ID.equals(getCompany())) {
+			if (getSubCompany().equals("DEM")) {
+				isValid = validateLF_DEM() && isValid;
+			} else {
+				isValid = validateLF_LF() && isValid;
+			}
 		} else {
 			isValid = validateAB() && isValid;
 		}
@@ -722,25 +737,26 @@ public class LostAndFoundController {
 							.getContact().getPrimaryPhone().getLine()
 							.replaceAll("[^\\d.]", "").trim().length() > 0)) {
 				hasContactPhoneOrEmail = true;
-			} else if(!((lostReport.getContact().getPrimaryPhone().getCountry() == null || (lostReport.getContact().getPrimaryPhone().getCountry() != null && lostReport.getContact().getPrimaryPhone().getCountry().length()==0)) &&
-					(lostReport.getContact().getPrimaryPhone().getArea() == null || (lostReport.getContact().getPrimaryPhone().getArea() != null && lostReport.getContact().getPrimaryPhone().getArea().length()==0)) && 
-					(lostReport.getContact().getPrimaryPhone().getExchange() == null || (lostReport.getContact().getPrimaryPhone().getExchange() != null && lostReport.getContact().getPrimaryPhone().getExchange().length()==0)) &&
-					(lostReport.getContact().getPrimaryPhone().getLine() == null || (lostReport.getContact().getPrimaryPhone().getLine() != null && lostReport.getContact().getPrimaryPhone().getLine().length()==0)))){
+			} else if(!(US_PHONE_COUNTRYCODE.equals(lostReport.getContact().getPrimaryPhone().getCountry().trim()) &&
+					(lostReport.getContact().getPrimaryPhone().getArea() == null || lostReport.getContact().getPrimaryPhone().getArea().trim().length()==0) && 
+					(lostReport.getContact().getPrimaryPhone().getExchange() == null || lostReport.getContact().getPrimaryPhone().getExchange().trim().length()==0) &&
+					(lostReport.getContact().getPrimaryPhone().getLine() == null || lostReport.getContact().getPrimaryPhone().getLine().trim().length()==0))){
 				isValid = false;
 				FacesUtil.addError("ERROR: Primary US Phone Number Must contain a Area-Exchange-Line number.");
 			}
 		} else {
 			if ((lostReport.getContact().getPrimaryPhone().getCountry() != null && lostReport
 					.getContact().getPrimaryPhone().getCountry()
-					.replaceAll("[^\\d.]", "").trim().length() > 0)
+					.replaceAll("[^\\d.]", "").trim().length() > 0 && 
+					!US_PHONE_COUNTRYCODE.equals(lostReport.getContact().getPrimaryPhone().getCountry()))
 					&& (lostReport.getContact().getPrimaryPhone().getLine() != null && lostReport
 							.getContact().getPrimaryPhone().getLine()
 							.replaceAll("[^\\d.]", "").trim().length() > 0)) {
 				hasContactPhoneOrEmail = true;
-			} else if(!((lostReport.getContact().getPrimaryPhone().getCountry() == null || (lostReport.getContact().getPrimaryPhone().getCountry() != null && lostReport.getContact().getPrimaryPhone().getCountry().length()==0)) &&
-					(lostReport.getContact().getPrimaryPhone().getArea() == null || (lostReport.getContact().getPrimaryPhone().getArea() != null && lostReport.getContact().getPrimaryPhone().getArea().length()==0)) && 
-					(lostReport.getContact().getPrimaryPhone().getExchange() == null || (lostReport.getContact().getPrimaryPhone().getExchange() != null && lostReport.getContact().getPrimaryPhone().getExchange().length()==0)) &&
-					(lostReport.getContact().getPrimaryPhone().getLine() == null || (lostReport.getContact().getPrimaryPhone().getLine() != null && lostReport.getContact().getPrimaryPhone().getLine().length()==0)))){
+			} else if(!(US_PHONE_COUNTRYCODE.equals(lostReport.getContact().getPrimaryPhone().getCountry().trim()) &&
+					(lostReport.getContact().getPrimaryPhone().getArea() == null || lostReport.getContact().getPrimaryPhone().getArea().trim().length()==0) && 
+					(lostReport.getContact().getPrimaryPhone().getExchange() == null || lostReport.getContact().getPrimaryPhone().getExchange().trim().length()==0) &&
+					(lostReport.getContact().getPrimaryPhone().getLine() == null || lostReport.getContact().getPrimaryPhone().getLine().trim().length()==0))){
 				isValid = false;
 				FacesUtil.addError("ERROR: Primary International Phone Numbers Must contain a Country-Line number.");
 			}
@@ -759,10 +775,10 @@ public class LostAndFoundController {
 							.getContact().getSecondaryPhone().getLine()
 							.replaceAll("[^\\d.]", "").trim().length() > 0)) {
 				hasContactPhoneOrEmail = true;
-			} else if(!((lostReport.getContact().getSecondaryPhone().getCountry() == null || (lostReport.getContact().getSecondaryPhone().getCountry() != null && lostReport.getContact().getSecondaryPhone().getCountry().length()==0)) &&
-						(lostReport.getContact().getSecondaryPhone().getArea() == null || (lostReport.getContact().getSecondaryPhone().getArea() != null && lostReport.getContact().getSecondaryPhone().getArea().length()==0)) && 
-						(lostReport.getContact().getSecondaryPhone().getExchange() == null || (lostReport.getContact().getSecondaryPhone().getExchange() != null && lostReport.getContact().getSecondaryPhone().getExchange().length()==0)) &&
-						(lostReport.getContact().getSecondaryPhone().getLine() == null || (lostReport.getContact().getSecondaryPhone().getLine() != null && lostReport.getContact().getSecondaryPhone().getLine().length()==0)))){
+			} else if(!(US_PHONE_COUNTRYCODE.equals(lostReport.getContact().getSecondaryPhone().getCountry().trim()) &&
+						(lostReport.getContact().getSecondaryPhone().getArea() == null || lostReport.getContact().getSecondaryPhone().getArea().trim().length()==0) && 
+						(lostReport.getContact().getSecondaryPhone().getExchange() == null || lostReport.getContact().getSecondaryPhone().getExchange().trim().length()==0) &&
+						(lostReport.getContact().getSecondaryPhone().getLine() == null || lostReport.getContact().getSecondaryPhone().getLine().trim().length()==0))){
 					isValid = false;
 				FacesUtil.addError("ERROR: Secondary US Phone Number Must contain a Area-Exchange-Line number.");
 				
@@ -770,15 +786,16 @@ public class LostAndFoundController {
 		} else {
 			if ((lostReport.getContact().getSecondaryPhone().getCountry() != null && lostReport
 					.getContact().getSecondaryPhone().getCountry()
-					.replaceAll("[^\\d.]", "").trim().length() > 0)
+					.replaceAll("[^\\d.]", "").trim().length() > 0 && 
+					!US_PHONE_COUNTRYCODE.equals(lostReport.getContact().getSecondaryPhone().getCountry()))
 					&& (lostReport.getContact().getSecondaryPhone().getLine() != null && lostReport
 							.getContact().getSecondaryPhone().getLine()
 							.replaceAll("[^\\d.]", "").trim().length() > 0)) {
 				hasContactPhoneOrEmail = true;
-			} else if(!((lostReport.getContact().getSecondaryPhone().getCountry() == null || (lostReport.getContact().getSecondaryPhone().getCountry() != null && lostReport.getContact().getSecondaryPhone().getCountry().length()==0)) &&
-					(lostReport.getContact().getSecondaryPhone().getArea() == null || (lostReport.getContact().getSecondaryPhone().getArea() != null && lostReport.getContact().getSecondaryPhone().getArea().length()==0)) && 
-					(lostReport.getContact().getSecondaryPhone().getExchange() == null || (lostReport.getContact().getSecondaryPhone().getExchange() != null && lostReport.getContact().getSecondaryPhone().getExchange().length()==0)) &&
-					(lostReport.getContact().getSecondaryPhone().getLine() == null || (lostReport.getContact().getSecondaryPhone().getLine() != null && lostReport.getContact().getSecondaryPhone().getLine().length()==0)))){
+			} else if(!(US_PHONE_COUNTRYCODE.equals(lostReport.getContact().getSecondaryPhone().getCountry().trim()) &&
+					(lostReport.getContact().getSecondaryPhone().getArea() == null || lostReport.getContact().getSecondaryPhone().getArea().trim().length()==0) && 
+					(lostReport.getContact().getSecondaryPhone().getExchange() == null || lostReport.getContact().getSecondaryPhone().getExchange().trim().length()==0) &&
+					(lostReport.getContact().getSecondaryPhone().getLine() == null || lostReport.getContact().getSecondaryPhone().getLine().trim().length()==0))){
 				isValid = false;
 				FacesUtil.addError("ERROR: Secondary International Phone Number Must contain a Country-Line number.");
 			}
@@ -855,7 +872,7 @@ public class LostAndFoundController {
 		return isValid;
 	}
 
-	private boolean validateLF_SWA() {
+	private boolean validateLF_LF() {
 		boolean isValid = true;
 		isValid = validateSegments();
 		isValid = validateLFContact() && isValid;
@@ -908,7 +925,8 @@ public class LostAndFoundController {
 			} else {
 				if (!((lostReport.getLostPhone().getCountry() != null && lostReport
 						.getLostPhone().getCountry().replaceAll("[^\\d.]", "")
-						.trim().length() > 0) && (lostReport.getLostPhone()
+						.trim().length() > 0 && !US_PHONE_COUNTRYCODE.equals(lostReport
+						.getLostPhone().getCountry().trim())) && (lostReport.getLostPhone()
 						.getLine() != null && lostReport.getLostPhone()
 						.getLine().replaceAll("[^\\d.]", "").trim().length() > 0))) {
 
@@ -1315,6 +1333,105 @@ public class LostAndFoundController {
 
 	public void setRatesList(List<SelectItem> ratesList) {
 		this.ratesList = ratesList;
+	}
+	
+	private LostReportBean createReportFromContext(HttpSession session, String subcompany) {
+		LostReportBean bean = new LostReportBean();
+		if (!onLandingPage()) {
+			FacesContext fc = FacesContext.getCurrentInstance();
+			try {
+				fc.getExternalContext().redirect("landing.do");
+			} catch (IOException e) {
+			}
+		} else {
+			session.setAttribute("edit", false);
+			bean.setSubCompany(subcompany);
+			String company = TracingConstants.LF_LF_COMPANY_ID;
+			if (TracingConstants.LF_AVIS_COMPANY_ID.equals(subcompany) || TracingConstants.LF_BUDGET_COMPANY_ID.equals(subcompany)) {
+				company = TracingConstants.LF_AB_COMPANY_ID;
+			}
+			bean.setCompany(company);
+			if (RemoteService.getLists(bean.getSubCompany())) {
+				session.setAttribute("lostReport", bean);
+			} else {
+				FacesUtil.addError("Server Communication Error.");
+			}
+		}
+		return bean;
+	}
+	
+	private boolean onLandingPage() {
+		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+		String path = request.getServletPath();
+		return !(path == null || !"/landing".equals(path.substring(path.lastIndexOf("/"), path.lastIndexOf(".do"))));
+	}
+	
+	private String getSubcompanyFromURL() {
+		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+		String path = request.getServletPath();
+		String companyFromPath = path.substring(1, path.lastIndexOf("/"));
+		if (URL_SWA.equalsIgnoreCase(companyFromPath)) {
+			return TracingConstants.LF_SWA_COMPANY_ID;
+		} else if (URL_FL.equalsIgnoreCase(companyFromPath)) {
+			return TracingConstants.LF_SWA_COMPANY_ID;
+		} else if (URL_AVS.equalsIgnoreCase(companyFromPath)) {
+			return TracingConstants.LF_AVIS_COMPANY_ID;
+		} else if (URL_BGT.equalsIgnoreCase(companyFromPath)) {
+			return TracingConstants.LF_BUDGET_COMPANY_ID;
+		} else if (URL_DEMO.equalsIgnoreCase(companyFromPath)) {
+			return TracingConstants.LF_DEMO_COMPANY_ID;
+		} else if (URL_AA.equalsIgnoreCase(companyFromPath)) {
+			return TracingConstants.LF_AA_COMPANY_ID;
+		} else if (URL_DL.equalsIgnoreCase(companyFromPath)) {
+			return TracingConstants.LF_DL_COMPANY_ID;
+		}
+		return null;
+	}
+	
+	private void populatePhoneCountry(LostReportBean lostReport) {
+		if (lostReport.getReportId() == null || lostReport.getReportId().trim().length() == 0) {
+			if((lostReport.getContact().getSecondaryPhone().getCountry() == null || lostReport.getContact().getSecondaryPhone().getCountry().trim().length()==0) &&
+					(lostReport.getContact().getSecondaryPhone().getArea() == null || lostReport.getContact().getSecondaryPhone().getArea().trim().length()==0) && 
+					(lostReport.getContact().getSecondaryPhone().getExchange() == null || lostReport.getContact().getSecondaryPhone().getExchange().trim().length()==0) &&
+					(lostReport.getContact().getSecondaryPhone().getLine() == null || lostReport.getContact().getSecondaryPhone().getLine().trim().length()==0)) {
+				lostReport.getContact().getSecondaryPhone().setCountry(US_PHONE_COUNTRYCODE);
+			}
+			if((lostReport.getContact().getPrimaryPhone().getCountry() == null || lostReport.getContact().getPrimaryPhone().getCountry().trim().length()==0) &&
+					(lostReport.getContact().getPrimaryPhone().getArea() == null || lostReport.getContact().getPrimaryPhone().getArea().trim().length()==0) && 
+					(lostReport.getContact().getPrimaryPhone().getExchange() == null || lostReport.getContact().getPrimaryPhone().getExchange().trim().length()==0) &&
+					(lostReport.getContact().getPrimaryPhone().getLine() == null || lostReport.getContact().getPrimaryPhone().getLine().trim().length()==0)) {
+				lostReport.getContact().getPrimaryPhone().setCountry(US_PHONE_COUNTRYCODE);
+			}
+			if((lostReport.getLostPhone().getCountry() == null || lostReport.getLostPhone().getCountry().trim().length()==0) &&
+					(lostReport.getLostPhone().getArea() == null || lostReport.getLostPhone().getArea().trim().length()==0) && 
+					(lostReport.getLostPhone().getExchange() == null || lostReport.getLostPhone().getExchange().trim().length()==0) &&
+					(lostReport.getLostPhone().getLine() == null || lostReport.getLostPhone().getLine().trim().length()==0)) {
+				lostReport.getLostPhone().setCountry(US_PHONE_COUNTRYCODE);
+			}
+		}
+	}
+	
+	private void stripPhoneCountry(LostReportBean lostReport) {
+		if (lostReport.getReportId() == null || lostReport.getReportId().trim().length() == 0) {
+			if(US_PHONE_COUNTRYCODE.equals(lostReport.getContact().getSecondaryPhone().getCountry().trim()) &&
+					(lostReport.getContact().getSecondaryPhone().getArea() == null || lostReport.getContact().getSecondaryPhone().getArea().trim().length()==0) && 
+					(lostReport.getContact().getSecondaryPhone().getExchange() == null || lostReport.getContact().getSecondaryPhone().getExchange().trim().length()==0) &&
+					(lostReport.getContact().getSecondaryPhone().getLine() == null || lostReport.getContact().getSecondaryPhone().getLine().trim().length()==0)) {
+				lostReport.getContact().getSecondaryPhone().setCountry("");
+			}
+			if(US_PHONE_COUNTRYCODE.equals(lostReport.getContact().getPrimaryPhone().getCountry().trim()) &&
+					(lostReport.getContact().getPrimaryPhone().getArea() == null || lostReport.getContact().getPrimaryPhone().getArea().trim().length()==0) && 
+					(lostReport.getContact().getPrimaryPhone().getExchange() == null || lostReport.getContact().getPrimaryPhone().getExchange().trim().length()==0) &&
+					(lostReport.getContact().getPrimaryPhone().getLine() == null || lostReport.getContact().getPrimaryPhone().getLine().trim().length()==0)) {
+				lostReport.getContact().getPrimaryPhone().setCountry("");
+			}
+			if(US_PHONE_COUNTRYCODE.equals(lostReport.getLostPhone().getCountry().trim()) &&
+					(lostReport.getLostPhone().getArea() == null || lostReport.getLostPhone().getArea().trim().length()==0) && 
+					(lostReport.getLostPhone().getExchange() == null || lostReport.getLostPhone().getExchange().trim().length()==0) &&
+					(lostReport.getLostPhone().getLine() == null || lostReport.getLostPhone().getLine().trim().length()==0)) {
+				lostReport.getLostPhone().setCountry("");
+			}
+		}
 	}
 
 }

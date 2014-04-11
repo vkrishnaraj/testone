@@ -10,154 +10,193 @@
 	<ui:define name="title">Delta Airlines: Lost &amp; Found</ui:define>
 	<ui:define name="body">
 		<h:form>
+		
+			<div class="interactivebreadcrumb breadcrumb">
+				<div id="InteractiveBreadcrumbNavigation">
+					<ul class="deltaDropDownMenu">
+						<li class="alpha"><a href="//www.delta.com"><div>Home</div>
+						</a></li>
+						<div class="breadcrumbDividerStyle">&gt;</div>
+						<li><a href="/client/delta/login.do"><div>Lost &amp; Found Update</div></a></li>
+						<div class="breadcrumbDividerStyle">&gt;</div>
+						<li><a href="#"><div>Report Status</div></a></li>
+					</ul>
+				</div>
+			</div>
 			<h:panelGroup>
-				<p class="contentHeader"><t:outputText value="#{msg.status_text_title}" escape="false"/></p>
-				<p class="contentSubHeader"><t:outputText value="#{msg.status_text_report_title}" /></p>
-				<table>
-					<tr><td class="twlvPxBlk">
-						<t:outputText value="#{msg.status_label_report_id}" />
-					</td><td class="twlvPxBlk">
-						<t:outputText value="#{lostAndFound.lostReport.reportId}" />
-					</td></tr>
-				</table><br/>
-				<p class="contentSubHeader"><t:outputText value="#{msg.lostform_text_about_title}" /></p>
-				<table>
-					<tr><td class="twlvPxBlk">
-						<t:outputText value="#{msg.lostform_label_item_model}" />
-					</td><td class="twlvPxBlk">
-						<t:outputText value="#{msg.lostform_label_item_brand}" />
-					</td><td class="twlvPxBlk" colspan="2">
-						<t:outputText value="#{msg.lostform_label_item_serial}" />
-					</td></tr>
-					<tr><td class="twlvPxBlk">
-						<t:outputText value="#{lostAndFound.lostReport.itemModel}" />
-					</td><td class="twlvPxBlk">
-						<t:outputText value="#{lostAndFound.lostReport.itemBrand}" />
-					</td><td class="twlvPxBlk" colspan="2">
-						<t:outputText value="#{lostAndFound.lostReport.itemSerial}" />
-					</td></tr>
-					<tr><td>&#160;</td></tr>
-					<tr><td class="twlvPxBlk">
-						<t:outputText value="#{msg.lostform_label_item_category}" />
-					</td><td class="twlvPxBlk">
-						<t:outputText value="#{msg.lostform_label_item_subcat}" />
-					</td><td class="twlvPxBlk">
-						<t:outputText value="#{msg.lostform_label_item_color}" />
-					</td><td class="twlvPxBlk">
-						<t:outputText value="#{msg.lostform_label_item_case_color}" escape="false" />
-					</td></tr>
-					<tr><td class="twlvPxBlk">
-						<t:outputText value="#{lostAndFound.categoryDesc}" />
-					</td><td class="twlvPxBlk">
-						<t:outputText value="#{lostAndFound.subCategoryDesc}" />
-					</td><td class="twlvPxBlk">
-						<t:outputText value="#{lostAndFound.colorDesc}" />
-					</td><td class="twlvPxBlk">
-						<t:outputText value="#{lostAndFound.caseColorDesc}" />
-					</td></tr>
-					<tr><td>&#160;</td></tr>
-					<tr><td class="twlvPxBlk">
-						<t:outputText value="#{msg.lostform_label_date_lost}" />
-					</td><td class="twlvPxBlk">
-						<t:outputText value="#{msg.lostform_label_item_size}" />
-					</td><td class="twlvPxBlk" colspan="2">
-						<t:outputText value="#{msg.lostform_label_item_phone}" />
-					</td></tr>
-					<tr><td class="twlvPxBlk">
-						<t:outputText value="#{lostAndFound.lostReport.dateLost}" />
-					</td><td class="twlvPxBlk">
-						<t:outputText value="#{lostAndFound.lostReport.itemSize}" />
-					</td><td class="twlvPxBlk" colspan="2">
-						<t:outputText value="#{lostAndFound.lostReport.lostPhone.number}" />
-					</td></tr>
-					<tr><td>&#160;</td></tr>
-					<tr><td class="twlvPxBlk" colspan="4">
-						<t:outputText value="#{msg.lostform_label_item_desc}" />
-					</td></tr>
-					<tr><td class="twlvPxBlk" colspan="4">
-						<t:outputText value="#{lostAndFound.lostReport.itemDesc}" />
-					</td></tr>
-					<tr><td>&#160;</td></tr>
-					<tr><td class="twlvPxBlk" colspan="4">
-						<t:outputText value="#{msg.lostform_label_item_long_desc}" />
-					</td></tr>
-					<tr><td class="twlvPxBlk" colspan="4">
-						<p style="width:750px;word-wrap:break-word;" >
-						<t:outputText value="#{lostAndFound.lostReport.itemLongDesc}" />
-						</p>
-					</td></tr>
-					<tr><td class="twlvPxBlk" colspan="1">
-						<t:outputText value="#{msg.lostform_label_name_bag_name}" />
-					</td><td class="twlvPxBlk" colspan="1">
-						<t:outputText value="#{lostAndFound.lostReport.firstNameBag} #{lostAndFound.lostReport.lastNameBag}" />
-					</td></tr>
-				</table><br/>
-				<p class="contentSubHeader"><t:outputText value="#{msg.lostform_text_contact_title}" /></p>
-				<table>
-					<tr><td class="twlvPxBlk">
-						<t:outputText value="#{lostAndFound.lostReport.contact.lastName}, #{lostAndFound.lostReport.contact.firstName} #{lostAndFound.lostReport.contact.middleInitial}" />
-					</td></tr>
-<!-- BEGIN ADDRESS INFO UI -->
- 					<tr><td class="twlvPxBlk">
-						<t:outputText value="#{lostAndFound.lostReport.contact.address.address1}" />
-					</td></tr>
-					<tr><td class="twlvPxBlk">
-						<t:outputText value="#{lostAndFound.lostReport.contact.address.address2}" />
-					</td></tr>
-					<tr><td class="twlvPxBlk">
-						<t:outputText value="#{lostAndFound.lostReport.contact.address.city}, #{lostAndFound.lostReport.contact.address.state} #{lostAndFound.lostReport.contact.address.postal}" />
-					</td></tr>
-					<tr><td class="twlvPxBlk">
-						<t:outputText value="#{lostAndFound.countryDesc}" />
-					</td></tr>                                                     
-<!-- END ADDRESS INFO UI -->
-					<tr><td class="twlvPxBlk">
-						<!-- <t:outputText value="#{lostAndFound.lostReport.contact.primaryPhone.typeText}#{lostAndFound.lostReport.contact.primaryPhone.number}" />-->
-						<t:outputText value="#{lostAndFound.lostReport.contact.primaryPhone.typeText}"/>
-						<t:outputText value="#{lostAndFound.lostReport.contact.primaryPhone.country}" />
-						<t:outputText value="#{lostAndFound.lostReport.contact.primaryPhone.area}" />
-						<t:outputText value="#{lostAndFound.lostReport.contact.primaryPhone.exchange}" />
-						<t:outputText value="#{lostAndFound.lostReport.contact.primaryPhone.line}" /><br/>
-						<t:outputText value="#{msg.lostform_label_item_extension} "/> 
-						<t:outputText value="#{lostAndFound.lostReport.contact.primaryPhone.extension}" />
-					</td><td class="twlvPxBlk">
-						<!-- <t:outputText value="#{lostAndFound.lostReport.contact.secondaryPhone.typeText}#{lostAndFound.lostReport.contact.secondaryPhone.number}" />-->
-						<t:outputText value="#{lostAndFound.lostReport.contact.secondaryPhone.typeText}"/>
-						<t:outputText value="#{lostAndFound.lostReport.contact.secondaryPhone.country}" />
-						<t:outputText value="#{lostAndFound.lostReport.contact.secondaryPhone.area}" />
-						<t:outputText value="#{lostAndFound.lostReport.contact.secondaryPhone.exchange}" />
-						<t:outputText value="#{lostAndFound.lostReport.contact.secondaryPhone.line}" /><br/>
-						<t:outputText value="#{msg.lostform_label_item_extension} "/> 
-						<t:outputText value="#{lostAndFound.lostReport.contact.secondaryPhone.extension}" />
-					</td></tr>
-					<tr><td class="twlvPxBlk">
-						<t:outputText value="#{lostAndFound.lostReport.contact.emailAddress}" />
-					</td></tr>
-				</table><br/>
-				<p class="contentSubHeader"><t:outputText value="#{msg.lostform_text_trip_title}" /></p>
-				<table>
-					<tr><td class="twlvPxBlk">
-						<t:outputText value="#{msg.lostform_header_segment_departure}" />
-					</td><td class="twlvPxBlk">
-						<t:outputText value="#{msg.lostform_header_segment_arrival}" />
-					</td><td class="twlvPxBlk">
-						<t:outputText value="#{msg.lostform_header_segment_flight}" />
-					</td></tr>
-					<a4j:repeat id="segments" value="#{lostAndFound.lostReport.segments}" var="segment" rowKeyVar="rowIndex" >
-						<tr><td class="twlvPxBlk">
-							<t:outputText value="#{segment.departureLocationDesc}" />
-						</td><td class="twlvPxBlk">
-							<t:outputText value="#{segment.arrivalLocationDesc}" />
-						</td><td class="twlvPxBlk">
-							<t:outputText value="#{segment.flightNumber}" />
-						</td></tr>
-					</a4j:repeat>
-				</table><br/><br/>
-				<div align="center">
-				<a4j:commandButton styleClass="small button" value="#{msg.general_button_back}" action="#{lostAndFound.backToLanding}" rendered="#{!lostAndFound.editting}" />
-				<a4j:commandButton styleClass="small button" value="#{msg.general_button_back}" action="#{lostAndFound.backToLogin}" rendered="#{lostAndFound.editting}" />&#160;&#160;&#160;
-				<a4j:commandButton styleClass="small button" value="#{msg.general_button_print}" action="null" onclick="window.print();return false;" />
-				</div><br/>
+				<div class="title parbase">
+					<div class="pageTitle">
+						<h1>
+							<t:outputText value="#{msg.status_text_title}" escape="false"/>
+						</h1>
+					</div>
+				</div>
+				
+				<div id="ContentWell" class="grid_12 alpha">
+				<div class="grid_9 alpha">
+					<div class="parsys mainPar">
+						<div class="text section">
+							<div class="contentWrapper rteDelta">
+								<h2 class="contentWrapperHeader">
+									<b><t:outputText value="#{msg.status_text_report_title}" /></b>
+								</h2><br/>
+								<table style="width: 95%;">
+									<tr><td class="twlvPxBlk">
+										<t:outputLabel value="#{msg.status_label_report_id}" />
+									</td><td class="twlvPxBlk">
+										<t:outputText value="#{lostAndFound.lostReport.reportId}" />
+									</td></tr>
+								</table><br/>
+								<h2 class="contentWrapperHeader">
+									<b><t:outputText value="#{msg.lostform_text_about_title}" /></b>
+								</h2><br/>
+								<table style="width: 95%;">
+									<tr><td class="twlvPxBlk">
+										<t:outputLabel value="#{msg.lostform_label_item_model}" />
+									</td><td class="twlvPxBlk">
+										<t:outputLabel value="#{msg.lostform_label_item_brand}" />
+									</td><td class="twlvPxBlk" colspan="2">
+										<t:outputLabel value="#{msg.lostform_label_item_serial}" />
+									</td></tr>
+									<tr><td class="twlvPxBlk">
+										<t:outputText value="#{lostAndFound.lostReport.itemModel}" />
+									</td><td class="twlvPxBlk">
+										<t:outputText value="#{lostAndFound.lostReport.itemBrand}" />
+									</td><td class="twlvPxBlk" colspan="2">
+										<t:outputText value="#{lostAndFound.lostReport.itemSerial}" />
+									</td></tr>
+									<tr><td>&#160;</td></tr>
+									<tr><td class="twlvPxBlk">
+										<t:outputLabel value="#{msg.lostform_label_item_category}" />
+									</td><td class="twlvPxBlk">
+										<t:outputLabel value="#{msg.lostform_label_item_subcat}" />
+									</td><td class="twlvPxBlk">
+										<t:outputLabel value="#{msg.lostform_label_item_color}" />
+									</td><td class="twlvPxBlk">
+										<t:outputLabel value="#{msg.lostform_label_item_case_color}" escape="false" />
+									</td></tr>
+									<tr><td class="twlvPxBlk">
+										<t:outputText value="#{lostAndFound.categoryDesc}" />
+									</td><td class="twlvPxBlk">
+										<t:outputText value="#{lostAndFound.subCategoryDesc}" />
+									</td><td class="twlvPxBlk">
+										<t:outputText value="#{lostAndFound.colorDesc}" />
+									</td><td class="twlvPxBlk">
+										<t:outputText value="#{lostAndFound.caseColorDesc}" />
+									</td></tr>
+									<tr><td>&#160;</td></tr>
+									<tr><td class="twlvPxBlk">
+										<t:outputLabel value="#{msg.lostform_label_date_lost}" />
+									</td><td class="twlvPxBlk">
+										<t:outputLabel value="#{msg.lostform_label_item_size}" />
+									</td><td class="twlvPxBlk" colspan="2">
+										<t:outputLabel value="#{msg.lostform_label_item_phone}" />
+									</td></tr>
+									<tr><td class="twlvPxBlk">
+										<t:outputText value="#{lostAndFound.lostReport.dateLost}" />
+									</td><td class="twlvPxBlk">
+										<t:outputText value="#{lostAndFound.lostReport.itemSize}" />
+									</td><td class="twlvPxBlk" colspan="2">
+										<t:outputText value="#{lostAndFound.lostReport.lostPhone.number}" />
+									</td></tr>
+									<tr><td>&#160;</td></tr>
+									<tr><td class="twlvPxBlk" colspan="4">
+										<t:outputLabel value="#{msg.lostform_label_item_desc}" />
+									</td></tr>
+									<tr><td class="twlvPxBlk" colspan="4">
+										<t:outputText value="#{lostAndFound.lostReport.itemDesc}" />
+									</td></tr>
+									<tr><td>&#160;</td></tr>
+									<tr><td class="twlvPxBlk" colspan="4">
+										<t:outputLabel value="#{msg.lostform_label_item_long_desc}" />
+									</td></tr>
+									<tr><td class="twlvPxBlk" colspan="4">
+										<p style="width:97%;word-wrap:break-word;" >
+										<t:outputText value="#{lostAndFound.lostReport.itemLongDesc}" />
+										</p>
+									</td></tr>
+									<tr><td class="twlvPxBlk" colspan="1">
+										<t:outputLabel value="#{msg.lostform_label_name_bag_name}" />
+									</td><td class="twlvPxBlk" colspan="1">
+										<t:outputText value="#{lostAndFound.lostReport.firstNameBag} #{lostAndFound.lostReport.lastNameBag}" />
+									</td></tr>
+								</table><br/>
+								<h2 class="contentWrapperHeader">
+									<b><t:outputText value="#{msg.lostform_text_contact_title}" /></b>
+								</h2><br/>
+								<table style="width: 95%;">
+									<tr><td class="twlvPxBlk">
+										<t:outputText value="#{lostAndFound.lostReport.contact.lastName}, #{lostAndFound.lostReport.contact.firstName} #{lostAndFound.lostReport.contact.middleInitial}" />
+									</td></tr>
+				<!-- BEGIN ADDRESS INFO UI -->
+				 					<tr><td class="twlvPxBlk">
+										<t:outputText value="#{lostAndFound.lostReport.contact.address.address1}" />
+									</td></tr>
+									<tr><td class="twlvPxBlk">
+										<t:outputText value="#{lostAndFound.lostReport.contact.address.address2}" />
+									</td></tr>
+									<tr><td class="twlvPxBlk">
+										<t:outputText value="#{lostAndFound.lostReport.contact.address.city}, #{lostAndFound.lostReport.contact.address.state} #{lostAndFound.lostReport.contact.address.postal}" />
+									</td></tr>
+									<tr><td class="twlvPxBlk">
+										<t:outputText value="#{lostAndFound.countryDesc}" />
+									</td></tr>                                                     
+				<!-- END ADDRESS INFO UI -->
+									<tr><td class="twlvPxBlk">
+										<!-- <t:outputText value="#{lostAndFound.lostReport.contact.primaryPhone.typeText}#{lostAndFound.lostReport.contact.primaryPhone.number}" />-->
+										<t:outputText value="#{lostAndFound.lostReport.contact.primaryPhone.typeText}"/>
+										<t:outputText value="#{lostAndFound.lostReport.contact.primaryPhone.country}" />
+										<t:outputText value="#{lostAndFound.lostReport.contact.primaryPhone.area}" />
+										<t:outputText value="#{lostAndFound.lostReport.contact.primaryPhone.exchange}" />
+										<t:outputText value="#{lostAndFound.lostReport.contact.primaryPhone.line}" /><br/>
+										<t:outputText value="#{msg.lostform_label_item_extension} "/> 
+										<t:outputText value="#{lostAndFound.lostReport.contact.primaryPhone.extension}" />
+									</td><td class="twlvPxBlk">
+										<!-- <t:outputText value="#{lostAndFound.lostReport.contact.secondaryPhone.typeText}#{lostAndFound.lostReport.contact.secondaryPhone.number}" />-->
+										<t:outputText value="#{lostAndFound.lostReport.contact.secondaryPhone.typeText}"/>
+										<t:outputText value="#{lostAndFound.lostReport.contact.secondaryPhone.country}" />
+										<t:outputText value="#{lostAndFound.lostReport.contact.secondaryPhone.area}" />
+										<t:outputText value="#{lostAndFound.lostReport.contact.secondaryPhone.exchange}" />
+										<t:outputText value="#{lostAndFound.lostReport.contact.secondaryPhone.line}" /><br/>
+										<t:outputText value="#{msg.lostform_label_item_extension} "/> 
+										<t:outputText value="#{lostAndFound.lostReport.contact.secondaryPhone.extension}" />
+									</td></tr>
+									<tr><td class="twlvPxBlk">
+										<t:outputText value="#{lostAndFound.lostReport.contact.emailAddress}" />
+									</td></tr>
+								</table><br/>
+								<h2 class="contentWrapperHeader">
+									<b><t:outputText value="#{msg.lostform_text_trip_title}" /></b>
+								</h2><br/>
+								<table style="width: 95%;">
+									<tr><td class="twlvPxBlk">
+										<t:outputLabel value="#{msg.lostform_header_segment_departure}" />
+									</td><td class="twlvPxBlk">
+										<t:outputLabel value="#{msg.lostform_header_segment_arrival}" />
+									</td><td class="twlvPxBlk">
+										<t:outputLabel value="#{msg.lostform_header_segment_flight}" />
+									</td></tr>
+									<a4j:repeat id="segments" value="#{lostAndFound.lostReport.segments}" var="segment" rowKeyVar="rowIndex" >
+										<tr><td class="twlvPxBlk">
+											<t:outputText value="#{segment.departureLocationDesc}" />
+										</td><td class="twlvPxBlk">
+											<t:outputText value="#{segment.arrivalLocationDesc}" />
+										</td><td class="twlvPxBlk">
+											<t:outputText value="#{segment.flightNumber}" />
+										</td></tr>
+									</a4j:repeat>
+								</table><br/>
+								<a4j:commandButton styleClass="small button ui-button ui-button-secondary right ui-widget ui-state-default ui-corner-all ui-button-text-only" 
+								value="#{msg.general_button_back}" action="#{lostAndFound.backToLogin}" />&#160;&#160;&#160;
+								<a4j:commandButton styleClass="small button ui-button ui-button-secondary right ui-widget ui-state-default ui-corner-all ui-button-text-only" 
+								value="#{msg.general_button_print}" action="null" onclick="window.print();return false;" />
+								<br/><br/>
+
+							</div>
+						</div>
+					</div>
+				</div>
+				</div>
 			</h:panelGroup>
 		</h:form>
 	</ui:define>

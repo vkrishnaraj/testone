@@ -44,7 +44,7 @@ public class ViewExpiredExceptionExceptionHandler extends ExceptionHandlerWrappe
                     // Push some useful stuff to the request scope for
                     // use in the page
                     requestMap.put("currentViewId", vee.getViewId());
-                    FacesUtil.addError("ERROR: View Expired. Please Try Again.");
+                    FacesUtil.addError("Your Session Has Expired. Please Try Again.");
                     
                     if ( fc.getViewRoot() == null ) {
 	                    UIViewRoot view = fc.getApplication().getViewHandler().createView( fc, vee.getViewId() );
