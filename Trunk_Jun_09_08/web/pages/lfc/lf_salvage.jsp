@@ -20,7 +20,6 @@
   	
   	int divId = 0;
   	String salvageFoundSize=String.valueOf(request.getAttribute("salvagefoundsize"));
-/*  	String salvageFoundSize=String.valueOf(Integer.valueOf(request.getAttribute("salvagefoundsize"))-1);*/
 %>
   
   
@@ -29,23 +28,6 @@
   <SCRIPT LANGUAGE="JavaScript">
     
 	var cal1xx = new CalendarPopup();	
-
-	/*function addItemAjax() {
-		o = document.lfSalvageForm;
-		o.addItem.value = o.addBarcode.value;
-		
-		o.divId.value = o.lastDivNum.value;
-		if(o.addItem.value){
-		postForm("lfSalvageForm", true, function (req) {
-			o.addItem.value = "";
-			o.divId.value = "";
-			jQuery('#barcodeDiv').before(req.responseText);
-			document.lfSalvageForm.addBarcode.value="";
-			document.lfSalvageForm.addBarcode.focus();
-			document.lfSalvageForm.lastDivNum.value = parseInt(document.lfSalvageForm.lastDivNum.value) + 1;
-		});
-		}
-	}*/
 	
 	function addItemAjax() {
 	 var key=event.keyCode || event.which;
@@ -96,6 +78,12 @@
 			}
 			document.lfSalvageForm.addBarcode.focus();
 		});
+	}
+
+	function saveItem() {
+		var saveID = document.getElementById("salvageId").value;
+		var statusID = document.getElementById("statusId").value;
+		document.location.href="lf_salvage.do?save=1&saveID=" + escape(saveID) + "&statusID=" + escape(statusID);
 	}
 
   </SCRIPT>
@@ -285,9 +273,9 @@
      				<input type="hidden" name="lastDivNum" id="lastDivNum" value="<%=divId %>" />
      				<html:submit styleId="hiddenSubmit" />
      			</div>
-     			<html:submit property="save" styleId="saveButton" styleClass="button" >
+     			<html:button property="saveButton" styleId="saveButton" styleClass="button" onclick="this.disabled = true; saveItem();" >
 					<bean:message key="button.save" />
-				</html:submit>
+				</html:button>
      			</center>
       		</div>
        

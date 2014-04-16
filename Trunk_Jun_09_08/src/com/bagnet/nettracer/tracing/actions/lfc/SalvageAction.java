@@ -1,13 +1,12 @@
 package com.bagnet.nettracer.tracing.actions.lfc;
 
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -61,7 +60,7 @@ public class SalvageAction extends CheckedAction {
 		LFServiceBean serviceBean = new LFServiceBean();
 		SalvageForm sForm = (SalvageForm) form;
 		LFSalvage salvage = sForm.getSalvage();
-		List<LFSalvageFound> salvageItems=new ArrayList();
+		List<LFSalvageFound> salvageItems=new ArrayList<LFSalvageFound>();
 		if (request.getParameter("createNew") != null) {
 			salvage = createSalvage(user);
 		} else if (request.getParameter("id") != null) {
@@ -231,7 +230,6 @@ public class SalvageAction extends CheckedAction {
 			
 			boolean success = true;
 			try {
-				String barcode = (String) request.getParameter("updateItem");
 				LFFound found = serviceBean.getFoundItemByBarcode(updateItem);
 
 				if (found == null) {
@@ -255,8 +253,16 @@ public class SalvageAction extends CheckedAction {
 				}
 			}
 			
-			return mapping.findForward(TracingConstants.AJAX_LF_BLANK); // mapping.findForward(TracingConstants.LFC_SALVAGE);
+			return mapping.findForward(TracingConstants.AJAX_LF_BLANK);
 		} else if (request.getParameter("save") != null) {
+			long saveID = Long.parseLong(request.getParameter("saveID"));
+			if (saveID == 0) { // First save needs to create new.
+				salvage = createSalvage(user);
+			} else {
+				salvage = serviceBean.loadSalvage(saveID);
+				int statusId = Integer.parseInt(request.getParameter("statusID"));
+				salvage.setStatusId(statusId);
+			}
 			saveSalvage(serviceBean, salvage, request, errors);
 			salvage = serviceBean.loadSalvage(salvage.getId());
 			salvageItems = serviceBean.loadSalvageFound(salvage.getId());
