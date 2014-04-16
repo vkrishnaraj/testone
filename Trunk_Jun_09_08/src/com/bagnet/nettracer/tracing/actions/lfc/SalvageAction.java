@@ -255,17 +255,30 @@ public class SalvageAction extends CheckedAction {
 			
 			return mapping.findForward(TracingConstants.AJAX_LF_BLANK);
 		} else if (request.getParameter("save") != null) {
-			long saveID = Long.parseLong(request.getParameter("saveID"));
-			if (saveID == 0) { // First save needs to create new.
-				salvage = createSalvage(user);
-			} else {
-				salvage = serviceBean.loadSalvage(saveID);
-				int statusId = Integer.parseInt(request.getParameter("statusID"));
-				salvage.setStatusId(statusId);
+			boolean saveSuccess = false;
+			String saveIDString = request.getParameter("saveID");
+			String statusIdString = request.getParameter("statusID");
+			if (saveIDString != null && saveIDString.matches("^\\d+$") && statusIdString != null && statusIdString.matches("^\\d+$")) {
+				long saveID = Long.parseLong(saveIDString);
+				int statusId = Integer.parseInt(statusIdString);
+				if (TracingConstants.LF_STATUS_OPEN == statusId || TracingConstants.LF_STATUS_CLOSED == statusId) {
+					if (saveID == 0) { // First save needs to create new.
+						salvage = createSalvage(user);
+					} else {
+						salvage = serviceBean.loadSalvage(saveID);
+						salvage.setStatusId(statusId);
+					}
+					saveSuccess = saveSalvage(serviceBean, salvage, request, errors);
+					salvage = serviceBean.loadSalvage(salvage.getId());
+					salvageItems = serviceBean.loadSalvageFound(salvage.getId());
+				}
 			}
-			saveSalvage(serviceBean, salvage, request, errors);
-			salvage = serviceBean.loadSalvage(salvage.getId());
-			salvageItems = serviceBean.loadSalvageFound(salvage.getId());
+			if (!saveSuccess) {
+				ActionMessage error = new ActionMessage("error.error500.desc");
+				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, errors);
+				return mapping.findForward(TracingConstants.ERROR_MAIN);
+			}
 		} 
 		
 		if (salvage.getId() == 0) {
@@ -306,13 +319,5 @@ public class SalvageAction extends CheckedAction {
 		saveMessages(request, errors);
 		return success;
 	}
-	
-//	private String padBarcode(String barcode) {
-//		StringBuilder sb = new StringBuilder(barcode);
-//		if (barcode.length() < 8) {
-//			sb.append("0");
-//		}
-//		return sb.toString();
-//	}
 	
 }
