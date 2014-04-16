@@ -66,6 +66,7 @@
         String remarkText2       = "this.form.elements['" + remarkDescription + "2']";
 %>
 			<td valign="top" colspan=3>
+<%				if (remark.getRemark_ID() == 0 || UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_UPDATE_REMARKS, a)) { %>
 				<textarea name="<%= remarkDescription %>" cols="80" rows="10"
 					onkeydown="textCounter2(<%= remarkText %>, <%= remarkText2 %>,1500);"
 					onkeyup="textCounter2(<%= remarkText %>, <%= remarkText2 %>,1500);"><%= remark.getRemarktext() %></textarea>
@@ -75,6 +76,9 @@
 					indexed="true" onclick="doCheck=0; doSaveCheck=0; return true;">
 					<bean:message key="button.delete_remark" />
 				</html:submit> 
+<%				} else { %>
+                  <bean:write name="remark" property="readonlyremarktext" filter="false"/>	
+<%				} %>
 			</td>
 		</tr>
 		</logic:equal>
