@@ -737,7 +737,7 @@ public class LostAndFoundController {
 							.getContact().getPrimaryPhone().getLine()
 							.replaceAll("[^\\d.]", "").trim().length() > 0)) {
 				hasContactPhoneOrEmail = true;
-			} else if(!(US_PHONE_COUNTRYCODE.equals(lostReport.getContact().getPrimaryPhone().getCountry().trim()) &&
+			} else if(!((lostReport.getContact().getPrimaryPhone().getCountry() == null || lostReport.getContact().getPrimaryPhone().getCountry().trim().length()==0 || US_PHONE_COUNTRYCODE.equals(lostReport.getContact().getPrimaryPhone().getCountry().trim())) &&
 					(lostReport.getContact().getPrimaryPhone().getArea() == null || lostReport.getContact().getPrimaryPhone().getArea().trim().length()==0) && 
 					(lostReport.getContact().getPrimaryPhone().getExchange() == null || lostReport.getContact().getPrimaryPhone().getExchange().trim().length()==0) &&
 					(lostReport.getContact().getPrimaryPhone().getLine() == null || lostReport.getContact().getPrimaryPhone().getLine().trim().length()==0))){
@@ -753,7 +753,7 @@ public class LostAndFoundController {
 							.getContact().getPrimaryPhone().getLine()
 							.replaceAll("[^\\d.]", "").trim().length() > 0)) {
 				hasContactPhoneOrEmail = true;
-			} else if(!(US_PHONE_COUNTRYCODE.equals(lostReport.getContact().getPrimaryPhone().getCountry().trim()) &&
+			} else if(!((lostReport.getContact().getPrimaryPhone().getCountry() == null || lostReport.getContact().getPrimaryPhone().getCountry().trim().length()==0 || US_PHONE_COUNTRYCODE.equals(lostReport.getContact().getPrimaryPhone().getCountry().trim())) &&
 					(lostReport.getContact().getPrimaryPhone().getArea() == null || lostReport.getContact().getPrimaryPhone().getArea().trim().length()==0) && 
 					(lostReport.getContact().getPrimaryPhone().getExchange() == null || lostReport.getContact().getPrimaryPhone().getExchange().trim().length()==0) &&
 					(lostReport.getContact().getPrimaryPhone().getLine() == null || lostReport.getContact().getPrimaryPhone().getLine().trim().length()==0))){
@@ -775,7 +775,7 @@ public class LostAndFoundController {
 							.getContact().getSecondaryPhone().getLine()
 							.replaceAll("[^\\d.]", "").trim().length() > 0)) {
 				hasContactPhoneOrEmail = true;
-			} else if(!(US_PHONE_COUNTRYCODE.equals(lostReport.getContact().getSecondaryPhone().getCountry().trim()) &&
+			} else if(!((lostReport.getContact().getSecondaryPhone().getCountry() == null || lostReport.getContact().getSecondaryPhone().getCountry().trim().length()==0 || US_PHONE_COUNTRYCODE.equals(lostReport.getContact().getSecondaryPhone().getCountry().trim())) &&
 						(lostReport.getContact().getSecondaryPhone().getArea() == null || lostReport.getContact().getSecondaryPhone().getArea().trim().length()==0) && 
 						(lostReport.getContact().getSecondaryPhone().getExchange() == null || lostReport.getContact().getSecondaryPhone().getExchange().trim().length()==0) &&
 						(lostReport.getContact().getSecondaryPhone().getLine() == null || lostReport.getContact().getSecondaryPhone().getLine().trim().length()==0))){
@@ -792,7 +792,7 @@ public class LostAndFoundController {
 							.getContact().getSecondaryPhone().getLine()
 							.replaceAll("[^\\d.]", "").trim().length() > 0)) {
 				hasContactPhoneOrEmail = true;
-			} else if(!(US_PHONE_COUNTRYCODE.equals(lostReport.getContact().getSecondaryPhone().getCountry().trim()) &&
+			} else if(!((lostReport.getContact().getSecondaryPhone().getCountry() == null || lostReport.getContact().getSecondaryPhone().getCountry().trim().length()==0 || US_PHONE_COUNTRYCODE.equals(lostReport.getContact().getSecondaryPhone().getCountry().trim())) &&
 					(lostReport.getContact().getSecondaryPhone().getArea() == null || lostReport.getContact().getSecondaryPhone().getArea().trim().length()==0) && 
 					(lostReport.getContact().getSecondaryPhone().getExchange() == null || lostReport.getContact().getSecondaryPhone().getExchange().trim().length()==0) &&
 					(lostReport.getContact().getSecondaryPhone().getLine() == null || lostReport.getContact().getSecondaryPhone().getLine().trim().length()==0))){
