@@ -1,3 +1,8 @@
+
+--REMOVE STATIONS WITH LFC FROM SUBCOMPANIES AND THEN REMOVE 'LFC' FROM STATION TABLE SO THAT ALL PROPER SUBCOMPANYSTATIONS WILL SHOW UP
+delete from subcompanystation where subcompany_id not in (select id from subcompany where subcompanycode = 'DL') and station_id in (select s.station_ID from station s where s.associated_airport = 'LFC');
+update station set associated_airport = null;
+
 insert into subcompany (id, subcompanycode, company_id, name, email_subject, email_path, auto_close_low, auto_close_high, email_notice_1, email_notice_2, email_notice_3, email_notice_4, email_notice_5, shippingSurcharge)
 values (10, 'DL', 'LF', 'Delta Air Lines', 'Delta Air Lines Lost Item Report Number {LOSTID}', '/DL/', 30, 30, 3, 7, 0, 0, 0, 5);
 
