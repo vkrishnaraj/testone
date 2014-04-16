@@ -836,6 +836,19 @@ public class OhdBMO {
 				sql.append(" and ohd.posId like :posId");
 			}
 
+			if (sort != null && (sort.equalsIgnoreCase(SortParam.OHD_NAME.getParamString()) || sort.equalsIgnoreCase(SortParam.OHD_NAMEREV.getParamString()))) {
+				sql.append(" and (passengers.passenger_id = (select min(p.passenger_id) from ohd.passengers p where 1=1 ");
+						if (oDTO.getFirstname() != null && oDTO.getFirstname().trim().length() > 0) {
+							sql.append(" and (p.firstname like :firstname) ");
+						}
+						if (oDTO.getLastname() != null && oDTO.getLastname().trim().length() > 0) {
+							sql.append(" and (p.lastname like :lastname) ");
+						}
+						if (oDTO.getMiddlename() != null && oDTO.getMiddlename().trim().length() > 0) {
+							sql.append(" and (p.middlename like :middlename)");
+						}
+				sql.append(" group by p.ohd.OHD_ID) or passengers is null) ");
+			}
 
 			Date sdate = null, edate = null;
 			Date sdate1 = null, edate1 = null; // add one for timezone
