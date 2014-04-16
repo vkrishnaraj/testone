@@ -712,7 +712,7 @@ public class OhdBMO {
 			} else {
 				sql.append("select distinct ohd, ohd.OHD_ID ");
 				if ((sort != null && (sort.equalsIgnoreCase(SortParam.OHD_NAME.getParamString()) || sort.equalsIgnoreCase(SortParam.OHD_NAMEREV.getParamString())))) {
-					sql.append(", passengers.lastname ");
+					sql.append(", passengerOrder.lastname ");
 				}
 
 				if (sort != null && (sort.equalsIgnoreCase(SortParam.OHD_DESTINATION.getParamString()) || sort.equalsIgnoreCase(SortParam.OHD_DESTINATIONREV.getParamString()))) {
@@ -723,8 +723,12 @@ public class OhdBMO {
 			}
 
 			if (oDTO.getFirstname().trim().length() > 0 || oDTO.getLastname().trim().length() > 0
-					|| oDTO.getMiddlename().trim().length() > 0 || (sort != null && (sort.equalsIgnoreCase(SortParam.OHD_NAME.getParamString()) || sort.equalsIgnoreCase(SortParam.OHD_NAMEREV.getParamString())))) {
+					|| oDTO.getMiddlename().trim().length() > 0) {
 				sql.append(" left outer join ohd.passengers passengers ");
+			}
+
+			if (sort != null && (sort.equalsIgnoreCase(SortParam.OHD_NAME.getParamString()) || sort.equalsIgnoreCase(SortParam.OHD_NAMEREV.getParamString()))) {
+				sql.append(" left outer join ohd.passengers passengerOrder ");
 			}
 
 			if ((oDTO.getOHD_categorytype_ID() != null && !oDTO.getOHD_categorytype_ID().equals("0"))
@@ -837,17 +841,8 @@ public class OhdBMO {
 			}
 
 			if (sort != null && (sort.equalsIgnoreCase(SortParam.OHD_NAME.getParamString()) || sort.equalsIgnoreCase(SortParam.OHD_NAMEREV.getParamString()))) {
-				sql.append(" and (passengers.passenger_id = (select min(p.passenger_id) from ohd.passengers p where 1=1 ");
-						if (oDTO.getFirstname() != null && oDTO.getFirstname().trim().length() > 0) {
-							sql.append(" and (p.firstname like :firstname) ");
-						}
-						if (oDTO.getLastname() != null && oDTO.getLastname().trim().length() > 0) {
-							sql.append(" and (p.lastname like :lastname) ");
-						}
-						if (oDTO.getMiddlename() != null && oDTO.getMiddlename().trim().length() > 0) {
-							sql.append(" and (p.middlename like :middlename)");
-						}
-				sql.append(" group by p.ohd.OHD_ID) or passengers is null) ");
+				sql.append(" and (passengerOrder.passenger_id = (select min(p.passenger_id) from ohd.passengers p where 1=1 ");
+				sql.append(" group by p.ohd.OHD_ID) or passengerOrder is null) ");
 			}
 
 			Date sdate = null, edate = null;
@@ -963,9 +958,9 @@ public class OhdBMO {
 					if (sort.equalsIgnoreCase(SortParam.OHD_HOLDSTATIONREV.getParamString()))
 						sortq += " ohd.holdingStation.stationcode desc, ";
 					if (sort.equalsIgnoreCase(SortParam.OHD_NAME.getParamString()))
-						sortq += " passengers.lastname asc, ";
+						sortq += " passengerOrder.lastname asc, ";
 					if (sort.equalsIgnoreCase(SortParam.OHD_NAMEREV.getParamString()))
-						sortq += " passengers.lastname desc, ";
+						sortq += " passengerOrder.lastname desc, ";
 					if (sort.equalsIgnoreCase(SortParam.OHD_DESTINATION.getParamString()))
 						sortq += " itinerary.legto asc, ";
 					if (sort.equalsIgnoreCase(SortParam.OHD_DESTINATIONREV.getParamString()))
