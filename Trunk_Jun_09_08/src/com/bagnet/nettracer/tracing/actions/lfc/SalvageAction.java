@@ -256,28 +256,25 @@ public class SalvageAction extends CheckedAction {
 			return mapping.findForward(TracingConstants.AJAX_LF_BLANK);
 		} else if (request.getParameter("save") != null) {
 			boolean validParameters = false;
-			String saveIDString = request.getParameter("saveID");
-			String statusIdString = request.getParameter("statusID");
-			if (saveIDString != null && saveIDString.matches(TracingConstants.REGEX_NON_NEGATIVE_INTEGER) && statusIdString != null && statusIdString.matches(TracingConstants.REGEX_NON_NEGATIVE_INTEGER)) {
-				try {
-					long saveID = Long.parseLong(saveIDString);
-					int statusId = Integer.parseInt(statusIdString);
-					if (TracingConstants.LF_STATUS_OPEN == statusId || TracingConstants.LF_STATUS_CLOSED == statusId) {
-						validParameters = true;
-						if (saveID == 0) { // First save needs to create new.
-							salvage = createSalvage(user);
-						} else {
-							salvage = serviceBean.loadSalvage(saveID);
-							salvage.setStatusId(statusId);
-						}
-						saveSalvage(serviceBean, salvage, request, errors);
-						salvage = serviceBean.loadSalvage(salvage.getId());
-						salvageItems = serviceBean.loadSalvageFound(salvage.getId());
+			try {
+				long saveID = Long.parseLong(request.getParameter("saveID"));
+				int statusId = Integer.parseInt(request.getParameter("statusID"));
+				if (TracingConstants.LF_STATUS_OPEN == statusId || TracingConstants.LF_STATUS_CLOSED == statusId) {
+					validParameters = true;
+					if (saveID == 0) { // First save needs to create new.
+						salvage = createSalvage(user);
+					} else {
+						salvage = serviceBean.loadSalvage(saveID);
+						salvage.setStatusId(statusId);
 					}
-				} catch (NumberFormatException nfe) {
-					logger.error("SaveID or StatusID is improperly formatted but passed the conditionals: " + nfe);
+					saveSalvage(serviceBean, salvage, request, errors);
+					salvage = serviceBean.loadSalvage(salvage.getId());
+					salvageItems = serviceBean.loadSalvageFound(salvage.getId());
 				}
+			} catch (NumberFormatException nfe) {
+				logger.error("SaveID or StatusID is improperly formatted but passed the conditionals: " + nfe);
 			}
+			
 			if (!validParameters) {
 				ActionMessage error = new ActionMessage("error.error500.desc");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
