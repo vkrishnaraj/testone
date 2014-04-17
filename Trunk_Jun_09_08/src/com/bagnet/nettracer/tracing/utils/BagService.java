@@ -11,6 +11,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -1524,6 +1525,20 @@ public class BagService {
 			int itemtype, IncidentBMO iBMO, Incident iDTO, boolean doNotEmail)
 			throws IllegalAccessException, InvocationTargetException {
 		BeanUtils.copyProperties(theform, iDTO);
+		
+		/*NT-2281: Check for a property to lock item loss Codes (is this the right place to do it?) and check the time */
+		if(PropertyBMO.isTrue(PropertyBMO.LOSS_CODE_BAGS_LOCK) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_EDIT_LOCKED_CODES,user)){
+			Date now=new Date();
+			Calendar fifthOfMonth=Calendar.getInstance();
+			/* Gets a day of the month where all previous Loss Codes are now locked */
+			int dayOfMonthLocked=PropertyBMO.getValueAsInt(PropertyBMO.LOSS_CODE_MONTH_DAY_LOCKED);
+			fifthOfMonth.set(fifthOfMonth.get(Calendar.YEAR), fifthOfMonth.get(Calendar.MONTH), dayOfMonthLocked, 0,0);
+			if(iDTO.getCreatedate().before(fifthOfMonth.getTime()) && now.after(fifthOfMonth.getTime())){
+				theform.setSwaLocked(true);
+			} else {
+				theform.setSwaLocked(false);
+			}
+		}
 		
 		// make sure separate stationcreate and stationassigned and
 		// faultstation

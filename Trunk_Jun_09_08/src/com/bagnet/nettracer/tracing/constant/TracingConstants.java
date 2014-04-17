@@ -158,6 +158,8 @@ public class TracingConstants {
 	public final static String SYSTEM_COMPONENT_MANAGE_3DAY_CALL = "Manage Three Day Call";
 	public final static String SYSTEM_COMPONENT_MANAGE_4DAY_CALL = "Manage Four Day Call";
 	public final static String SYSTEM_COMPONENT_MANAGE_CSS_DAILY_CALLS = "Manage_CSS_Daily_Calls";
+
+	public static final String SYSTEM_COMPONENT_EDIT_LOCKED_CODES = "Edit Locked Loss Codes";
 	
 	public final static String SYSTEM_COMPONENT_NAME_CANCEL_BDO = "Cancel BDO";
 	public final static String SYSTEM_COMPONENT_NAME_BDOS_FOR_STATIONS = "BDOs For Stations";

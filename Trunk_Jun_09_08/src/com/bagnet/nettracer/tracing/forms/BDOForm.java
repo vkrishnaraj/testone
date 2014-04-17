@@ -71,6 +71,7 @@ public final class BDOForm extends ValidatorForm {
 	
 	private String remark;
 	private boolean secure;
+	private boolean swaLocked;
 	
 
 
@@ -628,6 +629,14 @@ public final class BDOForm extends ValidatorForm {
 
 	public void setPickuptz_id(int pickuptz_id) {
 		this.pickuptz_id = pickuptz_id;
+	}
+
+	public boolean isSwaLocked() {
+		return swaLocked;
+	}
+
+	public void setSwaLocked(boolean swaLocked) {
+		this.swaLocked = swaLocked;
 	}
 
 }

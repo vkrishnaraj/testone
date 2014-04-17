@@ -290,6 +290,10 @@ public class PropertyBMO {
 	public static final String CREATE_CALL_TASK_TIMEZONE = "create.call.task.timezone";
 	
 	public static final String BAGBUZZ_MAX_CATEGORIES = "bagbuzz.max.categories";
+
+	public static final String LOSS_CODE_BAGS_LOCK = "loss.code.bags.lock";
+
+	public static final String LOSS_CODE_MONTH_DAY_LOCKED = "loss.code.month.day.locked";
 	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;

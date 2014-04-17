@@ -43,7 +43,8 @@ Loss Code at Bag Level Permission Check Reference
 */
 boolean closed=(myform.getIncident_ID()!=null && !myform.getIncident_ID().isEmpty() && myform.getIncident()!=null && myform.getIncident().getStatus().getStatus_ID()==TracingConstants.MBR_STATUS_CLOSED);
 boolean sameStation=(myform.getIncident_ID()!=null && !myform.getIncident_ID().isEmpty() && myform.getIncident()!=null && a.getStation().getStation_ID()==myform.getIncident().getStationcreated().getStation_ID());
-boolean swaLocked=(myform.getIncident_ID()!=null && !myform.getIncident_ID().isEmpty() && myform.getIncident()!=null && myform.getIncident().isSwaLocked());
+boolean swaLocked=myform.isSwaLocked();
+System.out.println("SWALOCKED: "+swaLocked);
 boolean editSameNonClosedPermission=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_SAME_NON_CLOSED_DELIVERED,a);
 boolean editOtherNonClosedDeliveredPermission=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_OTHER_NON_CLOSED_DELIVERED,a);
 
@@ -51,7 +52,9 @@ boolean editSameNonClosedDeliveredBags=editSameNonClosedPermission && !closed &&
 boolean editSameClosedDeliveredBags=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_SAME_CLOSED_DELIVERED,a)  && sameStation && !swaLocked && editSameNonClosedPermission;
 boolean editOtherNonClosedDeliveredBags=editOtherNonClosedDeliveredPermission  && !closed && !sameStation && !swaLocked && editSameNonClosedPermission;
 boolean editOtherClosedDeliveredBags=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_OTHER_CLOSED_DELIVERED,a) && !sameStation && !swaLocked && editOtherNonClosedDeliveredPermission && editSameNonClosedPermission; 
-boolean editAnyBags=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_ANY_BAGS_LOSS_CODES,a);
+boolean editAnyBags=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_ANY_BAGS_LOSS_CODES,a) && !swaLocked;
+boolean editLockedBags=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_EDIT_LOCKED_CODES,a);
+
 %>
 <%@page import="com.bagnet.nettracer.tracing.db.Address"%><script language="javascript">
 <%

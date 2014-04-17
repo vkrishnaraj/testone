@@ -7,6 +7,7 @@ package com.bagnet.nettracer.tracing.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -225,6 +226,8 @@ public class BDOUtils {
 			if(iDTO.getDeliveryInstructions()!=null){
 				theform.setDelivery_comments(iDTO.getDeliveryInstructions().getInstructions());
 			}
+			/* NT-2281 - Populate the form with existing data when creating a new BDO */
+			BDOUtils.populateFormWithExistingData(iDTO, theform);
 
 		}
 		List<DeliverCo_Station> list = new ArrayList<DeliverCo_Station>(BDOUtils.getDeliveryCompanies(theform.getStation().getStation_ID()));
@@ -345,6 +348,18 @@ public class BDOUtils {
 				theform.setExistItemList(new ArrayList<Item>(inc.getItemlist()));
 			} else {
 				theform.setExistItemList(new ArrayList<Item>());
+			}
+		}
+		/* NT-2281 - Check against the Incident's Create Date and the current date to determine if the loss codes should be locked */
+		if(PropertyBMO.isTrue(PropertyBMO.LOSS_CODE_BAGS_LOCK) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_EDIT_LOCKED_CODES,theform.getAgent())){
+			Date now=new Date();
+			Calendar fifthOfMonth=Calendar.getInstance();
+			int dayOfMonthLocked=PropertyBMO.getValueAsInt(PropertyBMO.LOSS_CODE_MONTH_DAY_LOCKED);
+			fifthOfMonth.set(fifthOfMonth.get(Calendar.YEAR), fifthOfMonth.get(Calendar.MONTH), dayOfMonthLocked, 0,0);
+			if(inc.getCreatedate().before(fifthOfMonth.getTime()) && now.after(fifthOfMonth.getTime())){
+				theform.setSwaLocked(true);
+			} else {
+				theform.setSwaLocked(false);
 			}
 		}
 	}
