@@ -1410,6 +1410,9 @@ public class TracingConstants {
 	public static final int INCIDENT_TRACING_STATUS_DEFAULT = 0;
 	public static final int INCIDENT_TRACING_STATUS_TRACING = 1;
 	public static final int INCIDENT_TRACING_STATUS_FINAL = 2;
+
+	//STANDARD REGEX TESTS
+	public static final String REGEX_NON_NEGATIVE_INTEGER = "^\\d+$";
 	
 	public static final int FILE_CREATION_METHOD_APPLICATION = 0;
 	public static final int FILE_CREATION_METHOD_WEBSERVICE = 1;

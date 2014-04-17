@@ -255,25 +255,26 @@ public class SalvageAction extends CheckedAction {
 			
 			return mapping.findForward(TracingConstants.AJAX_LF_BLANK);
 		} else if (request.getParameter("save") != null) {
-			boolean saveSuccess = false;
+			boolean validParameters = false;
 			String saveIDString = request.getParameter("saveID");
 			String statusIdString = request.getParameter("statusID");
-			if (saveIDString != null && saveIDString.matches("^\\d+$") && statusIdString != null && statusIdString.matches("^\\d+$")) {
+			if (saveIDString != null && saveIDString.matches(TracingConstants.REGEX_NON_NEGATIVE_INTEGER) && statusIdString != null && statusIdString.matches(TracingConstants.REGEX_NON_NEGATIVE_INTEGER)) {
 				long saveID = Long.parseLong(saveIDString);
 				int statusId = Integer.parseInt(statusIdString);
 				if (TracingConstants.LF_STATUS_OPEN == statusId || TracingConstants.LF_STATUS_CLOSED == statusId) {
+					validParameters = true;
 					if (saveID == 0) { // First save needs to create new.
 						salvage = createSalvage(user);
 					} else {
 						salvage = serviceBean.loadSalvage(saveID);
 						salvage.setStatusId(statusId);
 					}
-					saveSuccess = saveSalvage(serviceBean, salvage, request, errors);
+					saveSalvage(serviceBean, salvage, request, errors);
 					salvage = serviceBean.loadSalvage(salvage.getId());
 					salvageItems = serviceBean.loadSalvageFound(salvage.getId());
 				}
 			}
-			if (!saveSuccess) {
+			if (!validParameters) {
 				ActionMessage error = new ActionMessage("error.error500.desc");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
