@@ -63,7 +63,6 @@ public class ReservationIntegrationImpl extends
 
 
 	private boolean getBooking(String recordLocator) {
-		ArrayList<String> errors = new ArrayList<String>();
 		try {
 			SharesIntegrationWrapper wrapper = new SharesIntegrationWrapper();
 			// Record Locator
@@ -260,6 +259,18 @@ public class ReservationIntegrationImpl extends
 						fAddr.setProvince(fMap.mapString(NetTracerField.ADDR_PROVINCE, pAddr.getProvinceState()));
 					}				
 				}
+
+				if (pax.getBaggageList().getBaggageArray().length == 1) {
+					Baggage bag =	pax.getBaggageList().getBaggageArray(0);
+					long deptime = (bag.getBagTagDate().getTime().getTime()) / 3600000;
+					long nowtime = ((new Date()).getTime()) / 3600000;
+					Long timeDifference = nowtime - deptime;
+					if (timeDifference <= HOURS_BACK_ITINERARY) {
+						if (bag.getBagTag() != null && bag.getBagTag().length() > 0) {
+							form.setBagTagNumber(bag.getBagTag().substring(0, Math.min(bag.getBagTag().length(), 13)));
+						}
+					}
+				}
 			}
 		}
 		
@@ -283,13 +294,6 @@ public class ReservationIntegrationImpl extends
 						}
 						Long nowtime = ((new Date()).getTime()) / 3600000;
 						Long timeDifference = nowtime - deptime;
-						
-						/*
-						boolean includeSegment = false;
-						if (seg.getDepartureActual().getTime().getTime() != WS_NULL_DATE) {
-							includeSegment = true;
-						}
-						*/
 						
 						if (timeDifference <= HOURS_BACK_ITINERARY && timeDifference >= -HOURS_FORWARD_ITINERARY) {
 							fItin.setAirline(seg.getCarrierCode());
@@ -437,15 +441,14 @@ public class ReservationIntegrationImpl extends
 					if (timeDifference <= HOURS_BACK_ITINERARY) {
 
 						// claimcheck
-						if (bag.getBagTag() != null && bag.getBagTag().length() > 0) {
+						if (itemtype == TracingConstants.LOST_DELAY && bag.getBagTag() != null && bag.getBagTag().length() > 0) {
 							Incident_Claimcheck ic = form.getClaimcheck(bagIndex);
 							ic.setClaimchecknum(bag.getBagTag().substring(0, Math.min(bag.getBagTag().length(), 13)));
 						}
 	
 						// bag info
 						Item theitem = form.getItem(bagIndex, itemtype);
-						if (itemtype != TracingConstants.LOST_DELAY
-								&& bag.getBagTag() != null && bag.getBagTag().length() > 0) {
+						if (itemtype != TracingConstants.LOST_DELAY && bag.getBagTag() != null && bag.getBagTag().length() > 0) {
 							theitem.setClaimchecknum(bag.getBagTag().substring(0, Math.min(bag.getBagTag().length(), 13)));
 						}
 						theitem.set_DATEFORMAT(user.getDateformat().getFormat());

@@ -575,7 +575,7 @@ public class MissingAction extends CheckedAction {
 					theform.setRecordlocator(theform.getRecordlocator());
 				}
 			}
-			boolean pnrcheck=(user.getStation().getCompany().getVariable().getPnr_last_x_days()!=0 && (request.getParameter("pnrpopulate") != null || (request.getParameter("pnrpopulate") == null && request.getAttribute("pnrlist")==null))) || (user.getStation().getCompany().getVariable().getPnr_last_x_days()==0 && request.getParameter("doprepopulate1") != null);
+			boolean pnrcheck=(user.getStation().getCompany().getVariable().getPnr_last_x_days()!=0 && (request.getParameter("pnrpopulate") != null || (request.getParameter("pnrpopulate") == null && request.getAttribute("pnrlist")==null))) || (user.getStation().getCompany().getVariable().getPnr_last_x_days()==0 && request.getParameter("doprepopulate") != null);
 			// Attempt to prepopulate the fields from the reservation integration.
 			if(!(theform.getRecordlocator()!=null  && theform.getRecordlocator().length()>0) && session.getAttribute("pnrtrue")!=null && session.getAttribute("pnrtrue").toString().length()>0){
 				theform.setRecordlocator(session.getAttribute("pnrtrue").toString());
