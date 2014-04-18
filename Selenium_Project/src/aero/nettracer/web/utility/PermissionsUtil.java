@@ -241,6 +241,7 @@ public class PermissionsUtil {
 	public static final String EDIT_CLOSED_DELIVERED_BAGS_SAME = "663";
 	public static final String EDIT_NON_CLOSED_NON_DELIVERED_BAGS_OTHER = "664";
 	public static final String EDIT_CLOSED_DELIVERED_BAGS_OTHER = "665";
+	public static final String EDIT_LOCKED_CODES = "689";
 	public static final String EDIT_ANY_BAGS= "675";
 	public static final String SECURE_REMARKS = "335";
 	public static final String INCIDENT_COURTESY_REASON_COLLECT = "648";
