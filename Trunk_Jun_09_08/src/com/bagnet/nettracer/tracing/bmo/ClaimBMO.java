@@ -19,7 +19,6 @@ import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.Claim;
 import com.bagnet.nettracer.tracing.db.Claim_Depreciation;
 import com.bagnet.nettracer.tracing.db.Claim_Type;
-import com.bagnet.nettracer.tracing.db.Depreciation_Category;
 import com.bagnet.nettracer.tracing.db.Depreciation_Item;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
@@ -140,6 +139,7 @@ public class ClaimBMO {
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(sql);
 			
+			@SuppressWarnings("unchecked")
 			List<Claim_Type> ilist= (List<Claim_Type>) q.list();
 			return ilist;
 		} catch (Exception e) {
@@ -163,6 +163,7 @@ public class ClaimBMO {
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(sql);
 			q.setParameter("claim", claimid);
+			@SuppressWarnings("unchecked")
 			List<Depreciation_Item> ilist= (List<Depreciation_Item>) q.list();
 			return ilist;
 		} catch (Exception e) {
@@ -186,6 +187,7 @@ public class ClaimBMO {
 			sess = HibernateWrapper.getSession().openSession();
 			Query q = sess.createQuery(sql);
 			q.setParameter("claim", claimid);
+			@SuppressWarnings("unchecked")
 			List<Claim_Depreciation> ilist= (List<Claim_Depreciation>) q.list();
 			if(ilist.size()>0){
 				return ilist.get(0);
@@ -208,18 +210,31 @@ public class ClaimBMO {
 
 	public void saveDepreciationItems(List<Depreciation_Item> items) {
 		Session sess = null;
+		Transaction tx = null;
 		try {
 			sess = HibernateWrapper.getSession().openSession();
-			Transaction tx = sess.beginTransaction();
+			tx = sess.beginTransaction();
 			for(Depreciation_Item i : items)
 				sess.saveOrUpdate(i);
 			tx.commit();
 			sess.flush();
-			sess.close();
-
 		} catch (Exception e){
-
 			logger.error("Error in get Claim Types: " + e);
+			try {
+				if(tx != null){
+					tx.rollback();
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}	
 		}
 	}
 
