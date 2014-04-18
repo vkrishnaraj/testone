@@ -711,8 +711,20 @@ public class OhdBMO {
 				sql.append("select count(ohd.OHD_ID) from com.bagnet.nettracer.tracing.db.OHD ohd ");
 			} else {
 				sql.append("select distinct ohd, ohd.OHD_ID ");
-				if ((sort != null && (sort.equalsIgnoreCase(SortParam.OHD_NAME.getParamString()) || sort.equalsIgnoreCase(SortParam.OHD_NAMEREV.getParamString())))) {
+				if (sort != null && (sort.equalsIgnoreCase(SortParam.OHD_NAME.getParamString()) || sort.equalsIgnoreCase(SortParam.OHD_NAMEREV.getParamString()))) {
 					sql.append(", passengerOrder.lastname ");
+				}
+				
+				if (sort != null && (sort.equalsIgnoreCase(SortParam.OHD_AIRLINEFOUND.getParamString()) || sort.equalsIgnoreCase(SortParam.OHD_AIRLINEFOUNDREV.getParamString()))){
+					sql.append(", ohd.foundAtStation.company.companyCode_ID ");
+				}
+				
+				if (sort != null && (sort.equalsIgnoreCase(SortParam.OHD_STATIONFOUND.getParamString()) || sort.equalsIgnoreCase(SortParam.OHD_STATIONFOUNDREV.getParamString()))){
+					sql.append(", ohd.foundAtStation.stationcode ");
+				}
+				
+				if (sort != null && (sort.equalsIgnoreCase(SortParam.OHD_HOLDSTATION.getParamString()) || sort.equalsIgnoreCase(SortParam.OHD_HOLDSTATIONREV.getParamString()))){
+					sql.append(", ohd.holdingStation.stationcode ");
 				}
 
 				if (sort != null && (sort.equalsIgnoreCase(SortParam.OHD_DESTINATION.getParamString()) || sort.equalsIgnoreCase(SortParam.OHD_DESTINATIONREV.getParamString()))) {
