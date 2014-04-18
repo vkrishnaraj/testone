@@ -622,6 +622,8 @@ public class WSCoreOHDUtil {
       com.bagnet.nettracer.ws.core.InsertQuickOHDDocument insertQOHD) {
 	logger.info("Start Web Service Response... " + insertQOHD);
   	String errorMsg = "Insert OHD Failed: ";
+	boolean includingExpediteTag = false;	
+
   	
   	InsertQuickOHDResponseDocument resDoc = InsertQuickOHDResponseDocument.Factory.newInstance();
   	InsertQuickOHDResponseDocument.InsertQuickOHDResponse res = resDoc.addNewInsertQuickOHDResponse();
@@ -684,7 +686,7 @@ public class WSCoreOHDUtil {
   	
   	//auto receive related : to check if there is an incoming OHD that has the same bagTagNumber
 
-  	OHD forwardedOnHand = OHDUtils.getBagTagNumberIncomingToStation(bagTagNumber, foundStation);
+  	OHD forwardedOnHand = OHDUtils.getBagTagNumberIncomingToStation(bagTagNumber, foundStation, includingExpediteTag);
   	
   	// If OHD within last 24 hours with this ID:
   	if (onhand != null) {

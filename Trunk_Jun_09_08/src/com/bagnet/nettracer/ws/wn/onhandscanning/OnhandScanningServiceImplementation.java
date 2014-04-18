@@ -46,7 +46,7 @@ import com.bagnet.nettracer.ws.wn.onhandscanning.pojo.xsd.ServiceResponse;
 public class OnhandScanningServiceImplementation extends OnhandScanningServiceSkeleton{
 	
 	private static Logger logger = Logger.getLogger(OnhandScanningServiceImplementation.class);
-	
+	private static boolean includingExpediteTag = true;	
 	
 	/**
 	 * Since IncidentActivityService uses spring to instantiate and currently our junit test suite does not support spring,
@@ -343,7 +343,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		} else if((incomingOHD = OHDUtils.getBagTagNumberIncomingToStation(wsohd.getBagtagnum(),holdingstation)) != null){
+		} else if((incomingOHD = OHDUtils.getBagTagNumberIncomingToStation(wsohd.getBagtagnum(),holdingstation, includingExpediteTag)) != null){
 			//receive incoming bag
 			wsohd.setOHDID(incomingOHD.getOHD_ID());
 			WSCoreOHDUtil util = new WSCoreOHDUtil();
@@ -707,7 +707,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		}
 		
 		//Handle incoming OHD
-		OHD incomingOHD = OHDUtils.getBagTagNumberIncomingToStation(lookupOnhandLZ.getLookupOnhandLZ().getTagNumber(),holdingstation);
+		OHD incomingOHD = OHDUtils.getBagTagNumberIncomingToStation(lookupOnhandLZ.getLookupOnhandLZ().getTagNumber(),holdingstation,includingExpediteTag);
 		if(incomingOHD != null){
 			/** 
 			 * per SWA requirement, NetTracer is to not receive the bag, only to acknowledge it by updating the lastModified datetime (NT-1991) 
@@ -1106,7 +1106,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		populateMissingOHDFields(wsohd, agent);
 		
 		//add/update ohd
-		if((incomingOHD = OHDUtils.getBagTagNumberIncomingToStation(wsohd.getBagtagnum(),holdingstation)) != null){
+		if((incomingOHD = OHDUtils.getBagTagNumberIncomingToStation(wsohd.getBagtagnum(),holdingstation, includingExpediteTag)) != null){
 			util.properlyHandleForwardedOnHand(incomingOHD, agent, holdingstation);
 			ohd = OhdBMO.getOHDByID(incomingOHD.getOHD_ID(), null);
 			updateLzOHD(wsohd, ohd, agent, tbi, posId, lateCheckInc);
@@ -1212,7 +1212,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 		LookupOnhandReturnResponseDocument resDoc = LookupOnhandReturnResponseDocument.Factory.newInstance();
 		LookupOnhandReturnResponse res = resDoc.addNewLookupOnhandReturnResponse();
 		com.bagnet.nettracer.ws.wn.onhandscanning.pojo.xsd.ServiceResponse serviceResponse = res.addNewReturn();
-
+		
 		if(lookupOnhandReturn == null || lookupOnhandReturn.getLookupOnhandReturn() == null){
 			serviceResponse.setSuccess(false);
 			serviceResponse.setValidUser(false);
@@ -1264,7 +1264,7 @@ public class OnhandScanningServiceImplementation extends OnhandScanningServiceSk
 			//OHD in current station
 			OhdBMO obmo = new OhdBMO();
 			ohd = obmo.findOHDByID(ohdId);
-		} else if ((incomingOHD = OHDUtils.getBagTagNumberIncomingToStation(tagNum,holdingstation)) != null){
+		} else if ((incomingOHD = OHDUtils.getBagTagNumberIncomingToStation(tagNum,holdingstation,includingExpediteTag)) != null){
 			//Incoming OHD, receive
 			util.properlyHandleForwardedOnHand(incomingOHD, agent, holdingstation);
 			OhdBMO obmo = new OhdBMO();

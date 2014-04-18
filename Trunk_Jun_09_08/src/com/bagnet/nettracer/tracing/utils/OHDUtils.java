@@ -1691,7 +1691,7 @@ public class OHDUtils {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static OHD getBagTagNumberIncomingToStation(String bagTagNumber, Station foundAtStation) {
+	public static OHD getBagTagNumberIncomingToStation(String bagTagNumber, Station foundAtStation, boolean includingExpediteTag) {
 
 		OHD result = null;
 		
@@ -1702,13 +1702,17 @@ public class OHDUtils {
 			sess = HibernateWrapper.getSession().openSession();
 			StringBuffer sql = new StringBuffer(512);
 			
-		
-			
 			sql.append("select log from com.bagnet.nettracer.tracing.db.OHD_Log log");
 			sql.append(" where 1=1");
 			sql.append(" and log.destStationCode = :station_ID");
 			sql.append(" and (log.ohd.claimnum = :claimnum1");
-			sql.append(" or log.ohd.claimnum = :claimnum2)");
+			sql.append(" or log.ohd.claimnum = :claimnum2");
+			if (includingExpediteTag){
+				sql.append(" or log.expeditenum = :claimnum1");
+				sql.append(" or log.expeditenum = :claimnum2)");
+			}else{
+				sql.append(")");
+			}
 			sql.append(" and log.log_status = :status");
 			
 			Query q = sess.createQuery(sql.toString());
