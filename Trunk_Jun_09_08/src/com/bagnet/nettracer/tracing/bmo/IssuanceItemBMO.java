@@ -670,7 +670,7 @@ public class IssuanceItemBMO {
 							ep.setVoucheramt(0);
 							ep.setMileageamt(0);
 							ep.setDistributemethod("");
-							ep.setPaytype("DRAFT");
+							ep.setPaytype("INVOICE");
 							ep.setStation(user.getStation());
 							ep.setExpenselocation(user.getStation());
 							ep.setIssuanceItem(1);
