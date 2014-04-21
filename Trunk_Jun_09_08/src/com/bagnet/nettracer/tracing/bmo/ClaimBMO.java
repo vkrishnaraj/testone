@@ -208,37 +208,6 @@ public class ClaimBMO {
 		}
 	}
 
-	public void saveDepreciationItems(List<Depreciation_Item> items) {
-		Session sess = null;
-		Transaction tx = null;
-		try {
-			sess = HibernateWrapper.getSession().openSession();
-			tx = sess.beginTransaction();
-			for(Depreciation_Item i : items)
-				sess.saveOrUpdate(i);
-			tx.commit();
-			sess.flush();
-		} catch (Exception e){
-			logger.error("Error in get Claim Types: " + e);
-			try {
-				if(tx != null){
-					tx.rollback();
-				}
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}	
-		}
-	}
-
-
 	public void saveClaimDepreciation(Claim_Depreciation claimDeprec) {
 		Session sess = null;
 		Transaction tx=null;
