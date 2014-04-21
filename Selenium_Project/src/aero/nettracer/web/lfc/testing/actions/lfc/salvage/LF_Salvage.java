@@ -90,7 +90,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			LF_Salvage.LOW_LT_30 = String.valueOf(System.currentTimeMillis());
 			selenium.type("//input[@name='found.barcode']", LF_Salvage.LOW_LT_30);
-			selenium.select("name=found.companyId", "label=Southwest Airlines");
+			selenium.select("name=found.companyId", "label=Southwest");
 			selenium.select("name=found.locationId", "label=LZ");
 			selenium.click("//img[@id='calendar']");
 			selenium.click("//div[@id='calstyle']/table/tbody/tr/td/center/table[2]/tbody/tr[8]/td/a");
@@ -130,7 +130,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 
 			LF_Salvage.LOW_GT_30 = String.valueOf(System.currentTimeMillis());
 			selenium.type("//input[@name='found.barcode']", LF_Salvage.LOW_GT_30);
-			selenium.select("name=found.companyId", "label=Southwest Airlines");
+			selenium.select("name=found.companyId", "label=Southwest");
 			selenium.select("name=found.locationId", "label=LZ");
 			selenium.type("//div[@id='maincontent']/table/tbody/tr/td[2]/input", "02/11/2012");
 			selenium.type("name=item[0].brand", "Plantronics");
@@ -164,7 +164,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 
 			LF_Salvage.HIGH_LT_60 = String.valueOf(System.currentTimeMillis());
 			selenium.type("//div[@id='maincontent']/table/tbody/tr/td/input", LF_Salvage.HIGH_LT_60);
-			selenium.select("name=found.companyId", "label=Southwest Airlines");
+			selenium.select("name=found.companyId", "label=Southwest");
 			selenium.select("name=found.locationId", "label=LZ");
 			selenium.click("//div[@id='maincontent']/table/tbody/tr/td[2]/img");
 			selenium.click("//div[@id='calstyle']/table/tbody/tr/td/center/table[2]/tbody/tr[8]/td/a");
@@ -205,7 +205,7 @@ public class LF_Salvage extends DefaultSeleneseTestCase {
 
 			LF_Salvage.HIGH_GT_60 = String.valueOf(System.currentTimeMillis());
 			selenium.type("//div[@id='maincontent']/table/tbody/tr/td/input", LF_Salvage.HIGH_GT_60);
-			selenium.select("name=found.companyId", "label=Southwest Airlines");
+			selenium.select("name=found.companyId", "label=Southwest");
 			selenium.select("name=found.locationId", "label=LZ");
 			selenium.type("//div[@id='maincontent']/table/tbody/tr/td[2]/input", hvCutoff);
 			selenium.select("id=itemvalue_0", "label=High");

@@ -17,7 +17,7 @@ public class LF_ProcessTraceResults extends LFC_SeleniumTest {
 		
 		if (checkNoErrorPage()) {
 
-			selenium.select("name=lost.companyId", "label=Southwest Airlines");
+			selenium.select("name=lost.companyId", "label=Southwest");
 			selenium.type("id=lastName", "Sanders");
 			selenium.type("id=firstName", "Mike");
 			selenium.type("id=address1", "950 Marietta St");
@@ -63,7 +63,7 @@ public class LF_ProcessTraceResults extends LFC_SeleniumTest {
 		if (checkNoErrorPage()) {
 			LF_ProcessTraceResults.foundId = String.valueOf(System.currentTimeMillis());
 			selenium.type("//div[@id='maincontent']/table/tbody/tr/td/input", LF_ProcessTraceResults.foundId);
-			selenium.select("name=found.companyId", "label=Southwest Airlines");
+			selenium.select("name=found.companyId", "label=Southwest");
 			selenium.select("name=found.locationId", "label=LZ");
 			selenium.click("//img[@id='calendar']");
 			selenium.click("//div[@id='calstyle']/table/tbody/tr/td/center/table[2]/tbody/tr[8]/td/a");

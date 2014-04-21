@@ -100,8 +100,8 @@ public class LF_WN_CreateLost extends LFC_SeleniumTest {
 		driver.findElement(By.id("lostForm:email")).sendKeys("test@nettracer.aero");
 		driver.findElement(By.id("lostForm:dateLostPopupButton")).click();
 		driver.findElement(By.xpath("//td[@id='lostForm:dateLostFooter']/table/tbody/tr/td[5]/div")).click();
-		(new Select(driver.findElement(By.id("lostForm:segmentTable:0:departLoc")))).selectByVisibleText("ATL - Atlanta, GA");
-		(new Select(driver.findElement(By.id("lostForm:segmentTable:0:arrivalLoc")))).selectByVisibleText("BOS - Boston, MA");
+		(new Select(driver.findElement(By.id("lostForm:segmentTable:0:departLoc")))).selectByVisibleText("Atlanta, GA - ATL");
+		(new Select(driver.findElement(By.id("lostForm:segmentTable:0:arrivalLoc")))).selectByVisibleText("Boston, MA - BOS");
 		driver.findElement(By.id("lostForm:buttonCreate")).click();
 		waitForPageToLoadImproved(1000);
 		driver.findElement(By.id("lostForm:confirmEmail")).sendKeys("test@nettracer.aero");

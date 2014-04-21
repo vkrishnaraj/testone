@@ -27,7 +27,7 @@ public class LF_CreateFound_VerifyRequiredFields extends DefaultSeleneseTestCase
 			selenium.click("//div[@id='calstyle']/table/tbody/tr/td/center/table[2]/tbody/tr[8]/td/a");
 			selenium.click("name=saveButton");
 			assertEquals("Company is required.", selenium.getAlert());
-			selenium.select("name=found.companyId", "label=Southwest Airlines");
+			selenium.select("name=found.companyId", "label=Southwest");
 			selenium.click("name=saveButton");
 			assertEquals("Found Station is required.", selenium.getAlert());
 			selenium.select("name=found.locationId", "label=LZ");

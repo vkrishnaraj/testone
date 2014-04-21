@@ -14,7 +14,7 @@ public class LF_CreateLost_Detailed extends DefaultSeleneseTestCase {
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
 			checkCopyrightAndQuestionMarks();
-			selenium.select("name=lost.companyId", "label=Southwest Airlines");
+			selenium.select("name=lost.companyId", "label=Southwest");
 			selenium.type("name=lost.client.lastName", "Test");
 			selenium.type("name=lost.client.firstName", "Test");
 			selenium.type("name=lost.client.address.decryptedAddress1", "123 Test");

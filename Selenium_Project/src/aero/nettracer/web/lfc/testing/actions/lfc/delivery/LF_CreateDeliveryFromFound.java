@@ -17,15 +17,14 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		waitForPageToLoadImproved();
 		
 		if (checkNoErrorPage()) {
-			selenium.select("name=lost.companyId", "label=Southwest Airlines");
+			selenium.select("name=lost.companyId", "label=Southwest");
 			selenium.type("name=lost.client.lastName", "Sanders");
 			selenium.type("name=lost.client.firstName", "Mike");
 			selenium.type("name=lost.client.address.decryptedAddress1", "950 Marietta St");
 			selenium.type("name=lost.client.address.decryptedCity", "Atlanta");
 			selenium.select("id=state", "label=Georgia");
 			selenium.type("name=lost.client.address.decryptedZip", "30318");
-//			selenium.type("//div[@id='maincontent']/table[2]/tbody/tr[4]/td/input", "1112223333");
-			selenium.type("id=priInterNum", "1"); //112223333
+			selenium.type("id=priInterNum", "1");
 			selenium.type("id=priAreaNum", "122");
 			selenium.type("id=priExchaNum", "23");
 			selenium.type("id=priLineNum", "333");
@@ -65,7 +64,7 @@ public class LF_CreateDeliveryFromFound extends DefaultSeleneseTestCase {
 		if (checkNoErrorPage()) {
 			LF_CreateDeliveryFromFound.foundId = String.valueOf(System.currentTimeMillis());
 			selenium.type("//div[@id='maincontent']/table/tbody/tr/td/input", LF_CreateDeliveryFromFound.foundId);
-			selenium.select("name=found.companyId", "label=Southwest Airlines");
+			selenium.select("name=found.companyId", "label=Southwest");
 			selenium.select("name=found.locationId", "label=LZ");
 			selenium.click("//img[@id='calendar']");
 			selenium.click("//div[@id='calstyle']/table/tbody/tr/td/center/table[2]/tbody/tr[8]/td/a");

@@ -17,7 +17,7 @@ public class LF_CreateLost_VerifyRequiredFields extends DefaultSeleneseTestCase 
 			selenium.click("saveButton");
 			
 			assertEquals("Company is required.", selenium.getAlert());
-			selenium.select("name=lost.companyId", "label=Southwest Airlines");
+			selenium.select("name=lost.companyId", "label=Southwest");
 			selenium.click("saveButton");
 			assertEquals("Last Name is required.", selenium.getAlert());
 			selenium.type("name=lost.client.lastName", "Test");
