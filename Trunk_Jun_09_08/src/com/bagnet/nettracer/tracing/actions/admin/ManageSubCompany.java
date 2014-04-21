@@ -344,10 +344,14 @@ public final class ManageSubCompany extends Action {
 				sc = SubCompanyDAO.loadSubcompany(Integer.valueOf(subcompId));
 			} else {
 				sc = new Subcompany();	
+				
+				// Set unchangeable values here so that they will not change on edit. CG
+				sc.setSubcompanyCode(SCForm.getSubcompanyCode());
+				sc.setName(SCForm.getName());
+				sc.setEmail_Path("/" + SCForm.getSubcompanyCode() + "/");
+				sc.setSendDataplanEmails(true);
 			}
 			
-			sc.setSubcompanyCode(SCForm.getSubcompanyCode());
-			sc.setName(SCForm.getName());
 			sc.setEmail_Notice_1(SCForm.getEmail_Notice_1());
 			sc.setEmail_Notice_2(SCForm.getEmail_Notice_2());
 			sc.setEmail_Notice_3(SCForm.getEmail_Notice_3());

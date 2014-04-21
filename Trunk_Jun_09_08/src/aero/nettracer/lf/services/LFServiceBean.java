@@ -3637,7 +3637,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		case 2:
 			h.put("RETURNADDRESS", PropertyBMO.getValue(PropertyBMO.LF_EMAIL_RETURNADDR_SECOND));
 			email = "update_2_report_email.html";
-			if (TracingConstants.LF_SWA_COMPANY_ID.equalsIgnoreCase(lost.getCompanyId()) && dataplan(lost)){//Probably should normalize dataplan emails in a future ticket
+			if (dataplan(lost) && SubCompanyDAO.loadSubcompany(lost.getCompanyId()).isSendDataplanEmails()){//Probably should normalize dataplan emails in a future ticket
 				email = "update_2_ipad_report_email.html";
 			}
 			logMessage = "2ND NOTICE EMAIL SENT";
@@ -3759,7 +3759,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		
 		String email = "closed_report_email.html";
-		if (TracingConstants.LF_SWA_COMPANY_ID.equalsIgnoreCase(lost.getCompanyId()) && dataplan(lost)){
+		if (dataplan(lost) && SubCompanyDAO.loadSubcompany(lost.getCompanyId()).isSendDataplanEmails()){
 			email = "closed_report_ipad_email.html";
 		}
 		

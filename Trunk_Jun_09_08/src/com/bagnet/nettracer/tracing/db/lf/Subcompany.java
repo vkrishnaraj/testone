@@ -48,6 +48,7 @@ public class Subcompany implements Serializable{
 	private int auto_Close_Low;
 	private int auto_Close_High;
 	private int shippingSurcharge;
+	private boolean sendDataplanEmails;
 	
 
 	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="subcompany")
@@ -164,5 +165,14 @@ public class Subcompany implements Serializable{
 	public void setShippingSurcharge(int shippingSurcharge) {
 		this.shippingSurcharge = shippingSurcharge;
 	}
+
+	public boolean isSendDataplanEmails() {
+		return sendDataplanEmails;
+	}
+
+	public void setSendDataplanEmails(boolean sendDataplanEmails) {
+		this.sendDataplanEmails = sendDataplanEmails;
+	}
+	
 }
 
