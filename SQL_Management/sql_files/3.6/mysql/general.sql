@@ -42,3 +42,6 @@ update properties set valueStr = 'http://service1.nettracer.aero/NTServices_1_0/
 
 update agent set web_enabled = 0;
 update agent set password = '80B66C2EEDA92E6BFD59AEC4551DFE40888312594A133ED47BC3E7B23B1FE586', account_locked = 0, reset_password = 0, last_pass_reset_date = now(), web_enabled = 1 where username in ('ntadmin', 'ogadmin', 'ntagent');
+
+--ADD DATAPLAN BOOLEAN TO SUBCOMPANY TABLE
+alter table subcompany add sendDataplanEmails tinyint(1) not null default 0;
