@@ -227,7 +227,7 @@ public class BDOUtils {
 				theform.setDelivery_comments(iDTO.getDeliveryInstructions().getInstructions());
 			}
 			/* NT-2281 - Populate the form with existing data when creating a new BDO */
-			BDOUtils.populateFormWithExistingData(iDTO, theform);
+			BDOUtils.populateFormWithExistingData(iDTO, theform, user);
 
 		}
 		List<DeliverCo_Station> list = new ArrayList<DeliverCo_Station>(BDOUtils.getDeliveryCompanies(theform.getStation().getStation_ID()));
@@ -262,7 +262,7 @@ public class BDOUtils {
 			theform.setPassengerlist(new ArrayList(bdo.getPassengers()));
 			theform.setItemlist(new ArrayList(bdo.getItems()));
 			
-			populateFormWithExistingData(bdo.getIncident(),theform);
+			populateFormWithExistingData(bdo.getIncident(),theform, user);
 
 			if (bdo.getExpensePayout() != null) {
 
@@ -329,9 +329,9 @@ public class BDOUtils {
 	 * @param theform - form to populate
 	 */
 	public static void populateFormWithExistingData(String incident_ID,
-			BDOForm theform) {
+			BDOForm theform, Agent user) {
 		Incident inc=IncidentBMO.getIncidentByID(incident_ID, null);
-		populateFormWithExistingData(inc,theform);
+		populateFormWithExistingData(inc,theform, user);
 		
 	}
 	
@@ -342,7 +342,7 @@ public class BDOUtils {
 	 * @param theform - form to populate
 	 */
 	public static void populateFormWithExistingData(Incident inc,
-			BDOForm theform) {
+			BDOForm theform, Agent user) {
 		if(inc!=null){
 			if(inc.getItemlist()!=null){
 				theform.setExistItemList(new ArrayList<Item>(inc.getItemlist()));

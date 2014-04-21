@@ -31,6 +31,7 @@ import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.BDO;
+import com.bagnet.nettracer.tracing.db.Category;
 import com.bagnet.nettracer.tracing.db.Company;
 import com.bagnet.nettracer.tracing.db.Company_specific_irregularity_code;
 import com.bagnet.nettracer.tracing.db.DeliveryInstructions;
@@ -202,13 +203,13 @@ public class BDOAction extends Action {
 		}
 
 		@SuppressWarnings({ "unchecked", "rawtypes" })
-		List list = new ArrayList(BDOUtils.getDeliveryCompanies(theform
+		List<?> list = new ArrayList(BDOUtils.getDeliveryCompanies(theform
 				.getStation().getStation_ID(), true));
 		if (list != null)
 			request.setAttribute("delivercompanies", list);
 		
 		if (session.getAttribute("bdoCategoryList") == null) {
-			list=new ArrayList(BDOUtils.getBDOCategories());
+			list=new ArrayList<Category>(BDOUtils.getBDOCategories());
 			if(list!=null)
 				session.setAttribute("bdoCategoryList", list);
 		}
@@ -241,7 +242,7 @@ public class BDOAction extends Action {
 			*get the incident information for purposes of checking for remark requirements
 			*/
 			if (theform.getIncident_ID()!=null && !theform.getIncident_ID().isEmpty()){
-				BDOUtils.populateFormWithExistingData(theform.getIncident_ID(),theform);
+				BDOUtils.populateFormWithExistingData(theform.getIncident_ID(),theform, user);
 			}
 
 			// if there are no bags, then don't deliver, unless it is ohd
@@ -403,7 +404,7 @@ public class BDOAction extends Action {
 				request.setAttribute("showbdo", "1");
 				request.setAttribute("showprint", "1");
 				if(bdo.getIncident()!=null){
-					BDOUtils.populateFormWithExistingData(bdo.getIncident(),theform);
+					BDOUtils.populateFormWithExistingData(bdo.getIncident(),theform, user);
 				}	
 				if(bdo.getDelivery_integration_type()==DeliveryIntegrationType.SERV && bdo.getDelivery_integration_id()!=null && !bdo.getDelivery_integration_id().isEmpty() && PropertyBMO.getValue(PropertyBMO.BDSI_ADDRESS_ENDPOINT)!=null){
 					DecimalFormat myFormatter=new DecimalFormat("0000000000");
