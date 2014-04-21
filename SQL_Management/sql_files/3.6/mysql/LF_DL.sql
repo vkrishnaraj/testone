@@ -6,6 +6,10 @@ update station set associated_airport = null;
 insert into subcompany (id, subcompanycode, company_id, name, email_subject, email_path, auto_close_low, auto_close_high, email_notice_1, email_notice_2, email_notice_3, email_notice_4, email_notice_5, shippingSurcharge)
 values (10, 'DL', 'LF', 'Delta Air Lines', 'Delta Air Lines Lost Item Report Number {LOSTID}', '/DL/', 30, 30, 3, 7, 0, 0, 0, 5);
 
+--ADD DATAPLAN BOOLEAN TO SUBCOMPANY TABLE
+alter table subcompany add sendDataplanEmails tinyint(1) not null default 0;
+update subcompany set sendDataplanEmails = 1;
+
 insert into station (stationcode, stationdesc, countrycode_ID, companycode_ID, active, lz_id) values ('YEG', 'Edmonton, AB - YEG', 'CA', 'LF', 1, 300);
 insert into station (stationcode, stationdesc, countrycode_ID, companycode_ID, active, lz_id) values ('YMM', 'Fort McMurray, AB - YMM', 'CA', 'LF', 1, 300);
 insert into station (stationcode, stationdesc, countrycode_ID, companycode_ID, active, lz_id) values ('YQU', 'Grande Prarie, AB - YQU', 'CA', 'LF', 1, 300);
