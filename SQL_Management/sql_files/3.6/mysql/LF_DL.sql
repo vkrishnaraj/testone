@@ -7,6 +7,9 @@ insert into subcompany (id, subcompanycode, company_id, name, email_subject, ema
 values (10, 'DL', 'LF', 'Delta Air Lines', 'Delta Air Lines Lost Item Report Number {LOSTID}', '/DL/', 30, 30, 3, 7, 0, 0, 0, 5);
 
 update subcompany set sendDataplanEmails = 1;
+update lfcategory set dataplan = 1 where description = 'Cellphone';
+update lfsubcategory set dataplan = 1 where description = 'Laptop';
+update lfsubcategory set dataplan = 1 where description = 'Tablet/E-Reader/PDA';
 
 insert into station (stationcode, stationdesc, countrycode_ID, companycode_ID, active, lz_id) values ('YEG', 'Edmonton, AB - YEG', 'CA', 'LF', 1, 300);
 insert into station (stationcode, stationdesc, countrycode_ID, companycode_ID, active, lz_id) values ('YMM', 'Fort McMurray, AB - YMM', 'CA', 'LF', 1, 300);
