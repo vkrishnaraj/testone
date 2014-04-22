@@ -829,6 +829,7 @@ public class BagService {
 					newItin.setLegto(iti.getLegto());
 					newItin.setScharrivetime(iti.getScharrivetime());
 					newItin.setSchdeparttime(iti.getSchdeparttime());
+					newItin.setActdeparttime(iti.getActdeparttime());
 				}
 			}
 
