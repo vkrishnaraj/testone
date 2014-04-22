@@ -54,7 +54,7 @@
       	<profile>
       		<id>production</id>
       		<properties>
-        		<ws.location>https\://live.nettracer.aero/ntsouthwest/services/OnlineClaimsService</ws.location>
+        		<ws.location>https\://live.nettracer.aero/southwest/services/OnlineClaimsService</ws.location>
         		<file.server>\\\\file.nettracer.aero\\nettracer_claims_files\\production\\</file.server>
       		</properties>
     	</profile>
@@ -340,13 +340,13 @@
 		
 		 -->
 		
-		<dependency>
+<!--		<dependency>
 			<groupId>OnlineClaimsService-client</groupId>
 			<artifactId>OnlineClaimsService-client</artifactId>
 			<version>1.0</version>
 			<scope>provided</scope>
 		</dependency>
-<!-- 		<dependency>
+ 		<dependency>
    			<groupId>org.apache.axis2</groupId>
 			<artifactId>axis2-parent</artifactId>
 			<version>1.5.1</version>
