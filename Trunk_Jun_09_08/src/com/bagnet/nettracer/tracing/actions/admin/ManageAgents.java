@@ -79,9 +79,8 @@ public final class ManageAgents extends Action {
 		request.setAttribute("timezones", AdminUtils.getTimeZones());
 
 		//figure out the company to be used.
-		if (request.getParameter("companyCode") != null) 
-			companyCode = request
-				.getParameter("companyCode");
+		if (request.getParameter("companyCode") != null && request.getParameter("companyCode").length() > 0) 
+			companyCode = request.getParameter("companyCode");
 		else {
 			if (dForm.get("companyCode") != null && ((String) dForm.get("companyCode")).length() > 0) companyCode = (String) dForm
 					.get("companyCode");
@@ -97,7 +96,6 @@ public final class ManageAgents extends Action {
 				String quickSearchString = request.getParameter("searchAgentUsername");
 				quickSearchAgent = AdminUtils.getAgentBasedOnUsername(quickSearchString, companyCode);
 		}
-		
 		if ((request.getParameter("edit") != null && !request.getParameter("edit").equals("")) || request.getParameter("self_edit") != null || quickSearchAgent != null) {
 			Agent a = null;
 			if (request.getParameter("self_edit") != null) {
@@ -138,6 +136,10 @@ public final class ManageAgents extends Action {
 			dForm.set("ws_enabled", "" + a.isWs_enabled());
 			dForm.set("max_ws_sessions", "" + a.getMax_ws_sessions());
 			dForm.set("inboundQueue", "" + a.isInboundQueue());
+			dForm.set("loadpercentage", "" + Double.toString(a.getLoadpercentage()));
+			dForm.set("inbound", "" + a.getInbound());
+			dForm.set("acaa", "" + a.getAcaa());
+			dForm.set("damaged", "" + a.getDamaged());
 					
 			if (a.isAccount_locked()) {
 				ActionMessage error = new ActionMessage("error.user.admin.lockedout");
@@ -282,7 +284,7 @@ public final class ManageAgents extends Action {
 							return mapping.findForward(TracingConstants.EDIT_AGENT);
 						}
 					}
-					if (request.getParameter("aNew") != null) {
+					if (request.getParameter("aNew") != null && request.getParameter("aNew") != "") {
 						agent = new Agent();
 						isNew = true;
 					}
@@ -377,7 +379,14 @@ public final class ManageAgents extends Action {
 					agent.setWeb_enabled(true);
 					agent.setWs_enabled(false);
 				}
-				
+				String load = (String)dForm.get("loadpercentage");
+				if (load == null || load.length() ==0){
+					load = "0.0";
+				}
+				agent.setLoadpercentage(Double.parseDouble((load)));
+				agent.setInbound(((String)dForm.get("inbound")).equals("on") ? true : false);
+				agent.setAcaa(((String)dForm.get("acaa")).equals("on") ? true : false);
+				agent.setDamaged(((String)dForm.get("damaged")).equals("on") ? true : false);
 				
 				if (dForm.get("passwordChanged") != null && dForm.get("passwordChanged").equals("1")) {
 					boolean validPw = SecurityUtils.isPolicyAcceptablePassword(agent.getCompanycode_ID(), (String) dForm.get("password"), agent.getUsername(), request, false);

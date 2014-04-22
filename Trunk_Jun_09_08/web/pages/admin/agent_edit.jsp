@@ -469,14 +469,41 @@ String passMin = bundle.getString("error.security.password.minimal").replace("{0
               :
             </td>
             <td>
-              <html:select name="agentForm" property="inboundQueue" styleClass="dropdown">
-                <html:option value="true">
+              <html:select name="agentForm" property="inboundQueue" styleClass="dropdown" styleId="inboundQueue" onchange="displayUnassignedTasks(this.value)">
+                <html:option value="true" >
                   <bean:message key="select.yes" />
                 </html:option>
                 <html:option value="false">
                   <bean:message key="select.no" />
                 </html:option>
               </html:select>
+            </td>            
+          </tr>
+          <tr>          
+            <td>
+            </td>
+            <td>
+	            <table  border="0" id="unassigned_tasks">
+				    <tr>
+				        <td width="15%">
+				        	<bean:message key="colname.unassignedinbound.load" /><br>
+				       		<html:text name="agentForm" property="loadpercentage" size="5" maxlength="5" styleClass="textfield" onblur="validateLoad(this.value)" />
+				        </td>
+				        
+				        <td width="15%">
+				        	<bean:message key="colname.unassignedinbound.inbound" /><br>
+				            <html:checkbox name="agentForm" property="inbound"/>
+				        </td>
+				        <td width="15%">
+				        	<bean:message key="colname.unassignedinbound.acaa" /><br>
+				            <html:checkbox name="agentForm" property="acaa"/>
+				        </td>
+				        <td width="15%">
+				        	<bean:message key="colname.unassignedinbound.damaged" /><br>
+				            <html:checkbox name="agentForm" property="damaged"/>
+				        </td>
+				    </tr>
+				</table>
             </td>
           </tr>
   			<% } %>        
@@ -516,9 +543,27 @@ String passMin = bundle.getString("error.security.password.minimal").replace("{0
 			element.focus();
 			return false;
 		}
-		
 		return true;
 	}
-    
+	
+	function validateLoad(val) {
+		if (!isNaN(val)) {
+		} else {
+			alert("<bean:message key="agent.save.invalidload" />");
+			loadelement.focus();
+			return false;
+		}		
+		return true;
+	}
+
+	
+	function displayUnassignedTasks(val){
+		if(val=="true"){
+			document.getElementById("unassigned_tasks").style.display="inline";
+		} else {
+			document.getElementById("unassigned_tasks").style.display="none";
+		}					
+	}
+	displayUnassignedTasks("<bean:write property="inboundQueue" name="agentForm"/>");
 	</script>
       

@@ -57,6 +57,10 @@ public class Agent implements Serializable {
 	private UserGroup cachedGroup = null;
 	
 	private boolean inboundQueue;
+	private double loadpercentage;
+	private boolean inbound;
+	private boolean acaa;
+	private boolean damaged;
 	
 	public Agent() { }
 	
@@ -641,4 +645,51 @@ public class Agent implements Serializable {
 	public void setInboundQueue(boolean inboundQueue) {
 		this.inboundQueue = inboundQueue;
 	}	
+	/**
+	 * @return what percentage agent is assigned to tasks
+	 * @hibernate.property type="double"
+	 */
+	public double getLoadpercentage() {
+		return loadpercentage;
+	}
+
+	public void setLoadpercentage(double loadpercentage) {
+		this.loadpercentage = loadpercentage;
+	}	
+	
+	/**
+	 * @return is agent is assigned to inbound
+	 * @hibernate.property type="org.hibernate.type.BooleanType" column="inbound"
+	 */
+	public boolean getInbound() {
+		return inbound;
+	}
+
+	public void setInbound(boolean inbound) {
+		this.inbound = inbound;
+	}	
+	/**
+	 * @return is agent is assigned to acaa
+	 * @hibernate.property type="org.hibernate.type.BooleanType" column="acaa"
+	 */
+	public boolean getAcaa() {
+		return acaa;
+	}
+
+	public void setAcaa(boolean acaa) {
+		this.acaa = acaa;
+	}	
+	/**
+	 * @return is agent is assigned to damaged
+	 * @hibernate.property type="org.hibernate.type.BooleanType" column="damaged"
+	 */
+	public boolean getDamaged() {
+		return damaged;
+	}
+
+	public void setDamaged(boolean damaged) {
+		this.damaged = damaged;
+	}	
+
+	
 }

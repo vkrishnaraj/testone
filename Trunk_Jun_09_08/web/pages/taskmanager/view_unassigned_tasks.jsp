@@ -74,19 +74,19 @@
 	       	<display:setProperty name="basic.empty.showtable" value="true"/>
 	       	<display:column style="width:30%;" titleKey="agent" value="${agentElement.agent.username}" sortable="false" headerClass="header" />
 	       	<display:column style="width:25%;" titleKey="colname.unassignedinbound.load" headerClass="header">
-	       		<input type="text" name="agentMatrix[${agentElement_rowNum - 1}].load" value="${agentElement.load}" size="1" class="textfield" />
+	       		<input type="text" name="agentMatrix[${agentElement_rowNum - 1}].load" value="${agentElement.agent.loadpercentage}" size="1" class="textfield" />
 	       	</display:column>
 	       	<display:column style="width:15%;" titleKey="colname.unassignedinbound.inbound" headerClass="header">
 		         <%String inboundId =  "agentMatrix[" + (agentElement_rowNum - 1) + "].inbound"; %>
-		         <input type="checkbox" name="agentMatrix[${agentElement_rowNum - 1}].inbound" property="<%=inboundId %>" <% if(((UnassignedInboundAgentElement)agentElement).isInbound()){ %> checked="true" <% } %> />
+		         <input type="checkbox" name="agentMatrix[${agentElement_rowNum - 1}].inbound" property="<%=inboundId %>" <% if(((UnassignedInboundAgentElement)agentElement).getAgent().getInbound()){ %> checked="true" <% } %> />
 		    </display:column>
 		    <display:column style="width:15%;" titleKey="colname.unassignedinbound.acaa" headerClass="header">
 		         <%String acaaId =  "agentMatrix[" + (agentElement_rowNum - 1) + "].acaa"; %>
-		         <input type="checkbox" name="agentMatrix[${agentElement_rowNum - 1}].acaa" property="<%=acaaId %>" <% if(((UnassignedInboundAgentElement)agentElement).isAcaa()){ %> checked="true" <% } %> />
+		         <input type="checkbox" name="agentMatrix[${agentElement_rowNum - 1}].acaa" property="<%=acaaId %>" <% if(((UnassignedInboundAgentElement)agentElement).getAgent().getAcaa()){ %> checked="true" <% } %> />
 		    </display:column>
 		    <display:column style="width:15%;" titleKey="colname.unassignedinbound.damaged" headerClass="header">
 		         <%String damagedId =  "agentMatrix[" + (agentElement_rowNum - 1) + "].damaged"; %>
-		         <input type="checkbox" name="agentMatrix[${agentElement_rowNum - 1}].damaged" property="<%=damagedId %>" <% if(((UnassignedInboundAgentElement)agentElement).isDamaged()){ %> checked="true" <% } %> />
+		         <input type="checkbox" name="agentMatrix[${agentElement_rowNum - 1}].damaged" property="<%=damagedId %>" <% if(((UnassignedInboundAgentElement)agentElement).getAgent().getDamaged()){ %> checked="true" <% } %> />
 		    </display:column>
 	       	
 	       <display:footer>

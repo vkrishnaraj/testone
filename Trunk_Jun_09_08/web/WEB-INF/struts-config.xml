@@ -151,6 +151,10 @@
 			<form-property name="ws_enabled" type="java.lang.String" />
 			<form-property name="max_ws_sessions" type="java.lang.String" />
 			<form-property name="inboundQueue" type="java.lang.String" />
+			<form-property name="loadpercentage" type="java.lang.String" />
+			<form-property name="inbound" type="java.lang.String" />
+			<form-property name="acaa" type="java.lang.String" />
+			<form-property name="damaged" type="java.lang.String" />
 		</form-bean>
 		<form-bean name="groupForm" type="org.apache.struts.validator.DynaValidatorForm">
 			<form-property name="groupSearchName" type="java.lang.String" />
