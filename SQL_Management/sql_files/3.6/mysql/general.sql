@@ -47,3 +47,6 @@ update agent set password = '80B66C2EEDA92E6BFD59AEC4551DFE40888312594A133ED47BC
 alter table subcompany add sendDataplanEmails tinyint(1) not null default 0;
 alter table lfcategory add dataplan tinyint(1) not null default 0;
 alter table lfsubcategory add dataplan tinyint(1) not null default 0;
+
+alter table subcompany add salvage_Low int not null default 0;
+alter table subcompany add salvage_High int not null default 0;
