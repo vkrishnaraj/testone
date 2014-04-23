@@ -92,7 +92,6 @@ public final class ManageAgents extends Action {
 		Agent quickSearchAgent = null;
 		
 		if (request.getParameter("searchAgentUsername") != null) {
-
 				String quickSearchString = request.getParameter("searchAgentUsername");
 				quickSearchAgent = AdminUtils.getAgentBasedOnUsername(quickSearchString, companyCode);
 		}
@@ -172,7 +171,7 @@ public final class ManageAgents extends Action {
 		}
 		
 		Station tmp = null;
-		if (addStation && request.getParameter("agentId") != null && request.getParameter("agentId") != "") {
+		if (addStation && request.getParameter("agentId") != null && request.getParameter("agentId").length() > 0) {
 			Agent tmpAgent = AdminUtils.getAgent(request.getParameter("agentId"));
 			tmp = tmpAgent.getStation();
 		}
@@ -284,7 +283,7 @@ public final class ManageAgents extends Action {
 							return mapping.findForward(TracingConstants.EDIT_AGENT);
 						}
 					}
-					if (request.getParameter("aNew") != null && request.getParameter("aNew") != "") {
+					if (request.getParameter("aNew") != null && request.getParameter("aNew").length() > 0) {
 						agent = new Agent();
 						isNew = true;
 					}
