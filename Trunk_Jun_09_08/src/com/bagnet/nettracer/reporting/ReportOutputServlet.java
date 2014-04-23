@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
@@ -197,29 +198,22 @@ public class ReportOutputServlet extends HttpServlet {
 					.setContentType("text/plain");
 			else if (outputtype == TracingConstants.REPORT_OUTPUT_XML) response
 					.setContentType("text/xml");
-
-			@SuppressWarnings("unused")
-			int length = 0;
-			
-
 			
 			response.setContentLength((int) iFile.length());
-			
-			FileInputStream is = new FileInputStream(iFile);
-			OutputStream ouputStream = response.getOutputStream();
-			
-			int current = -1;
-			
-		  while ((current = is.read()) > -1) {
-		  	ouputStream.write(current);
-		  }
 
+			int current = -1;	
+			OutputStream ouputStream = response.getOutputStream();
+			FileInputStream is = new FileInputStream(iFile);
+			while ((current = is.read()) > -1) {
+				ouputStream.write(current);
+			}
+		  
+		    IOUtils.closeQuietly(is);
+		    
 			ouputStream.flush();
-			ouputStream.close();
-			is.close();
+			IOUtils.closeQuietly(ouputStream);
 		} catch (Exception e) {
-			logger.error("print report error:" + e);
-			e.printStackTrace();
+			logger.error("print report error: " + e.getLocalizedMessage(), e);
 			response.sendRedirect("claim_payout.do?error=print");
 		} 
 	}

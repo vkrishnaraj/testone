@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Hibernate;
 import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.SQLQuery;
 
@@ -28,7 +27,7 @@ public class LFSummaryReport extends AbstractNtJasperReport {
 
 	@Override
 	protected String getMySqlSqlString(StatReportDTO srDto) {
-		String sql = "select greatest(ifnull(combo.lost_date, 0), ifnull(combo.found_date, 0)) as 'date', ifnull(combo.lost_id_count, 0) as 'nlrr', ifnull(combo.found_id_count, 0) as 'nfie' from ( " +
+		String sql = "select DATE_FORMAT(greatest(ifnull(combo.lost_date, 0), ifnull(combo.found_date, 0)), '%Y-%m-%d') as 'date', ifnull(combo.lost_id_count, 0) as 'nlrr', ifnull(combo.found_id_count, 0) as 'nfie' from ( " +
 					 "select lost.date as 'lost_date',found.date as 'found_date',lost.id_count as 'lost_id_count',found.id_count as 'found_id_count' from " + 
 					 "(select date(lfl.openDate) as 'date',count(lfl.id) as 'id_count' from lflost lfl where lfl.openDate between :startDate and :endDate ";
 					 if(!srDto.getSubcompCode().equals("0")){
