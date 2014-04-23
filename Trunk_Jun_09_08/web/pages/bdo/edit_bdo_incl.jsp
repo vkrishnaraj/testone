@@ -42,9 +42,8 @@ Loss Code at Bag Level Permission Check Reference
 	5. I can edit any loss code, regardless of state or status. (admin level)
 */
 boolean closed=(myform.getIncident_ID()!=null && !myform.getIncident_ID().isEmpty() && myform.getIncident()!=null && myform.getIncident().getStatus().getStatus_ID()==TracingConstants.MBR_STATUS_CLOSED);
-boolean sameStation=(myform.getIncident_ID()!=null && !myform.getIncident_ID().isEmpty() && myform.getIncident()!=null && a.getStation().getStation_ID()==myform.getIncident().getStationcreated().getStation_ID());
+boolean sameStation=(myform.getIncident_ID()!=null && !myform.getIncident_ID().isEmpty() && myform.getIncident()!=null && a.getStation().getStation_ID()==myform.getIncident().getStationassigned().getStation_ID());
 boolean swaLocked=myform.isSwaLocked();
-System.out.println("SWALOCKED: "+swaLocked);
 boolean editSameNonClosedPermission=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_SAME_NON_CLOSED_DELIVERED,a);
 boolean editOtherNonClosedDeliveredPermission=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_OTHER_NON_CLOSED_DELIVERED,a);
 

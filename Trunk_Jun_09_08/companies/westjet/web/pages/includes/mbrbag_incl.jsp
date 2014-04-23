@@ -31,7 +31,7 @@
 	5. I can edit any loss code, regardless of state or status. (admin level)
   */
   boolean closed=myform.getExistIncStatus()!=null && myform.getExistIncStatus().getStatus_ID()==TracingConstants.MBR_STATUS_CLOSED;
-  boolean sameStation=a.getStation().getStation_ID()==myform.getStationcreated().getStation_ID();
+  boolean sameStation=a.getStation().getStation_ID()==myform.getStationassigned_ID();
   boolean swaLocked=myform.isSwaLocked();
   boolean editSameNonClosedPermission=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_SAME_NON_CLOSED_DELIVERED,a);
   boolean editOtherNonClosedDeliveredPermission=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_EDIT_OTHER_NON_CLOSED_DELIVERED,a);
