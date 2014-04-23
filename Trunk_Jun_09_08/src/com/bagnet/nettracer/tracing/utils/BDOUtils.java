@@ -351,7 +351,7 @@ public class BDOUtils {
 			}
 		}
 		/* NT-2281 - Check against the Incident's Create Date and the current date to determine if the loss codes should be locked */
-		if(PropertyBMO.isTrue(PropertyBMO.LOSS_CODE_BAGS_LOCK) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_EDIT_LOCKED_CODES,theform.getAgent())){
+		if(PropertyBMO.isTrue(PropertyBMO.LOSS_CODE_BAGS_LOCK) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_EDIT_LOCKED_CODES,user)){
 			Date now=new Date();
 			Calendar fifthOfMonth=Calendar.getInstance();
 			int dayOfMonthLocked=PropertyBMO.getValueAsInt(PropertyBMO.LOSS_CODE_MONTH_DAY_LOCKED);
