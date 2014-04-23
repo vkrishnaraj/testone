@@ -32,6 +32,8 @@ public class SubCompanyForm extends ValidatorForm {
 	private int auto_Close_High;
 	private int shippingSurcharge;
 	private String delete1;
+	private int salvage_Low;
+	private int salvage_High;
 	
 	public long getId() {
 		return id;
@@ -191,6 +193,22 @@ public class SubCompanyForm extends ValidatorForm {
 
 	public void setShippingSurcharge(int shippingSurcharge) {
 		this.shippingSurcharge = shippingSurcharge;
+	}
+
+	public int getSalvage_Low() {
+		return salvage_Low;
+	}
+
+	public void setSalvage_Low(int salvage_Low) {
+		this.salvage_Low = salvage_Low;
+	}
+
+	public int getSalvage_High() {
+		return salvage_High;
+	}
+
+	public void setSalvage_High(int salvage_High) {
+		this.salvage_High = salvage_High;
 	}
 }
 

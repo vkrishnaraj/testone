@@ -1,8 +1,6 @@
 package com.bagnet.nettracer.tracing.dao.lf;
 
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -10,7 +8,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Transaction;
 import org.hibernate.Session;
-import org.hibernate.criterion.Expression;
+import org.hibernate.criterion.Restrictions;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.lf.Subcompany;
@@ -65,8 +63,8 @@ public class SubCompanyDAO {
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			Criteria criteria = session.createCriteria(Subcompany.class);
-			criteria.add(Expression.eq("subcompanyCode", code));
-			criteria.add(Expression.eq("company.companyCode_ID", TracerProperties.get(airline,"wt.company.code")));
+			criteria.add(Restrictions.eq("subcompanyCode", code));
+			criteria.add(Restrictions.eq("company.companyCode_ID", TracerProperties.get(airline,"wt.company.code")));
 			subcomp=(Subcompany) criteria.uniqueResult();
 			if(subcomp!=null){
 				System.out.print("Got subcomp: "+subcomp.getSubcompanyCode());
@@ -82,18 +80,19 @@ public class SubCompanyDAO {
 		return subcomp;
 	}
 	
-	public static Set loadSubcompaniesByCompCode(String compCode) {
+	@SuppressWarnings("unchecked")
+	public static Set<Subcompany> loadSubcompaniesByCompCode(String compCode) {
 		if (compCode == null) {
 			return null;
 		}
-		LinkedHashSet results = null;
+		LinkedHashSet<Subcompany> results = null;
 		Session session = null;
 		
 		try {
 			session = HibernateWrapper.getSession().openSession();
 			Criteria criteria = session.createCriteria(Subcompany.class);
-			criteria.add(Expression.eq("company_id", compCode));
-			results=new LinkedHashSet(criteria.list());
+			criteria.add(Restrictions.eq("company.companyCode_ID", compCode));
+			results=new LinkedHashSet<Subcompany>(criteria.list());
 			if (results.isEmpty()) {
 				results = null;
 			}

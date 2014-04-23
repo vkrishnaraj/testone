@@ -97,6 +97,7 @@
                 <td>
                   <html:text styleClass="textfield" property="subcompanyCode" disabled="true" size="12" maxlength="3" />
                 </td>
+               	 <html:hidden name="subCompanyForm"  property="subcompanyCode"/>
                 </logic:notEmpty>
               </tr>
               <tr>
@@ -116,6 +117,7 @@
                 <td>
                   <html:text styleClass="textfield" property="name" disabled="true" size="20" maxlength="50" />
                 </td>
+               	 <html:hidden property="name"/>
                 </logic:notEmpty>
               </tr>
               <tr>
@@ -188,6 +190,24 @@
                 </td>
                 <td>
                   <html:text styleClass="textfield" property="auto_Close_High" size="20" maxlength="3" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <bean:message key="colname.salvagelow" />
+                  :
+                </td>
+                <td>
+                  <html:text styleClass="textfield" property="salvage_Low" size="20" maxlength="3" />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <bean:message key="colname.salvagehigh" />
+                  :
+                </td>
+                <td>
+                  <html:text styleClass="textfield" property="salvage_High" size="20" maxlength="3" />
                 </td>
               </tr>
               <tr>

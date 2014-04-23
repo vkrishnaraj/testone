@@ -51,6 +51,13 @@ public class LFCategory implements Serializable{
 		return companycode;
 	}
 
+	public boolean isDataplan() {
+		return dataplan;
+	}
+	public void setDataplan(boolean dataplan) {
+		this.dataplan = dataplan;
+	}
+
 	@Id
 	@GeneratedValue
 	private long id;
@@ -60,4 +67,5 @@ public class LFCategory implements Serializable{
 	Set<LFSubCategory> subcategories;
 	private long score;
 	private String companycode;
+	private boolean dataplan;
 }

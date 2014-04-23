@@ -75,6 +75,8 @@ public final class ManageSubCompany extends Action {
 			Subcompany subcomp = SubCompanyDAO.loadSubcompany(Long.valueOf(subcompId));
 			SCForm.setAuto_Close_High(subcomp.getAuto_Close_High());
 			SCForm.setAuto_Close_Low(subcomp.getAuto_Close_Low());
+			SCForm.setSalvage_High(subcomp.getSalvage_High());
+			SCForm.setSalvage_Low(subcomp.getSalvage_Low());
 			SCForm.setCompanyCode(subcomp.getCompany().getCompanyCode_ID());
 			SCForm.setEmail_Notice_1(subcomp.getEmail_Notice_1());
 			SCForm.setEmail_Notice_2(subcomp.getEmail_Notice_2());
@@ -94,7 +96,7 @@ public final class ManageSubCompany extends Action {
 			
 			//check if adding agents to this group
 			if (request.getParameter("addStations") != null) {
-				HashMap<String,String> selectedStations = new HashMap<String,String>();
+				HashMap<String, String> selectedStations = new HashMap<String, String>();
 
 				String[] stationsSelected = request.getParameterValues("station_ID");
 				if (stationsSelected != null) {
@@ -110,7 +112,6 @@ public final class ManageSubCompany extends Action {
 	
 							//change association for the agent.
 							HibernateUtils.save(scs);
-
 						} else {
 							selectedStations.put("" + s.getStation_ID(), String.valueOf(subcomp.getId()));
 						}
@@ -126,17 +127,16 @@ public final class ManageSubCompany extends Action {
 
 				if (request.getParameter("id") != null) subcomp_id = request
 						.getParameter("id");
-
+				
 				List<SubcompanyStation> scslist = null;
 				if (!subcomp_id.equals("-1")) scslist = AdminUtils.getSubcompanyStationsBySubcompany(Long.valueOf(subcomp_id));
-						
+				
 				if(scslist!=null && scslist.size()>0){
 					for (Iterator<SubcompanyStation> i = scslist.iterator(); i.hasNext();) {
 						SubcompanyStation scs = (SubcompanyStation) i.next();
 						if (scs.getSubcompany().getId() == subcomp.getId()) {
 							// If agent was selected, leave it alone.
 							if (selectedStations.get("" + scs.getStation().getStation_ID()) == null) {
-								// If agent was displayed but not selected, deactivate it.
 								HibernateUtils.delete(scs);
 							}
 						}
@@ -206,7 +206,7 @@ public final class ManageSubCompany extends Action {
 		}
 		SCForm.setCompanyCode(companyCode);
 
-		if (request.getParameter("addNew") != null) {	
+		if (request.getParameter("addNew") != null) {		
 			request.setAttribute("lzStations", LzUtils.getIncidentLzStationsBeans(companyCode));
 			return mapping.findForward(TracingConstants.EDIT_SUBCOMPANY);
 		}
@@ -311,6 +311,8 @@ public final class ManageSubCompany extends Action {
 					SCForm.setName(subcomp.getName());
 					SCForm.setAuto_Close_High(subcomp.getAuto_Close_High());
 					SCForm.setAuto_Close_Low(subcomp.getAuto_Close_Low());
+					SCForm.setSalvage_High(subcomp.getSalvage_High());
+					SCForm.setSalvage_Low(subcomp.getSalvage_Low());
 					SCForm.setEmail_Notice_1(subcomp.getEmail_Notice_1());
 					SCForm.setEmail_Notice_2(subcomp.getEmail_Notice_2());
 					SCForm.setEmail_Notice_3(subcomp.getEmail_Notice_3());
@@ -334,7 +336,7 @@ public final class ManageSubCompany extends Action {
 				error = new ActionMessage("error.deleting.station");
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
-			}
+			} 
 		}
 
 		if (request.getParameter("save") != null) {
@@ -361,6 +363,9 @@ public final class ManageSubCompany extends Action {
 			sc.setShippingSurcharge(SCForm.getShippingSurcharge());
 			sc.setAuto_Close_High(SCForm.getAuto_Close_High());
 			sc.setAuto_Close_Low(SCForm.getAuto_Close_Low());
+			sc.setSalvage_High(SCForm.getSalvage_High());
+			sc.setSalvage_Low(SCForm.getSalvage_Low());
+			
 			
 			Company c = new Company();
 			c.setCompanyCode_ID(companyCode);
@@ -378,7 +383,6 @@ public final class ManageSubCompany extends Action {
 		}
 		
 		List<Subcompany> subCompList = null;
-
 		subCompList = AdminUtils.getCustomSubCompanies(SCForm, companyCode, 0, 0);
 		
 		if (subCompList != null && subCompList.size() > 0) {

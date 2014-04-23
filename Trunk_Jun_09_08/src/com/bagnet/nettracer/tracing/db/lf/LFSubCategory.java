@@ -44,6 +44,13 @@ public class LFSubCategory implements Serializable{
 	public void setScore(long score) {
 		this.score = score;
 	}
+
+	public boolean isDataplan() {
+		return dataplan;
+	}
+	public void setDataplan(boolean dataplan) {
+		this.dataplan = dataplan;
+	}
 	@Id
 	@GeneratedValue
 	private long id;
@@ -53,4 +60,5 @@ public class LFSubCategory implements Serializable{
 	@Fetch(FetchMode.SELECT)
 	private LFCategory parent;
 	private long score;
+	private boolean dataplan;
 }

@@ -27,12 +27,14 @@ import com.bagnet.nettracer.tracing.actions.CheckedAction;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.ReportBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.dao.lf.SubCompanyDAO;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
 import com.bagnet.nettracer.tracing.db.lf.LFSalvage;
 import com.bagnet.nettracer.tracing.db.lf.LFSalvageFound;
+import com.bagnet.nettracer.tracing.db.lf.Subcompany;
 import com.bagnet.nettracer.tracing.dto.StatReportDTO;
 import com.bagnet.nettracer.tracing.forms.lfc.SalvageForm;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
@@ -149,10 +151,19 @@ public class SalvageAction extends CheckedAction {
 				salvageCutoff.setTimeInMillis(System.currentTimeMillis());
 
 				int salvageDays;
+				Subcompany subcomp=SubCompanyDAO.loadSubcompany(found.getCompanyId());
 				if (found.getItem().getValue() == TracingConstants.LFC_ITEM_HIGH_VALUE) {
-					salvageDays = PropertyBMO.getValueAsInt("lf.high.value.salvage.days");
+					if(subcomp!=null){
+						salvageDays = subcomp.getSalvage_High();
+					} else {
+						salvageDays = PropertyBMO.getValueAsInt("lf.high.value.salvage.days");
+					}
 				} else {
-					salvageDays = PropertyBMO.getValueAsInt("lf.low.value.salvage.days");
+					if(subcomp!=null){
+						salvageDays = subcomp.getSalvage_Low();
+					} else {
+						salvageDays = PropertyBMO.getValueAsInt("lf.low.value.salvage.days");
+					}
 				}
 				
 				if(newBoxId!=null && !newBoxId.isEmpty()) {

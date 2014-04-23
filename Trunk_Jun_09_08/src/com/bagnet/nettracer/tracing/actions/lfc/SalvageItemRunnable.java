@@ -8,8 +8,10 @@ import aero.nettracer.lf.services.exception.UpdateException;
 
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.dao.lf.SubCompanyDAO;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFLost;
+import com.bagnet.nettracer.tracing.db.lf.Subcompany;
 
 public class SalvageItemRunnable implements Runnable {
 
@@ -35,11 +37,22 @@ public class SalvageItemRunnable implements Runnable {
 				salvageCutoff.setTimeInMillis(System.currentTimeMillis());
 	
 				int salvageDays;
+
+				Subcompany subcomp=SubCompanyDAO.loadSubcompany(found.getCompanyId());
 				if (found.getItem().getValue() == TracingConstants.LFC_ITEM_HIGH_VALUE) {
-					salvageDays = PropertyBMO.getValueAsInt("lf.high.value.salvage.days");
+					if(subcomp!=null){
+						salvageDays = subcomp.getSalvage_High();
+					} else {
+						salvageDays = PropertyBMO.getValueAsInt("lf.high.value.salvage.days");
+					}
 				} else {
-					salvageDays = PropertyBMO.getValueAsInt("lf.low.value.salvage.days");
+					if(subcomp!=null){
+						salvageDays = subcomp.getSalvage_Low();
+					} else {
+						salvageDays = PropertyBMO.getValueAsInt("lf.low.value.salvage.days");
+					}
 				}
+				
 				salvageCutoff.add(Calendar.DAY_OF_MONTH, (-1 * salvageDays));
 				
 				Calendar rxDate = Calendar.getInstance();
