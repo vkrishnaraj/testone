@@ -356,7 +356,13 @@ public class BDOUtils {
 			Calendar fifthOfMonth=Calendar.getInstance();
 			int dayOfMonthLocked=PropertyBMO.getValueAsInt(PropertyBMO.LOSS_CODE_MONTH_DAY_LOCKED);
 			fifthOfMonth.set(fifthOfMonth.get(Calendar.YEAR), fifthOfMonth.get(Calendar.MONTH), dayOfMonthLocked, 0,0);
-			if(inc.getCreatedate().before(fifthOfMonth.getTime()) && now.after(fifthOfMonth.getTime())){
+
+			Calendar firstOfMonth=Calendar.getInstance();
+			firstOfMonth.set(firstOfMonth.get(Calendar.YEAR), firstOfMonth.get(Calendar.MONTH), 1, 0,0);
+
+			Date completedate = DateUtils.convertToDate(inc.getCreatedate().toString() + " "
+					+ inc.getCreatetime().toString(), TracingConstants.DB_DATETIMEFORMAT, null);
+			if(completedate.before(firstOfMonth.getTime()) && now.after(fifthOfMonth.getTime())){
 				theform.setSwaLocked(true);
 			} else {
 				theform.setSwaLocked(false);

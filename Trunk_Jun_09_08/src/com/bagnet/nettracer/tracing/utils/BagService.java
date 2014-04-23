@@ -1530,11 +1530,17 @@ public class BagService {
 		/*NT-2281: Check for a property to lock item loss Codes (is this the right place to do it?) and check the time */
 		if(PropertyBMO.isTrue(PropertyBMO.LOSS_CODE_BAGS_LOCK) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_EDIT_LOCKED_CODES,user)){
 			Date now=new Date();
-			Calendar fifthOfMonth=Calendar.getInstance();
 			/* Gets a day of the month where all previous Loss Codes are now locked */
 			int dayOfMonthLocked=PropertyBMO.getValueAsInt(PropertyBMO.LOSS_CODE_MONTH_DAY_LOCKED);
+			Calendar fifthOfMonth=Calendar.getInstance();
 			fifthOfMonth.set(fifthOfMonth.get(Calendar.YEAR), fifthOfMonth.get(Calendar.MONTH), dayOfMonthLocked, 0,0);
-			if(iDTO.getCreatedate().before(fifthOfMonth.getTime()) && now.after(fifthOfMonth.getTime())){
+
+			Calendar firstOfMonth=Calendar.getInstance();
+			firstOfMonth.set(firstOfMonth.get(Calendar.YEAR), firstOfMonth.get(Calendar.MONTH), 1, 0,0);
+
+			Date completedate = DateUtils.convertToDate(iDTO.getCreatedate().toString() + " "
+					+ iDTO.getCreatetime().toString(), TracingConstants.DB_DATETIMEFORMAT, null);
+			if(completedate.before(firstOfMonth.getTime()) && now.after(fifthOfMonth.getTime())){
 				theform.setSwaLocked(true);
 			} else {
 				theform.setSwaLocked(false);
