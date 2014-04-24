@@ -24,13 +24,4 @@ mysql -u root -pnettracer -N ntwn_training < D:\EDW\Queries\payment_code.sql > D
 mysql -u root -pnettracer -N ntwn_training < D:\EDW\Queries\report_expense.sql > D:\EDW\report_expense_%date:~-4,4%-%date:~-10,2%-%date:~-7,2%.csv
 mysql -u root -pnettracer -N ntwn_training < D:\EDW\Queries\report_type_code.sql > D:\EDW\report_type_code_%date:~-4,4%-%date:~-10,2%-%date:~-7,2%.csv
 mysql -u root -pnettracer -N ntwn_training < D:\EDW\Queries\resolution_code.sql > D:\EDW\resolution_code_%date:~-4,4%-%date:~-10,2%-%date:~-7,2%.csv
-call VIM_EDIT.bat
-
-:: BELOW ACTS LIKE A WAIT COMMAND 
-ping 192.0.2.2 -n 1 -w 10000 > nul
-
-DEL /F /Q /S D:\EDW\*.csv~
-MKDIR D:\EDW\training
-MOVE D:\EDW\*.csv D:\EDW\training
-echo y | psftp -i C:\PSFTP\nt2swaEDW.ppk -b D:\EDW\Batch_Files\PSFTP_TRAINING.bat -bc -be -v ntrcbags@ftp.wnco.com 1>C:\PSFTP\debugTraining.txt 2>C:\PSFTP\errorsTraining.txt
 
