@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.xhtmlrenderer.pdf.ITextRenderer;
@@ -43,7 +44,7 @@ import com.bagnet.nettracer.tracing.service.DocumentService;
 import com.bagnet.nettracer.tracing.utils.ImageUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
-
+ 
 public class DocumentServiceImpl implements DocumentService {
 	
 	private Logger logger = Logger.getLogger(DocumentServiceImpl.class);
@@ -105,7 +106,7 @@ public class DocumentServiceImpl implements DocumentService {
 					if (print && getterValue == null) getterValue = "";
 					
 					if (getterValue != null) {
-						content = content.replace(toReplace, getterValue);
+						content = content.replace(toReplace, StringEscapeUtils.escapeHtml(getterValue));
 					}
 				} catch (NoSuchMethodException nsme) {
 					// MJS: not catastrophic; make note of the exception and move on
