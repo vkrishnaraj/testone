@@ -442,7 +442,10 @@
       currentElement = form.elements[j];
       currentElementName=currentElement.name;
       
-	  if (currentElementName.indexOf("disppickupdate") != -1)
+	  if(currentElementName.indexOf("bagchosen") != -1){
+	  	i=currentElement.id.substring(9,10);
+	  
+	  } else if (currentElementName.indexOf("disppickupdate") != -1)
       {
       		if(currentElement.value.length == 0){
 	      		alert("<%= (String)bundle.getString("colname.pickupdatetime") %>" + " <%= (String)bundle.getString("error.validation.isRequired") %>");
@@ -505,7 +508,6 @@
           currentElement.focus();
           return false;
         }
-        i++;
       }
       else if (currentElementName.indexOf("remark") != -1)
       {
