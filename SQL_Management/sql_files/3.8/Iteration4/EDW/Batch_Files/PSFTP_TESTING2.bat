@@ -1,4 +1,3 @@
-cd upload
-cd testing2
+cd data/dev/toswa
 rm *.*
 mput "D:/EDW/testing2/*.csv"
