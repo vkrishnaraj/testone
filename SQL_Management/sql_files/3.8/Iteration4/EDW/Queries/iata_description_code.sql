@@ -4,7 +4,6 @@ set @qry = concat("
 select formatted_output 
 
 #OUTFILE
-into outfile 'D:/EDW/iata_description_code_", date_format(now(), '%Y-%m-%d'), ".csv' 
 from (
 select concat_ws('|','H',date_format(now(), '%Y%m%d'), date_format(now(), '%Y%m%d')) formatted_output, 1 as seq
 union
