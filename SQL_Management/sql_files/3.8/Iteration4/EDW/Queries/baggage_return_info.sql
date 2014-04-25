@@ -28,7 +28,6 @@ case when (isnull(b.canceled) or b.canceled = 1) and i.status_ID != 50 then 'N' 
 from item i
 left outer join incident inc on inc.Incident_ID = i.incident_ID
 left outer join station s on s.Station_ID = i.faultStation_id
-left outer join item_bdo ib on i.Item_ID = ib.item_ID
 left outer join 
 (
 	select b2.*, ib.item_ID from
@@ -39,7 +38,7 @@ left outer join
 left outer join agent ba on b.agent_ID = ba.Agent_ID
 left outer join agent a on inc.agent_ID = a.Agent_ID
 where inc.lastupdated >= date(date_add(now(), INTERVAL -1 DAY))
-and inc.itemtype_ID = 1
+and inc.itemtype_ID = 1 and ifnull(i.lossCode, 0) > 0 and not isnull(s.stationcode)
 
 union
 select concat_ws('|','T',
@@ -51,8 +50,16 @@ count(i.Item_ID)
 #ROOT QUERY
 from item i
 left outer join incident inc on inc.Incident_ID = i.incident_ID
+left outer join station s on s.Station_ID = i.faultStation_id
+left outer join 
+(
+	select b2.*, ib.item_ID from
+	bdo b2
+	left outer join item_bdo ib on ib.bdo_ID = b2.BDO_ID
+	where b2.canceled = 0
+) b on i.Item_ID = b.item_ID
 where inc.lastupdated >= date(date_add(now(), INTERVAL -1 DAY))
-and inc.itemtype_ID = 1
+and inc.itemtype_ID = 1 and ifnull(i.lossCode, 0) > 0 and not isnull(s.stationcode)
 ) temp
 order by seq");
 prepare stmt from @qry;
