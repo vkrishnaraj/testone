@@ -1,0 +1,2 @@
+#NT-2301 - Endpoints will be provided for QA and Production
+insert into properties (keyStr,valueStr) VALUES ('scan.history.endpoint','http://209.20.26.156:8080/NetTracerLookupservice/baggageservice.asmx');
