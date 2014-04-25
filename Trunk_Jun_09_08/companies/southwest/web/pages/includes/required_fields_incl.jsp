@@ -443,7 +443,9 @@
       currentElementName=currentElement.name;
       
 	  if(currentElementName.indexOf("bagchosen") != -1){
-	  	i=currentElement.id.substring(9,10);
+	  	if(currentElement.id.length > "bagchosen".length){
+	  		i=currentElement.id.substring("bagchosen".length,currentElement.id.length);
+	  	}
 	  
 	  } else if (currentElementName.indexOf("disppickupdate") != -1)
       {
