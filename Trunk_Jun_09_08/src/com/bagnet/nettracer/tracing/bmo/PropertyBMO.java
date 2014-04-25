@@ -31,6 +31,7 @@ public class PropertyBMO {
 	public static final String PROPERTY_TRACING_TERTIARY_COLOR_PERCENT = "tracing.tertiary.color";
 	public static final String PROPERTY_TRACING_SECONDARY_TYPE_PERCENT = "tracing.secondary.type";
 	public static final String PROPERTY_TRACING_TERTIARY_TYPE_PERCENT = "tracing.tertiary.type";
+	public static final String PROPERTY_SCAN_HISTORY_ENDPOINT = "scan.history.endpoint";
 	public static final String PROPERTY_BOOKING_ENDPOINT = "booking.endpoint";
 	public static final String PROPERTY_DEFAULT_COUNTRY = "default.country";
 	public static final String PROPERTY_NUM_CONTENT_FIELDS = "num.content.fields";
