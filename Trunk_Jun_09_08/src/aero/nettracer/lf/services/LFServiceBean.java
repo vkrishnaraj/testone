@@ -1172,7 +1172,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				+ " or f.location.lz_ID = " + station.getStation_ID() + ")"
 				+ " and f.status.status_ID != " + TracingConstants.LF_STATUS_CLOSED;
 		if(subcomp!=null){
-			sql+=" and l.companyId = '"+subcomp.getSubcompanyCode()+"'";
+			sql+=" and f.companyId = '"+subcomp.getSubcompanyCode()+"'";
 		}
 		return sql;
 	}
