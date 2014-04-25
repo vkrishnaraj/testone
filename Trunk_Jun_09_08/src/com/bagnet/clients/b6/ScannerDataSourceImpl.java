@@ -1,478 +1,161 @@
 package com.bagnet.clients.b6;
 
-import java.io.FileReader;
+import java.rmi.RemoteException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
-import org.hibernate.Hibernate;
-import org.hibernate.type.StandardBasicTypes;
-import org.hibernate.SQLQuery;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.apache.axis2.AxisFault;
+import org.apache.axis2.client.Options;
+import org.apache.axis2.transport.http.HTTPConstants;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 
+import com.bagnet.clients.us.ScannerComparator;
 import com.bagnet.nettracer.datasources.ScannerDataSource;
-import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.dto.ScannerDTO;
 import com.bagnet.nettracer.tracing.dto.ScannerDataDTO;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
+import com.brocksolutions.www.ArrayOfBagTransactionResult;
+import com.brocksolutions.www.BagLookupResponseDocument;
+import com.brocksolutions.www.BagTransactionResult;
+import com.brocksolutions.www.BaggageServiceStub;
+import com.brocksolutions.www.BagLookupDocument;
+import com.brocksolutions.www.LookupRequest;
 
-import au.com.bytecode.opencsv.CSVReader;
+import edu.emory.mathcs.backport.java.util.Collections;
 
-public class ScannerDataSourceImpl implements ScannerDataSource{
-	
-	@Override
-	public ScannerDTO getScannerData(Date startDate, Date endDate,
-			String bagTagNumber) {
-		
-		return getScannerData(startDate, endDate, bagTagNumber, 0);
+public class ScannerDataSourceImpl implements ScannerDataSource {
+	private static final Logger logger = Logger.getLogger(ScannerDataSourceImpl.class);
+
+	public ScannerDTO getScannerData(Date startDate, Date endDate, String bagTagNumber) {
+		return getScannerData(startDate, endDate, bagTagNumber, 120);
 	}
 
-	@Override
-	public ScannerDTO getScannerData(Date startDate, Date endDate,
-			String bagTagNumber, int timeout) {
-		
+	public ScannerDTO getScannerData(Date startDate, Date endDate, String bagTagNumber, int timeout) {
+		BaggageServiceStub stub = null;
 		ScannerDTO newDto = new ScannerDTO();
-		ArrayList<ScannerDataDTO> list = new ArrayList<ScannerDataDTO>();
-		
-		String bagtag = "";
-		if(bagTagNumber.length() >  6){
-			int end = bagTagNumber.length();
-			int begin = end - 6;
-			bagtag = bagTagNumber.substring(begin, end);
-		} else {
-			bagtag = bagTagNumber;
-		}
-		
-		String sql = "select s.a as bagtag, s.b as remarks, s.flightdate as date, s.c as loc, s.d as ohd from scandata s" +
-				" where s.a like '%" + bagtag + "' "; 
-				if(startDate != null && endDate != null){
-					sql += " and s.flightdate between :startdate and :enddate ";
-				}
-				sql += " order by s.id asc";
-		
-		Session sess = null;
-		try{
-			sess = HibernateWrapper.getSession().openSession();
-			SQLQuery q = sess.createSQLQuery(sql);
-			if(startDate != null && endDate != null){
-				q.setDate("startdate", startDate);
-				q.setDate("enddate", endDate);
-			}
-			q.addScalar("bagtag", StandardBasicTypes.STRING);
-			q.addScalar("remarks", StandardBasicTypes.STRING);
-			q.addScalar("date", StandardBasicTypes.DATE);
-			q.addScalar("loc", StandardBasicTypes.STRING);
-			q.addScalar("ohd", StandardBasicTypes.STRING);
-			List<Object[]> ret = q.list();
-			
-			for(Object[] o:ret){
-				String tag = (String)o[0];
-				String remark = (String)o[1];
-				Date d = (Date)o[2];
-				String loc = (String)o[3];
-				String ohd = (String)o[4];
-				ScannerDataDTO dtoItem = new ScannerDataDTO(tag, d.toString(), loc, "", remark.toString(), this.getOHDid(bagtag, d), null);
-				list.add(dtoItem);
-			}
-			
-			newDto.setScannerDataDTOs(list);
+		String endpoint = PropertyBMO.getValue(PropertyBMO.PROPERTY_SCAN_HISTORY_ENDPOINT);
+		try {
+			logger.debug("Endpoint: " + endpoint);
+			stub = new BaggageServiceStub(endpoint);
+		} catch (AxisFault e) {
+			logger.error("AxisFault thrown with Bag Request: endpoint = " + endpoint, e);
 			return newDto;
-			
-		}catch (Exception e1) {
-			e1.printStackTrace();
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-			}
 		}
-			
-		return null;
-	}
-	
-	private String getOHDid(String bagtag, Date founddate){
-		String sql = "select o.OHD_ID as id from ohd o " +
-				" where o.founddate between :start and :end " +
-				" and o.claimnum like  '%" + bagtag + "' " +
-				" order by o.founddate asc";
-		GregorianCalendar scal = new GregorianCalendar();
-		scal.setTime(founddate);
-		scal.add(Calendar.DATE, -1);
-		Date start = scal.getTime();
-		GregorianCalendar ecal = new GregorianCalendar();
-		ecal.setTime(founddate);
-		ecal.add(Calendar.DATE, 4);
-		Date end = ecal.getTime();
-		Session sess = null;
-		try{
-			sess = HibernateWrapper.getSession().openSession();
-			SQLQuery q = sess.createSQLQuery(sql);
-			q.setDate("start", start);
-			q.setDate("end", end);
-			q.addScalar("id", StandardBasicTypes.STRING);
-			List<String> ret = q.list();
-			if(ret != null && ret.size() > 0){
-				return ret.get(0);
-			}
-		}catch (Exception e1) {
-			e1.printStackTrace();
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-			}
-		}
-		return null;
-	}
-	
-	public List<String[]> consumeScannerDataFromCSV(String file){
-		System.out.println(file);
-		try{
-			CSVReader reader = new CSVReader(new FileReader(file));
-			List<String[]> item = reader.readAll();
-//			for(String[] s:item){
-//				String out = "";
-//				for(int i = 0;i<s.length;i++){
-//					out+=s[i] + " ";
-//				}
-//				System.out.println(out);
-//			}
-			return item;
+		
+		Options options = stub._getServiceClient().getOptions();
+		options.setProperty(HTTPConstants.CHUNKED, Boolean.FALSE);
+		options.setProperty(HTTPConstants.SO_TIMEOUT, new Integer(timeout*1000));
+		options.setProperty(HTTPConstants.CONNECTION_TIMEOUT, new Integer(timeout*1000));		
+
+		BagLookupDocument scanDoc = BagLookupDocument.Factory.newInstance();
+		BagLookupDocument.BagLookup bagLookup = scanDoc.addNewBagLookup();
+		
+		LookupRequest request = bagLookup.addNewRequest();
+		request.setBagTagNumber(StringUtils.stripToEmpty(bagTagNumber).toUpperCase());
+		
+		DateFormat dateFormatRequest = new SimpleDateFormat(TracingConstants.DISPLAY_DATEFORMAT, Locale.US);
+		request.setStartDate(dateFormatRequest.format(startDate));
+		request.setEndDate(dateFormatRequest.format(endDate));
+				
+		BagLookupResponseDocument responseDoc = null; 
+		try {
+			logger.debug("Scanner request: \r" + scanDoc); 
+			responseDoc = stub.bagLookup(scanDoc);
+		} catch (RemoteException e) {
+			logger.error("RemoteException thrown with Bag Request: bagTagNumber = " + bagTagNumber, e);
+			newDto.setErrorResponse("scanner.communicationError");
+			return newDto;
 		} catch (Exception e){
-			e.printStackTrace();
+			logger.error("Exception thrown with Bag Request: bagTagNumber = " + bagTagNumber, e);
+			newDto.setErrorResponse("scanner.communicationError.unknownerror");
+			return newDto;
 		}
-		return null;
-	}
-	
-	public void insertData(Session sess, Date flightdate, String a, String b, String c, String d, String e){
-//		System.out.println(a);
-		String sql = "insert into scandata (createdate,flightdate,a,b,c,d,e) values (:date,:flightdate,:a,:b,:c,:d,:e)";
-//		Session sess = null;
+
+		ArrayOfBagTransactionResult bagTransactionResults = responseDoc.getBagLookupResponse().getBagLookupResult().getTransactions();
+		if (bagTransactionResults == null) {
+			logger.error("No bag transaction result : bagTagNumber = " + bagTagNumber + ", startDate = " + dateFormatRequest.format(startDate) //
+					+ ", endDate = " + dateFormatRequest.format(endDate)+ " and timeout = " + timeout);
+			return newDto;
+		}
 		
-		Transaction t = null;
-		try{
-			if(sess == null || !sess.isOpen()){
-				sess = HibernateWrapper.getSession().openSession();
+		logger.debug("Results: " + bagTransactionResults.sizeOfBagTransactionResultArray());
+
+		List<ScannerDataDTO> scannerDataList = new ArrayList<ScannerDataDTO>();
+		DateFormat dateFormatResult = new SimpleDateFormat(TracingConstants.DISPLAY_DATETIMEFORMAT, Locale.US);
+		for (int i = 0; i < bagTransactionResults.sizeOfBagTransactionResultArray(); ++i) {
+			BagTransactionResult bagTransactionResult = bagTransactionResults.getBagTransactionResultArray(i);
+			logger.debug("bagTransactionResult: \r" + bagTransactionResult);
+			if (bagTransactionResult == null) {
+				continue;
 			}
-			t = sess.beginTransaction();
-			SQLQuery q = sess.createSQLQuery(sql);
-			q.setParameter("date", DateUtils.convertToGMTDate(new Date()));
-			q.setParameter("flightdate", flightdate);
-			q.setParameter("a", a);
-			q.setParameter("b", b);
-			q.setParameter("c", c);
-			q.setParameter("d", d);
-			q.setParameter("e", e);
-			q.executeUpdate();
-			t.commit();
-		}catch (Exception e1) {
-			e1.printStackTrace();
-			try {
-				t.rollback();
-			} catch (Exception te) {
-				te.printStackTrace();
+
+			String ohdId = bagTransactionResult.getOHDId();
+			String scanType = bagTransactionResult.getDescription(); 
+			
+			Calendar time = bagTransactionResult.getInsertTimestamp();
+			Date newdate = DateUtils.convertSystemCalendarToGMTDate(time); 
+			String timeStamp = dateFormatResult.format(newdate);
+			
+			StringBuilder sbLocation = new StringBuilder(0);
+			if (bagTransactionResult.getAirportCode() != null) {
+				sbLocation.append(bagTransactionResult.getAirportCode()).append("<br/>");
 			}
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e1) {
-					e1.printStackTrace();
+			if (bagTransactionResult.getArea() != null) {
+				sbLocation.append(bagTransactionResult.getArea()).append("<br/>");
+			}
+			if (bagTransactionResult.getLocation() != null) {
+				sbLocation.append(bagTransactionResult.getLocation());
+			}
+			
+			StringBuilder sbOtherInfo = new StringBuilder(0);
+			if (bagTransactionResult.getUser() != null) {
+				sbOtherInfo.append(bagTransactionResult.getUser()).append(" - ");
+			}
+			if (bagTransactionResult.getWorkstation() != null) {
+				sbOtherInfo.append(bagTransactionResult.getWorkstation()).append("<br/>");
+			}
+			if (bagTransactionResult.getCarrierCode() != null) {
+				sbOtherInfo.append(bagTransactionResult.getCarrierCode()).append(" ");
+				if (bagTransactionResult.getFlightDate() != null) {
+					String flightDate = dateFormatResult.format(bagTransactionResult.getFlightDate().getTime());
+					sbOtherInfo.append(flightDate).append("<br/>");
 				}
+				if (bagTransactionResult.getFlightNumber() != null) {
+					sbOtherInfo.append(bagTransactionResult.getFlightNumber());
+				}
+				sbOtherInfo.append("<br/>");
 			}
+			if (bagTransactionResult.getContainerName() != null) {
+				sbOtherInfo.append(bagTransactionResult.getContainerName()).append("<br/>");
+			}
+			if (bagTransactionResult.getFromContainerName() != null) {
+				sbOtherInfo.append(bagTransactionResult.getFromContainerName()).append("<br/>");
+			}
+			if (bagTransactionResult.getBumSource() != null) {
+				sbOtherInfo.append(bagTransactionResult.getBumSource()).append("<br/>");
+			}
+			if (bagTransactionResult.getToContainerName() != null) {
+				sbOtherInfo.append(bagTransactionResult.getToContainerName()).append("<br/>");
+			}
+			if (bagTransactionResult.getToContainerName() != null) {
+				sbOtherInfo.append(bagTransactionResult.getToContainerName());
+			}
+			
+			ScannerDataDTO dtoItem = new ScannerDataDTO(bagTagNumber, timeStamp, sbLocation.toString(), scanType, sbOtherInfo.toString(), ohdId, time);
+			scannerDataList.add(dtoItem);
 		}
-	}
-	
-	public void consumeBAG_A(String file){
-		List<String[]>list = this.consumeScannerDataFromCSV(file);
-		Session sess = HibernateWrapper.getSession().openSession();
-		try {
-			if(list!=null){
-				for(String[]s:list){
-					String bagtag = s[0]+s[1];
-					String date = s[3] + " " + s[4];
-					Date d = DateUtils.convertToDate(date, "MMM dd yyyy", "US");
-					String remark = "Tag Number: "+bagtag;
-					if(s[9].trim().length()>0){
-						remark+="<br/>"+s[9].trim();
-					}
-					if(s[16].trim().length()>0){
-						remark+="<br/>"+s[16].trim();
-					}
-					if(s[17].trim().length()>0){
-						remark+="<br/>"+s[17].trim();
-					}
-					this.insertData(sess,d, bagtag, remark,null,null,null);
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e2) {
-					e2.printStackTrace();
-				}
-			}
-		}
-	}
-	
-	public void consumeBAG_B(String file){
-		List<String[]>list = this.consumeScannerDataFromCSV(file);
-		Session sess = HibernateWrapper.getSession().openSession();
-		try {
-			if(list!=null){
-				for(String[]s:list){
-					String bagtag = s[0]+s[1];
-					String date = s[3];
-					Date d = DateUtils.convertToDate(date, "yyyyMMdd", "US");
-					String remark = "Tag Number: "+bagtag;
-					if(s[8].trim().length()>0){
-						remark+="<br/>"+s[8].trim();
-					}
-					if(s[14].trim().length()>0){
-						remark+="<br/>"+s[14].trim();
-					}
-					if(s[15].trim().length()>0){
-						remark+="<br/>"+s[15].trim();
-					}
-					this.insertData(sess,d, bagtag, remark,null,null,null);
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e2) {
-					e2.printStackTrace();
-				}
-			}
-		}
-	}
-	
-	public void consumeHISTORY_A(String file){
-		List<String[]>list = this.consumeScannerDataFromCSV(file);
-		Session sess = HibernateWrapper.getSession().openSession();
-		try {
-			if(list!=null){
-				for(String[]s:list){
-					String bagtag = s[3]+s[4];
-					String date = s[1] + " " + s[2];
-					Date d = DateUtils.convertToDate(date, "MMM dd yyyy", "US");
-					String loc = "MCO";
-					if(s[5].trim().length() > 0){
-						loc += ":" + s[5].trim();
-					}
-					String scanner = s[7];
-					
-					String remark = "Tag Number: " + bagtag;
-					if(scanner.trim().length() > 0){
-						remark += "<br/>" + scanner.trim();
-					}
-					if(s[6].trim().length()>0){
-						remark += "<br/>" + s[6].trim();
-					}
-					this.insertData(sess,d,bagtag, remark,loc,null,null);
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e2) {
-					e2.printStackTrace();
-				}
-			}
-		}
-	}
-	
-	public void consumeHISTORY_B(String file){
-		List<String[]>list = this.consumeScannerDataFromCSV(file);
-		Session sess = HibernateWrapper.getSession().openSession();
-		try {
-			if(list!=null){
-				for(String[]s:list){
-					String bagtag = s[2]+s[3];
-					String date = s[1];
-					Date d = DateUtils.convertToDate(date, "yyyyMMdd", "US");
-					String loc = "MCO";
-					if(s[4].trim().length() > 0){
-						loc += ":" + s[4].trim();
-					}
-					String scanner = s[6];
-					
-					String remark = "Tag Number: " + bagtag;
-					if(scanner.trim().length() > 0){
-						remark += "<br/>" + scanner.trim();
-					}
-					if(s[5].trim().length()>0){
-						remark += "<br/>" + s[5].trim();
-					}
-					this.insertData(sess,d,bagtag, remark,loc,null,null);
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (sess != null) {
-				try {
-					sess.close();
-				} catch (Exception e2) {
-					e2.printStackTrace();
-				}
-			}
-		}
-	}
-	
-	
-	public static void main (String [] args){
-		ScannerDataSourceImpl s = new ScannerDataSourceImpl();
-////		s.consumeBAG("C:\\Users\\Matt\\Documents\\b6scandata\\BAG.csv");
-//		s.consumeHISTORY("C:\\Users\\Matt\\Documents\\b6scandata\\HISTORY.csv");
-//		ScannerDTO b = s.getScannerData(null, null, "279310459");
-//		System.out.println(b);
+
+		newDto.setScannerDataDTOs(scannerDataList);
+		Collections.sort(newDto.getScannerDataDTOs(), new ScannerComparator());
 		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-11.csv");
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-11.csv");
-//
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-12.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-12.del");
-//
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-13.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-13.del");
-//
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-14.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-14.del");
-//
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-15.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-15.del");
-//
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-16.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-16.del");
-//
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-17.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-17.del");
-//
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-18.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-18.del");
-//
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-19.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-19.del");
-//
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-20.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-20.del");
-//
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-21.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-21.del");
-//
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-22.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-22.del");
-//
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-23.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-23.del");
-//		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-24.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-24.del");
-//		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-25.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-25.del");
-//		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-26.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-26.del");
-//		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-27.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-27.del");
-//		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-28.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-28.del");
-//		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-29.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-29.del");
-//		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-30.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-30.del");
-//		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-01-31.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-01-31.del");
-//		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-01.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-01.del");
-//		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-02.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-02.del");
-//		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-03.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-03.del");
-//		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-04.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-04.del");
-//		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-05.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-05.del");
-//		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-06.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-06.del");
-//		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-07.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-07.del");
-//		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-08.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-08.del");
-//		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-09.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-09.del");
-//		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-10.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-10.del");
-//		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-11.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-11.del");
-//		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-12.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-12.del");
-//		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-13.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-13.del");
-//		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-14.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-14.del");
-//		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-15.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-15.del");
-//		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-16.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-16.del");
-//		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-17.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-17.del");
-//		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-18.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-18.del");
-//		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-19.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-19.del");
-//		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-20.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-20.del");	
-//		
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-21.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-21.del");	
-//
-//		s.consumeBAG_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\TBAG_2012-02-22.del");	
-//		s.consumeHISTORY_B("C:\\Users\\Matt\\Documents\\b6scandata\\all\\THISTORY_2012-02-22.del");	
-	}
+		return newDto;
+	}	
 }

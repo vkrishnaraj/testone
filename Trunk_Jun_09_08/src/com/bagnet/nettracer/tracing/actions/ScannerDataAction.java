@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -66,9 +67,9 @@ public class ScannerDataAction extends Action {
 		Date startDate = null;
 		Date endDate = null;
 
-		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1)
-				+ ".do", user))
+		if (!UserPermissions.hasLinkPermission(mapping.getPath().substring(1) + ".do", user)) {
 			return (mapping.findForward(TracingConstants.LOGON));
+		}		
 
 		DynaActionForm dynaForm = (DynaActionForm) form;
 		ActionMessages errors = new ActionMessages();
@@ -156,9 +157,7 @@ public class ScannerDataAction extends Action {
 			}
 			
 			try {
-//				bagTagNumber = LookupAirlineCodes.getFullBagTag(bagTagNumber);
-				bagTagNumber = LookupAirlineCodes.getTwoCharacterBagTag(bagTagNumber);
-				
+				bagTagNumber = (StringUtils.equalsIgnoreCase("b6", user.getCompanycode_ID())) ? LookupAirlineCodes.getFullBagTag(bagTagNumber) : LookupAirlineCodes.getTwoCharacterBagTag(bagTagNumber);				
 			} catch (BagtagException e) {
 //				ActionMessage error = new ActionMessage("scanner.error.format");
 //				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
@@ -173,8 +172,15 @@ public class ScannerDataAction extends Action {
 			try{
 				dto = scannerDataSource.getScannerData(startDate, endDate, bagTagNumber);
 			}catch(Exception e){
-				e.printStackTrace();
+				logger.error("Exception thrown with ScannerDTO: " + bagTagNumber, e);
+				
+				ActionMessage error = new ActionMessage("scanner.communicationError.unknownerror");
+				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+				saveMessages(request, errors);
+				
+				return mapping.findForward(TracingConstants.FORWARD_SCANNER_DATA);
 			}
+			
 			request.setAttribute("resultList", dto.getScannerDataDTOs());
 			
 			if (request.getParameter("generateReport") != null && 
@@ -201,6 +207,7 @@ public class ScannerDataAction extends Action {
 				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
 				saveMessages(request, errors);
 			}
+			
 			return (mapping.findForward(TracingConstants.FORWARD_SCANNER_DATA));
 		}
 			

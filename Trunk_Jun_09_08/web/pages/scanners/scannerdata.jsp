@@ -17,17 +17,17 @@
       
       
       <%@page import="com.bagnet.nettracer.tracing.db.Agent"%>
-      <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/date.js"></SCRIPT>
-      <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/AnchorPosition.js"></SCRIPT>
-      <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/PopupWindow.js"></SCRIPT>
-      <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/popcalendar.js"></SCRIPT>
-      <SCRIPT LANGUAGE="javascript" SRC="deployment/main/js/ajax_forall.js"></SCRIPT>
-      <SCRIPT LANGUAGE="JavaScript">
+      <script src="deployment/main/js/date.js"></script>
+      <script src="deployment/main/js/AnchorPosition.js"></script>
+      <script src="deployment/main/js/PopupWindow.js"></script>
+      <script src="deployment/main/js/popcalendar.js"></script>
+      <script src="deployment/main/js/ajax_forall.js"></script>
+      <script>
       
       var cal1xx = new CalendarPopup(); 
       
 
-      </SCRIPT>
+      </script>
       
       
       
@@ -119,7 +119,7 @@
               </select>
               <input type="submit" name="generateReport" id="button" value="<bean:message key="button.generateReport" />">
               <logic:present name="reportfile" scope="request">
-                <script language=javascript>
+                <script>
                   
                     openReportWindow('reporting?outputtype=<%= request.getAttribute("outputtype") %>&reportfile=<bean:write name="reportfile" scope="request" />','report',800,600);
 
@@ -182,7 +182,7 @@ width:expression(60 + "px");
                 </td>
                 <td id="str2">
                   <c:if test='${scannerDTO.string2 != null && scannerDTO.string2 != ""}'>
-                    <c:out value="${scannerDTO.string2}" />
+                    <c:out value="${scannerDTO.string2}" escapeXml="false"/>
                   </c:if>
                   <c:if test='${scannerDTO.string2 == null || scannerDTO.string2 == ""}'>
                     &nbsp;

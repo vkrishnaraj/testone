@@ -11,6 +11,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import org.apache.axis2.AxisFault;
+import org.apache.axis2.client.Options;
 import org.apache.axis2.transport.http.HTTPConstants;
 import org.apache.log4j.Logger;
 
@@ -55,33 +56,32 @@ import com.usairways.www.cbro.baggage_scanner.wsdl.WarrantType;
 
 import edu.emory.mathcs.backport.java.util.Collections;
 
-public class ScannerDataSourceImpl implements ScannerDataSource {
+public class ScannerDataSourceImpl implements ScannerDataSource { 
+	private static final Logger logger = Logger.getLogger(ScannerDataSourceImpl.class);
 
-	private static final String PROPERTY_SCAN_HISTORY_ENDPOINT = "scan.history.endpoint";
-	private static final Logger logger = Logger
-			.getLogger(ScannerDataSourceImpl.class);
-
-	public ScannerDTO getScannerData(Date startDate, Date endDate,
-			String bagTagNumber) {
+	public ScannerDTO getScannerData(Date startDate, Date endDate, String bagTagNumber) {
 		return getScannerData(startDate, endDate, bagTagNumber, 120);
 	}
 
 	public ScannerDTO getScannerData(Date startDate, Date endDate, String bagTagNumber, int timeout) {
-		String endpoint = PropertyBMO.getValue(PROPERTY_SCAN_HISTORY_ENDPOINT);
+		String endpoint = PropertyBMO.getValue(PropertyBMO.PROPERTY_SCAN_HISTORY_ENDPOINT);
 		
 		ScanPoints4ServiceBeanServiceStub stub = null;
 		//ScanPointsStub stub = null;
+		ScannerDTO newDto = new ScannerDTO();
 		try {
 			//stub = new ScanPointsStub(endpoint);
 			stub = new ScanPoints4ServiceBeanServiceStub(endpoint);
 		} catch (AxisFault e) {
-			e.printStackTrace();
+			logger.error("AxisFault thrown with Bag Request: endpoint = " + endpoint, e);
+			return newDto;
 		}
-		stub._getServiceClient().getOptions().setProperty(HTTPConstants.CHUNKED, Boolean.FALSE);
-		stub._getServiceClient().getOptions().setProperty(HTTPConstants.SO_TIMEOUT, new Integer(timeout*1000));
-		stub._getServiceClient().getOptions().setProperty(HTTPConstants.CONNECTION_TIMEOUT, new Integer(timeout*1000));
 		
-		ScannerDTO newDto = new ScannerDTO();
+		Options options = stub._getServiceClient().getOptions();
+		options.setProperty(HTTPConstants.CHUNKED, Boolean.FALSE);
+		options.setProperty(HTTPConstants.SO_TIMEOUT, new Integer(timeout*1000));
+		options.setProperty(HTTPConstants.CONNECTION_TIMEOUT, new Integer(timeout*1000));
+		
 		ArrayList<ScannerDataDTO> list = new ArrayList<ScannerDataDTO>();
 		
 		GetScanPointsDocument scanDoc = GetScanPointsDocument.Factory.newInstance();
@@ -103,8 +103,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 		tag.setStringValue(bagTagNumber.trim().toUpperCase());
 
 		GetScanPointsResponseDocument responseDoc = null;
-		try {
-			
+		try {			
 			//logger.debug("Scanner request: " + scanDoc);
 			responseDoc = stub.getScanPoints(scanDoc);
 			
