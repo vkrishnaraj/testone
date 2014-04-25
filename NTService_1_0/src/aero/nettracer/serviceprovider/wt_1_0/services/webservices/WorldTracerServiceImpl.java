@@ -3354,6 +3354,10 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						
 					}
 
+					if(ores.getOnHandBag().getStorageLocation()!=null && ores.getOnHandBag().getStorageLocation()!=null){
+						rohd.setStorageLocation(ores.getOnHandBag().getStorageLocation());
+					}
+
 				}
 				if(ores.getAdditionalInfo()!=null && ores.getAdditionalInfo().getFurtherInfo()!=null){
 					rohd.setFurtherInfo(ores.getAdditionalInfo().getFurtherInfo());
@@ -3436,6 +3440,10 @@ public class WorldTracerServiceImpl implements WorldTracerService {
 						if (ci.getTempPhones() != null)
 							add.setAltPhone(ci.getTempPhones().getPhoneArray(0));
 
+					}
+					
+					if(wsp.getPNR()!=null && wsp.getPNR()!=null){
+						rohd.setPnrLocator(wsp.getPNR());
 					}
 
 				}

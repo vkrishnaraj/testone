@@ -81,9 +81,11 @@ function resetSort() {
 	    if (sort != null) {
 	%>
 	    <input type="hidden" name="sort" id="sort_id" value="<%= sort %>"/>
+	<%} else if(collectPosId){%>
+		<input type="hidden" name="sort" id="sort_id" value="<%=TracingConstants.SortParam.OHD_POSITION.getParamString()%>">
 	<%} else {%>
-	      <input type="hidden" name="sort" id="sort_id" value="<%=TracingConstants.SortParam.OHD_POSITION.getParamString()%>">
-	<%}%>
+	    <input type="hidden" name="sort" id="sort_id" value=""/>
+	<% } %>
 	 
     <tr>
       

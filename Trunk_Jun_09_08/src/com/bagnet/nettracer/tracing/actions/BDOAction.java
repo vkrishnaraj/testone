@@ -410,10 +410,8 @@ public class BDOAction extends Action {
 					DecimalFormat myFormatter=new DecimalFormat("0000000000");
 					String bdoNum=myFormatter.format(bdo.getBDO_ID());
 					String stationCode="";
-					if(bdo.getIncident()!=null){
-						stationCode=bdo.getIncident().getStationcode();
-					} else if (bdo.getOhd()!=null && bdo.getOhd().getHoldingStation()!=null){
-						stationCode=bdo.getOhd().getHoldingStation().getStationcode();
+					if(bdo.getStation()!=null){
+						stationCode=bdo.getStation().getStationcode();
 					} else if(user.getStation()!=null) {
 						stationCode=user.getStation().getStationcode();
 					}

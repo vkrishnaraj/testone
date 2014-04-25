@@ -38,7 +38,7 @@ function goprev() {
   o = document.deliverForm;
   o.prevpage.value = "1";
   o.pagination.value="1";
-  o.sortBy.value="<%=request.getAttribute("sortNum").toString()%>"
+  o.sortBy.value="<%=request.getAttribute("sortNum").toString()%>";
   o.submit();
 }
 
@@ -46,7 +46,7 @@ function gonext() {
   o = document.deliverForm;
   o.nextpage.value="1";
   o.pagination.value="1";
-  o.sortBy.value="<%=request.getAttribute("sortNum").toString()%>"
+  o.sortBy.value="<%=request.getAttribute("sortNum").toString()%>";
   o.submit();
 }
 
@@ -54,7 +54,7 @@ function gopage(i) {
   o = document.deliverForm;
   o.currpage.value = i;
   o.pagination.value="1";
-  o.sortBy.value="<%=request.getAttribute("sortNum").toString()%>"
+  o.sortBy.value="<%=request.getAttribute("sortNum").toString()%>";
   o.submit();
 
 }
