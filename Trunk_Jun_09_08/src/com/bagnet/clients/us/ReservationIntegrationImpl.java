@@ -195,9 +195,14 @@ public class ReservationIntegrationImpl extends
 		if (retList.size() > 0) {
 			return retList;
 		}
+		String bagtag=form.getBagTagNumber();
 		
 		form = (OnHandForm) request.getSession().getAttribute("OnHandForm");
 		populateOhdFormInner(request, form);
+		if(form.getBagTagNumber()==null || form.getBagTagNumber().trim().length()==0){
+			form.setBagTagNumber(bagtag);
+		}
+		
 		HttpSession session = request.getSession();
 		session.setAttribute("OnHandForm", form);
 		return retList;
