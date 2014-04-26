@@ -6,6 +6,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpClient;
@@ -1068,12 +1069,13 @@ public class WorldTracerUtils {
 		List<Remark> remarks=new ArrayList<Remark>();
 		i.setRemarklist(remarks);
 		Remark rem =i.getRemark(i.getRemarklist().size());
-		rem.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
-		rem.setRemarktype(TracingConstants.REMARK_REGULAR);
+		rem.setCreatetime(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(TracerDateTime.getGMTDate()));
 		rem.setAgent(user);
+		rem.set_DATEFORMAT(user.getDateformat().getFormat());
+		rem.set_TIMEFORMAT(user.getTimeformat().getFormat());
+		rem.set_TIMEZONE(TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone()));
 		if(a.getFurtherInfo()!=null && a.getFurtherInfo().length()>0){
 			rem.setRemarktext(a.getFurtherInfo());
-			remarks.add(rem);
 		}
 		
 		return i;
