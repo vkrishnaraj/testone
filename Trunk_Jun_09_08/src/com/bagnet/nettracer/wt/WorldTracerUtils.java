@@ -1070,8 +1070,8 @@ public class WorldTracerUtils {
 		Remark rem =i.getRemark(i.getRemarklist().size());
 		rem.setCreatetime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(TracerDateTime.getGMTDate()));
 		rem.setRemarktype(TracingConstants.REMARK_REGULAR);
+		rem.setAgent(user);
 		if(a.getFurtherInfo()!=null && a.getFurtherInfo().length()>0){
-			rem.setAgent(user);
 			rem.setRemarktext(a.getFurtherInfo());
 			remarks.add(rem);
 		}
