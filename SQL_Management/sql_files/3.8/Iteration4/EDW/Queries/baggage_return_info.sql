@@ -6,7 +6,7 @@ select formatted_output
 #OUTFILE
 from (
 select concat_ws('|','H',date_format(now(), '%Y%m%d'), date_format(date_add(now(), INTERVAL -1 DAY), '%Y%m%d')) formatted_output, 1 as seq
-union
+union all
 select concat_ws('|',
 
 #COLUMNS
@@ -40,7 +40,7 @@ left outer join agent a on inc.agent_ID = a.Agent_ID
 where inc.lastupdated >= date(date_add(now(), INTERVAL -1 DAY))
 and inc.itemtype_ID = 1 and ifnull(i.lossCode, 0) > 0 and not isnull(s.stationcode)
 
-union
+union all
 select concat_ws('|','T',
 
 #COUNT
