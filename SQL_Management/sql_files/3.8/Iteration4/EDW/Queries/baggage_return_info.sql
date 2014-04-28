@@ -44,7 +44,7 @@ union
 select concat_ws('|','T',
 
 #COUNT
-count(i.Item_ID)
+count(*)
 ) formatted_output, 3 as seq 
 
 #ROOT QUERY
