@@ -44,10 +44,10 @@
 	    
 	    function validateEmail() {
 	    	var distributeMethod = document.getElementById("distributemethod");
-			if (distributeMethod.options[distributeMethod.selectedIndex].value != "EMAIL"){
+			if (distributeMethod.options[distributeMethod.selectedIndex].value != "EMAIL" || document.getElementById("distributedmethod").style.display == 'none'){
 		    	return true;
 			}
-	    
+
 	    	var email = document.getElementById("email");
  			if (email.value.length < 1){
 				alert('<%=myMessages.getMessage(myLocale, "voucher.alert.email.required")%>');
