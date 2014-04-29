@@ -71,7 +71,7 @@ public abstract class GeneralTask {
 		this.status = status;
 	}
 	@ManyToOne
-	@JoinColumn(name = "agent_ID", nullable = false)
+	@JoinColumn(name = "agent_ID")
 	public Agent getAssigned_agent() {
 		return assigned_agent;
 	}
