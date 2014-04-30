@@ -13,7 +13,7 @@ alter table passenger add dlprovince varchar(255) default null;
 alter table passenger add dlcountry varchar(2) default null;
 
 
-drop index _dta_index_ohd_6_1954106002__K21_K2_K25_K30_K27_K7_K8_1_3_4_5_6_9_10_11_12_13_14_15_16_17_18_19_20_22_23_24_26_28_29_31_32_39_40 on passenger;
+drop index _dta_index_passenger_6_562101043__K1_K2_3_4_5_6_7_8_9_10_11_12_13_14_15_15_16 on passenger;
 GO
 alter table passenger alter column driverslicense varchar(511);
 GO
