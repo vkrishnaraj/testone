@@ -377,7 +377,7 @@
 	    				|| (editSameClosedDeliveredBags && (closed || !theitem.isNotDelivered()) )
 	    				|| (editOtherNonClosedDeliveredBags && theitem.isNotDelivered())
 	    				|| (editOtherClosedDeliveredBags && (closed || !theitem.isNotDelivered()))
-	    				|| editAnyBags);%>
+	    				|| editAnyBags || myform.getIncident_ID() == null || myform.getIncident_ID().trim().length() == 0);%>
           <tr>
           	<td >
 	            	<bean:message key="colname.loss.code" />

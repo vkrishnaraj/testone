@@ -336,7 +336,7 @@
 		    				|| (editSameClosedDeliveredBags && (closed || !theitem.isNotDelivered()) )
 		    				|| (editOtherNonClosedDeliveredBags && theitem.isNotDelivered())
 		    				|| (editOtherClosedDeliveredBags && (closed || !theitem.isNotDelivered()))
-		    				|| editAnyBags);%>
+		    				|| editAnyBags || myform.getIncident_ID() == null || myform.getIncident_ID().trim().length() == 0);%>
           <% if(!editLossCode){ %> 
           
 	        <html:hidden property="lossCode" value="<%=String.valueOf(theitem.getLossCode()) %>"  name="theitem" indexed="true"/>
