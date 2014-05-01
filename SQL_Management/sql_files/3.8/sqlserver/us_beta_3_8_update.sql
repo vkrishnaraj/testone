@@ -1452,7 +1452,7 @@ SET IDENTITY_INSERT status OFF;
 insert into activity (code, description) VALUES ('55C','CREATE CLAIM SETTLEMENT LETTER');
 insert into template_type (ordinal,defaultName) VALUES (5,'Expense');
 
-insert into properties ( keyStr, valueStr) VALUES ('mishandling.attachment.at.creation','1');
+insert into properties ( keyStr, valueStr) VALUES ('mishandling.attachment.at.creation','0');
 
 insert into activity (code,description) VALUES ('99E','INBOUND WEB PORTAL MESSAGE');
 insert into activity (code,description) VALUES ('99O','OUTBOUND WEB PORTAL MESSAGE');
