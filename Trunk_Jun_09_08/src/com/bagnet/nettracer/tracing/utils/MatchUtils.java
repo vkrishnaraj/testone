@@ -8,6 +8,7 @@ package com.bagnet.nettracer.tracing.utils;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -15,10 +16,7 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
 
-import org.apache.log4j.Logger;
-
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
-import com.bagnet.nettracer.tracing.bmo.OhdBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Match;
@@ -30,6 +28,7 @@ import com.bagnet.nettracer.tracing.db.Status;
  * @author Ankur Gupta
  * 
  */
+@SuppressWarnings("deprecation")
 public class MatchUtils {
 	private static Logger logger = Logger.getLogger(MatchUtils.class);
 
@@ -131,6 +130,7 @@ public class MatchUtils {
 			if (ohd_id != null && ohd_id.length() > 0) q.setString("ohd_id", ohd_id);
 			else q.setInteger("station_id", station_id);
 
+			@SuppressWarnings("rawtypes")
 			List list = q.list();
 
 			// set list to be list of topflight objects
@@ -154,6 +154,7 @@ public class MatchUtils {
 		}
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public static List getMatches(boolean isactive, Station station, String[] status,
 			String incident_id, String ohd_id, int rowsperpage, int currpage, String sort) {
 		return getMatches(isactive, station, status, incident_id, ohd_id, rowsperpage, currpage, sort, false);
@@ -166,6 +167,7 @@ public class MatchUtils {
 	 * @param station_id
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	public static List getMatches(boolean isactive, Station station, String[] status,
 			String incident_id, String ohd_id, int rowsperpage, int currpage, String sort, boolean dirtyRead) {
 		Session sess = null;
@@ -276,6 +278,7 @@ public class MatchUtils {
 				sess = HibernateWrapper.getSession().openSession();
 			}
 			Criteria cri = sess.createCriteria(Match.class).add(Expression.eq("match_id", new Integer(match_ID)));
+			@SuppressWarnings("rawtypes")
 			List temp = cri.list();
 			if (temp == null || temp.size() == 0) return null;
 			return (Match) temp.get(0);
@@ -301,6 +304,7 @@ public class MatchUtils {
 	 * @param OHD_ID
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	public static List getMatchWithMBROHD(String Incident_ID, String OHD_ID) {
 		Session sess = null;
 		try {
@@ -324,6 +328,7 @@ public class MatchUtils {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static List getMatchWithOHD(String OHD_ID) {
 		return getMatchWithOHD(OHD_ID, false);
 	}
@@ -333,6 +338,7 @@ public class MatchUtils {
 	 * @param OHD_ID
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	public static List getMatchWithOHD(String OHD_ID, boolean dirtyRead) {
 		Session sess = null;
 		try {
@@ -361,6 +367,7 @@ public class MatchUtils {
 	}
 
 	
+	@SuppressWarnings("rawtypes")
 	public static List getMatchWithMBR(String Incident_ID) {
 		return getMatchWithMBR(Incident_ID, false);
 	}
@@ -370,6 +377,7 @@ public class MatchUtils {
 	 * @param OHD_ID
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	public static List getMatchWithMBR(String Incident_ID, boolean dirtyRead) {
 		Session sess = null;
 		try {
@@ -415,6 +423,7 @@ public class MatchUtils {
 
 			cri.createCriteria("ohd").add(Expression.eq("OHD_ID", ohd_id));
 
+			@SuppressWarnings("rawtypes")
 			List al = cri.list();
 			Match match = null;
 			Status status_obj = null;
@@ -462,6 +471,7 @@ public class MatchUtils {
 			sess = HibernateWrapper.getSession().openSession();
 
 			Criteria cri = null;
+			@SuppressWarnings("rawtypes")
 			List al = null;
 			Match match = null;
 
@@ -519,28 +529,20 @@ public class MatchUtils {
 		}
 	}
 
-	
-	public static void closeMatches(String incident_id, String ohd_id) {
-		closeMatches(incident_id, ohd_id, false);
-	}
 	/**
 	 * close all open matches with that incident id or ohd_id
 	 * 
 	 * @param incident_id
 	 * @param ohd_id
 	 */
-	public static void closeMatches(String incident_id, String ohd_id, boolean dirtyRead) {
+	public static void closeMatches(String incident_id, String ohd_id) {
 		Session sess = null;
 		Transaction t = null;
 		try {
-			if(dirtyRead) {
-				sess = HibernateWrapper.getDirtySession().openSession();
-			}
-			else {
-				sess = HibernateWrapper.getSession().openSession();
-			}
+			sess = HibernateWrapper.getSession().openSession();
 			
 			Criteria cri = null;
+			@SuppressWarnings("rawtypes")
 			List al = null;
 			Match match = null;
 			Status status = null;
@@ -608,6 +610,7 @@ public class MatchUtils {
 			cri.createCriteria("ohd").add(Expression.eq("OHD_ID", ohd_id));
 
 			Status status = null;
+			@SuppressWarnings("rawtypes")
 			List al = cri.list();
 			Match match = null;
 			for (int i = 0; i < al.size(); i++) {
@@ -634,7 +637,7 @@ public class MatchUtils {
 	}
 
 	public static void matchToOhd(int matchId, OHD ohd, Agent agent) {
-		String incidentId = MatchUtils.matchedOHD(matchId, ohd);
+		MatchUtils.matchedOHD(matchId, ohd);
 	}
 
 	public static void unmatchTheOHD(String ohd_id, Agent agent) {

@@ -213,7 +213,7 @@ public class IncidentBMO {
 			// check to see if we closed the report, if we did, then close all
 			// matches
 			if (iDTO.getStatus().getStatus_ID() == TracingConstants.MBR_STATUS_CLOSED) {
-				MatchUtils.closeMatches(iDTO.getIncident_ID(), null, true);
+				MatchUtils.closeMatches(iDTO.getIncident_ID(), null);
 			}
 		
 			// association report
@@ -487,7 +487,7 @@ public class IncidentBMO {
 			// check to see if we closed the report, if we did, then close all
 			// matches
 			if (iDTO.getStatus().getStatus_ID() == TracingConstants.MBR_STATUS_CLOSED) {
-				MatchUtils.closeMatches(iDTO.getIncident_ID(), null, true);
+				MatchUtils.closeMatches(iDTO.getIncident_ID(), null);
 			}
 
 			// association report
