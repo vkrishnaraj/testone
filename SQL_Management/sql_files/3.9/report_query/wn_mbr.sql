@@ -106,7 +106,8 @@ select
 from 
 
 (
-	select 
+	select
+	  s.station_id as station_id,
 	  s.stationcode as station_code,
 	  s.countrycode_ID as country_code,
 	  s.goal as station_goal, 
@@ -123,7 +124,7 @@ left outer join
 
 (
 	select 
-	  s.stationcode, 
+	 s.station_id as station_id, 
 	 sum(case when it.losscode = 1 then 1 else 0 end) lc1,
 	 sum(case when it.losscode = 2 then 1 else 0 end) lc2,
 	 sum(case when it.losscode = 3 then 1 else 0 end) lc3,
@@ -232,6 +233,6 @@ left outer join
 	group by s.stationcode
 ) losscodes
 
-on stationinfo.station_code = losscodes.stationcode
+on stationinfo.station_id = losscodes.station_id
 order by stationinfo.region_name, stationinfo.station_code asc
 ;
