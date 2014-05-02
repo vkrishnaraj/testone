@@ -2,9 +2,9 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="LostDelayReceipt" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="1.652892561983471"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="476"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -97,7 +97,7 @@ Aparatos de Asistencia]]></text>
 				</graphicElement>
 			</line>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-10" mode="Opaque" x="179" y="565" width="84" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-10" mode="Opaque" x="179" y="557" width="104" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -110,7 +110,7 @@ Aparatos de Asistencia]]></text>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{file_reference}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-11" mode="Opaque" x="179" y="579" width="240" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-11" mode="Opaque" x="179" y="588" width="240" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -123,7 +123,7 @@ Aparatos de Asistencia]]></text>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{pass_name}]]></textFieldExpression>
 			</textField>
 			<textField pattern="(###)###-####" isBlankWhenNull="true">
-				<reportElement key="textField-12" mode="Opaque" x="179" y="593" width="165" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-12" mode="Opaque" x="179" y="603" width="165" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -136,7 +136,7 @@ Aparatos de Asistencia]]></text>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{phone}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-13" mode="Opaque" x="179" y="607" width="345" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-13" mode="Opaque" x="179" y="617" width="345" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -149,7 +149,7 @@ Aparatos de Asistencia]]></text>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{address1}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-14" mode="Opaque" x="179" y="621" width="344" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-14" mode="Opaque" x="179" y="631" width="344" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -162,7 +162,7 @@ Aparatos de Asistencia]]></text>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{address2}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-15" mode="Opaque" x="179" y="635" width="346" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-15" mode="Opaque" x="179" y="645" width="346" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -175,7 +175,7 @@ Aparatos de Asistencia]]></text>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{city_st_zip}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-16" mode="Opaque" x="454" y="579" width="49" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-16" mode="Opaque" x="454" y="588" width="49" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -200,56 +200,56 @@ Aparatos de Asistencia]]></text>
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement key="textField-22" mode="Opaque" x="13" y="565" width="164" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-22" mode="Opaque" x="13" y="557" width="164" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Tahoma" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Número del reporte:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-23" mode="Opaque" x="13" y="579" width="164" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-23" mode="Opaque" x="13" y="588" width="164" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Tahoma" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Nombre del cliente:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-24" mode="Opaque" x="13" y="593" width="164" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-24" mode="Opaque" x="13" y="603" width="164" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Tahoma" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[ Teléfono:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-25" mode="Opaque" x="13" y="607" width="164" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-25" mode="Opaque" x="13" y="617" width="164" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Tahoma" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Dirección 1:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-26" mode="Opaque" x="13" y="635" width="164" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-26" mode="Opaque" x="13" y="645" width="164" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Tahoma" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Ciudad, Est/Prov, Código Postal:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-27" mode="Opaque" x="419" y="579" width="33" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-27" mode="Opaque" x="419" y="588" width="33" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Tahoma" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[PNR:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-28" mode="Opaque" x="13" y="621" width="164" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-28" mode="Opaque" x="13" y="631" width="164" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Tahoma" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Dirección 2:]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-29" positionType="Float" mode="Opaque" x="179" y="691" width="130" height="14" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-29" positionType="Float" mode="Opaque" x="179" y="701" width="130" height="14" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -308,7 +308,7 @@ Si la Oficina de Servicio de Equipaje local no puede resolver su situación, por
 ]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-54" mode="Opaque" x="506" y="565" width="30" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-54" mode="Opaque" x="507" y="557" width="30" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -321,14 +321,14 @@ Si la Oficina de Servicio de Equipaje local no puede resolver su situación, por
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{station}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement key="textField-55" mode="Opaque" x="438" y="565" width="66" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-55" mode="Opaque" x="439" y="557" width="66" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Tahoma" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Aeropuerto:]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-56" mode="Opaque" x="358" y="565" width="80" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-56" mode="Opaque" x="355" y="557" width="80" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -341,11 +341,11 @@ Si la Oficina de Servicio de Equipaje local no puede resolver su situación, por
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{createdate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement key="textField-57" mode="Opaque" x="264" y="565" width="93" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-57" mode="Opaque" x="288" y="557" width="64" height="30" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Tahoma" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[Fecha del reporte:]]></text>
+				<text><![CDATA[Fecha del reporte: ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="textField-48" positionType="Float" mode="Opaque" x="8" y="452" width="59" height="50" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
@@ -372,7 +372,7 @@ PO Box 36663
 Dallas, Texas 75235-1663]]></text>
 			</staticText>
 			<line>
-				<reportElement key="line-8" mode="Opaque" x="5" y="716" width="541" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="line-8" mode="Opaque" x="5" y="717" width="541" height="1" forecolor="#000000" backcolor="#FFFFFF"/>
 				<graphicElement fill="Solid">
 					<pen lineWidth="1.0" lineStyle="Solid"/>
 				</graphicElement>
@@ -396,35 +396,35 @@ Dallas, Texas 75235-1663]]></text>
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement key="textField-22" mode="Opaque" x="27" y="532" width="437" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-22" mode="Opaque" x="27" y="528" width="437" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Tahoma" size="10" isBold="true" isItalic="false" isUnderline="true" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Información Del Reporte De Equipaje]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-22" mode="Opaque" x="27" y="551" width="496" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-22" mode="Opaque" x="27" y="542" width="496" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Tahoma" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Para asistencia con su equipaje e información sobre su reporte llame al: (888)202-1024]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-26" mode="Opaque" x="13" y="691" width="164" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-26" mode="Opaque" x="13" y="701" width="164" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Tahoma" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Fecha de Impresión:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-26" mode="Opaque" x="13" y="649" width="164" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-26" mode="Opaque" x="13" y="659" width="164" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Tahoma" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[País:]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-15" mode="Opaque" x="179" y="649" width="346" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-15" mode="Opaque" x="179" y="659" width="346" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -437,14 +437,14 @@ Dallas, Texas 75235-1663]]></text>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{country}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement key="textField-26" mode="Opaque" x="13" y="663" width="164" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-26" mode="Opaque" x="13" y="673" width="164" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Tahoma" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Etiqueta de Equipaje:]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-15" mode="Opaque" x="179" y="663" width="346" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-15" mode="Opaque" x="179" y="673" width="346" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -457,14 +457,14 @@ Dallas, Texas 75235-1663]]></text>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{bag_description}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement key="textField-26" mode="Opaque" x="13" y="677" width="164" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-26" mode="Opaque" x="13" y="687" width="164" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Tahoma" size="10" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Artículos:]]></text>
 			</staticText>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-15" mode="Opaque" x="179" y="677" width="346" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-15" mode="Opaque" x="179" y="687" width="346" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
