@@ -520,3 +520,9 @@ alter table ohd modify column posId varchar(8) default null;
 alter table audit_ohd modify column posId varchar(8) default null;
 alter table item modify column posId varchar(8) default null;
 alter table audit_item modify column posId varchar(8) default null; 
+
+#Required for CostService in general. Not SWA-Specific despite the name.
+# Production
+#insert into properties (keystr,valuestr) values ("swa.service.address.endpoint","http://www.rbags.com/NetBags.WebService/SouthwestAirlines.asmx");
+# TESTING
+insert into properties (keystr,valuestr) values ("swa.service.address.endpoint","https://test.rbags.com/NetBags.WebService/SouthwestAirlines.asmx");

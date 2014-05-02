@@ -1733,3 +1733,10 @@ insert into properties (keyStr,valueStr) VALUES ('bagbuzz.max.categories','5');
 GO
 alter table bagbuzz alter column category_ID bigint not null;
 GO
+
+--Required for CostService in general. Not SWA-Specific despite the name.
+-- Production
+--insert into properties (keystr,valuestr) values ("swa.service.address.endpoint","http://www.rbags.com/NetBags.WebService/SouthwestAirlines.asmx");
+-- TESTING
+insert into properties (keystr,valuestr) values ("swa.service.address.endpoint","https://test.rbags.com/NetBags.WebService/SouthwestAirlines.asmx");
+GO

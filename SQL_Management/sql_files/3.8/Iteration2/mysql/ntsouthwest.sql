@@ -11,11 +11,6 @@ insert into links (description, link_address, image, companycode_id) values ('Ho
 
 update company_specific_variable set auto_close_ohd_days_back=90 where companycode_id='WN';
 
-# Production
-#insert into properties (keystr,valuestr) values ("swa.service.address.endpoint","http://www.rbags.com/NetBags.WebService/SouthwestAirlines.asmx");
-# TESTING
-insert into properties (keystr,valuestr) values ("swa.service.address.endpoint","https://test.rbags.com/NetBags.WebService/SouthwestAirlines.asmx");
-
 
 insert into generaldepreciationrules (lessTwentyDeprec,twentyOnefiftyDeprec,onefiftyDeprec,noDates,companyCode) VALUES (0,0,0,0,'WN');
 
