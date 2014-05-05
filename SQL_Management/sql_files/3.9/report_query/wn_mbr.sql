@@ -1,9 +1,21 @@
 #MBR Query for losscodes 1-99 for all stations regardless of active state
+#Any bags that have not been assigned a fault station will be faulted to the "unfaulted" station
+#Any bags that have not been assigned a fault code will be counted under the "no_code" column
+
+#PARAMS
 #startdate - Incident createdate start range.
 #enddate - Incident createdate end range.
 
 select 
-	stationinfo.*, 
+	stationinfo.station_code,
+    stationinfo.country_code,
+    stationinfo.station_goal,
+    stationinfo.station_active,
+    stationinfo.region_name,
+    stationinfo.region_director,
+    stationinfo.region_goal,
+    stationinfo.region_active,
+    ifnull(losscodes.lc0,0) no_code,
 	ifnull(losscodes.lc1,0) lc1,
 	ifnull(losscodes.lc2,0) lc2,
 	ifnull(losscodes.lc3,0) lc3,
@@ -106,15 +118,36 @@ select
 from 
 
 (
-	select
+  select
+   
+  #Since there exists a case where bags are not assigned a fault station, 
+  #we need to create an "unfaulted" station for our result set
+  
+    0 as station_id,
+    'unfaulted' as station_code,
+    null as country_code,
+    0 as station_goal,
+    0 as station_active,
+    null as region_name,
+    null as region_director,
+    null as region_goal,
+    null as region_active,
+    
+    #we want the unfaulted station at the top of the result list
+    0 as ordinal
+    
+  union all
+  select #All Southwest stations
 	  s.station_id as station_id,
 	  s.stationcode as station_code,
 	  s.countrycode_ID as country_code,
-	  s.goal as station_goal, 
+	  s.goal as station_goal,
+      s.active as station_active,
 	  r.name as region_name, 
 	  r.director as region_director, 
 	  r.target as region_goal, 
-	  r.active as region_active  
+	  r.active as region_active,
+    1 as ordinal
 	from station s
 	left outer join region r on s.Station_ID = r.id
 	where s.companycode_ID = 'WN'
@@ -124,7 +157,11 @@ left outer join
 
 (
 	select 
-	 s.station_id as station_id, 
+	
+	 #if fault station is null, return 0 for the id
+     ifnull(it.faultStation_id,0) faultstation_id,
+     
+     sum(case when it.losscode = 0 then 1 else 0 end) lc0,
 	 sum(case when it.losscode = 1 then 1 else 0 end) lc1,
 	 sum(case when it.losscode = 2 then 1 else 0 end) lc2,
 	 sum(case when it.losscode = 3 then 1 else 0 end) lc3,
@@ -225,14 +262,13 @@ left outer join
 	 sum(case when it.losscode = 98 then 1 else 0 end) lc98,
 	 sum(case when it.losscode = 99 then 1 else 0 end) lc99
 	from incident i
-	left outer join station s on i.stationcreated_ID = s.station_id
 	left outer join item it on it.incident_ID = i.Incident_ID
 	left outer join item it2 on (it2.incident_id = i.incident_id and it.item_id > it2.item_id)
 	where i.createdate between :startdate and :enddate
 	and it2.item_id is null
-	group by s.stationcode
+	group by it.faultStation_id
 ) losscodes
 
-on stationinfo.station_id = losscodes.station_id
-order by stationinfo.region_name, stationinfo.station_code asc
+on stationinfo.station_id = losscodes.faultstation_id
+order by stationinfo.ordinal, stationinfo.region_name, stationinfo.station_code asc
 ;
