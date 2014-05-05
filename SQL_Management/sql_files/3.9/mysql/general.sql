@@ -8,3 +8,9 @@ alter table agent add loadpercentage double default 0.0;
 alter table agent add inbound bit default 0;
 alter table agent add acaa bit default 0;
 alter table agent add damaged bit default 0;
+
+
+set @exist := (select count(*) from information_schema.statistics where table_name = 'item' and index_name = 'faultstation_id' and table_schema = (select database() from dual));
+set @sqlstmt := if( @exist > 0, 'select ''INFO: Index already exists.''', 'ALTER TABLE item ADD INDEX faultstation_id (faultStation_id)');
+PREPARE stmt FROM @sqlstmt;
+EXECUTE stmt;
