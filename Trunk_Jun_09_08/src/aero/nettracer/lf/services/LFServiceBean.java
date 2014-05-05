@@ -3535,8 +3535,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	public void sendLostCreatedEmail(long id){
 		LFLost lost = getLostReport(id);
 		HashMap<String,String> h = getEmailParams(lost);
+
+		Subcompany subcomp=SubCompanyDAO.loadSubcompany(lost.getCompanyId(), lost.getAgent().getCompanycode_ID());
+		boolean isAvis = (TracingConstants.LF_AB_COMPANY_ID.equalsIgnoreCase(subcomp.getCompany().getCompanyCode_ID()));
 		
-		if (TracingConstants.LF_SWA_COMPANY_ID.equalsIgnoreCase(lost.getCompanyId())){
+		if (!isAvis){
 			//use no reply email
 			h.put("RETURNADDRESS", PropertyBMO.getValue(PropertyBMO.LF_EMAIL_RETURNADDR_INIT));
 		}
@@ -3555,8 +3558,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	public void sendShippedEmail(ShippingBean bean){
 		LFLost lost = getLostReport(Long.valueOf(bean.getLost().getReportId()));
 		HashMap<String,String> h = getEmailParams(lost, bean);
+
+		Subcompany subcomp=SubCompanyDAO.loadSubcompany(lost.getCompanyId(), lost.getAgent().getCompanycode_ID());
+		boolean isAvis = (TracingConstants.LF_AB_COMPANY_ID.equalsIgnoreCase(subcomp.getCompany().getCompanyCode_ID()));
 		
-		if (TracingConstants.LF_SWA_COMPANY_ID.equalsIgnoreCase(lost.getCompanyId())){
+		if (!isAvis){
 			//use no reply email
 			h.put("RETURNADDRESS", PropertyBMO.getValue(PropertyBMO.LF_EMAIL_RETURNADDR_INIT));
 		}
