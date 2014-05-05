@@ -285,8 +285,8 @@
 					property="type" /> <br />
 				<span class="label"><bean:message key="wt.view.ohd.bag.description" /></span> 
 					<logic:notEmpty name="bag" property="desc1"><bean:write name="bag" property="desc1" /></logic:notEmpty>
-					<logic:notEmpty name="bag" property="desc2">, <bean:write name="bag" property="desc2" /></logic:notEmpty>
-					<logic:notEmpty name="bag" property="desc3">, <bean:write name="bag" property="desc3" /></logic:notEmpty>
+					<logic:notEmpty name="bag" property="desc2"><bean:write name="bag" property="desc2" /></logic:notEmpty>
+					<logic:notEmpty name="bag" property="desc3"><bean:write name="bag" property="desc3" /></logic:notEmpty>
 					 <br />
 				<span class="label"><bean:message key="wt.view.ohd.bag.manufacturer" /></span>
 					<bean:write name="bag" property="manufacturer" /> <br />
