@@ -126,6 +126,7 @@
 	<classpathentry kind="lib" path="lib/WSNetTracer-client.jar"/>
 	<classpathentry kind="lib" path="lib/Radixx-Reservation-client.jar"/>
 	<classpathentry kind="lib" path="lib/SWA-BTWS-client.jar"/>
+	<classpathentry kind="lib" path="lib/libphonenumber-2.4.jar"/>
 	<classpathentry kind="lib" path="lib/mockito-all-1.9.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
