@@ -35,11 +35,19 @@ public class LF_SalvageSearch extends DefaultSeleneseTestCase {
 		}
 		
 		if (checkNoErrorPage()) {
-			selenium.select("//select[@id='statusId']", "label=Closed");
 			selenium.click("//input[@id='saveButton']");
 			waitForPageToLoadImproved();
 		} else {
 			System.out.println("LFSS: Failed to open salvage page.");
+			return;
+		}
+		
+		if (checkNoErrorPage()) {
+			selenium.select("//select[@id='statusId']", "label=Closed");
+			selenium.click("//input[@id='saveButton']");
+			waitForPageToLoadImproved();
+		} else {
+			System.out.println("LFSS: Failed to save the close salvage.");
 			return;
 		}
 		
