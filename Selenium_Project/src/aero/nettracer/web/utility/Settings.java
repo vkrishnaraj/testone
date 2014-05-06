@@ -29,7 +29,7 @@ public class Settings {
 	public static final String BROWSER_CUSTOM = "*custom";
 	public static final String BROWSER_FIREFOXCUSTOM = "*firefox C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe";
 	
-	public static final boolean ECLIPSE_RUNS_SERVER = false;
+	public static final boolean ECLIPSE_RUNS_SERVER = true;
 	
 	//DELAY IN MS BETWEEN ACTIONS
 	public static final String EXECUTION_SPEED_FAST = "2";
@@ -53,15 +53,15 @@ public class Settings {
 	public static String PORT3=":8380/";
 	
 	//LOGIN CREDENTIALS
-	public static final String USERNAME_ADMIN = "ntauto";
-//	public static final String USERNAME_ADMIN = "ntadmin";
+//	public static final String USERNAME_ADMIN = "ntauto";
+	public static final String USERNAME_ADMIN = "ntadmin";
 	public static final String USERNAME_OGADMIN = "ogadmin";
 	public static final String USERNAME_TEST = "nttestauto";
-	public static final String PASSWORD_ADMIN = "wnI3onJan8!";
-//	public static final String PASSWORD_ADMIN = "SoftSprint1011";
-	public static final String PASSWORD_OGADMIN = "wnI3onJan8!";
-//	public static final String PASSWORD_OGADMIN = "InstaNokia41!";
-	public static final String PASSWORD_TEST = "wnI3onJan8!";
+	public static final String PASSWORD_ADMIN = "WONG72+c!";
+//	public static final String PASSWORD_ADMIN = "SLtop1731!";
+	public static final String PASSWORD_OGADMIN = "WONG72+c";
+//	public static final String PASSWORD_OGADMIN = "SLtop1731!";
+	public static final String PASSWORD_TEST = "WONG72+c";
 	public static final String PASSWORD_CHANGE = "nttest@Hud2";
 //	public static final String USERNAME_ADMIN = "ntadmin";
 //	public static final String PASSWORD_ADMIN = "InstaNokia41!";
@@ -92,7 +92,7 @@ public class Settings {
 	public static String DAMAGE_ID = "";
 	public static String PILFERAGE_ID = "";
 	public static String ONHAND_ID = "";
-	public static String PORT=":8180/";
+	public static String PORT=":8080/";
 	
 
 	
