@@ -1,5 +1,5 @@
 set START_OFFSET=date_add(now(), INTERVAL -1 DAY)
-set END_OFFSET=now()
+set END_OFFSET=date_add(now(), INTERVAL 1 DAY)
 
 cd D:\EDW\Batch_Files
 DEL /F /Q /S D:\EDW\production\*.csv
