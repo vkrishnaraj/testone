@@ -5,7 +5,7 @@ select formatted_output
 
 #OUTFILE
 from (
-select concat_ws('|','H',date_format(now(), '%Y%m%d'), date_format(date_add(now(), INTERVAL -1 DAY), '%Y%m%d')) formatted_output, 1 as seq
+select concat_ws('|','H',date_format(@end, '%Y%m%d'), date_format(@start, '%Y%m%d')) formatted_output, 1 as seq
 union
 select concat_ws('|',
 
@@ -47,7 +47,7 @@ left outer join
    where i2.itinerarytype = 1
    order by i2.incident_ID desc, i2.Itinerary_ID
 ) seq on seq.Itinerary_ID = i.Itinerary_ID
-where inc.lastupdated >= date(date_add(now(), INTERVAL -1 DAY))
+where inc.lastupdated >= date(@start) and inc.lastupdated <= date(@end) 
 and i.itinerarytype = 1
 order by i.incident_ID, seq.row) temp
 union
@@ -60,7 +60,7 @@ count(i.Itinerary_ID)
 #ROOT QUERY
 from itinerary i
 left outer join incident inc on inc.Incident_ID = i.incident_ID 
-where inc.lastupdated >= date(date_add(now(), INTERVAL -1 DAY))
+where inc.lastupdated >= date(@start) and inc.lastupdated <= date(@end) 
 and i.itinerarytype = 1
 ) temp
 order by seq");

@@ -5,7 +5,7 @@ select formatted_output
 
 #OUTFILE
 from (
-select concat_ws('|','H',date_format(now(), '%Y%m%d'), date_format(date_add(now(), INTERVAL -1 DAY), '%Y%m%d')) formatted_output, 1 as seq
+select concat_ws('|','H',date_format(@end, '%Y%m%d'), date_format(@start, '%Y%m%d')) formatted_output, 1 as seq
 union all
 select concat_ws('|',
 
@@ -37,7 +37,7 @@ left outer join
 ) b on i.Item_ID = b.item_ID
 left outer join agent ba on b.agent_ID = ba.Agent_ID
 left outer join agent a on inc.agent_ID = a.Agent_ID
-where inc.lastupdated >= date(date_add(now(), INTERVAL -1 DAY))
+where inc.lastupdated >= date(@start) and inc.lastupdated <= date(@end) 
 and inc.itemtype_ID = 1 and ifnull(i.lossCode, 0) > 0 and not isnull(s.stationcode)
 
 union all
@@ -58,7 +58,7 @@ left outer join
 	left outer join item_bdo ib on ib.bdo_ID = b2.BDO_ID
 	where b2.canceled = 0
 ) b on i.Item_ID = b.item_ID
-where inc.lastupdated >= date(date_add(now(), INTERVAL -1 DAY))
+where inc.lastupdated >= date(@start) and inc.lastupdated <= date(@end) 
 and inc.itemtype_ID = 1 and ifnull(i.lossCode, 0) > 0 and not isnull(s.stationcode)
 ) temp
 order by seq");

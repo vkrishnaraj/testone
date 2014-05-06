@@ -5,7 +5,7 @@ select formatted_output
 
 #OUTFILE
 from (
-select concat_ws('|','H',date_format(now(), '%Y%m%d'), date_format(date_add(now(), INTERVAL -1 DAY), '%Y%m%d')) formatted_output, 1 as seq
+select concat_ws('|','H',date_format(@end, '%Y%m%d'), date_format(@start, '%Y%m%d')) formatted_output, 1 as seq
 union
 select concat_ws('|',
 
@@ -25,7 +25,7 @@ case when a.statusId = 800 then 'Y' else 'N' end
 #ROOT QUERY
 from articles a
 left outer join incident i on a.incident_ID = i.Incident_ID
-where i.lastupdated >= date(date_add(now(), INTERVAL -1 DAY))
+where i.lastupdated >= date(@start) and i.lastupdated <= date(@end) 
 union
 select concat_ws('|','T',
 
@@ -36,7 +36,7 @@ count(a.Articles_ID)
 #ROOT QUERY
 from articles a
 left outer join incident i on a.incident_ID = i.Incident_ID 
-where i.lastupdated >= date(date_add(now(), INTERVAL -1 DAY))
+where i.lastupdated >= date(@start) and i.lastupdated <= date(@end) 
 ) temp
 order by seq");
 prepare stmt from @qry;

@@ -5,7 +5,7 @@ select formatted_output
 
 #OUTFILE
 from (
-select concat_ws('|','H',date_format(now(), '%Y%m%d'), date_format(date_add(now(), INTERVAL -1 DAY), '%Y%m%d')) formatted_output, 1 as seq
+select concat_ws('|','H',date_format(@end, '%Y%m%d'), date_format(@start, '%Y%m%d')) formatted_output, 1 as seq
 union
 select concat_ws('|',
 
@@ -74,7 +74,7 @@ left outer join agent ag on i.agent_ID = ag.Agent_ID
 left outer join incident_assoc ia on i.Incident_ID = ia.incident_ID
 left outer join incident i2 on ia.assoc_ID = i2.Incident_ID
 left outer join status st on i.courtesyReasonId = st.Status_ID
-where i.lastupdated >= date(date_add(now(), INTERVAL -1 DAY))
+where i.lastupdated >= date(@start) and i.lastupdated <= date(@end) 
 
 union
 select concat_ws('|','T',
@@ -109,7 +109,7 @@ left outer join agent ag on i.agent_ID = ag.Agent_ID
 left outer join incident_assoc ia on i.Incident_ID = ia.incident_ID
 left outer join incident i2 on ia.assoc_ID = i2.Incident_ID
 left outer join status st on i.courtesyReasonId = st.Status_ID
-where i.lastupdated >= date(date_add(now(), INTERVAL -1 DAY))
+where i.lastupdated >= date(@start) and i.lastupdated <= date(@end) 
 ) temp
 order by seq");
 prepare stmt from @qry;

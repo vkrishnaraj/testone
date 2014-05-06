@@ -5,7 +5,7 @@ select formatted_output
 
 #OUTFILE
 from (
-select concat_ws('|','H',date_format(now(), '%Y%m%d'), date_format(date_add(now(), INTERVAL -1 DAY), '%Y%m%d')) formatted_output, 1 as seq
+select concat_ws('|','H',date_format(@end, '%Y%m%d'), date_format(@start, '%Y%m%d')) formatted_output, 1 as seq
 union
 select concat_ws('|',
 
@@ -68,7 +68,7 @@ left outer join
    (SELECT @row:=1, @incCheck:='0') as row_count
    order by e2.incident_ID desc
 ) seq on seq.Expensepayout_ID = e.Expensepayout_ID
-where i.lastupdated >= date(date_add(now(), INTERVAL -1 DAY)) 
+where i.lastupdated >= date(@start) and i.lastupdated <= date(@end) 
 and e.incident_ID is not null
 order by e.incident_ID, seq.row) temp
 union
@@ -81,7 +81,7 @@ count(Expensepayout_ID)
 #ROOT QUERY
 from expensepayout e
 left outer join incident i on e.incident_ID = i.Incident_ID
-where i.lastupdated >= date(date_add(now(), INTERVAL -1 DAY)) 
+where i.lastupdated >= date(@start) and i.lastupdated <= date(@end) 
 and e.incident_ID is not null
 ) temp
 order by seq");

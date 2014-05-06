@@ -5,7 +5,7 @@ select formatted_output
 
 #OUTFILE
 from (
-select concat_ws('|','H',date_format(now(), '%Y%m%d'), date_format(date_add(now(), INTERVAL -1 DAY), '%Y%m%d')) formatted_output, 1 as seq
+select concat_ws('|','H',date_format(@end, '%Y%m%d'), date_format(@start, '%Y%m%d')) formatted_output, 1 as seq
 union
 select concat_ws('|',
 
@@ -52,7 +52,7 @@ left outer join
    e2.incident_ID
    from expensepayout e2 group by e2.incident_ID
 ) e on i.incident_ID = e.incident_ID
-where inc.createdate >= date(date_add(now(), INTERVAL -1 DAY)) 
+where inc.lastupdated >= date(@start) and inc.lastupdated <= date(@end) 
 and inc.itemtype_ID = 3 
 
 union
@@ -66,7 +66,7 @@ count(i.Item_ID)
 from
 item i
 left outer join incident inc on i.incident_ID = inc.Incident_ID 
-where inc.createdate >= date(date_add(now(), INTERVAL -1 DAY)) 
+where inc.lastupdated >= date(@start) and inc.lastupdated <= date(@end) 
 and inc.itemtype_ID = 3 
 ) temp
 order by seq");

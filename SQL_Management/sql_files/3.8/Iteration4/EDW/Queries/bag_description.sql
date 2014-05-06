@@ -5,7 +5,7 @@ select formatted_output
 
 #OUTFILE
 from (
-select concat_ws('|','H',date_format(now(), '%Y%m%d'), date_format(date_add(now(), INTERVAL -1 DAY), '%Y%m%d')) formatted_output, 1 as seq
+select concat_ws('|','H',date_format(@end, '%Y%m%d'), date_format(@start, '%Y%m%d')) formatted_output, 1 as seq
 union
 select concat_ws('|',
 
@@ -64,7 +64,7 @@ left outer join
    from item_bdo bi2 where bi2.canceled = 0 group by bi2.item_ID
 ) bi on i.Item_ID = bi.item_ID
 where 
-inc.lastupdated >= date(date_add(now(), INTERVAL -1 DAY))
+inc.lastupdated >= date(@start) and inc.lastupdated <= date(@end) 
 and inc.itemtype_ID = 1
 
 union
@@ -77,7 +77,7 @@ count(i.Item_ID)
 #ROOT QUERY
 from item i
 left outer join incident inc on  i.incident_ID = inc.Incident_ID 
-where inc.lastupdated >= date(date_add(now(), INTERVAL -1 DAY)) 
+where inc.lastupdated >= date(@start) and inc.lastupdated <= date(@end) 
 and inc.itemtype_ID = 1
 ) temp
 order by seq");

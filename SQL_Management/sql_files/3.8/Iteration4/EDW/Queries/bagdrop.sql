@@ -5,7 +5,7 @@ select formatted_output
 
 #OUTFILE
 from (
-select concat_ws('|','H',date_format(now(), '%Y%m%d'), date_format(date_add(now(), INTERVAL -1 DAY), '%Y%m%d')) formatted_output, 1 as seq
+select concat_ws('|','H',date_format(@end, '%Y%m%d'), date_format(@start, '%Y%m%d')) formatted_output, 1 as seq
 union
 select concat_ws('|',
 
@@ -20,7 +20,7 @@ ifnull(bagDropTime, '')
 ) formatted_output, 2 as seq 
 
 #ROOT QUERY
-from bagdrop where lastUpdated >= date_add(now(), INTERVAL -1 DAY)
+from bagdrop where lastUpdated >= @start and lastUpdated <= @end 
 union
 select concat_ws('|','T',
 
@@ -29,7 +29,7 @@ count(id)
 ) formatted_output, 3 as seq 
 
 #ROOT QUERY
-from bagdrop where lastUpdated >= date_add(now(), INTERVAL -1 DAY)
+from bagdrop where lastUpdated >= @start and lastUpdated <= @end 
 ) temp
 order by seq");
 prepare stmt from @qry;

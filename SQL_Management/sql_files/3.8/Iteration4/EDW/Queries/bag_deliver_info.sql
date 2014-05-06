@@ -5,7 +5,7 @@ select formatted_output
 
 #OUTFILE
 from (
-select concat_ws('|','H',date_format(now(), '%Y%m%d'), date_format(date_add(now(), INTERVAL -1 DAY), '%Y%m%d')) formatted_output, 1 as seq
+select concat_ws('|','H',date_format(@end, '%Y%m%d'), date_format(@start, '%Y%m%d')) formatted_output, 1 as seq
 union all
 select concat_ws('|',
 
@@ -34,7 +34,7 @@ left outer join incident i on i.Incident_ID = b.incident_ID
 left outer join item it on it.incident_ID = b.incident_ID
 left outer join station s on s.Station_ID = b.station_ID
 left outer join agent a on a.Agent_ID = b.agent_ID
-where b.createdate >= date(date_add(now(), INTERVAL -1 DAY))
+where b.createdate >= date(@start) and b.createdate <= date(@end)
 and b.incident_ID is not null
 
 union all
@@ -51,7 +51,7 @@ left outer join incident i on i.Incident_ID = b.incident_ID
 left outer join item it on it.incident_ID = b.incident_ID
 left outer join station s on s.Station_ID = b.station_ID
 left outer join agent a on a.Agent_ID = b.agent_ID
-where b.createdate >= date(date_add(now(), INTERVAL -1 DAY))
+where b.createdate >= date(@start) and b.createdate <= date(@end)
 and b.incident_ID is not null
 ) temp
 order by seq");
