@@ -262,16 +262,16 @@ public class ExpensePayoutBMO {
 
 	public static int addComment(int epId, Agent user, String key,
 			String content) {
-		Session sess = HibernateWrapper.getSession().openSession();
-		Transaction tx1 = sess.beginTransaction();
-		try {
-			ExpensePayout ep = (ExpensePayout) sess.load(ExpensePayout.class, epId);
-			Comment com = new Comment(user);
-			String tmp = TracerUtils.getText(key, user);
-			tmp += content != null ? content : "";
-			if (tmp != null && tmp.length() <= TracingConstants.COMMENT_CHAR_LENGTH) {
+		if (content != null && content.length() <= TracingConstants.EXPENSE_COMMENT_CHAR_LENGTH) {
+			Session sess = HibernateWrapper.getSession().openSession();
+			Transaction tx1 = sess.beginTransaction();
+			try {
+				ExpensePayout ep = (ExpensePayout) sess.load(ExpensePayout.class, epId);
+				Comment com = new Comment(user);
+				String tmp = TracerUtils.getText(key, user);
+				tmp += content != null ? content : "";
 				com.setContent(tmp);
-	
+		
 				if(ep.getComments() == null){
 					ep.setComments(new HashSet<Comment>());
 				}
@@ -279,12 +279,12 @@ public class ExpensePayoutBMO {
 				sess.update(ep);
 				tx1.commit();
 				return TracingConstants.SAVE_RESULT_SUCCESS;
+			} catch (Exception e) {
+				logger.error("unable to add comment to expense" + epId);
+				return TracingConstants.SAVE_RESULT_UNKNOWN;
+			} finally {
+				if (sess != null) sess.close();
 			}
-		} catch (Exception e) {
-			logger.error("unable to add comment to expense" + epId);
-			return TracingConstants.SAVE_RESULT_UNKNOWN;
-		} finally {
-			if (sess != null) sess.close();
 		}
 		return TracingConstants.SAVE_RESULT_FAILURE;
 		

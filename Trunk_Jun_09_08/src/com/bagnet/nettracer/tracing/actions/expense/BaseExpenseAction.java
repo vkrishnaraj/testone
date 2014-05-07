@@ -255,10 +255,10 @@ public abstract class BaseExpenseAction extends CheckedAction {
 
 	protected boolean addComment(ExpensePayout ep, Agent user, String key, String content) {
 		// create a comment
-		Comment com = new Comment(user);
-		String tmp = TracerUtils.getText(key, user);
-		tmp += content != null ? content : "";
-		if (tmp != null && tmp.length() <= TracingConstants.COMMENT_CHAR_LENGTH) {
+		if (content != null && content.length() <= TracingConstants.EXPENSE_COMMENT_CHAR_LENGTH) {
+			Comment com = new Comment(user);
+			String tmp = TracerUtils.getText(key, user);
+			tmp += content != null ? content : "";
 			com.setContent(tmp);
 	
 			if(ep.getComments() == null){
