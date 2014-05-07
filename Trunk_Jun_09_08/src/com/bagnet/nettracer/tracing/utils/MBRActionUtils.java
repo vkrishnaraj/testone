@@ -1143,6 +1143,8 @@ public class MBRActionUtils {
 					//to fix a bug reported by USAIR - hibernate exception 
 					//when saving associated incident, when original LD incident has a BDO
 					item2.setItem_bdo(null);
+					Status itemStatus = StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN);
+					item2.setStatus(itemStatus);
 					
 					// clear inventory
 					al2 = new ArrayList();

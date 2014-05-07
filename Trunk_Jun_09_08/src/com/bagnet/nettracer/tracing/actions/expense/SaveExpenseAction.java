@@ -47,7 +47,11 @@ public class SaveExpenseAction extends BaseExpenseAction {
 		ExpensePayoutForm expenseForm = (ExpensePayoutForm) form;
 		Agent user = (Agent) request.getSession().getAttribute("user");
 		ExpensePayout ep = createNewPayout(expenseForm, user);
-		addComment(ep, user, "expense.comment.new", expenseForm.getNewComment());
+		if (!addComment(ep, user, "expense.comment.new", expenseForm.getNewComment())) {
+			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("errors.maxlength", new Object[]{TracerUtils.getText("colname.new.comments", user), TracingConstants.EXPENSE_COMMENT_CHAR_LENGTH}));
+			saveMessages(request, messages);
+			return mapping.findForward(CREATE_SUCCESS);
+		}
 		String incidentId = ((IncidentForm) request.getSession().getAttribute("incidentForm")).getIncident_ID();
 		
 		boolean cbsProcess=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, user) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN, user);

@@ -30,6 +30,7 @@ import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
+import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
 
 public class UpdateExpenseAction extends BaseExpenseAction {
@@ -106,24 +107,44 @@ public class UpdateExpenseAction extends BaseExpenseAction {
 					}
 				}
 			}
-			addComment(ep, user, "expense.comment.updated", expenseForm.getNewComment());
+			if (!addComment(ep, user, "expense.comment.updated", expenseForm.getNewComment())) {
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("errors.maxlength", new Object[]{TracerUtils.getText("colname.new.comments", user), TracingConstants.EXPENSE_COMMENT_CHAR_LENGTH}));
+				saveMessages(request, errors);
+				return mapping.findForward(UPDATE_SUCCESS);
+			}
 		} else if (expenseForm.getApproveExpense() != null) {
 			st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED);
 			ep.setApproval_date(TracerDateTime.getGMTDate());
-			addComment(ep, user, "expense.comment.approved", expenseForm.getNewComment());
+			if (!addComment(ep, user, "expense.comment.approved", expenseForm.getNewComment())) {
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("errors.maxlength", new Object[]{TracerUtils.getText("colname.new.comments", user), TracingConstants.EXPENSE_COMMENT_CHAR_LENGTH}));
+				saveMessages(request, errors);
+				return mapping.findForward(UPDATE_SUCCESS);
+			}
 		} else if (expenseForm.getDenyExpense() != null) {
 			st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_DENIED);
-			addComment(ep, user, "expense.comment.denied", expenseForm.getNewComment());
+			if (!addComment(ep, user, "expense.comment.denied", expenseForm.getNewComment())) {
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("errors.maxlength", new Object[]{TracerUtils.getText("colname.new.comments", user), TracingConstants.EXPENSE_COMMENT_CHAR_LENGTH}));
+				saveMessages(request, errors);
+				return mapping.findForward(UPDATE_SUCCESS);
+			}
 			ep.setApproval_date(TracerDateTime.getGMTDate());
 		} else if (expenseForm.getPayExpense() != null) {
 			st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_PAID);
-			addComment(ep, user, "expense.comment.paid", expenseForm.getNewComment());
-		} else if (expenseForm.getUpdateRemarkOnly() != null) {
-			int epId = ep.getExpensepayout_ID();
-			if(ExpensePayoutBMO.addComment(epId, user, "expense.comment.comment", expenseForm.getNewComment())) {
+			if (!addComment(ep, user, "expense.comment.paid", expenseForm.getNewComment())) {
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("errors.maxlength", new Object[]{TracerUtils.getText("colname.new.comments", user), TracingConstants.EXPENSE_COMMENT_CHAR_LENGTH}));
+				saveMessages(request, errors);
 				return mapping.findForward(UPDATE_SUCCESS);
 			}
-			else {
+		} else if (expenseForm.getUpdateRemarkOnly() != null) {
+			int epId = ep.getExpensepayout_ID();
+			int result = ExpensePayoutBMO.addComment(epId, user, "expense.comment.comment", expenseForm.getNewComment());
+			if(result == TracingConstants.SAVE_RESULT_SUCCESS) {
+				return mapping.findForward(UPDATE_SUCCESS);
+			} else if (result == TracingConstants.SAVE_RESULT_FAILURE) {
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("errors.maxlength", new Object[]{TracerUtils.getText("colname.new.comments", user), TracingConstants.EXPENSE_COMMENT_CHAR_LENGTH}));
+				saveMessages(request, errors);
+				return mapping.findForward(UPDATE_SUCCESS);
+			} else if (result == TracingConstants.SAVE_RESULT_UNKNOWN) {
 				return mapping.findForward(ERROR);
 			}
 		} else if (expenseForm.getStatus_id() == TracingConstants.EXPENSEPAYOUT_STATUS_PAID) {

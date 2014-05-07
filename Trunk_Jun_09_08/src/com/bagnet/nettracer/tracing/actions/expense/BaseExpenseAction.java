@@ -253,17 +253,21 @@ public abstract class BaseExpenseAction extends CheckedAction {
 		return ep;
 	}
 
-	protected void addComment(ExpensePayout ep, Agent user, String key, String content) {
+	protected boolean addComment(ExpensePayout ep, Agent user, String key, String content) {
 		// create a comment
 		Comment com = new Comment(user);
 		String tmp = TracerUtils.getText(key, user);
 		tmp += content != null ? content : "";
-		com.setContent(tmp);
-
-		if(ep.getComments() == null){
-			ep.setComments(new HashSet<Comment>());
+		if (tmp != null && tmp.length() <= TracingConstants.COMMENT_CHAR_LENGTH) {
+			com.setContent(tmp);
+	
+			if(ep.getComments() == null){
+				ep.setComments(new HashSet<Comment>());
+			}
+			ep.getComments().add(com);
+			return true;
 		}
-		ep.getComments().add(com);
+		return false;
 	}
 	
 	protected void setupPending(HttpServletRequest request) {

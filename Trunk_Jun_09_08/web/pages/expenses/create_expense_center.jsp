@@ -274,9 +274,9 @@
 								<bean:message key="colname.comments" />
 								<br />
 								<html:textarea property="newComment" cols="80" rows="5"
-									onkeydown="textCounter(this.form.newComment,this.form.comments2,255);"
-									onkeyup="textCounter(this.form.newComment,this.form.comments2,255);" />
-								<input name='comments2' type="text" id='comments2' value="255"
+									onkeydown="<%="textCounter(this.form.newComment,this.form.comments2," + TracingConstants.EXPENSE_COMMENT_CHAR_LENGTH + ");" %>"
+									onkeyup="<%="textCounter(this.form.newComment,this.form.comments2," + TracingConstants.EXPENSE_COMMENT_CHAR_LENGTH + ");" %>" />
+								<input name='comments2' type="text" id='comments2' value="<%=TracingConstants.EXPENSE_COMMENT_CHAR_LENGTH %>"
 									size="4" maxlength="4" disabled="disabled"/>
 							</td>
 						</tr>

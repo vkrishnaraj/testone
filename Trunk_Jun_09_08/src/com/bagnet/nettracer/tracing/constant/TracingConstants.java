@@ -1599,6 +1599,13 @@ public class TracingConstants {
 	
 	public static final String OUTPUT_TYPE = "outputtype";
 	
+	public static final int COMMENT_CHAR_LENGTH = 255;
+	public static final int EXPENSE_COMMENT_CHAR_LENGTH = COMMENT_CHAR_LENGTH - 20;
+	
+	public static final int SAVE_RESULT_SUCCESS = 1;
+	public static final int SAVE_RESULT_FAILURE = 0;
+	public static final int SAVE_RESULT_UNKNOWN = -1;
+	
 	public static String getDBDateFormat(Properties properties) {
 		if (properties.getProperty("hibernate.dialect").equals("org.hibernate.dialect.SQLServerDialect")) {
 			return DB_DATEFORMAT_MSSQL;

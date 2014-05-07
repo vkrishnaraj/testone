@@ -97,6 +97,14 @@
     			}
     		});	
     	}
+	    
+	    function textCounter(field, countfield, maxlimit) {
+	        if (field.value.length > maxlimit) {
+	          field.value = field.value.substring(0, maxlimit);
+	        } else {
+	          countfield.value = maxlimit - field.value.length;
+	        }
+	    }	
 
     	function populateSelect(selectId, json) {
     		var activitySelect = document.getElementById(selectId);		
@@ -430,10 +438,10 @@
 								<bean:message key="colname.new.comments" />
 								<br />
 								<html:textarea property="newComment" cols="80" rows="5"
-									onkeydown="textCounter(this,this,255);"
-									onkeyup="textCounter(this,this,255);" 
+									onkeydown="<%="textCounter(this.form.newComment,this.form.comments2," + TracingConstants.EXPENSE_COMMENT_CHAR_LENGTH + ");" %>"
+									onkeyup="<%="textCounter(this.form.newComment,this.form.comments2," + TracingConstants.EXPENSE_COMMENT_CHAR_LENGTH + ");" %>" 
 									disabled="<%=((bsoPermission&&isInBSO) || !bsoPermission)?false:true %>"/>
-								<input name='newComment' type="text" id='comments2' value="255"
+								<input name='comments2' type="text" id='comments2' value="<%=TracingConstants.EXPENSE_COMMENT_CHAR_LENGTH %>"
 									size="4" maxlength="4" disabled="disabled" />
 							</td>
 						</tr>

@@ -12,6 +12,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
@@ -31,7 +32,7 @@ public class Comment implements Serializable {
 	Agent agent;
 	Date createDate;
 
-	@Column(length = 255)
+	@Column(length = TracingConstants.COMMENT_CHAR_LENGTH)
 	public String getContent() {
 		return content;
 	}

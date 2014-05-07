@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.tracing.actions.expense.BaseExpenseAction;
 import com.bagnet.nettracer.tracing.bmo.ExpensePayoutBMO;
@@ -22,6 +24,7 @@ import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
+import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
 public class ApproveExpenseAction extends BaseExpenseAction {
 	@Override
@@ -40,9 +43,15 @@ public class ApproveExpenseAction extends BaseExpenseAction {
 			return mapping.findForward(ERROR);
 		}
 		
+		ActionMessages messages = new ActionMessages();
+		
 		Status st = new Status();
 		st.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_APPROVED);
-		addComment(ep, user, "expense.comment.approved", expenseForm.getNewComment());
+		if (!addComment(ep, user, "expense.comment.approved", expenseForm.getNewComment())) {
+			messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("errors.maxlength", new Object[]{TracerUtils.getText("colname.new.comments", user), TracingConstants.EXPENSE_COMMENT_CHAR_LENGTH}));
+			saveMessages(request, messages);
+			return mapping.findForward(UPDATE_SUCCESS);
+		}
 		ep.setStatus(st);
 		ep.setApproval_date(new Date());
 		if(ExpensePayoutBMO.updateExpense(ep, user)) {
