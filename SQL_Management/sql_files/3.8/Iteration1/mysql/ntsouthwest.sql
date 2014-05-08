@@ -13,7 +13,7 @@ delete from expensetype;
 ### PRODUCTION
 #insert into expensetype select * from nk_production.expensetype;
 
-insert into properties (keyStr,valueStr) VALUES ('bsdi.address.endpoint','https://test.rbags.com/BDO.WebService/BaggageDeliveryStatusInfoService.asmx');
+insert into properties (keyStr,valueStr) VALUES ('bsdi.address.endpoint','http://test.rbags.com/BDO.WebService/BaggageDeliveryStatusInfoService.asmx');
 insert into properties (keyStr,valueStr) VALUES ('max.pnr.last.days','14');
 insert into properties (keyStr,valueStr) VALUES ('bso.ws.timeout','5000');
 
