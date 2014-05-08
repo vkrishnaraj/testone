@@ -38,7 +38,7 @@ values (632,'Collect_Drivers_License','Enter driver''s license on the Incident p
 insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group)
 values (633,'View_Edit_Drivers_License','View and edit the driver''s license field on the Incident pages',39,null,0,99,0);
 
-insert into properties (keyStr,valueStr) VALUES ('bsdi.address.endpoint','https://test.rbags.com/BDO.WebService/BaggageDeliveryStatusInfoService.asmx');
+insert into properties (keyStr,valueStr) VALUES ('bsdi.address.endpoint','http://test.rbags.com/BDO.WebService/BaggageDeliveryStatusInfoService.asmx');
 
 alter table ohd add creationMethod integer default 0;
 GO
