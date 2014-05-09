@@ -581,7 +581,7 @@
                       <bean:message key="colname.matched_ohd" />
                       :
                       <html:text name="claimcheck" property="tempOHD_ID"
-                      size="13" maxlength="12" styleClass="textfield"
+                      size="13" maxlength="13" styleClass="textfield"
                       indexed="true" onblur="fillzero(this,13);" />
                     <input type="submit" name="matchclaim<%= i %>"
                       value='<bean:message key="button.do_match"/>'
