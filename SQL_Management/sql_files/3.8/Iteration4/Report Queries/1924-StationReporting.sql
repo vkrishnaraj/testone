@@ -169,26 +169,29 @@ call getBSOAgentAuditReport (:startDate, :endDate, :stationcode,:agentUsername, 
 #endDate - the end of the date range. DateTime variable
 #chargedStation - 3 Character Station Code that is charged with the fault.
 #changingStation - 3 Character Station Code that made the change
-select i.incident_ID, (case b.deliverydate when null then i.close_date else b.deliverydate end) as returnDate, i.modify_time, 
-datediff(i.modify_time,(case b.deliverydate when null then i.close_date else b.deliverydate end) ) as daysToChange,
-  a.firstname,a.lastname, cs.stationcode as changingStation, ai.lossCode, fs.stationcode as chargedStation,
-  itemIncident.bagCount
-  from audit_item ai 
-    inner join station fs on fs.Station_ID = ai.faultStation_id 
-    inner join audit_incident i on i.audit_incident_id = ai.audit_incident_id
-    inner join (select min(aii.audit_incident_id) as minIncNum from audit_item aii 
-            inner join audit_incident ii on ii.audit_incident_id = aii.audit_incident_id
-              where aii.lossCode>0 and aii.Item_ID>0 
-              group by ii.incident_id, concat(aii.lossCode,"-",aii.faultStation_id) ) as minInc on minInc.minIncNum=i.audit_incident_id
-    inner join (select count(it.Item_ID) as bagCount, it.incident_ID as itemInc from Item it group by it.incident_id) as itemIncident on itemIncident.itemInc = i.Incident_ID
-    inner join agent a on a.Agent_ID = i.modify_agent_id
+select auditTable.incident_id, (case b.deliverydate when null then auditTable.close_date else b.deliverydate end) as returnDate, auditTable.modify_time,
+  datediff(auditTable.modify_time,(case b.deliverydate when null then auditTable.close_date else b.deliverydate end) ) as daysToChange,
+  a.firstname,a.lastname, cs.stationcode as changingStation, auditTable.lossCode, fs.stationcode as chargedStation,
+  (auditTable.bagnumber + 1) as bagnumber from 
+    (select * from (select orderedAudit.modify_time, orderedAudit.modify_agent_id, orderedAudit.close_date,
+      case when ((orderedAudit.faultstation_id != @faultStation || orderedAudit.lossCode!=@lossCode) && orderedAudit.incident_id=@incCheck && orderedAudit.bagnumber=@bagCheck && ((@faultStation!=0 && not isnull(@faultStation)) || @lossCode!=0)) then orderedAudit.audit_incident_id else 0 END as audit_incident_id, 
+      case when (orderedAudit.incident_id=@incCheck ) then orderedAudit.incident_id ELSE (@incCheck:=orderedAudit.incident_ID) END as incident_id, 
+      case when (orderedAudit.bagnumber=@bagCheck ) then orderedAudit.bagnumber ELSE (@bagCheck:=orderedAudit.bagnumber) END as bagnumber, 
+      @lossCode:=orderedAudit.lossCode as lossCode, @faultStation:=orderedAudit.faultStation_id as faultStation
+        from (select ai2.faultstation_id, ai2.lossCode, i.close_date, i.incident_id, i.audit_incident_id, i.modify_time, i.modify_agent_id, ai2.bagnumber
+          from audit_item ai2 inner join audit_incident i on i.audit_incident_id = ai2.audit_incident_id
+          order by i.incident_id, ai2.bagnumber, i.audit_incident_id, i.modify_time asc) orderedAudit,
+          (SELECT @faultStation:='0', @lossCode:='0', @incCheck:='0', @bagCheck:='-1' ) as row_count) comparedAudit where comparedAudit.audit_incident_id != 0) auditTable
+    inner join station fs on fs.Station_ID = auditTable.faultStation 
+    inner join agent a on a.Agent_ID = auditTable.modify_agent_id
     inner join station cs on cs.Station_ID = a.station_ID
-    left outer join bdo b on b.incident_ID = i.Incident_ID
-      where ai.lossCode>0 and ai.item_id>0 and
-      i.modify_time >= :startDate and i.modify_time <=:endDate and fs.stationcode=:chargedStation and cs.stationcode =:changingStation 
-      and not isnull((case b.deliverydate when null then i.close_date else b.deliverydate end)) 
-      group by i.Incident_ID, ai.lossCode, fs.stationcode
-      order by i.incident_id,  i.modify_time;
+    left outer join 
+        (select max(b2.deliverydate) as deliverydate, i.bagnumber, i.incident_ID 
+          from bdo b2 inner join item_bdo ib on b2.BDO_ID = ib.bdo_ID inner join item i on ib.item_ID = i.Item_ID 
+          where b2.canceled = 0 group by i.incident_ID, i.bagnumber) b on b.incident_id = auditTable.incident_id and b.bagnumber = auditTable.bagnumber
+      where auditTable.modify_time >= :startDate and auditTable.modify_time <=:endDate# and fs.stationcode=:chargedStation and cs.stationcode =:changingStation 
+        and not isnull((case b.deliverydate when null then auditTable.close_date else b.deliverydate end)) 
+      order by cs.stationcode, auditTable.incident_id, auditTable.modify_time;
 #--------------------------------------------------------------------
 
 #On Hand Scanner Usage Summary - Is based on and returns GMT Time. Proceeding as normal until Auto vs Manual question is resolved.
