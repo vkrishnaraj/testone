@@ -183,7 +183,7 @@
 		<c:if test="${!empty incidentForm.wt_id }">
 			<bean:message key="wt.ahl.id" />
 			<a
-				href="worldtraceraf.do?rawtext=1&ahl_id=<bean:write name="incidentForm" property="wt_id" />">
+				href="worldtraceraf.do?rawtext=1&ahl_id=<bean:write name="incidentForm" property="wt_id" />&incident_id=${incident}">
 				<c:out value="${incidentForm.wt_id}" />
 			</a>
 			<input type="hidden" value="<%=myform.getWt_id() %>" id="wtid"/>

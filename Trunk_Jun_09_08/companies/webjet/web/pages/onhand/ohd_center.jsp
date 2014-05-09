@@ -383,7 +383,7 @@ function gotoHistoricalReport() {
       	if(a.getCompanycode_ID().equals(onHandForm.getHolding_company())) {
       		%>
       <br />
-        WorldTracer ID: <a href="worldtraceraf.do?rawtext=1&ohd_id=${OnHandForm.wt_id}">
+        WorldTracer ID: <a href="worldtraceraf.do?rawtext=1&ohd_id=${OnHandForm.wt_id}&ntohd_id=${OnHandForm.ohd_id}">
         <c:out value="${OnHandForm.wt_id}" /></a>
 
 
@@ -484,7 +484,7 @@ function gotoHistoricalReport() {
       %>
    
 <c:if test="${!empty OnHandForm.wt_id }">
-        WorldTracer ID: <a href="worldtraceraf.do?rawtext=1&ohd_id=${OnHandForm.wt_id}">
+        WorldTracer ID: <a href="worldtraceraf.do?rawtext=1&ohd_id=${OnHandForm.wt_id}&ntohd_id=${OnHandForm.ohd_id}">
         <c:out value="${OnHandForm.wt_id}" /></a>
         <c:if test="${OnHandForm.wtFile.wt_status != 'SUSPENDED' && OnHandForm.wtFile.wt_status != 'ACTIVE'}">
 		<br/>

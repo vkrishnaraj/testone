@@ -17,6 +17,12 @@
 		var url = 'lostDelay.do?importAhl_id='+ahlId;
 		window.location.href=url;
 	}
+	
+	function back(){
+		var incidentId = '<%=request.getAttribute("incident_id")%>';
+		var url = 'searchIncident.do?incident='+incidentId;
+		window.location.href=url;
+	}
 </script>
 <logic:present name="file_not_found" scope="request">
     <tr>
@@ -363,7 +369,12 @@
 </tr>
 	<tr>
 		<td colspan="4" align="center">
-			<INPUT id="button" type="button" value="Back" onClick="history.back()"> &nbsp; 
+			<% if(request.getAttribute("incident_id") != null){ %>
+				<INPUT id="button" type="button" value="<bean:message key="button.back" />" onClick="back()"> &nbsp; 
+			<% } else { %> 
+				<INPUT id="button" type="button" value="<bean:message key="button.back" />" onClick="history.back()"> &nbsp;
+			<% } %>
+			
 			<logic:present name="allowImport" scope="request">
 				<INPUT id="button" type="button" value="<bean:message key="import.ahl" />" onClick="importAhl();"> &nbsp; 
 			</logic:present><br />&nbsp;

@@ -154,7 +154,7 @@
 		<bean:message key="wt.pending.ahl.create"/>&nbsp;<a href="javascript: document.forms[0].incident_ID.value = '${incident}'; document.forms[0].submit();"><bean:message key="update"/></a>&nbsp;<a href="javascript: document.forms[0].wtq_pending_cancel.value = '${wtq_pending_id}'; document.forms[0].incident_ID.value = '${incident}'; document.forms[0].submit();"><bean:message key="cancel"/></a>
 	</c:if>
 	<c:if test="${!empty incidentForm.wt_id }">
-		<bean:message key="wt.ahl.id"/> <a href="worldtraceraf.do?rawtext=1&ahl_id=<bean:write name="incidentForm" property="wt_id" />">
+		<bean:message key="wt.ahl.id"/> <a href="worldtraceraf.do?rawtext=1&ahl_id=<bean:write name="incidentForm" property="wt_id" />&incident_id=${incident}">
 			<c:out value="${incidentForm.wt_id}" /></a><br/>
 		<c:choose>
 			<c:when test="${!empty pendingWtAction}">

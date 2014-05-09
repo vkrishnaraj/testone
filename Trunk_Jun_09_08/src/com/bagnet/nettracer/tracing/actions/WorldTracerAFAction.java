@@ -112,6 +112,13 @@ public class WorldTracerAFAction extends Action {
 			request.setAttribute("wt_raw", result);
 			request.setAttribute("wt_raw_incident", request
 					.getParameter("ahl_id"));
+			
+			/**
+			 * Adding the incident_id if provide for the purpose of implementing a custom back button on the view ahl page (NT-2651)
+			 */
+			if(request.getParameter("incident_id") != null && !request.getParameter("incident_id").isEmpty()){
+				request.setAttribute("incident_id", request.getParameter("incident_id"));
+			}
 			return (mapping
 					.findForward(TracingConstants.VIEW_WORLDTRACER_AHL));
 
@@ -136,6 +143,13 @@ public class WorldTracerAFAction extends Action {
 
 			request.setAttribute("wt_raw", result);
 			request.setAttribute("wt_raw_ohd", request.getParameter("ohd_id"));
+			
+			/**
+			 * Adding the OHD_ID if provide for the purpose of implementing a custom back button on the view ohd page (NT-2651)
+			 */
+			if(request.getParameter("ntohd_id") != null && !request.getParameter("ntohd_id").isEmpty()){
+				request.setAttribute("ntohd_id", request.getParameter("ntohd_id"));
+			}
 			return (mapping
 					.findForward(TracingConstants.VIEW_WORLDTRACER_OHD));
 		}

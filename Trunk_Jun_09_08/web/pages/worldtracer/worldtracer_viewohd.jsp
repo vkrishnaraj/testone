@@ -10,7 +10,13 @@
 <%@ page import="aero.nettracer.serviceprovider.wt_1_0.common.Itinerary" %>
 <%@ page import="aero.nettracer.serviceprovider.wt_1_0.common.Address" %>
 
-
+<script>
+	function back(){
+		var ntohdId = '<%=request.getAttribute("ntohd_id")%>';
+		var url = 'addOnHandBag.do?ohd_ID='+ntohdId;
+		window.location.href=url;
+	}
+</script>
 <logic:present name="file_not_found" scope="request">
     <tr>
       <td colspan="3" id="pageheadercell">
@@ -346,9 +352,12 @@
 </tr>
             <tr>
               <td colspan="4" align="center">
-                <INPUT id="button" type="button" value="Back" onClick="history.back()">
-                </br>
-                &nbsp;
+             	<% if(request.getAttribute("ntohd_id") != null){ %>
+					<INPUT id="button" type="button" value="<bean:message key="button.back" />" onClick="back()"> &nbsp; 
+				<% } else { %> 
+					<INPUT id="button" type="button" value="<bean:message key="button.back" />" onClick="history.back()"> &nbsp;
+				<% } %>
+				<br/>&nbsp;
               </td>
             </tr>
 </logic:present>
