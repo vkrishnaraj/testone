@@ -56,7 +56,7 @@ public class BagDelStatusInfoUtils {
 			if(a.getBdoExists() && a.getStatusExists() && a.getInfoArray()!=null){
 				for(StatusInfo si:a.getInfoArray()){
 					StatusListDisp sld=new StatusListDisp();
-					sld.setCreateDate(DateUtils.convertSystemCalendarToGMTDate(si.getCreatedDateTime()));
+					sld.setCreateDate(DateUtils.convertSystemCalendarToGMTDate(si.getStatusDateTime()));
 					sld.setDelStatus(si.getDeliveryStatus());
 					sld.setDelStatusDesc(si.getDeliveryStatusDescription());
 					sld.setDelStatusDesc2(si.getDeliveryStatusDescription2());
