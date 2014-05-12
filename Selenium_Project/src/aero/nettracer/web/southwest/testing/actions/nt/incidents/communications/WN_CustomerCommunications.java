@@ -164,7 +164,7 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
 		selenium.click("id=addCommButton");
 		assertEquals("Customer Communications Type is required.", selenium.getAlert());
-		selenium.select("id=activityIdSelect", "label=CREATE LETTER");
+		selenium.select("id=activityIdSelect", "label=55 - CREATE LETTER");
 		selenium.click("id=addCommButton");
 		waitForPageToLoadImproved(500,false);
 		
@@ -418,7 +418,7 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 	@Test
 	public void testAddAssignedToActivity() {
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-		selenium.select("id=activityIdSelect", "label=ASSIGNED TO");
+		selenium.select("id=activityIdSelect", "label=AS - ASSIGNED TO");
 		selenium.click("id=addCommButton");
 		waitForPageToLoadImproved();
 		if (checkNoErrorPage()) {
@@ -434,7 +434,7 @@ public class WN_CustomerCommunications extends WN_SeleniumTest {
 	@Test
 	public void testOutboundWebPortalMessage() {
 		verifyTrue(navigateToIncident(WN_SeleniumTest.INCIDENT_TYPE_LOSTDELAY));
-		selenium.select("id=activityIdSelect", "label=OUTBOUND WEB PORTAL MESSAGE");
+		selenium.select("id=activityIdSelect", "label=99O - OUTBOUND WEB PORTAL MESSAGE");
 		selenium.click("id=addCommButton");
 		waitForPageToLoadImproved(500,false);
 		

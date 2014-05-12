@@ -113,7 +113,7 @@ public class WN_ViewTasksNotInWork extends WN_SeleniumTest {
 	
 	private void createCustomerCommunication() {
 		verifyTrue(navigateToIncident(INCIDENT_TYPE_LOSTDELAY));
-		selenium.select("id=activityIdSelect", "label=CREATE LETTER");
+		selenium.select("id=activityIdSelect", "label=55 - CREATE LETTER");
 		selenium.click("id=addCommButton");
 		waitForPageToLoadImproved(500,false);
 		
@@ -153,7 +153,7 @@ public class WN_ViewTasksNotInWork extends WN_SeleniumTest {
 	
 	@Test
 	public void resetPaymentAppPermissions(){
-		verifyTrue(setPermissions(new String[] { "682","683","685","687","684","688","689"}, new boolean[] { true,true,true,true,true,true}));
+		verifyTrue(setPermissions(new String[] { "682","683","685","687","684","688","689"}, new boolean[] { true,true,true,true,true,true,true}));
 	}
 	
 }
