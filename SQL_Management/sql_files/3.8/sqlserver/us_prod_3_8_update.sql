@@ -4,9 +4,6 @@ GO
 update company_specific_variable set pnr_last_x_days = 0;
 update audit_company_specific_variable set pnr_last_x_days = 0;
 
-alter table ohd alter column storage_location varchar(100);
-alter table audit_ohd alter column storage_location varchar(100);
-
 alter table company_irregularity_codes add active tinyint default 1;
 alter table company_irregularity_codes add controllable tinyint default 0;
 GO
@@ -14,10 +11,24 @@ update company_irregularity_codes set active=1, controllable=0;
 
 alter table passenger add dlprovince varchar(255) default null;
 alter table passenger add dlcountry varchar(2) default null;
+
+
+drop index _dta_index_passenger_6_562101043__K1_K2_3_4_5_6_7_8_9_10_11_12_13_14_15_15_16 on passenger;
+GO
 alter table passenger alter column driverslicense varchar(511);
+GO
+CREATE INDEX [_dta_index_passenger_6_562101043__K1_K2_3_4_5_6_7_8_9_10_11_12_13_14_15_15_16]
+ ON [passenger] ([Passenger_ID], [incident_ID])
+INCLUDE ([membership_ID], [jobtitle], [salutation], [firstname], [middlename], [lastname], [commonnum], [countryofissue], [dlstate], [driverslicense], [isprimary], [numRonKitsIssued], [languageKey], [languageFreeFlow])
+WITH (FILLFACTOR=100,
+	DATA_COMPRESSION = NONE)
+ON [PRIMARY]
+GO
+
+alter table audit_passenger alter column driverslicense varchar(511);
+
 alter table audit_passenger add dlprovince varchar(255) default null;
 alter table audit_passenger add dlcountry varchar(2) default null;
-alter table audit_passenger alter column driverslicense varchar(511);
 GO
 
 
@@ -132,9 +143,79 @@ companycode_id varchar(3),
 primary key (id)
 );
 
+
+drop index ic_scanquery1_idx on incident_claimcheck;
+drop index ic_scanquery2_idx on incident_claimcheck;
+drop index ic_scanquery3_idx on incident_claimcheck;
+drop index ic_scanquery4_idx on incident_claimcheck;
+GO
 alter table incident_claimcheck alter column claimchecknum_bagnumber varchar(8);
+GO
+CREATE INDEX [ic_scanquery1_idx]
+ ON [incident_claimcheck] ([claimchecknum_bagnumber], [claimchecknum_ticketingcode], [claimchecknum_carriercode], [claimchecknum_leading], [incident_ID])
+WITH (FILLFACTOR=100,
+	DATA_COMPRESSION = NONE)
+ON [PRIMARY]
+GO
+CREATE INDEX [ic_scanquery2_idx]
+ ON [incident_claimcheck] ([claimchecknum_bagnumber], [claimchecknum_ticketingcode], [claimchecknum_leading], [incident_ID])
+WITH (FILLFACTOR=100,
+	DATA_COMPRESSION = NONE)
+ON [PRIMARY]
+GO
+CREATE INDEX [ic_scanquery3_idx]
+ ON [incident_claimcheck] ([claimchecknum_bagnumber], [claimchecknum_ticketingcode], [incident_ID])
+WITH (FILLFACTOR=100,
+	DATA_COMPRESSION = NONE)
+ON [PRIMARY]
+GO
+CREATE INDEX [ic_scanquery4_idx]
+ ON [incident_claimcheck] ([claimchecknum_bagnumber], [claimchecknum_carriercode], [incident_ID])
+WITH (FILLFACTOR=100,
+	DATA_COMPRESSION = NONE)
+ON [PRIMARY]
+GO
+
+drop index item_scanquery1_idx on item;
+drop index item_scanquery2_idx on item;
+drop index item_scanquery3_idx on item;
+drop index item_scanquery4_idx on item;
+GO
 alter table item alter column claimchecknum_bagnumber varchar(8);
+GO
+CREATE INDEX [item_scanquery1_idx]
+ ON [item] ([claimchecknum_bagnumber], [claimchecknum_ticketingcode], [claimchecknum_carriercode], [claimchecknum_leading], [incident_ID])
+WITH (FILLFACTOR=100,
+	DATA_COMPRESSION = NONE)
+ON [PRIMARY]
+GO
+CREATE INDEX [item_scanquery2_idx]
+ ON [item] ([claimchecknum_bagnumber], [claimchecknum_ticketingcode], [claimchecknum_leading], [incident_ID])
+WITH (FILLFACTOR=100,
+	DATA_COMPRESSION = NONE)
+ON [PRIMARY]
+GO
+CREATE INDEX [item_scanquery3_idx]
+ ON [item] ([claimchecknum_bagnumber], [claimchecknum_ticketingcode], [incident_ID])
+WITH (FILLFACTOR=100,
+	DATA_COMPRESSION = NONE)
+ON [PRIMARY]
+GO
+CREATE INDEX [item_scanquery4_idx]
+ ON [item] ([claimchecknum_bagnumber], [claimchecknum_carriercode], [incident_ID])
+WITH (FILLFACTOR=100,
+	DATA_COMPRESSION = NONE)
+ON [PRIMARY]
+GO
+
+DROP STATISTICS ohd._WA_Sys_00000026_74794A92;
+GO
 alter table ohd alter column claimchecknum_bagnumber varchar(8);
+GO
+CREATE STATISTICS [_WA_Sys_00000026_74794A92]
+ON [ohd] ([claimchecknum_bagnumber])
+GO
+
 
 alter table item add expediteTagNum varchar(12) null;
 alter table audit_item add expediteTagNum varchar(12) null;
@@ -716,12 +797,177 @@ insert into manufacturer (description) values ('TAG');
 
 alter table company_specific_variable add status_message varchar(255) default null;
 
+
+DROP STATISTICS task._dta_stat_1123535086_1_9_6_10;
+GO
+DROP STATISTICS task._dta_stat_1123535086_10_9_1;
+GO
+DROP STATISTICS task._dta_stat_1123535086_2_6_1;
+GO
+DROP STATISTICS task._dta_stat_1123535086_2_6_1_5_7;
+GO
+DROP STATISTICS task._dta_stat_1123535086_2_7_6_1;
+GO
+DROP STATISTICS task._dta_stat_1123535086_5_2_6_1;
+GO
+DROP STATISTICS task._dta_stat_1123535086_5_6;
+GO
+DROP STATISTICS task._dta_stat_1123535086_5_9_1_6_10;
+GO
+DROP STATISTICS task._dta_stat_1123535086_6_9;
+GO
+DROP STATISTICS task._WA_Sys_00000001_42F7C8EE;
+GO
+DROP STATISTICS task._WA_Sys_00000003_42F7C8EE;
+GO
+DROP STATISTICS task._WA_Sys_00000004_42F7C8EE;
+GO
+DROP STATISTICS task._WA_Sys_00000005_42F7C8EE;
+GO
+DROP STATISTICS task._WA_Sys_00000006_42F7C8EE;
+GO
+DROP STATISTICS task._WA_Sys_00000007_42F7C8EE;
+GO
+DROP STATISTICS task._WA_Sys_00000008_42F7C8EE;
+GO
+DROP STATISTICS task._WA_Sys_00000009_42F7C8EE;
+GO
+DROP STATISTICS task._WA_Sys_0000000A_42F7C8EE;
+GO
+
+drop index _dta_index_task_5_1123535086__K1_K9_K6_K10 on task;
+drop index _dta_index_task_5_1123535086__K6_K1_K5_K2_3_4_9_10 on task;
+drop index _dta_index_task_5_1123535086__K9_K1_K6_K10 on task;
+GO
 alter table task add generic_timestamp datetime;
 GO
 update task set generic_timestamp = deferment_timestamp;
-
---TODO drop index, statistics
+GO
 alter table task drop column deferment_timestamp;
+GO
+alter table task alter column agent_id integer;
+GO
+
+CREATE INDEX [_dta_index_task_5_1123535086__K1_K9_K6_K10]
+ ON [task] ([task_type], [incident_id], [status_ID], [generic_timestamp])
+WITH (FILLFACTOR=100,
+	DATA_COMPRESSION = NONE)
+ON [PRIMARY]
+GO
+
+CREATE INDEX [_dta_index_task_5_1123535086__K6_K1_K5_K2_3_4_9_10]
+ ON [task] ([status_ID], [task_type], [agent_ID], [task_id])
+INCLUDE ([closed_timestamp], [opened_timestamp], [incident_id], [generic_timestamp])
+WITH (FILLFACTOR=100,
+	DATA_COMPRESSION = NONE)
+ON [PRIMARY]
+GO
+
+CREATE INDEX [_dta_index_task_5_1123535086__K9_K1_K6_K10]
+ ON [task] ([incident_id], [task_type], [status_ID], [generic_timestamp])
+WITH (FILLFACTOR=100,
+	DATA_COMPRESSION = NONE)
+ON [PRIMARY]
+GO
+
+CREATE STATISTICS [_dta_stat_1123535086_1_9_6_10]
+ON [task] ([task_type],
+	[incident_id],
+	[status_ID],
+	[generic_timestamp])
+GO
+
+CREATE STATISTICS [_dta_stat_1123535086_10_9_1]
+ON [task] ([generic_timestamp],
+	[incident_id],
+	[task_type])
+GO
+
+CREATE STATISTICS [_dta_stat_1123535086_2_6_1]
+ON [task] ([task_id],
+	[status_ID],
+	[task_type])
+GO
+
+CREATE STATISTICS [_dta_stat_1123535086_2_6_1_5_7]
+ON [task] ([task_id],
+	[status_ID],
+	[task_type],
+	[agent_ID],
+	[bagbuzz_id])
+GO
+
+CREATE STATISTICS [_dta_stat_1123535086_2_7_6_1]
+ON [task] ([task_id],
+	[bagbuzz_id],
+	[status_ID],
+	[task_type])
+GO
+
+CREATE STATISTICS [_dta_stat_1123535086_5_2_6_1]
+ON [task] ([agent_ID],
+	[task_id],
+	[status_ID],
+	[task_type])
+GO
+
+CREATE STATISTICS [_dta_stat_1123535086_5_6]
+ON [task] ([agent_ID],
+	[status_ID])
+GO
+
+CREATE STATISTICS [_dta_stat_1123535086_5_9_1_6_10]
+ON [task] ([agent_ID],
+	[incident_id],
+	[task_type],
+	[status_ID],
+	[generic_timestamp])
+GO
+
+CREATE STATISTICS [_dta_stat_1123535086_6_9]
+ON [task] ([status_ID],
+	[incident_id])
+GO
+
+CREATE STATISTICS [_WA_Sys_00000001_42F7C8EE]
+ON [task] ([task_type])
+GO
+
+CREATE STATISTICS [_WA_Sys_00000003_42F7C8EE]
+ON [task] ([closed_timestamp])
+GO
+
+CREATE STATISTICS [_WA_Sys_00000004_42F7C8EE]
+ON [task] ([opened_timestamp])
+GO
+
+CREATE STATISTICS [_WA_Sys_00000005_42F7C8EE]
+ON [task] ([agent_ID])
+GO
+
+CREATE STATISTICS [_WA_Sys_00000006_42F7C8EE]
+ON [task] ([status_ID])
+GO
+
+CREATE STATISTICS [_WA_Sys_00000007_42F7C8EE]
+ON [task] ([bagbuzz_id])
+GO
+
+CREATE STATISTICS [_WA_Sys_00000008_42F7C8EE]
+ON [task] ([dispute_res_id])
+GO
+
+CREATE STATISTICS [_WA_Sys_00000009_42F7C8EE]
+ON [task] ([incident_id])
+GO
+
+CREATE STATISTICS [_WA_Sys_0000000A_42F7C8EE]
+ON [task] ([generic_timestamp])
+GO
+
+
+
+
 
 insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group)
 values (658,'Manage_CSS_Daily_Calls','Task Manager CS&S Daily Calls Display',15,'css_calls.do',1,99,1);
@@ -734,7 +980,6 @@ insert into systemcomponents (component_id,component_name,component_desc,parent_
 values (660,'NTLF_TM_Ship_To_LFC','Task Manager Ship to LFC',15,'ntlf_search_lost_found.do?stLFCSearch=1',1,99,5);
 
 alter table audit_company_specific_variable add status_message varchar(255) default null;
-
 
 alter table ohd alter column posId varchar(8);
 alter table audit_ohd alter column posId varchar(8);
@@ -1074,8 +1319,17 @@ update systemcomponents set component_name='LUV Cancel a Voucher' where componen
 
 alter table expensepayout add printcount integer default 0;
 
-alter table expensetype alter column description varchar(30); 
-
+DROP STATISTICS expensetype._WA_Sys_00000002_2645B050;
+GO
+DROP STATISTICS expensetype._WA_Sys_00000004_2645B050;
+GO
+alter table expensetype alter column description varchar(30);
+GO 
+CREATE STATISTICS [_WA_Sys_00000002_2645B050]
+ON [expensetype] ([description])
+GO
+CREATE STATISTICS [_WA_Sys_00000004_2645B050]
+ON [expensetype] ([companycode_ID])
 GO
 
 update expensepayout set printcount=0;
@@ -1090,7 +1344,9 @@ alter table task add incidentActivityId bigint default null;
 alter table task add active bit default 1;
 
 alter table expensepayout add ordernum varchar(10);
+
 alter table expensepayout alter column paytype varchar(10);
+
 alter table expensepayout add cancelreason varchar(10);
 alter table expensepayout add cancelcount integer default 0;
 alter table expensepayout add slvnum varchar(20);
@@ -1158,15 +1414,130 @@ insert into systemcomponents (component_id,component_name,component_desc,parent_
    750,'Bag Drop','View and update Bag Drops',39,'bagDrop.do?reset=1',1,99,0);
 insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group) VALUES (
    751,'Bag Drop Admin','Bag Drop Admin',39,null,0,99,0);
-   
-alter table ohd alter column storage_location varchar(125);
-alter table ohd alter column firstname varchar(25);
-alter table ohd alter column lastname varchar(25);
-alter table ohd_passenger alter column firstname varchar(25);
-alter table ohd_passenger alter column lastname varchar(25);
 
+
+DROP STATISTICS ohd._WA_Sys_00000012_74794A92;
+GO
+DROP STATISTICS ohd._WA_Sys_00000016_74794A92;
+GO
+DROP STATISTICS ohd._WA_Sys_00000017_74794A92;
+GO
+DROP STATISTICS ohd._WA_Sys_00000026_74794A92;
+GO
+
+drop index _dta_index_ohd_6_1954106002__K21_K2_K25_K30_K27_K7_K8_1_3_4_5_6_9_10_11_12_13_14_15_16_17_18_19_20_22_23_24_26_28_29_31_32_39_40 on ohd;
+drop index _dta_index_ohd_6_1954106002__K7_K20_K21_1_2_3_4_5_6_8_9_10_11_12_13_14_15_16_17_18_19_22_23_24_25_26_27_28_29_30_39_40 on ohd;
+drop index _dta_index_ohd_6_1954106002__K9_K21_1_2_3_4_5_6_7_8_10_11_12_13_14_15_16_17_18_19_20_22_23_24_25_26_27_28_29_30_31_32_39_40 on ohd;
+GO
+
+alter table ohd alter column storage_location varchar(125);
+alter table ohd alter column firstname varchar(30);
+alter table ohd alter column lastname varchar(30);
 alter table ohd alter column claimchecknum_bagnumber varchar(12);
+GO
+
+CREATE INDEX [_dta_index_ohd_6_1954106002__K21_K2_K25_K30_K27_K7_K8_1_3_4_5_6_9_10_11_12_13_14_15_16_17_18_19_20_22_23_24_26_28_29_31_32_39_40]
+ ON [ohd] ([status_ID], [found_station_ID], [ohd_type], [wt_status], [wt_id], [founddate], [foundtime])
+INCLUDE ([OHD_ID], [holding_station_ID], [membership_ID], [record_locator], [agent_ID], [claimnum], [color], [bagarrivedate], [type], [xdescelement_ID_1], [xdescelement_ID_2], [xdescelement_ID_3], [manufacturer_ID], [manufacturer_other], [storage_location], [close_date], [lastupdated], [firstname], [lastname], [middlename], [disposal_status_id], [faultstation_ID], [loss_code], [earlyBag], [matched_incident], [warehouseSentDate], [warehouseReceivedDate])
+WITH (FILLFACTOR=100,
+	DATA_COMPRESSION = NONE)
+ON [PRIMARY]
+GO
+CREATE INDEX [_dta_index_ohd_6_1954106002__K7_K20_K21_1_2_3_4_5_6_8_9_10_11_12_13_14_15_16_17_18_19_22_23_24_25_26_27_28_29_30_39_40]
+ ON [ohd] ([founddate], [lastupdated], [status_ID])
+INCLUDE ([OHD_ID], [found_station_ID], [holding_station_ID], [membership_ID], [record_locator], [agent_ID], [foundtime], [claimnum], [color], [bagarrivedate], [type], [xdescelement_ID_1], [xdescelement_ID_2], [xdescelement_ID_3], [manufacturer_ID], [manufacturer_other], [storage_location], [close_date], [firstname], [lastname], [middlename], [ohd_type], [disposal_status_id], [wt_id], [faultstation_ID], [loss_code], [wt_status], [warehouseSentDate], [warehouseReceivedDate])
+WITH (FILLFACTOR=100,
+	DATA_COMPRESSION = NONE)
+ON [PRIMARY]
+GO
+CREATE INDEX [_dta_index_ohd_6_1954106002__K9_K21_1_2_3_4_5_6_7_8_10_11_12_13_14_15_16_17_18_19_20_22_23_24_25_26_27_28_29_30_31_32_39_40]
+ ON [ohd] ([claimnum], [status_ID])
+INCLUDE ([OHD_ID], [found_station_ID], [holding_station_ID], [membership_ID], [record_locator], [agent_ID], [founddate], [foundtime], [color], [bagarrivedate], [type], [xdescelement_ID_1], [xdescelement_ID_2], [xdescelement_ID_3], [manufacturer_ID], [manufacturer_other], [storage_location], [close_date], [lastupdated], [firstname], [lastname], [middlename], [ohd_type], [disposal_status_id], [wt_id], [faultstation_ID], [loss_code], [wt_status], [earlyBag], [matched_incident], [warehouseSentDate], [warehouseReceivedDate])
+WITH (FILLFACTOR=100,
+	DATA_COMPRESSION = NONE)
+ON [PRIMARY]
+GO
+CREATE STATISTICS [_WA_Sys_00000012_74794A92]
+ON [ohd] ([storage_location])
+GO
+CREATE STATISTICS [_WA_Sys_00000016_74794A92]
+ON [ohd] ([firstname])
+GO
+CREATE STATISTICS [_WA_Sys_00000017_74794A92]
+ON [ohd] ([lastname])
+GO
+CREATE STATISTICS [_WA_Sys_00000026_74794A92]
+ON [ohd] ([claimchecknum_bagnumber])
+GO
+
+
+DROP STATISTICS ohd_passenger._dta_stat_1413580074_1_4;
+GO
+DROP STATISTICS ohd_passenger._dta_stat_1413580074_4_5;
+GO
+DROP STATISTICS ohd_passenger._dta_stat_1413580074_5_1_4;
+GO
+DROP STATISTICS ohd_passenger._WA_Sys_00000004_5441852A;
+GO
+DROP STATISTICS ohd_passenger._WA_Sys_00000002_5441852A;
+GO
+alter table ohd_passenger alter column firstname varchar(30);
+alter table ohd_passenger alter column lastname varchar(30);
+GO
+CREATE STATISTICS [_dta_stat_1413580074_1_4]
+ON [ohd_passenger] ([passenger_id],
+	[lastname])
+GO
+CREATE STATISTICS [_dta_stat_1413580074_4_5]
+ON [ohd_passenger] ([lastname],
+	[OHD_ID])
+GO
+CREATE STATISTICS [_dta_stat_1413580074_5_1_4]
+ON [ohd_passenger] ([OHD_ID],
+	[passenger_id],
+	[lastname])
+GO
+CREATE STATISTICS [_WA_Sys_00000004_5441852A]
+ON [ohd_passenger] ([lastname])
+GO
+CREATE STATISTICS [_WA_Sys_00000002_5441852A]
+ON [ohd_passenger] ([firstname])
+GO
+
+
+drop index ic_scanquery1_idx on incident_claimcheck;
+drop index ic_scanquery2_idx on incident_claimcheck;
+drop index ic_scanquery3_idx on incident_claimcheck;
+drop index ic_scanquery4_idx on incident_claimcheck;
+GO
 alter table incident_claimcheck alter column claimchecknum_bagnumber varchar(12);   
+GO
+CREATE INDEX [ic_scanquery1_idx]
+ ON [incident_claimcheck] ([claimchecknum_bagnumber], [claimchecknum_ticketingcode], [claimchecknum_carriercode], [claimchecknum_leading], [incident_ID])
+WITH (FILLFACTOR=100,
+	DATA_COMPRESSION = NONE)
+ON [PRIMARY]
+GO
+
+CREATE INDEX [ic_scanquery2_idx]
+ ON [incident_claimcheck] ([claimchecknum_bagnumber], [claimchecknum_ticketingcode], [claimchecknum_leading], [incident_ID])
+WITH (FILLFACTOR=100,
+	DATA_COMPRESSION = NONE)
+ON [PRIMARY]
+GO
+CREATE INDEX [ic_scanquery3_idx]
+ ON [incident_claimcheck] ([claimchecknum_bagnumber], [claimchecknum_ticketingcode], [incident_ID])
+WITH (FILLFACTOR=100,
+	DATA_COMPRESSION = NONE)
+ON [PRIMARY]
+GO
+CREATE INDEX [ic_scanquery4_idx]
+ ON [incident_claimcheck] ([claimchecknum_bagnumber], [claimchecknum_carriercode], [incident_ID])
+WITH (FILLFACTOR=100,
+	DATA_COMPRESSION = NONE)
+ON [PRIMARY]
+GO
+
    
 alter table company_specific_variable add bagdrop_autorefresh_mins integer default 0;
 alter table audit_company_specific_variable add bagdrop_autorefresh_mins integer default 0;
@@ -1298,8 +1669,6 @@ GO
 update agent set inboundQueue = 0;
 update audit_agent set inboundQueue = 0;
 
-alter table task alter column agent_id integer;
-
 alter table task add inboundqueue_id bigint;
 
 create table inboundqueue(
@@ -1396,11 +1765,6 @@ update task set task_type = '3DAYTASK' where task_type = 'THREEDAYTASK';
 update task set task_type = '4DAYTASK' where task_type = 'FOURDAYTASK';
 update task set task_type = '5DAYTASK' where task_type = 'FIVEDAYTASK';
 
-
-alter table ohd alter column firstname varchar(30);
-alter table ohd alter column lastname varchar(30);
-alter table ohd_passenger alter column firstname varchar(30);
-alter table ohd_passenger alter column lastname varchar(30);
 alter table audit_ohd alter column firstname varchar(30);
 alter table audit_ohd alter column lastname varchar(30);
 alter table audit_ohd_passenger alter column firstname varchar(30);
@@ -1411,13 +1775,22 @@ GO
 insert into systemcomponents (component_id,component_name,component_desc,parent_component_id,component_action_link,display,sort_order,sort_group) VALUES (1502,'Import WT AHL','Allows user to Import WorldTracer AHL to create new Incidents',93,'',0,0,0);
 
 alter table issuance_category add copyDescription bit not null default 0;
+
+
 alter table issuance_category alter column description varchar(100);
 alter table issuance_item alter column description varchar(100);
+
+
 alter table issuance_item add cost float default 0;
 
-alter table ohd_log alter column expeditenum varchar(12);
-
+DROP STATISTICS ohd_log._WA_Sys_00000002_6166761E;
 GO
+alter table ohd_log alter column expeditenum varchar(12);
+GO
+CREATE STATISTICS [_WA_Sys_00000002_6166761E]
+ON [ohd_log] ([expeditenum])
+GO
+
 
 update issuance_category set copyDescription = 0;
 update issuance_item set cost = 0;
@@ -1477,7 +1850,7 @@ alter table bagbuzz add category_ID bigint;
 
 GO
 
-update bagbuzz set category_ID = (select id from category where type = 100);--ADD to deployment plan determine correct value
+update bagbuzz set category_ID = (select id from category where type = 100);
 
 update systemcomponents set component_action_link = 'bagbuzzsearch.do?admin_view=1', display = 1, sort_order = 30 where component_name = 'BagBuzzAdmin' and component_id = 504;
 insert into properties (keyStr,valueStr) VALUES ('bagbuzz.max.categories','5');
