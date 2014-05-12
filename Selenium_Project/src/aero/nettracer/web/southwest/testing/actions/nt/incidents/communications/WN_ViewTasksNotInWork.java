@@ -50,7 +50,7 @@ public class WN_ViewTasksNotInWork extends WN_SeleniumTest {
 		boolean[] values = { true, true, true, false, false, true, 
 				false, false, false, false, false, false };
 		verifyTrue(setPermissions(permissions, values));
-		createIncident(true);
+		createIncident(false);
 		createCustomerCommunication();
 		clickMenu("menucol_10.21");
 		waitForPageToLoadImproved();
