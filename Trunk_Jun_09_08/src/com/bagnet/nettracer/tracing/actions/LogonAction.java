@@ -99,6 +99,8 @@ public class LogonAction extends Action {
 	private String foobar;
 	private final Logger authenlog = Logger.getLogger("authentication");
 	
+	IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
+	
 	/**
 	 * Process the specified HTTP request, and create the corresponding HTTP
 	 * response (or forward to another web component that will create it). Return
@@ -320,40 +322,15 @@ public class LogonAction extends Action {
 		}
 		
 		if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL, agent)) {
-			IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
-			IncidentActivityTask iat = incidentActivityService.getAssignedTask(agent,new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING));
-			if (iat != null) {
-				IncidentActivityTaskDTO dto = DomainUtils.fromIncidentActivityTask(iat);
-				dto.set_DATEFORMAT(agent.getDateformat().getFormat());
-				dto.set_TIMEFORMAT(agent.getTimeformat().getFormat());
-				dto.set_TIMEZONE(TimeZone.getTimeZone(agent.getDefaulttimezone()));
-				dto.setAgentLocale(new Locale(agent.getCurrentlocale()));
-				session.setAttribute("iatInProgress", dto);				
-			}
+			session.setAttribute("iatInProgress", loadAssignedTaskId(agent, new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING)));				
 		}
 		
 		if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_FRAUD_REVIEW, agent)) {
-			IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
-			IncidentActivityTask iat = incidentActivityService.getAssignedTask(agent,new Status(TracingConstants.FINANCE_STATUS_FRAUD_REVIEW));
-			if (iat != null) {
-				IncidentActivityTaskDTO dto = DomainUtils.fromIncidentActivityTask(iat);
-				dto.set_DATEFORMAT(agent.getDateformat().getFormat());
-				dto.set_TIMEFORMAT(agent.getTimeformat().getFormat());
-				dto.set_TIMEZONE(TimeZone.getTimeZone(agent.getDefaulttimezone()));
-				session.setAttribute("fraudIatInProgress", dto);				
-			}
+			session.setAttribute("fraudIatInProgress", loadAssignedTaskId(agent, new Status(TracingConstants.FINANCE_STATUS_FRAUD_REVIEW)));				
 		}
 
 		if (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_SUPERVISOR_REVIEW, agent)) {
-			IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
-			IncidentActivityTask iat = incidentActivityService.getAssignedTask(agent,new Status(TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW));
-			if (iat != null) {
-				IncidentActivityTaskDTO dto = DomainUtils.fromIncidentActivityTask(iat);
-				dto.set_DATEFORMAT(agent.getDateformat().getFormat());
-				dto.set_TIMEFORMAT(agent.getTimeformat().getFormat());
-				dto.set_TIMEZONE(TimeZone.getTimeZone(agent.getDefaulttimezone()));
-				session.setAttribute("svIatInProgress", dto);				
-			}
+			session.setAttribute("svIatInProgress", loadAssignedTaskId(agent, new Status(TracingConstants.FINANCE_STATUS_SUPERVISOR_REVIEW)));				
 		}
 		
 		//check if the agent has any outstanding MorningDutiesTask
@@ -424,7 +401,6 @@ public class LogonAction extends Action {
 							entries = (labelList == null) ? 0 : labelList.size();							
 						} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_DOCUMENT_PRINT_QUEUE)) {
 							Status status = new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING_PRINT);
-							IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
 							List<IncidentActivity> documentPrintlist = incidentActivityService.getIncidentActivitiesByTaskStatus(status, null);
 							entries = (documentPrintlist == null) ? 0 : documentPrintlist.size();							
 						} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_TO_BE_INVENTORIED)) {
@@ -608,16 +584,12 @@ public class LogonAction extends Action {
 																					dto = bbDtoList.get(bbDtoList.size() - 1);
 																					entries = Integer.parseInt(dto.getEntries());
 																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_FRAUD_REVIEW)){																					
-																					IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
 																					entries = incidentActivityService.getIncidentActivityFraudReviewCount();
 																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_SUPERVISOR_REVIEW)){																			
-																					IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
 																					entries = incidentActivityService.getIncidentActivitySupervisorReviewCount();
 																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_DISBURSE_REJECT_VIEW)){																			
-																					IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
 																					entries = incidentActivityService.getDisbursementRejectTaskCount(agent);
 																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_PAYMENT_APPROVAL)) {																	
-																					IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
 																					entries = incidentActivityService.getIncidentActivityAwaitingDisbursementCount();
 																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_CLERICAL_CLAIMS_FEATURES)) {
 																					//itemized 3 for damaged
@@ -721,11 +693,9 @@ public class LogonAction extends Action {
 																					}
 																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL_QUEUE) &&
 																						UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_APPROVAL, agent)) {
-																					IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
 																					entries = incidentActivityService.getIncidentActivityAwaitingApprovalCount();
 																				} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_REJECTION_QUEUE) &&
 																						UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_CUST_COMM_CREATE, agent)) {
-																					IncidentActivityService incidentActivityService = (IncidentActivityService) SpringUtils.getBean(TracingConstants.INCIDENT_ACTIVITY_SERVICE_BEAN);
 																					entries = incidentActivityService.getIncidentActivityRejectionCount(agent);
 																				} else if(key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_UNASSIGNED_INBOUND_QUEUE) && 
 																						UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_UNASSIGNED_INBOUND_QUEUE, agent)){
@@ -762,6 +732,11 @@ public class LogonAction extends Action {
 			}
 			session.setAttribute("activityList", list);
 		}
+	}
+	
+	private String loadAssignedTaskId(Agent agent, Status status) {
+		long assignedTaskId = incidentActivityService.getAssignedTaskId(agent, status);
+		return assignedTaskId > 0 ? String.valueOf(assignedTaskId) : null;
 	}
 
 	public void setFoobar(String foobar) {

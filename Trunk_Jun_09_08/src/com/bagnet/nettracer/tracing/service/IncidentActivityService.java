@@ -62,6 +62,7 @@ public interface IncidentActivityService {
 	
 	public IncidentActivityTask getAssignedTask(Agent agent);
 	public IncidentActivityTask getAssignedTask(Agent agent, Status s);
+	public long getAssignedTaskId(Agent agent, Status s);
 	public IncidentActivityTask getTask(Agent agent, Status status);
 	public IncidentActivityTask startTask(long incidentActivityId, Agent agent, Status s);
 	

@@ -9,6 +9,7 @@ import java.util.Map;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.Hibernate;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -18,6 +19,7 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
 import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -744,6 +746,37 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 			}
 		}
 		return toReturn;
+	}
+	
+	@Override
+	public long getAssignedTaskId(Agent agent, Status s) {
+		long id = 0;
+		Session session = null;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			StringBuilder sql = new StringBuilder("select task_id from task where task_type = 'INCACTIVITYTASK' and agent_id = :agentId and active = 1 ");
+			if (s != null) {
+				sql.append("and status_ID = :statusId");
+			}
+			
+			SQLQuery query = session.createSQLQuery(sql.toString());
+			query.setLong("agentId", agent.getAgent_ID());
+			if (s != null) {
+				query.setLong("statusId", s.getStatus_ID());
+			}
+			query.addScalar("task_id", StandardBasicTypes.LONG);
+			
+			@SuppressWarnings("unchecked")
+			List<Long> results = query.list();
+			id = results != null && !results.isEmpty() ? results.get(0).longValue() : 0;
+		} catch (Exception e) {
+			logger.error("An error occurred while attempting to get an assigned task id for: " + agent.getUsername(), e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return id;
 	}
 	
 	@Override
