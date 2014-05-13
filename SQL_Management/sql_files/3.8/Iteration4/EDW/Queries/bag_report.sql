@@ -68,7 +68,7 @@ left outer join
 ) p on i.Incident_ID = p.incident_ID and p.row = 1
 left outer join address a on p.Passenger_ID = a.passenger_ID 
 left outer join airlinemembership m on p.membership_ID = m.Membership_ID 
-left outer join station s on i.stationassigned_ID = s.Station_ID
+left outer join station s on i.stationcreated_ID = s.Station_ID
 left outer join fsclaim c on i.Incident_ID = c.ntIncident_Incident_ID
 left outer join agent ag on i.agent_ID = ag.Agent_ID
 left outer join incident_assoc ia on i.Incident_ID = ia.incident_ID
@@ -103,7 +103,7 @@ left outer join
 ) p on i.Incident_ID = p.incident_ID and p.row = 1
 left outer join address a on p.Passenger_ID = a.passenger_ID 
 left outer join airlinemembership m on p.membership_ID = m.Membership_ID 
-left outer join station s on i.stationassigned_ID = s.Station_ID
+left outer join station s on i.stationcreated_ID = s.Station_ID
 left outer join fsclaim c on i.Incident_ID = c.ntIncident_Incident_ID
 left outer join agent ag on i.agent_ID = ag.Agent_ID
 left outer join incident_assoc ia on i.Incident_ID = ia.incident_ID
