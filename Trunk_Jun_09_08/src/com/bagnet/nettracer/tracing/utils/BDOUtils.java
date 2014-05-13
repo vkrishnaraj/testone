@@ -419,7 +419,7 @@ public class BDOUtils {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static BDO createBdo(BDOForm theform, String[] bagchosen) throws Exception {
+	public static BDO createBdo(BDOForm theform) throws Exception {
 		BDO bdo = new BDO();
 
 		try {
@@ -467,14 +467,8 @@ public class BDOUtils {
 				for (int i = theform.getItemlist().size() - 1; i >= 0; i--) {
 
 					item = (Item) theform.getItemlist().get(i);
-					ArrayList<String> bagsChosen = new ArrayList<String>();
 
-					if (bagchosen != null)
-						for (String bag : bagchosen) {
-							bagsChosen.add(bag);
-						}
-
-					if (bagchosen == null || (bagchosen != null && bagsChosen.contains(Integer.toString(item.getBagnumber())))) {
+					if ( item.isBdoChosen()) {
 						item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_PROCESSFORDELIVERY));
 						// item.setBdo(bdo);
 

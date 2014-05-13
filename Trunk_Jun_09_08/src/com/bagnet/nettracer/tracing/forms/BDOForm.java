@@ -601,6 +601,7 @@ public final class BDOForm extends ValidatorForm {
 			for (int i = 0; i < this.itemlist.size(); i++){
 				Item item = (Item) this.itemlist.get(i);
 				item.setNoAddFees(false);
+				item.setBdoChosen(false);
 			}
 			setItemlist(itemlist);
 		}

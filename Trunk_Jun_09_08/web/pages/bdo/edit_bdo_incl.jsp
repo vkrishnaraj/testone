@@ -927,7 +927,7 @@ if (i.intValue() == 0) {
                 <b>
                 <logic:equal name="BDOForm" property="choosebags" value="1">
                 
-                <input type="checkbox" name="bagchosen" id="bagchosen<%= theitem.getBagnumber() %>" value="<%= theitem.getBagnumber() %>">
+              <input type="checkbox" name="theitem[<%=i %>].bdoChosen"  <% if(theitem.isBdoChosen()) {%> checked="true" <%} %>/>
               </logic:equal>
               <bean:message key="colname.bag_number" />
               : &nbsp;&nbsp;

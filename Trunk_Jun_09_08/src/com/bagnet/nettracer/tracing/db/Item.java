@@ -104,6 +104,7 @@ public class Item implements Serializable {
 	
 	private int lossCode;
 	private Station faultStation;
+	private boolean bdoChosen = false;
 	
 	/**
 	 * @return Returns the bag_weight;
@@ -1315,5 +1316,13 @@ public class Item implements Serializable {
 		if(getStatus()!=null)
 			return getStatus().getStatus_ID()!=TracingConstants.ITEM_STATUS_PROCESSFORDELIVERY;
 		return true;
+	}
+
+	public boolean isBdoChosen() {
+		return bdoChosen;
+	}
+
+	public void setBdoChosen(boolean bdoChosen) {
+		this.bdoChosen = bdoChosen;
 	}
 }

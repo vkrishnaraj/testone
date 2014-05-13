@@ -39,6 +39,7 @@ import com.bagnet.nettracer.tracing.db.DeliveryIntegrationType;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.ExpenseType;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.Item;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.forms.BDOForm;
@@ -254,13 +255,31 @@ public class BDOAction extends Action {
 				return (mapping.findForward(TracingConstants.BDO_MAIN));
 			}
 			
-			String[] bagchosen = null;
 
 			// make sure user checked item to be inserted if choosebags is 1
 			if (theform.getChoosebags() == 1) {
 				// need to select
-				bagchosen = request.getParameterValues("bagchosen");
-				if (bagchosen == null) {
+				boolean hasBags = false;
+				List<Item> bags = theform.getItemlist();
+				for (Item item: bags) {
+					if ( item.isBdoChosen() )
+						hasBags = true;
+				}
+				if ( !hasBags ) {
+					ActionMessage error = new ActionMessage(
+							"error.bdo_choose_bag");
+					messages.add(ActionMessages.GLOBAL_MESSAGE, error);
+					saveMessages(request, messages);
+					return (mapping.findForward(TracingConstants.BDO_MAIN));
+				}
+			} else {
+				// Only 1 bag, make sure it's selected
+				List<Item> bags = theform.getItemlist();
+				// Sanity check, should be at least 1 bag
+				if ( bags != null && bags.size() == 1 ) {
+					bags.get(0).setBdoChosen(true);
+				} else {
+					// Shouldn't happen, no bags ?
 					ActionMessage error = new ActionMessage(
 							"error.bdo_choose_bag");
 					messages.add(ActionMessages.GLOBAL_MESSAGE, error);
@@ -285,7 +304,7 @@ public class BDOAction extends Action {
 			// do insert
 			BDO bdo = null;
 			try {
-				bdo = BDOUtils.createBdo(theform, bagchosen);
+				bdo = BDOUtils.createBdo(theform);
 				bdo.setExpensePayout(createNewBdoPayout(theform, user, bdo));
 				boolean success = BDOUtils.insertBDO(bdo, user);
 				
