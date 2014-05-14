@@ -14,3 +14,7 @@ set @exist := (select count(*) from information_schema.statistics where table_na
 set @sqlstmt := if( @exist > 0, 'select ''INFO: Index already exists.''', 'ALTER TABLE item ADD INDEX faultstation_id (faultStation_id)');
 PREPARE stmt FROM @sqlstmt;
 EXECUTE stmt;
+
+insert into template_var (displayTag,associatedClass) values ('Barcode','IssuanceItem');
+insert into template_var_dependency (associatedClass,dependentClass) values ('IssuanceItem','IssuanceItem');
+insert into template_type (ordinal,defaultName) values (6,'IssuanceItem');
