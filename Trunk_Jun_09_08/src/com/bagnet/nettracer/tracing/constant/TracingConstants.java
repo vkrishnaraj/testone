@@ -14,6 +14,7 @@ import aero.nettracer.fs.model.FsClaim;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.issuance.IssuanceItem;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
@@ -33,6 +34,7 @@ public class TracingConstants {
 		displayNames.put(FsClaim.class, "Claim");
 		displayNames.put(LFFound.class, "Found Item");
 		displayNames.put(ExpensePayout.class, "Expense Payout");
+		displayNames.put(IssuanceItem.class, "Issuance Item");
 	}
 	
 	public static String getDisplayNameFromClass(Class<?> clazz) {

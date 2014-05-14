@@ -15,6 +15,7 @@ import com.bagnet.nettracer.tracing.db.Address;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Passenger;
+import com.bagnet.nettracer.tracing.db.issuance.IssuanceItem;
 import com.bagnet.nettracer.tracing.db.lf.LFAddress;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFPerson;
@@ -52,6 +53,9 @@ public class TemplateAdapterFactory {
 			} else if (type == TemplateType.CLAIM_SETTLEMENT && dto.getExpensePayout() == null) {
 				result.addMissingInfo(TracingConstants.getDisplayNameFromClass(ExpensePayout.class));
 				success = false;
+			} else if (type == TemplateType.ISSUANCE_ITEM && dto.getIssuanceItem() == null) {
+				result.addMissingInfo(TracingConstants.getDisplayNameFromClass(IssuanceItem.class));
+				success = false;
 			} else {
 				continue;
 			}
@@ -62,7 +66,7 @@ public class TemplateAdapterFactory {
 	}
 	
 	public static TemplateAdapter getTemplateAdapter(TemplateAdapterDTO dto) throws InvalidDocumentTypeException {
-		TemplateAdapter adapter = instance.createAdapter(dto);
+		TemplateAdapterImpl adapter = instance.createAdapter(dto);
 		for (TemplateType type: dto.getTypes()) {
 			switch(type) {
 				case STATIC:
@@ -80,6 +84,9 @@ public class TemplateAdapterFactory {
 				case CLAIM_SETTLEMENT:
 					instance.getExpenseInfo(dto, adapter);
 					break;
+				case ISSUANCE_ITEM:
+					instance.getIssuanceItemInfo(dto, adapter);
+					break;
 				default:
 					throw new InvalidDocumentTypeException();
 			}
@@ -87,13 +94,13 @@ public class TemplateAdapterFactory {
 		return adapter;
 	}
 	
-	private TemplateAdapter createAdapter(TemplateAdapterDTO dto) {
-		TemplateAdapter adapter = new TemplateAdapterImpl();
+	private TemplateAdapterImpl createAdapter(TemplateAdapterDTO dto) {
+		TemplateAdapterImpl adapter = new TemplateAdapterImpl();
 		getAgentInfo(dto, adapter);
 		return adapter;
 	}
 	
-	private void getAgentInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) {
+	private void getAgentInfo(TemplateAdapterDTO dto, TemplateAdapterImpl adapter) {
 		if (dto.getAgent() != null) {
 			adapter.setAgentFirstName(dto.getAgent().getFirstname());
 			adapter.setAgentLastName(dto.getAgent().getLastname());
@@ -103,7 +110,7 @@ public class TemplateAdapterFactory {
 	}
 	
 
-	private void getExpenseInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) {
+	private void getExpenseInfo(TemplateAdapterDTO dto, TemplateAdapterImpl adapter) {
 		if(dto.getExpensePayout()!=null){
 			double total=0;
 			if(dto.getExpensePayout().getCheckamt()>0){
@@ -119,7 +126,7 @@ public class TemplateAdapterFactory {
 		}
 	}
 	
-	private void getIncidentInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) {
+	private void getIncidentInfo(TemplateAdapterDTO dto, TemplateAdapterImpl adapter) {
 		if (dto.getIncident() == null) return;
 		Incident incident = dto.getIncident();
 			adapter.setIncidentId(incident.getIncident_ID());			
@@ -150,7 +157,7 @@ public class TemplateAdapterFactory {
 		}
 	}
 	
-	private void getClaimInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) {
+	private void getClaimInfo(TemplateAdapterDTO dto, TemplateAdapterImpl adapter) {
 		if (dto.getClaim() == null) return;
 		
 		FsClaim claim = dto.getClaim();
@@ -194,7 +201,7 @@ public class TemplateAdapterFactory {
 		
 	}
 	
-	private void getFoundItemInfo(TemplateAdapterDTO dto, TemplateAdapter adapter) {
+	private void getFoundItemInfo(TemplateAdapterDTO dto, TemplateAdapterImpl adapter) {
 		if (dto.getFound() == null) return;
 		LFFound found = dto.getFound();
 		adapter.setFoundItemId(String.valueOf(found.getId()));
@@ -238,6 +245,13 @@ public class TemplateAdapterFactory {
 			}
 		}
 	
+	}
+	
+	private void getIssuanceItemInfo(TemplateAdapterDTO dto, TemplateAdapterImpl adapter) {
+		if (dto.getIssuanceItem() == null) return;
+		if (dto.getIssuanceItem().isInventoryIssuanceItem()) {
+			adapter.setIssuanceItemBarcode(dto.getIssuanceItem().getInventoryIssuanceItemBarcode());
+		}
 	}
 	
 }

@@ -7,6 +7,7 @@ import aero.nettracer.fs.model.FsClaim;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.ExpensePayout;
 import com.bagnet.nettracer.tracing.db.Incident;
+import com.bagnet.nettracer.tracing.db.issuance.IssuanceItem;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.enums.TemplateType;
 
@@ -19,6 +20,7 @@ public class TemplateAdapterDTO {
 	private Incident incident;
 	private ExpensePayout expensePayout;
 	private LFFound found;
+	private IssuanceItem issuanceItem;
 	
 	public List<TemplateType> getTypes() {
 		return types;
@@ -66,6 +68,14 @@ public class TemplateAdapterDTO {
 
 	public void setExpensePayout(ExpensePayout expensePayout) {
 		this.expensePayout = expensePayout;
+	}
+
+	public IssuanceItem getIssuanceItem() {
+		return issuanceItem;
+	}
+
+	public void setIssuanceItem(IssuanceItem issuanceItem) {
+		this.issuanceItem = issuanceItem;
 	}	
 
 }

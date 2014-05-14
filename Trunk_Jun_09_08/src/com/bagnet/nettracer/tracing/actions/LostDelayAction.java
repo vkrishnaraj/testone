@@ -426,7 +426,8 @@ public class LostDelayAction extends CheckedAction {
 		if(MBRActionUtils.actionAdd(theform, request, user,TracingConstants.LOST_DELAY)) {
 			return (mapping.findForward(TracingConstants.LD_MAIN));
 		}
-		if(MBRActionUtils.actionIssueItem(theform, request, user)) {
+		if(MBRActionUtils.actionIssueItem(theform, request, user, errors)) {
+			saveMessages(request, errors);
 			return (mapping.findForward(TracingConstants.LD_MAIN));
 		}
 		if(MBRActionUtils.actionReturnItem(theform, request, user)) {

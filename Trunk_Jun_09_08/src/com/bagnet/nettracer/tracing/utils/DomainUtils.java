@@ -30,6 +30,8 @@ import com.bagnet.nettracer.tracing.db.communications.IncidentActivityRemark;
 import com.bagnet.nettracer.tracing.db.documents.Document;
 import com.bagnet.nettracer.tracing.db.documents.templates.Template;
 import com.bagnet.nettracer.tracing.db.documents.templates.TemplateTypeMapping;
+import com.bagnet.nettracer.tracing.db.issuance.IssuanceItem;
+import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemInventory;
 import com.bagnet.nettracer.tracing.db.lf.LFAddress;
 import com.bagnet.nettracer.tracing.db.lf.LFFound;
 import com.bagnet.nettracer.tracing.db.lf.LFItem;
@@ -327,12 +329,14 @@ public class DomainUtils {
 		dto.setClaim(getDummyClaim());
 		dto.setFound(getDummyFoundItem());
 		dto.setExpensePayout(getDummyExpense());
+		dto.setIssuanceItem(getDummyIssuanceItem());
 
 		List<TemplateType> types = new ArrayList<TemplateType>();
 		types.add(TemplateType.INCIDENT);
 		types.add(TemplateType.CLAIM);
 		types.add(TemplateType.FOUND_ITEM);
 		types.add(TemplateType.CLAIM_SETTLEMENT);
+		types.add(TemplateType.ISSUANCE_ITEM);
 		
 		dto.setTypes(types);
 		
@@ -544,6 +548,16 @@ public class DomainUtils {
 		
 		incident.setPassengers(incidentPassengers);
 		return incident;
+	}
+	
+	private static IssuanceItem getDummyIssuanceItem() {
+		IssuanceItem item = new IssuanceItem();
+		IssuanceItemInventory inventoryItem = new IssuanceItemInventory();
+		inventoryItem.setBarcode("1234567890");
+		Set<IssuanceItemInventory> inventoryItems = new LinkedHashSet<IssuanceItemInventory>();
+		inventoryItems.add(inventoryItem);
+		item.setInventoryItems(inventoryItems);
+		return item;
 	}
 	
 }

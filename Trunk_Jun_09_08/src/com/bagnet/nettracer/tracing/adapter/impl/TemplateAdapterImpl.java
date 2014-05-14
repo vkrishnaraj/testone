@@ -72,6 +72,9 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 	private String incidentMobilePhone;
 	private String incidentSalutation;
 	
+	// Issuance Item info
+	private String issuanceItemBarcode;
+	
 	// Expense info
 	private String expenseTotalAmount;
 	
@@ -493,6 +496,14 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 
 	public void setIncidentSalutation(String incidentSalutation) {
 		this.incidentSalutation = incidentSalutation;
+	}
+
+	public String getIssuanceItemBarcode() {
+		return issuanceItemBarcode;
+	}
+
+	public void setIssuanceItemBarcode(String issuanceItemBarcode) {
+		this.issuanceItemBarcode = issuanceItemBarcode;
 	}
 
 	public String getDateToday() {

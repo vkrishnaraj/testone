@@ -313,7 +313,8 @@ public class MissingAction extends CheckedAction {
 		if (MBRActionUtils.actionAdd(theform, request, user,TracingConstants.MISSING_ARTICLES)) {
 			return (mapping.findForward(TracingConstants.MISSING_MAIN));
 		}
-		if(MBRActionUtils.actionIssueItem(theform, request, user)) {
+		if(MBRActionUtils.actionIssueItem(theform, request, user, errors)) {
+			saveMessages(request, errors);
 			return (mapping.findForward(TracingConstants.MISSING_MAIN));
 		}
 		if(MBRActionUtils.actionReturnItem(theform, request, user)) {

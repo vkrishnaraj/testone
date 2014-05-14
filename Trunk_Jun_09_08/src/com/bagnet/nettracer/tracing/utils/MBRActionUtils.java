@@ -86,7 +86,7 @@ public class MBRActionUtils {
 	static Logger logger = Logger.getLogger(MBRActionUtils.class);
 	static DocumentService documentService = (DocumentService) SpringUtils.getBean(TracingConstants.DOCUMENT_SERVICE_BEAN);
 	static TemplateService templateService = (TemplateService) SpringUtils.getBean(TracingConstants.TEMPLATE_SERVICE_BEAN);	
-	static ActionMessages errors = new ActionMessages();
+
 	/**
 	 * This method is responsible for processing the Add buttons on the Incident pages.
 	 * 
@@ -304,7 +304,7 @@ public class MBRActionUtils {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static boolean actionIssueItem(IncidentForm theform, HttpServletRequest request, Agent user) {
+	public static boolean actionIssueItem(IncidentForm theform, HttpServletRequest request, Agent user, ActionMessages errors) {
 		// add new remark box
 		boolean issueQ = (request.getParameter("issueItem") != null);
 		boolean issueL = (request.getParameter("loanItem") != null);
@@ -778,29 +778,17 @@ public class MBRActionUtils {
 		}
 
 		if (request.getParameter("close") != null && (request.getParameter("doclose") != null || request.getParameter("doclosewt") != null)) {
-			ActionMessage error = null;
 			/**
 			 * Checking for the losscode per bag permission. If the permission is not set, then the incident will close on a per incident basis. 
 			 * If it is set, then the fault station is checked against the passenger itinerary to confirm it's valid.
 			 */
 			if(!UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_LOSS_CODES_BAG_LEVEL, user)){
-				if (theform.getFaultstation_id() == 0 || Integer.toString(theform.getFaultstation_id()) == "") {
-					error = new ActionMessage("error.choose_faultcompany");
-					if (error != null) {
-						if (error.getKey().length() > 0) {
-							errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-						}
-					}
-		
+				if (theform.getFaultstation_id() == 0) {
+					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.choose_faultcompany"));						
 					return true;
 				}
 				if (theform.getLoss_code() == 0) {
-					error = new ActionMessage("error.choose_lossreason");
-					if (error != null) {
-						if (error.getKey().length() > 0) {
-							errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-						}
-					}
+					errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.choose_lossreason"));
 					return true;
 				}
 			} else {
@@ -854,12 +842,7 @@ public class MBRActionUtils {
 							}
 						}
 						if(!inPaxItin){
-							error = new ActionMessage("error.fault.pax.itin");
-							if (error != null) {
-								if (error.getKey().length() > 0) {
-									errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-								}
-							}
+							errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.fault.pax.itin"));
 							return true;
 						}
 					}
@@ -1423,8 +1406,6 @@ public class MBRActionUtils {
 				BDO bdo = item.getBdo();
 				if (bdo != null) {
 					// if bdo created, then set bdo to ohd instead
-//					bdo.setIncident(null);
-//					item.setBdo(null);
 					BDOUtils.cancelBdo(bdo.getBDO_ID(), item.getItem_ID(), (Agent) request.getSession().getAttribute("user"));
 					BDOUtils.insertBDOtoDB(bdo, user);
 				}
@@ -1435,7 +1416,7 @@ public class MBRActionUtils {
 
 				// if bag is at the report station, change both status to open
 				// again
-				if (ohd_obj != null & ohd_obj.getHoldingStation().getStation_ID() == theform.getStationassigned().getStation_ID()) {
+				if (ohd_obj != null && ohd_obj.getHoldingStation().getStation_ID() == theform.getStationassigned().getStation_ID()) {
 					item.setStatus(StatusBMO.getStatus(TracingConstants.ITEM_STATUS_OPEN));
 					if (bdo == null) {
 						ohd_obj.setStatus(StatusBMO.getStatus(TracingConstants.OHD_STATUS_OPEN));
@@ -1580,10 +1561,7 @@ public class MBRActionUtils {
 	 */
 
 	public static List<Incident> prePopulateCheck(String pnr, int lastXDays) {
-		
 		return IncidentBMO.getIncidentsByPNR(pnr, lastXDays);
-		// TODO Auto-generated method stub
-		
 	}
 	
 
@@ -1634,8 +1612,14 @@ public class MBRActionUtils {
 		// 2. get the template adapter
 		TemplateAdapterDTO dto = DomainUtils.getTemplateAdapterDTO(user, template);
 		dto.setIncident(incident);
+		dto.setIssuanceItem(qitem);
 		
 		try {
+			result = TemplateAdapterFactory.hasRequiredInfo(dto);
+			if (!result.isSuccess()) {
+				return result;
+			}
+			
 			TemplateAdapter adapter = TemplateAdapterFactory.getTemplateAdapter(dto);
 			Document document = new Document(template);
 			

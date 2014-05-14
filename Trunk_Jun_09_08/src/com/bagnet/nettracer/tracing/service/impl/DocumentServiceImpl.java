@@ -187,7 +187,7 @@ public class DocumentServiceImpl implements DocumentService {
 			for (int i = 1; i < documents.size(); i++) {
 				Document document = documents.get(i);
 				if (document == null  || StringUtils.isBlank(document.getXml(user))) {
-					logger.debug("Document is empty: document Id = " + document.getId());
+					logger.debug("Document is empty: document Id = " + document != null ? document.getId() : "null");
 					continue;
 				}
 				

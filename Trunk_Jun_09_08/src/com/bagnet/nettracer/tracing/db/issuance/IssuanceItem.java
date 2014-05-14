@@ -117,4 +117,15 @@ public class IssuanceItem {
 		this.cost = Double.parseDouble(dispCost);
 	}
 	
+	public boolean isInventoryIssuanceItem() {
+		return inventoryItems != null && !inventoryItems.isEmpty();
+	}
+	
+	public String getInventoryIssuanceItemBarcode() {
+		if (this.isInventoryIssuanceItem()) {
+			return inventoryItems.toArray(new IssuanceItemInventory[0])[0].getBarcode();
+		}
+		return "";
+	}
+	
 }
