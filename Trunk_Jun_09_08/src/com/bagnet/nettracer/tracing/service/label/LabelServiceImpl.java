@@ -23,6 +23,11 @@ public class LabelServiceImpl implements LabelService {
 	}
 
 	@Override
+	public long getLabelCountForAgent(int agentId) {
+		return dao.getLabelCountForAgent(agentId);
+	}
+	
+	@Override
 	public long save(Label label) {
 		return dao.save(label);
 	}

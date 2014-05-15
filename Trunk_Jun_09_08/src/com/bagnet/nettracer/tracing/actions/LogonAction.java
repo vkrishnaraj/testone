@@ -397,8 +397,7 @@ public class LogonAction extends Action {
 								entries = x;
 						} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_LABEL_QUEUE)) {
 							LabelService labelService = (LabelService) SpringUtils.getBean(TracingConstants.LABEL_SERVICE_BEAN);
-							List<Label> labelList = labelService.getLabels(agent.getAgent_ID());
-							entries = (labelList == null) ? 0 : labelList.size();							
+							entries = labelService.getLabelCountForAgent(agent.getAgent_ID());
 						} else if (key.equalsIgnoreCase(TracingConstants.SYSTEM_COMPONENT_NAME_DOCUMENT_PRINT_QUEUE)) {
 							Status status = new Status(TracingConstants.STATUS_CUSTOMER_COMM_PENDING_PRINT);
 							List<IncidentActivity> documentPrintlist = incidentActivityService.getIncidentActivitiesByTaskStatus(status, null);

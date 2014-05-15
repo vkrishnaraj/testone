@@ -10,5 +10,5 @@ public interface LabelDao {
 	public boolean delete(int agentId, long labelId);
 	public Label load(long labelId);
 	public List<Label> getLabels(int agentId);
-
+	public long getLabelCountForAgent(int agentId);
 }

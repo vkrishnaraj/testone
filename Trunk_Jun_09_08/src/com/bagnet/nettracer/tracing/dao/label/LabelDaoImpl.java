@@ -3,12 +3,13 @@
  */
 package com.bagnet.nettracer.tracing.dao.label;
 
+import java.math.BigInteger;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.commons.collections.ListUtils;
+import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
@@ -16,13 +17,14 @@ import org.hibernate.criterion.Restrictions;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.db.Label;
+import com.bagnet.nettracer.tracing.service.impl.IncidentActivityServiceImpl;
 
 /**
  *
  */
 public class LabelDaoImpl implements LabelDao {
 
-	private final Logger log = LoggerFactory.getLogger(getClass());
+	private Logger log = Logger.getLogger(IncidentActivityServiceImpl.class);
 
 	@Override
 	public long save(Label label) {
@@ -40,7 +42,7 @@ public class LabelDaoImpl implements LabelDao {
 			transaction.commit();
 			id = label.getId();
 		} catch (Exception e) {
-			log.error("Failed to create a label - agentId = {} and text = " + label.getText(), label.getAgent().getAgent_ID(), e);
+			log.error("Failed to create a label - agentId = " + label.getAgent().getAgent_ID() + " and text = " + label.getText(), e);
 			if (transaction != null) {
 				transaction.rollback();
 			}
@@ -65,7 +67,7 @@ public class LabelDaoImpl implements LabelDao {
 			session = HibernateWrapper.getSession().openSession();
 			Label oldLabel = (Label) session.get(Label.class, label.getId());
 			if (oldLabel == null) {
-				log.error("Failed to load label - id = {}", label.getId());
+				log.error("Failed to load label - id = " + label.getId());
 				return false;			
 			}
 			
@@ -76,7 +78,7 @@ public class LabelDaoImpl implements LabelDao {
 			transaction.commit();
 			success = true;
 		} catch (Exception e) {
-			log.error("Failed to update label - id = {}", label.getId(), e);
+			log.error("Failed to update label - id = " + label.getId(), e);
 			if (transaction != null) {
 				transaction.rollback();
 			}
@@ -111,7 +113,7 @@ public class LabelDaoImpl implements LabelDao {
 			transaction.commit();
 			success = true;
 		} catch (Exception e) {
-			log.error("Failed to delete label - id = {} and agentId = " + agentId, labelId, e);
+			log.error("Failed to delete label - id = " + labelId + " and agentId = " + agentId, e);
 			if (transaction != null) {
 				transaction.rollback();
 			}
@@ -138,7 +140,7 @@ public class LabelDaoImpl implements LabelDao {
 			session = HibernateWrapper.getSession().openSession();
 			label = (Label) session.get(Label.class, labelId);			
 		} catch (Exception e) {
-			log.error("Failed loading label - id = {}", labelId, e);
+			log.error("Failed loading label - id = " + labelId, e);
 		} finally {
 			if (session != null) {
 				session.close();
@@ -161,12 +163,11 @@ public class LabelDaoImpl implements LabelDao {
 		Session session = null;
 		try {
 			session = HibernateWrapper.getSession().openSession();
-			Criteria criteria = session.createCriteria(Label.class, "l");
-			criteria.add(Restrictions.eq("l.agent.agent_ID", agentId));
+			Criteria criteria = getLabelCriteriaForAgent(session, agentId);
 			criteria.addOrder(Order.desc("l.lastUpdate"));
 			labels = criteria.list();
 		} catch (Exception e) {
-			log.error("Failed loading labels by agentId = {}", agentId, e);
+			log.error("Failed loading labels by agentId = " + agentId, e);
 		} finally {
 			if (session != null) {
 				session.close();
@@ -174,5 +175,31 @@ public class LabelDaoImpl implements LabelDao {
 		}
 		
 		return labels;
+	}
+	
+	public long getLabelCountForAgent(int agentId) {
+		if (agentId <= 0) return 0;
+		
+		Session session = null;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			SQLQuery q = session.createSQLQuery("select count(*) from label where agent_id = :agentId");
+			q.setInteger("agentId", agentId);
+			BigInteger count = (BigInteger) q.uniqueResult();
+			return count != null ? count.longValue() : 0;
+		} catch (Exception e) {
+			log.error("Failed to get label count for agentId: " + agentId, e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return 0;
+	}
+	
+	private Criteria getLabelCriteriaForAgent(Session session, long agentId) {
+		Criteria criteria = session.createCriteria(Label.class, "l");
+		criteria.add(Restrictions.eq("l.agent.agent_ID", agentId));
+		return criteria;
 	}
 }
