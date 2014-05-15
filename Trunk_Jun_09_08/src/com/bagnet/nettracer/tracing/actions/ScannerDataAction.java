@@ -159,10 +159,6 @@ public class ScannerDataAction extends Action {
 			try {
 				bagTagNumber = (StringUtils.equalsIgnoreCase("b6", user.getCompanycode_ID())) ? LookupAirlineCodes.getFullBagTag(bagTagNumber) : LookupAirlineCodes.getTwoCharacterBagTag(bagTagNumber);				
 			} catch (BagtagException e) {
-//				ActionMessage error = new ActionMessage("scanner.error.format");
-//				errors.add(ActionMessages.GLOBAL_MESSAGE, error);
-//				saveMessages(request, errors);
-//				return (mapping.findForward(TracingConstants.FORWARD_SCANNER_DATA));
 			}
 			dynaForm.set("bagTagNumber", bagTagNumber);
 			

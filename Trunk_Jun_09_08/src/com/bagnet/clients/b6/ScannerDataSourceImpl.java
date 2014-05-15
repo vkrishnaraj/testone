@@ -24,10 +24,12 @@ import com.bagnet.nettracer.tracing.dto.ScannerDataDTO;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.brocksolutions.www.ArrayOfBagTransactionResult;
 import com.brocksolutions.www.BagLookupResponseDocument;
+import com.brocksolutions.www.BagLookupResponseDocument.BagLookupResponse;
 import com.brocksolutions.www.BagTransactionResult;
 import com.brocksolutions.www.BaggageServiceStub;
 import com.brocksolutions.www.BagLookupDocument;
 import com.brocksolutions.www.LookupRequest;
+import com.brocksolutions.www.LookupResult;
 
 import edu.emory.mathcs.backport.java.util.Collections;
 
@@ -43,7 +45,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 		ScannerDTO newDto = new ScannerDTO();
 		String endpoint = PropertyBMO.getValue(PropertyBMO.PROPERTY_SCAN_HISTORY_ENDPOINT);
 		try {
-			logger.debug("Endpoint: " + endpoint);
+			logger.info("Endpoint: " + endpoint);
 			stub = new BaggageServiceStub(endpoint);
 		} catch (AxisFault e) {
 			logger.error("AxisFault thrown with Bag Request: endpoint = " + endpoint, e);
@@ -67,7 +69,7 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 				
 		BagLookupResponseDocument responseDoc = null; 
 		try {
-			logger.debug("Scanner request: \r" + scanDoc); 
+			logger.info("Scanner request: \r" + scanDoc); 
 			responseDoc = stub.bagLookup(scanDoc);
 		} catch (RemoteException e) {
 			logger.error("RemoteException thrown with Bag Request: bagTagNumber = " + bagTagNumber, e);
@@ -79,20 +81,23 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 			return newDto;
 		}
 
-		ArrayOfBagTransactionResult bagTransactionResults = responseDoc.getBagLookupResponse().getBagLookupResult().getTransactions();
+		BagLookupResponse bagLookupResponse = responseDoc.getBagLookupResponse();
+		LookupResult bagLookupResult = (bagLookupResponse == null) ? null : bagLookupResponse.getBagLookupResult();
+		ArrayOfBagTransactionResult bagTransactionResults = (bagLookupResult == null) ? null : bagLookupResult.getTransactions();
 		if (bagTransactionResults == null) {
 			logger.error("No bag transaction result : bagTagNumber = " + bagTagNumber + ", startDate = " + dateFormatRequest.format(startDate) //
-					+ ", endDate = " + dateFormatRequest.format(endDate)+ " and timeout = " + timeout);
+					+ ", endDate = " + dateFormatRequest.format(endDate)+ ", timeout = " + timeout
+					+ ((bagLookupResponse == null) ? " and bagLookupResponse is null" : ((bagLookupResult == null) ? " and bagLookupResult is null" : "")));
 			return newDto;
 		}
 		
-		logger.debug("Results: " + bagTransactionResults.sizeOfBagTransactionResultArray());
+		logger.info("Results: " + bagTransactionResults.sizeOfBagTransactionResultArray());
 
 		List<ScannerDataDTO> scannerDataList = new ArrayList<ScannerDataDTO>();
 		DateFormat dateFormatResult = new SimpleDateFormat(TracingConstants.DISPLAY_DATETIMEFORMAT, Locale.US);
 		for (int i = 0; i < bagTransactionResults.sizeOfBagTransactionResultArray(); ++i) {
 			BagTransactionResult bagTransactionResult = bagTransactionResults.getBagTransactionResultArray(i);
-			logger.debug("bagTransactionResult: \r" + bagTransactionResult);
+			logger.info("bagTransactionResult: \r" + bagTransactionResult);
 			if (bagTransactionResult == null) {
 				continue;
 			}
@@ -141,9 +146,6 @@ public class ScannerDataSourceImpl implements ScannerDataSource {
 			}
 			if (bagTransactionResult.getBumSource() != null) {
 				sbOtherInfo.append(bagTransactionResult.getBumSource()).append("<br/>");
-			}
-			if (bagTransactionResult.getToContainerName() != null) {
-				sbOtherInfo.append(bagTransactionResult.getToContainerName()).append("<br/>");
 			}
 			if (bagTransactionResult.getToContainerName() != null) {
 				sbOtherInfo.append(bagTransactionResult.getToContainerName());
