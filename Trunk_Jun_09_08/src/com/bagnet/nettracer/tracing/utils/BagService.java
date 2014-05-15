@@ -1705,7 +1705,7 @@ public class BagService {
 			dto.setCreateDate(activity.getCreateDate());
 			dto.setPublishedDate(activity.getPublishedDate());
 			if (activity.getLastStatus() != null) {
-				dto.setStatusId(activity.getLastStatus().getStatus_ID());
+				dto.setStatus(activity.getLastStatus());
 			}
 			dto.setAgent(activity.getAgent().getUsername());
 			dto.setDescription(activity.getDescription());
@@ -1923,7 +1923,7 @@ public class BagService {
 				dto.setCreateDate(activity.getCreateDate());
 				dto.setPublishedDate(activity.getPublishedDate());
 				if (activity.getLastStatus() != null) {
-					dto.setStatusId(activity.getLastStatus().getStatus_ID());
+					dto.setStatus(activity.getLastStatus());
 				}
 				dto.setAgent(activity.getAgent().getUsername());
 				dto.setDescription(activity.getDescription());

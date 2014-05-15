@@ -2,6 +2,7 @@
 <%@ taglib uri="/tags/struts-bean" prefix="bean" %>
 <%@ taglib uri="/tags/struts-html" prefix="html" %>
 <%@ taglib uri="/tags/struts-logic" prefix="logic"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <%@ page import="java.util.List" %>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
@@ -247,14 +248,17 @@
 	<logic:notEmpty name="incidentForm" property="activityDtos" >
 		<table  class="<%=cssFormClass %>" cellspacing="0" cellpadding="0">
 			<tr>
-				<td class="header" style="width:15%;">
+				<td class="header" style="width:10%;">
 					<bean:message key="incident.activity.date.time.created" />
 				</td>
-				<td class="header" style="width:15%;">
+				<td class="header" style="width:10%;">
 					<bean:message key="incident.activity.agent.created" />
 				</td>
-				<td class="header" style="width:50%;">
+				<td class="header" style="width:40%;">
 					<bean:message key="incident.activity.description" />
+				</td>
+				<td class="header" style="width:20%;">
+					<bean:message key="incident.activity.status" />
 				</td>
 				<td class="header" style="width:20%;">
 					<bean:message key="incident.activity.action" />
@@ -292,6 +296,19 @@
 							</logic:notEmpty>
 						</logic:equal>
 					</td>
+					
+					<td>
+		        		<c:choose>
+			        		<c:when test="${empty activity.status}">
+			        			<bean:message key="incident.activity.status.unavailable" />
+			        		</c:when>
+						    <c:otherwise>
+						    	${activity.status.description}
+						    </c:otherwise>
+		        		</c:choose>
+		        		&nbsp;
+					</td>
+					
 					<td>
 						<logic:equal name="activity" property="isCustomerCommunication" value="true" >
 							<logic:notEqual name="activity" property="statusId" value="<%=String.valueOf(TracingConstants.STATUS_CUSTOMER_COMM_PUBLISHED) %>">

@@ -494,11 +494,11 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 	@Override
 	public List<LabelValueBean> getWorkableStatuses(Locale locale) {
 		List<LabelValueBean> statuses = new ArrayList<LabelValueBean>();
-		List<Status> fromDb = incidentActivityDao.getWorkableStatuses();
 		if (locale == null) {
 			logger.error("Cannot get task types without a Locale.");
 			return statuses;
 		}
+		List<Status> fromDb = incidentActivityDao.getWorkableStatuses();
 		
 		ResourceBundle bundle = ResourceBundle.getBundle("com.bagnet.nettracer.tracing.resources.ApplicationResources", locale);
 		for (Status s: fromDb) {

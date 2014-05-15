@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 public class IncidentActivityDTO {
@@ -16,7 +17,7 @@ public class IncidentActivityDTO {
 	private Date publishedDate;
 	private String agent;
 	private String description;
-	private int statusId;
+	private Status status;
 	private String fileName;
 	private long custCommId;
 	private boolean isCustomerCommunication;
@@ -94,13 +95,17 @@ public class IncidentActivityDTO {
 	}
 	
 	public int getStatusId() {
-		return statusId;
+		return (this.status == null) ? 0 : this.status.getStatus_ID();
 	}
 
-	public void setStatusId(int statusId) {
-		this.statusId = statusId;
+	public Status getStatus() {
+		return this.status;
 	}
-
+	
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+	
 	public String getFileName() {
 		return fileName;
 	}
