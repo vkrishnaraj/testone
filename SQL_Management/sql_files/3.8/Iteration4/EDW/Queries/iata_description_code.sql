@@ -6,7 +6,7 @@ select formatted_output
 #OUTFILE
 from (
 select concat_ws('|','H',date_format(@end, '%Y%m%d'), date_format(@end, '%Y%m%d')) formatted_output, 1 as seq
-union
+union all
 select concat_ws('|',
 
 #COLUMNS
@@ -17,7 +17,7 @@ concat(a.description,'/',b.description,'/',c.description)
 #ROOT QUERY
 from xdescelement a, xdescelement b, xdescelement c
 
-union
+union all
 select concat_ws('|','T',
 
 #COUNT

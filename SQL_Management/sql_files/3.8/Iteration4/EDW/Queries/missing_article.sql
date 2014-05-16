@@ -6,7 +6,7 @@ select formatted_output
 #OUTFILE
 from (
 select concat_ws('|','H',date_format(@end, '%Y%m%d'), date_format(@start, '%Y%m%d')) formatted_output, 1 as seq
-union
+union all
 select concat_ws('|',
 
 #COLUMNS
@@ -26,7 +26,7 @@ case when a.statusId = 800 then 'Y' else 'N' end
 from articles a
 left outer join incident i on a.incident_ID = i.Incident_ID
 where i.lastupdated >= date(@start) and i.lastupdated <= date(@end) 
-union
+union all
 select concat_ws('|','T',
 
 #COUNT

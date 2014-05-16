@@ -6,7 +6,7 @@ select formatted_output
 #OUTFILE
 from (
 select concat_ws('|','H',date_format(@end, '%Y%m%d'), date_format(@end, '%Y%m%d')) formatted_output, 1 as seq
-union
+union all
 select concat_ws('|',
 
 #COLUMNS
@@ -24,7 +24,7 @@ from company_irregularity_codes
 where companycode_ID = 'WN' 
 group by loss_code
 
-union
+union all
 select concat_ws('|','T',
 
 #COUNT

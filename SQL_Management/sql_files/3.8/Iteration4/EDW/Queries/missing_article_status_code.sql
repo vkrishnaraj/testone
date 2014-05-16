@@ -6,7 +6,7 @@ select formatted_output
 #OUTFILE
 from (
 select concat_ws('|','H',date_format(@end, '%Y%m%d'), date_format(@end, '%Y%m%d')) formatted_output, 1 as seq
-union
+union all
 select concat_ws('|',
 
 #COLUMNS
@@ -18,7 +18,7 @@ CASE WHEN Status_ID IN (801,802) THEN 'N' ELSE 'Y' END,
 
 #ROOT QUERY
 from status where table_id = 20
-union
+union all
 select concat_ws('|','T',
 
 #COUNT

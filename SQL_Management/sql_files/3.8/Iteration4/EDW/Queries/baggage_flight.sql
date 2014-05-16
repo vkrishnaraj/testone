@@ -6,7 +6,7 @@ select formatted_output
 #OUTFILE
 from (
 select concat_ws('|','H',date_format(@end, '%Y%m%d'), date_format(@start, '%Y%m%d')) formatted_output, 1 as seq
-union
+union all
 select concat_ws('|',
 
 #COLUMNS
@@ -50,7 +50,7 @@ left outer join
 where inc.lastupdated >= date(@start) and inc.lastupdated <= date(@end) 
 and i.itinerarytype = 1
 order by i.incident_ID, seq.row) temp
-union
+union all
 select concat_ws('|','T',
 
 #COUNT

@@ -6,7 +6,7 @@ select formatted_output
 #OUTFILE
 from (
 select concat_ws('|','H',date_format(@end, '%Y%m%d'), date_format(@start, '%Y%m%d')) formatted_output, 1 as seq
-union
+union all
 select concat_ws('|',
 
 #COLUMNS
@@ -17,7 +17,7 @@ i.color,
 (i.lvlofdamage + 10),
 i.bagtype,
 '',
-concat(x1.code,x2.code,x3.code),
+concat(ifnull(x1.code,'X'),ifnull(x2.code,'X'),ifnull(x3.code,'X')),
 i.claimchecknum,
 case when s.stationcode = 'RYN' then 'Rynn''s' else '' end,
 ifnull(i.damage, ''),
@@ -55,7 +55,7 @@ left outer join
 where inc.lastupdated >= date(@start) and inc.lastupdated <= date(@end) 
 and inc.itemtype_ID = 3 
 
-union
+union all
 select concat_ws('|','T',
 
 #COUNT

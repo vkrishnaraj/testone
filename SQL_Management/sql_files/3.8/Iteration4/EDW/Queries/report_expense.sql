@@ -6,7 +6,7 @@ select formatted_output
 #OUTFILE
 from (
 select concat_ws('|','H',date_format(@end, '%Y%m%d'), date_format(@start, '%Y%m%d')) formatted_output, 1 as seq
-union
+union all
 select concat_ws('|',
 
 #COLUMNS
@@ -71,7 +71,7 @@ left outer join
 where i.lastupdated >= date(@start) and i.lastupdated <= date(@end) 
 and e.incident_ID is not null
 order by e.incident_ID, seq.row) temp
-union
+union all
 select concat_ws('|','T',
 
 #COUNT

@@ -6,7 +6,7 @@ select formatted_output
 #OUTFILE
 from (
 select concat_ws('|','H',date_format(@end, '%Y%m%d'), date_format(@start, '%Y%m%d')) formatted_output, 1 as seq
-union
+union all
 select concat_ws('|',
 
 #COLUMNS
@@ -76,7 +76,7 @@ left outer join incident i2 on ia.assoc_ID = i2.Incident_ID
 left outer join status st on i.courtesyReasonId = st.Status_ID
 where i.lastupdated >= date(@start) and i.lastupdated <= date(@end) 
 
-union
+union all
 select concat_ws('|','T',
 
 #COUNT

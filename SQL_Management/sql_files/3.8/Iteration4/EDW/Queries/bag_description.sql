@@ -6,7 +6,7 @@ select formatted_output
 #OUTFILE
 from (
 select concat_ws('|','H',date_format(@end, '%Y%m%d'), date_format(@start, '%Y%m%d')) formatted_output, 1 as seq
-union
+union all
 select concat_ws('|',
 
 #COLUMNS
@@ -67,7 +67,7 @@ where
 inc.lastupdated >= date(@start) and inc.lastupdated <= date(@end) 
 and inc.itemtype_ID = 1
 
-union
+union all
 select concat_ws('|','T',
 
 #COUNT
