@@ -530,6 +530,11 @@ public class IncidentActivityServiceImpl implements IncidentActivityService {
 	public List<IncidentActivity> getIncidentActivitiesByTaskStatus(Status status, String sortBy) {
 		return incidentActivityDao.getIncidentActivitiesByTaskStatus(status, sortBy);
 	}
+
+	@Override
+	public long getIncidentActivityByTaskStatusCount(Status status, String sortBy) {
+		return incidentActivityDao.getIncidentActivityByTaskStatusCount(status, sortBy);
+	}
 	
 	@Override
 	public List<IncidentActivity> loadActivities(List<Long> idlist){

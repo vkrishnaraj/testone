@@ -666,47 +666,7 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 		Session session = null;
 		try {
 			session = HibernateWrapper.getSession().openSession();
-			Criteria criteria = session.createCriteria(IncidentActivity.class, "ia");			
-			criteria.add(Restrictions.isNotNull("ia.tasks"));			
-			criteria.add(Restrictions.isNotNull("ia.approvalAgent"));		
-
-			criteria.createAlias("ia.tasks", "task", JoinType.LEFT_OUTER_JOIN);
-			criteria.add(Restrictions.eq("task.status", status));
-			criteria.add(Restrictions.eq("task.active", true));
-
-			
-			if (StringUtils.startsWithIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_APPROVAL_AGENT_NAME.getParamString())
-					|| StringUtils.startsWithIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_APPROVAL_AGENT_USERNAME.getParamString())) {
-				criteria.createAlias("ia.approvalAgent", "aa");
-				if (StringUtils.equalsIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_APPROVAL_AGENT_NAME.getParamString())) {
-					criteria.addOrder(Order.asc("aa.lastname"));
-				} else if (StringUtils.equalsIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_APPROVAL_AGENT_NAME_REV.getParamString())) {
-					criteria.addOrder(Order.desc("aa.lastname"));
-				} else if (StringUtils.equalsIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_APPROVAL_AGENT_USERNAME.getParamString())) {
-					criteria.addOrder(Order.asc("aa.username"));
-				} else {
-					criteria.addOrder(Order.desc("aa.username"));
-				}
-			} else if (StringUtils.startsWithIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_DOCUMENT_ID.getParamString())
-					|| StringUtils.startsWithIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_DOCUMENT_TITLE.getParamString())) {
-				criteria.createAlias("ia.document", "d");
-				if (StringUtils.equalsIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_DOCUMENT_ID.getParamString())) {
-					criteria.addOrder(Order.asc("d.id"));
-				} else if (StringUtils.equalsIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_DOCUMENT_ID_REV.getParamString())) {
-					criteria.addOrder(Order.desc("d.id"));
-				} else if (StringUtils.equalsIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_DOCUMENT_TITLE.getParamString())) {
-					criteria.addOrder(Order.asc("d.title"));
-				} else {
-					criteria.addOrder(Order.desc("d.title"));
-				}
-			} else if (StringUtils.equalsIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_REV.getParamString())) {
-				criteria.addOrder(Order.desc("ia.incident"));
-			} else {
-				criteria.addOrder(Order.asc("ia.incident"));
-			}
-			
-			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-			
+			Criteria criteria = getCriteriaForActivitiesByStatus(status, sortBy, session);
 			incidentActivities = criteria.list();
 		} catch (Exception e) {
 			logger.error("Failed loading incident activities by tasks status's Id = {}", status.getStatus_ID(), e);
@@ -717,6 +677,70 @@ public class IncidentActivityDAOImpl implements IncidentActivityDAO {
 		}
 		
 		return incidentActivities;
+	}
+	
+	@Override
+	public long getIncidentActivityByTaskStatusCount(Status status, String sortBy) {
+		if (status == null || status.getStatus_ID() < 1) return 0;
+		Session session = null;
+		try {
+			session = HibernateWrapper.getSession().openSession();
+			Criteria criteria = this.getCriteriaForActivitiesByStatus(status, sortBy, session);
+			criteria.setProjection(Projections.rowCount());
+			Long result = (Long) criteria.uniqueResult();
+			return result != null ? result : 0;
+		} catch (Exception e) {
+			logger.error("Failed to get incident activity task by status count", e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return 0;
+	}
+	
+	private Criteria getCriteriaForActivitiesByStatus(Status status, String sortBy, Session session) {
+		Criteria criteria = session.createCriteria(IncidentActivity.class, "ia");			
+		criteria.add(Restrictions.isNotNull("ia.tasks"));			
+		criteria.add(Restrictions.isNotNull("ia.approvalAgent"));		
+
+		criteria.createAlias("ia.tasks", "task", JoinType.LEFT_OUTER_JOIN);
+		criteria.add(Restrictions.eq("task.status", status));
+		criteria.add(Restrictions.eq("task.active", true));
+
+		
+		if (StringUtils.startsWithIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_APPROVAL_AGENT_NAME.getParamString())
+				|| StringUtils.startsWithIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_APPROVAL_AGENT_USERNAME.getParamString())) {
+			criteria.createAlias("ia.approvalAgent", "aa");
+			if (StringUtils.equalsIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_APPROVAL_AGENT_NAME.getParamString())) {
+				criteria.addOrder(Order.asc("aa.lastname"));
+			} else if (StringUtils.equalsIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_APPROVAL_AGENT_NAME_REV.getParamString())) {
+				criteria.addOrder(Order.desc("aa.lastname"));
+			} else if (StringUtils.equalsIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_APPROVAL_AGENT_USERNAME.getParamString())) {
+				criteria.addOrder(Order.asc("aa.username"));
+			} else {
+				criteria.addOrder(Order.desc("aa.username"));
+			}
+		} else if (StringUtils.startsWithIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_DOCUMENT_ID.getParamString())
+				|| StringUtils.startsWithIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_DOCUMENT_TITLE.getParamString())) {
+			criteria.createAlias("ia.document", "d");
+			if (StringUtils.equalsIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_DOCUMENT_ID.getParamString())) {
+				criteria.addOrder(Order.asc("d.id"));
+			} else if (StringUtils.equalsIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_DOCUMENT_ID_REV.getParamString())) {
+				criteria.addOrder(Order.desc("d.id"));
+			} else if (StringUtils.equalsIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_ACTIVITY_DOCUMENT_TITLE.getParamString())) {
+				criteria.addOrder(Order.asc("d.title"));
+			} else {
+				criteria.addOrder(Order.desc("d.title"));
+			}
+		} else if (StringUtils.equalsIgnoreCase(sortBy, TracingConstants.SortParam.INCIDENT_REV.getParamString())) {
+			criteria.addOrder(Order.desc("ia.incident"));
+		} else {
+			criteria.addOrder(Order.asc("ia.incident"));
+		}
+		
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		return criteria;
 	}
 	
 	@Override

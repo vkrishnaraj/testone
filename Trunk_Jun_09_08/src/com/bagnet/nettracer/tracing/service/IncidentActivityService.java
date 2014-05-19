@@ -48,7 +48,7 @@ public interface IncidentActivityService {
 	
 	public int getIncidentActivityAwaitingApprovalCount();
 	public int getIncidentActivityRejectionCount(Agent agent);
-
+	public long getIncidentActivityByTaskStatusCount(Status status, String sortBy);
 	
 	public boolean hasIncidentActivityTask(IncidentActivity incidentActivity);
 	

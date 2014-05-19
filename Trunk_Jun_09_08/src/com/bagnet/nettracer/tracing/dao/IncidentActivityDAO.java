@@ -41,6 +41,7 @@ public interface IncidentActivityDAO {
 	public int getIncidentActivityTaskCount(IncidentActivityTaskSearchDTO dto);
 	public List<IncidentActivityTask> listIncidentActivityTasks(IncidentActivityTaskSearchDTO dto);
 	public List<IncidentActivity> getIncidentActivitiesByTaskStatus(Status status, String sortBy);
+	public long getIncidentActivityByTaskStatusCount(Status status, String sortBy);
 
 	public IncidentActivityTask loadTaskForIncidentActivity(IncidentActivity incidentActivity, Status withStatus);
 
