@@ -1049,9 +1049,14 @@
 				<% } %>
 						<td style="text-align:left;">
 							<logic:notEmpty name="issuanceitem" property="document">
-								<a href="#" onclick="submitPrintRequest('issuanceItemAdmin.do?preview_document=<bean:write name="issuanceitem" property="document.id" />&receipt=1', 'width=600,height=800,resizable=yes'); return false;"> 
-									<bean:message key="link.preview" />
-								</a>
+								<logic:notEqual name="issuanceitem" property="id" value="0" >
+									<a href="#" onclick="submitPrintRequest('issuanceItemAdmin.do?preview_document=<bean:write name="issuanceitem" property="document.id" />&receipt=1', 'width=600,height=800,resizable=yes'); return false;"> 
+										<bean:message key="link.preview" />
+									</a>
+								</logic:notEqual>
+								<logic:equal name="issuanceitem" property="id" value="0" >
+									<bean:message key="issuance.save.before.print" />
+								</logic:equal>
 							</logic:notEmpty>
 							<logic:empty name="issuanceitem" property="document">
 							&nbsp;
