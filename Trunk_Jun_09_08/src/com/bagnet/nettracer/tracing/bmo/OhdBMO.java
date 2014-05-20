@@ -689,8 +689,8 @@ public class OhdBMO {
 	 *          size of current page
 	 * @return list of on hands, null if none found.
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })//suppressing List rawtype since based on the iscount param, the list can be of type OHD or of type long
-	public List findOnHandBagsBySearchCriteria(Ohd_DTO oDTO, Agent user, int rowsperpage,
+	@SuppressWarnings({ "unchecked" })//suppressing List rawtype since based on the iscount param, the list can be of type OHD or of type long
+	public List<?> findOnHandBagsBySearchCriteria(Ohd_DTO oDTO, Agent user, int rowsperpage,
 			int currpage, boolean iscount, boolean notClosed, boolean dirtyRead, String sort) {
 
 		Session sess = null;
@@ -861,7 +861,7 @@ public class OhdBMO {
 			Date sdate1 = null, edate1 = null; // add one for timezone
 			Date stime = null; // time to compare (04:00 if eastern, for example)
 			
-			ArrayList dateal = null;
+			ArrayList<?> dateal = null;
 			if ((dateal = IncidentUtils.calculateDateDiff(oDTO.getS_createtime(),oDTO.getE_createtime(),tz,user)) == null) {
 				return null;
 			} 
@@ -884,7 +884,7 @@ public class OhdBMO {
 
 			Date sidate = null, eidate = null;
 			Date eidate1 = null; // add one for timezone
-			ArrayList dateal2 = null;
+			ArrayList<?> dateal2 = null;
 			if ((dateal2 = IncidentUtils.calculateDateDiff(oDTO.getS_inventorydate(),oDTO.getE_inventorydate(),tz,user)) == null) {
 				return null;
 			} 
@@ -1121,8 +1121,9 @@ public class OhdBMO {
 			if (iscount){
 				return q.list();
 			} else {
+				@SuppressWarnings("rawtypes")
 				List returnList=new ArrayList();
-				List resultList=q.list();
+				List<?> resultList=q.list();
 				Object[] row;
 				for(int i=0;i<resultList.size();++i){
 					row=(Object[])resultList.get(i);
@@ -1578,7 +1579,7 @@ public class OhdBMO {
 		    	 * Checking for UTB tag - When saving UTB as a Incident_Claimcheck, it only needs to check against the claimCheckNum field	
 		    	 */
 	    		if(tag!=null && tag.length()>3 && tag.substring(0, 3).toUpperCase().equals(TracingConstants.UTB_CHECK)){
-	    			itemSelect = " and (ohd.claimchecknum_ticketingcode = :keyUTB and ohd.claimchecknum_bagnumber = :keyUTBList)";
+	    			itemSelect = " and (ohd.claimchecknum_ticketingcode = :keyUTB and ohd.claimchecknum_bagnumber like :keyUTBList)";
 				} else if (tag != null && tag.length() == 8) {
     				String key = tag.substring(0, 2);
     				itemSelect = " and (ohd.claimchecknum_carriercode = :key8" + key + " and ohd.claimchecknum_bagnumber = :key8" + key + "List)";

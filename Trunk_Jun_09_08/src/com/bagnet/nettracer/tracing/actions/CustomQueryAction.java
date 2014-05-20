@@ -1,8 +1,6 @@
 /*
  * Created on Jul 9, 2004
  *
- * TODO To change the template for this generated file go to
- * Window - Preferences - Java - Code Style - Code Templates
  */
 package com.bagnet.nettracer.tracing.actions;
 
@@ -27,8 +25,6 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.OHD;
-import com.bagnet.nettracer.tracing.forms.IncidentForm;
-import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
@@ -68,9 +64,6 @@ public class CustomQueryAction extends Action {
 			request.setAttribute("ohd", "1");
 		}
 		
-		IncidentForm theform = new IncidentForm();
-		OnHandForm ohdform = new OnHandForm();
-
 		String report_id = request.getParameter("reportid");
 
 		// if user comes here first, just display the screen
@@ -156,15 +149,13 @@ public class CustomQueryAction extends Action {
 			}
 
 			
-			ArrayList resultlist = null;
-
-			resultlist = doSearch(daform, user, request, searchType);
+			ArrayList<?> resultlist = doSearch(daform, user, request, searchType);
 
 			// returned one result go straight to the page
 			if (resultlist != null && resultlist.size() == 1) {
 
-				if (searchType != null && searchType.equals("1") || searchType.equals("2") 
-						|| searchType.equals("3") || searchType.equals("4")) { // search mbr
+				if (searchType != null && (searchType.equals("1") || searchType.equals("2") 
+						|| searchType.equals("3") || searchType.equals("4"))) { // search mbr
 
 					// go straight to the mbr page
 					Incident inc = (Incident) resultlist.get(0);
@@ -198,13 +189,12 @@ public class CustomQueryAction extends Action {
 	 * @param searchtype
 	 * @return
 	 */
-	private ArrayList doSearch(SearchIncidentForm daform, Agent user, HttpServletRequest request,
+	private ArrayList<?> doSearch(SearchIncidentForm daform, Agent user, HttpServletRequest request,
 			String searchtype) {
 		// get number of records found
-		ArrayList resultlist = null;
+		ArrayList<?> resultlist = null;
 		BagService bs = new BagService();
 		int rowcount = -1;
-		String report_id = null;
 		
 		if (request.getParameter("generateReport") != null && 
 				request.getParameter("outputtype") != null) {
@@ -214,12 +204,12 @@ public class CustomQueryAction extends Action {
 				int outputType = new Integer(request.getParameter("outputtype")).intValue();
 				String reportFile = null;
 				
-				ArrayList countArray = bs.customQuery(daform, user, 0, 0, true, searchtype, true);
+				ArrayList<?> countArray = bs.customQuery(daform, user, 0, 0, true, searchtype, true);
 				int rc = ((Long) countArray.get(0)).intValue();
 				int maxRc = TracerProperties.getMaxReportRows(user.getStation().getCompany().getCompanyCode_ID()); 
 
 				if (rc < maxRc) {
-					ArrayList resultArray = bs.customQuery(daform, user, 0, 0, false, searchtype, true);
+					ArrayList<?> resultArray = bs.customQuery(daform, user, 0, 0, false, searchtype, true);
 					
 					ReportBMO rbmo = new ReportBMO(request);
 					if (searchtype.equals("1") || searchtype.equals("2") || searchtype.equals("3") || searchtype.equals("4")) {
@@ -290,7 +280,7 @@ public class CustomQueryAction extends Action {
 
 				if (currpage + 1 == totalpages) request.setAttribute("end", "1");
 				if (totalpages > 1) {
-					ArrayList al = new ArrayList();
+					ArrayList<String> al = new ArrayList<String>();
 					for (int i = 0; i < totalpages; i++) {
 						al.add(Integer.toString(i));
 					}
