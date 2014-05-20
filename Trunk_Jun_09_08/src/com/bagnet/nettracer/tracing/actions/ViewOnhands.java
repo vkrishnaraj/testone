@@ -6,26 +6,20 @@
  */
 package com.bagnet.nettracer.tracing.actions;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
-import org.apache.struts.util.LabelValueBean;
 import org.displaytag.tags.TableTagParameters;
 import org.displaytag.util.ParamEncoder;
 
@@ -35,25 +29,14 @@ import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.constant.TracingConstants.SortParam;
 import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.OHD;
-import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
-import com.bagnet.nettracer.tracing.db.Status;
-import com.bagnet.nettracer.tracing.db.WorldTracerFile.WTStatus;
-import com.bagnet.nettracer.tracing.db.wtq.WtqAmendOhd;
-import com.bagnet.nettracer.tracing.db.wtq.WtqCloseOhd;
-import com.bagnet.nettracer.tracing.db.wtq.WtqCreateOhd;
-import com.bagnet.nettracer.tracing.db.wtq.WtqOhdAction;
-import com.bagnet.nettracer.tracing.forms.CloseOnHandForm;
-import com.bagnet.nettracer.tracing.forms.OnHandForm;
 import com.bagnet.nettracer.tracing.forms.SearchIncidentForm;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
 import com.bagnet.nettracer.tracing.utils.BagService;
 import com.bagnet.nettracer.tracing.utils.OHDUtils;
-import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerProperties;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
-import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
 
 /**
  * Implementation of <strong>Action </strong> that is responsible for generating
@@ -63,8 +46,6 @@ import com.bagnet.nettracer.wt.WorldTracerQueueUtils;
  */
 public class ViewOnhands extends CheckedAction {
 	private static Logger logger = Logger.getLogger(ViewOnhands.class);
-	private String closedOhd_ID = null;
-	private String notClosedOhd_ID = null;
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
