@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import javax.ejb.Stateless;
 import javax.mail.internet.InternetAddress;
@@ -79,12 +80,12 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			"SELECT dt, sum(val) FROM (SELECT date(f.deliveredDate) AS dt, CASE count(*) WHEN NULL THEN 0 ELSE count(*) END AS val " +
 			"FROM lfitem i JOIN lffound f ON f.id = i.found_id LEFT OUTER JOIN lfmatchhistory h ON h.found_id = f.id AND h.status_Status_ID = 608 " +
 			"LEFT OUTER JOIN lflost l ON l.id = h.lost_id LEFT OUTER JOIN lfitem i2 ON i2.lost_id = l.id AND i2.type = 1 WHERE i.value = :value " +
-			"AND f.deliveredDate < :enddate AND f.deliveredDate >= :lastweek AND ( ( i.trackingNumber IS NOT NULL AND i.trackingNumber != '') " +
+			"AND f.deliveredDate < :enddate AND f.deliveredDate >= :lastweek AND f.companyId = :subcompany AND ( ( i.trackingNumber IS NOT NULL AND i.trackingNumber != '') " +
 			"OR i.deliveryRejected = 1 OR ( i2.trackingNumber IS NOT NULL AND i2.trackingNumber != '') OR i2.deliveryRejected = 1) " +
 			"GROUP BY date(f.deliveredDate) UNION SELECT date(l.closeDate) AS dt, CASE count(*) WHEN NULL THEN 0 ELSE count(*) END AS val " +
 			"FROM lfitem i JOIN lffound f ON f.id = i.found_id LEFT OUTER JOIN lfmatchhistory h ON h.found_id = f.id AND h.status_Status_ID = 608 " +
 			"LEFT OUTER JOIN lflost l ON l.id = h.lost_id LEFT OUTER JOIN lfitem i2 ON i2.lost_id = l.id AND i2.type = 1 WHERE i.value = :value " +
-			"AND l.closeDate < :enddate AND l.closeDate >= :lastweek AND ( ( i.trackingNumber IS NULL OR i.trackingNumber = '') AND " +
+			"AND l.closeDate < :enddate AND l.closeDate >= :lastweek AND l.companyId = :subcompany AND ( ( i.trackingNumber IS NULL OR i.trackingNumber = '') AND " +
 			"i.deliveryRejected != 1 AND (( i2.trackingNumber IS NOT NULL AND i2.trackingNumber != '') OR i2.deliveryRejected = 1)) " +
 			"GROUP BY date(l.closeDate)) tb1"; 
 	private static final String CALCULATE_RETURNED_ITEMS_GROUP_BY = " GROUP BY dt ";
@@ -2555,7 +2556,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		return h;
 	}
 	
-	private HashMap<String,String> getEmailParams(){
+	private HashMap<String,String> getLFWeeklyEmailParams(String subcompany){
 		
 		
 		HashMap<String,String> h = new HashMap<String,String>();
@@ -2588,27 +2589,29 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		while((DateUtils.addDays(endDate,1)).after(cal.getTime()));
 		
-		getLostReportsEntered(h, endDate,week);
-		getBoxesEntered(h,endDate,week);	
-		getHighValueEntered(h,endDate,week);
-		getLowValueEntered(h,endDate,week);
-		getReturnedForValueType(HIGH_VALUE,"HighReturned", h,endDate,week);
-		getReturnedForValueType(LOW_VALUE,"LowReturned", h,endDate,week);
-		getMTDTotals(h,endDate,beginMonth);
-		getYTDTotals(h,endDate,beginYear);
-		getWeekItemCounts(h,endDate,fourWeek);		
-		
+		getLostReportsEntered(h, endDate, week, subcompany);
+		getBoxesEntered(h, endDate, week, subcompany);	
+		getHighValueEntered(h, endDate, week, subcompany);
+		getLowValueEntered(h, endDate, week, subcompany);
+		getReturnedForValueType(HIGH_VALUE, "HighReturned", h, endDate, week, subcompany);
+		getReturnedForValueType(LOW_VALUE, "LowReturned", h, endDate, week, subcompany);
+		getMTDTotals(h, endDate, beginMonth, subcompany);
+		getYTDTotals(h, endDate, beginYear, subcompany);
+		getWeekItemCounts(h, endDate, fourWeek, subcompany);		
+
+		h.put("SUBCOMPANY",subcompany);
 		h.put("STARTDATE",DateUtils.formatDate(fourWeek, TracingConstants.DISPLAY_DATEFORMAT, null, null));
 		h.put("ENDDATE", DateUtils.formatDate(endDate, TracingConstants.DISPLAY_DATEFORMAT, null, null));
-		h.put("SUBJECTLINE", "Weekly Summary Report: {STARTDATE} - {ENDDATE}");
+		h.put("SUBJECTLINE", "Weekly Summary Report: {SUBCOMPANY} - {STARTDATE} - {ENDDATE}");
 		
 		return h;
 	}
 	
-	public void getBoxesEntered(HashMap<String, String> h,Date endDate, Date week)
+	public void getBoxesEntered(HashMap<String, String> h,Date endDate, Date week, String subcompany)
 	{
 		int weeklyTotal=0;
 		//Boxes Entered
+		// TODO: Add support for subcompany to boxes. Ticket NT-2398 captures this improvement.
 		String sql = "select bc.dateCount, case sum(b.boxCount) when null then 0 else sum(b.boxCount) end from lfBoxCount b left join lfboxcontainer bc on bc.id =b.container_ID "+
 				"where bc.dateCount < :enddate and bc.dateCount >= :lastweek group by date(bc.dateCount)";
 		SQLQuery q = null;
@@ -2662,12 +2665,12 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 	}
 	
-	public void getLostReportsEntered(HashMap<String, String> h,Date endDate, Date week)
+	public void getLostReportsEntered(HashMap<String, String> h,Date endDate, Date week, String subcompany)
 	{
 	int weeklyTotal=0;
 		//Lost Reports Entered
 		String sql = "select opendate, case count(*) when null then 0 else count(*) end from lflost "+
-				"where openDate < :enddate and OpenDate >= :lastweek group by date(openDate)";
+				"where openDate < :enddate and OpenDate >= :lastweek and companyId = :subcompany group by date(openDate)";
 		SQLQuery q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
@@ -2675,6 +2678,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			
 			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
 			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("subcompany", subcompany);
 			
 			List<?> lis = q.list();
 			Object[] o;
@@ -2720,12 +2724,12 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 	}
 	
 
-	public void getHighValueEntered(HashMap<String, String> h,Date endDate, Date week)
+	public void getHighValueEntered(HashMap<String, String> h,Date endDate, Date week, String subcompany)
 	{
 		int weeklyTotal=0;
 		//High Value Items entered
 		String sql = "select f.receivedDate, case count(*) when null then 0 else count(*) end from lfitem i join lffound f on f.id=i.found_id "+
-				"where i.value=1 and f.receivedDate < :enddate and f.receivedDate >= :lastweek group by date(f.receivedDate)";
+				"where i.value=1 and f.receivedDate < :enddate and f.receivedDate >= :lastweek and f.companyId = :subcompany group by date(f.receivedDate)";
 		SQLQuery q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
@@ -2733,6 +2737,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			
 			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
 			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("subcompany", subcompany);
 			
 			List<?> lis = q.list();
 			Object[] o;
@@ -2776,13 +2781,13 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 	}
 	
-	public void getLowValueEntered(HashMap<String, String> h,Date endDate, Date week)
+	public void getLowValueEntered(HashMap<String, String> h,Date endDate, Date week, String subcompany)
 	{
 		int weeklyTotal=0;
 		//Est Low Value Items entered
 		
 		String sql = "select f.receivedDate, case count(*) when null then 0 else count(*) end from lfitem i join lffound f on f.id=i.found_id "+
-				"where i.value=0 and f.receivedDate < :enddate and f.receivedDate >= :lastweek group by date(f.receivedDate)";
+				"where i.value=0 and f.receivedDate < :enddate and f.receivedDate >= :lastweek and f.companyId = :subcompany group by date(f.receivedDate)";
 		SQLQuery q = null;
 		Session sess = HibernateWrapper.getSession().openSession();
 		try {
@@ -2790,6 +2795,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			
 			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
 			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("subcompany", subcompany);
 			
 			List<?> lis = q.list();
 			Object[] o;
@@ -2834,7 +2840,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 	}
 
-	public void getReturnedForValueType(int type, String fieldNameLabel, HashMap<String, String> h, Date endDate, Date startDate)
+	public void getReturnedForValueType(int type, String fieldNameLabel, HashMap<String, String> h, Date endDate, Date startDate, String subcompany)
 	{
 		int weeklyTotal=0;
 		
@@ -2847,6 +2853,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
 			q.setParameter("lastweek", DateUtils.formatDate(startDate, TracingConstants.DB_DATEFORMAT, null, null));
 			q.setInteger("value",type);
+			q.setParameter("subcompany", subcompany);
 			
 			List<?> lis = q.list();
 			Object[] o;
@@ -2890,7 +2897,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 	}
 	
-	public void getMTDTotals(HashMap<String, String> h, Date endDate, Date week)
+	public void getMTDTotals(HashMap<String, String> h, Date endDate, Date week, String subcompany)
 	{
 		//Low Value Items returned MTD
 		String sql = CALCULATE_RETURNED_ITEMS_QUERY;
@@ -2902,6 +2909,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
 			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
 			q.setInteger("value", LOW_VALUE);
+			q.setParameter("subcompany", subcompany);
 			
 			List<?> lis = q.list();
 			Object[] o;
@@ -2940,6 +2948,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
 			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
 			q.setInteger("value", HIGH_VALUE);
+			q.setParameter("subcompany", subcompany);
 			
 			List<?> lis = q.list();
 			Object[] o;
@@ -2970,7 +2979,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		
 		//Low Value Items Entered Month to Date
 		sql = "select f.receivedDate, case count(*) when null then 0 else count(*) end from lfitem i join lffound f on f.id=i.found_id "+
-				"where i.value=0 and f.receivedDate < :enddate and f.receivedDate >= :lastweek";
+				"where i.value=0 and f.receivedDate < :enddate and f.receivedDate >= :lastweek and f.companyId = :subcompany ";
 		q = null;
 		sess = HibernateWrapper.getSession().openSession();
 		try {
@@ -2978,6 +2987,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			
 			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
 			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("subcompany", subcompany);
 			
 			List<?> lis = q.list();
 			Object[] o;
@@ -3008,7 +3018,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		
 		//High Value Items Entered Month to Date
 		sql = "select f.receivedDate, case count(*) when null then 0 else count(*) end from lfitem i join lffound f on f.id=i.found_id "+
-				"where i.value=1 and f.receivedDate < :enddate and f.receivedDate >= :lastweek";
+				"where i.value=1 and f.receivedDate < :enddate and f.receivedDate >= :lastweek and f.companyId = :subcompany ";
 		q = null;
 		sess = HibernateWrapper.getSession().openSession();
 		try {
@@ -3016,6 +3026,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			
 			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
 			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("subcompany", subcompany);
 			
 			List<?> lis = q.list();
 			Object[] o;
@@ -3045,6 +3056,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		
 		//Boxes Entered Month to Date
+		// TODO: Add support for subcompany to boxes. Ticket NT-2398 captures this improvement.
 		sql = "select bc.dateCount, case sum(b.boxCount) when null then 0 else sum(b.boxCount) end from lfBoxCount b left join lfboxcontainer bc on bc.id =b.container_ID "+
 				"where bc.dateCount < :enddate and bc.dateCount >= :lastweek";
 		q = null;
@@ -3084,7 +3096,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		
 		//Lost Reports Entered Month to Date
 		sql = "select opendate, case count(*) when null then 0 else count(*) end from lflost "+
-				"where openDate < :enddate and OpenDate >= :lastweek";
+				"where openDate < :enddate and OpenDate >= :lastweek and companyId = :subcompany ";
 		q = null;
 		sess = HibernateWrapper.getSession().openSession();
 		try {
@@ -3092,6 +3104,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			
 			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
 			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("subcompany", subcompany);
 			
 			List<?> lis = q.list();
 			Object[] o;
@@ -3121,7 +3134,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 	}
 	
-	public void getYTDTotals(HashMap<String, String> h, Date endDate, Date week)
+	public void getYTDTotals(HashMap<String, String> h, Date endDate, Date week, String subcompany)
 	{
 		//Low Value Items returned
 		String sql = CALCULATE_RETURNED_ITEMS_QUERY;
@@ -3133,6 +3146,8 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
 			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
 			q.setInteger("value", LOW_VALUE);
+			q.setParameter("subcompany", subcompany);
+			
 			List<?> lis = q.list();
 			Object[] o;
 			if(lis.size()!=0){
@@ -3170,6 +3185,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
 			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
 			q.setInteger("value", HIGH_VALUE);
+			q.setParameter("subcompany", subcompany);
 			
 			List<?> lis = q.list();
 			Object[] o;
@@ -3200,7 +3216,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		
 		//Low Value Items Entered Year to Date
 		sql = "select f.receivedDate, case count(*) when null then 0 else count(*) end from lfitem i join lffound f on f.id=i.found_id "+
-				"where i.value=0 and f.receivedDate < :enddate and f.receivedDate >= :lastweek";
+				"where i.value=0 and f.receivedDate < :enddate and f.receivedDate >= :lastweek and f.companyId = :subcompany ";
 		q = null;
 		sess = HibernateWrapper.getSession().openSession();
 		try {
@@ -3208,6 +3224,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			
 			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
 			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("subcompany", subcompany);
 			
 			List<?> lis = q.list();
 			Object[] o;
@@ -3238,7 +3255,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		
 		//High Value Items Entered year to Date
 		sql = "select f.receivedDate, case count(*) when null then 0 else count(*) end from lfitem i join lffound f on f.id=i.found_id "+
-				"where i.value=1 and f.receivedDate < :enddate and f.receivedDate >= :lastweek";
+				"where i.value=1 and f.receivedDate < :enddate and f.receivedDate >= :lastweek and f.companyId = :subcompany ";
 		q = null;
 		sess = HibernateWrapper.getSession().openSession();
 		try {
@@ -3246,6 +3263,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			
 			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
 			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("subcompany", subcompany);
 			
 			List<?> lis = q.list();
 			Object[] o;
@@ -3275,6 +3293,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 		
 		//Boxes Entered year to Date
+		// TODO: Add support for subcompany to boxes. Ticket NT-2398 captures this improvement.
 		sql = "select bc.dateCount, case sum(b.boxCount) when null then 0 else sum(b.boxCount) end from lfBoxCount b left join lfboxcontainer bc on bc.id =b.container_ID "+
 				"where bc.dateCount < :enddate and bc.dateCount >= :lastweek";
 		q = null;
@@ -3314,7 +3333,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		
 		//Lost Reports Entered Year to Date
 		sql = "select opendate, case count(*) when null then 0 else count(*) end from lflost "+
-				"where openDate < :enddate and OpenDate >= :lastweek";
+				"where openDate < :enddate and OpenDate >= :lastweek and companyId = :subcompany ";
 		q = null;
 		sess = HibernateWrapper.getSession().openSession();
 		try {
@@ -3322,6 +3341,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			
 			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
 			q.setParameter("lastweek", DateUtils.formatDate(week, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("subcompany", subcompany);
 			
 			List<?> lis = q.list();
 			Object[] o;
@@ -3351,7 +3371,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		}
 	}
 	
-	public void getWeekItemCounts(HashMap<String, String> h, Date endDate, Date fourweek)
+	public void getWeekItemCounts(HashMap<String, String> h, Date endDate, Date fourweek, String subcompany)
 	{
 		int lowenterTotal=0;
 		int highenterTotal=0;
@@ -3362,6 +3382,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 		int LowReceived=0;
         DecimalFormat twoPlaces = new DecimalFormat("0.00");
 		//Item and Status Counts (Last 4 weeks)
+		// TODO: Add support for subcompany to boxes. Ticket NT-2398 captures this improvement.
 		String sql="select bc.dateCount, Round(10.56 * .9 * case sum(b.boxCount) when null then 0 else sum(b.boxCount) end) from lfBoxCount b left join lfboxcontainer bc on bc.id =b.container_ID "
 				+"where bc.dateCount < :enddate and bc.dateCount >= :fourweek";
 		SQLQuery q = null;
@@ -3407,18 +3428,18 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 				"(q2.ct2+q3.ct3)/q1.ct1*100 as 'Return Rate' from (select case value when 0 then 'Low Value' else 'High Value' END as val, " +
 				"DATE_ADD(f.receivedDate, INTERVAL(1-DAYOFWEEK(f.receivedDate)) DAY) as wk1, " +
 				"case count(*) when null then 0 else count(*) end as ct1 from lfitem i join lffound f on i.found_id = f.id where type = 2 and " +
-				"f.receivedDate < :enddate and f.receivedDate >= :fourweek group by value, wk1) as q1 left outer join " +
+				"f.receivedDate < :enddate and f.receivedDate >= :fourweek and f.companyId = :subcompany group by value, wk1) as q1 left outer join " +
 				"( SELECT CASE i.value WHEN 0 THEN 'Low Value' ELSE 'High Value' END AS val, DATE_ADD(f.receivedDate, " +
 				"INTERVAL (1 - DAYOFWEEK(f.receivedDate)) DAY) AS wk2, CASE count(*) WHEN NULL THEN 0 ELSE count(*) END AS ct2 FROM lfitem i JOIN " +
 				"lffound f ON i.found_id = f.id LEFT OUTER JOIN lfmatchhistory h on h.found_id = f.id and h.status_Status_ID = 608 LEFT OUTER JOIN " +
 				"lflost l on l.id = h.lost_id LEFT OUTER JOIN lfitem i2 on i2.lost_id = l.id and i2.type = 1 WHERE i.type = 2 AND f.receivedDate < :enddate " +
-				"AND f.receivedDate >= :fourweek AND ( (i.trackingNumber IS NOT NULL AND i.trackingNumber != '') OR i.deliveryRejected = 1 OR " +
+				"AND f.receivedDate >= :fourweek AND f.companyId = :subcompany AND ( (i.trackingNumber IS NOT NULL AND i.trackingNumber != '') OR i.deliveryRejected = 1 OR " +
 				"(i2.trackingNumber IS NOT NULL AND i2.trackingNumber != '') OR i2.deliveryRejected = 1) GROUP BY i.value, wk2 ) q2 on q2.val = q1.val and " +
 				"q1.wk1 = q2.wk2 left outer join ( SELECT CASE i.value WHEN 0 THEN 'Low Value' ELSE 'High Value' END AS val, DATE_ADD(f.receivedDate, " +
 				"INTERVAL (1 - DAYOFWEEK(f.receivedDate)) DAY) AS wk3, CASE count(*) WHEN NULL THEN 0 ELSE count(*) END AS ct3 FROM lfitem i JOIN lffound f ON " +
 				"i.found_id = f.id LEFT OUTER JOIN lfmatchhistory h on h.found_id = f.id and h.status_Status_ID = 608 LEFT OUTER JOIN lflost l on l.id = h.lost_id " +
 				"LEFT OUTER JOIN lfitem i2 on i2.lost_id = l.id and i2.type = 1 WHERE i.type = 2 AND f.receivedDate < :enddate AND f.receivedDate >= :fourweek " +
-				"AND ( ((i.trackingNumber IS NULL OR i.trackingNumber = '') AND i.lost_id IS NOT NULL) OR (l.foundemail = 1 AND i2.found_id = i.found_id AND " +
+				"AND f.companyId = :subcompany AND ( ((i.trackingNumber IS NULL OR i.trackingNumber = '') AND i.lost_id IS NOT NULL) OR (l.foundemail = 1 AND i2.found_id = i.found_id AND " +
 				"(i2.trackingNumber IS NULL OR i2.trackingNumber = '') AND (i.trackingNumber IS NULL OR i.trackingNumber = '')) ) " +
 				"GROUP BY i.value, wk3 ) q3 on q3.val = q1.val and q3.wk3 = q1.wk1 group by val, q1.wk1 order by q1.wk1 asc, q1.val desc";
 	    q = null;
@@ -3427,6 +3448,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			
 			q.setParameter("enddate", DateUtils.formatDate(endDate, TracingConstants.DB_DATEFORMAT, null, null));
 			q.setParameter("fourweek", DateUtils.formatDate(fourweek, TracingConstants.DB_DATEFORMAT, null, null));
+			q.setParameter("subcompany", subcompany);
 			
 			List<?> lis = q.list();
 			Object[] o;
@@ -3580,9 +3602,16 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 	public void sendLFWeekly(){
 		Agent a = getAutoAgent();
-		HashMap<String,String> h = getEmailParams();
-		if(sendEmail(a, h, "weekly_email.html",  h.get("SUBJECTLINE"))){
-			Logger.logLF(""+a.getAgent_ID(), "WEEKLY REPORT EMAIL SENT", 0);
+		Set<Subcompany> subcompanies = SubCompanyDAO.loadSubcompaniesByCompCode(a.getCompanycode_ID());
+		if (subcompanies != null && !subcompanies.isEmpty()) {
+			for (Subcompany subcompany : subcompanies) {
+				if (subcompany != null && subcompany.getSubcompanyCode() != null) {
+					HashMap<String,String> h = getLFWeeklyEmailParams(subcompany.getSubcompanyCode());
+					if(sendEmail(a, h, "weekly_email.html",  h.get("SUBJECTLINE"))){
+						Logger.logLF(""+a.getAgent_ID(), subcompany.getSubcompanyCode() + " WEEKLY REPORT EMAIL SENT", 0);
+					}
+				}
+			}
 		}
 	}
 	
