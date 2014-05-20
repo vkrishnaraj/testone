@@ -605,6 +605,7 @@ public class TracingConstants {
 	public final static int OHD_STATUS_OWNER_PICKED_UP = 42;
 	public final static int OHD_STATUS_TO_BE_INVENTORIED = 58;
 	public final static int OHD_STATUS_PASSENGER_PICKED_UP = 60;
+	public final static int OHD_DISPOSAL_STATUS_OTHER = 99;
 
 	public final static int OHD_REQUEST_STATUS_DENIED = 8;
 	public final static int OHD_REQUEST_STATUS_FORWARDED = 9;
@@ -976,6 +977,7 @@ public class TracingConstants {
 	public final static String FORWARD_ON_HAND_SUCCESS = "forwardonhandsuccess";
 
 	public final static String FORWARD_ERROR = "forwarderror";
+	public final static String CLOSE_ERROR = "closeerror";
 	//success wt bag forward
 	public final static String FORWARD_WT_BAG_SUCCESS = "forwardwtbagsuccess";
 
@@ -992,7 +994,6 @@ public class TracingConstants {
 	public final static String ENTER_FORWARD_ON_HAND = "enterforwardonhand";
 
 	public final static String ENTER_FORWARD_MESSAGE = "enterforwardmessage";
-
 	//success on hand forward
 	public final static String REQUEST_ON_HAND_SUCCESS = "requestonhandsuccess";
 

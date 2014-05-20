@@ -31,6 +31,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.util.LabelValueBean;
 import org.apache.struts.util.MessageResources;
@@ -2440,6 +2441,82 @@ public class BagService {
 			return false;
 		}
 	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public boolean insertOnHandForBatchClose(OHD oDTO, Agent mod_agent) {
+		try {
+			oDTO.setModifiedBy(mod_agent.getUsername());
+			if(oDTO.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_CLOSED) {
+				oDTO.setClose_date(TracerDateTime.getGMTDate());
+			}
+			else {
+				oDTO.setClose_date(null);
+			}
+			for(Iterator i = oDTO.getItems().iterator(); i.hasNext();) {
+				OHD_Inventory oo = (OHD_Inventory) i.next();
+				oo.setOhd(oDTO);
+			}
+			for(Iterator i = oDTO.getRemarks().iterator(); i.hasNext();) {
+				Remark oo = (Remark) i.next();
+				oo.setOhd(oDTO);
+			}
+			for(Iterator i = oDTO.getPhotos().iterator(); i.hasNext();) {
+				OHD_Photo oo = (OHD_Photo) i.next();
+				oo.setOhd(oDTO);
+			}
+			for(Iterator i = oDTO.getTasks().iterator(); i.hasNext();) {
+				Task oo = (Task) i.next();
+				oo.setFile_ref_number(oDTO.getOHD_ID());
+			}
+			for(Iterator i = oDTO.getControlLog().iterator(); i.hasNext();) {
+				ControlLog oo = (ControlLog) i.next();
+				oo.setOhd(oDTO);
+			}
+			for(Iterator i = oDTO.getItinerary().iterator(); i.hasNext();) {
+				OHD_Itinerary oo = (OHD_Itinerary) i.next();
+				oo.setOhd(oDTO);
+			}
+			for(Iterator i = oDTO.getPassengers().iterator(); i.hasNext();) {
+				OHD_Passenger oo = (OHD_Passenger) i.next();
+				oo.setOhd(oDTO);
+			}
+			OhdBMO oBMO = new OhdBMO();
+			boolean hasPPULD=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP_LOSTDELAY, mod_agent);
+			boolean hasPPUMA=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP_MISSING, mod_agent);
+			boolean hasPPUDM=UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PASSENGER_PICK_UP_DAMAGE, mod_agent);
+			
+			if(hasPPULD || hasPPUMA || hasPPUDM) {
+				IncidentBMO iBMO=new IncidentBMO();
+				Incident inc=IncidentBMO.getIncidentByID(oDTO.getMatched_incident(), null);
+				if(inc!=null && inc.getItemlist()!=null){
+					Remark rem2=null;
+					int i=1;
+					for(Item item:inc.getItemlist()){
+						if(item.getOHD_ID()!=null && item.getOHD_ID().equals(oDTO.getOHD_ID())
+								&& ((item.getItemtype_ID()==TracingConstants.LOST_DELAY && hasPPULD)
+								|| (item.getItemtype_ID()==TracingConstants.MISSING_ARTICLES && hasPPUMA)
+								|| (item.getItemtype_ID()==TracingConstants.DAMAGED_BAG && hasPPUDM))){
+							rem2=new Remark();
+							rem2.setRemarktype(TracingConstants.REMARK_REGULAR);
+							rem2.setIncident(inc);
+							rem2.setAgent(mod_agent);
+							rem2.setCreatetime(new SimpleDateFormat(TracingConstants.DB_DATETIMEFORMAT).format(TracerDateTime.getGMTDate()));
+							rem2.setRemarktext(messages.getMessage(new Locale(mod_agent.getCurrentlocale()), "ppu.item")+" "+i+" "+messages.getMessage(new Locale(mod_agent.getCurrentlocale()), "inc.ppu.not.returned"));
+							inc.getRemarks().add(rem2);
+						}
+						i++;
+					}
+					iBMO.updateRemarksOnly(oDTO.getMatched_incident(), inc.getRemarks(), mod_agent, true);
+				}
+			}
+			return oBMO.insertOHD(oDTO, mod_agent);
+		}
+		catch (Exception e) {
+			logger.error("unable to batch close onhand - insert onhand error: " + e);
+			return false;
+		}
+	}
+
 
 	@SuppressWarnings("rawtypes")
 	public List findOnHandBagsBySearchCriteria(SearchIncidentForm daform, Agent user, int rowsperpage, int currpage,
