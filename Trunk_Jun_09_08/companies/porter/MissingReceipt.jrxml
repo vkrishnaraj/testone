@@ -4,7 +4,7 @@
 	<property name="ireport.encoding" value="UTF-8"/>
 	<property name="ireport.zoom" value="1.5"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="713"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -303,7 +303,7 @@
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="styled">
 					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[To track your baggage, log onto flyporter.com under the â€œBaggage Claimâ€� heading with your Incident Number and your Record Locator    (indicated below).]]></text>
+				<text><![CDATA[To track your baggage, log onto flyporter.com under the "Baggage Claim" heading with your Incident Number and your Record Locator (indicated below).]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="textField-26" mode="Opaque" x="165" y="264" width="104" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
@@ -332,7 +332,7 @@
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement key="textField-26" mode="Opaque" x="271" y="288" width="106" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-26" mode="Opaque" x="271" y="288" width="89" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Tahoma" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
@@ -349,7 +349,7 @@
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[If Porter cannot locate your baggage, complete a Passenger Property Form and return it to Porter Airlines via email or mail. The form can be found under the â€œBaggage Claimâ€� heading at flyporter.com]]></text>
+				<text><![CDATA[If Porter cannot locate your baggage, complete a Passenger Property Form and return it to Porter Airlines via email or mail. The form can be found under the "Baggage Claim" heading at flyporter.com]]></text>
 			</staticText>
 			<staticText>
 				<reportElement key="textField-48" positionType="Float" mode="Opaque" x="0" y="346" width="542" height="54" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
@@ -366,91 +366,91 @@
 				<text><![CDATA[Please direct questions concerning your baggage to: Porter Airlines Baggage Department, Billy Bishop Toronto City Airport, Toronto ON M5V1A1 Canada email: ytz.baggage@flyporter.com telephone: 416-619-8584]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-48" positionType="Float" mode="Opaque" x="0" y="434" width="542" height="13" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-481" positionType="Float" mode="Opaque" x="0" y="432" width="542" height="13" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Domestic Baggage- Limitation of Liability]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-48" positionType="Float" mode="Opaque" x="0" y="444" width="542" height="43" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-482" positionType="Float" mode="Opaque" x="0" y="445" width="542" height="43" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="styled">
 					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[For domestic travel Porterâ€™s maximum liability for lost baggage and lost contents from damage is $1800.00 per person, per incident. Porter will require proof of loss. Reimbursement for loss or damaged property will be determined by Porter on a case-by-case basis in its reasonable discretion, in accordance with its tariffs. The carrier will not accept a claim for fragile, valuable or perishable articles including money, jewelry, cameras, video and electronic equipment etc. Please visit flyporter.com for a complete list.]]></text>
+				<text><![CDATA[For domestic travel Porter's maximum liability for lost baggage and lost contents from damage is $1800.00 per person, per incident. Porter will require proof of loss. Reimbursement for loss or damaged property will be determined by Porter on a case-by-case basis in its reasonable discretion, in accordance with its tariffs. The carrier will not accept a claim for fragile, valuable or perishable articles including money, jewelry, cameras, video and electronic equipment etc. Please visit flyporter.com for a complete list.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-48" positionType="Float" mode="Opaque" x="0" y="500" width="542" height="34" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-484" positionType="Float" mode="Opaque" x="0" y="501" width="552" height="37" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="styled">
 					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[For international travel, including round trips, Porterâ€™s liability will be subject to the provisions of the Montreal Convention, which prescribes a maximum compensation per passenger of 1131 Special Drawing Rights (SDR). Porter will require proof of loss. Reimbursement for loss or damaged property will be determined by Porter on a case-by-case basis in its reasonable discretion, in accordance with its tariffs. Porter will not accept a claim for fragile]]></text>
+				<text><![CDATA[For international travel, including round trips, Porter's liability will be subject to the provisions of the Montreal Convention, which prescribes a maximum compensation per passenger of 1131 Special Drawing Rights (SDR). Porter will require proof of loss. Reimbursement for loss or damaged property will be determined by Porter on a case-by-case basis in its reasonable discretion, in accordance with its tariffs. Porter will not accept a claim for fragile, valuable or perishable articles including money, jewelry, cameras, video and electronic equipment etc. Please visit flyporter.com for a complete list.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-48" positionType="Float" mode="Opaque" x="0" y="489" width="542" height="13" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-483" positionType="Float" mode="Opaque" x="0" y="488" width="542" height="13" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[International Baggage- Limitation of Liability]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-48" positionType="Float" mode="Opaque" x="0" y="536" width="542" height="13" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-485" positionType="Float" mode="Opaque" x="0" y="547" width="542" height="13" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Delayed Baggage]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-48" positionType="Float" mode="Opaque" x="0" y="547" width="542" height="41" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-486" positionType="Float" mode="Opaque" x="0" y="560" width="542" height="41" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="styled">
 					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Most delayed baggage will be recovered and delivered to you within hours. If your baggage has not been returned to you after 24 hours, you will be issued an electronic voucher worth $25.00 per day for up to 5 days. Porter Airlines allows reasonable interim expenses for delayed baggage. Reimbursement for interim expenses must be sent to the Porter Baggage Department at Billy Bishop Toronto City Airport; original receipts must be provided. Forward all documentation including expense receipts and a copy of this Baggage Irregularity Receipt to Porter Baggage Department.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-48" positionType="Float" mode="Opaque" x="0" y="590" width="542" height="13" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-487" positionType="Float" mode="Opaque" x="0" y="601" width="542" height="13" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Lost Baggage]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-48" positionType="Float" mode="Opaque" x="0" y="601" width="542" height="22" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-488" positionType="Float" mode="Opaque" x="0" y="615" width="542" height="22" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="styled">
 					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[If the bag has not been located after 5 days, your baggage file will be forwarded to our Baggage Department in Toronto. Compensation will be determined in accordance with our Tariff and Conditions of Carriage.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-48" positionType="Float" mode="Opaque" x="0" y="626" width="542" height="13" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-489" positionType="Float" mode="Opaque" x="0" y="638" width="542" height="13" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Missing Contents]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-48" positionType="Float" mode="Opaque" x="0" y="637" width="542" height="22" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-4810" positionType="Float" mode="Opaque" x="0" y="653" width="542" height="19" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="styled">
 					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Porter Airlines assumes no liability for contents missing from your baggage. We encourage you to file a police report in your arrival city and contact your travel insurance agent for further assistance, if applicable.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-48" positionType="Float" mode="Opaque" x="0" y="663" width="542" height="13" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-4811" positionType="Float" mode="Opaque" x="0" y="676" width="542" height="12" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Arial" size="8" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Damaged Baggage or Contents]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-48" positionType="Float" mode="Opaque" x="0" y="674" width="542" height="22" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-4812" positionType="Float" mode="Opaque" x="0" y="689" width="542" height="22" isPrintWhenDetailOverflows="true" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="styled">
 					<font fontName="Arial" size="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[When baggage damage is reported and approved for repair by Porter, you will be offered settlement with travel vouchers equal to the cost of repair, or Porter will arrange to have your baggage repaired at our local approved repair centre at Porterâ€™s cost up to a maximum of $1800.00.]]></text>
+				<text><![CDATA[When baggage damage is reported and approved for repair by Porter, you will be offered settlement with travel vouchers equal to the cost of repair, or Porter will arrange to have your baggage repaired at our local approved repair centre at Porter’s cost up to a maximum of $1800.00.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-48" positionType="Float" mode="Opaque" x="388" y="700" width="147" height="20" isPrintWhenDetailOverflows="true" forecolor="#003366" backcolor="#FFFFFF"/>
+				<reportElement key="textField-48" positionType="Float" mode="Opaque" x="388" y="713" width="147" height="16" isPrintWhenDetailOverflows="true" forecolor="#003366" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Right" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="styled">
 					<font fontName="Arial" size="12" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
@@ -490,7 +490,7 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{state}]]></textFieldExpression>
 			</textField>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement key="textField-15" mode="Opaque" x="387" y="240" width="129" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-15" mode="Opaque" x="364" y="241" width="129" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<box>
 					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
 					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
@@ -510,11 +510,11 @@
 				<text><![CDATA[Province/State:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="textField-26" mode="Opaque" x="308" y="241" width="79" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
+				<reportElement key="textField-26" mode="Opaque" x="308" y="241" width="52" height="14" forecolor="#000000" backcolor="#FFFFFF"/>
 				<textElement textAlignment="Left" verticalAlignment="Top" rotation="None" lineSpacing="Single" markup="none">
 					<font fontName="Tahoma" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfFontName="Helvetica-Bold" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
 				</textElement>
-				<text><![CDATA[Province/State:]]></text>
+				<text><![CDATA[Postal/ZIP]]></text>
 			</staticText>
 		</band>
 	</pageHeader>

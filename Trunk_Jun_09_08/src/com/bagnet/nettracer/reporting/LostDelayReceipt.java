@@ -135,7 +135,7 @@ public class LostDelayReceipt {
 				+ (pa.getAddress(0).getState_ID() != null ? (pa.getAddress(0).getState_ID() + " ") : (pa.getAddress(0).getProvince() != null ? (pa.getAddress(0).getProvince() + " ") : ""))
 				+ (pa.getAddress(0).getZip() != null ? pa.getAddress(0).getZip() : ""));
 		parameters.put("city", (pa.getAddress(0).getCity() != null ? pa.getAddress(0).getCity() : ""));
-		parameters.put("state", (pa.getAddress(0).getState_ID() != null ? pa.getAddress(0).getState_ID() : (pa.getAddress(0).getProvince() != null ? pa.getAddress(0).getProvince() : "")));
+		parameters.put("state", ((pa.getAddress(0).getState_ID() != null  && pa.getAddress(0).getState_ID() .trim().length() > 0 ) ? pa.getAddress(0).getState_ID() : (pa.getAddress(0).getProvince() != null ? pa.getAddress(0).getProvince() : "")));
 		parameters.put("zip", (pa.getAddress(0).getZip() != null ? pa.getAddress(0).getZip() : ""));
 		parameters.put("country", (pa.getAddress(0).getCountry() != null ? pa.getAddress(0).getCountry() : ""));
 		
