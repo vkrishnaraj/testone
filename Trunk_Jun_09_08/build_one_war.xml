@@ -4214,6 +4214,7 @@
 		<copy todir="${basedir}/src" file="${basedir}/companies/southwest/report_email_es.html" />
 		<copy todir="${basedir}/src" file="${basedir}/companies/southwest/report_update_info_email.html" />
 		<copy todir="${basedir}/web/pages/login" file="companies/southwest/environment/${environment.name}/login/center.jsp" />
+		<copy todir="${basedir}/web/pages/onhand" file="companies/southwest/web/pages/onhand/stationOnhands.jsp" />
 	
 		<ant antfile="build-gen.xml" target="combineResourceFiles">
 			<property name="defaultResource" value="${basedir}/companies/tracer/environment/${environment.name}/tracer.properties" />
