@@ -45,6 +45,7 @@
 		<form-bean name="incidentForm" type="com.bagnet.nettracer.tracing.forms.IncidentForm" />
 		<form-bean name="forwardOnHandForm" type="com.bagnet.nettracer.tracing.forms.ForwardOnHandForm" />
 		<form-bean name="forwardMessageForm" type="com.bagnet.nettracer.tracing.forms.ForwardMessageForm" />
+		<form-bean name="closeOnHandForm" type="com.bagnet.nettracer.tracing.forms.CloseOnHandForm" />
 		<form-bean name="searchIncidentForm" type="com.bagnet.nettracer.tracing.forms.SearchIncidentForm" />
 		<form-bean name="subCompanyForm" type="com.bagnet.nettracer.tracing.forms.SubCompanyForm" />
 		<form-bean name="OnHandForm" type="com.bagnet.nettracer.tracing.forms.OnHandForm" />
@@ -473,6 +474,7 @@
 		<forward name="editservicelevels" path="edit_servicelevel" />
 		<forward name="viewtask" path="view_task" />
 		<forward name="forwarderror" path="forward_error" />
+		<forward name="closeerror" path="close_error" />
 		<forward name="composemessage" path="compose_message" />
 		<forward name="viewmessages" path="view_messages" />
 		<forward name="viewmessage" path="view_message" />
@@ -782,7 +784,10 @@
 		<action path="/forward_message" type="com.bagnet.nettracer.tracing.actions.ForwardMessageAction" name="forwardMessageForm" scope="session" validate="false"></action>
 
 		<action path="/forwardBag" type="com.bagnet.nettracer.tracing.actions.ViewOHDToLZed" name="viewOHDLZedForm" scope="request" validate="false"></action>
-
+		
+		<!-- closing ohd bags -->
+		<action path="/close_on_hand" type="com.bagnet.nettracer.tracing.actions.CloseOnHandAction" name="closeOnHandForm" scope="session" validate="false"></action>
+		
 		<!-- Requesting Bags -->
 		<action path="/request_on_hand" type="com.bagnet.nettracer.tracing.actions.RequestOnHandAction" name="requestOnHandForm" scope="request" validate="false"></action>
 

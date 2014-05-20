@@ -14,44 +14,91 @@
       <tr>
         <td>
           <h1 class="green">
-            <bean:message key="message.success.ohd.receive" />
-            <p />
-<%
-              String ohd_id = (String)request.getAttribute("ohd_ID");
-
-              if (ohd_id != null && ohd_id.length() > 13) {
+             <table>
+              <%
+              String ohd_id = (String)request.getAttribute("closedOhd_ID");
+              if (ohd_id != null && ohd_id.length() >= 13) {
+				%>
+             
+             <tr>
+             <td> 
+            <bean:message key="message.onhand.number.success" />
+            </td>
+            </tr>
+            <tr>
+            <td>
+            <%
                 StringTokenizer st = new StringTokenizer(ohd_id, ",");
-
                 while (st.hasMoreTokens()) {
                   String token = (String)st.nextToken();
 %>
-                  <bean:message key="message.onhand.number" />
-                  <a href='addOnHandBag.do?ohd_ID=<%= token %>'><%= token %></a>
+                <a href='addOnHandBag.do?ohd_ID=<%= token %>'><%= token %></a>
                 <p />
                 <logic:present name="deliveredFlag" scope="request">
                   <hr width="50%" />
                   <bean:message key="message.pleasedeliverbags" /><p />
                   <a href="deliver.do"><bean:message key="message.pleasedeliver" /></a>
                 </logic:present>
-
 <%
                 }
               } else {
 %>
-                <bean:message key="message.onhand.number" />
-                <a href='addOnHandBag.do?ohd_ID=<bean:write name="ohd_ID" scope="request"/>'><bean:write name="ohd_ID" scope="request" /></a>
+                <a href='addOnHandBag.do?ohd_ID=${ohd_id}'>${ohd_id}</a>
                 <p />
                 <logic:present name="deliveredFlag" scope="request">
                   <hr width="50%" />
                   <bean:message key="message.pleasedeliverbag" /><p />
                   <a href="deliver.do"><bean:message key="message.pleasedeliver" /></a>
                 </logic:present>
-
 <%
               }
               
 %>
+			</td>
+			</tr>
+			 <%
+              String notClosedOhd_ID = (String)request.getAttribute("notClosedOhd_ID");
 
+              if (notClosedOhd_ID != null && notClosedOhd_ID.length() >= 13) {
+            	  %>
+             <tr>
+             <td>
+            <bean:message key="message.onhand.number.failed" />
+            </td>
+            </tr>
+            <tr>
+            <td>
+            	  <%
+                StringTokenizer st = new StringTokenizer(notClosedOhd_ID, ",");
+
+                while (st.hasMoreTokens()) {
+                  String token = (String)st.nextToken();
+%>
+                <a href='addOnHandBag.do?ohd_ID=<%= token %>'><%= token %></a>
+                <p />
+                <logic:present name="deliveredFlag" scope="request">
+                  <hr width="50%" />
+                  <bean:message key="message.pleasedeliverbags" /><p />
+                  <a href="deliver.do"><bean:message key="message.pleasedeliver" /></a>
+                </logic:present>
+<%
+                }
+              } else {
+%>
+                <a href='addOnHandBag.do?ohd_ID=${ohd_id}'>${ohd_id}</a>
+                <p />
+                <logic:present name="deliveredFlag" scope="request">
+                  <hr width="50%" />
+                  <bean:message key="message.pleasedeliverbag" /><p />
+                  <a href="deliver.do"><bean:message key="message.pleasedeliver" /></a>
+                </logic:present>
+<%
+              }
+              
+%>
+			</td>
+			</tr>			
+			</table>
             </td>
           </tr>
         </table>
