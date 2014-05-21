@@ -27,6 +27,9 @@
 	boolean showPosId = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_COLLECT_POS_ID, a);
 	
 	int colspan = showPosId ? 14 : 13;
+	ResourceBundle bundle = ResourceBundle.getBundle(
+			"com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
+
 %>
 
 <script language="javascript">
@@ -131,7 +134,7 @@ function submitForwardForm()
           		size="<%=Integer.valueOf(request.getAttribute("rowcount").toString())%>" pagesize="<%=Integer.valueOf(request.getAttribute("rowsperpage").toString())%>"
           		class="form2" cellspacing="0" cellpadding="0" id="ohd" defaultsort="1" partialList="true" >
           		<% OHD o=(OHD)ohd; %>
-          		<display:column title="<bean:message key="colname.forwardOhd" />">
+          		<display:column titleKey="colname.forwardOhd">
           		    <%  if (o != null && 
                           o.getStatus().getStatus_ID() != TracingConstants.OHD_STATUS_IN_TRANSIT &&
                           o.getStatus().getStatus_ID() != TracingConstants.OHD_STATUS_MATCH_IN_TRANSIT
@@ -140,30 +143,30 @@ function submitForwardForm()
           			<% } %>
           			&nbsp;
           		</display:column>
-             	<display:column property="OHD_ID" title="<bean:message key="colname.on_hand_report_number" />" href="addOnHandBag.do" paramId="ohd_ID" sortable="true" sortName="<%=request.getAttribute("sortNum").equals(TracingConstants.SortParam.OHD_NUM.getParamString())?TracingConstants.SortParam.OHD_NUMREV.getParamString():TracingConstants.SortParam.OHD_NUM.getParamString() %>"/>
-             	<display:column title="<bean:message key="colname.incident_num" />" sortable="true" href="searchIncident.do" paramId="incident" sortName="<%=request.getAttribute("sortNum").equals(TracingConstants.SortParam.OHD_INCIDENT.getParamString())?TracingConstants.SortParam.OHD_INCIDENTREV.getParamString():TracingConstants.SortParam.OHD_INCIDENT.getParamString() %>"><a href='searchIncident.do?incident=<%= OHDUtils.getMBRReportNum((OHD)ohd, "" + a.getStation().getStation_ID()) %>'><%= OHDUtils.getMBRReportNum((OHD)ohd, "" + a.getStation().getStation_ID()) %></a>&nbsp;</display:column>
-             	<display:column property="displaydate" title="<bean:message key="colname.ohd_create_date" />" sortable="true" sortName="<%=request.getAttribute("sortNum").equals(TracingConstants.SortParam.OHD_DATE.getParamString())?TracingConstants.SortParam.OHD_DATEREV.getParamString():TracingConstants.SortParam.OHD_DATE.getParamString() %>"/>
-             	<display:column title="<bean:message key="colname.ohd_modified_date" />" sortable="true" sortName="<%=request.getAttribute("sortNum").equals(TracingConstants.SortParam.OHD_MODDATE.getParamString())?TracingConstants.SortParam.OHD_MODDATEREV.getParamString():TracingConstants.SortParam.OHD_MODDATE.getParamString() %>"><c:out value="${ohd.dispModifiedDate} ${ohd.dispModifiedTime}"/>&nbsp;</display:column>
-                <display:column title="<bean:message key="colname.bag_tag_number" />" sortable="true" sortName="<%=request.getAttribute("sortNum").equals(TracingConstants.SortParam.OHD_BAGTAG.getParamString())?TracingConstants.SortParam.OHD_BAGTAGREV.getParamString():TracingConstants.SortParam.OHD_BAGTAG.getParamString() %>"><c:out value="${ohd.claimnum}"/>&nbsp;</display:column>
-                <display:column title="<bean:message key="header.status" />" sortable="true" sortName="<%=request.getAttribute("sortNum").equals(TracingConstants.SortParam.OHD_STATUS.getParamString())?TracingConstants.SortParam.OHD_STATUSREV.getParamString():TracingConstants.SortParam.OHD_STATUS.getParamString() %>">
+             	<display:column property="OHD_ID" titleKey="colname.on_hand_report_number" href="addOnHandBag.do" paramId="ohd_ID" sortable="true" sortName="<%=request.getAttribute("sortNum").equals(TracingConstants.SortParam.OHD_NUM.getParamString())?TracingConstants.SortParam.OHD_NUMREV.getParamString():TracingConstants.SortParam.OHD_NUM.getParamString() %>"/>
+             	<display:column titleKey="colname.incident_num" sortable="true" href="searchIncident.do" paramId="incident" sortName="<%=request.getAttribute("sortNum").equals(TracingConstants.SortParam.OHD_INCIDENT.getParamString())?TracingConstants.SortParam.OHD_INCIDENTREV.getParamString():TracingConstants.SortParam.OHD_INCIDENT.getParamString() %>"><a href='searchIncident.do?incident=<%= OHDUtils.getMBRReportNum((OHD)ohd, "" + a.getStation().getStation_ID()) %>'><%= OHDUtils.getMBRReportNum((OHD)ohd, "" + a.getStation().getStation_ID()) %></a>&nbsp;</display:column>
+             	<display:column property="displaydate" titleKey="colname.ohd_create_date" sortable="true" sortName="<%=request.getAttribute("sortNum").equals(TracingConstants.SortParam.OHD_DATE.getParamString())?TracingConstants.SortParam.OHD_DATEREV.getParamString():TracingConstants.SortParam.OHD_DATE.getParamString() %>"/>
+             	<display:column titleKey="colname.ohd_modified_date" sortable="true" sortName="<%=request.getAttribute("sortNum").equals(TracingConstants.SortParam.OHD_MODDATE.getParamString())?TracingConstants.SortParam.OHD_MODDATEREV.getParamString():TracingConstants.SortParam.OHD_MODDATE.getParamString() %>"><c:out value="${ohd.dispModifiedDate} ${ohd.dispModifiedTime}"/>&nbsp;</display:column>
+                <display:column titleKey="colname.bag_tag_number" sortable="true" sortName="<%=request.getAttribute("sortNum").equals(TracingConstants.SortParam.OHD_BAGTAG.getParamString())?TracingConstants.SortParam.OHD_BAGTAGREV.getParamString():TracingConstants.SortParam.OHD_BAGTAG.getParamString() %>"><c:out value="${ohd.claimnum}"/>&nbsp;</display:column>
+                <display:column titleKey="header.status" sortable="true" sortName="<%=request.getAttribute("sortNum").equals(TracingConstants.SortParam.OHD_STATUS.getParamString())?TracingConstants.SortParam.OHD_STATUSREV.getParamString():TracingConstants.SortParam.OHD_STATUS.getParamString() %>">
                 	<% String status=o.getStatus().getKey(); %>
-                	<c:out value="<bean:message key="<%=status%>" />" />&nbsp;
+                	<c:out value="<%=bundle.getString(status)%>" />&nbsp;
                 </display:column>
-                <display:column title="<bean:message key="colname.color" />" sortable="true" sortName="<%=request.getAttribute("sortNum").equals(TracingConstants.SortParam.OHD_COLOR.getParamString())?TracingConstants.SortParam.OHD_COLORREV.getParamString():TracingConstants.SortParam.OHD_COLOR.getParamString() %>"><c:out value="${ohd.color}"/>&nbsp;</display:column>
-                <display:column  title="<bean:message key="colname.bagtype" />" sortable="true" sortName="<%=request.getAttribute("sortNum").equals(TracingConstants.SortParam.OHD_TYPE.getParamString())?TracingConstants.SortParam.OHD_TYPEREV.getParamString():TracingConstants.SortParam.OHD_TYPE.getParamString() %>"><c:out value="${ohd.type}"/>&nbsp;</display:column>
+                <display:column titleKey="colname.color" sortable="true" sortName="<%=request.getAttribute("sortNum").equals(TracingConstants.SortParam.OHD_COLOR.getParamString())?TracingConstants.SortParam.OHD_COLORREV.getParamString():TracingConstants.SortParam.OHD_COLOR.getParamString() %>"><c:out value="${ohd.color}"/>&nbsp;</display:column>
+                <display:column  titleKey="colname.bagtype" sortable="true" sortName="<%=request.getAttribute("sortNum").equals(TracingConstants.SortParam.OHD_TYPE.getParamString())?TracingConstants.SortParam.OHD_TYPEREV.getParamString():TracingConstants.SortParam.OHD_TYPE.getParamString() %>"><c:out value="${ohd.type}"/>&nbsp;</display:column>
                 <% if (showPosId) { %>
-                	<display:column sortable="true" title="<bean:message key="colname.posId" />" sortName="<%=request.getAttribute("sortNum").equals(TracingConstants.SortParam.OHD_POSID.getParamString())?TracingConstants.SortParam.OHD_POSIDREV.getParamString():TracingConstants.SortParam.OHD_POSID.getParamString() %>"><c:out value="${ohd.posId}"/>&nbsp;</display:column>
+                	<display:column sortable="true" titleKey="colname.posId" sortName="<%=request.getAttribute("sortNum").equals(TracingConstants.SortParam.OHD_POSID.getParamString())?TracingConstants.SortParam.OHD_POSIDREV.getParamString():TracingConstants.SortParam.OHD_POSID.getParamString() %>"><c:out value="${ohd.posId}"/>&nbsp;</display:column>
                 <% } %>
-                <display:column title="<bean:message key="colname.found_destination" />" sortable="true" sortName="<%=request.getAttribute("sortNum").equals(TracingConstants.SortParam.OHD_DESTINATION.getParamString())?TracingConstants.SortParam.OHD_DESTINATIONREV.getParamString():TracingConstants.SortParam.OHD_DESTINATION.getParamString() %>"><c:out value="${ohd.dispDestination}"/>&nbsp;</display:column>
-				<display:column  title="<bean:message key="colname.name" />" sortable="true" sortName="<%=request.getAttribute("sortNum").equals(TracingConstants.SortParam.OHD_NAME.getParamString())?TracingConstants.SortParam.OHD_NAMEREV.getParamString():TracingConstants.SortParam.OHD_NAME.getParamString() %>" >
+                <display:column titleKey="colname.found_destination" sortable="true" sortName="<%=request.getAttribute("sortNum").equals(TracingConstants.SortParam.OHD_DESTINATION.getParamString())?TracingConstants.SortParam.OHD_DESTINATIONREV.getParamString():TracingConstants.SortParam.OHD_DESTINATION.getParamString() %>"><c:out value="${ohd.dispDestination}"/>&nbsp;</display:column>
+				<display:column  titleKey="colname.name" sortable="true" sortName="<%=request.getAttribute("sortNum").equals(TracingConstants.SortParam.OHD_NAME.getParamString())?TracingConstants.SortParam.OHD_NAMEREV.getParamString():TracingConstants.SortParam.OHD_NAME.getParamString() %>" >
 					<% if(o.getPassenger().getFirstname()!=null && !o.getPassenger().getFirstname().isEmpty()){ %>
 						<c:out value="${ohd.passenger.lastname}, ${ohd.passenger.firstname} ${ohd.passenger.middlename}"/>&nbsp;
 					<% } else { %>
 						<c:out value="${ohd.passenger.lastname}"/>&nbsp;
 					<% } %>
                	</display:column> 
-               	<display:column title="<bean:message key="colname.storage_location" />" sortable="true" sortName="<%=request.getAttribute("sortNum").equals(TracingConstants.SortParam.OHD_COMMENTS.getParamString())?TracingConstants.SortParam.OHD_COMMENTSREV.getParamString():TracingConstants.SortParam.OHD_COMMENTS.getParamString() %>" style="width:12em;word-wrap:break-word;"><c:out value="${ohd.storage_location}"/>&nbsp;</display:column>
-               	<display:column title="<bean:message key="header.action" />">
+               	<display:column titleKey="colname.storage_location" sortable="true" sortName="<%=request.getAttribute("sortNum").equals(TracingConstants.SortParam.OHD_COMMENTS.getParamString())?TracingConstants.SortParam.OHD_COMMENTSREV.getParamString():TracingConstants.SortParam.OHD_COMMENTS.getParamString() %>" style="width:12em;word-wrap:break-word;"><c:out value="${ohd.storage_location}"/>&nbsp;</display:column>
+               	<display:column titleKey="header.action">
           		    <%
                         if (o != null && 
 	                      o.getStatus().getStatus_ID() == TracingConstants.OHD_STATUS_IN_TRANSIT ||
