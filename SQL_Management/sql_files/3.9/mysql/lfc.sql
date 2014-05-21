@@ -1,0 +1,1 @@
+insert into properties (keyStr, valueStr) values ('lfc.weekly.email.address', 'lfcmetrics@nettracer.aero');

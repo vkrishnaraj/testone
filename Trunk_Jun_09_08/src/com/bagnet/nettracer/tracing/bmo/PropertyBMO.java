@@ -296,6 +296,8 @@ public class PropertyBMO {
 
 	public static final String LOSS_CODE_MONTH_DAY_LOCKED = "loss.code.month.day.locked";
 	
+	public static final String LFC_WEEKLY_EMAIL_ADDRESS = "lfc.weekly.email.address";
+	
 	public static boolean updateProperty(String key, String value){
 		boolean success = true;
 		if(key != null && value != null){

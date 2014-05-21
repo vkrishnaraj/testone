@@ -90,6 +90,7 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 			"GROUP BY date(l.closeDate)) tb1"; 
 	private static final String CALCULATE_RETURNED_ITEMS_GROUP_BY = " GROUP BY dt ";
 	private static String autoagent = "autoagent";
+	private static final String DEFAULT_WEEKLY_EMAIL_ADDRESS = "lfcmetrics@nettracer.aero";
 	
 	private static Agent auto;
 	private static ResourceBundle resources = null;
@@ -3905,7 +3906,11 @@ public class LFServiceBean implements LFServiceRemote, LFServiceHome{
 
 				he.setFrom(from);
 				ArrayList<InternetAddress> al = new ArrayList<InternetAddress>();
-				al.add(new InternetAddress("lfcmetrics@nettracer.aero")); 
+				String emailFrom = PropertyBMO.getValue(PropertyBMO.LFC_WEEKLY_EMAIL_ADDRESS);
+				if (emailFrom == null) {
+					emailFrom = DEFAULT_WEEKLY_EMAIL_ADDRESS;
+				}
+				al.add(new InternetAddress(emailFrom)); 
 				he.setTo(al);
 				
 				String msg = EmailParser.parse(configpath + htmlFileName, params, currentLocale);
