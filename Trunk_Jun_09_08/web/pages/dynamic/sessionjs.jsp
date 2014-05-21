@@ -1874,9 +1874,12 @@ function populateBagInfo(form) {
 	
 }
 
+var printDocumentTemplateURL;
+
 function submitPrintRequest(url, options) {
 	if (!url || url == null) return;
 
+	printDocumentTemplateURL = url;
 	var output;
 	var reportOptionsDialog = jQuery("#reportOptionsDiv").dialog({
 								height: 50,
@@ -1888,7 +1891,7 @@ function submitPrintRequest(url, options) {
 										jQuery(this).dialog("close");
 										var outputSelect = document.getElementById("outputSelect");
 										output = outputSelect.options[outputSelect.selectedIndex].value;
-										window.open(url+'&outputtype='+output, '', options);										
+										window.open(printDocumentTemplateURL+'&outputtype='+output, '', options);										
 									},
 									Cancel: function() {
 										jQuery(this).dialog("close");
