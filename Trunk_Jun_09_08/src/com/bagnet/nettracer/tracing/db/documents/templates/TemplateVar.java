@@ -26,6 +26,8 @@ public class TemplateVar {
 	@ManyToMany(mappedBy = "variables")
 	private Set<Template> templates;
 	
+	private boolean containsHtml;
+	
 	public long getId() {
 		return id;
 	}
@@ -50,17 +52,65 @@ public class TemplateVar {
 		this.associatedClass = associatedClass;
 	}
 	
-	@Override
-	public boolean equals(Object o) {
-		if (o.getClass() != this.getClass()) return false;
-		TemplateVar that = (TemplateVar) o;
-		return this.associatedClass.equals(that.associatedClass) && this.displayTag.equals(that.displayTag);
+	public boolean getContainsHtml() {
+		return containsHtml;
+	}
+
+	public void setContainsHtml(boolean containsHtml) {
+		this.containsHtml = containsHtml;
+	}
+	
+	public boolean variableValueContainsHtml() {
+		return getContainsHtml();
 	}
 	
 	@Override
 	public String toString() {
 		if (associatedClass == null || displayTag == null) return "";
 		return "{" + this.associatedClass + "." + this.displayTag + "}";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((associatedClass == null) ? 0 : associatedClass.hashCode());
+		result = prime * result + (containsHtml ? 1231 : 1237);
+		result = prime * result + ((displayTag == null) ? 0 : displayTag.hashCode());
+		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result + ((templates == null) ? 0 : templates.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TemplateVar other = (TemplateVar) obj;
+		if (associatedClass == null) {
+			if (other.associatedClass != null)
+				return false;
+		} else if (!associatedClass.equals(other.associatedClass))
+			return false;
+		if (containsHtml != other.containsHtml)
+			return false;
+		if (displayTag == null) {
+			if (other.displayTag != null)
+				return false;
+		} else if (!displayTag.equals(other.displayTag))
+			return false;
+		if (id != other.id)
+			return false;
+		if (templates == null) {
+			if (other.templates != null)
+				return false;
+		} else if (!templates.equals(other.templates))
+			return false;
+		return true;
 	}
 
 }

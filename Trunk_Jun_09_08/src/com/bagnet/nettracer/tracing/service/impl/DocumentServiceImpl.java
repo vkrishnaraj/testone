@@ -106,7 +106,7 @@ public class DocumentServiceImpl implements DocumentService {
 					if (print && getterValue == null) getterValue = "";
 					
 					if (getterValue != null) {
-						content = content.replace(toReplace, StringEscapeUtils.escapeHtml(getterValue));
+						content = content.replace(toReplace, var.getContainsHtml() ? getterValue : StringEscapeUtils.escapeHtml(getterValue));
 					}
 				} catch (NoSuchMethodException nsme) {
 					// MJS: not catastrophic; make note of the exception and move on
