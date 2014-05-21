@@ -3,6 +3,7 @@ package com.bagnet.nettracer.tracing.adapter.impl;
 import java.lang.reflect.Method;
 import java.util.Date;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 
 import com.bagnet.nettracer.tracing.adapter.TemplateAdapter;
@@ -523,27 +524,27 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 		
 		String value = invokeMethod("get" + className + "Address1");
 		if(value != null && !value.isEmpty()){
-			fullAddress.append(value+"<br/>");
+			fullAddress.append(StringEscapeUtils.escapeHtml(value) + "<br/>");
 		}
 		value = invokeMethod("get" + className + "Address2");
 		if(value != null && !value.isEmpty()){
-			fullAddress.append(value+"<br/>");
+			fullAddress.append(StringEscapeUtils.escapeHtml(value) + "<br/>");
 		}
 		value = invokeMethod("get" + className + "City");
 		if(value != null && !value.isEmpty()){
-			fullAddress.append(value+", ");
+			fullAddress.append(StringEscapeUtils.escapeHtml(value) + ", ");
 		}
 		value = invokeMethod("get" + className + "State");
 		if(value != null && !value.isEmpty()){
-			fullAddress.append(value+". ");
+			fullAddress.append(StringEscapeUtils.escapeHtml(value) + ". ");
 		}
 		value = invokeMethod("get" + className + "Zip");
 		if(value != null && !value.isEmpty()){
-			fullAddress.append(value);
+			fullAddress.append(StringEscapeUtils.escapeHtml(value));
 		}
 		value = invokeMethod("get" + className + "Country");
 		if(value != null && !value.isEmpty()){
-			fullAddress.append("<br/>"+value);
+			fullAddress.append("<br/>" + StringEscapeUtils.escapeHtml(value));
 		}
 		
 		return !fullAddress.toString().isEmpty() ? fullAddress.toString() : null;
@@ -559,5 +560,5 @@ public class TemplateAdapterImpl implements TemplateAdapter {
 		}
 		return result;
 	}
-
+	
 }
