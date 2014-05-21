@@ -31,7 +31,6 @@ import org.hibernate.criterion.Restrictions;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
 import com.bagnet.nettracer.tracing.actions.templates.DocumentTemplateResult;
-import com.bagnet.nettracer.tracing.adapter.TemplateAdapter;
 import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.IssuanceItemBMO;
 import com.bagnet.nettracer.tracing.bmo.LossCodeBMO;
@@ -63,18 +62,13 @@ import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.db.documents.Document;
-import com.bagnet.nettracer.tracing.db.documents.templates.Template;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceCategory;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItem;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemIncident;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemInventory;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemQuantity;
 import com.bagnet.nettracer.tracing.dto.IncidentActivityDTO;
-import com.bagnet.nettracer.tracing.dto.TemplateAdapterDTO;
-import com.bagnet.nettracer.tracing.factory.TemplateAdapterFactory;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
-import com.bagnet.nettracer.tracing.service.DocumentService;
-import com.bagnet.nettracer.tracing.service.TemplateService;
 
 /**
  * @author Administrator
@@ -84,8 +78,6 @@ import com.bagnet.nettracer.tracing.service.TemplateService;
 public class MBRActionUtils {
 	
 	static Logger logger = Logger.getLogger(MBRActionUtils.class);
-	static DocumentService documentService = (DocumentService) SpringUtils.getBean(TracingConstants.DOCUMENT_SERVICE_BEAN);
-	static TemplateService templateService = (TemplateService) SpringUtils.getBean(TracingConstants.TEMPLATE_SERVICE_BEAN);	
 
 	/**
 	 * This method is responsible for processing the Add buttons on the Incident pages.
@@ -335,7 +327,7 @@ public class MBRActionUtils {
 						iss_inc.setIssuanceItemQuantity(qItem);
 						adjustIssuanceLists(request, qItem, null, null);
 						//generate tempalte receipt
-						DocumentTemplateResult result = generateTemplateReceipt(user, qItem.getIssuanceItem(), incident);
+						DocumentTemplateResult result = IssuanceItemBMO.generateTemplateReceipt(user, qItem.getIssuanceItem(), incident, 0);
 						if (result.isSuccess()) {
 							Document d = (Document) result.getPayload();
 							iss_inc.setDocument(d);	 					
@@ -356,7 +348,7 @@ public class MBRActionUtils {
 					iss_inc.setIssuanceItemInventory(iItem);
 					adjustIssuanceLists(request, null, iItem, null);
 					//generate tempalte receipt					
-					DocumentTemplateResult result = generateTemplateReceipt(user, iItem.getIssuanceItem(), incident);
+					DocumentTemplateResult result = IssuanceItemBMO.generateTemplateReceipt(user, iItem.getIssuanceItem(), incident, 0);
 					if (result.isSuccess()) {
 						Document d = (Document) result.getPayload();
 						iss_inc.setDocument(d);						
@@ -1590,53 +1582,5 @@ public class MBRActionUtils {
 				}
 			}
 		}
-	}
-
-	private static DocumentTemplateResult generateTemplateReceipt(Agent user, IssuanceItem qitem, Incident incident) {
-		DocumentTemplateResult result = new DocumentTemplateResult();
-		// 1. load the template
-		long templateId = 0;
-		if (qitem.getCategory().getTemplate() != null) {
-			templateId = qitem.getCategory().getTemplate().getId();
-		} else {
-			logger.error("No template defined " );
-			result.setMessageKey("no.template.receipt.defined");
-			return result;			
-		}
-
-		Template template = templateService.load(templateId);
-		if (template == null) {
-			result.setMessageKey("no.template.receipt.defined");
-			return result;
-		}
-		// 2. get the template adapter
-		TemplateAdapterDTO dto = DomainUtils.getTemplateAdapterDTO(user, template);
-		dto.setIncident(incident);
-		dto.setIssuanceItem(qitem);
-		
-		try {
-			result = TemplateAdapterFactory.hasRequiredInfo(dto);
-			if (!result.isSuccess()) {
-				return result;
-			}
-			
-			TemplateAdapter adapter = TemplateAdapterFactory.getTemplateAdapter(dto);
-			Document document = new Document(template);
-			
-			// 3. merge the template and adapter
-			result = documentService.mergeDocumentToPrint(document, adapter);
-			if (!result.isSuccess()) return result;
-
-			// 4. save the document
-			if (documentService.save(document) > 0) {
-				result.setPayload(document);
-			} else {
-				result.setSuccess(false);
-			}
-		} catch (Exception e) {
-			logger.error("Failed to generate the template receipt for Incident with id: " + qitem.getCategory().getTemplate().getId(), e);
-		}
-		
-		return result;
 	}
 }

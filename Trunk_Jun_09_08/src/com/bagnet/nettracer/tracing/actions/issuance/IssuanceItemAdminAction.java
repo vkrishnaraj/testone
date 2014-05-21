@@ -22,14 +22,18 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import com.bagnet.nettracer.tracing.actions.CheckedAction;
+import com.bagnet.nettracer.tracing.actions.templates.DocumentTemplateResult;
+import com.bagnet.nettracer.tracing.bmo.IncidentBMO;
 import com.bagnet.nettracer.tracing.bmo.IssuanceItemBMO;
 import com.bagnet.nettracer.tracing.bmo.PropertyBMO;
 import com.bagnet.nettracer.tracing.bmo.StationBMO;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
+import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.documents.Document;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceCategory;
+import com.bagnet.nettracer.tracing.db.issuance.IssuanceItem;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemInventory;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemQuantity;
 import com.bagnet.nettracer.tracing.forms.issuance.IssuanceItemAdminForm;
@@ -74,6 +78,16 @@ public class IssuanceItemAdminAction extends CheckedAction {
 					String directoryKey = request.getParameter("receipt") != null ? PropertyBMO.DOCUMENT_LOCATION_RECEIPTS : PropertyBMO.DOCUMENT_LOCATION_TEMP;
 					long documentId = Long.parseLong((String) request.getParameter(REQUEST_PREVIEW_DOCUMENT));
 					Document document = documentService.load(documentId);
+					if (documentId == 0 || document == null || IssuanceItemBMO.UNGENERATED_DOCUMENT_NAME.equals(document.getFileName())) {
+						String issuanceItemID = (String) request.getParameter("issItem");
+						String incidentID = (String) request.getParameter("incident");
+						IssuanceItem item = IssuanceItemBMO.getItem(issuanceItemID);
+						Incident incident = IncidentBMO.getIncidentByID(incidentID, null);
+						DocumentTemplateResult result = IssuanceItemBMO.generateTemplateReceipt(user, item, incident, documentId);
+						if (result.isSuccess()) {
+							document = (Document) result.getPayload();
+						}
+					}
 					if (document != null) {
 						if (outputType == TracingConstants.REPORT_OUTPUT_PDF) {
 							if (!documentService.generatePdf(user, document, PropertyBMO.getValue(directoryKey)).isSuccess()) {

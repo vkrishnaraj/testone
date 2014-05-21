@@ -1067,7 +1067,7 @@
 						<td style="text-align:left;">
 							<logic:notEmpty name="issuanceitem" property="document">
 								<logic:notEqual name="issuanceitem" property="id" value="0" >
-									<a href="#" onclick="submitPrintRequest('issuanceItemAdmin.do?preview_document=<bean:write name="issuanceitem" property="document.id" />&receipt=1', 'width=600,height=800,resizable=yes'); return false;"> 
+									<a href="#" onclick="submitPrintRequest('issuanceItemAdmin.do?preview_document=<bean:write name="issuanceitem" property="document.id" />&incident=<%=myform.getIncident_ID() %>&issItem=<%=iItem.getId() %>&receipt=1', 'width=600,height=800,resizable=yes'); return false;"> 
 										<bean:message key="link.preview" />
 									</a>
 								</logic:notEqual>

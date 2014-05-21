@@ -18,6 +18,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.bagnet.nettracer.hibernate.HibernateWrapper;
+import com.bagnet.nettracer.tracing.actions.templates.DocumentTemplateResult;
+import com.bagnet.nettracer.tracing.adapter.TemplateAdapter;
 import com.bagnet.nettracer.tracing.bmo.exception.StaleStateException;
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
 import com.bagnet.nettracer.tracing.db.Agent;
@@ -27,6 +29,7 @@ import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.db.Status;
+import com.bagnet.nettracer.tracing.db.documents.Document;
 import com.bagnet.nettracer.tracing.db.documents.templates.Template;
 import com.bagnet.nettracer.tracing.db.issuance.AuditIssuanceItemInventory;
 import com.bagnet.nettracer.tracing.db.issuance.AuditIssuanceItemQuantity;
@@ -35,7 +38,13 @@ import com.bagnet.nettracer.tracing.db.issuance.IssuanceItem;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemIncident;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemInventory;
 import com.bagnet.nettracer.tracing.db.issuance.IssuanceItemQuantity;
+import com.bagnet.nettracer.tracing.dto.TemplateAdapterDTO;
+import com.bagnet.nettracer.tracing.factory.TemplateAdapterFactory;
+import com.bagnet.nettracer.tracing.service.DocumentService;
+import com.bagnet.nettracer.tracing.service.TemplateService;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.DomainUtils;
+import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 
@@ -46,6 +55,8 @@ import com.bagnet.nettracer.tracing.utils.TracerUtils;
 public class IssuanceItemBMO {
 
 	private static Logger logger = Logger.getLogger(IssuanceItemBMO.class);
+	static DocumentService documentService = (DocumentService) SpringUtils.getBean(TracingConstants.DOCUMENT_SERVICE_BEAN);
+	static TemplateService templateService = (TemplateService) SpringUtils.getBean(TracingConstants.TEMPLATE_SERVICE_BEAN);	
 	
 	public static final String SPECIAL_LOAN_ID = "$SNITEM$";
 	public static final String ERROR_INVALID_INCIDENT_PROP = "error.invalid.incident";
@@ -53,6 +64,86 @@ public class IssuanceItemBMO {
 	public static final int ERROR_INVALID_INCIDENT = -1;
 	public static final int ERROR_UNKNOWN = -2;
 	public static final int SUCCESSFUL_SAVE = 1;
+	public static final String UNGENERATED_DOCUMENT_NAME = "!!XX-NOT GENERATED-XX!!";
+	
+	/**
+	 * Get an IssuanceItem by id. 
+	 * @param id
+	 * @return
+	 */
+	public static IssuanceItem getItem(String id) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			IssuanceItem item = (IssuanceItem) sess.load(IssuanceItem.class, Long.parseLong(id));
+			return  item;
+		} catch (Exception e) {
+			logger.fatal(e.getMessage());
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.fatal(e.getMessage());
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Get an IssuanceItemIncident by id. 
+	 * @param id
+	 * @return
+	 */
+	public static IssuanceItemIncident getItemIncident(String id) {
+		Session sess = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			IssuanceItemIncident item = (IssuanceItemIncident) sess.load(IssuanceItemIncident.class, Long.parseLong(id));
+			return  item;
+		} catch (Exception e) {
+			logger.fatal(e.getMessage());
+			return null;
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.fatal(e.getMessage());
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Save an IssuanceItemIncident. 
+	 * @param item
+	 * @return
+	 */
+	public static void saveItemIncident(IssuanceItemIncident item) {
+		Session sess = null;
+		Transaction t = null;
+		try {
+			sess = HibernateWrapper.getSession().openSession();
+			t = sess.beginTransaction();
+			sess.saveOrUpdate(item);
+			t.commit();
+		} catch (Exception e) {
+			logger.fatal(e.getMessage());
+			if (t != null) {
+				t.rollback();
+			}
+		} finally {
+			if (sess != null) {
+				try {
+					sess.close();
+				} catch (Exception e) {
+					logger.fatal(e.getMessage());
+				}
+			}
+		}
+	}
 	
 	/**
 	 * Get an IssuanceItemQuantity by id. 
@@ -935,6 +1026,72 @@ public class IssuanceItemBMO {
 			default:
 				return null;
 		}
+	}
+
+	public static DocumentTemplateResult generateTemplateReceipt(Agent user, IssuanceItem qitem, Incident incident, long document_ID) {
+		DocumentTemplateResult result = new DocumentTemplateResult();
+		// 1. load the template
+		long templateId = 0;
+		if (qitem.getCategory().getTemplate() != null) {
+			templateId = qitem.getCategory().getTemplate().getId();
+		} else {
+			logger.error("No template defined " );
+			result.setMessageKey("no.template.receipt.defined");
+			return result;			
+		}
+
+		Template template = templateService.load(templateId);
+		if (template == null) {
+			result.setMessageKey("no.template.receipt.defined");
+			return result;
+		}
+		// 2. get the template adapter
+		TemplateAdapterDTO dto = DomainUtils.getTemplateAdapterDTO(user, template);
+		dto.setIncident(incident);
+		dto.setIssuanceItem(qitem);
+		
+		try {
+			result = TemplateAdapterFactory.hasRequiredInfo(dto);
+			if (!result.isSuccess()) {
+				return result;
+			}
+			
+			// Don't generate a Document unless there is an Incident ID to use.
+			if (incident.getIncident_ID() == null || incident.getIncident_ID().isEmpty()) {
+				Document temp = new Document(template);
+				temp.setId(0);
+				temp.setFileName(UNGENERATED_DOCUMENT_NAME);
+				result.setPayload(temp);
+				result.setSuccess(true);
+			} else {
+				TemplateAdapter adapter = TemplateAdapterFactory.getTemplateAdapter(dto);
+				Document document = new Document(template);
+				
+				// 3. merge the template and adapter
+				result = documentService.mergeDocumentToPrint(document, adapter);
+				if (!result.isSuccess()) return result;
+	
+				// 4. save or update the document
+				if (document_ID > 0) {
+					document.setId(document_ID);
+					if (documentService.update(document)) {
+						result.setPayload(document);
+					} else {
+						result.setSuccess(false);
+					}
+				} else {
+					if (documentService.save(document) > 0) {
+						result.setPayload(document);
+					} else {
+						result.setSuccess(false);
+					}
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Failed to generate the template receipt for Incident with id: " + qitem.getCategory().getTemplate().getId(), e);
+		}
+		
+		return result;
 	}
 
 }
