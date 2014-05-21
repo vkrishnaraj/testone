@@ -18,3 +18,6 @@ EXECUTE stmt;
 insert into template_var (displayTag,associatedClass) values ('Barcode','IssuanceItem');
 insert into template_var_dependency (associatedClass,dependentClass) values ('IssuanceItem','IssuanceItem');
 insert into template_type (ordinal,defaultName) values (6,'IssuanceItem');
+
+alter table template_var add containsHtml bit default 0;
+update template_var set containsHtml = 1 where displayTag = 'FullAddress';
