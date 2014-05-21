@@ -60,7 +60,7 @@ public class TemplateVar {
 		this.containsHtml = containsHtml;
 	}
 	
-	public boolean variableValueContainsHtml() {
+	public boolean variableValueCanContainHtml() {
 		return getContainsHtml();
 	}
 	
