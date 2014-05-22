@@ -1,6 +1,5 @@
 package com.bagnet.nettracer.tracing.actions.expense;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +17,7 @@ import com.bagnet.nettracer.tracing.db.Agent;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.forms.ExpensePayoutForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 
 public class CreateExpenseAction extends BaseExpenseAction {
 
@@ -49,7 +49,7 @@ public class CreateExpenseAction extends BaseExpenseAction {
 	}
 	
 	private void prepareForm(ExpensePayoutForm epform, Agent user) {
-		epform.setCreatedate(new Date());
+		epform.setCreatedate(DateUtils.getLocalDate(user));
 		epform.setCreateStation(user.getStation().getStationcode());
 		epform.setCreateUser(user.getUsername());
 		epform.setCurrency_ID(user.getDefaultcurrency());

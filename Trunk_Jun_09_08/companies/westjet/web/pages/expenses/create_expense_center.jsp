@@ -3,6 +3,7 @@
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
 <%@page import="com.bagnet.nettracer.tracing.db.Agent"%>
 <%@page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
+<%@ page import="com.bagnet.nettracer.tracing.utils.DateUtils"%>
 <%@ taglib uri="/tags/struts-bean" prefix="bean"%>
 <%@ taglib uri="/tags/struts-html" prefix="html"%>
 <%@ taglib uri="/tags/struts-logic" prefix="logic"%>
@@ -107,7 +108,7 @@
 								<br />
 								<input type="text" name="createdate" size="15" class="textfield"
 									disabled="disabled"
-									value="<fmt:formatDate value='${expensePayoutForm.createdate}' pattern='${expensePayoutForm.dateFormat}' />" />
+									value="<%=DateUtils.formatDate(epf.getCreatedate(), epf.getDateFormat(), null, null) %>" />
 							</td>
 							<td>
 								<bean:message key="colname.agentusername" />

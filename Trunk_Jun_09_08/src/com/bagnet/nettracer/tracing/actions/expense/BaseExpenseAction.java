@@ -2,7 +2,6 @@ package com.bagnet.nettracer.tracing.actions.expense;
 
 import java.util.ArrayList;
 import java.util.Currency;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -27,6 +26,7 @@ import com.bagnet.nettracer.tracing.db.Station;
 import com.bagnet.nettracer.tracing.forms.ExpensePayoutForm;
 import com.bagnet.nettracer.tracing.forms.IncidentForm;
 import com.bagnet.nettracer.tracing.forms.SearchExpenseForm;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.ExpenseUtils;
 import com.bagnet.nettracer.tracing.utils.TracerUtils;
 import com.bagnet.nettracer.tracing.utils.UserPermissions;
@@ -168,9 +168,8 @@ public abstract class BaseExpenseAction extends CheckedAction {
 		ep.setAgent(user);
 
 		ep.setCurrency(Currency.getInstance(expenseForm.getCurrency_ID()));
+		ep.setCreatedate(DateUtils.getLocalDate(user));
 		
-		ep.setCreatedate(new Date());
-
 		Station loc = new Station();
 		loc.setStation_ID(expenseForm.getExpenselocation_ID());
 		ep.setExpenselocation(loc);

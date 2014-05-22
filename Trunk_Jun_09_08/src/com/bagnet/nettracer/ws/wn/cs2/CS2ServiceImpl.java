@@ -28,6 +28,7 @@ import com.bagnet.nettracer.tracing.db.Incident;
 import com.bagnet.nettracer.tracing.db.Passenger;
 import com.bagnet.nettracer.tracing.db.Remark;
 import com.bagnet.nettracer.tracing.db.Station;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.SecurityUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
 import com.bagnet.nettracer.ws.wn.cs2.IssueLuvVoucherDocument.IssueLuvVoucher;
@@ -146,7 +147,7 @@ public class CS2ServiceImpl extends CS2ServiceSkeleton {
 		
 		ExpensePayout payout = new ExpensePayout();
 		payout.setAgent(agent);
-		payout.setCreatedate(new Date());
+		payout.setCreatedate(DateUtils.getLocalDate(agent));
 		payout.setStation(station);
 		payout.setExpenselocation(station);
 		payout.setVoucheramt(doc.getAmount());

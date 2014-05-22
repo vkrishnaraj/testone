@@ -2,6 +2,8 @@
 <%@ page import="com.bagnet.nettracer.tracing.db.ExpensePayout"%>
 <%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
 <%@ page import="com.bagnet.nettracer.tracing.utils.UserPermissions"%>
+<%@ page import="com.bagnet.nettracer.tracing.utils.AdminUtils"%>
+<%@ page import="com.bagnet.nettracer.tracing.utils.DateUtils"%>
 <%@ page import="com.bagnet.nettracer.tracing.db.Agent"%>
 <%@ page import="com.bagnet.nettracer.tracing.forms.ExpensePayoutForm"%>
 <%@ page import="com.bagnet.nettracer.tracing.bmo.ExpensePayoutBMO"%>
@@ -10,6 +12,8 @@
 <%@ page import="org.apache.struts.util.LabelValueBean"%>
 <%@ page import="java.text.SimpleDateFormat"%>
 <%@ page import="java.util.Calendar"%>
+<%@ page import="java.util.Date"%>
+<%@ page import="java.util.TimeZone"%>
 <%@ page import="java.util.Locale, org.apache.struts.util.PropertyMessageResources"%>
 <%@ page import="com.bagnet.nettracer.tracing.enums.TemplateType"%>
 
@@ -38,9 +42,17 @@
 
 	boolean submitOk = (epf.getPaymentType() !=null && epf.getPaymentType().equals(TracingConstants.ENUM_VOUCHER) && epf.getOrdernum() !=null)? true :false; 
 	boolean showprint = epf.getPrintcount() == 0 ? true : false;
-	String today = new SimpleDateFormat("MM/dd/yyyy").format(Calendar.getInstance().getTime());
+	
+	TimeZone agentTZ = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(a.getDefaulttimezone()).getTimezone());
+	Date gmt = DateUtils.convertToGMTDate(new Date());
+	Calendar gmtMinus = Calendar.getInstance();
+	gmtMinus.setTime(gmt);
+	gmtMinus.add(Calendar.HOUR, -1);
+	String todayNow = DateUtils.formatDate(gmt, "MM/dd/yyyy", null, agentTZ);
+	String todayMinus = DateUtils.formatDate(gmtMinus.getTime(), "MM/dd/yyyy", null, agentTZ);
 	String createdate = new SimpleDateFormat("MM/dd/yyyy").format(epf.getCreatedate());
-	boolean sameday = today.equals(createdate);
+	boolean sameday = todayNow.equals(createdate) || todayMinus.equals(createdate);
+	
 	boolean showcancel = (sameday && epf.getCancelcount() == 0 ) ? true : false;
 	boolean bsoPermission = UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_PROCESS, a) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_BSO_ADMIN,a);
 	boolean payApproveCreatePerm = (UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAYMENT_APPROVAL_CREATE, a) || UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAYMENT_APPROVAL, a)) && !UserPermissions.hasPermission(TracingConstants.SYSTEM_COMPONENT_NAME_PAYMENT_APPROVAL_ADMIN,a);
@@ -355,7 +367,7 @@
 								<br />
 								<input type="text" name="createdate" size="15" class="textfield"
 									disabled="disabled"
-									value="<fmt:formatDate value='${expensePayoutForm.createdate}' pattern='${expensePayoutForm.dateFormat}' />" />
+									value="<%=DateUtils.formatDate(epf.getCreatedate(), epf.getDateFormat(), null, null) %>" />
 							</td>
 							<td>
 								<bean:message key="colname.agentusername" />

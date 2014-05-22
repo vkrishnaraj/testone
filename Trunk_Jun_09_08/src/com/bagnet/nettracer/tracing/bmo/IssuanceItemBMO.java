@@ -43,6 +43,7 @@ import com.bagnet.nettracer.tracing.factory.TemplateAdapterFactory;
 import com.bagnet.nettracer.tracing.service.DocumentService;
 import com.bagnet.nettracer.tracing.service.TemplateService;
 import com.bagnet.nettracer.tracing.utils.AdminUtils;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.DomainUtils;
 import com.bagnet.nettracer.tracing.utils.SpringUtils;
 import com.bagnet.nettracer.tracing.utils.TracerDateTime;
@@ -748,7 +749,7 @@ public class IssuanceItemBMO {
 							ep.setPaycode("ADV");
 							ep.setAgent(user);	
 							ep.setCurrency(Currency.getInstance("USD"));
-							ep.setCreatedate(new Date());
+							ep.setCreatedate(DateUtils.getLocalDate(user));
 							
 							ExpenseType et = new ExpenseType();
 							et.setExpensetype_ID(3);

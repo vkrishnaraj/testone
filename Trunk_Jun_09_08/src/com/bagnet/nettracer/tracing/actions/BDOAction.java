@@ -45,6 +45,7 @@ import com.bagnet.nettracer.tracing.db.Status;
 import com.bagnet.nettracer.tracing.forms.BDOForm;
 import com.bagnet.nettracer.tracing.history.BDOHistoryObject;
 import com.bagnet.nettracer.tracing.utils.BDOUtils;
+import com.bagnet.nettracer.tracing.utils.DateUtils;
 import com.bagnet.nettracer.tracing.utils.DeliveryIntegrationTypeUtils;
 import com.bagnet.nettracer.tracing.utils.HibernateUtils;
 import com.bagnet.nettracer.tracing.utils.HistoryUtils;
@@ -492,7 +493,7 @@ public class BDOAction extends Action {
 				
 				ep.setAgent(user);	
 				ep.setCurrency(Currency.getInstance(theform.getCurrency()));
-				ep.setCreatedate(new Date());
+				ep.setCreatedate(DateUtils.getLocalDate(user));
 				
 				Status s = new Status();
 				s.setStatus_ID(TracingConstants.EXPENSEPAYOUT_STATUS_PAID);

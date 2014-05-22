@@ -19,6 +19,7 @@ import java.util.TimeZone;
 import org.apache.log4j.Logger;
 
 import com.bagnet.nettracer.tracing.constant.TracingConstants;
+import com.bagnet.nettracer.tracing.db.Agent;
 
 /**
  * @author Matt
@@ -98,7 +99,6 @@ public class DateUtils {
 	public static String formatDate(Date indate, String outstyle, String inloc, TimeZone tz) {
 		try {
 			Locale locale = null;
-			Locale defaultLocale = Locale.US;
 			if (inloc == null) locale = Locale.US;
 			else locale = new Locale(inloc);
 
@@ -213,10 +213,12 @@ public class DateUtils {
 		return convertSystemDateToGMTDate(date.getTime());
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static Date convertSystemDateToGMTDate(Date date) {
 		return new Date(date.getTime() + date.getTimezoneOffset()*1000*60);
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static Date convertGMTDateToLocalTime(Date date) {
 		return new Date(date.getTime() - date.getTimezoneOffset()*1000*60);
 	}
@@ -250,7 +252,9 @@ public class DateUtils {
 	public static boolean isDateRangeOutsideLimit(Date startDate, Date endDate, long MAX_NUMBER_OF_DAYS) {
 		boolean result = false;
 		
+		@SuppressWarnings("deprecation")
 		long myEndL = endDate.getTime() + endDate.getTimezoneOffset();
+		@SuppressWarnings("deprecation")
 		long myStartL = startDate.getTime() + startDate.getTimezoneOffset();
 		long MILLISECS_PER_DAY = 24 * 60 * 60 * 1000;
 		long dateRangeInDays = (myEndL - myStartL) / MILLISECS_PER_DAY; 
@@ -291,6 +295,14 @@ public class DateUtils {
 			}
 		}
 		return ccYears;
+	}
+	
+	public static Date getLocalDate(Agent user) {
+		TimeZone agentTZ = TimeZone.getTimeZone(AdminUtils.getTimeZoneById(user.getDefaulttimezone()).getTimezone());
+		Date gmt = convertToGMTDate(new Date());
+		String local = formatDate(gmt, user.getDateformat().getFormat() + " " + user.getTimeformat().getFormat(), null, agentTZ);
+		Date localDate = convertToDate(local, user.getDateformat().getFormat() + " " + user.getTimeformat().getFormat(), null);
+		return localDate;
 	}
 	
 }
