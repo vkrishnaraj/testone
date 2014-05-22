@@ -24,6 +24,7 @@
 				<ref bean="cronLfAutoClose" />
 				<ref bean="cronLfNotice" />
 				<ref bean="cronLfTraceAll" />
+				<ref bean="cronLfWeekly" />
 				<ref bean="LockCleanupTrigger" />
 			</list>
 		</property>
