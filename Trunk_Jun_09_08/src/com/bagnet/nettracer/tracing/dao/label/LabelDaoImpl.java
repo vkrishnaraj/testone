@@ -163,7 +163,8 @@ public class LabelDaoImpl implements LabelDao {
 		Session session = null;
 		try {
 			session = HibernateWrapper.getSession().openSession();
-			Criteria criteria = getLabelCriteriaForAgent(session, agentId);
+			Criteria criteria = session.createCriteria(Label.class, "l");
+			criteria.add(Restrictions.eq("l.agent.agent_ID", agentId));
 			criteria.addOrder(Order.desc("l.lastUpdate"));
 			labels = criteria.list();
 		} catch (Exception e) {
@@ -197,9 +198,4 @@ public class LabelDaoImpl implements LabelDao {
 		return 0;
 	}
 	
-	private Criteria getLabelCriteriaForAgent(Session session, long agentId) {
-		Criteria criteria = session.createCriteria(Label.class, "l");
-		criteria.add(Restrictions.eq("l.agent.agent_ID", agentId));
-		return criteria;
-	}
 }
