@@ -350,7 +350,9 @@ public class ExpenseUtils {
 	 	 		}
 	 		}
 			for (int i = 0; i < grandTotal.length; i++){
-				grandTotal[i] += values[i];
+				if (!key.startsWith("MILE")){
+					grandTotal[i] += values[i];
+				}
 			}
 		}//end while
 		Set<String> eGrand = grands.keySet();

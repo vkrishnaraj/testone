@@ -381,6 +381,13 @@
 								<html:text property="createStation" size="15"
 									styleClass="textfield" disabled="true" />
 							</td>
+							<td>
+							<bean:message key="header.expensetype" />
+							<br />
+								<html:text property="paymentType" size="15"
+									styleClass="textfield" disabled="true" />							
+							</td>
+							
 						</tr>
 						<tr>
 							<td>
@@ -404,8 +411,6 @@
 
 							</td>
 							<td>
-
-
 								<bean:message key="colname.paycode" />
 								<br />
 								<html:select property="paycode" styleClass="dropdown"
@@ -430,18 +435,15 @@
                                 <c:if test="${!empty expensePayoutForm.bdo_id}">
                                   <a href="bdo.do?bdo_id=<c:out value="${expensePayoutForm.bdo_id}"/>"><c:out value="${expensePayoutForm.bdo_ref}"/></a>
                                 </c:if>
-							<br />
-							<bean:message key="header.expensetype" />
-							<br />
-								<html:text property="paymentType" size="15"
-									styleClass="textfield" disabled="true" />
 							</td>
+							<td>&nbsp;
+							</td>							
 						</tr>
 						<jsp:include page="/pages/includes/payment_types_incl.jsp" />
 
 
 						<tr>
-							<td colspan="3">
+							<td colspan="4">
 								<bean:message key="agent.comments" />
 								<br />
 								<textarea rows="6" cols="80" readonly="readonly"><c:forEach items="${expensePayoutForm.oldComments}" var="comment" varStatus="status"><c:out value="${comment.agent.username}" />&nbsp;${comment.displayCreateDate}&#x0D;<c:out value="${comment.content}" /><c:if test="${!status.last }">&#x0D;&#x0D;</c:if></c:forEach></textarea>
@@ -451,7 +453,7 @@
 					if (canEdit || canApprove || canPay) {
 						%>
 						<tr>
-							<td colspan="3">
+							<td colspan="4">
 								<bean:message key="colname.new.comments" />
 								<br />
 								<html:textarea property="newComment" cols="80" rows="5"
@@ -478,7 +480,7 @@
               <br>
               <html:text property="firstname" size="20" maxlength="20"  styleClass="textfield" disabled="<%=isVoucher %>"/>
             </td>
-            <td>
+            <td colspan="2">
               <bean:message key="colname.mid_initial" />
               <br>
               <html:text property="middlename" size="1" maxlength="1"  styleClass="textfield" disabled="<%=isVoucher %>"/>
@@ -490,7 +492,7 @@
               <br>
               <html:text property="address1" size="45" maxlength="50" styleClass="textfield" disabled="true"/>
             </td>
-            <td nowrap >
+            <td nowrap  colspan="2">
               <bean:message key="colname.street_addr2" />
               <br>
               <html:text property="address2" size="45" maxlength="50" styleClass="textfield" disabled="true"/>
@@ -532,7 +534,7 @@
                  </logic:notEqual>
               </logic:notEqual>
             </td>
-            <td>
+            <td colspan="2">
               <bean:message key="colname.province" />
               <br />
                 <logic:equal name="expensePayoutForm" property="countrycode_ID" value="US">
@@ -559,7 +561,7 @@
                <br>
                <html:text property="workphone" size="15" maxlength="25" styleClass="textfield" disabled="true"/>
              </td>
-             <td>
+             <td colspan="2">
                <bean:message key="colname.mobile_ph" />
                <br>
                <html:text property="mobile" size="15" maxlength="25" styleClass="textfield" disabled="true"/>
@@ -571,7 +573,7 @@
                <br>
                  <html:text property="zip" size="15" maxlength="11" styleClass="textfield" disabled="true"/>
              </td>
-             <td>
+             <td colspan="2">
                <bean:message key="colname.country" />
                <br>
                  <html:select property="countrycode_ID" styleClass="dropdown" onchange="checkstate(this,this.form,'state_ID', 'province');" disabled="true">
@@ -583,7 +585,7 @@
               </td>
             </tr>
      	    <tr>
-               <td colspan="2" width="33%">
+               <td colspan="4" width="33%">
                   <bean:message key="colname.email" />
                   <br>
                   <html:text property="email" size="42" maxlength="100" styleClass="textfield" disabled="true"/>
@@ -604,7 +606,7 @@
 			<% } %>			
 <% } %>
 						<tr>
-							<td align="center" valign="top" colspan="3">
+							<td align="center" valign="top" colspan="4">
 								<%
 									if (epf.getStatus_id() == TracingConstants.EXPENSEPAYOUT_STATUS_PENDING) {
 												if (canApprove && !payApproveCreatePerm ) {

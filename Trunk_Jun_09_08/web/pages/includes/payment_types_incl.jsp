@@ -52,8 +52,8 @@ boolean swaIsInBSO=(epf!=null && a!=null && a.getStation()!=null && epf.getExpen
             (<%= a.getDateformat().getFormat() %>)
             <br />
             <html:text property="dispDraftpaiddate" disabled="<%=((swaBsoPermission&&swaIsInBSO) || !swaBsoPermission)?false:true %>" size="15" maxlength="10" styleClass="textfield" /><img src="deployment/main/images/calendar/calendar_icon.gif" id="calendar2" name="calendar2" height="15" width="20" border="0" onmouseover="this.style.cursor='hand'" onClick="cal1xx.select(document.expensePayoutForm.dispDraftpaiddate,'calendar2','<%= a.getDateformat().getFormat() %>'); return false;">
-            <br/><br/>
-					            
+		</td>
+		<td>			            
             <bean:message key="colname.maildate" />
             (<%= a.getDateformat().getFormat() %>)
             <br />
@@ -103,7 +103,10 @@ boolean swaIsInBSO=(epf!=null && a!=null && a.getStation()!=null && epf.getExpen
             <bean:message key="colname.mileageamt" />
             <br />
             <html:text property="mileageamt" size="15" maxlength="10" styleClass="textfield" disabled="<%=swaBsoPermission %>"/>
-        </td>                        
+        </td>  
+        <td>&nbsp;
+		</td>							
+                              
      </tr>
 
 	 

@@ -88,8 +88,23 @@ function toggleExpenseSummary() {
 					property="paytype" /> &nbsp;
 			<td><bean:write name="expenselist" property="paycode" /> &nbsp;
 			</td>
+<%
+	if (expenselist.getPaytype().startsWith("MILE")){
+		String mileage = String.valueOf(amount).substring(0, String.valueOf(amount).indexOf("."));
+%>
+			<td align="right" nowrap><%=mileage %>
+			</td>
+
+<%		
+	}else{
+%>
 			<td align="right" nowrap><%=TracingConstants.DECIMALFORMAT.format(amount) %>&nbsp; <bean:write name="expenselist"
-					property="currency_ID" /></td>
+					property="currency_ID" />
+			</td>
+
+<%
+	}
+%>
 			<td><bean:write name="expenselist" property="dispapproval_date" />
 				&nbsp;</td>
 			<td><bean:write name="expenselist" property="disdraftreqdate" />
@@ -113,7 +128,7 @@ function toggleExpenseSummary() {
 	cellpadding="0">
 					<tr>
 						<td width="16%"></td>
-						<td width="8%"></td>
+						<td width="8%">&nbsp;</td>
 						<td width="12%" align="left"><strong><bean:message key="STATUS_KEY_52" /></strong></td>
 						<td width="12%" align="left"><strong><bean:message key="STATUS_KEY_53" /></strong></td>
 						<td width="12%" align="left"><strong><bean:message key="STATUS_KEY_54" /></strong></td>
@@ -125,19 +140,42 @@ function toggleExpenseSummary() {
 <%
 	Set<String> e = expenseSummary.keySet();
 	Iterator it = e.iterator();
+	boolean hasMileage = false;
+	String[] subtotalDisplay = new String[5];
+	String[] grandtotalMileageDisplay = new String[5];
     while ( it.hasNext()){
     	 String key = (String)it.next();
     	 double[] values = expenseSummary.get(key);
      	 String currentCurrencyDisplay = key.substring(key.indexOf("-") + 1, key.indexOf("-") + 4);
+     	 if (key.startsWith("MILE")){
+     		hasMileage = true;  
+     		//currentCurrencyDisplay = "";
+     		subtotalDisplay[0] = String.valueOf(values[0]).substring(0, String.valueOf(values[0]).indexOf("."));
+     		subtotalDisplay[1] = String.valueOf(values[1]).substring(0, String.valueOf(values[1]).indexOf("."));
+     		subtotalDisplay[2] = String.valueOf(values[2]).substring(0, String.valueOf(values[2]).indexOf("."));
+     		subtotalDisplay[3] = String.valueOf(values[3]).substring(0, String.valueOf(values[3]).indexOf("."));
+     		subtotalDisplay[4] = String.valueOf(values[4]).substring(0, String.valueOf(values[4]).indexOf("."));
+     		grandtotalMileageDisplay[0] = subtotalDisplay[0];
+     		grandtotalMileageDisplay[1] = subtotalDisplay[1];
+     		grandtotalMileageDisplay[2] = subtotalDisplay[2];
+     		grandtotalMileageDisplay[3] = subtotalDisplay[3];
+     		grandtotalMileageDisplay[4] = subtotalDisplay[4];
+     	 }else{
+      		subtotalDisplay[0] = TracingConstants.DECIMALFORMAT.format(values[0]) + "&nbsp;&nbsp;" + currentCurrencyDisplay;
+      		subtotalDisplay[1] = TracingConstants.DECIMALFORMAT.format(values[1]) + "&nbsp;&nbsp;" + currentCurrencyDisplay;
+      		subtotalDisplay[2] = TracingConstants.DECIMALFORMAT.format(values[2]) + "&nbsp;&nbsp;" + currentCurrencyDisplay;
+      		subtotalDisplay[3] = TracingConstants.DECIMALFORMAT.format(values[3]) + "&nbsp;&nbsp;" + currentCurrencyDisplay;
+      		subtotalDisplay[4] = TracingConstants.DECIMALFORMAT.format(values[4]) + "&nbsp;&nbsp;" + currentCurrencyDisplay;    		 
+     	 }
 %>
 					<tr>
 						<td></td>
 						<td align="left" ><strong><%=key.substring(0, key.indexOf("-")) %></strong></td>
-						<td align="right" ><%=TracingConstants.DECIMALFORMAT.format(values[0])%> &nbsp; <%=currentCurrencyDisplay%></td>
-						<td align="right" ><%=TracingConstants.DECIMALFORMAT.format(values[1])%> &nbsp; <%=currentCurrencyDisplay%></td>
-						<td align="right" ><%=TracingConstants.DECIMALFORMAT.format(values[2])%> &nbsp; <%=currentCurrencyDisplay%></td>
-						<td align="right" ><%=TracingConstants.DECIMALFORMAT.format(values[3])%> &nbsp; <%=currentCurrencyDisplay%></td>
-						<td align="right" ><%=TracingConstants.DECIMALFORMAT.format(values[4])%> &nbsp; <%=currentCurrencyDisplay%></td>
+						<td align="right" ><%=subtotalDisplay[0]%></td>
+						<td align="right" ><%=subtotalDisplay[1]%></td>
+						<td align="right" ><%=subtotalDisplay[2]%></td>
+						<td align="right" ><%=subtotalDisplay[3]%></td>
+						<td align="right" ><%=subtotalDisplay[4]%></td>
 						<td></td>
 					</tr>
 <%
@@ -154,6 +192,23 @@ function toggleExpenseSummary() {
 						<td align="right" ><strong><%=grandTotalDisplay[4] %></strong></td>
 						<td></td>
 					</tr>
+<%
+	if (hasMileage){
+%>
+					<tr>
+						<td></td>
+						<td align="left" >&nbsp;</td>
+						<td align="right" ><strong><%=grandtotalMileageDisplay[0] %></strong></td>
+						<td align="right" ><strong><%=grandtotalMileageDisplay[1] %></strong></td>
+						<td align="right" ><strong><%=grandtotalMileageDisplay[2] %></strong></td>
+						<td align="right" ><strong><%=grandtotalMileageDisplay[3] %></strong></td>
+						<td align="right" ><strong><%=grandtotalMileageDisplay[4] %></strong></td>
+						<td></td>
+					</tr>
+
+<%
+	}
+%>					
 				</table>
 			<a href="#interimexpense" onclick="toggleExpenseSummary()"><bean:message
 					key="colname.hide_expense_summary" /></a>
