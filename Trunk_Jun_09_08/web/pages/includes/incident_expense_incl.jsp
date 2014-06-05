@@ -1,175 +1,180 @@
-<%@ page language="java" %>
-<%@ taglib uri="/tags/struts-bean" prefix="bean" %>
-<%@ taglib uri="/tags/struts-html" prefix="html" %>
-<%@ taglib uri="/tags/struts-logic" prefix="logic" %>
-<%@ taglib uri="/tags/struts-tiles" prefix="tiles" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java"%>
+<%@ taglib uri="/tags/struts-bean" prefix="bean"%>
+<%@ taglib uri="/tags/struts-html" prefix="html"%>
+<%@ taglib uri="/tags/struts-logic" prefix="logic"%>
+<%@ taglib uri="/tags/struts-tiles" prefix="tiles"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<%@ taglib uri="/tags/struts-nested" prefix="nested" %>
-<%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants" %>
+<%@ taglib uri="/tags/struts-nested" prefix="nested"%>
+<%@ page import="com.bagnet.nettracer.tracing.constant.TracingConstants"%>
+<%@ page import="java.util.TreeMap" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="java.util.HashMap" %>
+<%@ page import="java.util.Set" %>
+<%@ page import="java.util.Iterator" %>
+<%@page import="java.util.ResourceBundle" %>
+<%@page import="java.util.Locale" %>
+<%@ page import="com.bagnet.nettracer.tracing.db.Agent" %>
+<%@ page import="com.bagnet.nettracer.tracing.utils.ExpenseUtils" %>
 
-          <table class='<%= request.getParameter("formCss") %>' cellspacing="0" cellpadding="0">
-            <tr>
-              <td>
-                <strong>
-                  <bean:message key="colname.createdate" />
-                </strong>
-              </td>
-              <td>
-                <strong>
-                  <bean:message key="colname.paycode" />
-                </strong>
-              </td>
-              <td>
-                <strong>
-                  <bean:message key="colname.draft_br" />
-                </strong>
-              </td>
-              <td>
-                <strong>
-                  <bean:message key="colname.draftreqdate_br" />
-                </strong>
-              </td>
-              <td>
-                <strong>
-                  <bean:message key="colname.draftpaiddate_br" />
-                </strong>
-              </td>
-              <td>
-                <strong>
-                  <bean:message key="colname.checkamt_br" />
-                </strong>
-              </td>
-              <td>
-                <strong>
-                  <bean:message key="colname.voucheramt_br" />
-                </strong>
-              </td>
-              <td>
-                <strong>
-                  <bean:message key="colname.mileageamt_br" />
-                </strong>
-              </td>
-              <td>
-                <strong>
-                  <bean:message key="header.status" />
-                </strong>
-              </td>
-              <td>
-                <strong>
-                  <bean:message key="header.approval_deny_date_br" />
-                </strong>
-              </td>
-              <td>
-                <strong>
-                  <bean:message key="colname.modify" />
-                </strong>
-              </td>
-            </tr>
+
+<script>
+function toggleExpenseSummary() {
+	var div = document.getElementById("expense_summary_div");
+	var div_view = document.getElementById("expense_summary_div_view");
+	if (div.style.display=="block" && div_view.style.display=="none"){
+		div.style.display="none";
+		div_view.style.display="block";
+	}else{
+		div.style.display="block";
+		div_view.style.display="none";
+	}
+}
+</script>
+<table class='<%=request.getParameter("formCss")%>' cellspacing="0"
+	cellpadding="0">
+	<tr>
+		<td><strong> <bean:message key="colname.createdate" />
+		</strong></td>
+		<td><strong> <bean:message key="header.status" />
+		</strong></td>
+		<td><strong> <bean:message key="header.expensetype" />
+		</strong></td>
+		<td><strong> <bean:message key="colname.paycode" />
+		</strong></td>
+		<td><strong> <bean:message key="colname.checkamt_br" />
+		</strong></td>
+		<td><strong> <bean:message
+					key="header.approval_deny_date_br" />
+		</strong></td>
+		<td><strong> <bean:message key="colname.draftreqdate_br" />
+		</strong></td>
+		<td><strong> <bean:message
+					key="colname.draftpaiddate_br" />
+		</strong></td>
+		<td><strong> <bean:message key="colname.draft_br" />
+		</strong></td>
+		<td><strong> <bean:message key="colname.action" />
+		</strong></td>
+	</tr>
 <%
-            double checktotal   = 0;
-            double vouchertotal = 0;
-            int    mileagetotal = 0;
-            int    i            = -1;
-            boolean samecurrency = true;
-            String lastcurrency = "";
+	Agent a = (Agent) session.getAttribute("user");
+	ResourceBundle bundle = ResourceBundle.getBundle(
+			"com.bagnet.nettracer.tracing.resources.ApplicationResources", new Locale(a.getCurrentlocale()));
+	String multipleCurrencies = bundle.getString("colname.grandtotal.multiple.currency");
+	int payTypeCount = 5;
+	String[] grandTotalDisplay = ExpenseUtils.initializeStringArray(payTypeCount, "0.00");
+	Map<String, double[]> expenseSummary = new TreeMap<String, double[]>();
 %>
-            <logic:iterate id="expenselist" name="incidentForm" property="expenselist" type="com.bagnet.nettracer.tracing.db.ExpensePayout">
-              <bean:define id="expensetype" name="expenselist" property="expensetype" type="com.bagnet.nettracer.tracing.db.ExpenseType" />
-              <bean:define id="expenselocation" name="expenselist" property="expenselocation" type="com.bagnet.nettracer.tracing.db.Station" />
+	<logic:iterate id="expenselist" name="incidentForm"
+		property="expenselist"
+		type="com.bagnet.nettracer.tracing.db.ExpensePayout">
+		<bean:define id="expensetype" name="expenselist"
+			property="expensetype"
+			type="com.bagnet.nettracer.tracing.db.ExpenseType" />
+		<bean:define id="expenselocation" name="expenselist"
+			property="expenselocation"
+			type="com.bagnet.nettracer.tracing.db.Station" />
 <%
-              i++;
-              if(expenselist.getStatus().getStatus_ID() != TracingConstants.EXPENSEPAYOUT_STATUS_DENIED) {
-                checktotal   += expenselist.getCheckamt();
-								if (lastcurrency == "") lastcurrency = expenselist.getCurrency_ID();
-								if (!lastcurrency.equals(expenselist.getCurrency_ID())) samecurrency = false;
-								
-                if (expenselist.getStatus().getStatus_ID() == TracingConstants.EXPENSEPAYOUT_STATUS_PAID ) 
-                  vouchertotal += expenselist.getVoucheramt();
-                mileagetotal += expenselist.getMileageamt();
-                }
+	double amount = ExpenseUtils.getPaymentAmount(expenselist);
+	expenseSummary = (Map<String, double[]>)ExpenseUtils.populateExpensePaySubtotals(expenselist, expenseSummary, amount);
 %>
-                <tr>
-                  <td>
-                    <bean:write name="expenselist" property="discreatedate" />
-                  </td>
-                  <td>
-                    <bean:write name="expenselist" property="paycode" />
-                  </td>
-                  <td>
-                    <bean:write name="expenselist" property="draft" />
-                    &nbsp;
-                  </td>
-                  <td>
-                    <bean:write name="expenselist" property="disdraftreqdate" />
-                    &nbsp;
-                  </td>
-                  <td>
-                    <bean:write name="expenselist" property="disdraftpaiddate" />
-                    &nbsp;
-                  </td>
-                  <td align="right" nowrap>
-                    <bean:write name="expenselist" property="discheckamt" />
-                    &nbsp;
-                    <bean:write name="expenselist" property="currency_ID" />
-                  </td>
-                  <td align="right">
-                    &nbsp;
-                    <bean:write name="expenselist" property="disvoucheramt" />
-                  </td>
-                  <td align="right">
-                    &nbsp;
-                    <bean:write name="expenselist" property="mileageamt" />
-                  </td>
-                  <td valign="top">
-                    <bean:message name="expenselist" property="status.key" />
-                    &nbsp;
-                  </td>
-                  <td>
-                    <bean:write name="expenselist" property="dispapproval_date" />
-                    &nbsp;
-                  </td>
-                  <logic:notEqual name="incidentForm" property="readonly" value="1">
-                    <td>
-                      <a href="EditExpense.do?expense_id=<bean:write name='expenselist' property='expensepayout_ID'/>"><bean:message key="colname.modify" /></a>
-                    </td>
-                  </logic:notEqual>
-                </tr>
-            </logic:iterate>
-            <tr>
-              <td>
-                <b><bean:message key="colname.total_payout" />
-                :
-              </td>
-              <td colspan="4">
-                &nbsp;
-              </td>
-              <td align="right">
-                <%
-                if (samecurrency) out.println(TracingConstants.DECIMALFORMAT.format(checktotal)); 
-                else  out.println("Multiple Currencies");
-                %>
-                <p>
-                </td>
-                <td align="right">
-                  <%= TracingConstants.DECIMALFORMAT.format(vouchertotal) %>
-                  <p>
-                  </td>
-                  <td align="right">
-                    <%= mileagetotal %>
-                    <p>
-                    </td>
-                  </tr>
-                  <logic:notEmpty name="incidentForm" property="readonly" >
-                  <logic:notEqual name="incidentForm" property="readonly" value="1">
-                    <tr>
-                      <td align="center" valign="top" colspan="12">
-                        <html:button property="addnewexpense" styleId="button" 
-                        	onclick="document.location.href='CreateExpense.do'">
-                          <bean:message key="button.add_payout" />
-                        </html:button>
-                      </td>
-                    </tr>
-                  </logic:notEqual>
-                  </logic:notEmpty>
-                </table>
+		<tr>
+			<td><bean:write name="expenselist" property="discreatedate" />
+				&nbsp;</td>
+			<td valign="top"><bean:message name="expenselist"
+					property="status.key" /> &nbsp;</td>
+			<td valign="top"><bean:write name="expenselist"
+					property="paytype" /> &nbsp;
+			<td><bean:write name="expenselist" property="paycode" /> &nbsp;
+			</td>
+			<td align="right" nowrap><%=TracingConstants.DECIMALFORMAT.format(amount) %>&nbsp; <bean:write name="expenselist"
+					property="currency_ID" /></td>
+			<td><bean:write name="expenselist" property="dispapproval_date" />
+				&nbsp;</td>
+			<td><bean:write name="expenselist" property="disdraftreqdate" />
+				&nbsp;</td>
+			<td><bean:write name="expenselist" property="disdraftpaiddate" />
+				&nbsp;</td>
+			<td><bean:write name="expenselist" property="draft" /> &nbsp;</td>
+			<logic:notEqual name="incidentForm" property="readonly" value="1">
+				<td><a
+					href="EditExpense.do?expense_id=<bean:write name='expenselist' property='expensepayout_ID'/>"><bean:message
+							key="colname.modify" /></a></td>
+			</logic:notEqual>
+		</tr>
+	</logic:iterate>
+	
+
+	<tr>
+		<td colspan="10" align="center">
+			<div id="expense_summary_div" style="display: none">
+				<table class='<%=request.getParameter("formCss")%>' cellspacing="0"
+	cellpadding="0">
+					<tr>
+						<td width="16%"></td>
+						<td width="8%"></td>
+						<td width="12%" align="left"><strong><bean:message key="STATUS_KEY_52" /></strong></td>
+						<td width="12%" align="left"><strong><bean:message key="STATUS_KEY_53" /></strong></td>
+						<td width="12%" align="left"><strong><bean:message key="STATUS_KEY_54" /></strong></td>
+						<td width="12%" align="left"><strong><bean:message key="STATUS_KEY_55" /></strong></td>
+						<td width="12%" align="left"><strong><bean:message key="STATUS_KEY_94" /></strong></td>
+						<td width="16%"></td>
+					</tr>
+				
+<%
+	Set<String> e = expenseSummary.keySet();
+	Iterator it = e.iterator();
+    while ( it.hasNext()){
+    	 String key = (String)it.next();
+    	 double[] values = expenseSummary.get(key);
+     	 String currentCurrencyDisplay = key.substring(key.indexOf("-") + 1, key.indexOf("-") + 4);
+%>
+					<tr>
+						<td></td>
+						<td align="left" ><strong><%=key.substring(0, key.indexOf("-")) %></strong></td>
+						<td align="right" ><%=TracingConstants.DECIMALFORMAT.format(values[0])%> &nbsp; <%=currentCurrencyDisplay%></td>
+						<td align="right" ><%=TracingConstants.DECIMALFORMAT.format(values[1])%> &nbsp; <%=currentCurrencyDisplay%></td>
+						<td align="right" ><%=TracingConstants.DECIMALFORMAT.format(values[2])%> &nbsp; <%=currentCurrencyDisplay%></td>
+						<td align="right" ><%=TracingConstants.DECIMALFORMAT.format(values[3])%> &nbsp; <%=currentCurrencyDisplay%></td>
+						<td align="right" ><%=TracingConstants.DECIMALFORMAT.format(values[4])%> &nbsp; <%=currentCurrencyDisplay%></td>
+						<td></td>
+					</tr>
+<%
+ 	}//end while
+ 	grandTotalDisplay = ExpenseUtils.populateExpensePayGrandTotals(expenseSummary, multipleCurrencies);
+%>
+					<tr>
+						<td></td>
+						<td align="left" ><strong><bean:message key="colname.grandtotal" />:</strong></td>
+						<td align="right" ><strong><%=grandTotalDisplay[0] %></strong></td>
+						<td align="right" ><strong><%=grandTotalDisplay[1] %></strong></td>
+						<td align="right" ><strong><%=grandTotalDisplay[2] %></strong></td>
+						<td align="right" ><strong><%=grandTotalDisplay[3] %></strong></td>
+						<td align="right" ><strong><%=grandTotalDisplay[4] %></strong></td>
+						<td></td>
+					</tr>
+				</table>
+			<a href="#interimexpense" onclick="toggleExpenseSummary()"><bean:message
+					key="colname.hide_expense_summary" /></a>
+</div> 
+<div id="expense_summary_div_view" style="display: block"> 
+<a href="#interimexpense" onclick="toggleExpenseSummary()"><bean:message
+					key="colname.view_expense_summary" /></a>
+					</div> 
+		</td>
+	</tr>
+
+	
+	<logic:notEmpty name="incidentForm" property="readonly">
+		<logic:notEqual name="incidentForm" property="readonly" value="1">
+			<tr>
+				<td align="center" valign="top" colspan="12"><html:button
+						property="addnewexpense" styleId="button"
+						onclick="document.location.href='CreateExpense.do'">
+						<bean:message key="button.add_payout" />
+					</html:button></td>
+			</tr>
+		</logic:notEqual>
+	</logic:notEmpty>
+</table>

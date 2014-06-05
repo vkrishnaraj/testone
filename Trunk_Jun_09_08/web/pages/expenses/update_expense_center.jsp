@@ -430,6 +430,11 @@
                                 <c:if test="${!empty expensePayoutForm.bdo_id}">
                                   <a href="bdo.do?bdo_id=<c:out value="${expensePayoutForm.bdo_id}"/>"><c:out value="${expensePayoutForm.bdo_ref}"/></a>
                                 </c:if>
+							<br />
+							<bean:message key="header.expensetype" />
+							<br />
+								<html:text property="paymentType" size="15"
+									styleClass="textfield" disabled="true" />
 							</td>
 						</tr>
 						<jsp:include page="/pages/includes/payment_types_incl.jsp" />
